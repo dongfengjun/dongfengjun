@@ -6,12 +6,12 @@ sim:
 	@echo $(VSRCS)
 	verilator --trace --cc --exe --build \
 	--switch sim \
-	-I$(INCLUDE) ../test_out/sim.cpp $(VSRCS) \
+	-I$(INCLUDE) ./test_out/sim.cpp $(VSRCS) \
 	-LDFLAGS -"lreadline"
 
 include ../Makefile
 
-VSRCS = $(shell find $(../test_out ) -name "*.v")
+VSRCS = $(shell find $(./test_out ) -name "*.v")
 # CSRCS = $(shell find $(./csrc ) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 wave: sim
 	./obj_dir/Vswitch
