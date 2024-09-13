@@ -1,4 +1,4 @@
-module switch(
+module top(
   input a,
   input b,
   output f
