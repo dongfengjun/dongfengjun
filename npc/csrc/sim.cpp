@@ -3,7 +3,7 @@
  #include <assert.h>
  #include <verilated.h>   //访问验证程序例程的库
  #include <verilated_vcd_c.h>  //向VCD文件中写入波形
- #include "../obj_dir/Vswitch.h"
+ #include "Vtop.h"
 
  #define MAX_SIM_TIME 20   //最大仿真时间
  vluint64_t sim_time = 0;
@@ -13,7 +13,7 @@
   VerilatedContext* contextp = new VerilatedContext;
   contextp->commandArgs(argc, argv);
   //用VerilatedContext实例化自己的顶层类
-  Vswitch* top = new Vswitch{contextp};
+  Vtop* top = new Vtop{contextp};
   //开启波形追踪
   Verilated::traceEverOn(true);
   VerilatedVcdC* m_trace = new VerilatedVcdC;
