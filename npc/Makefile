@@ -45,7 +45,7 @@ $(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
 	@rm -rf $(OBJ_DIR)
-	$(VERILATOR) $(VERILATOR_CFLAGS) --top-module $(TOPNAME) $^\
+	$(VERILATOR) $(VERILATOR_CFLAGS) --top-module $(TOPNAME) $^ \
 	$(addprefix -CFLAGS , $(CFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 	--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 	# verilator -MMD --build --cc -O3 --x-assgin fast --x-initial fast --noassert --trace \
