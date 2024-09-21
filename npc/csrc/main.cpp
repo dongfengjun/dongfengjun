@@ -19,9 +19,8 @@ static void reset(int n) {
 int main() {
 	nvboard_bind_all_pins(&dut); //引脚绑定
   nvboard_init(); //初始化NVBoard
-  reset(10);
 	while(1) {
+		dut.eval();
 		nvboard_update(); //更新
-		single_cycle();
 	}
 }
