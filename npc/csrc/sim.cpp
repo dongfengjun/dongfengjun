@@ -17,7 +17,8 @@ int main(int argc, char** argv, char** env) {
 	tfp->open("wave.vcd");//设置输出的文件wave.vcd
 
 /***code***/
-	while (!contextp->gotFinish()) { //一直到contextp仿真完成才退出
+//	while (!contextp->gotFinish()) { //一直到contextp仿真完成才退出
+	for(int i, i<10, i++){
 		int a = rand() & 1;	//定义a
 		int b = rand() & 1;	//定义b
 		top->a = a;	//输入a
