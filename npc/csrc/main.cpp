@@ -23,4 +23,3 @@ int main() {
 		single_cycle();
 	}
 }
-main.cpp
