@@ -14,7 +14,7 @@ VL_ATTR_COLD void Vtop___024root__trace_init_sub__TOP__0(Vtop___024root* vlSelf,
     tracep->declBit(c+1,"a", false,-1);
     tracep->declBit(c+2,"b", false,-1);
     tracep->declBit(c+3,"f", false,-1);
-    tracep->pushNamePrefix("switch ");
+    tracep->pushNamePrefix("top ");
     tracep->declBit(c+1,"a", false,-1);
     tracep->declBit(c+2,"b", false,-1);
     tracep->declBit(c+3,"f", false,-1);

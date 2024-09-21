@@ -1,38 +1,35 @@
- #include <stdio.h>
- #include <stdlib.h>
- #include <assert.h>
- #include <verilated.h>   //访问验证程序例程的库
- #include <verilated_vcd_c.h>  //向VCD文件中写入波形
- #include "Vtop.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>	//C
+#include "Vtop.h"  //top.v被verilator编译成Vtop.h
+#include "verilated.h"  //verialtor官方库
+#include "verilated_vcd_c.h"	//生成.vcd文件
 
- #define MAX_SIM_TIME 20   //最大仿真时间
- vluint64_t sim_time = 0;
+int main(int argc, char** argv, char** env) {
+	VerilatedContext* contextp = new VerilatedContext;  //verilator上下文指针
+  contextp->commandArgs(argc, argv);  //检查参数
+  Vtop* top = new Vtop{contextp};  //实例化top块
 
- int main(int argc, char** argv) {
-  //构建VerilatedContext以保留模拟时间
-  VerilatedContext* contextp = new VerilatedContext;
-  contextp->commandArgs(argc, argv);
-  //用VerilatedContext实例化自己的顶层类
-  Vtop* top = new Vtop{contextp};
-  //开启波形追踪
-  Verilated::traceEverOn(true);
-  VerilatedVcdC* m_trace = new VerilatedVcdC;
-  top->trace(m_trace, 5); //顶层类设置测试波形参数
-  m_trace->open("waveform.vcd"); //设置波形写入的文件
+/***wave***/
+  VerilatedVcdC *tfp= new VerilatedVcdC;   //初始化VCD对象指针
+  contextp->traceEverOn(true); //打开追踪
+	top->trace(tfp,0);
+	tfp->open("wave.vcd");//设置输出的文件wave.vcd
 
-  while (sim_time < MAX_SIM_TIME) {
-  int a = rand() &1;
-  int b = rand() &1;
-  top->a = a; //实例化模型的信号赋值
-  top->b = b;
-  top->eval(); //评估信号
-  m_trace->dump(sim_time); //将信号写入波形
-  sim_time++;
-  printf("a = %d, b = %d,f = %d\n",a,b,top->f);
-  assert(top->f == (a^b));
-     }
-  m_trace->close();
-  top->final();
+/***code***/
+	while (!contextp->gotFinish()) { //一直到contextp仿真完成才退出
+		int a = rand() & 1;	//定义a
+		int b = rand() & 1;	//定义b
+		top->a = a;	//输入a
+		top->b = b;	//输入b
+		printf("a = %d, b = %d, f = %d\n", a, b, top->f);	//输出top模块f
+		top->eval(); //更新电路状态，计算输出
+/***wave***/
+    tfp->dump(contextp->time());  //dump wave
+    contextp->timeInc(1);//仿真时间推进
+		}
+	tfp->close();
   delete top;
-  return 0;
- }
+	delete contextp;
+	return 0;
+}
