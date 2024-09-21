@@ -13,7 +13,7 @@ include ../Makefile
 #CSRCS = $(shell find $(./csrc ) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 
 wave.o:
-	gtkwave waveform.vcd
+	gtkwave wave.vcd
 
 clean:
 	rm -rf obj_dir
