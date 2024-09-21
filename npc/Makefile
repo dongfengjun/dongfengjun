@@ -17,4 +17,4 @@ wave.o:
 
 clean:
 	rm -rf obj_dir
-	rm waveform.vcd
+	rm wave.vcd
