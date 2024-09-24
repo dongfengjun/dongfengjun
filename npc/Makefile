@@ -1,19 +1,67 @@
-all: sim.o wave.o
-	@echo "Write this Makefile by your self."
+TOPNAME = top
+NXDC_FILES = constr/top.nxdc  #约束文件路径
+INC_PATH ?=  #?=的意义是，INC_PATH如果被未被定义，则为?=后的值，如果被定义过，则保持原来的值
 
-sim.o: csrc/sim.cpp vsrc/switch.v
+VERILATOR = verilator
+#在代码段结束后看这一句的详细注解
+VERILATOR_CFLAGS += -MMD --build --cc --trace \
+								-O3 --x-assign fast --x-initial fast --noassert
+BUILD_DIR = ./build
+OBJ_DIR = $(BUILD_DIR)/obj_dir
+ #OBJ_DIR = ./build/obj_dir
+BIN = $(BUILD_DIR)/$(TOPNAME)
+ #BIN = ./build/top
+
+default: $(BIN) #终极目标为default，依赖./build/top
+
+$(shell mkdir -p $(BUILD_DIR)) #建立./build目录
+
+SRC_AUTO_BIND = $(abspath $(BUILD_DIR)/auto_bind.cpp) #abspath:返回文件的绝对路径
+#SRC_AUTO_BIND = ~/vtest/ex2/part4/build/auto_bind.cpp 此为约束文件
+$(SRC_AUTO_BIND): $(NXDC_FILES) # 目标文件（约束文件SRC_AUTO_BIND)的建立依赖于constr/top.nxdc
+	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
+	# python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py constr/top.nxdc auto_bin.cpp 
+	#此命令用来生成auto_bin.cpp文件
+
+VSRCS = $(shell find $(abspath ./vsrc) -name "*.v")
+#在~/vtest/ex2/part4/vsrc目录中寻找所有的.v文件
+#VSRCS = top.v bcd7seg.v
+CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+#CSRCS = sim_main.cpp
+CSRCS += $(SRC_AUTO_BIND)
+#CSRCS = sim_main.cpp auto_bind.cpp
+
+include $(NVBOARD_HOME)/scripts/nvboard.mk
+#在该Makefile中引用其他Makefile
+
+INCFLAGS = $(addprefix -I, $(INC_PATH))
+#INCFLAGS = -I
+CFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
+#CFLAGS = -I -DTOP_NAME="\"Vtop\""
+LDFLAGS += -lSDL2 -lSDL2_image
+
+$(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
+#./build/top文件的建立依赖于 top.v sim_main.cpp auto_bind.cpp 以及verilator仿真可执行文件
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
-	verilator --trace --cc --exe --build -j 0 -Wall csrc/sim.cpp vsrc/switch.v
+	@rm -rf $(OBJ_DIR)
+	$(VERILATOR) $(VERILATOR_CFLAGS) --top-module $(TOPNAME) $^ \
+	$(addprefix -CFLAGS , $(CFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
+	--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
+	# verilator -MMD --build --cc -O3 --x-assgin fast --x-initial fast --noassert --trace \
+	#--top-module top top.v bcd7seg.v sim_main.cpp auto_bind.cpp \
+	#-CFLAGS -I -DTOP_NAME="\"VTOP\"" -LDFLAGS -lSDL2 -lSDL2_image \
+	#--Mdir ./build/obj_dir --exe -o ./build/top
+	#--top-module top 指定顶层文件名 --Mdir 将生成的文件都放入obj_dir目录中 --exe -o ./build/top 产生可执行文件并指定名字为./build/top
+
+all:default
+	@echo "Write this Makefile by your self."
 
 include ../Makefile
 
-#VSRCS = $(shell find $(./test_out ) -name "*.v")
-# CSRCS = $(shell find $(./csrc ) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
-wave.o:
-	./obj_dir/Vswitch
-	gtkwave waveform.vcd
+run:$(BIN)
+	@$^	#make run 执行可执行文件 ./build/top
 
 clean:
-	rm -rf obj_dir
-	rm waveform.vcd
+	rm -rf $(BUILD_DIR)
+.PHONY: default all clean run
