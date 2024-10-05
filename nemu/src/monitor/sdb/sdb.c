@@ -178,6 +178,7 @@ static int cmd_si(char *args) {
 	}
   else {
 		int n = atoi(arg);
+		printf("%s",arg);
 		cpu_exec(n);
 	}
 return 0;
