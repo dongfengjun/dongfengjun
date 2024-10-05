@@ -27,12 +27,22 @@ void isa_reg_display() {
 	/***打印寄存器***/
 	int i;
 	printf("The value of the register:\n");
-	for (i = 0; i < 7; i ++) {
+	for (i = 0; i < 8; i ++) {
 		printf("%s ", regs[i]);
 	}
-	for (i = 8; i < 15; i ++) {
+	printf("\n");
+	for (i = 8; i < 16; i ++) {
 		printf("%s ", regs[i]);
- }
+	}
+	printf("\n");
+	for (i = 16; i < 24; i ++) {
+		printf("%s ", regs[i]);
+	}
+	printf("\n");
+	for (i = 24; i < 32; i ++) {
+		printf("%s ", regs[i]);
+	}
+	printf("\n");
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
