@@ -175,10 +175,11 @@ static int cmd_si(char *args) {
 	char *arg = strtok(NULL, " ");
 	if (arg == NULL) {
 		cpu_exec(1);
-}
+	}
   else {
-//        printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
-				}
+		int n = atoi(arg);
+		cpu_exec(n);
+	}
 return 0;
 }
 
