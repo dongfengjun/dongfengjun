@@ -178,7 +178,6 @@ static int cmd_si(char *args) {
 	}
   else {
 		int n = atoi(arg);
-		printf("%d\n",*arg);
 		cpu_exec(n);
 	}
 return 0;
@@ -187,6 +186,7 @@ return 0;
 static int cmd_info(char *args) {
 	char *arg = strtok(NULL, " ");
 		if (*arg == 'r') {
+			printf("%d\n",'r');
 			isa_reg_display();
 		}
 		else if (*arg == 'w') {
