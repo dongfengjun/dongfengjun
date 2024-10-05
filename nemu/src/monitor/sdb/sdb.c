@@ -11,7 +11,7 @@
 * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 *
 * See the Mulan PSL v2 for more details.
-***************************************************************************************/
+*******************************:********************************************************/
 
 #include <isa.h>
 #include <cpu/cpu.h>
@@ -54,6 +54,12 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+/***添加调试内容***/
+static int cmd_si(char *args);
+//static int cmd_info(char *args);
+//static int cmd_x(char *args);
+/***END***/
+
 static struct {
   const char *name;
   const char *description;
@@ -62,6 +68,9 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+	{	"si", "Pause execution after the program steps N instructions", cmd_si },
+//	{ "info", "Print register status", cmd_info },
+//	{ "x", "Evaluate the expression EXPR, use the result as the starting memory address, and output N consecutive 4-bytes in hexadecimal form", cmd_x },
 
   /* TODO: Add more commands */
 
@@ -141,3 +150,38 @@ void init_sdb() {
   /* Initialize the watchpoint pool. */
   init_wp_pool();
 }
+
+/***添加调试代码
+static int cmd_help(char *args) {                                           
+   char *arg = strtok(NULL, " ");
+   int i;
+   if (arg == NULL) {
+     for (i = 0; i < NR_CMD; i ++) {
+       printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+     }
+   }
+   else {
+     for (i = 0; i < NR_CMD; i ++) {
+       if (strcmp(arg, cmd_table[i].name) == 0) {
+         printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+         return 0;
+       }
+     }
+     printf("Unknown command '%s'\n", arg);
+   }
+   return 0;
+ }***/
+static int cmd_si(char *args) {
+	char *arg = strtok(NULL, " ");
+	if (arg == NULL) {
+		cpu_exec(1);
+}
+  else {
+//        printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+				}
+return 0;
+}
+
+//static int cmd_info(char *args);
+//static int cmd_x(char *args);
+
