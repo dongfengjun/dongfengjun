@@ -191,6 +191,9 @@ static int cmd_info(char *args) {
 		else if (*arg == 'w') {
 			//代写监视点
 		}
+		else if (arg == NULL) {
+			printf("Please enter parameter:'r'or'w'\n");
+		}
 		else {
 			printf("Unknown command '%s'\n", arg);
 		}
