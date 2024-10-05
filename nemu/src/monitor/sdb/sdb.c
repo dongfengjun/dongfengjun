@@ -56,7 +56,7 @@ static int cmd_help(char *args);
 
 /***添加调试内容***/
 static int cmd_si(char *args);
-//static int cmd_info(char *args);
+static int cmd_info(char *args);
 //static int cmd_x(char *args);
 /***END***/
 
@@ -69,7 +69,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
 	{	"si", "Pause execution after the program steps N instructions", cmd_si },
-//	{ "info", "Print register status", cmd_info },
+	{ "info", "Print register status", cmd_info },
 //	{ "x", "Evaluate the expression EXPR, use the result as the starting memory address, and output N consecutive 4-bytes in hexadecimal form", cmd_x },
 
   /* TODO: Add more commands */
@@ -183,6 +183,18 @@ static int cmd_si(char *args) {
 return 0;
 }
 
-//static int cmd_info(char *args);
+static int cmd_info(char *args) {
+	char *arg = strtok(NULL, " ");
+		if (*arg == 'r') {
+			void isa_reg_display();
+		}
+		else if (*arg == 'w') {
+			//代写监视点
+		}
+		else {
+			printf("Unknown command '%s'\n", arg);
+		}
+	return 0;
+}
 //static int cmd_x(char *args);
 
