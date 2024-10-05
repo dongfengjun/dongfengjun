@@ -187,6 +187,7 @@ static int cmd_x(char *args) {
   char *arg2 = strtok(NULL, " ");
   vaddr_t N = atoi(arg);
   int EXPR = atoi(arg2);
+	printf("%d %d",N,EXPR);
   if (arg == NULL) {
   }
   else {
