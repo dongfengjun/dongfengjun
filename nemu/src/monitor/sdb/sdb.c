@@ -186,6 +186,7 @@ return 0;
 static int cmd_info(char *args) {
 	char *arg = strtok(NULL, " ");
 		if (*arg == 'r') {
+			printf("rrr");
 			void isa_reg_display();
 		}
 		else if (*arg == 'w') {
