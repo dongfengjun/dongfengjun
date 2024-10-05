@@ -181,18 +181,17 @@ static int cmd_info(char *args) {
   return 0;
 }
 
-word_t vaddr_read(vaddr_t addr, int len);
+word_t paddr_read(vaddr_t addr, int len);
 static int cmd_x(char *args) {
   char *arg = strtok(NULL, " ");
   char *arg2 = strtok(NULL, " ");
-  vaddr_t N = atoi(arg);
-  int EXPR = atoi(arg2);
-	printf("%d %d",N,EXPR);
-  if (arg == NULL) {
-  }
-  else {
-    vaddr_read(EXPR, N);
-  }
+  int N = atoi(arg);
+	paddr_t addr = 0;
+  sscanf(arg2, "%x", &addr); 
+  for(int i = 0; i < N; i++) {
+    paddr_read(addr, 4);
+		addr = addr + 4;
+	}
   return 0;
 }
 
