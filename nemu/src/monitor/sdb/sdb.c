@@ -57,7 +57,7 @@ static int cmd_help(char *args);
 /***添加调试内容***/
 static int cmd_si(char *args);
 static int cmd_info(char *args);
-//static int cmd_x(char *args);
+static int cmd_x(char *args);
 /***END***/
 
 static struct {
@@ -70,7 +70,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 	{ "si", "Pause execution after the program steps N instructions", cmd_si }    ,
 	{ "info", "Print register status", cmd_info },
-//	{ "x", "Evaluate the expression EXPR, use the result as the starting memor    y address, and output N consecutive 4-bytes in hexadecimal form", cmd_x },
+	{ "x", "Evaluate the expression EXPR, use the result as the starting memor    y address, and output N consecutive 4-bytes in hexadecimal form", cmd_x },
   
 	/* TODO: Add more commands */
 
@@ -180,7 +180,8 @@ static int cmd_info(char *args) {
     }
   return 0;
 }
-/***
+
+word_t vaddr_read(vaddr_t addr, int len);
 static int cmd_x(char *args) {
   char *arg = strtok(NULL, " ");
   char *arg2 = strtok(NULL, " ");
@@ -189,8 +190,8 @@ static int cmd_x(char *args) {
   if (arg == NULL) {
   }
   else {
-    pmem_read(EXPR, N);
+    vaddr_read(EXPR, N);
   }
   return 0;
 }
-***/
+
