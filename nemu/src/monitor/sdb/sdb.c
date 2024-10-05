@@ -185,7 +185,7 @@ word_t vaddr_read(vaddr_t addr, int len);
 static int cmd_x(char *args) {
   char *arg = strtok(NULL, " ");
   char *arg2 = strtok(NULL, " ");
-  int N = atoi(arg);
+  vaddr_t N = atoi(arg);
   int EXPR = atoi(arg2);
   if (arg == NULL) {
   }
