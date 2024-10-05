@@ -177,8 +177,8 @@ static int cmd_si(char *args) {
 		cpu_exec(1);
 	}
   else {
-		int n = atoi(arg);
-		cpu_exec(n);
+//		int n = atoi(arg);
+		cpu_exec(*arg);
 	}
 return 0;
 }
@@ -199,5 +199,6 @@ static int cmd_info(char *args) {
 		}
 	return 0;
 }
+
 //static int cmd_x(char *args);
 
