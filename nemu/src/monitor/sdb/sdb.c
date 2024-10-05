@@ -1,5 +1,5 @@
 /***************************************************************************************
-* Copyright (c) 2014-2022 Zihao Yu, Nanjing University
+* Copyright (c) 2014-2024 Zihao Yu, Nanjing University
 *
 * NEMU is licensed under Mulan PSL v2.
 * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -11,7 +11,7 @@
 * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 *
 * See the Mulan PSL v2 for more details.
-*******************************:********************************************************/
+***************************************************************************************/
 
 #include <isa.h>
 #include <cpu/cpu.h>
@@ -68,11 +68,11 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-	{	"si", "Pause execution after the program steps N instructions", cmd_si },
+	{ "si", "Pause execution after the program steps N instructions", cmd_si }    ,
 	{ "info", "Print register status", cmd_info },
-//	{ "x", "Evaluate the expression EXPR, use the result as the starting memory address, and output N consecutive 4-bytes in hexadecimal form", cmd_x },
-
-  /* TODO: Add more commands */
+//	{ "x", "Evaluate the expression EXPR, use the result as the starting memor    y address, and output N consecutive 4-bytes in hexadecimal form", cmd_x },
+  
+	/* TODO: Add more commands */
 
 };
 
@@ -151,55 +151,46 @@ void init_sdb() {
   init_wp_pool();
 }
 
-/***添加调试代码
-static int cmd_help(char *args) {                                           
-   char *arg = strtok(NULL, " ");
-   int i;
-   if (arg == NULL) {
-     for (i = 0; i < NR_CMD; i ++) {
-       printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
-     }
-   }
-   else {
-     for (i = 0; i < NR_CMD; i ++) {
-       if (strcmp(arg, cmd_table[i].name) == 0) {
-         printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
-         return 0;
-       }
-     }
-     printf("Unknown command '%s'\n", arg);
-   }
-   return 0;
- }***/
 static int cmd_si(char *args) {
 	char *arg = strtok(NULL, " ");
-	if (arg == NULL) {
-		cpu_exec(1);
-	}
-  else {
-		int n = atoi(arg);
-		cpu_exec(n);
-	}
-return 0;
+   if (arg == NULL) {
+		 cpu_exec(1);
+   }
+   else {
+     int n = atoi(arg);
+     cpu_exec(n);
+   }
+ return 0;
 }
 
 static int cmd_info(char *args) {
-	char *arg = strtok(NULL, " ");
-		if (*arg == 'r') {
-			printf("%d %d\n", 'r', *arg);
-			isa_reg_display();
-		}
+  char *arg = strtok(NULL, " ");
+    if (*arg == 'r') {
+//      printf("%d %d\n", 'r', *arg);
+      isa_reg_display();
+    }
 		else if (*arg == 'w') {
-			//代写监视点
-		}
-		else if (arg == NULL) {
-			printf("Please enter parameter:'r'or'w'\n");
-		}
-		else {
-			printf("Unknown command '%s'\n", arg);
-		}
-	return 0;
+      //待写监视点
+    }
+    else if (arg == NULL) {
+      printf("Please enter parameter:'r'or'w'\n");
+    }
+    else {
+      printf("Unknown command '%s'\n", arg);
+    }
+  return 0;
 }
-
-//static int cmd_x(char *args);
-
+/***
+static int cmd_x(char *args) {
+  char *arg = strtok(NULL, " ");
+  char *arg2 = strtok(NULL, " ");
+  int N = atoi(arg);
+  int EXPR = atoi(arg2);
+  if (arg == NULL) {
+  }
+  else {
+    pmem_read(EXPR, N);
+  }
+  return 0;
+}
+***/
