@@ -155,6 +155,7 @@ void init_sdb() {
 
 static int cmd_si(char *args) {
 	char *arg = strtok(NULL, " ");
+	printf("args = %s arg = %s", args, arg);
    if (arg == NULL) {
 		 cpu_exec(1);
    }
@@ -202,7 +203,7 @@ static int cmd_p(char *args) {
 		printf("Please enter EXPR.\n");
 		return 0;
 	}
-	printf("args = %s\n", args);
+//printf("args = %s\n", args);
 	bool flag = false;
 	expr(args, &flag);
 	return 0;
