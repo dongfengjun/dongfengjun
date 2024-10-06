@@ -58,6 +58,7 @@ static int cmd_help(char *args);
 static int cmd_si(char *args);
 static int cmd_info(char *args);
 static int cmd_x(char *args);
+static int cmd_p(char *args);
 /***END***/
 
 static struct {
@@ -71,7 +72,8 @@ static struct {
 	{ "si", "Pause execution after the program steps N instructions", cmd_si }    ,
 	{ "info", "Print register status", cmd_info },
 	{ "x", "Evaluate the expression EXPR, use the result as the starting memor    y address, and output N consecutive 4-bytes in hexadecimal form", cmd_x },
-  
+  { "p", "Evaluates the value of the expression EXPR", cmd_p },
+
 	/* TODO: Add more commands */
 
 };
@@ -195,3 +197,13 @@ static int cmd_x(char *args) {
   return 0;
 }
 
+static int cmd_p(char *args) {
+	if (args == NULL) {
+		printf("Please enter EXPR.\n");
+		return 0;
+	}
+	printf("args = %s\n", args);
+	bool flag = false;
+	expr(args, &flag);
+	return 0;
+}
