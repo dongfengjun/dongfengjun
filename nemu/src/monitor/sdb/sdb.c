@@ -154,31 +154,32 @@ void init_sdb() {
 }
 
 static int cmd_si(char *args) {
-   if (args == NULL) {
+  if (args == NULL) {
 		 cpu_exec(1);
-   }
-   else {
+	}
+  else {
      int n = atoi(args);
      cpu_exec(n);
-   }
- return 0;
+  }
+	return 0;
 }
 
 static int cmd_info(char *args) {
-  char *arg = strtok(NULL, " ");
-    if (*arg == 'r') {
-//      printf("%d %d\n", 'r', *arg);
+	if (args == NULL) {
+		      printf("Please enter parameter:'r'or'w'\n");
+    } 
+  else {
+		if (*args == 'r') {
+      printf("%d %d\n", 'r', *args);
       isa_reg_display();
     }
-		else if (*arg == 'w') {
-      //待写监视点
-    }
-    else if (arg == NULL) {
-      printf("Please enter parameter:'r'or'w'\n");
+		else if (*args == 'w') {
+      //TODO :待写监视点
     }
     else {
-      printf("Unknown command '%s'\n", arg);
+      printf("Unknown command '%s'\n", args);
     }
+	}
   return 0;
 }
 
