@@ -39,6 +39,11 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
+	{"\\-", '-'},         // sub
+	{"\\(", '('},					// lift parenthesis
+	{"\\)", ')'},					// right parenthesis
+	{"\\*", '*'},					// multiply
+	{"\\/", '/'},					// division
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -95,7 +100,16 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
-          default: TODO();
+					case TK_NOTYPE:
+						break;
+          default:
+						Assert(nr_token < 32, "The tokens array has insufficient storage space."); //32*32*(4+4)*8=65536
+						Assert(substr_len < 32, "The token is too long");
+						tokens[nr_token].type = rules[i].token_type;
+						strncpy(tokens[nr_token].str, substr_start, substr_len);
+						tokens[nr_token].str[substr_len] = '\0';
+						nr_token++;
+						break;
         }
 
         break;
@@ -111,6 +125,9 @@ static bool make_token(char *e) {
   return true;
 }
 
+bool check_parentheses(int p, int q);
+int max(int a, int b);
+uint32_t eval(int p, int  q);
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -119,7 +136,89 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+	eval(0, nr_token - 1);
 
-  return 0;
+	return 0;
+}
+
+uint32_t eval(int p, int  q) {
+  if (p > q) {
+    /* Bad expression */
+		assert(0);
+		return -1;
+  }
+  else if (p == q) {
+    /* Single token.
+     * For now this token should be a number.
+     * Return the value of the number.
+     */
+		return atoi(tokens[p].str);
+  }
+  else if (check_parentheses(p, q) == true) {
+    /* The expression is surrounded by a matched pair of parentheses.
+     * If that is the case, just throw away the parentheses.
+     */
+    return eval(p + 1, q - 1);
+  }
+  else {
+    int op = -1;//the position of 主运算符 in the token expression;
+		bool flag = false;
+		for(int i = p; i < q; i++) {
+			if(tokens[i].type == '(') {
+//				int j = i;
+				while(tokens[i].type != ')') {//s循环
+					i++;
+//				if(j == q) {
+//					printf("ERROR')'")
+				}
+			}
+			if(!flag && (tokens[i].type == '+' || tokens[i].type == '-')) {
+				flag = true;
+				op = max(op, i);
+			}
+			if(!flag && (tokens[i].type == '*' || tokens[i].type == '/')) {
+				flag = true;
+				op = max(op, i);
+			}
+		}
+
+    uint32_t val1 = eval(p, op - 1);
+    uint32_t val2 = eval(op + 1, q);
+		int op_type = tokens[op].type;
+    switch (op_type) {
+      case '+': return val1 + val2;
+      case '-': return val1 - val2;
+      case '*': return val1 * val2;
+      case '/': return val1 / val2;
+      default: assert(0);
+    }
+  }
+}
+
+bool check_parentheses(int p, int q) {
+	if(tokens[p].type != '(' || tokens[q].type != ')')
+		return false;
+	int l = p, r = q;
+	while(l < r) {
+		if(tokens[l].type == '(') {
+			if(tokens[r].type == ')') {
+				l ++, r --;
+				continue;
+			}
+			else
+				r --;
+		}
+		else if(tokens[l].type == ')')
+			return false;
+		else l ++;
+	}
+	return true;
+}
+//algorithm max
+int max(int a, int b) {
+    if (a > b) {
+        return a;
+    } else {
+        return b;
+    }
 }
