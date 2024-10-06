@@ -154,13 +154,11 @@ void init_sdb() {
 }
 
 static int cmd_si(char *args) {
-	char *arg = strtok(NULL, " ");
-	printf("args = %s arg = %s", args, arg);
-   if (arg == NULL) {
+   if (args == NULL) {
 		 cpu_exec(1);
    }
    else {
-     int n = atoi(arg);
+     int n = atoi(args);
      cpu_exec(n);
    }
  return 0;
