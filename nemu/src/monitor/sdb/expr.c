@@ -181,11 +181,12 @@ uint32_t eval(int p, int  q) {
 			}
 			if(!flag&&(tokens[i].type == '+' || tokens[i].type == '-')) {
 				flag = true;
-				printf("%d\n",flag);
 				op = max(op, i);
+				printf("+%d", op);
 			}
 			if(!flag&&(tokens[i].type == '*' || tokens[i].type == '/')) {
 				op = max(op, i);
+				printf("*%d", op);
 			}
 		}
 
