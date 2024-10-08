@@ -123,12 +123,12 @@ static bool make_token(char *e) {
     }
   }
 
-/***test tokens**/
+											/***test tokens**/
 	for(int j = 0; j < nr_token; j++) {
 		printf("%d:%s ", tokens[j].type, tokens[j].str);
 	}
 	printf("\n");
-/******/
+										 /******/
 
   return true;
 }
@@ -170,7 +170,7 @@ uint32_t eval(int p, int  q) {
   }
   else {
     int op = -1;//the position of 主运算符 in the token expression;
-		bool flag = false;
+//		bool flag = false;
 		for(int i = p; i < q; i++) {
 			if(tokens[i].type == '(') {
 //				int j = i;
@@ -180,12 +180,12 @@ uint32_t eval(int p, int  q) {
 //					printf("ERROR')'")
 				}
 			}
-			if(!flag && (tokens[i].type == '+' || tokens[i].type == '-')) {
-				flag = true;
+			if(tokens[i].type == '+' || tokens[i].type == '-') {
+//				flag = true;
 				op = max(op, i);
 			}
-			if(!flag && (tokens[i].type == '*' || tokens[i].type == '/')) {
-				flag = true;
+			if(tokens[i].type == '*' || tokens[i].type == '/') {
+//				flag = true;
 				op = max(op, i);
 			}
 		}
