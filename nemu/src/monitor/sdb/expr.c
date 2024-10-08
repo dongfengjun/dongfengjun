@@ -124,6 +124,11 @@ static bool make_token(char *e) {
   }
 
   return true;
+
+/***test tokens***/
+	for(int j = 0; j < 32; j++) {
+		printf("%d", tokens[j].type);
+	}
 }
 
 bool check_parentheses(int p, int q);
