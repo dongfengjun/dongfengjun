@@ -144,7 +144,7 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-	printf("%d", eval(0, nr_token - 1));
+	printf("%d\n", eval(0, nr_token - 1));
 
 
 	return 0;
