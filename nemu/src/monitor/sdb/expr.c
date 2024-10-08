@@ -125,7 +125,7 @@ static bool make_token(char *e) {
 
 /***test tokens**/
 	for(int j = 0; j < 32; j++) {
-		printf("%d", tokens[j].type);
+		printf("%s", tokens[j].str);
 	}
 /******/
 
