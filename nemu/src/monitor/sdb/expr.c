@@ -196,7 +196,7 @@ uint32_t eval(int p, int  q) {
       case '+': return val1 + val2;
       case '-': return val1 - val2;
       case '*': return val1 * val2;
-      case '/': return val1 / val2;
+      case '/': Assert(val2 != 0,"fenmuwei0."); return val1 / val2;
       default: assert(0);
     }
   }
