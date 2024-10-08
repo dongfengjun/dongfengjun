@@ -198,8 +198,7 @@ uint32_t eval(int p, int  q) {
       case '*': return val1 * val2;
       case '/': 
 				if(val2 == 0) {
-					printf("fenmuwei0.");
-					assert(0);
+					Assert(0, "The denominator is zero");
 				}
 				else {
 					return val1 / val2;
