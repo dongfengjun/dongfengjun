@@ -145,8 +145,6 @@ word_t expr(char *e, bool *success) {
 
   /* TODO: Insert codes to evaluate the expression. */
 	printf("%d\n", eval(0, nr_token - 1));
-
-
 	return 0;
 }
 
@@ -171,7 +169,7 @@ uint32_t eval(int p, int  q) {
   }
   else {
     int op = -1;//the position of 主运算符 in the token expression;
-//		bool flag = false;
+		bool flag = false;
 		for(int i = p; i < q; i++) {
 			if(tokens[i].type == '(') {
 //				int j = i;
@@ -181,12 +179,12 @@ uint32_t eval(int p, int  q) {
 //					printf("ERROR')'")
 				}
 			}
-			if(tokens[i].type == '+' || tokens[i].type == '-') {
-//				flag = true;
+			if(!flag&&(tokens[i].type == '+' || tokens[i].type == '-')) {
+				flag = true;
 				op = max(op, i);
 			}
-			if(tokens[i].type == '*' || tokens[i].type == '/') {
-//				flag = true;
+			if(!flag&&(tokens[i].type == '*' || tokens[i].type == '/')) {
+				flag = true;
 				op = max(op, i);
 			}
 		}
