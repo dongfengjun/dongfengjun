@@ -109,8 +109,8 @@ int main(int argc, char *argv[]) {
     ret = fscanf(fp, "%d", &result);
     pclose(fp);
 
-		printf("%s\n", buf);
-//  printf("%u %s\n", result, buf);
+//	printf("%s\n", buf);
+    printf("%u %s\n", result, buf);
 		index_buf = 0;
   }
   return 0;
