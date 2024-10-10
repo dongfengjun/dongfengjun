@@ -149,8 +149,8 @@ word_t expr(char *e, bool *success) {
 }
 
 uint32_t eval(int p, int  q) {
+	printf("%d %d", p, q);
   if (p > q) {
-		printf("%d %d", p, q);
     /* Bad expression */
 		assert(0);
 		return -1;
