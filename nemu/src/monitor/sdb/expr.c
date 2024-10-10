@@ -130,6 +130,7 @@ static bool make_token(char *e) {
 	printf("\n");
 										 ******/
 
+	printf("%d", nr_token);
   return true;
 }
 
@@ -149,7 +150,6 @@ word_t expr(char *e, bool *success) {
 }
 
 uint32_t eval(int p, int  q) {
-	printf("%d %d", p, q);
   if (p > q) {
     /* Bad expression */
 		assert(0);
