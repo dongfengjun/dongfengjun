@@ -34,7 +34,7 @@ char line[65536 + 128];
 char exprbuf[65536];
 uint32_t result;
 
-file = fopen("/home/xi/ysyx-workbench/nemu/tools/gen-expr/input", "r");	//打开文件
+file = fopen("/home/xi/ysyx-workbench/nemu/tools/gen-expr/tools/input", "r");	//打开文件
 assert(file != NULL);	//assert0
 while (fgets(line, 65536 + 128, file) != NULL)	//fgets读取file文件x-1位字符串到line
 {
@@ -43,18 +43,14 @@ while (fgets(line, 65536 + 128, file) != NULL)	//fgets读取file文件x-1位字�
   int j = 0;
   int cnt = sscanf(line, "%u", &result);	//sscanf字符串格式为化"%u"无符号整型数据,sscanf成功返回1
   assert(cnt == 1);
-  while (line[i] != ' ')
-  {
+  while (line[i] != ' ') {
     i++;
-  }
-	printf("%d ", i);		//result result + j = i
-  while (line[i] != '\n' && i < 65536)
-  {
+  }		//result result + j = i
+  while (line[i] != '\n' && i < 65536) {
     exprbuf[j] = line[i];
     j++;
     i++;
   }
-	printf("%d %d\n", i, j);
   exprbuf[j] = '\0';		//将line中的表达式读入exprbuf
   bool success = true;
   word_t ans = expr(exprbuf, &success);	//exprbuf式输入expr函数计算结果ans
@@ -65,7 +61,7 @@ while (fgets(line, 65536 + 128, file) != NULL)	//fgets读取file文件x-1位字�
     return 0;
   }
 }
-//return 0;
+//return 0;		// 返回/继续进行
 
   /* Start engine. */
 	engine_start();
