@@ -33,11 +33,11 @@ static char* rl_gets() {
     line_read = NULL;
   }
 
-  line_read = readline("(nemu) ");
+  line_read = readline("(nemu) ");		//读取用户输入
 
   if (line_read && *line_read) {
     add_history(line_read);
-  }
+  }		//添加输入到历史记录
 
   return line_read;
 }
@@ -78,11 +78,11 @@ static struct {
 
 };
 
-#define NR_CMD ARRLEN(cmd_table)
+#define NR_CMD ARRLEN(cmd_table)		//可能返回cmd_table数组长度为NR_CMD
 
 static int cmd_help(char *args) {
   /* extract the first argument */
-  char *arg = strtok(NULL, " ");
+  char *arg = strtok(NULL, " ");		//分割字符串
   int i;
 
   if (arg == NULL) {
@@ -90,14 +90,14 @@ static int cmd_help(char *args) {
     for (i = 0; i < NR_CMD; i ++) {
       printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
     }
-  }
+  }		//遍历结构体cmd_table
   else {
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(arg, cmd_table[i].name) == 0) {
         printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
         return 0;
       }
-    }
+    }		//strcmp对比字符，相同返回0
     printf("Unknown command '%s'\n", arg);
   }
   return 0;
@@ -114,7 +114,7 @@ void sdb_mainloop() {
   }
 
   for (char *str; (str = rl_gets()) != NULL; ) {
-    char *str_end = str + strlen(str);
+    char *str_end = str + strlen(str);		//str=输入 strlen()计算字符长度
 
     /* extract the first token as the command */
     char *cmd = strtok(str, " ");
@@ -131,7 +131,7 @@ void sdb_mainloop() {
 #ifdef CONFIG_DEVICE
     extern void sdl_clear_event_queue();
     sdl_clear_event_queue();
-#endif
+#endif		//如果CONFIG_DEVICE被定义，代码将被编译
 
     int i;
     for (i = 0; i < NR_CMD; i ++) {
@@ -139,7 +139,7 @@ void sdb_mainloop() {
         if (cmd_table[i].handler(args) < 0) { return; }
         break;
       }
-    }
+    }		//对比第一段字符和cmb_table
 
     if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
   }
