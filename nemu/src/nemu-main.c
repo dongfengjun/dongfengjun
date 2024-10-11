@@ -34,26 +34,28 @@ char line[65536 + 128];
 char exprbuf[65536];
 uint32_t result;
 
-file = fopen("/home/xi/ysyx-workbench/nemu/tools/gen-expr/build/input", "r");
-assert(file != NULL);
-while (fgets(line, 65536 + 128, file) != NULL)
+file = fopen("/home/xi/ysyx-workbench/nemu/tools/gen-expr/build/input", "r");	//打开文件
+assert(file != NULL);	//assert0
+while (fgets(line, 65536 + 128, file) != NULL)	//fgets读取file文件x-1位字符串到line
 {
   /*notice i and j need reset before start*/
   int i = 0;
   int j = 0;
-  int cnt = sscanf(line, "%u", &result);
+  int cnt = sscanf(line, "%u", &result);	//sscanf字符串格式为化"%u"无符号整型数据,sscanf成功返回1
   assert(cnt == 1);
   while (line[i] != ' ')
   {
     i++;
   }
+	printf("%d ", i);
   while (line[i] != '\n' && i < 65536)
   {
     exprbuf[j] = line[i];
     j++;
     i++;
   }
-  exprbuf[j] = '\0';
+	printf("%d %d\n", i, j);
+  exprbuf[j] = '\0';		//将line读入
   bool success = true;
   word_t ans = expr(exprbuf, &success);
   if (success == false && result - ans != 0)
