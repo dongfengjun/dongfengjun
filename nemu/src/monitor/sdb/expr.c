@@ -21,7 +21,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, NUM, LEQ, EQ, NOTEQ, OR, AND, REG, HEX
+  TK_NOTYPE = 256, TK_EQ, NUM, LEQ, EQ, NOTEQ, OR, AND = 257, REG, HEX
 
   /* TODO: Add more token types */
 
@@ -225,7 +225,7 @@ uint32_t eval(int p, int  q) {
 			case EQ: return val1 == val2;
 			case NOTEQ: return val1 != val2;
 			case OR: return val1 || val2;
-			case AND: return val1 && val2;
+			case 257: return val1 && val2;
       default: printf("No op type.\n"); assert(0);
     }
   }
