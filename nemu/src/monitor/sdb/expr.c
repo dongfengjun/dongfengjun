@@ -21,7 +21,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, NUM, LEQ, NOTEQ, OR, AND, REG, HEX
+  TK_NOTYPE = 256, TK_EQ, NUM, UNEQ, OR, AND, REG, HEX
 
   /* TODO: Add more token types */
 
@@ -46,11 +46,9 @@ static struct rule {
 	{"\\/", '/'},					// divisioin
 	{"[0-9]*", NUM},
 
-	{"<=", LEQ},			//leq
-	{"!=", NOTEQ},		//noteq
+	{"!=", UNEQ},		//uneq
 	{"||", OR},				//or
-	{"\\&\\&", AND},		//and
-	{"\\!", '!'},			//non
+	{"&&", AND},			//and
 	{"\\$[a-zA-Z]*[0-9]*", REG},		//reg_name
 	{"\\0[xX][0-9a-fA-F]+", HEX},		//hexadecimal-number
 };
@@ -222,7 +220,7 @@ uint32_t eval(int p, int  q) {
 					return val1 / val2;
 				}
 			case TK_EQ: return val1 == val2;
-			case NOTEQ: return val1 != val2;
+			case UNEQ: return val1 != val2;
 			case OR: return val1 || val2;
 			case AND: return val1 && val2;
       default: printf("No op type.\n"); assert(0);
