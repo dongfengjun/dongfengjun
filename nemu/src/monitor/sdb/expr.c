@@ -133,12 +133,12 @@ static bool make_token(char *e) {
     }
   }
 
-											/***test tokens***/
+											/***test tokens***
 	for(int j = 0; j < nr_token; j++) {
 		printf("%d:%s ", tokens[j].type, tokens[j].str);
 	}
 	printf("\n");
-										// ******/
+										 ******/
 
   return true;
 }
@@ -222,7 +222,11 @@ uint32_t eval(int p, int  q) {
 				else {
 					return val1 / val2;
 				}
-      default: assert(0);
+			case EQ: return val1 == val2;
+			case NOTEQ: return val1 != val2;
+			case OR: return val1 || val2;
+			case AND: return val1 && val2;
+      default: printf("No op type.\n"); assert(0);
     }
   }
 }
