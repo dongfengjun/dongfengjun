@@ -21,7 +21,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, NUM
+  TK_NOTYPE = 256, TK_EQ, NUM, LEQ, EQ, NOTEQ, OR, AND, REG, HEX
 
   /* TODO: Add more token types */
 
@@ -45,6 +45,15 @@ static struct rule {
 	{"\\*", '*'},					// multiply
 	{"\\/", '/'},					// divisioin
 	{"[0-9]*", NUM},
+
+	{"\\<\\=", LEQ},			//leq
+	{"\\=\\=", EQ},				//eq
+	{"\\!\\=", NOTEQ},		//noteq
+	{"\\|\\|", OR},				//or
+	{"\\&\\&", AND},			//and
+	{"\\!", '!'},					//non
+	{"\\$[a-zA-Z]*[0-9]*", REG},		//reg_name
+	{"\\0[xX][0-9a-fA-F]+", HEX},		//hexadecimal-number
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -145,7 +154,15 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-	printf("%d\n", nr_token - 1);
+
+	/***处理负号***/
+
+	/***处理指针***/
+//	for (i = 0; i < nr_token; i ++) {
+//		if (tokens[i].type == '*' && (i == 0 || tokens[i-1].type == )) {
+//    tokens[i].type = DEREF;
+//		}
+//	}
 	printf("%d\n", eval(0, nr_token - 1));
 	return 0;
 }
