@@ -45,7 +45,6 @@ static struct rule {
 	{"\\*", '*'},					// multiply
 	{"\\/", '/'},					// divisioin
 	{"[0-9]*", NUM},
-
 	{"!=", UNEQ},		//uneq
 	{"\\|\\|", OR},				//or
 	{"\\&\\&", AND},			//and
