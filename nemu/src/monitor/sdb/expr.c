@@ -21,7 +21,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, NUM, LEQ, EQ, NOTEQ, OR, AND, REG, HEX
+  TK_NOTYPE = 256, TK_EQ, NUM, LEQ, NOTEQ, OR, AND, REG, HEX
 
   /* TODO: Add more token types */
 
@@ -38,7 +38,7 @@ static struct rule {
 
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
-//  {"==", TK_EQ},        // equal
+  {"==", TK_EQ},        // equal
 	{"\\-", '-'},         // sub
 	{"\\(", '('},					// lift parenthesis
 	{"\\)", ')'},					// right parenthesis
@@ -46,9 +46,8 @@ static struct rule {
 	{"\\/", '/'},					// divisioin
 	{"[0-9]*", NUM},
 
-	{"\\<\\=", LEQ},			//leq
-	{"\\=\\=", EQ},				//eq
-	{"\\!\\=", NOTEQ},		//noteq
+	{"<=", LEQ},			//leq
+	{"!=", NOTEQ},		//noteq
 	{"\\|\\|", OR},				//or
 	{"\\&\\&", AND},			//and
 	{"\\!", '!'},					//non
@@ -222,7 +221,7 @@ uint32_t eval(int p, int  q) {
 				else {
 					return val1 / val2;
 				}
-			case EQ: return val1 == val2;
+			case TK_EQ: return val1 == val2;
 			case NOTEQ: return val1 != val2;
 			case OR: return val1 || val2;
 			case AND: return val1 && val2;
