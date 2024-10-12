@@ -109,6 +109,19 @@ static bool make_token(char *e) {
         switch (rules[i].token_type) {
 					case TK_NOTYPE:
 						break;
+					case UNEQ:
+					case TK_EQ:
+					case OR:
+					case AND:
+					case REG:
+					case HEX:
+						Assert(nr_token < 32, "The tokens array has insufficient storage     space.");
+            Assert(substr_len < 32, "The token is too long");
+            tokens[nr_token].type = rules[i].token_type;
+            strncpy(tokens[nr_token].str, substr_start, substr_len);
+            tokens[nr_token].str[substr_len] = '\0';
+            nr_token++;
+            break;
           default:
 						Assert(nr_token < 32, "The tokens array has insufficient storage space.");
 						Assert(substr_len < 32, "The token is too long");
