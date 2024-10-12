@@ -46,8 +46,8 @@ static struct rule {
 	{"\\/", '/'},					// divisioin
 	{"[0-9]*", NUM},
 	{"!=", UNEQ},		//uneq
-	{"\\|\\|", OR},				//or
-	{"\\&\\&", AND},			//and
+	{"\\||", OR},				//or
+	{"\\&&", AND},			//and
 	{"\\$[a-zA-Z]*[0-9]*", REG},		//reg_name
 	{"\\0[xX][0-9a-fA-F]+", HEX},		//hexadecimal-number
 };
