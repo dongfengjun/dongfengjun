@@ -47,9 +47,9 @@ static struct rule {
 	{"!=", UNEQ},		//uneq
 	{"\\|\\|", OR},				//or
 	{"\\&\\&", AND},			//and
-	{"[0-9]*", NUM},
 	{"\\$[a-zA-Z]*[0-9]*", REG},		//reg_name
 	{"\\0[xX][0-9a-fA-F]+", HEX},		//hexadecimal-number
+	{"[0-9]*", NUM},
 };
 
 #define NR_REGEX ARRLEN(rules)
