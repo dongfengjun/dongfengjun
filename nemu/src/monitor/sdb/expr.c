@@ -19,6 +19,7 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include <math.h>
 
 enum {
   TK_NOTYPE = 256, TK_EQ, NUM, UNEQ, OR, AND, REG, HEX
@@ -72,25 +73,49 @@ void init_regex() {
     }
   }
 }
-/***辅助函数***/
-void int2char(int x, char str[]){
-  int len = strlen(str);
-  memset(str, 0, len);
-  int tmp_index = 0;
-  int tmp_x = x;
-  int x_size = 0, flag = 1;
-  while(tmp_x) {
-		tmp_x /= 10;
-		x_size ++;
-		flag *= 10;
+/***附加函数***/
+void int2char(int x, char str[]) {
+    // 初始化一个临时索引变量
+    int tmp_index = 0;
+    // 用于计算整数位数的临时变量
+    int tmp_x = x;
+    // 用于存储整数位数的变量
+    int x_size = 0;
+    // 用于计算数字的位数
+    int flag = 1;
+    // 计算整数的位数
+    while(tmp_x) {
+        tmp_x /= 10;
+        x_size++;
+        flag *= 10;
+    }
+    // 如果x为0，直接在字符串首位添加'0'
+    if (x_size == 0) {
+        str[tmp_index++] = '0';
+    }
+    // 调整flag的值，使其指向最高位的数字
+    flag = x_size > 0 ? pow(10, x_size - 1) : 1;
+    // 将整数转换为字符串
+    while(strchr(str, '\0') == NULL) {
+        // 取出当前最高位的数字
+        int a = x / flag; 
+        // 移除当前最高位的数字
+        x %= flag;
+        // 调整flag的值，使其指向下一位的数字
+        flag /= 10;
+        // 将数字转换为字符，并存储到字符串中
+        str[tmp_index++] = a + '0';
+    }
+    // 确保字符串以'\0'结尾
+    str[tmp_index] = '\0';
+}
+int char2int(char s[]){
+  int s_size = strlen(s);
+  int res = 0 ;
+  for(int i = 0 ; i < s_size ; i ++) {
+		res = res * 10 + (s[i] - '0');
   }
-  flag /= 10;
-  while(x) {
-		int a = x / flag;
-		x %= flag;
-		flag /= 10;
-		str[tmp_index ++] = a + '0';
-  }
+  return res;
 }
 /******/
 typedef struct token {
@@ -211,11 +236,21 @@ word_t expr(char *e, bool *success) {
 	/***处理指针***/
 	for (int i = 0; i < nr_token; i ++) {
 		if (tokens[i].type == '*' && (i == 0 || tokens[i-1].type != NUM || tokens[i-1].type != HEX || tokens[i-1].type != (int)(')'))) {
-    tokens[i].type = TK_NOTYPE;
-
-		}
+			tokens[i].type = TK_NOTYPE;
+			int tmp = char2int(tokens[i+1].str);
+			uintptr_t a = (uintptr_t)tmp;
+			int value = *((int*)a);
+			int2char(value, tokens[i+1].str);
+			for(int j = 0 ; j < nr_token ; j ++) {
+				if(tokens[j].type == TK_NOTYPE) {
+					for(int k = j +1 ; k < nr_token; k ++) {
+					tokens[k - 1] = tokens[k];
+					}
+					nr_token -- ;
+				}
+			}
 	}
-
+}
 	printf("result = %d\n", eval(0, nr_token - 1));
 	return 0;
 }
