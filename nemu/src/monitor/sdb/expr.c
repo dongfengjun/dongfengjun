@@ -72,7 +72,27 @@ void init_regex() {
     }
   }
 }
-
+/***辅助函数***/
+void int2char(int x, char str[]){
+  int len = strlen(str);
+  memset(str, 0, len);
+  int tmp_index = 0;
+  int tmp_x = x;
+  int x_size = 0, flag = 1;
+  while(tmp_x) {
+		tmp_x /= 10;
+		x_size ++;
+		flag *= 10;
+  }
+  flag /= 10;
+  while(x) {
+		int a = x / flag;
+		x %= flag;
+		flag /= 10;
+		str[tmp_index ++] = a + '0';
+  }
+}
+/******/
 typedef struct token {
   int type;
   char str[32];
@@ -165,16 +185,38 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-
+	/***reg***/
+	for(int i = 0; i < nr_token; i++) {
+		if(tokens[i].type == REG) {
+			bool flag = true;
+			int tmp = isa_reg_str2val(tokens[i].str, &flag);
+			if(flag) {
+				int2char(tmp, tokens[i].str);
+			}
+			else {
+				printf("Transfrom error.\n");
+				assert(0);
+			}
+		}
+	}
+	/***hex***/
+	for(int i = 0; i < nr_token; i++) {
+		if(tokens[i].type == HEX) {
+			int value = strtol(tokens[i].str, NULL, 16);		//将字符串转换为长整数
+			int2char(value, tokens[i].str);
+		}
+	}
 	/***处理负号***/
-
+	/***处理取反***/
 	/***处理指针***/
-//	for (i = 0; i < nr_token; i ++) {
-//		if (tokens[i].type == '*' && (i == 0 || tokens[i-1].type == )) {
-//    tokens[i].type = DEREF;
-//		}
-//	}
-	printf("%d\n", eval(0, nr_token - 1));
+	for (int i = 0; i < nr_token; i ++) {
+		if (tokens[i].type == '*' && (i == 0 || tokens[i-1].type != NUM || tokens[i-1].type != HEX || tokens[i-1].type != (int)(')'))) {
+    tokens[i].type = TK_NOTYPE;
+
+		}
+	}
+
+	printf("result = %d\n", eval(0, nr_token - 1));
 	return 0;
 }
 
