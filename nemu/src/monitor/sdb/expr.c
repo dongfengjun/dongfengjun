@@ -233,6 +233,23 @@ word_t expr(char *e, bool *success) {
 		}
 	}
 	/***处理负号***/
+	for(int i = 0; i < nr_token; i++) {
+		if(tokens[i].type == '-' && (i == 0 || (tokens[i-1].type != NUM && tokens[i+1].type == NUM ) || tokens[i-1].type == '(' )) {
+			tokens[i].type = TK_NOTYPE;
+			for(int j = 31; j >= 0; j--) {
+				tokens[i+1].str[j] = tokens[i+1].str[j-1];
+			}
+			tokens[i+1].str[0] = '-';
+			for(int j = 0; j < nr_token; j++) {
+				if(tokens[j].type == TK_NOTYPE) {
+					for(int k = j+1; k < nr_token; k++) {
+						tokens[k-1] = tokens[k];
+					}
+					nr_token--;
+				}
+			}
+		}
+	}
 	/***处理取反***/
 	for(int i = 0; i < nr_token; i++) {
 		if(tokens[i].type == '!') {
@@ -255,7 +272,6 @@ word_t expr(char *e, bool *success) {
 			}
 		}
 	}
-
 	/***处理指针***/
 	for (int i = 0; i < nr_token; i ++) {
 		if (tokens[i].type == '*' && (i == 0 || tokens[i-1].type != NUM || tokens[i-1].type != HEX || tokens[i-1].type != (int)(')'))) {
