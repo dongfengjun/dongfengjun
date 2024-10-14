@@ -287,11 +287,27 @@ uint32_t eval(int p, int  q) {
 //					printf("ERROR')'")
 				}
 			}
-			if(!flag&&(tokens[i].type == '+' || tokens[i].type == '-')) {
+			if(!flag && tokens[i].type == OR) {
+				flag = true;
+				op = max(op,i);
+			}
+			if(!flag && tokens[i].type == AND) {
+				flag = true;
+				op = max(op,i);
+			}
+			if(!flag && tokens[i].type == UNEQ) {
+				flag = true;
+				op = max(op,i);
+			}
+			if(!flag && tokens[i].type == TK_EQ) {
+				flag = true;
+				op = max(op,i);
+			}
+			if(!flag && (tokens[i].type == '+' || tokens[i].type == '-')) {
 				flag = true;
 				op = max(op, i);
 			}
-			if(!flag&&(tokens[i].type == '*' || tokens[i].type == '/')) {
+			if(!flag && (tokens[i].type == '*' || tokens[i].type == '/')) {
 				op = max(op, i);
 			}
 //			printf("%d %d %d\n",i,flag,op);
