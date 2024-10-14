@@ -22,6 +22,10 @@ typedef struct watchpoint {
   struct watchpoint *next;
 
   /* TODO: Add more members if necessary */
+	bool flag;
+	char expr[100];
+	int new_value;
+	int old_value;
 
 } WP;
 
@@ -33,6 +37,7 @@ void init_wp_pool() {
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
+		wp_pool[i].flag = false;
   }
 
   head = NULL;
@@ -40,4 +45,35 @@ void init_wp_pool() {
 }
 
 /* TODO: Implement the functionality of watchpoint */
+WP* new_wp() {
+	for(WP* p = free_; p->next != NULL; p = p -> next) {
+		if(p -> flag==false) {
+			p -> flag = true;
+			if(head == NULL) {
+				head = p;
+			}
+			return p;
+		}
+	}
+	printf("No unuse point.\n");
+	assert(0);
+	return NULL;
+}
+	
+void free_wq(WP *wp) {
+	if(head -> NO == wp -> NO) {
+		head -> flag = false;
+		head = NULL;
+		printf("Delete watchpoint success.\n");
+		return;
+	}
+	for(WP *p = head; p -> next != NULL; p = p -> next) {
+		if(p -> next -> NO == wp -> NO) {
+			p -> next = p -> next -> next;
+			p -> next -> flag = false;
+			printf("free succes.\n");
+			return;
+		}
+	}
+}
 
