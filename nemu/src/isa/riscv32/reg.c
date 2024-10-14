@@ -28,11 +28,11 @@ void isa_reg_display() {
 	int i;
 	printf("The value of the register:\n");
 	for (i = 0; i < 8; i ++) {
-		printf("%s\t%d", regs[i], cpu.gpr[i]);
+		printf("%s\t%d\t", regs[i], cpu.gpr[i]);
 	}
 	printf("\n");
 	for (i = 8; i < 16; i ++) {
-		printf("%s\t%d", regs[i], cpu.gpr[i]);
+		printf("%s\t%d\t", regs[i], cpu.gpr[i]);
 	}
 	printf("\n");
 	for (i = 16; i < 24; i ++) {
