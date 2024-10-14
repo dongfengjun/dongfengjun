@@ -45,9 +45,10 @@ static struct rule {
 	{"\\)", ')'},					// right parenthesis
 	{"\\*", '*'},					// multiply
 	{"\\/", '/'},					// divisioin
-	{"!=", UNEQ},		//uneq
-	{"\\|\\|", OR},				//or
-	{"\\&\\&", AND},			//and
+	{"!=", UNEQ},					// uneq
+	{"\\|\\|", OR},				// or
+	{"\\&\\&", AND},			// and
+	{"\\!", '!'},					// !
 	{"\\$[a-zA-Z]*[0-9]*", REG},		//reg_name
 	{"\\0[xX][0-9a-fA-F]+", HEX},		//hexadecimal-number
 	{"[0-9]*", NUM},
@@ -215,7 +216,6 @@ word_t expr(char *e, bool *success) {
 		if(tokens[i].type == REG) {
 			bool flag = true;
 			int tmp = isa_reg_str2val(tokens[i].str, &flag);
-			printf("tmp=%d", tmp);
 			if(flag) {
 				int2char(tmp, tokens[i].str);
 			}
@@ -234,6 +234,28 @@ word_t expr(char *e, bool *success) {
 	}
 	/***处理负号***/
 	/***处理取反***/
+	for(int i = 0; i < nr_token; i++) {
+		if(tokens[i].type == '!') {
+			tokens[i].type = TK_NOTYPE;
+			int tmp = char2int(tokens[i+1].str);
+			if(tmp == 0) {
+				memset(tokens[i+1].str, 0, sizeof(tokens[i+1].str));
+				tokens[i+1].str[0] = '1';
+			}
+			else {
+				memset(tokens[i+1].str, 0, sizeof(tokens[i+1].str));
+			}
+			for(int j = 0; j < nr_token; j++) {
+				if(tokens[j].type == TK_NOTYPE) {
+					for(int k = j + 1; k < nr_token; k++) {
+						tokens[k - 1] = tokens[k];
+					}
+					nr_token--;
+				}
+			}
+		}
+	}
+
 	/***处理指针***/
 	for (int i = 0; i < nr_token; i ++) {
 		if (tokens[i].type == '*' && (i == 0 || tokens[i-1].type != NUM || tokens[i-1].type != HEX || tokens[i-1].type != (int)(')'))) {
