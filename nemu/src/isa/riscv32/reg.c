@@ -32,15 +32,15 @@ void isa_reg_display() {
 	}
 	printf("\n");
 	for (i = 8; i < 16; i ++) {
-		printf("%s\t%d\t", regs[i], cpu.gpr[i]);
+		printf("%s  %d   ", regs[i], cpu.gpr[i]);
 	}
 	printf("\n");
 	for (i = 16; i < 24; i ++) {
-		printf("%s\t%d", regs[i], cpu.gpr[i]);
+		printf("%s  %d   ", regs[i], cpu.gpr[i]);
 	}
 	printf("\n");
 	for (i = 24; i < 32; i ++) {
-		printf("%s\t%d", regs[i], cpu.gpr[i]);
+		printf("%s  %d   ", regs[i], cpu.gpr[i]);
 	}
 	printf("\n");
 }
