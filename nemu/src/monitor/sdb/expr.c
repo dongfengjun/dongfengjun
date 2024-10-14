@@ -372,6 +372,7 @@ uint32_t eval(int p, int  q) {
 				}
 			case TK_EQ: return val1 == val2;
 			case UNEQ: return val1 != val2;
+			case LEQ: return val1 <= val2;
 			case OR: return val1 || val2;
 			case AND: return val1 && val2;
       default: printf("No op type.\n"); assert(0);
