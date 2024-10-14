@@ -22,7 +22,7 @@
 #include <math.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, NUM, UNEQ, OR, AND, REG, HEX
+  TK_NOTYPE = 256, TK_EQ, NUM, UNEQ, LEQ, OR, AND, REG, HEX
 
   /* TODO: Add more token types */
 
@@ -46,6 +46,7 @@ static struct rule {
 	{"\\*", '*'},					// multiply
 	{"\\/", '/'},					// divisioin
 	{"!=", UNEQ},					// uneq
+	{"<=", LEQ},			//less or equal
 	{"\\|\\|", OR},				// or
 	{"\\&\\&", AND},			// and
 	{"\\!", '!'},					// !
