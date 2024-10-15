@@ -71,7 +71,7 @@ void free_wq(WP *wp) {
 		if(p -> next -> NO == wp -> NO) {
 			p -> next = p -> next -> next;
 			p -> next -> flag = false;
-			printf("free succes.\n");
+			printf("free NO.%d succes.\n", p -> NO);
 			return;
 		}
 	}
@@ -97,7 +97,7 @@ void create_watchpoint(char* args) {
   int tmp = expr(p -> expr, &success);
   if(success) {
     p -> old_value = tmp;
-    printf("Create watchpoint NO.%d success.\n", p -> NO);
+    printf("Watchpoint NO.%d: %s\n", p -> NO, p-> expr);
   }
   else printf("Create watchpoint failure.\n");
 }
