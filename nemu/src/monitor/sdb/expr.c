@@ -212,6 +212,7 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
+	*success = true;
 	/***reg***/
 	for(int i = 0; i < nr_token; i++) {
 		if(tokens[i].type == REG) {

@@ -209,8 +209,8 @@ static int cmd_p(char *args) {
 		return 0;
 	}
 //printf("args = %s\n", args);
-	bool flag = false;
-	expr(args, &flag);
+	bool success = false;
+	expr(args, &success);
 	return 0;
 }
 
