@@ -84,9 +84,9 @@ void sdb_watchpoint_display() {
       printf("Watchpoint.NO:%d, expr=%s, old_value=%d, new_value=%d\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].old_value, wp_pool[i].new_value);
       flag = false;
 		}
-    if(flag) {
-      printf("NO watchpoint now.\n");
-    }
+	}
+	if(flag) {
+	printf("NO watchpoint now.\n");
   }
 }
 
