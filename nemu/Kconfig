@@ -191,6 +191,12 @@ config DIFFTEST_REF_NAME
   default "kvm" if DIFFTEST_REF_KVM
   default "spike" if DIFFTEST_REF_SPIKE
   default "none"
+
+#添加监测点开关
+config WATCHPOINT
+bool "Enable watchpoint"                                                  
+default n
+
 endmenu
 
 if MODE_SYSTEM
@@ -216,10 +222,3 @@ config RT_CHECK
 
 endmenu
 
-menu "Watchpoint"
-#添加监测点开关
-config CONFIG_WATCHPOINT
-	bool "Enable watchpoint"
-	default y
-
-endmenu

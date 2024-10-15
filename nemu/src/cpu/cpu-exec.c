@@ -31,6 +31,7 @@ static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
 
 void device_update();
+void checkWatchPoint();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
@@ -38,27 +39,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
-
-#ifdef CONFIG_WATCHPOINT
-//运行一次扫描所有监视点i
-	for(int i = 0; i < NR_WP; i++) {
-		if(wp_pool[i].flag) {
-			bool success = false;
-			int tmp = expr(wp_pool[i].expr, &success);
-			if(success) {
-				if(tmp != wp_pool[i].old_value) {
-					nemu_state.state = NEMU_STOP;
-					printf("");
-					return;
-				}
-			}
-			else {
-				printf("");
-				assert(0);
-			}
-		}
-	}
-#endif
+	IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
 
 static void exec_once(Decode *s, vaddr_t pc) {
