@@ -86,7 +86,7 @@ void sdb_watchpoint_display() {
 		}
 	}
 	if(flag) {
-	printf("NO watchpoint now.\n");
+		printf("NO watchpoint now.\n");
   }
 }
 
