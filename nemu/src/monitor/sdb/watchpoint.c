@@ -77,3 +77,35 @@ void free_wq(WP *wp) {
 	}
 }
 
+void sdb_watchpoint_display() {
+  bool flag = true;
+  for (int i = 0; i < NR_WP; i++) {
+		if(wp_pool[i].flag) {
+      printf("Watchpoint.NO:%d, expr=%s, old_value=%d, new_value=%d\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].old_value, wp_pool[i].new_value);
+      flag = false;
+		}
+    if(flag) {
+      printf("NO watchpoint now.\n");
+    }
+  }
+}
+
+void create_watchpoint(char* args) {
+	WP* p = new_wp();
+  strcpy(p -> expr, args);
+  bool success = false;
+  int tmp = expr(p -> expr, &success);
+  if(success) {
+    p -> old_value = tmp;
+    printf("Create watchpoint NO.%d success.\n", p -> NO);
+  }
+  else printf("Create watchpoint failure.\n");
+}
+
+void delete_watchpoint(int no) {
+  for(int i = 0; i < NR_WP; i++)
+		if(wp_pool[i].NO == no){
+			free_wq(&wp_pool[i]);
+			return ;
+	}
+}

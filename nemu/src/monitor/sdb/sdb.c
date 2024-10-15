@@ -23,6 +23,9 @@ static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+void sdb_watchpoint_display();
+void create_watchpoint();
+void delete_watchpoint();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -59,6 +62,8 @@ static int cmd_si(char *args);
 static int cmd_info(char *args);
 static int cmd_x(char *args);
 static int cmd_p(char *args);
+static int cmd_w(char *args);
+static int cmd_d(char *args);
 /***END***/
 
 static struct {
@@ -70,9 +75,11 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
 	{ "si", "Pause execution after the program steps N instructions", cmd_si }    ,
-	{ "info", "Print register status", cmd_info },
+	{ "info", "r--Print register status\nw--Print watchpoint information", cmd_info },
 	{ "x", "Evaluate the expression EXPR, use the result as the starting memor    y address, and output N consecutive 4-bytes in hexadecimal form", cmd_x },
   { "p", "Evaluates the value of the expression EXPR", cmd_p },
+	{ "w", "When the value of the expression EXPR changes, program execution is suspended", cmd_w },
+	{ "d", "Delete a watch with serial number N", cmd_d },
 
 	/* TODO: Add more commands */
 
@@ -170,11 +177,10 @@ static int cmd_info(char *args) {
     } 
   else {
 		if (*args == 'r') {
-      printf("%d %d\n", 'r', *args);
       isa_reg_display();
     }
 		else if (*args == 'w') {
-      //TODO :待写监视点
+			sdb_watchpoint_display();
     }
     else {
       printf("Unknown command '%s'\n", args);
@@ -205,5 +211,27 @@ static int cmd_p(char *args) {
 //printf("args = %s\n", args);
 	bool flag = false;
 	expr(args, &flag);
+	return 0;
+}
+
+static int cmd_w(char *args) {
+	if (args == NULL) {
+		printf("Please enter EXPR.");
+		return 0;
+	}
+	else {
+		create_watchpoint(args);
+	}
+	return 0;
+}
+
+static int cmd_d(char *args) {
+	if (args == NULL) {
+    printf("Please enter EXPR.");
+		return 0;
+  }
+	else {
+		delete_watchpoint(atoi(args));
+	}
 	return 0;
 }
