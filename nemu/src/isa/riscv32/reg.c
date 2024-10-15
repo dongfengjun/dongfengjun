@@ -60,13 +60,58 @@ void isa_reg_display() {
 	}
 	printf("\n");
 }
-
+/***
+const char *csrs[] = {
+  "mtvec", "mepc", "mstatus", "mcause"
+};
 word_t isa_reg_str2val(const char *s, bool *success) {
-	for(int i = 0 ; i < 32 ; i ++) {
-   	if(strcmp(regs[i], s) == 0) {
-			return cpu.gpr[i];
-		}
-	}
-  success = false;
+  int i = 0;
+//  bool haveFind = false;
+  word_t regVal;
+
+  for (i = 0; i < (sizeof(regs) / sizeof(char *)); i++){
+    if (strcmp(s, regs[i]) == 0){
+//      haveFind = true;
+      regVal = cpu.gpr[i];
+      break;
+    }
+  }
+}
+  for (i = 0; i < (sizeof(csrs) / sizeof(char *)); i++){
+    if (strcmp(s, csrs[i]) == 0){
+      haveFind = true;
+      switch (i)
+      {
+      case 0:
+        regVal = csrs.mtvec; break;
+      case 1:
+        regVal = csrs.mepc; break;
+      case 2:
+        regVal = csrs.mstatus; break;
+      case 3:
+        regVal = csrs.mcause; break;
+      default:
+        Assert(0, "no this index");
+      }
+    }
+  }
+  if (strcmp(s, "pc") == 0){
+    haveFind = true;
+    regVal = cpu.pc;
+  }
+  if (haveFind){
+    *success = true;
+    return regVal;
+  }
+  *success = false;
   return 0;
+	***/
+word_t isa_reg_str2val(const char *s, bool *success) {
+    for(int i = 0 ; i < 32 ; i ++){
+   	if(strcmp(regs[i], s) == 0){
+		return cpu.gpr[i];
+	}
+    }
+    success = false;
+    return 0;
 }
