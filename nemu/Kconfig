@@ -215,3 +215,11 @@ config RT_CHECK
   default y
 
 endmenu
+
+menu "Watchpoint"
+#添加监测点开关
+config CONFIG_WATCHPOINT
+	bool "Enable watchpoint"
+	default y
+
+endmenu
