@@ -67,9 +67,9 @@ word_t isa_reg_str2val(const char *s, bool *success) {
 			return cpu.gpr[i];
 		}
 	}
-	if(strcmp(s, "pc") == 0) {
-		return cpu.pc;
-	}
+//	if(strcmp(s, "pc") == 0) {
+//		return cpu.pc;
+//	}
   *success = false;
   return 0;
 }
