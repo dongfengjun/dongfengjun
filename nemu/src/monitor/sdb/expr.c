@@ -220,7 +220,7 @@ word_t expr(char *e, bool *success) {
 				tokens[i].str[j] = tokens[i].str[j+1];
 			}
 			bool flag = true;
-			int tmp = isa_reg_str2val(tokens[i].str, &flag);
+			uint32_t tmp = isa_reg_str2val(tokens[i].str, &flag);
 			printf("reg=%u\n", tmp);
 			if(flag) {
 				int2char(tmp, tokens[i].str);
