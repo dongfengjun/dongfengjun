@@ -65,15 +65,13 @@ word_t isa_reg_str2val(const char *s, bool *success) {
   for(int i = 0 ; i < 32 ; i ++){
    	if(strcmp(regs[i], s) == 0){
 			return cpu.gpr[i];
-			printf("str=%s\n", s);
 			break;
 		}
 		else {
 			printf("strcmp fail\n");
 		}
 	}
-	if(strcmp(s, "$pc") == 0) {
-		printf("str=pc\n");
+	if(strcmp(s, "pc") == 0) {
 		return cpu.pc;
 	}
   success = false;
