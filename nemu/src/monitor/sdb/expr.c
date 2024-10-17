@@ -191,12 +191,12 @@ static bool make_token(char *e) {
     }
   }
 
-											/***test tokens***/
+											/***test tokens***
 	for(int j = 0; j < nr_token; j++) {
 		printf("%d:%s ", tokens[j].type, tokens[j].str);
 	}
 	printf("\n");
-										/******/
+										  ******/
 
   return true;
 }
@@ -216,6 +216,9 @@ word_t expr(char *e, bool *success) {
 	/***reg***/
 	for(int i = 0; i < nr_token; i++) {
 		if(tokens[i].type == REG) {
+			for(int j = 0; j < 32; j++) {
+				tokens[i].str[j] = tokens[i].str[j+1];
+			}
 			bool flag = true;
 			int tmp = isa_reg_str2val(tokens[i].str, &flag);
 			printf("reg=%d\n", tmp);
