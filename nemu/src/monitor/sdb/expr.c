@@ -219,7 +219,6 @@ word_t expr(char *e, bool *success) {
 			for(int j = 0; j < 32; j++) {
 				tokens[i].str[j] = tokens[i].str[j+1];
 			}
-			printf("str is %s", tokens[i].str);
 			bool flag = true;
 			int tmp = isa_reg_str2val(tokens[i].str, &flag);
 			printf("reg=%d\n", tmp);
