@@ -62,7 +62,6 @@ void isa_reg_display() {
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
-	printf("str=%s\n", s);
   for(int i = 0 ; i < 32 ; i ++){
    	if(strcmp(regs[i], s) == 0){
 			return cpu.gpr[i];
@@ -73,7 +72,7 @@ word_t isa_reg_str2val(const char *s, bool *success) {
 			printf("strcmp fail\n");
 		}
 	}
-	if(strcmp(s, "pc") == 0) {
+	if(strcmp(s, "$pc") == 0) {
 		return cpu.pc;
 		printf("str=pc\n");
 	}
