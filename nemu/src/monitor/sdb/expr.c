@@ -268,14 +268,14 @@ word_t expr(char *e, bool *success) {
 			else {
 				memset(tokens[i+1].str, 0, sizeof(tokens[i+1].str));
 			}
-			for(int j = 0; j < nr_token; j++) {
+/**			for(int j = 0; j < nr_token; j++) {
 				if(tokens[j].type == TK_NOTYPE) {
 					for(int k = j + 1; k < nr_token; k++) {
 						tokens[k - 1] = tokens[k];
 					}
 					nr_token--;
 				}
-			}
+			}**/
 		}
 	}
 	/***处理指针***/
