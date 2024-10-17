@@ -218,6 +218,7 @@ word_t expr(char *e, bool *success) {
 		if(tokens[i].type == REG) {
 			bool flag = true;
 			int tmp = isa_reg_str2val(tokens[i].str, &flag);
+			printf("reg=%d", tmp);
 			if(flag) {
 				int2char(tmp, tokens[i].str);
 			}
