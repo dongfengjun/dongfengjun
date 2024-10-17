@@ -67,9 +67,6 @@ word_t isa_reg_str2val(const char *s, bool *success) {
 			return cpu.gpr[i];
 			break;
 		}
-		else {
-			printf("strcmp fail\n");
-		}
 	}
 	if(strcmp(s, "pc") == 0) {
 		return cpu.pc;
