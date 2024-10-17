@@ -224,7 +224,7 @@ word_t expr(char *e, bool *success) {
 			printf("i=%d,reg=%u\n", i, tmp);
 			if(flag) {
 				int2char(tmp, tokens[i].str);
-				printf("Success,str=%s", tokens[i].str);
+				printf("Success,str=%s\n", tokens[i].str);
 			}
 			else {
 				printf("Transfrom error.\n");
