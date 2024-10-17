@@ -221,7 +221,7 @@ word_t expr(char *e, bool *success) {
 			}
 			bool flag = true;
 			uint32_t tmp = isa_reg_str2val(tokens[i].str, &flag);
-			printf("reg=%u\n", tmp);
+			printf("i=%d,reg=%u\n", i, tmp);
 			if(flag) {
 				int2char(tmp, tokens[i].str);
 			}
@@ -303,7 +303,7 @@ word_t expr(char *e, bool *success) {
 }
 
 uint32_t eval(int p, int  q) {
-	printf("p=%d,q=%d", p, q);
+	printf("p=%d,q=%d\n", p, q);
   if (p > q) {
     /* Bad expression */
 		assert(0);
@@ -314,6 +314,7 @@ uint32_t eval(int p, int  q) {
      * For now this token should be a number.
      * Return the value of the number.
      */
+
 		return atoi(tokens[p].str);
   }
   else if (check_parentheses(p, q) == true) {
