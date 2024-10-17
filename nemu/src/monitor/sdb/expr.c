@@ -22,7 +22,7 @@
 #include <math.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, NUM, UNEQ, LEQ, OR, AND, REG, HEX
+  TK_NOTYPE = 256, TK_EQ, NUM, UNEQ, LEQ, OR, AND, REG=299, HEX
 
   /* TODO: Add more token types */
 
@@ -191,12 +191,12 @@ static bool make_token(char *e) {
     }
   }
 
-											/***test tokens***/
+											/***test tokens***
 	for(int j = 0; j < nr_token; j++) {
 		printf("%d:%s ", tokens[j].type, tokens[j].str);
 	}
 	printf("\n");
-										 /******/
+										 ******/
 
   return true;
 }
