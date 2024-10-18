@@ -111,16 +111,14 @@ void delete_watchpoint(int no) {
 }
 
 void checkWatchPoint() {
-	printf("checkwatchpoint\n");
 	for(int i = 0 ; i < NR_WP; i ++){
 		if(wp_pool[i].flag) {
 			bool success = false;
 			word_t tmp = expr(wp_pool[i].expr,&success);
       if(success){
 				if(tmp != wp_pool[i].old_value) {
-					printf("oldvalue=%u,newvalue=%u\n", wp_pool[i].old_value, tmp);
+					printf("oldvalue=%u != newvalue=%u,NEMU_STOP\n", wp_pool[i].old_value, tmp);
 					nemu_state.state = NEMU_STOP;
-          printf("NO EQ\n");
 					return ;
         }
       }
