@@ -117,7 +117,7 @@ void checkWatchPoint() {
 			word_t tmp = expr(wp_pool[i].expr,&success);
       if(success){
 				if(tmp != wp_pool[i].old_value) {
-					printf("oldvalue=%u  !=  newvalue=%u\nNEMU_STOP\n", wp_pool[i].old_value, tmp);
+					printf("oldvalue=%u\nnewvalue=%u\nNEMU_STOP\n", wp_pool[i].old_value, tmp);
 					nemu_state.state = NEMU_STOP;
 					return ;
         }
