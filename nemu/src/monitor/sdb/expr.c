@@ -119,24 +119,34 @@ int char2int(char s[]){
   }
   return res;
 }
-void uint2char(uint32_t x, char str[]){
-    int len = strlen(str);
-    memset(str, 0, len);
-    int tmp_index = 0;
-    uint32_t tmp_x = x;
-    int x_size = 0, flag = 1;
-    while(tmp_x){
-	tmp_x /= 10;
-	x_size ++;
-	flag *= 10;
+void uint2char(uint32_t num, char str[]) {
+    uint32_t tmp = num;
+    int index = 0;  // 字符串数组的索引
+    int isLeadingZero = 1;  // 标记是否为前导零
+    // 特殊情况，数值为 0
+    if (num == 0) {
+        str[index++] = '0';
+        str[index] = '\0';
+        return;
     }
-    flag /= 10;
-    while(x)
-    {
-	int a = x / flag; 
-	x %= flag;
-	flag /= 10;
-	str[tmp_index ++] = a + '0';
+    // 从最高位到最低位遍历数值的每一位
+    while (tmp > 0) {
+        int digit = tmp % 10;  // 获取当前位的数字
+        if (isLeadingZero && digit == 0) {
+            // 跳过前导零
+        } else {
+            str[index++] = '0' + digit;  // 将数字转换为字符
+            isLeadingZero = 0;  // 重置前导零标记
+        }
+        tmp /= 10;  // 移除当前位的数字
+    }
+    str[index] = '\0';  // 添加字符串终止符
+    // 反转字符串，因为我们是从最低位到最高位构建的
+    int len = strlen(str);
+    for (int i = 0; i < len / 2; i++) {
+        char temp = str[i];
+        str[i] = str[len - i - 1];
+        str[len - i - 1] = temp;
     }
 }
 /******/
