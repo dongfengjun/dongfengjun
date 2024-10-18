@@ -115,9 +115,9 @@ void checkWatchPoint() {
 	for(int i = 0 ; i < NR_WP; i ++){
 		if(wp_pool[i].flag) {
 			bool success = false;
-			int tmp = expr(wp_pool[i].expr,&success);
+			uint32_t tmp = expr(wp_pool[i].expr,&success);
 			printf("wp_pool[i].expr=%s,&success=%d\n", wp_pool[i].expr, success);
-			printf("tmp=%d\n", tmp);
+			printf("tmp=%u\n", tmp);
       if(success){
 				if(tmp != wp_pool[i].old_value) {
 					printf("oldvalue=%d,newvalue=%d\n", wp_pool[i].old_value, tmp);
