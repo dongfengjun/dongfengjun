@@ -254,8 +254,6 @@ word_t expr(char *e, bool *success) {
 			printf("i=%d,reg=%u\n", i, tmp);
 			if(flag) {
 				uint2char(tmp,tokens[i].str);
-				printf("Success,str=%s\n", tokens[i].str);
-				printf("%d\n", atoi(tokens[i].str));
 			}
 			else {
 				printf("Transfrom error.\n");
@@ -335,7 +333,6 @@ word_t expr(char *e, bool *success) {
 }
 
 uint32_t eval(int p, int  q) {
-	printf("p=%d,q=%d\n", p, q);
   if (p > q) {
     /* Bad expression */
 		assert(0);
