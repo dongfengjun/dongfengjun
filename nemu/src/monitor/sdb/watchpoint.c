@@ -116,9 +116,10 @@ void checkWatchPoint() {
 		if(wp_pool[i].flag) {
 			bool success = false;
 			int tmp = expr(wp_pool[i].expr,&success);
+			printf("tmp=%d\n", tmp);
       if(success){
 				if(tmp != wp_pool[i].old_value) {
-					printf("oldvalue=%d,newvalue=%d\n",wp_pool[i].old_value,tmp);
+					printf("oldvalue=%d,newvalue=%d\n", wp_pool[i].old_value, tmp);
 					nemu_state.state = NEMU_STOP;
           printf("NO EQ\n");
 					return ;
