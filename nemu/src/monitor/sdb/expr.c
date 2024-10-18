@@ -325,9 +325,9 @@ word_t expr(char *e, bool *success) {
 			}
 	}
 }
-	uint32_t result = 0;
+	word_t result = 0;
 	result = eval(0, nr_token - 1);
-	printf("result = %u\n", result);
+	printf("expr result = %u\n", result);
 	return result;
 }
 
