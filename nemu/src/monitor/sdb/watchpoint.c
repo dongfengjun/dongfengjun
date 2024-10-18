@@ -23,7 +23,7 @@ typedef struct watchpoint {
 
   /* TODO: Add more members if necessary */
 	bool flag;
-	char expr[100];
+	char expr[32];
 	int new_value;
 	int old_value;
 
@@ -81,7 +81,7 @@ void sdb_watchpoint_display() {
   bool flag = true;
   for (int i = 0; i < NR_WP; i++) {
 		if(wp_pool[i].flag) {
-      printf("Watchpoint.NO:%d, expr=%s, old_value=%d, new_value=%d\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].old_value, wp_pool[i].new_value);
+      printf("Watchpoint.NO:%d, expr=%s, old_value=%u, new_value=%u\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].old_value, wp_pool[i].new_value);
       flag = false;
 		}
 	}
@@ -94,7 +94,7 @@ void create_watchpoint(char* args) {
 	WP* p = new_wp();
   strcpy(p -> expr, args);
   bool success = false;
-  int tmp = expr(p -> expr, &success);
+  word_t tmp = expr(p -> expr, &success);
   if(success) {
     p -> old_value = tmp;
     printf("Watchpoint NO.%d: %s\n", p -> NO, p-> expr);
@@ -115,12 +115,10 @@ void checkWatchPoint() {
 	for(int i = 0 ; i < NR_WP; i ++){
 		if(wp_pool[i].flag) {
 			bool success = false;
-			uint32_t tmp = expr(wp_pool[i].expr,&success);
-			printf("wp_pool[i].expr=%s,&success=%d\n", wp_pool[i].expr, success);
-			printf("tmp=%u\n", tmp);
+			word_t tmp = expr(wp_pool[i].expr,&success);
       if(success){
 				if(tmp != wp_pool[i].old_value) {
-					printf("oldvalue=%d,newvalue=%d\n", wp_pool[i].old_value, tmp);
+					printf("oldvalue=%u,newvalue=%u\n", wp_pool[i].old_value, tmp);
 					nemu_state.state = NEMU_STOP;
           printf("NO EQ\n");
 					return ;
