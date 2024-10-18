@@ -251,7 +251,6 @@ word_t expr(char *e, bool *success) {
 			}
 			bool flag = true;
 			uint32_t tmp = isa_reg_str2val(tokens[i].str, &flag);
-			printf("i=%d,reg=%u\n", i, tmp);
 			if(flag) {
 				uint2char(tmp,tokens[i].str);
 			}
