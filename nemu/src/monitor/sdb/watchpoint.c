@@ -40,14 +40,14 @@ void init_wp_pool() {
 		wp_pool[i].flag = false;
   }
 
-  head = NULL;
-  free_ = wp_pool;
+  head = NULL;		//已用
+  free_ = wp_pool;		//未用
 }
 
 /* TODO: Implement the functionality of watchpoint */
 WP* new_wp() {
 	for(WP* p = free_; p->next != NULL; p = p -> next) {
-		if(p -> flag==false) {
+		if(p -> flag == false) {
 			p -> flag = true;
 			if(head == NULL) {
 				head = p;
@@ -59,18 +59,18 @@ WP* new_wp() {
 	assert(0);
 	return NULL;
 }
-	
+
 void free_wq(WP *wp) {
 	if(head -> NO == wp -> NO) {
 		head -> flag = false;
 		head = NULL;
-		printf("Delete NO.0 watchpoint success.\n");
+		printf("Delete watchpoint success.\n");
 		return;
 	}
 	for(WP *p = head; p -> next != NULL; p = p -> next) {
 		if(p -> NO == wp -> NO) {
-			p = p -> next;
 			p -> flag = false;
+			p = p -> next;
 			printf("free NO.%d success.\n", p -> NO);
 			return;
 		}
