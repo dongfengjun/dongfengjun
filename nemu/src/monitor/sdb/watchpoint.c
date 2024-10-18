@@ -64,14 +64,14 @@ void free_wq(WP *wp) {
 	if(head -> NO == wp -> NO) {
 		head -> flag = false;
 		head = NULL;
-		printf("Delete watchpoint success.\n");
+		printf("Delete NO.0 watchpoint success.\n");
 		return;
 	}
 	for(WP *p = head; p -> next != NULL; p = p -> next) {
-		if(p -> next -> NO == wp -> NO) {
-			p -> next = p -> next -> next;
-			p -> next -> flag = false;
-			printf("free NO.%d succes.\n", wp -> NO);
+		if(p -> NO == wp -> NO) {
+			p = p -> next;
+			p -> flag = false;
+			printf("free NO.%d success.\n", wp -> NO);
 			return;
 		}
 	}
