@@ -24,7 +24,6 @@ typedef struct watchpoint {
   /* TODO: Add more members if necessary */
 	bool flag;
 	char expr[32];
-	int new_value;
 	int old_value;
 
 } WP;
@@ -81,7 +80,9 @@ void sdb_watchpoint_display() {
   bool flag = true;
   for (int i = 0; i < NR_WP; i++) {
 		if(wp_pool[i].flag) {
-      printf("Watchpoint.NO:%d, expr=%s, old_value=%u, new_value=%u\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].old_value, wp_pool[i].new_value);
+			bool success = false;
+			word_t tmp = expr(wp_pool[i].expr,&success);
+      printf("Watchpoint.NO:%d, expr=%s, old_value=%u, new_value=%u\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].old_value, tmp);
       flag = false;
 		}
 	}
