@@ -210,7 +210,7 @@ static int cmd_p(char *args) {
 	}
 //printf("args = %s\n", args);
 	bool success = false;
-	expr(args, &success);
+	printf("expr result = %u", expr(args, &success));
 	return 0;
 }
 
