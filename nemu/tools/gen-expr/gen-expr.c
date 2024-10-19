@@ -23,7 +23,6 @@
 // this should be enough
 static char buf[65536] = {};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
-
 static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
@@ -32,53 +31,8 @@ static char *code_format =
 "  return 0; "
 "}";
 
-/***补充函数***/
-int index_buf = 0;
-
-int choose(int n){
-	int flag =rand() % 3 ;
-	return flag;
-}
-
-void gen_num() {
-	int num = rand() % 100;
-	int num_size = 0, num_tmp = num;
-	while(num_tmp) {
-		num_tmp /= 10;
-		num_size ++;
-  }
-  int x = 1;
-  while(num_size) {
-		x *= 10;
-		num_size -- ;
-  }
-  x /= 10;
-  while(num) {
-		char c = num / x + '0';
-		num %= x;
-		x /= 10;
-		buf[index_buf ++] = c;
-  }
-}
-
-void gen_rand_op() {
-    char op[4] = {'+', '-', '*', '/'};
-    int op_position = rand() % 4;
-    buf[index_buf ++] = op[op_position];
-}
-
-void gen(char c){
-    buf[index_buf ++] = c;
-}
-
-/******/
 static void gen_rand_expr() {
-//  buf[0] = '\0';
-	switch (choose(3)) {
-		case 0: gen_num(); break;
-		case 1: gen('('); gen_rand_expr(); gen(')'); break;
-		default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
-	}
+  buf[0] = '\0';
 }
 
 int main(int argc, char *argv[]) {
@@ -109,9 +63,7 @@ int main(int argc, char *argv[]) {
     ret = fscanf(fp, "%d", &result);
     pclose(fp);
 
-//	printf("%s\n", buf);
     printf("%u %s\n", result, buf);
-		index_buf = 0;
   }
   return 0;
 }
