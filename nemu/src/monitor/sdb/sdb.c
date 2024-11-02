@@ -75,8 +75,8 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
 	{ "si", "Pause execution after the program steps N instructions", cmd_si }    ,
-	{ "info",  "info r -Print register status info w -Print watchpoint information", cmd_info },
-	{ "x", "Evaluate the expression EXPR, use the result as the starting memory address, and output N consecutive 4-bytes in hexadecimal form", cmd_x },
+	{ "info", "r--Print register status   w--Print watchpoint information", cmd_info },
+	{ "x", "Evaluate the expression EXPR, use the result as the starting memor    y address, and output N consecutive 4-bytes in hexadecimal form", cmd_x },
   { "p", "Evaluates the value of the expression EXPR", cmd_p },
 	{ "w", "When the value of the expression EXPR changes, program execution is suspended", cmd_w },
 	{ "d", "Delete a watch with serial number N", cmd_d },
@@ -210,7 +210,7 @@ static int cmd_p(char *args) {
 	}
 //printf("args = %s\n", args);
 	bool success = false;
-	printf("expr result = %x\n", expr(args, &success));
+	printf("expr result = %u\n", expr(args, &success));
 	return 0;
 }
 
