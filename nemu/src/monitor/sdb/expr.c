@@ -269,7 +269,7 @@ word_t expr(char *e, bool *success) {
 	}
 	/***处理负号***/
 	for(int i = 0; i < nr_token; i++) {
-		if(tokens[i].type == '-' && (i == 0 || (tokens[i-1].type != NUM && tokens[i+1].type == NUM ) || tokens[i-1].type != ')' )) {
+		if(tokens[i].type == '-' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i+1].type == NUM ) || tokens[i-1].type != ')' ))) {
 			tokens[i].type = TK_NOTYPE;
 			for(int j = 31; j >= 0; j--) {
 				tokens[i+1].str[j] = tokens[i+1].str[j-1];
