@@ -428,7 +428,6 @@ bool check_parentheses(int p, int q) {
 			return false;}
 		else {
 			l ++;
-			printf("l++=%d\n",l);
 		}
 	}
 	return true;
