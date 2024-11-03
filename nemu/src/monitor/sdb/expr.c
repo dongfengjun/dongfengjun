@@ -424,7 +424,10 @@ bool check_parentheses(int p, int q) {
 		}
 		else if(tokens[l].type == ')')
 			return false;
-		else l ++;
+		else {
+			l ++;
+			printf("l++=%d\n",l);
+		}
 	}
 	return true;
 }
