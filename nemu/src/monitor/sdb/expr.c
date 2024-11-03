@@ -260,15 +260,6 @@ word_t expr(char *e, bool *success) {
 			}
 		}
 	}
-	/***hex***
-	for(int i = 0; i < nr_token; i++) {
-		if(tokens[i].type == HEX) {
-			int value = strtol(tokens[i].str, NULL, 16);		//将字符串转换为长整数
-			printf("hex value=%x\n",value);
-			int2char(value, tokens[i].str);
-		}
-	}
-***/
 	/***处理负号***/
 	for(int i = 0; i < nr_token; i++) {
 		if(tokens[i].type == '-' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i+1].type == NUM ) && tokens[i-1].type != ')' ))) {
