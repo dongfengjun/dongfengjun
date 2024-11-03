@@ -263,7 +263,7 @@ word_t expr(char *e, bool *success) {
 	/***hex***/
 	for(int i = 0; i < nr_token; i++) {
 		if(tokens[i].type == HEX) {
-			int value = strtol(tokens[i].str, NULL, 16);		//将字符串转换为长整数
+			int value = strtol(tokens[i].str, NULL, 10);		//将字符串转换为长整数
 			printf("hex value=%d\n",value);
 			int2char(value, tokens[i].str);
 		}
