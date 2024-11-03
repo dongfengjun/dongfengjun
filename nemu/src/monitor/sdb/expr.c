@@ -319,7 +319,20 @@ word_t expr(char *e, bool *success) {
 	}
 }
 	word_t result = 0;
-	result = eval(0, nr_token);
+	int numl = 0;
+	int numr = 0;
+  for(int i = 0; i < nr_token; i++) {
+		if(tokens[i].type == '(')
+        numl += 1;
+    if(tokens[i].type == ')')
+      numr += 1;
+  }
+	printf("numl=%d,numr=%d\n",numl,numr);
+  if(numl != numr) {
+    printf("ERROR ()\n");
+    assert(0);
+  }
+	result = eval(0, nr_token-1);
 //	printf("expr result = %u\n", result);
 	return result;
 }
@@ -345,20 +358,6 @@ uint32_t eval(int p, int  q) {
     return eval(p + 1, q - 1);
   }
   else {
-		int numl = 0;
-		int numr = 0;
-		printf("p=%d,q=%d\n",p,q);
-		for(int i = 0; i < nr_token; i++) {
-			if(tokens[i].type == '(')
-				numl += 1;
-			if(tokens[i].type == ')')
-				numr += 1;
-			printf("(=%d,)=%d\n", numl, numr);
-		}
-		if(numl != numr) {
-				printf("ERROR ()\n");
-				assert(0);
-		}
     int op = -1;//the position of 主运算符 in the token expression;
 		bool flag = false;
 		for(int i = p; i < q; i++) {
