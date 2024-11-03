@@ -309,7 +309,7 @@ word_t expr(char *e, bool *success) {
 	}
 	/***处理指针***/
 	for (int i = 0; i < nr_token; i ++) {
-		if (tokens[i].type == '*' && (i == 0 || tokens[i-1].type != NUM || tokens[i-1].type != HEX || tokens[i-1].type != (int)(')'))) {
+		if (tokens[i].type == '*' && (i == 0 || ((tokens[i-1].type != NUM || tokens[i-1].type != HEX) && tokens[i-1].type != (int)(')')))) {
 			tokens[i].type = TK_NOTYPE;
 			int tmp = char2int(tokens[i+1].str);
 			uintptr_t a = (uintptr_t)tmp;
