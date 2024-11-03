@@ -348,7 +348,7 @@ uint32_t eval(int p, int  q) {
 		int numl = 0;
 		int numr = 0;
 		printf("p=%d,q=%d\n",p,q);
-		for(int i = p; i < q; i++) {
+		for(int i = 0; i < nr_token; i++) {
 			if(tokens[i].type == '(')
 				numl += 1;
 			if(tokens[i].type == ')')
