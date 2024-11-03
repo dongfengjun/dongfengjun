@@ -353,7 +353,7 @@ uint32_t eval(int p, int  q) {
 				while(tokens[j].type != ')') {//s循环
 					j++;
 					if(j == q) {
-						printf("ERROR");
+						printf("ERROR\n");
 						assert(0);
 					}
 				}
