@@ -221,12 +221,12 @@ static bool make_token(char *e) {
     }
   }
 
-											/***test tokens***/
+											/***test tokens***
 	for(int j = 0; j < nr_token; j++) {
 		printf("%d:%s ", tokens[j].type, tokens[j].str);
 	}
 	printf("\n");
-										  /******/
+										  ******/
 
   return true;
 }
