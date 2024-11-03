@@ -415,6 +415,7 @@ bool check_parentheses(int p, int q) {
 	if(tokens[p].type != '(' || tokens[q].type != ')')
 		return false;
 	int l = p+1, r = q-1;
+	printf("l=%d,r=%d\n",l,r);
 	while(l < r) {
 		if(tokens[l].type == '(') {
 			if(tokens[r].type == ')') {
