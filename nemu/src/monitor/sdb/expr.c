@@ -345,30 +345,33 @@ uint32_t eval(int p, int  q) {
     return eval(p + 1, q - 1);
   }
   else {
-    int op = -1;//the position of 主运算符 in the token expression;
-		bool flag = false;
 		for(int i = p; i < q; i++) {
 			if(tokens[i].type == '(') {
-				int j = i;
-				while(tokens[j].type != ')') {
-					j++;
-					if(j == q) {
-						printf("ERROR ) \n");
-						assert(0);
+				  int j = i;
+					while(tokens[j].type != ')') {
+						j++;
+						if(j == q) {
+							printf("ERROR ) \n");
+							assert(0);
+						}
 					}
 				}
 			}
-			int u = q;
-      if(tokens[u].type == ')') {
-        int v = u;
-        while(tokens[v].type != '(') {
-          v--;
-          if(u == p) {
+    for(int i = q; i > p; i--) {
+      if(tokens[i].type == ')') {
+        int j = i;
+        while(tokens[j].type != '(') {
+          j--;
+          if(j == p) {
             printf("ERROR ( \n");
             assert(0);
           }
         }
       }
+		}
+    int op = -1;//the position of 主运算符 in the token expression;
+		bool flag = false;
+		for(int i = p; i < q; i++) {
 			if(!flag && tokens[i].type == OR) {
 				flag = true;
 				op = max(op,i);
