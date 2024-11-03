@@ -349,11 +349,12 @@ uint32_t eval(int p, int  q) {
 		bool flag = false;
 		for(int i = p; i < q; i++) {
 			if(tokens[i].type == '(') {
-//				int j = i;
-				while(tokens[i].type != ')') {//s循环
-					i++;
-//				if(j == q) {
-//					printf("ERROR')'")
+				int j = i;
+				while(tokens[j].type != ')') {//s循环
+					j++;
+					if(j == q) {
+						assert(0);
+					}
 				}
 			}
 			if(!flag && tokens[i].type == OR) {
