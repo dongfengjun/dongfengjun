@@ -413,7 +413,7 @@ uint32_t eval(int p, int  q) {
 bool check_parentheses(int p, int q) {
 	if(tokens[p].type != '(' || tokens[q].type != ')')
 		return false;
-	int l = p, r = q;
+	int l = p+1, r = q-1;
 	while(l < r) {
 		if(tokens[l].type == '(') {
 			if(tokens[r].type == ')') {
