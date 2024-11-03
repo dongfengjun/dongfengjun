@@ -350,7 +350,7 @@ uint32_t eval(int p, int  q) {
 		for(int i = p; i < q; i++) {
 			if(tokens[i].type == '(') {
 				int j = i;
-				while(tokens[j].type != ')') {//s循环
+				while(tokens[j].type != ')') {
 					j++;
 					if(j == q) {
 						printf("ERROR ) \n");
@@ -358,6 +358,17 @@ uint32_t eval(int p, int  q) {
 					}
 				}
 			}
+			int u = q;
+      if(tokens[u].type == ')') {
+        int v = u;
+        while(tokens[v].type != '(') {
+          v--;
+          if(u == p) {
+            printf("ERROR ( \n");
+            assert(0);
+          }
+        }
+      }
 			if(!flag && tokens[i].type == OR) {
 				flag = true;
 				op = max(op,i);
