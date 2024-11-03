@@ -352,6 +352,7 @@ uint32_t eval(int p, int  q) {
 				numl += 1;
 			if(tokens[i].type == ')')
 				numr += 1;
+			printf("(=%d,)=%d\n", numl, numr);
 		}
 		if(numl != numr) {
 				printf("ERROR ()\n");
