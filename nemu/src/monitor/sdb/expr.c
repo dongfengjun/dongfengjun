@@ -345,29 +345,17 @@ uint32_t eval(int p, int  q) {
     return eval(p + 1, q - 1);
   }
   else {
+		int numl = 0;
+		int numr = 0;
 		for(int i = p; i < q; i++) {
-			if(tokens[i].type == '(') {
-				  int j = i;
-					while(tokens[j].type != ')') {
-						j++;
-						if(j == q) {
-							printf("ERROR ) \n");
-							assert(0);
-						}
-					}
-				}
-			}
-    for(int i = q; i > p; i--) {
-      if(tokens[i].type == ')') {
-        int j = i;
-        while(tokens[j].type != '(') {
-          j--;
-          if(j == p) {
-            printf("ERROR ( \n");
-            assert(0);
-          }
-        }
-      }
+			if(tokens[i].type == '(')
+				numl += 1;
+			if(tokens[i].type == ')')
+				numr += 1;
+		}
+		if(numl != numr) {
+				printf("ERROR ()\n");
+				assert(0);
 		}
     int op = -1;//the position of 主运算符 in the token expression;
 		bool flag = false;
