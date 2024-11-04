@@ -361,7 +361,7 @@ uint32_t eval(int p, int  q) {
 		//TODO：优先级添加判断括号
     int op = -1;//the position of 主运算符 in the token expression;
 		bool flag = false;
-		for(int i = p; i < q; i++) {
+		for(int i = p; i <= q; i++) {
 			if(!flag && tokens[i].type == OR) {
 				flag = true;
 				op = max(op,i);
