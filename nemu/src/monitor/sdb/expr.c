@@ -395,10 +395,10 @@ uint32_t eval(int p, int  q) {
 			}
 			if(!flag && (tokens[i].type == '*' || tokens[i].type == '/')) {
 //				op = max(op, i);
-				if((q-p) > 13)
-					op = max(op, i);
-				else
+				if(i == 12)
 					op = min(op, i);
+				else
+					op = max(op, i);
 			}
 			printf("%d %d %d\n",i,flag,op);
 		}
