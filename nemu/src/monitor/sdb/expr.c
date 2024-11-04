@@ -386,7 +386,8 @@ uint32_t eval(int p, int  q) {
 				op = max(op, i);
 			}
 			if(!flag && (tokens[i].type == '*' || tokens[i].type == '/')) {
-				op = max(op, i);
+//				op = max(op, i);
+				op = 1;
 			}
 			printf("%d %d %d\n",i,flag,op);
 		}
