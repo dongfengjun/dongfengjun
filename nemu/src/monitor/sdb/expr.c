@@ -327,9 +327,8 @@ word_t expr(char *e, bool *success) {
     if(tokens[i].type == ')')
       numr += 1;
   }
-	printf("numl=%d,numr=%d\n",numl,numr);
   if(numl != numr) {
-    printf("ERROR ()\n");
+    printf("ERROR:The brackets don't match.\n");
     assert(0);
   }
 	result = eval(0, nr_token-1);
