@@ -28,20 +28,10 @@ static inline void gen_num() {
 }
 
 static inline void gen(char str) {
-	/* generate random white space */
-	uint32_t lSpace = choose(4);
-	uint32_t rSpace = choose(4);
-	
-	char s[lSpace + 1 + rSpace];
-
-	uint32_t i;
-
-	for (i = 0; i < lSpace; i++) s[i] = ' ';
-	s[i++] = str;
-	for (;i < lSpace + 1 + rSpace; i++) s[i] = ' ';
-    s[lSpace + 1 + rSpace] = '\0';	
+	char s[2];
+	s[0] = str;
+	s[1] = '\0';
 	strcat(buf, s);
-
 }
 
 static inline void gen_rand_op() {
