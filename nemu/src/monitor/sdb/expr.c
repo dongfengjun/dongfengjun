@@ -221,12 +221,12 @@ static bool make_token(char *e) {
     }
   }
 
-											/***test tokens***/
+											/***test tokens***
 	for(int j = 0; j < nr_token; j++) {
 		printf("%d:%s ", tokens[j].type, tokens[j].str);
 	}
 	printf("\n");
-										 /******/
+										 ******/
 
   return true;
 }
@@ -263,6 +263,7 @@ word_t expr(char *e, bool *success) {
 	/***处理负号***/
 	for(int i = 0; i < nr_token; i++) {
 		if(tokens[i].type == '-' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i+1].type == NUM ) && tokens[i-1].type != ')' ))) {
+			printf("The EXPR contains a negative sign.\n");
 			tokens[i].type = TK_NOTYPE;
 			for(int j = 31; j >= 0; j--) {
 				tokens[i+1].str[j] = tokens[i+1].str[j-1];
