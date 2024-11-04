@@ -338,7 +338,7 @@ word_t expr(char *e, bool *success) {
 }
 
 uint32_t eval(int p, int  q) {
-	printf("p=%d,q=%d\n",p,q);
+//Tpq	printf("p=%d,q=%d\n",p,q);
   if (p > q) {
     /* Bad expression */
 		assert(0);
@@ -359,7 +359,6 @@ uint32_t eval(int p, int  q) {
     return eval(p + 1, q - 1);
   }
   else {
-		//TODO：优先级添加判断括号
     int op = -1;//the position of 主运算符 in the token expression;
 		bool flag = false;
 		for(int i = p; i <= q; i++) {
@@ -369,7 +368,7 @@ uint32_t eval(int p, int  q) {
 						j++;
 					}
 				i = j;
-			}
+			}		//括号优先级
 			if(!flag && tokens[i].type == OR) {
 				flag = true;
 				op = max(op,i);
@@ -391,14 +390,13 @@ uint32_t eval(int p, int  q) {
 				op = max(op,i);
 			}
 			if(!flag && (tokens[i].type == '+' || tokens[i].type == '-')) {
-//				flag = true;
 				op = max(op, i);
 			}
 			if(!flag && (tokens[i].type == '*' || tokens[i].type == '/')) {
 				op = max(op, i);
 			}
-			printf("%d:%s ", tokens[i].type, tokens[i].str);printf("\n");
-			printf("%d %d %d\n",i,flag,op);
+//T			printf("%d:%s ", tokens[i].type, tokens[i].str);printf("\n");
+//T			printf("%d %d %d\n",i,flag,op);
 		}
 
     uint32_t val1 = eval(p, op - 1);
