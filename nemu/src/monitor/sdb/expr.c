@@ -450,9 +450,9 @@ bool check_parentheses(int p, int q) {
 bool check_parentheses(int p, int q) {
   if(tokens[p].type != '(' || tokens[q].type != ')')
     return false;
-  int l = p+1, r = q-1;
-	int numl = 0, numr = 0;
-	if(tokens[p].type == '(' || tokens[q].type == ')') {
+	else if(tokens[p].type == '(' && tokens[q].type == ')') {
+		int l = p+1, r = q-1;
+		int numl = 0, numr = 0;
 		for(int i = l; i <= r; i++) {
 			if(tokens[p].type == '(') {
 				numl += 1;
