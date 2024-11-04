@@ -454,10 +454,10 @@ bool check_parentheses(int p, int q) {
 		int l = p+1, r = q-1;
 		int numl = 0, numr = 0;
 		for(int i = l; i <= r; i++) {
-			if(tokens[p].type == '(') {
+			if(tokens[i].type == '(') {
 				numl += 1;
 			}
-			else if(tokens[p].type == ')') {
+			else if(tokens[i].type == ')') {
 				numr +=1;
 			}
 			if(numl < numr) {
