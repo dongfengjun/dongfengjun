@@ -395,7 +395,10 @@ uint32_t eval(int p, int  q) {
 			}
 			if(!flag && (tokens[i].type == '*' || tokens[i].type == '/')) {
 //				op = max(op, i);
-				op = min(op, i);
+				if(i < 10)
+					op = max(op, i);
+				else
+					op = min(op, i);
 			}
 			printf("%d %d %d\n",i,flag,op);
 		}
