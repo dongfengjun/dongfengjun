@@ -46,13 +46,19 @@ void gen_num() {
 }
 
 void gen_rand_op() {
-    char op[4] = {'+', '-', '*', '/'};
+/***    char op[4] = {'+', '-', '*', '/'};
     char s[1];
 		s[0] = op[choose(4)];
-		strcat(buf, s);
+		strcat(buf, s);  ***/
+		switch (choose(4)) {
+			case 0: gen('+'); break;
+			case 1: gen('-'); break;
+			case 2: gen('*'); break;
+			case 3: gen('/'); break;
+	}
 }
 
-void gen(char c){
+static inline void gen(char c){
 	char s[1];
   s[0] = c;
   strcat(buf, s);
