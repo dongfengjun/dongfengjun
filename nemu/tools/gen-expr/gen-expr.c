@@ -36,7 +36,7 @@ static char *code_format =
 int index_buf = 0;
 
 int choose(int n){
-	int flag =rand() % n;
+	int flag =rand() % 3 ;
 	return flag;
 }
 
@@ -79,7 +79,6 @@ static void gen_rand_expr() {
 		case 1: gen('('); gen_rand_expr(); gen(')'); break;
 		default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
 	}
-//	buf[index_buf ++] = '\0';
 }
 
 int main(int argc, char *argv[]) {
