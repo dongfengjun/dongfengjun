@@ -363,6 +363,11 @@ uint32_t eval(int p, int  q) {
     int op = -1;//the position of 主运算符 in the token expression;
 		bool flag = false;
 		for(int i = p; i <= q; i++) {
+			if(tokens[i].type == '(') {
+					if(tokens[i].type != ')') {
+						i++;
+					}
+				}
 			if(!flag && tokens[i].type == OR) {
 				flag = true;
 				op = max(op,i);
