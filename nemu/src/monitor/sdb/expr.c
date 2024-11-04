@@ -463,6 +463,7 @@ bool check_parentheses(int p, int q) {
 			if(numl < numr) {
 				return false;
 			}
+			printf("numl=%d,numr=%d\n",numl,numr);
 		}
 		if(numl != numr)
 			return false;
