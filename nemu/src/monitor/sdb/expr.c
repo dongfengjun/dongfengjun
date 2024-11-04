@@ -422,7 +422,10 @@ uint32_t eval(int p, int  q) {
     }
   }
 }
-
+/*
+*检测一对括号包裹着一个表达式，顺便检测括号是否匹配
+*两端必须为左右括号
+*中间左右括号数量相等，且扫描过程中(数量不小于)
 bool check_parentheses(int p, int q) {
 	if(tokens[p].type != '(' || tokens[q].type != ')')
 		return false;
@@ -443,6 +446,30 @@ bool check_parentheses(int p, int q) {
 	}
 	return true;
 }
+*/
+bool check_parentheses(int p, int q) {
+  if(tokens[p].type != '(' || tokens[q].type != ')')
+    return false;
+  int l = p+1, r = q-1;
+	int numl = 0, numr = 0;
+	if(tokens[p].type == '(' || tokens[q].type == ')') {
+		for(int i = l; i <= r; i++) {
+			if(tokens[p].type == '(') {
+				numl += 1;
+			}
+			else if(tokens[p].type == ')') {
+				numr +=1;
+			}
+			if(numl < numr) {
+				return false;
+			}
+		}
+		if(numl != numr)
+			return false;
+	}
+	return true;
+}
+
 //algorithm max
 int max(int a, int b) {
     if (a > b) {
