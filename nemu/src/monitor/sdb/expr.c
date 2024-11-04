@@ -338,7 +338,7 @@ word_t expr(char *e, bool *success) {
 }
 
 uint32_t eval(int p, int  q) {
-	printf("p=%d,q=%d\n",p,q);
+//Tpq	printf("p=%d,q=%d\n",p,q);
 	if (p > q) {
     /* Bad expression */
 		assert(0);
@@ -395,8 +395,8 @@ uint32_t eval(int p, int  q) {
 			if(!flag && (tokens[i].type == '*' || tokens[i].type == '/')) {
 				op = max(op, i);
 			}
-			printf("%d:%s ", tokens[i].type, tokens[i].str);printf("\n");
-			printf("%d %d %d\n",i,flag,op);
+//T			printf("%d:%s ", tokens[i].type, tokens[i].str);printf("\n");
+//T			printf("%d %d %d\n",i,flag,op);
 		}
 
     uint32_t val1 = eval(p, op - 1);
@@ -426,26 +426,6 @@ uint32_t eval(int p, int  q) {
 *检测一对括号包裹着一个表达式，顺便检测括号是否匹配
 *两端必须为左右括号
 *中间左右括号数量相等，且扫描过程中(数量不小于)
-bool check_parentheses(int p, int q) {
-	if(tokens[p].type != '(' || tokens[q].type != ')')
-		return false;
-	int l = p+1, r = q-1;
-	while(l < r) {
-		if(tokens[l].type == '(') {
-			if(tokens[r].type == ')')
-				return true;
-			else if(tokens[l].type == '(')
-				return false;
-			else
-				r --;
-		}
-		else if(tokens[l].type == ')')
-			return false;
-		else
-			l ++;
-	}
-	return true;
-}
 */
 bool check_parentheses(int p, int q) {
   if(tokens[p].type != '(' || tokens[q].type != ')')
@@ -454,16 +434,12 @@ bool check_parentheses(int p, int q) {
 		int l = p+1, r = q-1;
 		int numl = 0, numr = 0;
 		for(int i = l; i <= r; i++) {
-			if(tokens[i].type == '(') {
+			if(tokens[i].type == '(') 
 				numl += 1;
-			}
-			else if(tokens[i].type == ')') {
+			else if(tokens[i].type == ')') 
 				numr +=1;
-			}
-			if(numl < numr) {
+		if(numl < numr)
 				return false;
-			}
-			printf("numl=%d,numr=%d\n",numl,numr);
 		}
 		if(numl != numr)
 			return false;
