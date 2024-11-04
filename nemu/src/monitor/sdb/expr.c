@@ -361,6 +361,7 @@ uint32_t eval(int p, int  q) {
   else {
     int op = -1;//the position of 主运算符 in the token expression;
 		bool flag = false;
+		bool as = false;
 		for(int i = p; i <= q; i++) {
 			if(tokens[i].type == '(') {
 				int j = i;
@@ -390,10 +391,13 @@ uint32_t eval(int p, int  q) {
 				op = max(op,i);
 			}
       if(!flag && (tokens[i].type == '*' || tokens[i].type == '/')) {
-        op = max(op, i);
+        as = true;
+				op = max(op, i);
       }
 			if(!flag && (tokens[i].type == '+' || tokens[i].type == '-')) {
-				op = max(op, i);
+				if(!as) {
+					op = max(op, i);
+				}
 			}
 //T			printf("%d:%s ", tokens[i].type, tokens[i].str);printf("\n");
 //T			printf("%d %d %d\n",i,flag,op);
