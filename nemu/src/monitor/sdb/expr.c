@@ -429,12 +429,8 @@ bool check_parentheses(int p, int q) {
 	int l = p+1, r = q-1;
 	while(l < r) {
 		if(tokens[l].type == '(') {
-			if(tokens[r].type == ')') {
-				if(check_parentheses(l, r))
-					return true;
-				else
-					return false;
-			}
+			if(tokens[r].type == ')')
+				return true;
 			else if(tokens[l].type == '(')
 				return false;
 			else
