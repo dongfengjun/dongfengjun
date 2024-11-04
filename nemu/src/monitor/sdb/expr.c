@@ -234,6 +234,13 @@ static bool make_token(char *e) {
 bool check_parentheses(int p, int q);
 int max(int a, int b);
 uint32_t eval(int p, int  q);
+int min(int a, int b) {
+    if (a > b) {
+        return b;
+    } else {
+        return a;
+    }
+} 
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -358,6 +365,7 @@ uint32_t eval(int p, int  q) {
     return eval(p + 1, q - 1);
   }
   else {
+		//TODO：优先级添加判断括号
     int op = -1;//the position of 主运算符 in the token expression;
 		bool flag = false;
 		for(int i = p; i < q; i++) {
@@ -387,7 +395,7 @@ uint32_t eval(int p, int  q) {
 			}
 			if(!flag && (tokens[i].type == '*' || tokens[i].type == '/')) {
 //				op = max(op, i);
-				op = i;
+				op = min(op, i);
 			}
 			printf("%d %d %d\n",i,flag,op);
 		}
