@@ -101,12 +101,12 @@ int main(int argc, char *argv[]) {
 
     int result;
     int fsn = fscanf(fp, "%d", &result);
-	printf("[loop %d] fsn = %d\t ", i, fsn); /* TODO: delete fsn and printf it */
     pclose(fp);
-
-    printf("%u\t %s\n", result, buf);
+		if(fsn == 1) {
+			printf("%u %s\n", result, buf);
+		}
   
-	memset(buf, '\0', 65536);
+		memset(buf, '\0', 65536);
   }
   return 0;
 }
