@@ -31,7 +31,6 @@ static inline void gen(char str) {
 	/* generate random white space */
 	uint32_t lSpace = choose(2);
 	uint32_t rSpace = choose(2);
-	
 	char s[lSpace + 1 + rSpace];
 
 	uint32_t i;
