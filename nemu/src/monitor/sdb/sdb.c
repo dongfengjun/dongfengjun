@@ -76,7 +76,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 	{ "si", "Pause execution after the program steps N instructions", cmd_si }    ,
 	{ "info", "r--Print register status   -w--Print watchpoint information", cmd_info },
-	{ "x", "Evaluate the expression EXPR, use the result as the starting memor  y address, and output N consecutive 4-bytes in hexadecimal form", cmd_x },
+	{ "x", "Evaluate the expression EXPR, use the result as the starting memory address, and output N consecutive 4-bytes in hexadecimal form", cmd_x },
   { "p", "Evaluates the value of the expression EXPR", cmd_p },
 	{ "w", "When the value of the expression EXPR changes, program execution is suspended", cmd_w },
 	{ "d", "Delete a watch with serial number N", cmd_d },
