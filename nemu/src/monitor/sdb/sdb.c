@@ -138,7 +138,7 @@ void sdb_mainloop() {
 #ifdef CONFIG_DEVICE
     extern void sdl_clear_event_queue();
     sdl_clear_event_queue();
-#endif		//如果CONFIG_DEVICE被定义，代码将被编译
+#endif
 
     int i;
     for (i = 0; i < NR_CMD; i ++) {
