@@ -38,7 +38,6 @@ file = fopen("/home/xi/ysyx-workbench/nemu/tools/gen-expr/build/input", "r");	//
 assert(file != NULL);	//assert0
 while (fgets(line, 65536 + 128, file) != NULL)	//fgets读取file文件x-1位字符串到line
 {
-  /*notice i and j need reset before start*/
   int i = 0;
   int j = 0;
   int cnt = sscanf(line, "%u", &result);	//sscanf字符串格式为化"%u"无符号整型数据,sscanf成功返回1
