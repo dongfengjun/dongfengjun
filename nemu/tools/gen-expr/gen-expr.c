@@ -1,18 +1,3 @@
-/***************************************************************************************
-* Copyright (c) 2014-2022 Zihao Yu, Nanjing University
-*
-* NEMU is licensed under Mulan PSL v2.
-* You can use this software according to the terms and conditions of the Mulan PSL v2.
-* You may obtain a copy of Mulan PSL v2 at:
-*          http://license.coscl.org.cn/MulanPSL2
-*
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
-* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
-* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
-*
-* See the Mulan PSL v2 for more details.
-***************************************************************************************/
-
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,65 +6,73 @@
 #include <string.h>
 
 // this should be enough
-static char buf[65536] = {};
-static char code_buf[65536 + 128] = {}; // a little larger than `buf`
+static char buf[65536];
 
+/*
+ * inline expansion, or inlining, is a manual or compiler optimization that
+ * replaces a function call site with the body of the called function
+ * 
+ * it's faster than call function
+ */
+uint32_t choose(uint32_t n) {
+	return rand() % n;	
+}
+
+static inline void gen_num() {
+	char s[4];
+	uint32_t n = choose(99);
+	
+	/* send the formatted data to string */
+	sprintf(s, "%u", n);
+	strcat(buf, s);		
+}
+
+static inline void gen(char str) {
+	/* generate random white space */
+	uint32_t lSpace = choose(2);
+	uint32_t rSpace = choose(2);
+	char s[lSpace + 1 + rSpace];
+
+	uint32_t i;
+
+	for (i = 0; i < lSpace; i++) s[i] = ' ';
+	s[i++] = str;
+	for (;i < lSpace + 1 + rSpace; i++) s[i] = ' ';
+    s[lSpace + 1 + rSpace] = '\0';	
+	strcat(buf, s);
+
+}
+
+static inline void gen_rand_op() {
+
+	switch (choose(4)) {
+		case 0: gen('+'); break;
+		case 1: gen('-'); break;
+		case 2: gen('*'); break;
+		case 3: gen('/'); break;
+	}	
+}
+
+static inline void gen_rand_expr() {
+  
+  switch(choose(3)) {
+	case 0: gen_num(); break;
+	case 1: gen('('); gen_rand_expr(); gen(')'); break;
+	default:  gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break; 
+  
+  }
+
+}
+
+static char code_buf[65536];
 static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
+"_Bool flag;"
 "  unsigned result = %s; "
 "  printf(\"%%u\", result); "
 "  return 0; "
 "}";
-
-/***补充函数***/
-int index_buf = 0;
-
-int choose(int n){
-	int flag =rand() % 3 ;
-	return flag;
-}
-
-void gen_num() {
-	int num = rand() % 100;
-	int num_size = 0, num_tmp = num;
-	while(num_tmp) {
-		num_tmp /= 10;
-		num_size ++;
-  }
-  int x = 1;
-  while(num_size) {
-		x *= 10;
-		num_size -- ;
-  }
-  x /= 10;
-  while(num) {
-		char c = num / x + '0';
-		num %= x;
-		x /= 10;
-		buf[index_buf ++] = c;
-  }
-}
-
-void gen_rand_op() {
-    char op[4] = {'+', '-', '*', '/'};
-    int op_position = rand() % 4;
-    buf[index_buf ++] = op[op_position];
-}
-
-void gen(char c){
-    buf[index_buf ++] = c;
-}
-
-/******/
-static void gen_rand_expr() {
-//  buf[0] = '\0';
-	switch (choose(3)) {
-		case 0: gen_num(); break;
-		case 1: gen('('); gen_rand_expr(); gen(')'); break;
-		default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
-	}
-}
 
 int main(int argc, char *argv[]) {
   int seed = time(0);
@@ -106,12 +99,12 @@ int main(int argc, char *argv[]) {
     assert(fp != NULL);
 
     int result;
-    ret = fscanf(fp, "%d", &result);
+    int fsn = fscanf(fp, "%d", &result);
     pclose(fp);
-
-//	printf("%s\n", buf);
-    printf("%u %s\n", result, buf);
-		index_buf = 0;
+		if(fsn) {
+			printf("%u\t %s\n", result, buf);
+		}
+	memset(buf, '\0', 65536);
   }
   return 0;
 }

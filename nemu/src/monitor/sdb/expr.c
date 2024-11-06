@@ -185,21 +185,6 @@ static bool make_token(char *e) {
         switch (rules[i].token_type) {
 					case TK_NOTYPE:
 						break;
-/***可能不需要
-					case UNEQ:
-					case TK_EQ:
-					case OR:
-					case AND:
-					case REG:
-					case HEX:
-						Assert(nr_token < 32, "The tokens array has insufficient storage     space.");
-            Assert(substr_len < 32, "The token is too long");
-            tokens[nr_token].type = rules[i].token_type;
-            strncpy(tokens[nr_token].str, substr_start, substr_len);
-            tokens[nr_token].str[substr_len] = '\0';
-            nr_token++;
-            break;
-***/
           default:
 						Assert(nr_token < 65536, "The tokens array has insufficient storage space.");
 						Assert(substr_len < 32, "The token is too long");
@@ -226,7 +211,7 @@ static bool make_token(char *e) {
 		printf("%d:%s ", tokens[j].type, tokens[j].str);
 	}
 	printf("\n");
-										  ******/
+										 ******/
 
   return true;
 }
@@ -260,16 +245,10 @@ word_t expr(char *e, bool *success) {
 			}
 		}
 	}
-	/***hex***/
-	for(int i = 0; i < nr_token; i++) {
-		if(tokens[i].type == HEX) {
-			int value = strtol(tokens[i].str, NULL, 16);		//将字符串转换为长整数
-			int2char(value, tokens[i].str);
-		}
-	}
 	/***处理负号***/
 	for(int i = 0; i < nr_token; i++) {
-		if(tokens[i].type == '-' && (i == 0 || (tokens[i-1].type != NUM && tokens[i+1].type == NUM ) || tokens[i-1].type != ')' )) {
+		if(tokens[i].type == '-' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i+1].type == NUM ) && tokens[i-1].type != ')' ))) {
+			printf("The EXPR contains negative signs.\n");
 			tokens[i].type = TK_NOTYPE;
 			for(int j = 31; j >= 0; j--) {
 				tokens[i+1].str[j] = tokens[i+1].str[j-1];
@@ -309,7 +288,7 @@ word_t expr(char *e, bool *success) {
 	}
 	/***处理指针***/
 	for (int i = 0; i < nr_token; i ++) {
-		if (tokens[i].type == '*' && (i == 0 || tokens[i-1].type != NUM || tokens[i-1].type != HEX || tokens[i-1].type != (int)(')'))) {
+		if (tokens[i].type == '*' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i-1].type != HEX) && tokens[i-1].type != (int)(')')))) {
 			tokens[i].type = TK_NOTYPE;
 			int tmp = char2int(tokens[i+1].str);
 			uintptr_t a = (uintptr_t)tmp;
@@ -326,13 +305,26 @@ word_t expr(char *e, bool *success) {
 	}
 }
 	word_t result = 0;
-	result = eval(0, nr_token - 1);
+	int numl = 0;
+	int numr = 0;
+  for(int i = 0; i < nr_token; i++) {
+		if(tokens[i].type == '(')
+        numl += 1;
+    if(tokens[i].type == ')')
+      numr += 1;
+  }
+  if(numl != numr) {
+    printf("ERROR:The brackets don't match.\n");
+    assert(0);
+  }
+	result = eval(0, nr_token-1);
 //	printf("expr result = %u\n", result);
 	return result;
 }
 
 uint32_t eval(int p, int  q) {
-  if (p > q) {
+//Tpq	printf("p=%d,q=%d\n",p,q);
+	if (p > q) {
     /* Bad expression */
 		assert(0);
 		return -1;
@@ -343,7 +335,7 @@ uint32_t eval(int p, int  q) {
      * Return the value of the number.
      */
 
-		return atoi(tokens[p].str);
+		return strtol(tokens[p].str, NULL, 0);
   }
   else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
@@ -354,15 +346,15 @@ uint32_t eval(int p, int  q) {
   else {
     int op = -1;//the position of 主运算符 in the token expression;
 		bool flag = false;
-		for(int i = p; i < q; i++) {
+		bool as = false;
+		for(int i = p; i <= q; i++) {
 			if(tokens[i].type == '(') {
-//				int j = i;
-				while(tokens[i].type != ')') {//s循环
-					i++;
-//				if(j == q) {
-//					printf("ERROR')'")
-				}
-			}
+				int j = i;
+				while(tokens[j].type != ')') {
+						j++;
+					}
+				i = j;
+			}		//括号优先级
 			if(!flag && tokens[i].type == OR) {
 				flag = true;
 				op = max(op,i);
@@ -383,14 +375,17 @@ uint32_t eval(int p, int  q) {
 				flag = true;
 				op = max(op,i);
 			}
-			if(!flag && (tokens[i].type == '+' || tokens[i].type == '-')) {
-				flag = true;
+      if(!flag && (tokens[i].type == '+' || tokens[i].type == '-')) {
+        as = true;
 				op = max(op, i);
-			}
+      }
 			if(!flag && (tokens[i].type == '*' || tokens[i].type == '/')) {
-				op = max(op, i);
+				if(as == false) {
+					op = max(op, i);
+				}
 			}
-//			printf("%d %d %d\n",i,flag,op);
+//T			printf("%d:%s ", tokens[i].type, tokens[i].str);printf("\n");
+//T			printf("%d %d %d\n",i,flag,op);
 		}
 
     uint32_t val1 = eval(p, op - 1);
@@ -416,26 +411,31 @@ uint32_t eval(int p, int  q) {
     }
   }
 }
-
+/*
+*检测一对括号包裹着一个表达式，顺便检测括号是否匹配
+*两端必须为左右括号
+*中间左右括号数量相等，且扫描过程中(数量不小于)
+*/
 bool check_parentheses(int p, int q) {
-	if(tokens[p].type != '(' || tokens[q].type != ')')
-		return false;
-	int l = p, r = q;
-	while(l < r) {
-		if(tokens[l].type == '(') {
-			if(tokens[r].type == ')') {
-				l ++, r --;
-				continue;
-			}
-			else
-				r --;
+  if(tokens[p].type != '(' || tokens[q].type != ')')
+    return false;
+	else {
+		int l = p+1, r = q-1;
+		int numl = 0, numr = 0;
+		for(int i = l; i <= r; i++) {
+			if(tokens[i].type == '(') 
+				numl += 1;
+			else if(tokens[i].type == ')') 
+				numr +=1;
+		if(numl < numr)
+				return false;
 		}
-		else if(tokens[l].type == ')')
+		if(numl != numr)
 			return false;
-		else l ++;
 	}
 	return true;
 }
+
 //algorithm max
 int max(int a, int b) {
     if (a > b) {
