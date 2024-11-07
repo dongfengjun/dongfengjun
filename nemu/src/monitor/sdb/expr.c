@@ -347,17 +347,20 @@ uint32_t eval(int p, int  q) {
     int op = -1;//the position of 主运算符 in the token expression;
 		bool flag = false;
 		bool as = false;
+		int countl = 1, countr = 0;
 		for(int i = p; i <= q; i++) {
-/*			if((tokens[i].type == '(')) {
-				numl++;
-				for(j = i; j <= q; j++) {
-					if((tokens[i].type == ')'))
-						numr++;
+			if((tokens[i].type == '(')) {
+				for(int j = i; j <= q; j++) {
+					if((tokens[j].type == '('))
+						countl++;
+					if((tokens[j].type == ')'))
+						countr++;
+					if(countl == countr) {
+						i = j;
+						break;
+					}
 				}
-				if(numl <= numr) {
-					i = j;
-				}
-			}	*/	//括号优先级
+			}		//括号优先级
 			printf("numl=%d, numr=%d\n", numl, numr);
 			if(!flag && tokens[i].type == OR) {
 				flag = true;
