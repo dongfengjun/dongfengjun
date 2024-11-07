@@ -316,9 +316,8 @@ word_t expr(char *e, bool *success) {
 			Assert(0, "ERROR:The brackets don't match.\n");
   }
   if(numl != numr) {
-    printf("ERROR:The brackets don't match.\n");
-    assert(0);
-  }
+		Assert(0, "ERROR:The brackets don't match.\n");
+	}
 	result = eval(0, nr_token-1);
 //	printf("expr result = %u\n", result);
 	return result;
