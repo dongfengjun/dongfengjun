@@ -348,13 +348,19 @@ uint32_t eval(int p, int  q) {
     int op = -1;//the position of 主运算符 in the token expression;
 		bool flag = false;
 		bool as = false;
+		int j = 0;
+    int numl = 0;
+    int numr = 0;
 		for(int i = p; i <= q; i++) {
-			if(tokens[i].type == '(') {
-				int j = i;
-				while(tokens[j].type != ')') {
-						j++;
-					}
-				i = j;
+			if((tokens[i].type == '(')) {
+				numl++;
+				for(j = i; j <= q; j++) {
+					if((tokens[i].type == ')'))
+						numr++;
+				}
+				if(numl <= numr) {
+					i = j;
+				}
 			}		//括号优先级
 			if(!flag && tokens[i].type == OR) {
 				flag = true;
