@@ -7,7 +7,7 @@
 
 // this should be enough
 static char buf[65536];
-static char code_buf[65536];
+static char code_buf[65536 + 128];
 static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
@@ -29,14 +29,11 @@ uint32_t choose(uint32_t n) {
 static inline void gen_num() {
 	char s[4];
 	uint32_t n = choose(99);
-	
-	/* send the formatted data to string */
 	sprintf(s, "%u", n);
 	strcat(buf, s);		
 }
 
 static inline void gen(char str) {
-	/* generate random white space */
 	uint32_t lSpace = choose(2);
 	uint32_t rSpace = choose(2);
 	char s[lSpace + 1 + rSpace];
@@ -101,7 +98,7 @@ int main(int argc, char *argv[]) {
     pclose(fp);
 		if(fsn) {
 			count++;
-			printf("NO.%d:%u\t %s\n",i , result, buf);
+			printf("%u\t %s\n", result, buf);
 		}
 	memset(buf, '\0', 65536);
   }
