@@ -219,7 +219,6 @@ static bool make_token(char *e) {
 bool check_parentheses(int p, int q);
 int max(int a, int b);
 uint32_t eval(int p, int  q);
-int numl = 0,numr = 0;
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -306,6 +305,7 @@ word_t expr(char *e, bool *success) {
 	}
 }
 	word_t result = 0;
+	int numl = 0,numr = 0;
   for(int i = 0; i < nr_token; i++) {
 		if(tokens[i].type == '(')
         numl += 1;
@@ -427,16 +427,16 @@ bool check_parentheses(int p, int q) {
     return false;
 	else {
 		int l = p+1, r = q-1;
-		int numlp = 0, numrp = 0;
+		int numl = 0, numr = 0;
 		for(int i = l; i <= r; i++) {
 			if(tokens[i].type == '(') 
-				numlp += 1;
+				numl += 1;
 			else if(tokens[i].type == ')') 
-				numrp +=1;
-		if(numlp < numrp)
+				numr +=1;
+		if(numl < numr)
 				return false;
 		}
-		if(numlp != numrp)
+		if(numl != numr)
 			return false;
 	}
 	return true;
