@@ -323,7 +323,7 @@ word_t expr(char *e, bool *success) {
 }
 
 uint32_t eval(int p, int  q) {
-	printf("p=%d,q=%d\n",p,q);
+//T pq	printf("p=%d,q=%d\n",p,q);
 	if (p > q) {
     /* Bad expression */
 		assert(0);
@@ -359,7 +359,6 @@ uint32_t eval(int p, int  q) {
 						i = j;
 						break;
 					}
-					printf("countl=%d,countr=%d\n", countl, countr);
 				}
 			}		//括号优先级
 			if(!flag && tokens[i].type == OR) {
@@ -392,7 +391,7 @@ uint32_t eval(int p, int  q) {
 				}
 			}
 //			printf("%d:%s ", tokens[i].type, tokens[i].str);printf("\n");
-			printf("%d %d %d\n",i,flag,op);
+//			printf("%d %d %d\n",i,flag,op);
 		}
 
     uint32_t val1 = eval(p, op - 1);
