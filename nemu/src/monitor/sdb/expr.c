@@ -357,7 +357,7 @@ uint32_t eval(int p, int  q) {
 						countr++;
 					if(countl == countr) {
 						i = j;
-						continue;
+						break;
 					}
 					printf("countl=%d,countr=%d\n", countl, countr);
 				}
