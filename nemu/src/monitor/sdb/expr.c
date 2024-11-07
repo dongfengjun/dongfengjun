@@ -359,6 +359,7 @@ uint32_t eval(int p, int  q) {
 						i = j;
 						break;
 					}
+					printf("countl=%d,countr=%d\n", countl, countr);
 				}
 			}		//括号优先级
 			if(!flag && tokens[i].type == OR) {
