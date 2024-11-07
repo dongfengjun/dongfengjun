@@ -219,6 +219,7 @@ static bool make_token(char *e) {
 bool check_parentheses(int p, int q);
 int max(int a, int b);
 uint32_t eval(int p, int  q);
+int numl = 0,numr = 0;
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -305,8 +306,6 @@ word_t expr(char *e, bool *success) {
 	}
 }
 	word_t result = 0;
-	int numl = 0;
-	int numr = 0;
   for(int i = 0; i < nr_token; i++) {
 		if(tokens[i].type == '(')
         numl += 1;
@@ -348,11 +347,8 @@ uint32_t eval(int p, int  q) {
     int op = -1;//the position of 主运算符 in the token expression;
 		bool flag = false;
 		bool as = false;
-		int j = 0;
-    int numl = 0;
-    int numr = 0;
 		for(int i = p; i <= q; i++) {
-			if((tokens[i].type == '(')) {
+/*			if((tokens[i].type == '(')) {
 				numl++;
 				for(j = i; j <= q; j++) {
 					if((tokens[i].type == ')'))
@@ -361,7 +357,8 @@ uint32_t eval(int p, int  q) {
 				if(numl <= numr) {
 					i = j;
 				}
-			}		//括号优先级
+			}	*/	//括号优先级
+			printf("numl=%d, numr=%d\n", numl, numr);
 			if(!flag && tokens[i].type == OR) {
 				flag = true;
 				op = max(op,i);
@@ -428,16 +425,16 @@ bool check_parentheses(int p, int q) {
     return false;
 	else {
 		int l = p+1, r = q-1;
-		int numl = 0, numr = 0;
+		int numlp = 0, numrp = 0;
 		for(int i = l; i <= r; i++) {
 			if(tokens[i].type == '(') 
-				numl += 1;
+				numlp += 1;
 			else if(tokens[i].type == ')') 
-				numr +=1;
-		if(numl < numr)
+				numrp +=1;
+		if(numlp < numrp)
 				return false;
 		}
-		if(numl != numr)
+		if(numlp != numrp)
 			return false;
 	}
 	return true;
