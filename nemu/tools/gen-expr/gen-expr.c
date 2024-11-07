@@ -11,7 +11,6 @@ static char code_buf[65536 + 128];
 static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
-"_Bool flag;"
 "  unsigned result = %s; "
 "  printf(\"%%u\", result); "
 "  return 0; "
@@ -93,11 +92,9 @@ int main(int argc, char *argv[]) {
     assert(fp != NULL);
 
     int result;
-		int count = 0;
     int fsn = fscanf(fp, "%d", &result);
     pclose(fp);
 		if(fsn) {
-			count++;
 			printf("%u\t %s\n", result, buf);
 		}
 	memset(buf, '\0', 65536);
