@@ -7,7 +7,15 @@
 
 // this should be enough
 static char buf[65536];
-
+static char code_buf[65536];
+static char *code_format =
+"#include <stdio.h>\n"
+"int main() { "
+"_Bool flag;"
+"  unsigned result = %s; "
+"  printf(\"%%u\", result); "
+"  return 0; "
+"}";
 /*
  * inline expansion, or inlining, is a manual or compiler optimization that
  * replaces a function call site with the body of the called function
@@ -44,7 +52,6 @@ static inline void gen(char str) {
 }
 
 static inline void gen_rand_op() {
-
 	switch (choose(4)) {
 		case 0: gen('+'); break;
 		case 1: gen('-'); break;
@@ -63,16 +70,6 @@ static inline void gen_rand_expr() {
   }
 
 }
-
-static char code_buf[65536];
-static char *code_format =
-"#include <stdio.h>\n"
-"int main() { "
-"_Bool flag;"
-"  unsigned result = %s; "
-"  printf(\"%%u\", result); "
-"  return 0; "
-"}";
 
 int main(int argc, char *argv[]) {
   int seed = time(0);
@@ -99,10 +96,12 @@ int main(int argc, char *argv[]) {
     assert(fp != NULL);
 
     int result;
+		int count = 0;
     int fsn = fscanf(fp, "%d", &result);
     pclose(fp);
 		if(fsn) {
-			printf("%u\t %s\n", result, buf);
+			count++;
+			printf("NO.%d:%u\t %s\n",i , result, buf);
 		}
 	memset(buf, '\0', 65536);
   }
