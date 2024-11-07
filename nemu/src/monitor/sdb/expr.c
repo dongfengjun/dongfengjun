@@ -349,15 +349,15 @@ uint32_t eval(int p, int  q) {
 		bool as = false;
 		for(int i = p; i <= q; i++) {
 			if((tokens[i].type == '(')) {
+				int countl = 1, countr = 0;
 				for(int j = i; j <= q; j++) {
-					int countl = 1, countr = 0;
 					if((tokens[j].type == '('))
 						countl++;
 					if((tokens[j].type == ')'))
 						countr++;
 					if(countl == countr) {
 						i = j;
-						break;
+						continue;
 					}
 					printf("countl=%d,countr=%d\n", countl, countr);
 				}
