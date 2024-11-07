@@ -312,6 +312,8 @@ word_t expr(char *e, bool *success) {
         numl += 1;
     if(tokens[i].type == ')')
       numr += 1;
+		if(numl < numr)
+			Assert(0, "ERROR:The brackets don't match.\n");
   }
   if(numl != numr) {
     printf("ERROR:The brackets don't match.\n");
