@@ -361,7 +361,6 @@ uint32_t eval(int p, int  q) {
 					}
 				}
 			}		//括号优先级
-			printf("numl=%d, numr=%d\n", numl, numr);
 			if(!flag && tokens[i].type == OR) {
 				flag = true;
 				op = max(op,i);
