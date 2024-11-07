@@ -347,9 +347,9 @@ uint32_t eval(int p, int  q) {
     int op = -1;//the position of 主运算符 in the token expression;
 		bool flag = false;
 		bool as = false;
-		int countl = 1, countr = 0;
 		for(int i = p; i <= q; i++) {
 			if((tokens[i].type == '(')) {
+				int countl = 1, countr = 0;
 				for(int j = i; j <= q; j++) {
 					if((tokens[j].type == '('))
 						countl++;
