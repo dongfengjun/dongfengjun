@@ -190,10 +190,6 @@ static int cmd_info(char *args) {
 }
 
 word_t paddr_read(paddr_t addr, int len);
-//	for(int i = 0; i < len; i++) {
-//		bool flag = true;
-//		uint32_t tmp = isa_reg_str2val(tokens[i].str, &flag);
-//	}
 static int cmd_x(char *args) {
   char *arg = strtok(NULL, " ");
   char *arg2 = strtok(NULL, " ");
@@ -201,7 +197,7 @@ static int cmd_x(char *args) {
 	paddr_t addr = 0;
   sscanf(arg2, "%x", &addr); 
   for(int i = 0; i < N; i++) {
-    printf("%x\n",paddr_read(addr, 4));
+    printf("0x%x ",paddr_read(addr, 4));
 		addr = addr + 4;
 	}
   return 0;
