@@ -54,7 +54,7 @@ while (fgets(line, 65536 + 128, file) != NULL)	//fgets读取file文件x-1位字�
   exprbuf[j] = '\0';		//将line中的表达式读入exprbuf
   bool success = true;
   word_t ans = expr(exprbuf, &success);	//exprbuf式输入expr函数计算结果ans
-	printf("no.%dgenexpr result = %u\n", count, ans);
+	printf("no.%d genexpr result = %u\n", count, ans);
   if (success == false && result - ans != 0)		//如success=false或result对比ans不同，失败
   {
     printf("- origin line: %s- success: %d\n- exprbuf: %s\n- result:%u\n- ans: %u\n",
