@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include "memory/paddr.h"
 
 static int is_batch_mode = false;
 
@@ -189,6 +190,10 @@ static int cmd_info(char *args) {
 }
 
 word_t paddr_read(paddr_t addr, int len);
+//	for(int i = 0; i < len; i++) {
+//		bool flag = true;
+//		uint32_t tmp = isa_reg_str2val(tokens[i].str, &flag);
+//	}
 static int cmd_x(char *args) {
   char *arg = strtok(NULL, " ");
   char *arg2 = strtok(NULL, " ");
