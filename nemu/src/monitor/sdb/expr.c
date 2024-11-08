@@ -75,40 +75,28 @@ void init_regex() {
     }
   }
 }
-/***附加函数***/
+
+/***类型转换函数***/
 void int2char(int x, char str[]) {
-    // 初始化一个临时索引变量
     int tmp_index = 0;
-    // 用于计算整数位数的临时变量
     int tmp_x = x;
-    // 用于存储整数位数的变量
     int x_size = 0;
-    // 用于计算数字的位数
     int flag = 1;
-    // 计算整数的位数
     while(tmp_x) {
         tmp_x /= 10;
         x_size++;
         flag *= 10;
     }
-    // 如果x为0，直接在字符串首位添加'0'
     if (x_size == 0) {
         str[tmp_index++] = '0';
     }
-    // 调整flag的值，使其指向最高位的数字
     flag = x_size > 0 ? pow(10, x_size - 1) : 1;
-    // 将整数转换为字符串
     while(strchr(str, '\0') == NULL) {
-        // 取出当前最高位的数字
         int a = x / flag; 
-        // 移除当前最高位的数字
         x %= flag;
-        // 调整flag的值，使其指向下一位的数字
         flag /= 10;
-        // 将数字转换为字符，并存储到字符串中
         str[tmp_index++] = a + '0';
     }
-    // 确保字符串以'\0'结尾
     str[tmp_index] = '\0';
 }
 int char2int(char s[]){
@@ -121,27 +109,23 @@ int char2int(char s[]){
 }
 void uint2char(uint32_t num, char str[]) {
     uint32_t tmp = num;
-    int index = 0;  // 字符串数组的索引
-    int isLeadingZero = 1;  // 标记是否为前导零
-    // 特殊情况，数值为 0
+    int index = 0;
+    int isLeadingZero = 1;
     if (num == 0) {
         str[index++] = '0';
         str[index] = '\0';
         return;
     }
-    // 从最高位到最低位遍历数值的每一位
     while (tmp > 0) {
-        int digit = tmp % 10;  // 获取当前位的数字
+        int digit = tmp % 10;
         if (isLeadingZero && digit == 0) {
-            // 跳过前导零
         } else {
-            str[index++] = '0' + digit;  // 将数字转换为字符
-            isLeadingZero = 0;  // 重置前导零标记
+            str[index++] = '0' + digit;
+            isLeadingZero = 0;
         }
-        tmp /= 10;  // 移除当前位的数字
+        tmp /= 10;
     }
-    str[index] = '\0';  // 添加字符串终止符
-    // 反转字符串，因为我们是从最低位到最高位构建的
+    str[index] = '\0';
     int len = strlen(str);
     for (int i = 0; i < len / 2; i++) {
         char temp = str[i];
@@ -417,11 +401,7 @@ uint32_t eval(int p, int  q) {
     }
   }
 }
-/*
-*检测一对括号包裹着一个表达式，顺便检测括号是否匹配
-*两端必须为左右括号
-*中间左右括号数量相等，且扫描过程中(数量不小于)
-*/
+//检查一组括号包围
 bool check_parentheses(int p, int q) {
   if(tokens[p].type != '(' || tokens[q].type != ')')
     return false;

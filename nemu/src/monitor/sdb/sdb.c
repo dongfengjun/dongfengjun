@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include "memory/paddr.h"
 
 static int is_batch_mode = false;
 
@@ -64,7 +65,6 @@ static int cmd_x(char *args);
 static int cmd_p(char *args);
 static int cmd_w(char *args);
 static int cmd_d(char *args);
-/***END***/
 
 static struct {
   const char *name;
@@ -85,7 +85,7 @@ static struct {
 
 };
 
-#define NR_CMD ARRLEN(cmd_table)		//可能返回cmd_table数组长度为NR_CMD
+#define NR_CMD ARRLEN(cmd_table)		//返回cmd_table数组长度为NR_CMD
 
 static int cmd_help(char *args) {
   /* extract the first argument */
@@ -97,7 +97,7 @@ static int cmd_help(char *args) {
     for (i = 0; i < NR_CMD; i ++) {
       printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
     }
-  }		//遍历结构体cmd_table
+  }		//cmd_table
   else {
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(arg, cmd_table[i].name) == 0) {
@@ -121,7 +121,7 @@ void sdb_mainloop() {
   }
 
   for (char *str; (str = rl_gets()) != NULL; ) {
-    char *str_end = str + strlen(str);		//str=输入 strlen()计算字符长度
+    char *str_end = str + strlen(str);
 
     /* extract the first token as the command */
     char *cmd = strtok(str, " ");
@@ -197,9 +197,10 @@ static int cmd_x(char *args) {
 	paddr_t addr = 0;
   sscanf(arg2, "%x", &addr); 
   for(int i = 0; i < N; i++) {
-    printf("%x\n",paddr_read(addr, 4));
+    printf("0x%x ",paddr_read(addr, 4));
 		addr = addr + 4;
 	}
+	printf("\n");
   return 0;
 }
 
