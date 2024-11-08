@@ -43,8 +43,7 @@ static inline void gen(char str) {
 	s[i++] = str;
 	for (;i < lSpace + 1 + rSpace; i++) s[i] = ' ';
     s[lSpace + 1 + rSpace] = '\0';	
-	strcat(buf, s);
-
+		strcat(buf, s);
 }
 
 static inline void gen_rand_op() {
