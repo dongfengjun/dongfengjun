@@ -34,7 +34,7 @@ char line[65536 + 128];
 char exprbuf[65536];
 uint32_t result;
 
-file = fopen("/home/xi/ysyx-workbench/nemu/tools/gen-expr/input_test", "r");	//打开文件
+file = fopen("/home/xi/ysyx-workbench/nemu/tools/gen-expr/build/input", "r");	//打开文件
 assert(file != NULL);	//assert0
 int count = 1;
 while (fgets(line, 65536 + 128, file) != NULL)	//fgets读取file文件x-1位字符串到line
