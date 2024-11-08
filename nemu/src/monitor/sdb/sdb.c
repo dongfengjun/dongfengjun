@@ -200,6 +200,7 @@ static int cmd_x(char *args) {
     printf("0x%x ",paddr_read(addr, 4));
 		addr = addr + 4;
 	}
+	printf("\n");
   return 0;
 }
 
