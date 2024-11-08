@@ -390,8 +390,8 @@ uint32_t eval(int p, int  q) {
 					op = max(op, i);
 				}
 			}
-//			printf("%d:%s ", tokens[i].type, tokens[i].str);printf("\n");
-//			printf("%d %d %d\n",i,flag,op);
+			printf("%d:%s ", tokens[i].type, tokens[i].str);printf("\n");
+			printf("%d %d %d\n",i,flag,op);
 		}
 
     uint32_t val1 = eval(p, op - 1);
