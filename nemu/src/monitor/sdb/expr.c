@@ -323,7 +323,7 @@ word_t expr(char *e, bool *success) {
 }
 
 uint32_t eval(int p, int  q) {
-//T pq	printf("p=%d,q=%d\n",p,q);
+	printf("p=%d,q=%d\n",p,q);
 	if (p > q) {
     /* Bad expression */
 		assert(0);
