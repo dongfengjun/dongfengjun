@@ -1,16 +1,16 @@
 // Verilated -*- C++ -*-
 // DESCRIPTION: Verilator output: Symbol table implementation internals
 
-#include "Vtop__Syms.h"
-#include "Vtop.h"
-#include "Vtop___024root.h"
+#include "Vduswitch__Syms.h"
+#include "Vduswitch.h"
+#include "Vduswitch___024root.h"
 
 // FUNCTIONS
-Vtop__Syms::~Vtop__Syms()
+Vduswitch__Syms::~Vduswitch__Syms()
 {
 }
 
-Vtop__Syms::Vtop__Syms(VerilatedContext* contextp, const char* namep, Vtop* modelp)
+Vduswitch__Syms::Vduswitch__Syms(VerilatedContext* contextp, const char* namep, Vduswitch* modelp)
     : VerilatedSyms{contextp}
     // Setup internal state of the Syms class
     , __Vm_modelp{modelp}

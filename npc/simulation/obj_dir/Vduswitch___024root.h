@@ -1,15 +1,15 @@
 // Verilated -*- C++ -*-
 // DESCRIPTION: Verilator output: Design internal header
-// See Vtop.h for the primary calling header
+// See Vduswitch.h for the primary calling header
 
-#ifndef VERILATED_VTOP___024ROOT_H_
-#define VERILATED_VTOP___024ROOT_H_  // guard
+#ifndef VERILATED_VDUSWITCH___024ROOT_H_
+#define VERILATED_VDUSWITCH___024ROOT_H_  // guard
 
 #include "verilated.h"
 
-class Vtop__Syms;
+class Vduswitch__Syms;
 
-class Vtop___024root final : public VerilatedModule {
+class Vduswitch___024root final : public VerilatedModule {
   public:
 
     // DESIGN SPECIFIC STATE
@@ -26,12 +26,12 @@ class Vtop___024root final : public VerilatedModule {
     VlTriggerVec<0> __VnbaTriggered;
 
     // INTERNAL VARIABLES
-    Vtop__Syms* const vlSymsp;
+    Vduswitch__Syms* const vlSymsp;
 
     // CONSTRUCTORS
-    Vtop___024root(Vtop__Syms* symsp, const char* v__name);
-    ~Vtop___024root();
-    VL_UNCOPYABLE(Vtop___024root);
+    Vduswitch___024root(Vduswitch__Syms* symsp, const char* v__name);
+    ~Vduswitch___024root();
+    VL_UNCOPYABLE(Vduswitch___024root);
 
     // INTERNAL METHODS
     void __Vconfigure(bool first);

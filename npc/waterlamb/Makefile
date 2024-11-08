@@ -3,6 +3,7 @@ NXDC_FILES = constr/top.nxdc  #约束文件路径
 INC_PATH ?=  #?=的意义是，INC_PATH如果被未被定义，则为?=后的值，如果被定义过，则保持原来的值
 
 VERILATOR = verilator
+#在代码段结束后看这一句的详细注解
 VERILATOR_CFLAGS += -MMD --build --cc --trace \
 								-O3 --x-assign fast --x-initial fast --noassert
 BUILD_DIR = ./build
@@ -41,8 +42,8 @@ LDFLAGS += -lSDL2 -lSDL2_image
 
 $(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
 #./build/top文件的建立依赖于 top.v sim_main.cpp auto_bind.cpp 以及verilator仿真可执行文件
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@echo "Write this Makefile by your self."
+#	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+#	@echo "Write this Makefile by your self."
 	@rm -rf $(OBJ_DIR)
 	$(VERILATOR) $(VERILATOR_CFLAGS) --top-module $(TOPNAME) $^ \
 	$(addprefix -CFLAGS , $(CFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
@@ -52,11 +53,6 @@ $(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
 	#-CFLAGS -I -DTOP_NAME="\"VTOP\"" -LDFLAGS -lSDL2 -lSDL2_image \
 	#--Mdir ./build/obj_dir --exe -o ./build/top
 	#--top-module top 指定顶层文件名 --Mdir 将生成的文件都放入obj_dir目录中 --exe -o ./build/top 产生可执行文件并指定名字为./build/top
-
-all:default
-	@echo "Write this Makefile by your self."
-
-include ../Makefile
 
 run:$(BIN)
 	@$^	#make run 执行可执行文件 ./build/top
