@@ -36,6 +36,7 @@ uint32_t result;
 
 file = fopen("/home/xi/ysyx-workbench/nemu/tools/gen-expr/build/input", "r");	//打开文件
 assert(file != NULL);	//assert0
+int count = 1;
 while (fgets(line, 65536 + 128, file) != NULL)	//fgets读取file文件x-1位字符串到line
 {
   int i = 0;
@@ -53,13 +54,14 @@ while (fgets(line, 65536 + 128, file) != NULL)	//fgets读取file文件x-1位字�
   exprbuf[j] = '\0';		//将line中的表达式读入exprbuf
   bool success = true;
   word_t ans = expr(exprbuf, &success);	//exprbuf式输入expr函数计算结果ans
-	printf("genexpr result = %u\n", ans);
+	printf("no.%d genexpr result = %u\n", count, ans);
   if (success == false && result - ans != 0)		//如success=false或result对比ans不同，失败
   {
     printf("- origin line: %s- success: %d\n- exprbuf: %s\n- result:%u\n- ans: %u\n",
            line, success, exprbuf, result, ans);		//输出数据比较
     return 0;
   }
+	count++;
 }
 //return 0;		// 返回/继续进行
 

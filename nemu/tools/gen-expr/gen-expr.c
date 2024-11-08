@@ -7,7 +7,14 @@
 
 // this should be enough
 static char buf[65536];
-
+static char code_buf[65536 + 128];
+static char *code_format =
+"#include <stdio.h>\n"
+"int main() { "
+"  unsigned result = %s; "
+"  printf(\"%%u\", result); "
+"  return 0; "
+"}";
 /*
  * inline expansion, or inlining, is a manual or compiler optimization that
  * replaces a function call site with the body of the called function
@@ -21,14 +28,11 @@ uint32_t choose(uint32_t n) {
 static inline void gen_num() {
 	char s[4];
 	uint32_t n = choose(99);
-	
-	/* send the formatted data to string */
 	sprintf(s, "%u", n);
 	strcat(buf, s);		
 }
 
 static inline void gen(char str) {
-	/* generate random white space */
 	uint32_t lSpace = choose(2);
 	uint32_t rSpace = choose(2);
 	char s[lSpace + 1 + rSpace];
@@ -44,7 +48,6 @@ static inline void gen(char str) {
 }
 
 static inline void gen_rand_op() {
-
 	switch (choose(4)) {
 		case 0: gen('+'); break;
 		case 1: gen('-'); break;
@@ -63,16 +66,6 @@ static inline void gen_rand_expr() {
   }
 
 }
-
-static char code_buf[65536];
-static char *code_format =
-"#include <stdio.h>\n"
-"int main() { "
-"_Bool flag;"
-"  unsigned result = %s; "
-"  printf(\"%%u\", result); "
-"  return 0; "
-"}";
 
 int main(int argc, char *argv[]) {
   int seed = time(0);

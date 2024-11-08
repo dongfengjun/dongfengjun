@@ -305,25 +305,25 @@ word_t expr(char *e, bool *success) {
 	}
 }
 	word_t result = 0;
-	int numl = 0;
-	int numr = 0;
+	int numl = 0,numr = 0;
   for(int i = 0; i < nr_token; i++) {
 		if(tokens[i].type == '(')
         numl += 1;
     if(tokens[i].type == ')')
       numr += 1;
+		if(numl < numr)
+			Assert(0, "ERROR:The brackets don't match.\n");
   }
   if(numl != numr) {
-    printf("ERROR:The brackets don't match.\n");
-    assert(0);
-  }
+		Assert(0, "ERROR:The brackets don't match.\n");
+	}
 	result = eval(0, nr_token-1);
 //	printf("expr result = %u\n", result);
 	return result;
 }
 
 uint32_t eval(int p, int  q) {
-//Tpq	printf("p=%d,q=%d\n",p,q);
+//	printf("p=%d,q=%d\n",p,q);
 	if (p > q) {
     /* Bad expression */
 		assert(0);
@@ -348,12 +348,18 @@ uint32_t eval(int p, int  q) {
 		bool flag = false;
 		bool as = false;
 		for(int i = p; i <= q; i++) {
-			if(tokens[i].type == '(') {
-				int j = i;
-				while(tokens[j].type != ')') {
-						j++;
+			if((tokens[i].type == '(')) {
+				int countl = 0, countr = 0;
+				for(int j = i; j <= q; j++) {
+					if((tokens[j].type == '('))
+						countl++;
+					if((tokens[j].type == ')'))
+						countr++;
+					if(countl == countr) {
+						i = j;
+						break;
 					}
-				i = j;
+				}
 			}		//括号优先级
 			if(!flag && tokens[i].type == OR) {
 				flag = true;
@@ -384,12 +390,12 @@ uint32_t eval(int p, int  q) {
 					op = max(op, i);
 				}
 			}
-//T			printf("%d:%s ", tokens[i].type, tokens[i].str);printf("\n");
-//T			printf("%d %d %d\n",i,flag,op);
+//			printf("%d:%s ", tokens[i].type, tokens[i].str);printf("\n");
+//			printf("%d %d %d\n",i,flag,op);
 		}
 
-    uint32_t val1 = eval(p, op - 1);
-    uint32_t val2 = eval(op + 1, q);
+    int val1 = eval(p, op - 1);
+    int val2 = eval(op + 1, q);
 		int op_type = tokens[op].type;
     switch (op_type) {
       case '+': return val1 + val2;
