@@ -3,7 +3,6 @@ NXDC_FILES = constr/top.nxdc  #约束文件路径
 INC_PATH ?=  #?=的意义是，INC_PATH如果被未被定义，则为?=后的值，如果被定义过，则保持原来的值
 
 VERILATOR = verilator
-#在代码段结束后看这一句的详细注解
 VERILATOR_CFLAGS += -MMD --build --cc --trace \
 								-O3 --x-assign fast --x-initial fast --noassert
 BUILD_DIR = ./build
