@@ -69,7 +69,7 @@ void free_wq(WP *wp) {
 	for(WP *p = head; p -> next != NULL; p = p -> next) {
 		if(p -> NO == wp -> NO) {
 			p -> flag = false;
-			p = p -> next;
+//			p = p -> next;
 			printf("free NO.%d success.\n", wp -> NO);
 			return;
 		}

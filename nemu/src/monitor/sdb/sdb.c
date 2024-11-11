@@ -228,7 +228,7 @@ static int cmd_w(char *args) {
 
 static int cmd_d(char *args) {
 	if (args == NULL) {
-    printf("Please enter EXPR.");
+    printf("Please enter EXPR.\n");
 		return 0;
   }
 	else {
