@@ -22,7 +22,7 @@
 #include <math.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, NUM, UNEQ, LEQ, OR, AND, REG, HEX, UNID
+  TK_NOTYPE = 256, TK_EQ, NUM, UNEQ, LEQ, OR, AND, REG, HEX
 
   /* TODO: Add more token types */
 
@@ -53,7 +53,7 @@ static struct rule {
 	{"\\$[a-zA-Z]*[0-9]*", REG},		//reg_name
 	{"\\0[xX][0-9a-fA-F]+", HEX},		//hexadecimal-number
 	{"[0-9]*", NUM},
-	{"\\%", UNID}
+	{"\\%", '%'}
 };
 
 #define NR_REGEX ARRLEN(rules)
