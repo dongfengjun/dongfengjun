@@ -387,7 +387,8 @@ uint32_t eval(int p, int  q) {
       case '*': return val1 * val2;
       case '/': 
 				if(val2 == 0) {
-					Assert(0, "The denominator is zero");
+					printf("The denominator is zero");
+					return -1;
 				}
 				else {
 					return val1 / val2;
@@ -397,7 +398,7 @@ uint32_t eval(int p, int  q) {
 			case LEQ: return val1 <= val2;
 			case OR: return val1 || val2;
 			case AND: return val1 && val2;
-      default: printf("No op type.\n"); return 0;
+      default: printf("No op type.\n"); assert(0);
     }
   }
 }
