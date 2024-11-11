@@ -51,6 +51,10 @@ WP* new_wp() {
 			if(head == NULL) {
 				head = p;
 			}
+			else {
+				p -> next = head;
+				head = p;
+			}
 			return p;
 		}
 	}
@@ -59,21 +63,27 @@ WP* new_wp() {
 	return NULL;
 }
 
-void free_wq(WP *wp) {
-	if(head -> NO == wp -> NO) {
+void free_wp(WP *wp) {
+	if (wp == NULL) return;
+	if(head == wp) {
 		head -> flag = false;
-		free_ = wp;
 		head = wp -> next;
 		printf("free NO.%d success.\n", wp -> NO);
 		return;
 	}
-	for(WP *p = head; p -> next != NULL; p = p -> next) {
-		if(p -> NO == wp -> NO) {
-			p -> flag = false;
-			printf("free NO.%d success.\n", wp -> NO);
-			return;
+	else {
+		WP *p = head;
+		while(p != NULL && p -> next != wp) {
+			p = p -> next;
+		}
+		if (p != NULL) {
+			p -> next = wp -> next;
 		}
 	}
+		wp -> flag = false;
+		wp -> next = free_;
+		free_ = wp;
+		printf("free NO.%d success.\n", wp -> NO);
 }
 
 void sdb_watchpoint_display() {
@@ -93,40 +103,43 @@ void sdb_watchpoint_display() {
 
 void create_watchpoint(char* args) {
 	WP* p = new_wp();
-  strcpy(p -> expr, args);
+  strncpy(p -> expr, args, sizeof(p -> expr) - 1);
   bool success = false;
   word_t tmp = expr(p -> expr, &success);
   if(success) {
     p -> value = tmp;
     printf("Watchpoint NO.%d: %s\n", p -> NO, p-> expr);
   }
-  else printf("Create watchpoint failure.\n");
+  else {
+		printf("Create watchpoint failure.\n");
+		free_wp(p);
+	}
 }
 
 void delete_watchpoint(int no) {
   for(int i = 0; i < NR_WP; i++)
 		if(wp_pool[i].NO == no){
-			free_wq(&wp_pool[i]);
+			free_wp(&wp_pool[i]);
 			return ;
 	}
+	printf("Delete_watchpoint NO.%d not found.\n", no);
 }
 
 void checkWatchPoint() {
-	for(int i = 0 ; i < NR_WP; i ++){
-		if(wp_pool[i].flag) {
-			bool success = false;
-			word_t tmp = expr(wp_pool[i].expr,&success);
-      if(success){
-				if(tmp != wp_pool[i].value) {
-					printf("oldvalue=%u\nnewvalue=%u\nNEMU_STOP\n", wp_pool[i].value, tmp);
-					nemu_state.state = NEMU_STOP;
-					return ;
-        }
+	for(WP *wp = head; wp != NULL; wp = wp->next){
+		bool success = false;
+		word_t tmp = expr(wp -> expr,&success);
+    if(success){
+			if(tmp != wp -> value) {
+				printf("oldvalue=%u\nnewvalue=%u\nNEMU_STOP\n", wp -> value, tmp);
+				nemu_state.state = NEMU_STOP;
+				return ;
       }
-      else {
-        printf("expr error.\n");
-        assert(0);
-      }
-		}
-  }
+    }
+     else {
+      printf("Expression error in watchpoint NO.%d.\n", wp -> NO);
+      assert(0);
+    }
+	}
 }
+
