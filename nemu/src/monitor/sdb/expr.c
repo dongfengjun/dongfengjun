@@ -181,6 +181,7 @@ static bool make_token(char *e) {
 				break;
 			}
 		}
+			printf("%d\n",nr_token);
 			if(nr_token == elen) {
 				printf("no match at position %d\n%s\n%*.s^\n", position, e, position,"");
 				return false;
