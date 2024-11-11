@@ -222,7 +222,7 @@ word_t expr(char *e, bool *success) {
 			}
 			else {
 				printf("ERROR:read memory.\n");
-				return -1;
+				return 0;
 			}
 		}
 	}
@@ -294,13 +294,13 @@ word_t expr(char *e, bool *success) {
       numr += 1;
 		if(numl < numr) {
 			printf("ERROR:The brackets don't match.\n");
-			return -1;
+			return 0;
 		}
 //			Assert(0, "ERROR:The brackets don't match.\n");
   }
   if(numl != numr) {
 		printf("ERROR:The brackets don't match.\n");
-		return -1;
+		return 0;
 //		Assert(0, "ERROR:The brackets don't match.\n");
 	}
 	result = eval(0, nr_token-1);
@@ -312,8 +312,9 @@ word_t eval(int p, int  q) {
 //	printf("p=%d,q=%d\n",p,q);
 	if (p > q) {
     /* Bad expression */
-		Assert(0,"ERROR:Bad expression\n");
-		return -1;
+//		Assert(0,"ERROR:Bad expression\n");
+		printf("ERROR:Bad expression\n");
+		return 0;
   }
   else if (p == q) {
     /* Single token.
@@ -391,7 +392,7 @@ word_t eval(int p, int  q) {
 				if(val2 == 0) {
 //					Assert(0,"The denominator is zero\n");
 					printf("The denominator is zero\n");
-					return -1;
+					return 0;
 				}
 				else {
 					return val1 / val2;
@@ -401,7 +402,10 @@ word_t eval(int p, int  q) {
 			case LEQ: return val1 <= val2;
 			case OR: return val1 || val2;
 			case AND: return val1 && val2;
-      default: Assert(0,"No op type.\n");
+      default: 
+				//Assert(0,"No op type.\n");
+				printf("No op type.\n");
+				return 0;
     }
   }
 }
