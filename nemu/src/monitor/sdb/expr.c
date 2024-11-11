@@ -53,7 +53,6 @@ static struct rule {
 	{"\\$[a-zA-Z]*[0-9]*", REG},		//reg_name
 	{"\\0[xX][0-9a-fA-F]+", HEX},		//hexadecimal-number
 	{"[0-9]*", NUM},
-	{"\\%", '%'}
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -182,10 +181,11 @@ static bool make_token(char *e) {
         }
 				break;
 			}
-			if(i == (NR_REGEX-1)) {
+			else printf("UNID\n");
+		}
+			if(i == (NR_REGEX)) {
 				printf("no match at position %d\n%s\n%*.s^\n", position, e, position,"");
 				return false;
-			}
 		}
 	}
 
