@@ -315,7 +315,7 @@ word_t eval(int p, int  q) {
 //	printf("p=%d,q=%d\n",p,q);
 	if (p > q) {
     /* Bad expression */
-		assert(0);
+		printf("Bad expression\n");
 		return -1;
   }
   else if (p == q) {
