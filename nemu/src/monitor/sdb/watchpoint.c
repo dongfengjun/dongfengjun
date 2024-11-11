@@ -123,6 +123,7 @@ void checkWatchPoint() {
 	for(WP *wp = head; wp != NULL; wp = wp->next){
 		bool success = false;
 		word_t tmp = expr(wp -> expr,&success);
+		printf("tmp = %d\n", tmp);
     if(success){
 			if(tmp != wp -> value) {
 				printf("oldvalue=%u\nnewvalue=%u\nNEMU_STOP\n", wp -> value, tmp);
