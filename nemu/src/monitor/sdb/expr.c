@@ -169,7 +169,20 @@ static bool make_token(char *e) {
         switch (rules[i].token_type) {
 					case TK_NOTYPE:
 						break;
-          default:
+          case TK_EQ:
+					case NUM:
+					case UNEQ:
+					case LEQ:
+					case OR:
+					case AND:
+					case REG:
+					case HEX:
+					case '+':
+					case '-':
+					case '*':
+					case '/':
+					case '(':
+					case ')':
 						Assert(nr_token < 65536, "The tokens array has insufficient storage space.");
 						Assert(substr_len < 32, "The token is too long");
 						tokens[nr_token].type = rules[i].token_type;
@@ -177,16 +190,13 @@ static bool make_token(char *e) {
 						tokens[nr_token].str[substr_len] = '\0';
 						nr_token++;
 						break;
+					default:
+						printf("no match at position %d\n%s\n%*.s^\n", position, e, position,"");
+						return false;
+						break;
         }
-
         break;
       }
-    }
-
-//	printf("%d\n", nr_token);
-    if (i == NR_REGEX) {
-      printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-      return false;
     }
   }
 
