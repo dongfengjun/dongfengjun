@@ -120,22 +120,21 @@ void delete_watchpoint(int no) {
 }
 
 void checkWatchPoint() {
-	printf("checkWatchPoint ");
-	for(WP *wp = head; wp != NULL; wp = wp->next){
-		bool success = false;
-		word_t tmp = expr(wp -> expr,&success);
-		printf("tmp = %d\n", tmp);
-    if(success){
-			if(tmp != wp -> value) {
-				printf("oldvalue=%u\nnewvalue=%u\nNEMU_STOP\n", wp -> value, tmp);
-				nemu_state.state = NEMU_STOP;
-				return ;
+	for(int i = 0; i <= NR_WP; i++){
+		if(wp_pool[i].flag) {
+			bool success = false;
+			word_t tmp = expr(wp_pool[i].expr,&success);
+			if(success){
+				if(tmp != wp_pool[i].value) {
+					printf("oldvalue=%u\nnewvalue=%u\nNEMU_STOP\n", wp_pool[i].value, tmp);
+					nemu_state.state = NEMU_STOP;
+					return ;
       }
     }
-     else {
-      printf("Expression error in watchpoint NO.%d.\n", wp -> NO);
+			else {
+      printf("Expression error in watchpoint NO.%d.\n", wp_pool[i].NO);
       assert(0);
-    }
+			}
+		}
 	}
 }
-
