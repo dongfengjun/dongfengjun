@@ -97,6 +97,7 @@ void sdb_watchpoint_display() {
 void create_watchpoint(char* args) {
 	WP* p = new_wp();
   strncpy(p -> expr, args, sizeof(p -> expr) - 1);
+	p->expr[sizeof(p->expr) - 1] = '\0';
   bool success = false;
   word_t tmp = expr(p -> expr, &success);
   if(success) {
