@@ -120,6 +120,7 @@ void delete_watchpoint(int no) {
 }
 
 void checkWatchPoint() {
+	printf("checkWatchPoint ");
 	for(WP *wp = head; wp != NULL; wp = wp->next){
 		bool success = false;
 		word_t tmp = expr(wp -> expr,&success);
