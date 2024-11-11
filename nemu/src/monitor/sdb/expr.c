@@ -180,10 +180,10 @@ static bool make_token(char *e) {
         }
 				break;
     }
-		else {
-			printf("no match at position %d\n%s\n%*.s^\n", position, e, position,"");
-			continue;
-		}
+//		else {
+//			printf("no match at position %d\n%s\n%*.s^\n", position, e, position,"");
+//			continue;
+//		}
   }
 }
 
