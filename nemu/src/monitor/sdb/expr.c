@@ -152,6 +152,7 @@ static bool make_token(char *e) {
 
   while (e[position] != '\0') {
     /* Try all rules one by one. */
+		printf("NR_REGEX=%d\n", NR_REGEX);
     for (i = 0; i < NR_REGEX; i ++) {
 			if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
         char *substr_start = e + position;
@@ -181,10 +182,10 @@ static bool make_token(char *e) {
         }
 				break;
 			}
-		}
-		if(i == (NR_REGEX-1)) {
-			printf("no match at position %d\n%s\n%*.s^\n", position, e, position,"");
-			return false;
+			if(i == (NR_REGEX-1)) {
+				printf("no match at position %d\n%s\n%*.s^\n", position, e, position,"");
+				return false;
+			}
 		}
 	}
 
