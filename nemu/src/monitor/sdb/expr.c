@@ -388,7 +388,7 @@ uint32_t eval(int p, int  q) {
       case '/': 
 				if(val2 == 0) {
 					printf("The denominator is zero");
-					return -1;
+					return 0;
 				}
 				else {
 					return val1 / val2;
