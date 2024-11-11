@@ -120,7 +120,7 @@ void delete_watchpoint(int no) {
 }
 
 void checkWatchPoint() {
-	for(int i = 0; i <= NR_WP; i++){
+	for(int i = 0; i < NR_WP; i++){
 		if(wp_pool[i].flag) {
 			bool success = false;
 			word_t tmp = expr(wp_pool[i].expr,&success);
