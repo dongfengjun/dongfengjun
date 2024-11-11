@@ -120,7 +120,6 @@ void delete_watchpoint(int no) {
 }
 
 void checkWatchPoint() {
-	/***
 	for(int i = 0; i <= NR_WP; i++){
 		if(wp_pool[i].flag) {
 			bool success = false;
@@ -138,5 +137,4 @@ void checkWatchPoint() {
 			}
 		}
 	}
-	***/
 }
