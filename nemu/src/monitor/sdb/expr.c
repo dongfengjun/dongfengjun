@@ -192,7 +192,7 @@ static bool make_token(char *e) {
 						break;
 					default:
 						printf("no match at position %d\n%s\n%*.s^\n", position, e, position,"");
-						return false;
+						continue;
         }
 				break;
     }
