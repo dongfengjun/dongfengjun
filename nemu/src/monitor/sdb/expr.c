@@ -315,7 +315,7 @@ word_t eval(int p, int  q) {
 //	printf("p=%d,q=%d\n",p,q);
 	if (p > q) {
     /* Bad expression */
-		printf("ERROR:Bad expression\n");
+		Assert(0,"ERROR:Bad expression\n");
 		return -1;
   }
   else if (p == q) {
@@ -404,7 +404,7 @@ word_t eval(int p, int  q) {
 			case LEQ: return val1 <= val2;
 			case OR: return val1 || val2;
 			case AND: return val1 && val2;
-      default: printf("No op type.\n"); assert(0);
+      default: Assert(0,"No op type.\n");
     }
   }
 }
