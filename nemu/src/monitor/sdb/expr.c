@@ -295,18 +295,23 @@ word_t expr(char *e, bool *success) {
         numl += 1;
     if(tokens[i].type == ')')
       numr += 1;
-		if(numl < numr)
-			Assert(0, "ERROR:The brackets don't match.\n");
+		if(numl < numr) {
+			printf("ERROR:The brackets don't match.\n");
+			return -1;
+		}
+//			Assert(0, "ERROR:The brackets don't match.\n");
   }
   if(numl != numr) {
-		Assert(0, "ERROR:The brackets don't match.\n");
+		printf("ERROR:The brackets don't match.\n");
+		return -1;
+//		Assert(0, "ERROR:The brackets don't match.\n");
 	}
 	result = eval(0, nr_token-1);
 //	printf("expr result = %u\n", result);
 	return result;
 }
 
-uint32_t eval(int p, int  q) {
+word_t eval(int p, int  q) {
 //	printf("p=%d,q=%d\n",p,q);
 	if (p > q) {
     /* Bad expression */
@@ -387,7 +392,7 @@ uint32_t eval(int p, int  q) {
       case '*': return val1 * val2;
       case '/': 
 				if(val2 == 0) {
-					Assert(0,"The denominator is zero\n");
+//					Assert(0,"The denominator is zero\n");
 					printf("The denominator is zero\n");
 					return 0;
 				}
