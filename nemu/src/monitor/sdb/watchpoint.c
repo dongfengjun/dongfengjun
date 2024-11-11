@@ -45,24 +45,18 @@ void init_wp_pool() {
 
 /* TODO: Implement the functionality of watchpoint */
 WP* new_wp() {
-	for(WP* p = free_; p != NULL; p = p -> next) {
-		if(p -> flag == false) {
-			p -> flag = true;
-			if(head == NULL) {
-				head = p;
-			}
-			else {
-				p -> next = head;
-				head = p;
-			}
-			return p;
-		}
-	}
-	printf("No unuse point.\n");
-	assert(0);
-	return NULL;
+	if (free_ == NULL) {
+		printf("No unused watchpoint available.\n");
+    assert(0);
+		return NULL;
+  }
+	WP *p = free_;
+	free_ = free_->next;
+	p -> flag = true;
+	p -> next = head;
+	printf("Watchpoint NO.%d allocated.\n", p->NO);
+	return p;
 }
-
 void free_wp(WP *wp) {
 	if (wp == NULL) return;
 	if(head == wp) {
