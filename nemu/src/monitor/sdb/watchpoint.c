@@ -62,6 +62,7 @@ WP* new_wp() {
 void free_wq(WP *wp) {
 	if(head -> NO == wp -> NO) {
 		head -> flag = false;
+		free_ = wp;
 		head = wp -> next;
 		printf("free NO.%d success.\n", wp -> NO);
 		return;
@@ -69,7 +70,6 @@ void free_wq(WP *wp) {
 	for(WP *p = head; p -> next != NULL; p = p -> next) {
 		if(p -> NO == wp -> NO) {
 			p -> flag = false;
-			free_ = wp;
 			printf("free NO.%d success.\n", wp -> NO);
 			return;
 		}
