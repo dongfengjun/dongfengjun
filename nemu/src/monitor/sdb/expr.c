@@ -224,8 +224,8 @@ word_t expr(char *e, bool *success) {
 				uint2char(tmp,tokens[i].str);
 			}
 			else {
-				printf("Transfrom error.\n");
-				assert(0);
+				printf("ERROR:read memory.\n");
+				return -1;
 			}
 		}
 	}
@@ -394,7 +394,7 @@ word_t eval(int p, int  q) {
 				if(val2 == 0) {
 //					Assert(0,"The denominator is zero\n");
 					printf("The denominator is zero\n");
-					return 0;
+					return -1;
 				}
 				else {
 					return val1 / val2;
