@@ -54,7 +54,6 @@ WP* new_wp() {
 	free_ = free_->next;
 	p -> flag = true;
 	p -> next = head;
-	printf("Watchpoint NO.%d allocated.\n", p->NO);
 	return p;
 }
 void free_wp(WP *wp) {
