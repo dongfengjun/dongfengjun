@@ -24,7 +24,7 @@ typedef struct watchpoint {
   /* TODO: Add more members if necessary */
 	bool flag;
 	char expr[32];
-	int old_value;
+	int value;
 
 } WP;
 
@@ -45,35 +45,38 @@ void init_wp_pool() {
 
 /* TODO: Implement the functionality of watchpoint */
 WP* new_wp() {
-	for(WP* p = free_; p->next != NULL; p = p -> next) {
-		if(p -> flag == false) {
-			p -> flag = true;
-			if(head == NULL) {
-				head = p;
-			}
-			return p;
-		}
-	}
-	printf("No unuse point.\n");
-	assert(0);
-	return NULL;
+	if (free_ == NULL) {
+		printf("No unused watchpoint available.\n");
+    assert(0);
+		return NULL;
+  }
+	WP *p = free_;
+	free_ = free_->next;
+	p -> flag = true;
+	p -> next = head;
+	return p;
 }
-
-void free_wq(WP *wp) {
-	if(head -> NO == wp -> NO) {
+void free_wp(WP *wp) {
+	if (wp == NULL) return;
+	if(head == wp) {
 		head -> flag = false;
 		head = wp -> next;
-		printf("Delete watchpoint success.\n");
+		printf("free watchpoint NO.%d success.\n", wp -> NO);
 		return;
 	}
-	for(WP *p = head; p -> next != NULL; p = p -> next) {
-		if(p -> NO == wp -> NO) {
-			p -> flag = false;
+	else {
+		WP *p = head;
+		while(p != NULL && p -> next != wp) {
 			p = p -> next;
-			printf("free NO.%d success.\n", wp -> NO);
-			return;
+		}
+		if (p != NULL) {
+			p -> next = wp -> next;
 		}
 	}
+		wp -> flag = false;
+		wp -> next = free_;
+		free_ = wp;
+		printf("free NO.%d success.\n", wp -> NO);
 }
 
 void sdb_watchpoint_display() {
@@ -82,7 +85,7 @@ void sdb_watchpoint_display() {
 		if(wp_pool[i].flag) {
 			bool success = false;
 			word_t tmp = expr(wp_pool[i].expr,&success);
-      printf("Watchpoint.NO:%d, expr=%s, old_value=%u, new_value=%u\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].old_value, tmp);
+      printf("watchpoint NO:%d, expr=%s, old_value=%u, new_value=%u\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].value, tmp);
       flag = false;
 		}
 	}
@@ -93,40 +96,45 @@ void sdb_watchpoint_display() {
 
 void create_watchpoint(char* args) {
 	WP* p = new_wp();
-  strcpy(p -> expr, args);
+  strncpy(p -> expr, args, sizeof(p -> expr) - 1);
+	p->expr[sizeof(p->expr) - 1] = '\0';
   bool success = false;
   word_t tmp = expr(p -> expr, &success);
   if(success) {
-    p -> old_value = tmp;
-    printf("Watchpoint NO.%d: %s\n", p -> NO, p-> expr);
+    p -> value = tmp;
+    printf("watchpoint NO.%d: %s\n", p -> NO, p-> expr);
   }
-  else printf("Create watchpoint failure.\n");
+  else {
+		printf("Create watchpoint failure.\n");
+		free_wp(p);
+	}
 }
 
 void delete_watchpoint(int no) {
   for(int i = 0; i < NR_WP; i++)
 		if(wp_pool[i].NO == no){
-			free_wq(&wp_pool[i]);
+			free_wp(&wp_pool[i]);
 			return ;
 	}
+	printf("watchpoint NO.%d not found.\n", no);
 }
 
 void checkWatchPoint() {
-	for(int i = 0 ; i < NR_WP; i ++){
+	for(int i = 0; i < NR_WP; i++){
 		if(wp_pool[i].flag) {
 			bool success = false;
 			word_t tmp = expr(wp_pool[i].expr,&success);
-      if(success){
-				if(tmp != wp_pool[i].old_value) {
-					printf("oldvalue=%u\nnewvalue=%u\nNEMU_STOP\n", wp_pool[i].old_value, tmp);
+			if(success){
+				if(tmp != wp_pool[i].value) {
+					printf("watchpoint NO.%d\noldvalue=%u\nnewvalue=%u\nNEMU_STOP\n", wp_pool[i].NO, wp_pool[i].value, tmp);
 					nemu_state.state = NEMU_STOP;
 					return ;
-        }
       }
-      else {
-        printf("expr error.\n");
-        assert(0);
-      }
+    }
+			else {
+      printf("Expression error in watchpoint NO.%d.\n", wp_pool[i].NO);
+      assert(0);
+			}
 		}
-  }
+	}
 }

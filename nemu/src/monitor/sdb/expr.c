@@ -22,7 +22,7 @@
 #include <math.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, NUM, UNEQ, LEQ, OR, AND, REG=299, HEX
+  TK_NOTYPE = 256, TK_EQ, NUM, UNEQ, LEQ, OR, AND, REG, HEX
 
   /* TODO: Add more token types */
 
@@ -148,11 +148,11 @@ static bool make_token(char *e) {
   regmatch_t pmatch;
 
   nr_token = 0;
-
+	size_t elen = strlen(e);
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
-      if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+			if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
@@ -178,17 +178,14 @@ static bool make_token(char *e) {
 						nr_token++;
 						break;
         }
-
-        break;
-      }
-    }
-
-//	printf("%d\n", nr_token);
-    if (i == NR_REGEX) {
-      printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-      return false;
-    }
-  }
+				break;
+			}
+		}
+		if(nr_token == (elen+1)) {
+			printf("no match at position %d\n%s\n%*.s^\n", position, e, position,"");
+			return false;
+		}
+	}
 
 											/***test tokens***
 	for(int j = 0; j < nr_token; j++) {
@@ -224,8 +221,8 @@ word_t expr(char *e, bool *success) {
 				uint2char(tmp,tokens[i].str);
 			}
 			else {
-				printf("Transfrom error.\n");
-				assert(0);
+				printf("ERROR:read memory.\n");
+				return 0;
 			}
 		}
 	}
@@ -295,23 +292,29 @@ word_t expr(char *e, bool *success) {
         numl += 1;
     if(tokens[i].type == ')')
       numr += 1;
-		if(numl < numr)
-			Assert(0, "ERROR:The brackets don't match.\n");
+		if(numl < numr) {
+			printf("ERROR:The brackets don't match.\n");
+			return 0;
+		}
+//			Assert(0, "ERROR:The brackets don't match.\n");
   }
   if(numl != numr) {
-		Assert(0, "ERROR:The brackets don't match.\n");
+		printf("ERROR:The brackets don't match.\n");
+		return 0;
+//		Assert(0, "ERROR:The brackets don't match.\n");
 	}
 	result = eval(0, nr_token-1);
 //	printf("expr result = %u\n", result);
 	return result;
 }
 
-uint32_t eval(int p, int  q) {
+word_t eval(int p, int  q) {
 //	printf("p=%d,q=%d\n",p,q);
 	if (p > q) {
     /* Bad expression */
-		assert(0);
-		return -1;
+//		Assert(0,"ERROR:Bad expression\n");
+		printf("ERROR:Bad expression\n");
+		return 0;
   }
   else if (p == q) {
     /* Single token.
@@ -387,7 +390,9 @@ uint32_t eval(int p, int  q) {
       case '*': return val1 * val2;
       case '/': 
 				if(val2 == 0) {
-					Assert(0, "The denominator is zero");
+//					Assert(0,"The denominator is zero\n");
+					printf("ERROR:The denominator is zero\n");
+					return 0;
 				}
 				else {
 					return val1 / val2;
@@ -397,7 +402,10 @@ uint32_t eval(int p, int  q) {
 			case LEQ: return val1 <= val2;
 			case OR: return val1 || val2;
 			case AND: return val1 && val2;
-      default: printf("No op type.\n"); assert(0);
+      default: 
+				//Assert(0,"No op type.\n");
+				printf("No op type.\n");
+				return 0;
     }
   }
 }
