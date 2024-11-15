@@ -30,7 +30,7 @@ enum {
 #define src1R() do { *src1 = R(rs1); } while (0)
 #define src2R() do { *src2 = R(rs2); } while (0)
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
-#define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12;printf("imm=%ls\n",imm); } while(0)
+#define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
@@ -63,7 +63,7 @@ static int decode_exec(Decode *s) {
 /******/
 	INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(rd) = src1 + imm);
 	INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, Mw(src1 + imm, 4, src2));
-	INSTPAT("??????? ????? ????? 000 ????? 11011 11", jal    , U, R(rd) = s->pc + 4, s->pc += ((imm & 0x80000) << 20) | ((imm & 0x7fe00) << 1) | ((imm & 0x100) << 11) | ((imm & 0xff) << 12));
+	INSTPAT("??????? ????? ????? 000 ????? 11011 11", jal    , U, R(rd) = s->pc + 4, s->pc += ((imm & 0x80000000) << 20) | ((imm & 0x7fe00000) << 1) | ((imm & 0x100000) << 11) | ((imm & 0xff000) << 12));
 	INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, s->pc = ((src1 + imm)&(~1U)), R(rd) = s->pc + 4);
 /******/
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
