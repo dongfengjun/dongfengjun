@@ -201,6 +201,7 @@ bool check_parentheses(int p, int q);
 int max(int a, int b);
 uint32_t eval(int p, int  q);
 
+word_t paddr_read(paddr_t addr, int len);
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -272,12 +273,12 @@ word_t expr(char *e, bool *success) {
 		if (tokens[i].type == '*' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i-1].type != HEX) && tokens[i-1].type != (int)(')')))) {
 			tokens[i].type = TK_NOTYPE;
 			uint32_t addr = char2int(tokens[i+1].str);
-			long unsigned int act = addr + 132360350116712;
-			uintptr_t addrptr = act;
-			uint32_t* ptr =(uint32_t*)addrptr;
-			printf("addr=%u\naddrptr=%lu\nact=%lu",addr,addrptr,act);
-			printf("%n\n",ptr);
-			int value = 0;
+//			long unsigned int act = addr + &pc;
+//			uintptr_t addrptr = act;
+//			uint32_t* ptr =(uint32_t*)addrptr;
+//			printf("addr=%u\naddrptr=%lu\nact=%lu",addr,addrptr,act);
+//			printf("%n\n",ptr);
+			int value = paddr_read(addr, 4);
 //			memcpy(&value, (void*)a, sizeof(int));
 			int2char(value, tokens[i+1].str);
 			for(int j = 0 ; j < nr_token ; j ++) {
