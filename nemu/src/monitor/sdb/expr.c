@@ -273,9 +273,9 @@ word_t expr(char *e, bool *success) {
 			tokens[i].type = TK_NOTYPE;
 			int tmp = char2int(tokens[i+1].str);
 			uintptr_t a = (uintptr_t)tmp;
-			int value = *((int*)a);
-			int2char(value, tokens[i+1].str);
-			printf("intaddr=%d\nuintptr=%lu\nvalue=%d\n",tmp,a,value);
+//			int value = *((int*)a);
+//			int2char(value, tokens[i+1].str);
+			printf("intaddr=%d\nuintptr=%lu\n",tmp,a);
 			for(int j = 0 ; j < nr_token ; j ++) {
 				if(tokens[j].type == TK_NOTYPE) {
 					for(int k = j +1 ; k < nr_token; k ++) {
