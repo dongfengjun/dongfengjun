@@ -274,7 +274,7 @@ word_t expr(char *e, bool *success) {
 			uint64_t addr = char2int(tokens[i+1].str);
 			uintptr_t addrptr = addr;
 			uint64_t* ptr =(uint64_t*)addrptr;
-			printf("%lu\n%lu\n",addr,addrptr);
+			printf("addr=%lu\naddrptr=%lu\n",addr,addrptr);
 			printf("%ln\n",ptr);
 			int value = 0;
 //			memcpy(&value, (void*)a, sizeof(int));
