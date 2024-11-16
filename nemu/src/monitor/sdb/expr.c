@@ -273,7 +273,7 @@ word_t expr(char *e, bool *success) {
 			tokens[i].type = TK_NOTYPE;
 			uint32_t addr = char2int(tokens[i+1].str);
 			uintptr_t addrptr = addr;
-			uint32_t* ptr =(uint32_t *)addrptr;
+			int* ptr = (int*)addrptr;
 			printf("%u\n%lu\n",addr,addrptr);
 			printf("%d\n",*ptr);
 			int value = 0;
