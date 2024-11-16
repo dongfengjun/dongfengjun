@@ -275,6 +275,7 @@ word_t expr(char *e, bool *success) {
 			tokens[i].type = TK_NOTYPE;
 			bool flag = false;
 			int tmp = expr(tokens[i+1].str,&flag);
+			printf("tmp=%d\n",tmp);
 			char s[32];
 			sprintf(s, "%x", tmp);
 			paddr_t addr = 0;
