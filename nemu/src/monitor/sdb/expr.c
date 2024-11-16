@@ -271,11 +271,12 @@ word_t expr(char *e, bool *success) {
 	for (int i = 0; i < nr_token; i ++) {
 		if (tokens[i].type == '*' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i-1].type != HEX) && tokens[i-1].type != (int)(')')))) {
 			tokens[i].type = TK_NOTYPE;
-			uint64_t addr = char2int(tokens[i+1].str);
+			uint32_t addr = char2int(tokens[i+1].str);
+
 			uintptr_t addrptr = addr;
-			uint64_t* ptr =(uint64_t*)addrptr;
-			printf("addr=%lu\naddrptr=%lu\n",addr,addrptr);
-			printf("%ln\n",ptr);
+			uint32_t* ptr =(uint32_t*)addrptr;
+			printf("addr=%u\naddrptr=%lu\n",addr,addrptr);
+			printf("%n\n",ptr);
 			int value = 0;
 //			memcpy(&value, (void*)a, sizeof(int));
 			int2char(value, tokens[i+1].str);
