@@ -281,7 +281,8 @@ word_t expr(char *e, bool *success) {
 			sscanf(s, "%x", &addr);
 			uint32_t value = *(uint32_t *)guest_to_host(addr);
 			uint2char(value, tokens[i+1].str);
-			printf("value=%u\n",value);
+			printf("=%s/n", tokens[i+1].str);
+			printf("value=%u\n", value);
 			for(int j = 0 ; j < nr_token ; j ++) {
 				if(tokens[j].type == TK_NOTYPE) {
 					for(int k = j +1 ; k < nr_token; k ++) {
