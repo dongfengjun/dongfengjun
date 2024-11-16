@@ -273,16 +273,10 @@ word_t expr(char *e, bool *success) {
 	for (int i = 0; i < nr_token; i ++) {
 		if (tokens[i].type == '*' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i-1].type != HEX) && tokens[i-1].type != (int)(')')))) {
 			tokens[i].type = TK_NOTYPE;
-//			uint32_t addr = char2int(tokens[i+1].str);
 			paddr_t addr = 0;
 			sscanf(tokens[i+1].str, "%x", &addr);
-			printf("value=%u\n", *guest_to_host(addr));
-//			uintptr_t addrptr = act;
-//			uint32_t* ptr =(uint32_t*)addrptr;
-//			printf("addr=%u\naddrptr=%lu\nact=%lu",addr,addrptr,act);
-//			printf("%n\n",ptr);
-//			memcpy(&value, (void*)a, sizeof(int));
-//			int2char(value, tokens[i+1].str);
+//			printf("value=%u\n", *guest_to_host(addr));
+			int2char(*guest_to_host(addr), tokens[i+1].str);
 			for(int j = 0 ; j < nr_token ; j ++) {
 				if(tokens[j].type == TK_NOTYPE) {
 					for(int k = j +1 ; k < nr_token; k ++) {
