@@ -274,7 +274,7 @@ word_t expr(char *e, bool *success) {
 			int addr = char2int(tokens[i+1].str);
 			uintptr_t addrptr = (uintptr_t)addr;
 			int* ptr = (int*)addrptr;
-			printf("%d\n",*ptr);
+			printf("%d\n%lu\n%ls",addr,addrptr,ptr);
 			int value = 0;
 //			memcpy(&value, (void*)a, sizeof(int));
 			int2char(value, tokens[i+1].str);
