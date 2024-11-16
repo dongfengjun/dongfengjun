@@ -272,7 +272,7 @@ word_t expr(char *e, bool *success) {
 		if (tokens[i].type == '*' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i-1].type != HEX) && tokens[i-1].type != (int)(')')))) {
 			tokens[i].type = TK_NOTYPE;
 			int addr = char2int(tokens[i+1].str);
-			uintptr_t addrptr = (uintptr_t)addr;
+			uintptr_t addrptr = addr;
 //			int* ptr = (int*)addrptr;
 			printf("%d\n%lu\n",addr,addrptr);
 			int value = 0;
