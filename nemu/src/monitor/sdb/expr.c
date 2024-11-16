@@ -273,17 +273,10 @@ word_t expr(char *e, bool *success) {
 	for (int i = 0; i < nr_token; i ++) {
 		if (tokens[i].type == '*' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i-1].type != HEX) && tokens[i-1].type != (int)(')')))) {
 			tokens[i].type = TK_NOTYPE;
-			bool flag = false;
-			int tmp = expr(tokens[i+1].str,&flag);
-			printf("tmp=%d\n",tmp);
-			char s[32];
-			sprintf(s, "%x", tmp);
 			paddr_t addr = 0;
-			sscanf(s, "%x", &addr);
+			sscanf(tokens[i+1].str, "%x", &addr);
 			uint32_t value = *(uint32_t *)guest_to_host(addr);
 			uint2char(value, tokens[i+1].str);
-			printf("=%s\n", tokens[i+1].str);
-			printf("value=%u\n", value);
 			for(int j = 0 ; j < nr_token ; j ++) {
 				if(tokens[j].type == TK_NOTYPE) {
 					for(int k = j +1 ; k < nr_token; k ++) {
@@ -318,7 +311,7 @@ word_t expr(char *e, bool *success) {
 }
 
 word_t eval(int p, int  q) {
-	printf("p=%d,q=%d\n",p,q);
+//	printf("p=%d,q=%d\n",p,q);
 	if (p > q) {
     /* Bad expression */
 //		Assert(0,"ERROR:Bad expression\n");
