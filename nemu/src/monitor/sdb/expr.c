@@ -273,8 +273,9 @@ word_t expr(char *e, bool *success) {
 			tokens[i].type = TK_NOTYPE;
 			uint32_t addr = char2int(tokens[i+1].str);
 			uintptr_t addrptr = addr;
-//			int* ptr = (int*)addrptr;
+			int* ptr = (int*)addrptr;
 			printf("%u\n%lu\n",addr,addrptr);
+			printf("%d\n",*ptr);
 			int value = 0;
 //			memcpy(&value, (void*)a, sizeof(int));
 			int2char(value, tokens[i+1].str);
