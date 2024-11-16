@@ -275,7 +275,7 @@ word_t expr(char *e, bool *success) {
 			tokens[i].type = TK_NOTYPE;
 			paddr_t addr = 0;
 			sscanf(tokens[i+1].str, "%x", &addr);
-			uint32_t tmp = *guest_to_host(addr);
+			uint32_t tmp = *(uint32_t *)guest_to_host(addr);
 			uint2char(tmp, tokens[i+1].str);
 			for(int j = 0 ; j < nr_token ; j ++) {
 				if(tokens[j].type == TK_NOTYPE) {
