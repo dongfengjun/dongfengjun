@@ -275,7 +275,7 @@ word_t expr(char *e, bool *success) {
 			uintptr_t a = (uintptr_t)tmp;
 //			int value = *((int*)a);
 //			int2char(value, tokens[i+1].str);
-			printf("intaddr=%d\nuintptr=%lu\n",tmp,a);
+			printf("intaddr=%u\nuintptr=%lu\n",tmp,a);
 			for(int j = 0 ; j < nr_token ; j ++) {
 				if(tokens[j].type == TK_NOTYPE) {
 					for(int k = j +1 ; k < nr_token; k ++) {
