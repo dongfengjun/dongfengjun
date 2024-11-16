@@ -274,7 +274,7 @@ word_t expr(char *e, bool *success) {
 		if (tokens[i].type == '*' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i-1].type != HEX) && tokens[i-1].type != (int)(')')))) {
 			tokens[i].type = TK_NOTYPE;
 			paddr_t addr = 0;
-			sscanf(tokens[i+1].str, "%d", &addr);
+			sscanf(tokens[i+1].str, "%x", &addr);
 			uint32_t tmp = *(uint32_t *)guest_to_host(addr);
 			uint2char(tmp, tokens[i+1].str);
 			for(int j = 0 ; j < nr_token ; j ++) {
