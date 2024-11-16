@@ -273,8 +273,8 @@ word_t expr(char *e, bool *success) {
 			tokens[i].type = TK_NOTYPE;
 			uint32_t tmp = char2int(tokens[i+1].str);
 			uintptr_t a = (uintptr_t)tmp;
-//			int value = *((int*)a);
-//			int2char(value, tokens[i+1].str);
+			int value = *((int*)a);
+			int2char(value, tokens[i+1].str);
 			printf("intaddr=%u\nuintptr=%lu\n",tmp,a);
 			for(int j = 0 ; j < nr_token ; j ++) {
 				if(tokens[j].type == TK_NOTYPE) {
