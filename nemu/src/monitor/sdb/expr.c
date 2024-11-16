@@ -273,7 +273,7 @@ word_t expr(char *e, bool *success) {
 			tokens[i].type = TK_NOTYPE;
 			uint32_t addr = char2int(tokens[i+1].str);
 			long unsigned int act = addr + 124827343584581;
-			uintptr_t addrptr = addr;
+			uintptr_t addrptr = act;
 			uint32_t* ptr =(uint32_t*)addrptr;
 			printf("addr=%u\naddrptr=%lu\nact=%lu",addr,addrptr,act);
 			printf("%n\n",ptr);
