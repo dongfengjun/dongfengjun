@@ -278,7 +278,6 @@ word_t expr(char *e, bool *success) {
 			bool flag = false;
       word_t tmp = expr(tokens[i+1].str,&flag);
 			tokens[i].type = TK_NOTYPE;
-      printf("nrtmp=%d\n",nrtmp);
 			nr_token = nrtmp;
       char s[32];
       if(flag) {
@@ -287,12 +286,9 @@ word_t expr(char *e, bool *success) {
 				sscanf(s, "%x", &addr);
 				word_t value = *(uint32_t *)guest_to_host(addr);
 				uint2char(value, tokens[i+1].str);
-				printf("value=%u\n", value);
-				printf("tokens[i+1].str=%s\n", tokens[i+1].str);
 			}
 			else	printf("EXPR Invalid.\n");
 			for(int j = 0 ; j < nr_token; j ++) {
-				printf("j=%d\n", j);
 				if(tokens[j].type == TK_NOTYPE) {
 					for(int k = j +1 ; k < nr_token; k ++) {
 					tokens[k - 1] = tokens[k];
@@ -300,7 +296,6 @@ word_t expr(char *e, bool *success) {
 					nr_token -- ;
 				}
 			}
-			printf("token.str=%s\n",tokens[i].str);
 		}
 	}
 	word_t result = 0;
@@ -327,7 +322,7 @@ word_t expr(char *e, bool *success) {
 }
 
 word_t eval(int p, int  q) {
-	printf("p=%d,q=%d\n",p,q);
+//	printf("p=%d,q=%d\n",p,q);
 	if (p > q) {
     /* Bad expression */
 //		Assert(0,"ERROR:Bad expression\n");
