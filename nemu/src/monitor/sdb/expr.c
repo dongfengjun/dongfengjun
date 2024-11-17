@@ -273,10 +273,24 @@ word_t expr(char *e, bool *success) {
 	for (int i = 0; i < nr_token; i ++) {
 		if (tokens[i].type == '*' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i-1].type != HEX) && tokens[i-1].type != (int)(')')))) {
 			tokens[i].type = TK_NOTYPE;
-			paddr_t addr = 0;
+/***			paddr_t addr = 0;
 			sscanf(tokens[i+1].str, "%x", &addr);
-			uint32_t value = *(uint32_t *)guest_to_host(addr);
-			uint2char(value, tokens[i+1].str);
+			uint32_t value = *(uint32_t *)guest_to_host(addr);		***/
+			bool flag = false;
+      word_t tmp = expr(tokens[i+1].str,&flag);
+      printf("tmp=%u\n",tmp);
+      char s[32];
+      if(flag) {
+				sprintf(s, "%x", tmp);
+				paddr_t addr = 0;
+				sscanf(s, "%x", &addr);
+				word_t value = *(uint32_t *)guest_to_host(addr);
+				uint2char(value, tokens[i+1].str);
+				printf("=%s\n", tokens[i+1].str);
+				printf("value=%u\n", value);
+				uint2char(value, tokens[i+1].str);
+			}
+			else	printf("EXPR Invalid.\n");
 			for(int j = 0 ; j < nr_token ; j ++) {
 				if(tokens[j].type == TK_NOTYPE) {
 					for(int k = j +1 ; k < nr_token; k ++) {
