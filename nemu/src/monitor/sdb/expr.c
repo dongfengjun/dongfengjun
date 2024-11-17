@@ -287,7 +287,6 @@ word_t expr(char *e, bool *success) {
 				uint2char(value, tokens[i+1].str);
 				printf("=%s\n", tokens[i+1].str);
 				printf("value=%u\n", value);
-				uint2char(value, tokens[i+1].str);
 			}
 			else	printf("EXPR Invalid.\n");
 			for(int j = 0 ; j < nr_token ; j ++) {
