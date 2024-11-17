@@ -278,14 +278,14 @@ word_t expr(char *e, bool *success) {
 			uint32_t value = *(uint32_t *)guest_to_host(addr);		***/
 			bool flag = false;
       word_t tmp = expr(tokens[i+1].str,&flag);
-      printf("tmp=%u\n",tmp);
+      printf("nrtoken=%d\n",nr_token);
       char s[32];
       if(flag) {
 				sprintf(s, "%x", tmp);
 				paddr_t addr = 0;
 				sscanf(s, "%x", &addr);
 				word_t value = *(uint32_t *)guest_to_host(addr);
-				uint2char(value, tokens[i].str);
+				uint2char(value, tokens[i+1].str);
 				printf("value=%u\n", value);
 				printf("tokens[i+1].str=%s\n", tokens[i+1].str);
 			}
