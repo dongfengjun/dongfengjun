@@ -318,7 +318,7 @@ word_t expr(char *e, bool *success) {
 //		Assert(0, "ERROR:The brackets don't match.\n");
 	}
 	result = eval(0, nr_token-1);
-	printf("expr result = %u\n", result);
+//	printf("expr result = %u\n", result);
 	return result;
 }
 
@@ -335,7 +335,7 @@ word_t eval(int p, int  q) {
      * For now this token should be a number.
      * Return the value of the number.
      */
-
+		printf("tokens[p].str=%s\n",tokens[p].str);
 		return strtol(tokens[p].str, NULL, 0);
   }
   else if (check_parentheses(p, q) == true) {
