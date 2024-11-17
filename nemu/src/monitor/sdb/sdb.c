@@ -195,13 +195,20 @@ static int cmd_x(char *args) {
   char *arg2 = strtok(NULL, " ");
   int N = atoi(arg);
 	paddr_t addr = 0;
-  sscanf(arg2, "%x", &addr); 
-  for(int i = 0; i < N; i++) {
-    printf("0x%x ",paddr_read(addr, 4));
-		addr = addr + 4;
+	bool success = false;
+	word_t tmp = expr(arg2,&success);
+	if(success) {
+		char s[32];
+		sprintf(s, "%x", tmp);
+		sscanf(s, "%x", &addr); 
+		for(int i = 0; i < N; i++) {
+			printf("0x%x ",paddr_read(addr, 4));
+			addr = addr + 4;
+		}
+		printf("\n");
 	}
-	printf("\n");
-  return 0;
+	else printf("EXPR Invalid.\n");
+	return 0;
 }
 
 static int cmd_p(char *args) {
