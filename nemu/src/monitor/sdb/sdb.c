@@ -27,6 +27,7 @@ void init_wp_pool();
 void sdb_watchpoint_display();
 void create_watchpoint();
 void delete_watchpoint();
+word_t paddr_read(paddr_t addr, int len);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -189,19 +190,25 @@ static int cmd_info(char *args) {
   return 0;
 }
 
-word_t paddr_read(paddr_t addr, int len);
 static int cmd_x(char *args) {
   char *arg = strtok(NULL, " ");
   char *arg2 = strtok(NULL, " ");
   int N = atoi(arg);
 	paddr_t addr = 0;
-  sscanf(arg2, "%x", &addr); 
-  for(int i = 0; i < N; i++) {
-    printf("0x%x ",paddr_read(addr, 4));
-		addr = addr + 4;
+	bool success = false;
+	word_t tmp = expr(arg2,&success);
+	if(success) {
+		char s[66536];
+		sprintf(s, "%x", tmp);
+		sscanf(s, "%x", &addr); 
+		for(int i = 0; i < N; i++) {
+			printf("0x%x ",paddr_read(addr, 4));
+			addr = addr + 4;
+		}
+		printf("\n");
 	}
-	printf("\n");
-  return 0;
+	else printf("EXPR Invalid.\n");
+	return 0;
 }
 
 static int cmd_p(char *args) {

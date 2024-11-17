@@ -158,7 +158,6 @@ static bool make_token(char *e) {
 
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
-
         position += substr_len;
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
@@ -201,6 +200,8 @@ bool check_parentheses(int p, int q);
 int max(int a, int b);
 uint32_t eval(int p, int  q);
 
+word_t paddr_read(paddr_t addr, int len);
+uint8_t* guest_to_host(paddr_t paddr);
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -228,7 +229,7 @@ word_t expr(char *e, bool *success) {
 	}
 	/***处理负号***/
 	for(int i = 0; i < nr_token; i++) {
-		if(tokens[i].type == '-' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i+1].type == NUM ) && tokens[i-1].type != ')' ))) {
+		if(tokens[i].type == '-' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i-1].type != HEX && tokens[i+1].type == NUM ) && tokens[i-1].type != ')' ))) {
 			printf("The EXPR contains negative signs.\n");
 			tokens[i].type = TK_NOTYPE;
 			for(int j = 31; j >= 0; j--) {
@@ -270,12 +271,22 @@ word_t expr(char *e, bool *success) {
 	/***处理指针***/
 	for (int i = 0; i < nr_token; i ++) {
 		if (tokens[i].type == '*' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i-1].type != HEX) && tokens[i-1].type != (int)(')')))) {
+			int nrtmp = nr_token;
+			bool flag = false;
+      word_t tmp = expr(tokens[i+1].str,&flag);
 			tokens[i].type = TK_NOTYPE;
-			int tmp = char2int(tokens[i+1].str);
-			uintptr_t a = (uintptr_t)tmp;
-			int value = *((int*)a);
-			int2char(value, tokens[i+1].str);
-			for(int j = 0 ; j < nr_token ; j ++) {
+			nr_token = nrtmp;
+      char s[9];
+      if(flag) {
+				sprintf(s, "%x", tmp);
+				s[8]='\0';
+				paddr_t addr = 0;
+				sscanf(s, "%x", &addr);
+				word_t value = *(uint32_t *)guest_to_host(addr);
+				sprintf(tokens[i+1].str, "%u", value);
+			}
+			else	printf("EXPR Invalid.\n");
+			for(int j = 0 ; j < nr_token; j ++) {
 				if(tokens[j].type == TK_NOTYPE) {
 					for(int k = j +1 ; k < nr_token; k ++) {
 					tokens[k - 1] = tokens[k];
@@ -283,8 +294,8 @@ word_t expr(char *e, bool *success) {
 					nr_token -- ;
 				}
 			}
+		}
 	}
-}
 	word_t result = 0;
 	int numl = 0,numr = 0;
   for(int i = 0; i < nr_token; i++) {
@@ -304,7 +315,6 @@ word_t expr(char *e, bool *success) {
 //		Assert(0, "ERROR:The brackets don't match.\n");
 	}
 	result = eval(0, nr_token-1);
-//	printf("expr result = %u\n", result);
 	return result;
 }
 
@@ -321,7 +331,6 @@ word_t eval(int p, int  q) {
      * For now this token should be a number.
      * Return the value of the number.
      */
-
 		return strtol(tokens[p].str, NULL, 0);
   }
   else if (check_parentheses(p, q) == true) {
