@@ -279,7 +279,7 @@ word_t expr(char *e, bool *success) {
       char s[10];
       if(flag) {
 				sprintf(s, "%x", tmp);
-				s[10]='\0';
+				s[9]='\0';
 				printf("s=%s\n",s);
 				paddr_t addr = 0;
 				sscanf(s, "%x", &addr);
