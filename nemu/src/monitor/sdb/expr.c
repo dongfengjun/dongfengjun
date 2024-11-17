@@ -285,8 +285,8 @@ word_t expr(char *e, bool *success) {
 				sscanf(s, "%x", &addr);
 				word_t value = *(uint32_t *)guest_to_host(addr);
 				uint2char(value, tokens[i+1].str);
-				printf("=%s\n", tokens[i+1].str);
 				printf("value=%u\n", value);
+				printf("tokens[i+1].str=%s\n", tokens[i+1].str);
 			}
 			else	printf("EXPR Invalid.\n");
 			for(int j = 0 ; j < nr_token ; j ++) {
