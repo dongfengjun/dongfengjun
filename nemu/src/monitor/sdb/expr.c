@@ -280,7 +280,6 @@ word_t expr(char *e, bool *success) {
       if(flag) {
 				sprintf(s, "%x", tmp);
 				s[8]='\0';
-				printf("s=%s\n",s);
 				paddr_t addr = 0;
 				sscanf(s, "%x", &addr);
 				word_t value = *(uint32_t *)guest_to_host(addr);
