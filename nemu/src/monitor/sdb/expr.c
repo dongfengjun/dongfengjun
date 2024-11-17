@@ -276,10 +276,10 @@ word_t expr(char *e, bool *success) {
       word_t tmp = expr(tokens[i+1].str,&flag);
 			tokens[i].type = TK_NOTYPE;
 			nr_token = nrtmp;
-      char s[7];
+      char s[9];
       if(flag) {
 				sprintf(s, "%x", tmp);
-				s[6]='\0';
+				s[8]='\0';
 				printf("s=%s\n",s);
 				paddr_t addr = 0;
 				sscanf(s, "%x", &addr);
