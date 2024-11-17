@@ -304,7 +304,7 @@ word_t expr(char *e, bool *success) {
 	}
 	word_t result = 0;
 	int numl = 0,numr = 0;
-  for(int i = 0; i < nr_token; i++) {
+  for(int i = 0; i <= nr_token; i++) {
 		if(tokens[i].type == '(')
         numl += 1;
     if(tokens[i].type == ')')
