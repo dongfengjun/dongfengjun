@@ -279,7 +279,7 @@ word_t expr(char *e, bool *success) {
       word_t tmp = expr(tokens[i+1].str,&flag);
 			tokens[i].type = TK_NOTYPE;
 			nr_token = nrtmp;
-      char s[66536];
+      char s[32];
       if(flag) {
 				sprintf(s, "%x", tmp);
 				paddr_t addr = 0;
