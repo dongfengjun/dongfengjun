@@ -279,6 +279,7 @@ word_t expr(char *e, bool *success) {
       word_t tmp = expr(tokens[i+1].str,&flag);
 			tokens[i].type = TK_NOTYPE;
       printf("nrtmp=%d\n",nrtmp);
+			nr_token = nrtmp;
       char s[32];
       if(flag) {
 				sprintf(s, "%x", tmp);
@@ -290,7 +291,7 @@ word_t expr(char *e, bool *success) {
 				printf("tokens[i+1].str=%s\n", tokens[i+1].str);
 			}
 			else	printf("EXPR Invalid.\n");
-			for(int j = 0 ; j < nrtmp ; j ++) {
+			for(int j = 0 ; j < nr_token; j ++) {
 				printf("j=%d\n", j);
 				if(tokens[j].type == TK_NOTYPE) {
 					for(int k = j +1 ; k < nr_token; k ++) {
