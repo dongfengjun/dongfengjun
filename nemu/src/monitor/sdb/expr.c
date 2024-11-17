@@ -272,9 +272,6 @@ word_t expr(char *e, bool *success) {
 	for (int i = 0; i < nr_token; i ++) {
 		if (tokens[i].type == '*' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i-1].type != HEX) && tokens[i-1].type != (int)(')')))) {
 			int nrtmp = nr_token;
-/***			paddr_t addr = 0;
-			sscanf(tokens[i+1].str, "%x", &addr);
-			uint32_t value = *(uint32_t *)guest_to_host(addr);		***/
 			bool flag = false;
       word_t tmp = expr(tokens[i+1].str,&flag);
 			tokens[i].type = TK_NOTYPE;
@@ -282,6 +279,7 @@ word_t expr(char *e, bool *success) {
       char s[32];
       if(flag) {
 				sprintf(s, "%x", tmp);
+				s[31]='\0';
 				paddr_t addr = 0;
 				sscanf(s, "%x", &addr);
 				word_t value = *(uint32_t *)guest_to_host(addr);
