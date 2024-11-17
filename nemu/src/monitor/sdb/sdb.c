@@ -198,7 +198,7 @@ static int cmd_x(char *args) {
 	bool success = false;
 	word_t tmp = expr(arg2,&success);
 	if(success) {
-		char s[32];
+		char s[66536];
 		sprintf(s, "%x", tmp);
 		sscanf(s, "%x", &addr); 
 		for(int i = 0; i < N; i++) {
