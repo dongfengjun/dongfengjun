@@ -297,8 +297,9 @@ word_t expr(char *e, bool *success) {
 					nr_token -- ;
 				}
 			}
+			printf("token.str=%s\n",tokens[i].str);
+		}
 	}
-}
 	word_t result = 0;
 	int numl = 0,numr = 0;
   for(int i = 0; i < nr_token; i++) {
