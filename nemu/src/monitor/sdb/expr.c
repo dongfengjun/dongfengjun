@@ -291,7 +291,7 @@ word_t expr(char *e, bool *success) {
 			}
 			else	printf("EXPR Invalid.\n");
 			for(int j = 0 ; j < nr_token ; j ++) {
-				printf("j=%d", j);
+				printf("j=%d\n", j);
 				if(tokens[j].type == TK_NOTYPE) {
 					for(int k = j +1 ; k < nr_token; k ++) {
 					tokens[k - 1] = tokens[k];
