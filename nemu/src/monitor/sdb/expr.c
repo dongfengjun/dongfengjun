@@ -333,7 +333,6 @@ word_t eval(int p, int  q) {
      * For now this token should be a number.
      * Return the value of the number.
      */
-		printf("tokens[p].str=%s\n",tokens[p].str);
 		return strtol(tokens[p].str, NULL, 0);
   }
   else if (check_parentheses(p, q) == true) {
