@@ -28,12 +28,11 @@ int main(int argc, char *argv[]) {
 #else
   init_monitor(argc, argv);
 #endif
-
+/***gen-expr test***
 FILE *file;
 char line[65536 + 128];
 char exprbuf[65536];
 uint32_t result;
-
 file = fopen("/home/xi/ysyx-workbench/nemu/tools/gen-expr/build/input", "r");	//打开文件
 assert(file != NULL);	//assert0
 int count = 1;
@@ -57,14 +56,13 @@ while (fgets(line, 65536 + 128, file) != NULL)	//fgets读取file文件x-1位字�
 	printf("no.%d genexpr result = %u\n", count, ans);
   if (success == false && result - ans != 0)		//如success=false或result对比ans不同，失败
   {
-    printf("- origin line: %s- success: %d\n- exprbuf: %s\n- result:%u\n- ans: %u\n",
-           line, success, exprbuf, result, ans);		//输出数据比较
+    printf("- origin line: %s- success: %d\n- exprbuf: %s\n- result:%u\n- ans: %u\n", line, success, exprbuf, result, ans);		//输出数据比较
     return 0;
   }
 	count++;
 }
 //return 0;		// 返回/继续进行
-
+***/
   /* Start engine. */
 	engine_start();
 
