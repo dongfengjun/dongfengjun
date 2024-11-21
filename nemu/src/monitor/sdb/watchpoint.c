@@ -47,20 +47,25 @@ void init_wp_pool() {
 WP* new_wp() {
 	if (free_ == NULL) {
 		printf("No unused watchpoint available.\n");
-    assert(0);
 		return NULL;
   }
 	WP *p = free_;
 	free_ = free_->next;
 	p -> flag = true;
 	p -> next = head;
+	head = p; //
 	return p;
 }
 void free_wp(WP *wp) {
-	if (wp == NULL) return;
+	if (wp == NULL) {
+		printf("watchpoint NO.%d dosen't exist.", wp -> NO);
+		return;
+	}
 	if(head == wp) {
 		head -> flag = false;
 		head = wp -> next;
+		wp ->next = free_; //
+		free_ = wp; //
 		printf("free watchpoint NO.%d success.\n", wp -> NO);
 		return;
 	}
