@@ -90,7 +90,6 @@ void sdb_watchpoint_display() {
 		if(wp_pool[i].flag) {
 			bool success = false;
 			word_t tmp = expr(wp_pool[i].expr,&success);
-			printf("tmp=%u\n", tmp);
       printf("watchpoint NO:%d, expr=%s, old_value=%u, new_value=%u\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].value, tmp);
       flag = false;
 		}
@@ -132,7 +131,7 @@ void checkWatchPoint() {
 			word_t tmp = expr(wp_pool[i].expr,&success);
 			if(success){
 				if(tmp != wp_pool[i].value) {
-					printf("watchpoint NO.%d\noldvalue=%u\nnewvalue=%u\nNEMU_STOP\n", wp_pool[i].NO, wp_pool[i].value, tmp);
+					printf("watchpoint NO.%d:%s\noldvalue=%u\nnewvalue=%u\nNEMU_STOP\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].value, tmp);
 					nemu_state.state = NEMU_STOP;
 					return ;
       }
