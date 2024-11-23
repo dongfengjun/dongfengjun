@@ -42,7 +42,7 @@ char *mystrncpy(char *dst, const char *src, size_t n) {
 			j ++;
 		}
 	}
-  return 0;
+  return dst;
 }
 
 char *mystrcat(char *dst, const char *src) {
@@ -136,6 +136,80 @@ int mymemcmp(const void *s1, const void *s2, size_t n) {
 		return 0;
 }
 
+void int2str(char *str,int value)
+{
+	char tmp_str[20] = {0};
+	int lidx = 0;
+	char flag = 0;
+	int tmp_val;
+	if(value<0){
+		flag = 1;
+		tmp_val = -value;
+	}else{
+		tmp_val = value;
+	}
+	if(value==0){
+		tmp_str[lidx++] = 0x30+tmp_val%10;
+	}else{
+		while(1){
+			if(tmp_val==0){
+				break;
+			}else{
+				tmp_str[lidx++] = 0x30+tmp_val%10;
+				tmp_val = tmp_val/10;
+			}
+		}
+	}
+	if(flag){
+		tmp_str[lidx++] = '-';
+	}
+	while(lidx--){
+		*str++ = tmp_str[lidx];
+	}
+	*str = 0;
+}
+
+int mysprintf(char *out, const char *fmt, ...) {
+	mymemset(out, 0, strlen(out));
+	char str[20]={0};
+	va_list args;
+  va_start(args, fmt);
+  while(*fmt != '\0') {
+    switch(*fmt) {
+      case '%': {
+        ++ fmt;
+        switch(*fmt) {
+          case 'd': {
+            int val = va_arg(args, int);
+            int2str(str, val);
+            mystrcat(out, str);
+            break;
+          }
+          case 's': {
+            char *tmp = va_arg(args, char *);
+            mystrcat(out, tmp);
+            break;
+          }
+          default:
+						printf("wait complete.\n");
+            break;
+				}
+				break;
+			}
+      default: {
+				char tmp[2] = {0};
+				tmp[0] = *fmt;
+				tmp[1] = '\0';
+				mystrcat(out, tmp);
+        break;
+			}
+    }
+    ++ fmt;
+  }
+	va_end(args);
+	return 0;
+}
+
 /***test main***/
 #ifndef __TRAP_H__
 #define __TRAP_H__
@@ -147,28 +221,15 @@ void check(bool cond) {
 }
 #endif
 
-char *s[] = {
-	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
-	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-	", World!\n",
-	"Hello, World!\n",
-	"#####"
-};
-
-char str1[] = "Hello";
-char str[20];
-
+char buf[128];
 int main() {
-	check(mystrcmp(s[0], s[2]) == 0);
-	check(mystrcmp(s[0], s[1]) < 0);
-	check(mystrcmp(s[0] + 1, s[1] + 1) < 0);
-	check(mystrcmp(s[0] + 2, s[1] + 2) < 0);
-	check(mystrcmp(s[0] + 3, s[1] + 3) < 0);
-
-	check(mystrcmp(mystrcat(mystrcpy(str, str1), s[3]), s[4]) == 0);
-
-	check(mymemcmp(mymemset(str, '#', 5), s[5], 5) == 0);
-
-	return 0;
+	mysprintf(buf, "%s", "Hello world!\n");
+	check(mystrcmp(buf, "Hello world!\n") == 0);
+	mysprintf(buf, "%d + %d = %d\n", 1, 1, 2);
+	printf("buf:1+1=2:%s", buf);
+	check(mystrcmp(buf, "1 + 1 = 2\n") == 0);
+  mysprintf(buf, "%d + %d = %d\n", 2, 10, 12);
+	printf("buf:2+10=12:%s", buf);
+  check(mystrcmp(buf, "2 + 10 = 12\n") == 0);
+  return 0;
 }

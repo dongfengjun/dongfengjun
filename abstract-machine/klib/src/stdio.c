@@ -47,12 +47,13 @@ void int2str(char *str,int value)
 }
 
 int sprintf(char *out, const char *fmt, ...) {
+	memset(out, 0, strlen(out));
 	char str[20]={0};
 	va_list args;
   va_start(args, fmt);
-  while(*fmt) {
+  while(*fmt != '\0') {
     switch(*fmt) {
-      case '%':
+      case '%': {
         ++ fmt;
         switch(*fmt) {
           case 'd': {
@@ -67,10 +68,18 @@ int sprintf(char *out, const char *fmt, ...) {
             break;
           }
           default:
+						printf("wait complete.\n");
             break;
-        }
-      default:
+				}
+				break;
+			}
+      default: {
+				char tmp[2] = {0};
+				tmp[0] = *fmt;
+				tmp[1] = '\0';
+				strcat(out, tmp);
         break;
+			}
     }
     ++ fmt;
   }
