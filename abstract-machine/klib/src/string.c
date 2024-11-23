@@ -19,7 +19,7 @@ char *strcpy(char *dst, const char *src) {
 		i ++;
 	}
 	dst[i] = '\0';
-	return 0;
+	return dst;
 }
 
 char *strncpy(char *dst, const char *src, size_t n) {
@@ -40,7 +40,7 @@ char *strncpy(char *dst, const char *src, size_t n) {
 			j ++;
 		}
 	}
-  return 0;
+  return dst;
 }
 
 char *strcat(char *dst, const char *src) {
@@ -51,7 +51,7 @@ char *strcat(char *dst, const char *src) {
 		i ++;
 		j ++;
 	}
-	return 0;
+	return dst;
 }
 
 int strcmp(const char *s1, const char *s2) {
