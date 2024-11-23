@@ -1,45 +1,85 @@
 #include <stdio.h>
 #include <string.h>
+#include "stdarg.h"
+#include <stdlib.h>
 /***test founction***/
-int klibmemcmp(const void *s1, const void *s2, size_t n) {
-  int i = 0;
-  char *c1 = (char *)s1;
-  char *c2 = (char *)s2;
-  while((i < (n-1)) && (c1[i] == c2[i])) {
-    i ++;
+char* int2str(int num) {
+		// 处理负数
+    int isNegative = num < 0;
+    int absNum = isNegative ? -num : num;
+    // 计算数字位数
+    int length = 0;
+    int temp = absNum;
+    while (temp != 0) {
+        length++;
+        temp /= 10;
+    }
+    // 处理零的情况
+    if (length == 0) {
+        length = 1;
+    }
+		// 分配内存，包括符号位和终止符
+    char* str = (char*)malloc((length + isNegative + 1) * sizeof(char));
+    if (str == NULL) {
+        return NULL; // 内存分配失败
+    }
+    // 填充字符串
+    str[length + isNegative] = '\0'; // 设置终止符
+    int index = length + isNegative - 1;
+    // 从后向前填充数字
+    while (absNum != 0) {
+        int digit = absNum % 10;
+        str[index--] = '0' + digit;
+        absNum /= 10;
+    }
+    // 处理零的情况
+    if (num == 0) {
+        str[0] = '0';
+    }
+		if (isNegative) {
+        str[0] = '-';
+    }
+    return str;
+}
+int mysprintf(char *out, const char *fmt, ...) {
+	char *str;
+	va_list args;
+  va_start(args, fmt);
+  while(*fmt) {
+    switch(*fmt) {
+      case '%':
+        ++ fmt;
+        switch(*fmt) {
+          case 'd': {
+            int val = va_arg(args, int);
+            str = int2str(val);
+            strcat(out, str);
+            break;
+          }
+          case 's': {
+            char *tmp = va_arg(args, char *);
+            strcat(out, tmp);
+            break;
+          }
+          default:
+            break;
+        }
+      default:
+        break;
+    }
+    ++ fmt;
   }
-  if(c1[i] < c2[i])
-    return -1;
-  else if(c1[i] > c2[i])
-    return 1;
-  else
-    return 0;
+	va_end(args);
+	return 0;
 }
 
 /***test main***/
-int main ()
+int main()
 {
-   char str1[15];
-   char str2[15];
-   int ret;
+   char str[80];
+	 char *in = "abcde";
+   mysprintf(str, "%s", in);
+   puts(str);
 
-   memcpy(str1, "abcdef", 6);
-   memcpy(str2, "abcdef", 6);
-
-   ret = memcmp(str1, str2, 5);
-
-   if(ret > 0)
-   {
-      printf("str2 小于 str1");
-   }
-   else if(ret < 0)
-   {
-      printf("str1 小于 str2");
-   }
-   else
-   {
-      printf("str1 等于 str2");
-   }
-   
    return(0);
 }
