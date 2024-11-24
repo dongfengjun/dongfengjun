@@ -94,11 +94,13 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #endif
 #endif
 }
-//ringq_display(rqp);
+
 //irb_free(&irb);//free iringbuffer
 
 static void execute(uint64_t n) {
   Decode s;
+	RINGQ rq, *rqp;
+	rqp = &rq;
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
@@ -106,6 +108,7 @@ static void execute(uint64_t n) {
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
+	ringq_display(rqp);
 }
 
 static void statistic() {
