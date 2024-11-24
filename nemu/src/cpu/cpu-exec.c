@@ -25,7 +25,6 @@
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 10
-#define RQ_SIZE 1024
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
@@ -50,10 +49,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   isa_exec_once(s);
   cpu.pc = s->dnpc;
 	/***iringbuf***/
-	char str[RQ_SIZE]={};
-	RINGQ rq, *rqp;
-	rqp = &rq;
-	ringq_init(rqp, str, RQ_SIZE);
+	RINGQ *rqp = rqp;
 	char buf[128] = {0};
 	char *p2 = buf;
 	p2 += snprintf(p2, sizeof(buf), FMT_WORD ":", s->pc);
@@ -69,8 +65,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len2 = space_len2 * 3 + 1;
   memset(p2, ' ', space_len2);
   p2 += space_len2;
+
 	ringq_push(rqp, buf);
-  ringq_display(rqp);
+//ringq_display(rqp);
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
@@ -96,6 +93,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #endif
 #endif
 }
+//ringq_display(rqp);
 //irb_free(&irb);//free iringbuffer
 
 static void execute(uint64_t n) {

@@ -15,6 +15,7 @@
 
 #include <isa.h>
 #include <memory/paddr.h>
+#include "./../cpu/iringbuf.h"
 
 void init_rand();
 void init_log(const char *log_file);
@@ -98,6 +99,7 @@ static int parse_args(int argc, char *argv[]) {
   return 0;
 }
 
+#define RQ_SIZE 1024
 void init_monitor(int argc, char *argv[]) {
   /* Perform some global initialization. */
 
@@ -127,6 +129,12 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Initialize the simple debugger. */
   init_sdb();
+	
+	/* Initialize the IRingBuffer. */
+	char str[RQ_SIZE]={};
+	RINGQ rq, *rqp;
+	rqp = &rq;
+	ringq_init(rqp, str, RQ_SIZE);
 
 #ifndef CONFIG_ISA_loongarch32r
   IFDEF(CONFIG_ITRACE, init_disasm(
