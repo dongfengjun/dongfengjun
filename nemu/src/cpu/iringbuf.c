@@ -32,7 +32,7 @@ int ringq_push(RINGQ * ringqp, char *data) {
 		printf("index = %d\n", i);
 //		ringqp->str[ringqp->tail] = *data;
 		char s = data[i];
-		printf("s=%c\n", s);
+		printf("s=%s\n", &s);
     strcat(&ringqp->str[ringqp->tail], &s); 
 		ringqp->tail = (ringqp->tail + 1) % ringqp->size;
     if(ringq_is_full(ringqp)) {
