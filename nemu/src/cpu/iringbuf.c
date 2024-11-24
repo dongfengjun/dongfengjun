@@ -3,9 +3,9 @@
 #include <string.h>
 #include "iringbuf.h" 
 
-int ringq_init(RINGQ * ringqp, char *str, unsigned size)
+int ringq_init(RINGQ * ringqp, char *str_array, unsigned size)
 {
-   ringqp->str = str;
+   ringqp->str = str_array;
    ringqp->size = size;
    ringqp->head = 0;
    ringqp->tail = 0;
@@ -24,7 +24,7 @@ int ringq_push(RINGQ * ringqp, char *data) {
 	int len = strlen(data);
 	printf("len=%d\n", len);
 	char s[2] = {0};
-	for(int i = 0; i < len - 1; i ++) {
+	for(int i = 0; i < len; i ++) {
 //		ringqp->str[ringqp->tail] = *data;
 		s[0] = data[i];
     strcpy(&ringqp->str[ringqp->tail], s); 
