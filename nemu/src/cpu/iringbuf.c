@@ -3,7 +3,7 @@
 #include <string.h>
 #include "iringbuf.h" 
 
-RINGQ *sqp = NULL;
+RINGQ *sqp;
 int ringq_init(RINGQ * ringqp, char *str_array, unsigned size)
 {
    ringqp->str = str_array;
