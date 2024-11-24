@@ -69,7 +69,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len2 = space_len2 * 3 + 1;
   memset(p2, ' ', space_len2);
   p2 += space_len2;
-	ringq_push(rqp, p2);
+	ringq_push(rqp, buf);
   ringq_display(rqp);
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
