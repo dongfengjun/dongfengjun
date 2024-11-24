@@ -25,7 +25,6 @@
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 10
-RINGQ *sqp;
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
@@ -50,6 +49,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   isa_exec_once(s);
   cpu.pc = s->dnpc;
 	/***iringbuf***/
+	RINGQ rq;
 	char buf[128] = {0};
 	char *p2 = buf;
 	p2 += snprintf(p2, sizeof(buf), FMT_WORD ":", s->pc);
@@ -65,8 +65,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len2 = space_len2 * 3 + 1;
   memset(p2, ' ', space_len2);
   p2 += space_len2;
-	ringq_push(sqp, buf);
-	ringq_display(sqp);
+	ringq_push(&rq, buf);
+	ringq_display(&rq);
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
@@ -104,7 +104,7 @@ static void execute(uint64_t n) {
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
-	ringq_display(sqp);
+//	ringq_display(&rq);
 }
 
 static void statistic() {

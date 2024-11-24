@@ -132,9 +132,10 @@ void init_monitor(int argc, char *argv[]) {
 
 	/* Initialize the IRingBuffer. */
 	char str[RQ_SIZE]={};
-	RINGQ *sqp = NULL;
-  ringq_init(sqp, str, RQ_SIZE);
-	ringq_display(sqp);
+	RINGQ rq, *rqp;
+	rqp = &rq;
+  ringq_init(rqp, str, RQ_SIZE);
+	ringq_display(rqp);
 
 #ifndef CONFIG_ISA_loongarch32r
   IFDEF(CONFIG_ITRACE, init_disasm(
