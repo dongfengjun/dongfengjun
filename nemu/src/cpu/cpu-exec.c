@@ -54,7 +54,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	RINGQ rq, *rqp;
 	rqp = &rq;
 	ringq_init(rqp, str, RQ_SIZE);
-  ringq_display(rqp);
 	char buf[128] = {0};
 	char *p2 = buf;
 	p2 += snprintf(p2, sizeof(buf), FMT_WORD ":", s->pc);
