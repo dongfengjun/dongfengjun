@@ -28,12 +28,11 @@ int ringq_push(RINGQ * ringqp, char *data) {
 	printf("data:%s\n", data);
 	int len = strlen(data);
 	printf("len=%d\n", len);
-	char s[200] = {0};
 	for(int i = 0; i < len; i ++) {
 		printf("index = %d\n", i);
 //		ringqp->str[ringqp->tail] = *data;
-		s[0] = data[i];
-    strcpy(&ringqp->str[ringqp->tail], s); 
+		char s = data[i];
+    strcat(&ringqp->str[ringqp->tail], &s); 
 		ringqp->tail = (ringqp->tail + 1) % ringqp->size;
     if(ringq_is_full(ringqp)) {
 			ringqp->head = (ringqp->head + 1) % ringqp->size;
