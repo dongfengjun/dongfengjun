@@ -68,7 +68,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   p2 += space_len2;
 
 	ringq_push(rqp, p2);
-//ringq_display(rqp);
+	ringq_display(rqp);
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
