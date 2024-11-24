@@ -23,12 +23,9 @@ int ringq_free(RINGQ * ringqp)
  
 int ringq_push(RINGQ * ringqp, char *data) {
 	int len = strlen(data);
-	char s[2] = {0};
 	for(int i = 0; i < len; i ++) {
 //		ringqp->str[ringqp->tail] = *data;
-		s[0] = data[i];
-		s[1] = '\0';
-    strcat(&ringqp->str[ringqp->tail], s); 
+    ringqp->str[ringqp->tail] = data[i];
 		ringqp->tail = (ringqp->tail + 1) % ringqp->size;
     if(ringq_is_full(ringqp)) {
 			ringqp->head = (ringqp->head + 1) % ringqp->size;
