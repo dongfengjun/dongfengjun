@@ -11,7 +11,8 @@ typedef struct {
     unsigned int tail;
     unsigned int size;
     char *str;
-}RINGQ;    
+}RINGQ;
+extern RINGQ *sqp;
 
 #define ringq_is_empty(q) (q->head == q->tail)
 #define ringq_is_full(q) (((q->tail+1)%q->size) == q->head )
