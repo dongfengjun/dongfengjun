@@ -129,12 +129,12 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Initialize the simple debugger. */
   init_sdb();
-	
+
 	/* Initialize the IRingBuffer. */
 	char str[RQ_SIZE]={};
-	RINGQ rq, *rqp;
-	rqp = &rq;
-	ringq_init(rqp, str, RQ_SIZE);
+  RINGQ rq, *rqp;
+  rqp = &rq;
+  ringq_init(rqp, str, RQ_SIZE); 
 
 #ifndef CONFIG_ISA_loongarch32r
   IFDEF(CONFIG_ITRACE, init_disasm(

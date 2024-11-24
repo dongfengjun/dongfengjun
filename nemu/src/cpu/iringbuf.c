@@ -3,6 +3,8 @@
 #include <string.h>
 #include "iringbuf.h"
 
+#define RQ_SIZE 1024
+
 int ringq_init(RINGQ * ringqp, char *str, unsigned size)
 {
    ringqp->str = str;
