@@ -66,7 +66,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   memset(p2, ' ', space_len2);
   p2 += space_len2;
 	printf("p2:%s\nbuf:%s\n", p2, buf);
-	ringq_push(&rq, p2);
+	ringq_push(&rq, buf);
 	ringq_display(&rq);
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
