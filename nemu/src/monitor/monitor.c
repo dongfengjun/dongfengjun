@@ -134,7 +134,8 @@ void init_monitor(int argc, char *argv[]) {
 	char str[RQ_SIZE]={};
   RINGQ rq, *rqp;
   rqp = &rq;
-  ringq_init(rqp, str, RQ_SIZE); 
+  ringq_init(rqp, str, RQ_SIZE);
+	ringq_display(rqp);
 
 #ifndef CONFIG_ISA_loongarch32r
   IFDEF(CONFIG_ITRACE, init_disasm(
