@@ -2,18 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include "iringbuf.h" 
+#define RQ_SIZE 100
 
-RINGQ* get_ringq_ptr(void) {
-    static RINGQ rq;  // 静态局部变量
-    return &rq;
-}
-
-int ringq_init(RINGQ * ringqp, char *str_array, unsigned size)
-{
-	 ringqp->str = str_array;
-   ringqp->size = size;
-   ringqp->head = 0;
-   ringqp->tail = 0;
+int ringq_init() {
+	 char str[RQ_SIZE]={0};
+   RINGQ *rqp = NULL;
+	 rqp->str = str;
+   rqp->head = 0;
+   rqp->tail = 0;
    return 0;
 }
  
