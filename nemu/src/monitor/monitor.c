@@ -132,7 +132,7 @@ void init_monitor(int argc, char *argv[]) {
   init_sdb();
 
 	/* Initialize the IRingBuffer. */
-	char str[RQ_SIZE]={};
+	char str[RQ_SIZE]={0};
 	RINGQ *rqp = get_ringq_ptr();
   ringq_init(rqp, str, RQ_SIZE);
 	ringq_display(rqp);
