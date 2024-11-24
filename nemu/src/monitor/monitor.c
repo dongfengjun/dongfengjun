@@ -100,6 +100,7 @@ static int parse_args(int argc, char *argv[]) {
 }
 
 #define RQ_SIZE 32
+RINGQ* get_ringq_ptr(void);
 void init_monitor(int argc, char *argv[]) {
   /* Perform some global initialization. */
 
@@ -132,9 +133,9 @@ void init_monitor(int argc, char *argv[]) {
 
 	/* Initialize the IRingBuffer. */
 	char str[RQ_SIZE]={};
-	extern RINGQ rq;
-  ringq_init(&rq, str, RQ_SIZE);
-	ringq_display(&rq);
+	RINGQ *rqp = get_ringq_ptr();
+  ringq_init(rqp, str, RQ_SIZE);
+	ringq_display(rqp);
 
 #ifndef CONFIG_ISA_loongarch32r
   IFDEF(CONFIG_ITRACE, init_disasm(

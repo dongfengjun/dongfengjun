@@ -43,13 +43,14 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 	IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
 
+RINGQ* get_ringq_ptr(void);
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
   s->snpc = pc;
   isa_exec_once(s);
   cpu.pc = s->dnpc;
 	/***iringbuf***/
-	extern RINGQ rq;
+	RINGQ *rq = get_ringq_ptr();
 	char buf[128] = {0};
 	char *p2 = buf;
 	p2 += snprintf(p2, sizeof(buf), FMT_WORD ":", s->pc);
@@ -65,8 +66,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len2 = space_len2 * 3 + 1;
   memset(p2, ' ', space_len2);
   p2 += space_len2;
-	ringq_push(&rq, buf);
-	ringq_display(&rq);
+	ringq_push(rq, buf);
+	ringq_display(rq);
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);

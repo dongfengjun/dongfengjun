@@ -3,11 +3,14 @@
 #include <string.h>
 #include "iringbuf.h" 
 
-RINGQ rq;
+RINGQ* get_ringq_ptr(void) {
+    static RINGQ rq;  // 静态局部变量
+    return &rq;
+}
 
 int ringq_init(RINGQ * ringqp, char *str_array, unsigned size)
 {
-   ringqp->str = str_array;
+	 ringqp->str = str_array;
    ringqp->size = size;
    ringqp->head = 0;
    ringqp->tail = 0;
