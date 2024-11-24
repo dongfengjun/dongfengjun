@@ -49,7 +49,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   isa_exec_once(s);
   cpu.pc = s->dnpc;
 	/***iringbuf***/
-	RINGQ *rqp = NULL;
 	ringq_init();
 	ringq_display(rqp);
 	char buf[128] = {0};

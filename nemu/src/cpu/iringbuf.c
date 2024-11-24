@@ -4,9 +4,9 @@
 #include "iringbuf.h" 
 #define RQ_SIZE 100
 
+RINGQ * rqp = NULL;
 int ringq_init() {
 	 char str[RQ_SIZE]={0};
-   RINGQ *rqp = NULL;
 	 rqp->str = str;
    rqp->head = 0;
    rqp->tail = 0;

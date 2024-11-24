@@ -13,6 +13,8 @@ typedef struct {
     char *str;
 }RINGQ;
 
+extern RINGQ * rqp;
+
 #define ringq_is_empty(q) (q->head == q->tail)
 #define ringq_is_full(q) (((q->tail+1)%q->size) == q->head )
 
