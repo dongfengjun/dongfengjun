@@ -25,7 +25,7 @@ int ringq_push(RINGQ * ringqp, char *data) {
 	int len = strlen(data);
 	for(int i = 0; i < len; i ++) {
 //		ringqp->str[ringqp->tail] = *data;
-    ringqp->str[ringqp->tail] = data[i];
+    ringqp->str[ringqp->tail] = *data;
 		ringqp->tail = (ringqp->tail + 1) % ringqp->size;
     if(ringq_is_full(ringqp)) {
 			ringqp->head = (ringqp->head + 1) % ringqp->size;
