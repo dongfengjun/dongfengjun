@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "iringbuf.h"
-
-#define RQ_SIZE 1024
+#include "iringbuf.h" 
 
 int ringq_init(RINGQ * ringqp, char *str, unsigned size)
 {
@@ -23,9 +21,11 @@ int ringq_free(RINGQ * ringqp)
  
 int ringq_push(RINGQ * ringqp, char *data) {
 	int len = strlen(data);
+	char s[2] = {0};
 	for(int i = 0; i < len; i ++) {
 //		ringqp->str[ringqp->tail] = *data;
-    ringqp->str[ringqp->tail] = *data;
+		s[0] = data[i];
+    strcpy(&ringqp->str[ringqp->tail], s); 
 		ringqp->tail = (ringqp->tail + 1) % ringqp->size;
     if(ringq_is_full(ringqp)) {
 			ringqp->head = (ringqp->head + 1) % ringqp->size;
@@ -50,4 +50,4 @@ void ringq_display(RINGQ * ringqp) {
   printf("\n");
   return;
 }
-
+ 
