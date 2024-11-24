@@ -65,7 +65,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len2 = space_len2 * 3 + 1;
   memset(p2, ' ', space_len2);
   p2 += space_len2;
-	printf("p2:%s\nbuf:%s\n", p2, buf);
 	ringq_push(&rq, buf);
 	ringq_display(&rq);
 #ifdef CONFIG_ITRACE
