@@ -28,9 +28,11 @@ static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #ifdef CONFIG_MTRACE
 char buf[1024] = {0};
 char *p = buf;
-//IFDEF(CONFIG_MTRACE_COND, puts(p));
 #endif
 
+#ifdef CONFIG_MTRACE
+	 FILE *wtracelog;
+#endif
 
 uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
@@ -63,6 +65,9 @@ word_t paddr_read(paddr_t addr, int len) {
   if(likely(in_pmem(addr))) {
 		result = pmem_read(addr, len);
 		p += sprintf(p, "addr:%u write:%u\n", addr, result);//wtrace
+		wtracelog = fopen("wtracelog.txt", "a");
+    fprintf(wtracelog, "%s\n", buf);
+    fclose(wtracelog);
 		return result;
 	}
   IFDEF(CONFIG_DEVICE, p += sprintf(p, "addr:%u write:%u\n", addr, mmio_read(addr, len)); return mmio_read(addr, len));
@@ -72,6 +77,9 @@ word_t paddr_read(paddr_t addr, int len) {
 
 void paddr_write(paddr_t addr, int len, word_t data) {
 	p += sprintf(p, "addr:%u write:%u\n", addr, data);//wtrace
+	wtracelog = fopen("wtracelog.txt", "a");
+  fprintf(wtracelog, "%s\n", buf);
+  fclose(wtracelog);  
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
