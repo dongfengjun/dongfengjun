@@ -3,9 +3,9 @@
 #include <string.h>
 #include "iringbuf.h" 
 #define RQ_SIZE 10
+char strarray[RQ_SIZE]={0};
 
 int ringq_init(RINGQ * ringqp) {
-	 char strarray[RQ_SIZE]={0};
 	 ringqp->str = strarray;
    ringqp->head = 0;
    ringqp->tail = 0;
