@@ -64,7 +64,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len2 = space_len2 * 3 + 1;
   memset(p2, ' ', space_len2);
   p2 += space_len2;
-	ringq_push(&rq, buf);
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
@@ -87,11 +86,11 @@ static void exec_once(Decode *s, vaddr_t pc) {
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 	disassemble(p2, buf + sizeof(buf) - p2,
 			MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen2);
-	printf("111\n");
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
 #endif
+	ringq_push(&rq, buf);
 }
 
 //irb_free(&irb);//free iringbuffer
