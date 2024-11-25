@@ -26,7 +26,6 @@ int ringq_push(RINGQ * ringqp, char *data) {
 	int len = strlen(data);
 	printf("pushdata=%s\n", data);
 	for(int i = 0; i < len; i ++) {
-		printf("datai=%c\n", data[i]);
 		ringqp->str[ringqp->tail] = data[i];
 /***
 char s[2];
