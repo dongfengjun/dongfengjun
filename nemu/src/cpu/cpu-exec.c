@@ -102,7 +102,7 @@ static void execute(uint64_t n) {
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
-	ringq_display(&rq);
+//	ringq_display(&rq);
 }
 
 static void statistic() {
@@ -145,6 +145,7 @@ void cpu_exec(uint64_t n) {
            (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
             ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
           nemu_state.halt_pc);
+			if(nemu_state.halt_ret != 0) ringq_display(&rq);
       // fall through
     case NEMU_QUIT: statistic();
   }
