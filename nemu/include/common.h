@@ -43,9 +43,9 @@ typedef word_t vaddr_t;
 typedef MUXDEF(PMEM64, uint64_t, uint32_t) paddr_t;
 #define FMT_PADDR MUXDEF(PMEM64, "0x%016" PRIx64, "0x%08" PRIx32)
 typedef uint16_t ioaddr_t;
-
+/***IRINGBUF***/
 #include "./../src/cpu/iringbuf.h"
-extern RINGQ rq;//****//
+extern IRINGBUF rq;
 
 #include <debug.h>
 
