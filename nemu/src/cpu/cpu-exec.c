@@ -103,6 +103,7 @@ static void execute(uint64_t n) {
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
+	printf("111\n");
 	ringq_display(&rq);
 }
 
