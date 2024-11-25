@@ -14,7 +14,6 @@
 ***************************************************************************************/
 
 #include <common.h>
-#include "cpu/iringbuf.h"
 
 void init_monitor(int, char *[]);
 void am_init_monitor();
