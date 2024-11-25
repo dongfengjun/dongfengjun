@@ -399,7 +399,7 @@ word_t eval(int p, int  q) {
       case '*': return val1 * val2;
       case '/': 
 				if(val2 == 0) {
-//					Assert(0,"The denominator is zero\n");
+					Assert(0,"The denominator is zero\n");
 					printf("ERROR:The denominator is zero\n");
 					return 0;
 				}
