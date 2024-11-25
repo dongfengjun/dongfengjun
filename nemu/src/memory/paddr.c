@@ -28,7 +28,7 @@ static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #ifdef CONFIG_MTRACE
 char buf[1024] = {0};
 char *p = buf;
-//IFDEF(CONFIG_MTRACE_COND, puts("%s\n", buf));
+//IFDEF(CONFIG_MTRACE_COND, puts(p));
 #endif
 
 
@@ -60,11 +60,14 @@ void init_mem() {
 
 word_t paddr_read(paddr_t addr, int len) {
 	word_t result;
-  if (likely(in_pmem(addr))) result = pmem_read(addr, len);
-  IFDEF(CONFIG_DEVICE, result = mmio_read(addr, len));
-  out_of_bound(addr);
-	p += sprintf(p, "addr:%u read:%u\n", addr, result);//wtrace
-  return 0;
+  if(likely(in_pmem(addr))) {
+		result = pmem_read(addr, len);
+		p += sprintf(p, "addr:%u write:%u\n", addr, result);//wtrace
+		return result;
+	}
+  IFDEF(CONFIG_DEVICE, p += sprintf(p, "addr:%u write:%u\n", addr, mmio_read(addr, len)); return mmio_read(addr, len));
+		out_of_bound(addr);
+		return 0;
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
