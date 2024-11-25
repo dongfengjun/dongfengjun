@@ -131,9 +131,8 @@ void init_monitor(int argc, char *argv[]) {
   init_sdb();
 
 	/* Initialize the IRingBuffer. */
-//	ringq_init();
-//	extern RINGQ *rqp;
-//	ringq_display(rqp);
+	ringq_init(&rq);
+	ringq_display(&rq);
 
 #ifndef CONFIG_ISA_loongarch32r
   IFDEF(CONFIG_ITRACE, init_disasm(
