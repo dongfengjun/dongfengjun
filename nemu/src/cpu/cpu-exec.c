@@ -90,6 +90,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
 #endif
+	memset(p, '\n', 1);
 	ringq_push(&rq, buf);
 }
 
