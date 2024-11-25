@@ -49,7 +49,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   isa_exec_once(s);
   cpu.pc = s->dnpc;
 	/***iringbuf***/
-	char buf[256] = {0};
+	char buf[128] = {0};
 	char *p2 = buf;
 	p2 += snprintf(p2, sizeof(buf), FMT_WORD ":", s->pc);
   int ilen2 = s->snpc - s->pc;
@@ -82,10 +82,11 @@ static void exec_once(Decode *s, vaddr_t pc) {
   p += space_len;
 
 #ifndef CONFIG_ISA_loongarch32r
-	printf("111.\n");
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+	disassemble(p2, buf + sizeof(buf) - p2,
+			MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
