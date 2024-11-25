@@ -66,7 +66,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   memset(p2, ' ', space_len2);
   p2 += space_len2;
 	ringq_push(&rq, buf);
-	ringq_display(&rq);
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
@@ -104,7 +103,7 @@ static void execute(uint64_t n) {
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
-//	ringq_display(&rq);
+	ringq_display(&rq);
 }
 
 static void statistic() {
