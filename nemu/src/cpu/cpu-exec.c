@@ -87,6 +87,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 	disassemble(p2, buf + sizeof(buf) - p2,
 			MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen2);
+	printf("111\n");
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
