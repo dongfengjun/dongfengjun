@@ -31,9 +31,9 @@ int ringq_push(RINGQ * ringqp, char *data) {
 		s[1] = '\0';
 		printf("s=%s\n", s);
     strcat(&ringqp->str[ringqp->tail], s); 
-		ringqp->tail = (ringqp->tail + 1) % ringqp->size;
+		ringqp->tail = (ringqp->tail + 1) % RQ_SIZE;
     if(ringq_is_full(ringqp)) {
-			ringqp->head = (ringqp->head + 1) % ringqp->size;
+			ringqp->head = (ringqp->head + 1) % RQ_SIZE;
     }
 	}
     return 0;
