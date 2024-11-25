@@ -117,6 +117,7 @@ static void statistic() {
 void assert_fail_msg() {
   isa_reg_display();
   statistic();
+	ringq_display(&rq);
 }
 
 /* Simulate how the CPU works. */
@@ -145,7 +146,7 @@ void cpu_exec(uint64_t n) {
            (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
             ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
           nemu_state.halt_pc);
-			if(nemu_state.halt_ret != 0) ringq_display(&rq);
+			if(nemu_state.halt_ret != 0) ringq_display(&rq);//IRingBuff
       // fall through
     case NEMU_QUIT: statistic();
   }
