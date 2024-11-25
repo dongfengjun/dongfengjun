@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "iringbuf.h" 
-#define RQ_SIZE 100
+#define RQ_SIZE 10
 
 int ringq_init(RINGQ * ringqp) {
 	 char strarray[RQ_SIZE]={0};
