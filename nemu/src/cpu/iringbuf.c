@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "iringbuf.h" 
-#define RQ_SIZE 240
+#define RQ_SIZE 48
 #define ringq_is_empty(q) (q->head == q->tail)
 #define ringq_is_full(q) (((q->tail+1)%RQ_SIZE) == q->head )
 
