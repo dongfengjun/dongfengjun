@@ -46,6 +46,7 @@ typedef uint16_t ioaddr_t;
 
 #include "./../src/cpu/iringbuf.h"
 extern RINGQ rq;//****//
+
 #include <debug.h>
 
 #endif
