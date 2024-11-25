@@ -42,7 +42,6 @@ int ringq_push(RINGQ * ringqp, char *data) {
 void ringq_display(RINGQ * ringqp) {
   unsigned head = ringqp->head;
   unsigned tail = ringqp->tail;
-  unsigned size = ringqp->size;
 	char *str = ringqp->str;
   if(ringq_is_empty(ringqp)) {
     printf("ringq is empty.\n");
@@ -50,7 +49,7 @@ void ringq_display(RINGQ * ringqp) {
   }
   while(head != tail){
     printf("%c", str[head]); 
-		head = (head + 1)%(size);
+		head = (head + 1)%(RQ_SIZE);
   }
   printf("\n");
   return;
