@@ -4,7 +4,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
     
 typedef struct {  
     unsigned int head;   
@@ -13,14 +12,12 @@ typedef struct {
     char *str;
 }RINGQ;
 
-extern RINGQ * rqp;
-
 #define ringq_is_empty(q) (q->head == q->tail)
 #define ringq_is_full(q) (((q->tail+1)%q->size) == q->head )
 
-int ringq_init();
+int ringq_init(RINGQ * ringqp);
 int ringq_free(RINGQ * ringqp);
-int ringq_push(RINGQ * ringqp,char *data);
+int ringq_push(RINGQ * ringqp, char *data);
 void ringq_display(RINGQ * ringqp);
 
 #ifdef __cplusplus

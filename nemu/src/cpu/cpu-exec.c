@@ -49,8 +49,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
   isa_exec_once(s);
   cpu.pc = s->dnpc;
 	/***iringbuf***/
-	ringq_init();
-	ringq_display(rqp);
+	ringq_init(&rq);
+	ringq_display(&rq);
 	char buf[128] = {0};
 	char *p2 = buf;
 	p2 += snprintf(p2, sizeof(buf), FMT_WORD ":", s->pc);
@@ -66,8 +66,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len2 = space_len2 * 3 + 1;
   memset(p2, ' ', space_len2);
   p2 += space_len2;
-	ringq_push(rqp, buf);
-	ringq_display(rqp);
+	ringq_push(&rq, buf);
+	ringq_display(&rq);
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
