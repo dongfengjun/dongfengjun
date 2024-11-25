@@ -67,6 +67,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	ringq_push(&rq, buf);
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
+	printf("bflog:%s\n", p);
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
   int ilen = s->snpc - s->pc;
   int i;
