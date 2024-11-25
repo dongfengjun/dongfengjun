@@ -3,6 +3,9 @@
 #include <string.h>
 #include "iringbuf.h" 
 #define RQ_SIZE 1000
+#define ringq_is_empty(q) (q->head == q->tail)
+#define ringq_is_full(q) (((q->tail+1)%RQ_SIZE) == q->head )
+
 char strarray[RQ_SIZE]={0};
 
 int ringq_init(RINGQ * ringqp) {

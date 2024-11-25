@@ -11,9 +11,6 @@ typedef struct {
     char *str;
 }RINGQ;
 
-#define ringq_is_empty(q) (q->head == q->tail)
-#define ringq_is_full(q) (((q->tail+1)%10) == q->head )
-
 int ringq_init(RINGQ * ringqp);
 int ringq_free(RINGQ * ringqp);
 int ringq_push(RINGQ * ringqp, char *data);
