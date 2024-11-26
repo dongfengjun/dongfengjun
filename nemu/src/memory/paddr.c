@@ -30,7 +30,7 @@ char buf[1024] = {0};
 char *p = buf;
 #endif
 
-#ifdef CONFIG_MTRACE
+#ifdef CONFIG_MTRACE_COND
 	 FILE *wtracelog;
 #endif
 
