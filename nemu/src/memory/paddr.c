@@ -24,7 +24,7 @@ static uint8_t *pmem = NULL;
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
 
-/***MTRACE***/
+/***MTRACE***///每次都要打开文件，慢
 #ifdef CONFIG_MTRACE
 char buf[1024] = {0};
 char *p = buf;
@@ -62,7 +62,7 @@ word_t paddr_read(paddr_t addr, int len) {
   if(likely(in_pmem(addr))) {
 		result = pmem_read(addr, len);
 		#ifdef CONFIG_MTRACE
-			wtracelog = fopen("build/nemu-wtrace-log.txt", "w");
+			wtracelog = fopen("build/nemu-mtrace-log.txt", "w");
 			p += sprintf(p, "addr:%u read:%u\n", addr, result);//wtrace
 			fprintf(wtracelog, "%s", buf);
 			fclose(wtracelog);
@@ -72,7 +72,7 @@ word_t paddr_read(paddr_t addr, int len) {
   #ifdef CONFIG_DEVICE
 		result = mmio_read(addr, len);
 		#ifdef CONFIG_MTRACE
-			wtracelog = fopen("build/nemu-wtrace-log.txt", "w");
+			wtracelog = fopen("build/nemu-mtrace-log.txt", "w");
 			p += sprintf(p, "addr:%u write:%u\n", addr, result);
 			fprintf(wtracelog, "%s", buf);
 			fclose(wtracelog);
@@ -86,7 +86,7 @@ word_t paddr_read(paddr_t addr, int len) {
 void paddr_write(paddr_t addr, int len, word_t data) {
 	#ifdef CONFIG_MTRACE
 		p += sprintf(p, "addr:%u write:%u\n", addr, data);//wtrace
-		wtracelog = fopen("build/nemu-wtrace-log.txt", "w");
+		wtracelog = fopen("build/nemu-mtrace-log.txt", "w");
 		fprintf(wtracelog, "%s", buf);
 		fclose(wtracelog);
 	#endif
