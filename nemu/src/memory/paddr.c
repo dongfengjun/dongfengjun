@@ -84,11 +84,13 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-	p += sprintf(p, "addr:%u write:%u\n", addr, data);//wtrace
-	wtracelog = fopen("build/nemu-wtrace-log.txt", "w");
-  fprintf(wtracelog, "%s", buf);
-  fclose(wtracelog);  
-  if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
+	#ifdef CONFIG_WTRACE
+		p += sprintf(p, "addr:%u write:%u\n", addr, data);//wtrace
+		wtracelog = fopen("build/nemu-wtrace-log.txt", "w");
+		fprintf(wtracelog, "%s", buf);
+		fclose(wtracelog);
+	#endif
+	if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
 }
