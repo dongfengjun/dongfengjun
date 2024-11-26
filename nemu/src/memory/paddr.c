@@ -64,7 +64,6 @@ word_t paddr_read(paddr_t addr, int len) {
 		#ifdef CONFIG_MTRACE
 			wtracelog = fopen("build/nemu-wtrace-log.txt", "w");
 			p += sprintf(p, "addr:%u read:%u\n", addr, result);//wtrace
-			printf("buf1=%s\n", buf);
 			fprintf(wtracelog, "%s", buf);
 			fclose(wtracelog);
 		#endif
@@ -88,7 +87,6 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 	#ifdef CONFIG_MTRACE
 		p += sprintf(p, "addr:%u write:%u\n", addr, data);//wtrace
 		wtracelog = fopen("build/nemu-wtrace-log.txt", "w");
-		printf("buf2=%s\n", buf);
 		fprintf(wtracelog, "%s", buf);
 		fclose(wtracelog);
 	#endif
