@@ -67,9 +67,14 @@ word_t paddr_read(paddr_t addr, int len) {
     fclose(wtracelog);
 		return result;
 	}
-  IFDEF(CONFIG_DEVICE, p += sprintf(p, "addr:%u write:%u\n", addr, mmio_read(addr, len)); return mmio_read(addr, len));
+  #ifdef CONFIG_DEVICE
+		p += sprintf(p, "addr:%u write:%u\n", addr, mmio_read(addr, len)); 
+		return mmio_read(addr, len);
+	#endif
+	else {
 		out_of_bound(addr);
 		return 0;
+	}
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
