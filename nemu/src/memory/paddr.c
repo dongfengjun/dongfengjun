@@ -59,7 +59,6 @@ void init_mem() {
   IFDEF(CONFIG_MEM_RANDOM, memset(pmem, rand(), CONFIG_MSIZE));
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
-
 word_t paddr_read(paddr_t addr, int len) {
 	word_t result;
   if(likely(in_pmem(addr))) {
