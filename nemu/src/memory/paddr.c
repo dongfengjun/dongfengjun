@@ -59,13 +59,12 @@ void init_mem() {
   IFDEF(CONFIG_MEM_RANDOM, memset(pmem, rand(), CONFIG_MSIZE));
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
+
 word_t paddr_read(paddr_t addr, int len) {
 	word_t result;
   if(likely(in_pmem(addr))) {
 		result = pmem_read(addr, len);
-		wtracelog = fopen("build/nemu-wtrace-log.txt", "w");
 		p += sprintf(p, "addr:%u write:%u\n", addr, result);//wtrace
-    printf("buf=%s\n", buf);
 		fprintf(wtracelog, "%s", buf);
     fclose(wtracelog);
 		return result;
@@ -77,7 +76,7 @@ word_t paddr_read(paddr_t addr, int len) {
 
 void paddr_write(paddr_t addr, int len, word_t data) {
 	p += sprintf(p, "addr:%u write:%u\n", addr, data);//wtrace
-	wtracelog = fopen("build/nemu-wtrace-log.txt", "w");
+	wtracelog = fopen("build/nemu-wtrace-log.txt", "w+");
   fprintf(wtracelog, "%s", buf);
   fclose(wtracelog);  
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
