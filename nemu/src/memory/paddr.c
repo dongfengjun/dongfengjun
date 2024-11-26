@@ -62,12 +62,12 @@ void init_mem() {
 
 word_t paddr_read(paddr_t addr, int len) {
 	word_t result;
-	printf("addr:%u read\n", addr);
   if(likely(in_pmem(addr))) {
 		result = pmem_read(addr, len);
 		wtracelog = fopen("build/nemu-wtrace-log.txt", "w");
 		p += sprintf(p, "addr:%u write:%u\n", addr, result);//wtrace
 		fprintf(wtracelog, "%s", buf);
+		printf("read:%s\n", buf);
     fclose(wtracelog);
 		return result;
 	}
