@@ -65,8 +65,8 @@ word_t paddr_read(paddr_t addr, int len) {
   if(likely(in_pmem(addr))) {
 		result = pmem_read(addr, len);
 		p += sprintf(p, "addr:%u write:%u\n", addr, result);//wtrace
-		wtracelog = fopen("build/nemu-wtrace-log.txt", "w+");
-    fprintf(wtracelog, "%s", buf);
+    printf("buf=%s\n", buf);
+		fprintf(wtracelog, "%s", buf);
     fclose(wtracelog);
 		return result;
 	}
