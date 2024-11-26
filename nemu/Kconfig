@@ -156,11 +156,6 @@ config MTRACE
   bool "Enable memory tracer"
   default y
 
-config MTRACE_COND
-  depends on MTRACE
-  bool "Output the mtrace to the log"
-  default y
-
 config DIFFTEST
   depends on TARGET_NATIVE_ELF
   bool "Enable differential testing"

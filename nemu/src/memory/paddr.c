@@ -28,10 +28,7 @@ static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #ifdef CONFIG_MTRACE
 char buf[1024] = {0};
 char *p = buf;
-#endif
-
-#ifdef CONFIG_MTRACE_COND
-	 FILE *wtracelog;
+FILE *wtracelog;
 #endif
 
 uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
