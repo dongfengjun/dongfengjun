@@ -148,7 +148,7 @@ int isa_exec_once(Decode *s) {
 
 /***ftrace***/
 void isa_parser_elf(char *filename) {
-  printf("cmd-e success.\n");
+  printf("ELF FILE is:%s\n", filename);
 	FILE *fp = fopen(filename, "rb");
   Assert(fp, "Can not open '%s'", filename);
   fseek(fp, 0, SEEK_END);
