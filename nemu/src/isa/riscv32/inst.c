@@ -23,8 +23,9 @@
 #define Mr vaddr_read
 #define Mw vaddr_write
 
+/***ftrace***/
 #define MAX_FTRACE_SIZE 1024
-#define MAX_ELF_SIZE 32 * 1024//ftrace
+#define MAX_ELF_SIZE 32 * 1024
 void difftest_skip_ref();
 typedef struct Ftrace
 {
@@ -42,6 +43,7 @@ typedef MUXDEF(CONFIG_ISA64, Elf64_Shdr, Elf32_Shdr) Elf_Shdr;
 typedef MUXDEF(CONFIG_ISA64, Elf64_Sym, Elf32_Sym) Elf_Sym;
 Elf_Ehdr elf_ehdr;
 Elf_Shdr *elfshdr_symtab = NULL, *elfshdr_strtab = NULL;
+/******/
 
 enum {
   TYPE_I, TYPE_U, TYPE_S, TYPE_J, TYPE_R, TYPE_B,
@@ -222,3 +224,4 @@ void cpu_show_ftrace() {
       ftrace->npc);
   }
 }
+/******/

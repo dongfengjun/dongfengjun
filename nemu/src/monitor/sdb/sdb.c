@@ -172,6 +172,7 @@ static int cmd_si(char *args) {
 	return 0;
 }
 
+void cpu_show_ftrace();
 static int cmd_info(char *args) {
 	if (args == NULL) {
 		      printf("Please enter parameter:'r'or'w'\n");
