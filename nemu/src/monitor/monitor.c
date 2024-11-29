@@ -69,6 +69,7 @@ static long load_img() {
   return size;
 }
 
+void isa_parser_elf(char *filename);
 static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"batch"    , no_argument      , NULL, 'b'},
