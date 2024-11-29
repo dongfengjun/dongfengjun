@@ -98,7 +98,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 //irb_free(&irb);//free iringbufferi
 #ifdef CONFIG_MTRACE
 char buf[1024] = {0};
-extern char *mtrace_p = buf;
+char *mtrace_p = buf;
 FILE *wtracelog;
 #endif
 void cpu_show_ftrace();

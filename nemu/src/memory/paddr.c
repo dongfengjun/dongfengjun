@@ -67,7 +67,7 @@ word_t paddr_read(paddr_t addr, int len) {
 			p += sprintf(p, "addr:%u read:%u\n", addr, result);//wtrace
 			fprintf(wtracelog, "%s", buf);
 			fclose(wtracelog);		***/
-			mtrace_p += sprintf(, "addr:%u read:%u\n", addr, result);
+			mtrace_p += sprintf(mtrace_p, "addr:%u read:%u\n", addr, result);
 		#endif
 		return result;
 	}
@@ -78,7 +78,7 @@ word_t paddr_read(paddr_t addr, int len) {
 			p += sprintf(p, "addr:%u write:%u\n", addr, result);
 			fprintf(wtracelog, "%s", buf);
 			fclose(wtracelog);			***/
-			mtrace_p += sprintf(, "addr:%u read:%u\n", addr, result);
+			mtrace_p += sprintf(mtrace_p, "addr:%u read:%u\n", addr, result);
 		#endif
 		return result;
 	#endif
@@ -92,7 +92,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 		wtracelog = fopen("build/nemu-mtrace-log.txt", "w");
 		fprintf(wtracelog, "%s", buf);
 		fclose(wtracelog);			***/
-		mtrace_p += sprintf(, "addr:%u read:%u\n", addr, data);
+		mtrace_p += sprintf(mtrace_p, "addr:%u write:%u\n", addr, data);
 	#endif
 	if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);

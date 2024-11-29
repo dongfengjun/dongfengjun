@@ -46,6 +46,7 @@ typedef uint16_t ioaddr_t;
 /***IRINGBUF***/
 #include "./../src/cpu/iringbuf.h"
 extern IRINGBUF rq;
+extern char *mtrace_p;
 
 #include <debug.h>
 
