@@ -96,7 +96,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 }
 
 //irb_free(&irb);//free iringbuffer
-
+void cpu_show_ftrace();
 static void execute(uint64_t n) {
   Decode s;
   for (;n > 0; n --) {
@@ -106,6 +106,9 @@ static void execute(uint64_t n) {
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
+	#ifdef CONFIG_FTRACE
+		cpu_show_ftrace();  //Ftrace display
+  #endif
 //	iringbuf_display(&rq);
 }
 
@@ -124,7 +127,6 @@ void assert_fail_msg() {
 	iringbuf_display(&rq);
 }
 
-void cpu_show_ftrace();
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n) {
   g_print_step = (n < MAX_INST_TO_PRINT);
@@ -141,10 +143,6 @@ void cpu_exec(uint64_t n) {
 
   uint64_t timer_end = get_time();
   g_timer += timer_end - timer_start;
-
-	#ifdef CONFIG_FTRACE
-    cpu_show_ftrace();
-	#endif
 
   switch (nemu_state.state) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
