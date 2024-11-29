@@ -99,13 +99,13 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #ifdef CONFIG_MTRACE
 char buf[1024] = {0};
 char *mtrace_p = buf;
-FILE *wtracelog;
+FILE *mtracelog;
 #endif
 void cpu_show_ftrace();
 static void execute(uint64_t n) {
   Decode s;
 	#ifdef CONFIG_MTRACE
-		wtracelog = fopen("build/nemu-mtrace-log.txt", "w");//mtrace
+		mtracelog = fopen("build/nemu-mtrace-log.txt", "w");//mtrace
 	#endif
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
@@ -117,8 +117,8 @@ static void execute(uint64_t n) {
 
 //  iringbuf_display(&rq);  //  IRFtrace display
 	#ifdef CONFIG_MTRACE
-		fprintf(wtracelog, "%s", buf);
-		fclose(wtracelog);
+		fprintf(mtracelog, "%s", buf);
+		fclose(mtracelog);
 	#endif
 	#ifdef CONFIG_FTRACE
 		cpu_show_ftrace();  //Ftrace display
