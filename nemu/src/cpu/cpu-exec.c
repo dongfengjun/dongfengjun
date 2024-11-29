@@ -95,10 +95,18 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	iringbuf_push(&rq, buf);
 }
 
-//irb_free(&irb);//free iringbuffer
+//irb_free(&irb);//free iringbufferi
+#ifdef CONFIG_MTRACE
+char buf[1024] = {0};
+extern char *mtrace_p = buf;
+FILE *wtracelog;
+#endif
 void cpu_show_ftrace();
 static void execute(uint64_t n) {
   Decode s;
+	#ifdef CONFIG_MTRACE
+		wtracelog = fopen("build/nemu-mtrace-log.txt", "w");//mtrace
+	#endif
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
@@ -106,10 +114,15 @@ static void execute(uint64_t n) {
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
+
+//  iringbuf_display(&rq);  //  IRFtrace display
+	#ifdef CONFIG_MTRACE
+		fprintf(wtracelog, "%s", buf);
+		fclose(wtracelog);
+	#endif
 	#ifdef CONFIG_FTRACE
 		cpu_show_ftrace();  //Ftrace display
   #endif
-//	iringbuf_display(&rq);
 }
 
 static void statistic() {
