@@ -172,7 +172,6 @@ static int cmd_si(char *args) {
 	return 0;
 }
 
-void cpu_show_ftrace();
 static int cmd_info(char *args) {
 	if (args == NULL) {
 		      printf("Please enter parameter:'r'or'w'\n");
@@ -184,9 +183,6 @@ static int cmd_info(char *args) {
 		else if (*args == 'w') {
 			sdb_watchpoint_display();
     }
-		else if (*args == 'f') {
-			cpu_show_ftrace();
-		}
     else {
       printf("Unknown command '%s'\n", args);
     }
