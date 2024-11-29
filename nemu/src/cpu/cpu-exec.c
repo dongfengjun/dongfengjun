@@ -95,9 +95,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	iringbuf_push(&rq, buf);
 }
 
-//irb_free(&irb);//free iringbufferi
 #ifdef CONFIG_MTRACE
-char buf[1048576] = {0};	//有些程序太大装不下
+char buf[1048576] = {0};	//有些程序太大装不下，如recursion
 char *mtrace_p = buf;
 FILE *mtracelog;
 #endif
@@ -105,7 +104,7 @@ void cpu_show_ftrace();
 static void execute(uint64_t n) {
   Decode s;
 	#ifdef CONFIG_MTRACE
-		mtracelog = fopen("build/nemu-mtrace-log.txt", "w");//mtrace
+		mtracelog = fopen("build/nemu-mtrace-log.txt", "w");	//Mtrace
 	#endif
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
@@ -117,7 +116,7 @@ static void execute(uint64_t n) {
 
 //  iringbuf_display(&rq);  //  IRFtrace display
 	#ifdef CONFIG_MTRACE
-		fprintf(mtracelog, "%s", buf);
+		fprintf(mtracelog, "%s", buf);	//Mtrace log
 		fclose(mtracelog);
 	#endif
 	#ifdef CONFIG_FTRACE
