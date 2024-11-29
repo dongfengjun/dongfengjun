@@ -154,8 +154,9 @@ static int decode_exec(Decode *s) {
       ftracedepth++;
     }
     ftracehead = (ftracehead + 1) % MAX_FTRACE_SIZE;
+		printf("ftracehead=%d\n", ftracehead);
   }
-
+	
   return 0;
 }
 
@@ -218,7 +219,6 @@ void isa_parser_elf(char *filename) {
 }
 
 void cpu_show_ftrace() {
-	printf("ftrace\n");
 	printf("ftracehead=%d\n", ftracehead);
   Elf_Sym *sym = NULL;
   Ftrace *ftrace = NULL;
