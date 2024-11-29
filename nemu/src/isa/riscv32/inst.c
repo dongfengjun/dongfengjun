@@ -201,7 +201,7 @@ void isa_parser_elf(char *filename) {
 
 void cpu_show_ftrace() {
 	printf("ftrace\n");
-	printf("ftracehead=%d\n", ftracehead);
+	printf("ftracehead=%d\n", ftracedepth);
   Elf_Sym *sym = NULL;
   Ftrace *ftrace = NULL;
   for (size_t i = 0; i < ftracehead; i++) {
