@@ -135,7 +135,7 @@ void init_monitor(int argc, char *argv[]) {
 
 	/* Initialize the IRingBuffer. */
 	iringbuf_init(&rq);
-	iringbuf_display(&rq);
+//	iringbuf_display(&rq);	//check NULL
 
 #ifndef CONFIG_ISA_loongarch32r
   IFDEF(CONFIG_ITRACE, init_disasm(
