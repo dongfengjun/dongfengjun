@@ -22,7 +22,6 @@ void engine_start();
 int is_exit_status_bad();
 word_t expr(char *e, bool *success);
 IRINGBUF rq;//iringbuffer 全局变量
-void cpu_show_ftrace();	//FTRACE
 
 int main(int argc, char *argv[]) {
   /* Initialize the monitor. */
@@ -68,9 +67,6 @@ while (fgets(line, 65536 + 128, file) != NULL)	//fgets读取file文件x-1位字�
 ***/
   /* Start engine. */
 	engine_start();
-	#ifdef CONFIG_FTRACE
-		cpu_show_ftrace();
-	#endif
-		
+
   return is_exit_status_bad();
 }
