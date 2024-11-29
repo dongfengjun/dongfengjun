@@ -124,6 +124,7 @@ void assert_fail_msg() {
 	iringbuf_display(&rq);
 }
 
+void cpu_show_ftrace();
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n) {
   g_print_step = (n < MAX_INST_TO_PRINT);
