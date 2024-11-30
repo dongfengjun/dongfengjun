@@ -1,13 +1,10 @@
 all: sim.o wave.o
-	@echo "Write this Makefile by your self."
 
-sim.o: csrc/sim.cpp vsrc/top.v
+sim.o: csrc/duswitch_tb.cpp vsrc/duswitch.v
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
-	verilator --trace --cc --exe --build -j 0 -Wall csrc/sim.cpp vsrc/top.v
-	./obj_dir/Vtop
-
-include ../Makefile
+	verilator --trace --cc --exe --build -j 0 -Wall csrc/duswitch_tb.cpp vsrc/duswitch.v
+	./obj_dir/Vduswitch
 
 #VSRCS = $(shell find $(./test_out ) -name "*.v")
 #CSRCS = $(shell find $(./csrc ) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
