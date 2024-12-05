@@ -2,9 +2,9 @@
 # DESCRIPTION: Verilator output: Makefile for building Verilated archive or executable
 #
 # Execute this makefile from the object directory:
-#    make -f Vduswitch.mk
+#    make -f Vtop_ysyx_24110017.mk
 
-default: Vduswitch
+default: Vtop_ysyx_24110017
 
 ### Constants...
 # Perl executable (from $PERL)
@@ -30,9 +30,9 @@ VM_SC_TARGET_ARCH = linux
 
 ### Vars...
 # Design prefix (from --prefix)
-VM_PREFIX = Vduswitch
+VM_PREFIX = Vtop_ysyx_24110017
 # Module prefix (from --prefix)
-VM_MODPREFIX = Vduswitch
+VM_MODPREFIX = Vtop_ysyx_24110017
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
 
@@ -41,27 +41,30 @@ VM_USER_LDLIBS = \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
-	duswitch_tb \
+	instmemory \
+	sim \
 
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
-	csrc \
+	./csrc \
 
 
 ### Default rules...
 # Include list of all generated classes
-include Vduswitch_classes.mk
+include Vtop_ysyx_24110017_classes.mk
 # Include global rules
 include $(VERILATOR_ROOT)/include/verilated.mk
 
 ### Executable rules... (from --exe)
 VPATH += $(VM_USER_DIR)
 
-duswitch_tb.o: csrc/duswitch_tb.cpp
+instmemory.o: ./csrc/instmemory.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+sim.o: ./csrc/sim.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 
 ### Link rules... (from --exe)
-Vduswitch: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
+Vtop_ysyx_24110017: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
 	$(LINK) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) $(LIBS) $(SC_LIBS) -o $@
 
 

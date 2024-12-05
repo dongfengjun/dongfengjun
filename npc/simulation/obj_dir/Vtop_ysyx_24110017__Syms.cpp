@@ -1,16 +1,16 @@
 // Verilated -*- C++ -*-
 // DESCRIPTION: Verilator output: Symbol table implementation internals
 
-#include "Vduswitch__Syms.h"
-#include "Vduswitch.h"
-#include "Vduswitch___024root.h"
+#include "Vtop_ysyx_24110017__Syms.h"
+#include "Vtop_ysyx_24110017.h"
+#include "Vtop_ysyx_24110017___024root.h"
 
 // FUNCTIONS
-Vduswitch__Syms::~Vduswitch__Syms()
+Vtop_ysyx_24110017__Syms::~Vtop_ysyx_24110017__Syms()
 {
 }
 
-Vduswitch__Syms::Vduswitch__Syms(VerilatedContext* contextp, const char* namep, Vduswitch* modelp)
+Vtop_ysyx_24110017__Syms::Vtop_ysyx_24110017__Syms(VerilatedContext* contextp, const char* namep, Vtop_ysyx_24110017* modelp)
     : VerilatedSyms{contextp}
     // Setup internal state of the Syms class
     , __Vm_modelp{modelp}
@@ -23,4 +23,7 @@ Vduswitch__Syms::Vduswitch__Syms(VerilatedContext* contextp, const char* namep, 
     // Setup each module's pointers to their submodules
     // Setup each module's pointer back to symbol table (for public functions)
     TOP.__Vconfigure(true);
+    // Setup export functions
+    for (int __Vfinal = 0; __Vfinal < 2; ++__Vfinal) {
+    }
 }

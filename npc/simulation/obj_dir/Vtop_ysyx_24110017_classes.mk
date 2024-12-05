@@ -2,7 +2,7 @@
 # DESCRIPTION: Verilator output: Make include file with class lists
 #
 # This file lists generated Verilated files, for including in higher level makefiles.
-# See Vduswitch.mk for the caller.
+# See Vtop_ysyx_24110017.mk for the caller.
 
 ### Switches...
 # C11 constructs required?  0/1 (always on now)
@@ -23,28 +23,30 @@ VM_TRACE_FST = 0
 ### Object file lists...
 # Generated module classes, fast-path, compile with highest optimization
 VM_CLASSES_FAST += \
-	Vduswitch \
-	Vduswitch___024root__DepSet_he81a9731__0 \
-	Vduswitch___024root__DepSet_h2b000e93__0 \
+	Vtop_ysyx_24110017 \
+	Vtop_ysyx_24110017___024root__DepSet_hfa4d49a7__0 \
+	Vtop_ysyx_24110017___024root__DepSet_h193cfb83__0 \
 
 # Generated module classes, non-fast-path, compile with low/medium optimization
 VM_CLASSES_SLOW += \
-	Vduswitch___024root__Slow \
-	Vduswitch___024root__DepSet_he81a9731__0__Slow \
-	Vduswitch___024root__DepSet_h2b000e93__0__Slow \
+	Vtop_ysyx_24110017___024root__Slow \
+	Vtop_ysyx_24110017___024root__DepSet_hfa4d49a7__0__Slow \
+	Vtop_ysyx_24110017___024root__DepSet_h193cfb83__0__Slow \
 
 # Generated support classes, fast-path, compile with highest optimization
 VM_SUPPORT_FAST += \
-	Vduswitch__Trace__0 \
+	Vtop_ysyx_24110017__Dpi \
+	Vtop_ysyx_24110017__Trace__0 \
 
 # Generated support classes, non-fast-path, compile with low/medium optimization
 VM_SUPPORT_SLOW += \
-	Vduswitch__Syms \
-	Vduswitch__Trace__0__Slow \
+	Vtop_ysyx_24110017__Syms \
+	Vtop_ysyx_24110017__Trace__0__Slow \
 
 # Global classes, need linked once per executable, fast-path, compile with highest optimization
 VM_GLOBAL_FAST += \
 	verilated \
+	verilated_dpi \
 	verilated_vcd_c \
 	verilated_threads \
 

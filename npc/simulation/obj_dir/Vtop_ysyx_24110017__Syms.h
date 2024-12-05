@@ -4,34 +4,36 @@
 // Internal details; most calling programs do not need this header,
 // unless using verilator public meta comments.
 
-#ifndef VERILATED_VDUSWITCH__SYMS_H_
-#define VERILATED_VDUSWITCH__SYMS_H_  // guard
+#ifndef VERILATED_VTOP_YSYX_24110017__SYMS_H_
+#define VERILATED_VTOP_YSYX_24110017__SYMS_H_  // guard
 
 #include "verilated.h"
 
 // INCLUDE MODEL CLASS
 
-#include "Vduswitch.h"
+#include "Vtop_ysyx_24110017.h"
 
 // INCLUDE MODULE CLASSES
-#include "Vduswitch___024root.h"
+#include "Vtop_ysyx_24110017___024root.h"
+
+// DPI TYPES for DPI Export callbacks (Internal use)
 
 // SYMS CLASS (contains all model state)
-class Vduswitch__Syms final : public VerilatedSyms {
+class Vtop_ysyx_24110017__Syms final : public VerilatedSyms {
   public:
     // INTERNAL STATE
-    Vduswitch* const __Vm_modelp;
+    Vtop_ysyx_24110017* const __Vm_modelp;
     bool __Vm_activity = false;  ///< Used by trace routines to determine change occurred
     uint32_t __Vm_baseCode = 0;  ///< Used by trace routines when tracing multiple models
     VlDeleter __Vm_deleter;
     bool __Vm_didInit = false;
 
     // MODULE INSTANCE STATE
-    Vduswitch___024root            TOP;
+    Vtop_ysyx_24110017___024root   TOP;
 
     // CONSTRUCTORS
-    Vduswitch__Syms(VerilatedContext* contextp, const char* namep, Vduswitch* modelp);
-    ~Vduswitch__Syms();
+    Vtop_ysyx_24110017__Syms(VerilatedContext* contextp, const char* namep, Vtop_ysyx_24110017* modelp);
+    ~Vtop_ysyx_24110017__Syms();
 
     // METHODS
     const char* name() { return TOP.name(); }
