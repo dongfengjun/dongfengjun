@@ -155,7 +155,6 @@ static int decode_exec(Decode *s) {
     }
     ftracehead = (ftracehead + 1) % MAX_FTRACE_SIZE;
   }
-	
   return 0;
 }
 
