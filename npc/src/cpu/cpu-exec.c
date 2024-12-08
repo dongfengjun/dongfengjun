@@ -104,7 +104,7 @@ void cpu_show_ftrace();
 static void execute(uint64_t n) {
   Decode s;
 	#ifdef CONFIG_MTRACE
-		mtracelog = fopen("build/nemu-mtrace-log.txt", "w");	//Mtrace
+		mtracelog = fopen("build/npc-mtrace-log.txt", "w");	//Mtrace
 	#endif
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
