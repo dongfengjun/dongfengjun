@@ -1,15 +1,16 @@
-all:sim.o wave.o
+all:sim wave
 
-VSRCS = $(shell find $(./vsrc ) -name "*.v")
-CSRCS = $(shell find $(./csrc ) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+VSRCS = $(shell find ./vsrc -name "*.v")
+CSRCS = $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 
-sim.o: $(VSRCS) $(CSRCS)
+sim: $(VSRCS) $(CSRCS)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
+	@rm -rf ./obj_dir
 	verilator --trace --cc --exe --build -j 0 -Wall $(CSRCS) $(VSRCS)
 	./obj_dir/Vtop_ysyx_24110017
 
-wave.o: wave.vcd
+wave: wave.vcd
 	gtkwave $<
 
 clean:

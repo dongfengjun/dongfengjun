@@ -9,6 +9,10 @@
 #include "svdpi.h"
 #include "Vtop_ysyx_24110017__Dpi.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /***ebreak***/
 bool RUNNING;
 void npc_trap() {
@@ -25,9 +29,8 @@ static void reset(Vtop_ysyx_24110017* top,int n) {
 	top->rst=0;
 }
 
-int main(int argc, char** argv, char** env) {
+int npc_exec(int n) {
 	VerilatedContext* contextp = new VerilatedContext;  //verilator指针
-  contextp->commandArgs(argc, argv);  //检查参数
   Vtop_ysyx_24110017* top = new Vtop_ysyx_24110017{contextp};  //实例化top块
 	if (mem_init() != 0) {
         std::cerr << "Memory initialization failed." << std::endl;
@@ -53,12 +56,14 @@ int main(int argc, char** argv, char** env) {
 	reset(top,10);	
 	tfp->dump(contextp->time());	
 	contextp->timeInc(1);
-	while(RUNNING) { //一直到ebreak才退出
+	int i = 0;
+	while(RUNNING && i < n) { //执行n次\一直到ebreak才退出
 		top->inst = pmem_read(top->pc);	
 		single_cycle(top);
 /***wave***/
 		tfp->dump(contextp->time());//dump wave
 		contextp->timeInc(1);//仿真时间推进
+		i ++;
 	}
 	tfp->dump(contextp->time());
   contextp->timeInc(1);
@@ -68,3 +73,7 @@ int main(int argc, char** argv, char** env) {
 	delete contextp;
 	return 0;
 }
+
+#ifdef __cplusplus
+}
+#endif
