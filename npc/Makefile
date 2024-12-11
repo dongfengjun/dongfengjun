@@ -1,21 +1,35 @@
-BUILD_DIR = ./build
-OBJ_DIR = $(BUILD_DIR)/obj_dir
+BUILD = ./build
+OBJ_DIR = $(BUILD)/obj_dir
 VSRCS = $(shell find ./vsrc -name "*.v")
 CSRCS = $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+INC_PATH = ./csrc/include
 
-$(BUILD_DIR)/sim: $(VSRCS) $(CSRCS)
+LDFLAGS += $(shell llvm-config --ldflags)
+LIBS += $(shell llvm-config --libs)
+
+VERILATOR = verilator
+VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build
+VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH)
+VERILATOR_FLAGS += -CFLAGS -g
+VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
+VERILATOR_FLAGS += -LDFLAGS -lreadline
+
+IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
+NPC_ARGS = --img=$(IMG)
+
+run: sim
+	$(OBJ_DIR)/Vtop_ysyx_24110017 $(NPC_ARGS)
+
+sim: $(CSRCS) $(VSRCS)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@rm -rf ./obj_dir
 	@echo "Write this Makefile by your self."
-	verilator --trace --cc --exe --build -j 0 -Wall $(CSRCS) $(VSRCS)
-	./obj_dir/Vtop_ysyx_24110017
+	@rm -rf ./build/obj_dir
+	mkdir -p build
+	@$(VERILATOR)  $(VERILATOR_FLAGS) --exe $^
+	mv obj_dir $(BUILD)
 
-wave: wave.vcd
-	gtkwave $<
+wave:
+	gtkwave $(BUILD)/wave.vcd
 
 clean:
-	rm -rf obj_dir
-	rm wave.vcd
-
-.PHONY: clean run wave
-include ../Makefile
+	rm -rf ./build
