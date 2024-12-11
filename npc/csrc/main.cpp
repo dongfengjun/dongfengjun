@@ -34,8 +34,7 @@ static void reset(int n) {
 bool RUNNING;
 void npc_trap() {
 	char str[15];
-	top->a0 = 0b01010;
-	if(top->r1 == 0) {
+	if(top->a0 == 0) {
 		strcpy(str, "HIT GOOD TRAP");
 	}
 	else {
