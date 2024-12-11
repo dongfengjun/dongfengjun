@@ -33,7 +33,17 @@ static void reset(int n) {
 /***ebreak***/
 bool RUNNING;
 void npc_trap() {
-  RUNNING = false;
+	char str[15];
+	top->a0 = 0b01010;
+	if(top->r1 == 0) {
+		strcpy(str, "HIT GOOD TRAP");
+	}
+	else {
+		strcpy(str, "HIT BAD TRAP");
+	}
+	printf("npc: %s at pc = %x\n", str, top->inst);
+  
+	RUNNING = false;
 }
 
 void cpu_exec(int n) {
