@@ -40,13 +40,13 @@ void npc_trap() {
 	else {
 		strcpy(str, "HIT BAD TRAP");
 	}
-	printf("npc: %s at pc = %x\n", str, top->inst);
+	printf("npc: %s at pc = 0x%08x\n", str, top->pc);
   
 	RUNNING = false;
 }
 
 void cpu_exec(int n) {
-	while(RUNNING && n > 0) {
+	while(RUNNING && n != 0) {
 		single_cycle();
 		n--;
   }
@@ -54,7 +54,7 @@ void cpu_exec(int n) {
 
 int main(int argc, char *argv[]) {
 /***inst***/
-contextp = new VerilatedContext;  //verilator指针
+	contextp = new VerilatedContext;  //verilator指针
   top = new Vtop_ysyx_24110017{contextp};  //实例化top块
 	tfp= new VerilatedVcdC;   //初始化VCD对象指针
   contextp->traceEverOn(true); //打开追踪
@@ -67,7 +67,12 @@ contextp = new VerilatedContext;  //verilator指针
 	init_monitor(argc, argv);
 //测试inst  std::cout<<std::hex<<pmem_read(0x80000000)<<"\n";	
 	reset(2);
-	cpu_exec(128);
+#ifdef CONFIG_TARGET_AM
+  cpu_exec(-1);
+#else
+  /* Receive commands from user. */
+  sdb_mainloop();
+#endif
 	dump_wave();
 /***close**/
 	tfp->close();
