@@ -21,10 +21,14 @@ typedef uint16_t ioaddr_t;
 //Config
 //#define CONFIG_TARGET_AM 1;
 
+//main
+void cpu_exec(int n);
+
 //memory
 uint32_t pmem_read(int addr);                                               
 int pmem_write(uint32_t content, uint64_t addr, uint32_t len);
 int free_memory();
+void isa_reg_display();//DPI-C in RF
 
 //monitor
 void init_monitor(int argc, char *argv[]);

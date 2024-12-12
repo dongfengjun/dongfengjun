@@ -13,6 +13,11 @@ VerilatedContext* contextp = NULL;	//verilator指针
 Vtop_ysyx_24110017* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 
+void assert_fail_msg() {
+  isa_reg_display();//DPIC
+  //statistic();
+}
+
 /******/
 void dump_wave() {
 	tfp->dump(contextp->time());  
@@ -30,14 +35,26 @@ static void reset(int n) {
 	top->rst=0;
 }
 
-/***ebreak***/
+/***DPI-C***/
+void isa_reg_display() {
+	extern int gpr_reg_display(int addr);
+	svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017.RF"));
+	for(int i = 0; i < 32; i ++) {
+		printf("x%d:0x%08x\t", i, gpr_reg_display(i));
+	}
+	printf("\n");
+}
+
 bool RUNNING;
 void npc_trap() {
+	extern int gpr_reg_display(int addr);
+  svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017.RF"));
+	int a0 = gpr_reg_display(10);
 	char str[15];
-	if(top->a0 == 0) {
+	if(a0 == 0) {
 		strcpy(str, "HIT GOOD TRAP");
 	}
-	else {
+	else { 
 		strcpy(str, "HIT BAD TRAP");
 	}
 	printf("npc: %s at pc = 0x%08x\n", str, top->pc);

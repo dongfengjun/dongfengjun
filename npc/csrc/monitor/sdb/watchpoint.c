@@ -132,7 +132,7 @@ void checkWatchPoint() {
 			if(success){
 				if(tmp != wp_pool[i].value) {
 					printf("watchpoint NO.%d:%s\noldvalue=%u\nnewvalue=%u\nNEMU_STOP\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].value, tmp);
-					nemu_state.state = NEMU_STOP;
+					printf("RUNNING = false\n");
 					return ;
       }
     }

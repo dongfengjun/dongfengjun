@@ -23,9 +23,8 @@ static int is_batch_mode = false;
 void init_regex();
 void init_wp_pool();
 void sdb_watchpoint_display();
-void create_watchpoint();
-void delete_watchpoint();
-word_t paddr_read(paddr_t addr, int len);
+void create_watchpoint(char* args);
+void delete_watchpoint(int no);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -36,7 +35,7 @@ static char *line_read = NULL;
     line_read = NULL;
   }
 
-  line_read = readline("(nemu) ");		//读取用户输入
+  line_read = readline("(npc) ");		//读取用户输入
 
   if (line_read && *line_read) {
     add_history(line_read);
@@ -175,7 +174,7 @@ static int cmd_info(char *args) {
     } 
   else {
 		if (*args == 'r') {
-      isa_reg_display();
+			isa_reg_display();
     }
 		else if (*args == 'w') {
 			sdb_watchpoint_display();
@@ -187,6 +186,9 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+static word_t paddr_read(paddr_t addr, int len) {
+	return 0;
+}
 static int cmd_x(char *args) {
   char *arg = strtok(NULL, " ");
   char *arg2 = strtok(NULL, " ");

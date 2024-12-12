@@ -3,7 +3,7 @@ input clk;
 input rst;
 output [31:0]pc;//if
 input [31:0]inst;
-output [31:0]a0;//npc_trap
+output [31:0]a0;
 
 wire [6:0]op;
 wire [4:0]rd;
@@ -25,4 +25,5 @@ assign a = (op == 7'b0010011) ? r1 : pc;
 assign xrd = (op == 7'b0110111 && op == 7'b1100111) ? imm : (op == 7'b1101111) ? (pc + 4) : res;
 assign jalen = (op == 7'b1101111) ? 1'b1 : 1'b0;
 assign jalren = (op == 7'b1100111) ? 1'b1 : 1'b0;
+
 endmodule

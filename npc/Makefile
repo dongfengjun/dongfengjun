@@ -18,7 +18,7 @@ IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 NPC_ARGS = --img=$(IMG)
 
 run: sim
-	$(OBJ_DIR)/Vtop_ysyx_24110017 #$(NPC_ARGS)
+	$(OBJ_DIR)/Vtop_ysyx_24110017 $(NPC_ARGS)
 
 sim: $(CSRCS) $(VSRCS)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!

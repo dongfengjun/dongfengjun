@@ -28,8 +28,6 @@ assign offset = (op == 7'b1101111) ? {{11{inst[31]}},inst[31],inst[19:12],inst[2
 assign sel = ((op == 7'b0010011) && (funct3 == 3'b000))? 3'b000:3'b000;//addi
 assign wr_en = (op == 7'b0010011 || op == 7'b0010111 || op == 7'b1101111 || op == 7'b1100111) ? 1'b1 : 1'b0;
 
-
-
 always@(*) begin
 	if(inst == 32'b00000000000100000000000001110011) begin
 		npc_trap();

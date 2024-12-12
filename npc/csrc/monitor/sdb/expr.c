@@ -201,6 +201,11 @@ int max(int a, int b);
 uint32_t eval(int p, int  q);
 
 word_t paddr_read(paddr_t addr, int len);
+word_t isa_reg_str2val(const char *s, bool *success) //DPI-C 通用寄存器
+{
+	return 0;
+}
+
 uint8_t* guest_to_host(paddr_t paddr);
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -213,9 +218,11 @@ word_t expr(char *e, bool *success) {
 	/***reg***/
 	for(int i = 0; i < nr_token; i++) {
 		if(tokens[i].type == REG) {
-			for(int j = 0; j < 32; j++) {
+			for(int j = 0; j < 31; j++) {
+				printf("%d ", j);
 				tokens[i].str[j] = tokens[i].str[j+1];
 			}
+			tokens[i].str[31] = '\0';
 			bool flag = true;
 			uint32_t tmp = isa_reg_str2val(tokens[i].str, &flag);
 			if(flag) {
@@ -232,7 +239,7 @@ word_t expr(char *e, bool *success) {
 		if(tokens[i].type == '-' && (i == 0 || ((tokens[i-1].type != NUM && tokens[i-1].type != HEX) && tokens[i-1].type != ')' ))) {
 			printf("The EXPR contains negative signs.\n");
 			tokens[i].type = TK_NOTYPE;
-			for(int j = 31; j >= 0; j--) {
+			for(int j = 31; j > 0; j--) {
 				tokens[i+1].str[j] = tokens[i+1].str[j-1];
 			}
 			tokens[i+1].str[0] = '-';
@@ -282,7 +289,9 @@ word_t expr(char *e, bool *success) {
 				s[8]='\0';
 				paddr_t addr = 0;
 				sscanf(s, "%x", &addr);
-				word_t value = *(uint32_t *)guest_to_host(addr);
+				//word_t value = *(uint32_t *)guest_to_host(addr);
+				word_t value = 0;//DPI-C
+				printf("* expr wait DPI-C\n");
 				sprintf(tokens[i+1].str, "%u", value);
 			}
 			else	printf("EXPR Invalid.\n");
