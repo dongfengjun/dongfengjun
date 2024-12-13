@@ -219,7 +219,6 @@ word_t expr(char *e, bool *success) {
 	for(int i = 0; i < nr_token; i++) {
 		if(tokens[i].type == REG) {
 			for(int j = 0; j < 31; j++) {
-				printf("%d ", j);
 				tokens[i].str[j] = tokens[i].str[j+1];
 			}
 			tokens[i].str[31] = '\0';

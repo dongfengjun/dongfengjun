@@ -35,7 +35,7 @@ static void reset(int n) {
 	top->rst=0;
 }
 
-/***DPI-C***/
+/***DPI-C***可以封装成单个寄存器访问子函数放头文件中***/
 void isa_reg_display() {
 	extern int gpr_reg_display(int addr);
 	svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017.RF"));
@@ -47,7 +47,7 @@ void isa_reg_display() {
 
 bool RUNNING;
 void npc_trap() {
-	extern int gpr_reg_display(int addr);
+	extern int gpr_reg_display(int addr);//抓取a0
   svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017.RF"));
 	int a0 = gpr_reg_display(10);
 	char str[15];

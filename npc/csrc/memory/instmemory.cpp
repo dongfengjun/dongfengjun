@@ -5,7 +5,7 @@
 
 uint8_t mem[0x8000000] = {};
 
-uint32_t pmem_read(int addr) { // 内存读取函数
+word_t pmem_read(paddr_t addr) { // 内存读取函数
     int base_addr = addr - 0x80000000; // 计算实际的内存地址偏移
     uint32_t lo0 = (uint32_t)mem[base_addr];
     uint32_t lo1 = ((uint32_t)mem[base_addr + 1]) << 8;

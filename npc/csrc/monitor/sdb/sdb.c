@@ -186,9 +186,6 @@ static int cmd_info(char *args) {
   return 0;
 }
 
-static word_t paddr_read(paddr_t addr, int len) {
-	return 0;
-}
 static int cmd_x(char *args) {
   char *arg = strtok(NULL, " ");
   char *arg2 = strtok(NULL, " ");
@@ -201,7 +198,7 @@ static int cmd_x(char *args) {
 		sprintf(s, "%x", tmp);
 		sscanf(s, "%x", &addr); 
 		for(int i = 0; i < N; i++) {
-			printf("0x%x ",paddr_read(addr, 4));
+			printf("0x%08x ",pmem_read(addr));
 			addr = addr + 4;
 		}
 		printf("\n");

@@ -25,7 +25,7 @@ typedef uint16_t ioaddr_t;
 void cpu_exec(int n);
 
 //memory
-uint32_t pmem_read(int addr);                                               
+word_t pmem_read(paddr_t addr);
 int pmem_write(uint32_t content, uint64_t addr, uint32_t len);
 int free_memory();
 void isa_reg_display();//DPI-C in RF
