@@ -24,11 +24,14 @@ typedef uint16_t ioaddr_t;
 //main
 void cpu_exec(int n);
 
-//memory
+//inst_memory
 word_t pmem_read(paddr_t addr);
 int pmem_write(uint32_t content, uint64_t addr, uint32_t len);
 int free_memory();
-void isa_reg_display();//DPI-C in RF
+//reg DPI-C
+word_t gpr_regs_display(int raddr);//抓取reg  DPI-C in RF
+void isa_regs_display();
+word_t isa_reg_str2val(const char *s, bool *success);
 
 //monitor
 void init_monitor(int argc, char *argv[]);

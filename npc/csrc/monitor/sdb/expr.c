@@ -200,12 +200,6 @@ bool check_parentheses(int p, int q);
 int max(int a, int b);
 uint32_t eval(int p, int  q);
 
-word_t paddr_read(paddr_t addr, int len);
-word_t isa_reg_str2val(const char *s, bool *success) //DPI-C 通用寄存器
-{
-	return 0;
-}
-
 uint8_t* guest_to_host(paddr_t paddr);
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {

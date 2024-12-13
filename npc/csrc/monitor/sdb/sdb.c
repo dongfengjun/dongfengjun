@@ -174,7 +174,7 @@ static int cmd_info(char *args) {
     } 
   else {
 		if (*args == 'r') {
-			isa_reg_display();
+			isa_regs_display();
     }
 		else if (*args == 'w') {
 			sdb_watchpoint_display();
@@ -198,7 +198,7 @@ static int cmd_x(char *args) {
 		sprintf(s, "%x", tmp);
 		sscanf(s, "%x", &addr); 
 		for(int i = 0; i < N; i++) {
-			printf("0x%08x ",pmem_read(addr));
+			printf("0x%08x  ",pmem_read(addr));
 			addr = addr + 4;
 		}
 		printf("\n");
