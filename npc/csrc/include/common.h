@@ -19,14 +19,23 @@ typedef MUXDEF(PMEM64, uint64_t, uint32_t) paddr_t;
 typedef uint16_t ioaddr_t;
 
 //Config
-//#define CONFIG_TARGET_AM 1;
+//#define CONFIG_TARGET_AM 0//AM
+//#define CONFIG_DEVICE 0//DEVICE
+#define CONFIG_MBASE 0x80000000//IM
+#define CONFIG_MSIZE 0x8000000
+#define CONFIG_MEM_RANDOM 1
+#define PMEM_LEFT ((uint32_t)CONFIG_MBASE)
+#define PMEM_RIGHT ((uint32_t)CONFIG_MBASE + CONFIG_MSIZE - 1)
 
 //main
 void cpu_exec(int n);
 
 //inst_memory
+uint8_t guest_to_host(paddr_t paddr);
+paddr_t host_to_guest(uint8_t *haddr);
+void init_mem();
 word_t pmem_read(paddr_t addr);
-int pmem_write(uint32_t content, uint64_t addr, uint32_t len);
+word_t pmem_write(uint32_t content, uint64_t addr, uint32_t len);
 int free_memory();
 //reg DPI-C
 word_t gpr_regs_display(int raddr);//抓取reg  DPI-C in RF
@@ -35,7 +44,6 @@ word_t isa_reg_str2val(const char *s, bool *success);
 
 //monitor
 void init_monitor(int argc, char *argv[]);
-
 //sdb//sdb.h
 void init_sdb();
 void sdb_mainloop();

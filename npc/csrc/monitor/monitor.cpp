@@ -9,7 +9,7 @@ static void welcome() {
 static char *img_file = NULL;
 static char *diff_so_file = NULL;
 
-extern uint32_t mem[0x8000000];
+extern uint8_t mem[CONFIG_MSIZE];//mem
 
 static long load_img() {
   if(img_file == NULL) {
@@ -67,6 +67,9 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Parse arguments. */
   parse_args(argc, argv);
+
+	/* Initialize memory. */
+  init_mem();
 
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();

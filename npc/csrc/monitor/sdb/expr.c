@@ -200,7 +200,6 @@ bool check_parentheses(int p, int q);
 int max(int a, int b);
 uint32_t eval(int p, int  q);
 
-uint8_t* guest_to_host(paddr_t paddr);
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
