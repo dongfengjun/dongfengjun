@@ -17,6 +17,7 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+#include "iringbuf.h"
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -38,7 +39,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
-  IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+  IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));	//Diff-test
 	IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
 
@@ -47,6 +48,22 @@ static void exec_once(Decode *s, vaddr_t pc) {
   s->snpc = pc;
   isa_exec_once(s);
   cpu.pc = s->dnpc;
+	/***iringbuf***/
+	char buf[128] = {0};
+	char *p2 = buf;
+	p2 += snprintf(p2, sizeof(buf), FMT_WORD ":", s->pc);
+  int ilen2 = s->snpc - s->pc;
+  int j;
+  uint8_t *inst2 = (uint8_t *)&s->isa.inst.val;
+  for (j = ilen2 - 1; j >= 0; j --) {
+    p2 += snprintf(p2, 4, " %02x", inst2[j]);
+  }
+  int ilen_max2 = MUXDEF(CONFIG_ISA_x86, 8, 4);
+  int space_len2 = ilen_max2 - ilen2;
+  if (space_len2 < 0) space_len2 = 0;
+  space_len2 = space_len2 * 3 + 1;
+  memset(p2, ' ', space_len2);
+  p2 += space_len2;
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
@@ -67,14 +84,28 @@ static void exec_once(Decode *s, vaddr_t pc) {
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+	disassemble(p2, buf + sizeof(buf) - p2,
+			MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen2);
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
 #endif
+	char tmp[] = {" \n"};
+	strcat(buf, tmp);
+	iringbuf_push(&rq, buf);
 }
 
+#ifdef CONFIG_MTRACE
+char buf[1048576] = {0};	//有些程序太大装不下，如recursion
+char *mtrace_p = buf;
+FILE *mtracelog;
+#endif
+void cpu_show_ftrace();
 static void execute(uint64_t n) {
   Decode s;
+	#ifdef CONFIG_MTRACE
+		mtracelog = fopen("build/nemu-mtrace-log.txt", "w");	//Mtrace
+	#endif
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
@@ -82,6 +113,15 @@ static void execute(uint64_t n) {
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
+
+//  iringbuf_display(&rq);  //  IRFtrace display
+	#ifdef CONFIG_MTRACE
+		fprintf(mtracelog, "%s", buf);	//Mtrace log
+		fclose(mtracelog);
+	#endif
+	#ifdef CONFIG_FTRACE
+		cpu_show_ftrace();  //Ftrace display
+  #endif
 }
 
 static void statistic() {
@@ -96,6 +136,7 @@ static void statistic() {
 void assert_fail_msg() {
   isa_reg_display();
   statistic();
+	iringbuf_display(&rq);
 }
 
 /* Simulate how the CPU works. */
@@ -124,6 +165,7 @@ void cpu_exec(uint64_t n) {
            (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
             ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
           nemu_state.halt_pc);
+			if(nemu_state.halt_ret != 0) iringbuf_display(&rq);//IRingBuff
       // fall through
     case NEMU_QUIT: statistic();
   }

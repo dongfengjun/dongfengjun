@@ -47,20 +47,25 @@ void init_wp_pool() {
 WP* new_wp() {
 	if (free_ == NULL) {
 		printf("No unused watchpoint available.\n");
-    assert(0);
 		return NULL;
   }
 	WP *p = free_;
 	free_ = free_->next;
 	p -> flag = true;
 	p -> next = head;
+	head = p; //
 	return p;
 }
 void free_wp(WP *wp) {
-	if (wp == NULL) return;
+	if (wp == NULL) {
+		printf("watchpoint NO.%d dosen't exist.", wp -> NO);
+		return;
+	}
 	if(head == wp) {
 		head -> flag = false;
 		head = wp -> next;
+		wp ->next = free_; //
+		free_ = wp; //
 		printf("free watchpoint NO.%d success.\n", wp -> NO);
 		return;
 	}
@@ -85,7 +90,6 @@ void sdb_watchpoint_display() {
 		if(wp_pool[i].flag) {
 			bool success = false;
 			word_t tmp = expr(wp_pool[i].expr,&success);
-			printf("tmp=%u\n", tmp);
       printf("watchpoint NO:%d, expr=%s, old_value=%u, new_value=%u\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].value, tmp);
       flag = false;
 		}
@@ -127,7 +131,7 @@ void checkWatchPoint() {
 			word_t tmp = expr(wp_pool[i].expr,&success);
 			if(success){
 				if(tmp != wp_pool[i].value) {
-					printf("watchpoint NO.%d\noldvalue=%u\nnewvalue=%u\nNEMU_STOP\n", wp_pool[i].NO, wp_pool[i].value, tmp);
+					printf("watchpoint NO.%d:%s\noldvalue=%u\nnewvalue=%u\nNEMU_STOP\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].value, tmp);
 					nemu_state.state = NEMU_STOP;
 					return ;
       }
