@@ -14,7 +14,7 @@ Vtop_ysyx_24110017* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 
 void assert_fail_msg() {
-  isa_reg_display();//DPIC
+  isa_regs_display();//DPIC
   //statistic();
 }
 
@@ -35,14 +35,11 @@ static void reset(int n) {
 	top->rst=0;
 }
 
-/***DPI-C***可以封装成单个寄存器访问子函数放头文件中***/
-void isa_reg_display() {
+/***DPI-C***/
+word_t gpr_regs_display(int raddr) {
 	extern int gpr_reg_display(int addr);
 	svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017.RF"));
-	for(int i = 0; i < 32; i ++) {
-		printf("x%d:0x%08x\t", i, gpr_reg_display(i));
-	}
-	printf("\n");
+	return gpr_reg_display(raddr);
 }
 
 bool RUNNING;
