@@ -52,11 +52,11 @@ void isa_reg_display() {
 	}
 	printf("\n");
 	for(i = 24; i < 28; i++) {
-		printf("%s\t%u\t", regs[i], cpu.gpr[i]);
+		printf("%s\t%08x\t", regs[i], cpu.gpr[i]);
 	}
 	printf("\n");
 	for(i = 28; i < 32; i++) {
-		printf("%s\t%u\t", regs[i], cpu.gpr[i]);
+		printf("%s\t%08x\t", regs[i], cpu.gpr[i]);
 	}
 	printf("\n");
 }
