@@ -13,12 +13,25 @@ VerilatedContext* contextp = NULL;	//verilator指针
 Vtop_ysyx_24110017* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 
-void assert_fail_msg() {
-  isa_regs_display();//DPIC
-  //statistic();
+/***DPI-C***/
+word_t gpr_regs_display(int raddr) {
+  extern int gpr_reg_display(int addr);
+  svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017.RF"));
+  return gpr_reg_display(raddr);
 }
 
-/******/
+bool RUNNING;
+void npc_trap() {
+  extern int gpr_reg_display(int addr);//抓取a0
+  svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017.RF"));
+  int a0 = gpr_reg_display(10);
+  char str[15];
+  Log("npc: %s at pc = " FMT_WORD, (a0 == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED)), top->pc);
+                                                                            
+  RUNNING = false;
+}
+
+/***single_cycle***/
 void dump_wave() {
 	tfp->dump(contextp->time());  
   contextp->timeInc(1);
@@ -35,33 +48,55 @@ static void reset(int n) {
 	top->rst=0;
 }
 
-/***DPI-C***/
-word_t gpr_regs_display(int raddr) {
-	extern int gpr_reg_display(int addr);
-	svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017.RF"));
-	return gpr_reg_display(raddr);
+/***main***/
+#define MAX_INST_TO_PRINT 10//puts inst
+static bool g_print_step = false;
+void assert_fail_msg() {
+  isa_regs_display();
+  //statistic();
 }
 
-bool RUNNING;
-void npc_trap() {
-	extern int gpr_reg_display(int addr);//抓取a0
-  svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017.RF"));
-	int a0 = gpr_reg_display(10);
-	char str[15];
-	if(a0 == 0) {
-		strcpy(str, "HIT GOOD TRAP");
-	}
-	else { 
-		strcpy(str, "HIT BAD TRAP");
-	}
-	printf("npc: %s at pc = 0x%08x\n", str, top->pc);
-  
-	RUNNING = false;
+IFDEF(CONFIG_ITRACE, char logbuf[128]);
+#ifdef CONFIG_ITRACE
+static void itrace(){
+	uint8_t insts[4];
+	uint8_t *insts_ptr = insts;
+	insts[0] = top->inst & 0xFF;
+  insts[1] = (top->inst >>  8) & 0xFF;
+  insts[2] = (top->inst >> 16) & 0xFF;
+	insts[3] = (top->inst >> 24) & 0xFF;
+  char *p = logbuf;
+  p += snprintf(p, sizeof(logbuf), FMT_WORD ":", top->pc);
+  int ilen = 4;
+  int i;
+  for (i = ilen - 1; i >= 0; i --) {
+    p += snprintf(p, 4, " %02x", insts[i]);
+  }
+	uint32_t pc = 0x80000004;
+	uint8_t codes[4] = {0x0, 0x0, 0x91, 0x17};
+#ifndef CONFIG_ISA_loongarch32r
+	disassemble(p, logbuf + sizeof(logbuf) - p, pc, (uint8_t *)&codes, 4);/////////////////////////有问题
+#else
+  p[0] = '\0'; // the upstream llvm does not support loongarch32r
+#endif
+}
+#endif
+
+static void trace_and_difftest() {
+#ifdef CONFIG_ITRACE_COND
+  if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
+#endif
+  if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(logbuf)); }
+//		IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+//		IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
 
 void cpu_exec(int n) {
+	g_print_step = (n < MAX_INST_TO_PRINT);
 	while(RUNNING && n != 0) {
 		single_cycle();
+		itrace();
+		trace_and_difftest();
 		n--;
   }
 }
@@ -77,17 +112,17 @@ int main(int argc, char *argv[]) {
 	RUNNING = true;
 
 /***code***/
-/***load inst***/
-	init_monitor(argc, argv);
+	init_monitor(argc, argv);//load inst
 //测试inst  std::cout<<std::hex<<pmem_read(0x80000000)<<"\n";	
 	reset(2);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
 #else
-  /* Receive commands from user. */
+/* Receive commands from user. */
   sdb_mainloop();
 #endif
 	dump_wave();
+
 /***close**/
 	tfp->close();
 	delete contextp;
