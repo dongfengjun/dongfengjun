@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <inttypes.h>
 #include "Vtop_ysyx_24110017.h"  //.v被verilator编译成V.h
 #include "verilated.h"  //verialtor官方库
 #include "verilated_vcd_c.h"	//生成.vcd文件
