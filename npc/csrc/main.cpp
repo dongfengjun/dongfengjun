@@ -79,7 +79,7 @@ static void itrace(){
 	uint8_t codes[4] = {0x17, 0x91, 0x0, 0x0};
 	uint8_t *code = codes;
 ***/
-	uint32_t pc = 0x80000004;
+	uint32_t pc = top->pc;
   uint8_t codes[4] = {0x17, 0x91, 0x0, 0x0};
   uint8_t *code = codes;
 
