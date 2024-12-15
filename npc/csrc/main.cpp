@@ -77,12 +77,12 @@ static void itrace(){
 	uint8_t codes[4] = {0x17, 0x91, 0x0, 0x0};
 	uint8_t *code = codes;
 	uint32_t inst = 0x13040000;
-/***
+
 #ifndef CONFIG_ISA_loongarch32r
 	disassemble(p, logbuf + sizeof(logbuf) - p, pc, (uint8_t *)code, 4);
 	p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
-***/
+
 }
 #endif
 

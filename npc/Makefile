@@ -4,7 +4,7 @@ VSRCS = $(shell find ./vsrc -name "*.v")
 CSRCS = $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 INC_PATH = ./csrc/include
 
-LDFLAGS += $(shell llvm-config --ldflags)
+LDFLAGS += $(shell llvm-config --ldflags) -fPIE
 LIBS += $(shell llvm-config --libs)
 
 VERILATOR = verilator
