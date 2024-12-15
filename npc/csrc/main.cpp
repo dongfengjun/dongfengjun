@@ -76,7 +76,7 @@ static void itrace(){
 	p += 1;
 
 	uint32_t pc = 0x80000004;
-	uint8_t codes[4] = {0x17, 0x91, 0x0, 0x0};
+	uint8_t codes[4] = {0x0, 0x0, 0x91, 0x17};
 	uint8_t *code = codes;
 	uint32_t inst = 0x13040000;
 
