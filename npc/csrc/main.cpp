@@ -74,11 +74,14 @@ static void itrace(){
   }
 	memset(p, ' ', 1);
 	p += 1;
-
+/***
 	uint32_t pc = 0x80000004;
 	uint8_t codes[4] = {0x17, 0x91, 0x0, 0x0};
 	uint8_t *code = codes;
-	uint32_t inst = 0x13040000;
+***/
+	uint32_t pc = 0x80000004;
+  uint8_t codes[4] = {0x17, 0x91, 0x0, 0x0};
+  uint8_t *code = codes;
 
 #ifndef CONFIG_ISA_loongarch32r
 	disassemble(p, logbuf + sizeof(logbuf) - p, pc, (uint8_t *)code, 4);
