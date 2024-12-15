@@ -1,6 +1,10 @@
 #include "../include/common.h"
 #include <getopt.h>
 
+#ifdef CONFIG_ITRACE
+extern "C" void init_disasm(const char *triple);
+#endif
+
 static void welcome() {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
   IFDEF(CONFIG_TRACE, Log("If trace is enabled, a log file will be generated "
@@ -77,7 +81,12 @@ void init_monitor(int argc, char *argv[]) {
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
 
-  /* Initialize the simple debugger. */
+  /* Itrace */
+	#ifdef CONFIG_ITRACE
+		init_disasm("riscv32-pc-linux-gnu");
+	#endif
+
+	/* Initialize the simple debugger. */
   init_sdb();
 
 	/* Display welcome message. */
