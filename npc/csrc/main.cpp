@@ -80,6 +80,7 @@ static void itrace(){
 
 #ifndef CONFIG_ISA_loongarch32r
 	disassemble(p, logbuf + sizeof(logbuf) - p, pc, (uint8_t *)code, 4);
+#else
 	p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
 
