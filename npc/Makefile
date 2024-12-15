@@ -25,7 +25,7 @@ sim: $(CSRCS) $(VSRCS)
 	@echo "Write this Makefile by your self."
 	@rm -rf ./build/obj_dir
 	mkdir -p build
-	@$(VERILATOR)  $(VERILATOR_FLAGS) --Mdir $(OBJ_DIR) --exe $^
+	@$(VERILATOR)  $(VERILATOR_FLAGS) --Mdir ./obj_dir --exe $^
 	mv obj_dir $(BUILD)
 
 wave:
