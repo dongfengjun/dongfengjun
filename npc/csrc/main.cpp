@@ -61,10 +61,10 @@ IFDEF(CONFIG_ITRACE, char logbuf[128]);
 static void itrace(){
 	uint8_t insts[4];
 	uint8_t *insts_ptr = insts;
-	insts[0] = top->inst & 0xFF;
-  insts[1] = (top->inst >>  8) & 0xFF;
-  insts[2] = (top->inst >> 16) & 0xFF;
-	insts[3] = (top->inst >> 24) & 0xFF;
+	insts[0] = (top->inst >> 24) & 0xFF;
+  insts[1] = (top->inst >> 16) & 0xFF;
+  insts[2] = (top->inst >>  8) & 0xFF;
+	insts[3] =  top->inst        & 0xFF;
   char *p = logbuf;
   p += snprintf(p, sizeof(logbuf), FMT_WORD ":", top->pc);
   int ilen = 4;
@@ -75,13 +75,8 @@ static void itrace(){
 	memset(p, ' ', 1);
 	p += 1;
 
-	uint32_t pc = 0x80000004;
-	uint8_t codes[4] = {0x0, 0x0, 0x91, 0x17};
-	uint8_t *code = codes;
-	uint32_t inst = 0x13040000;
-
 #ifndef CONFIG_ISA_loongarch32r
-	disassemble(p, logbuf + sizeof(logbuf) - p, pc, (uint8_t *)code, 4);
+	disassemble(p, logbuf + sizeof(logbuf) - p, top->pc, (uint8_t *)insts_ptr, 4);
 #else
 	p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
