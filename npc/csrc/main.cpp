@@ -59,6 +59,7 @@ void assert_fail_msg() {
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
 #ifdef CONFIG_ITRACE
 static void itrace(){
+	uint32_t pc = top->pc;
 	uint8_t insts[4];
 	uint8_t *insts_ptr = insts;
 	insts[0] = (top->inst >> 24) & 0xFF;
@@ -76,7 +77,7 @@ static void itrace(){
 	p += 1;
 
 #ifndef CONFIG_ISA_loongarch32r
-	disassemble(p, logbuf + sizeof(logbuf) - p, top->pc, (uint8_t *)&insts, 4);
+	disassemble(p, logbuf + sizeof(logbuf) - p, pc, (uint8_t *)&insts, 4);
 #else
 	p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
