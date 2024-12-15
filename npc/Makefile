@@ -33,3 +33,6 @@ wave:
 
 clean:
 	rm -rf ./build
+
+.PHONY: clean run sim wave
+include ../Makefile
