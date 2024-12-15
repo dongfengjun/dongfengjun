@@ -81,11 +81,14 @@ static void exec_once(Decode *s, vaddr_t pc) {
   p += space_len;
 
 #ifndef CONFIG_ISA_loongarch32r
-  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
-      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
-	disassemble(p2, buf + sizeof(buf) - p2,
-			MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen2);
+  uint32_t pc1 = 0x80000000;
+  uint8_t codes[4] = {0x13, 0x4, 0x0, 0x0};
+	void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  disassemble(p, s->logbuf + sizeof(s->logbuf) - p, pc1, (uint8_t *)&codes, 4);
+	//disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
+    //  MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+//	disassemble(p2, buf + sizeof(buf) - p2,
+	//		MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen2);
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif

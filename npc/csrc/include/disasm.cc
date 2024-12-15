@@ -99,8 +99,7 @@ extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int
 	printf("arr:%x %x %x %x\n", arr[0], arr[1], arr[2], arr[3]);
 	printf("size:%d\n", size);
 	printf("pc:%lu\n", pc);
-	printf("code:%x\n", *code);
-  gDisassembler->getInstruction(inst, dummy_size, arr, pc, llvm::nulls());
+	gDisassembler->getInstruction(inst, dummy_size, arr, pc, llvm::nulls());
 	
   std::string s;
   raw_string_ostream os(s);
