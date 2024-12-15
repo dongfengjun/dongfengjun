@@ -73,7 +73,7 @@ static void itrace(){
     p += snprintf(p, 4, " %02x", insts[i]);
   }
 	memset(p, ' ', 1);
-	p += space_len;
+	p += 1;
 
 	uint32_t pc = 0x80000004;
 	uint8_t codes[4] = {0x17, 0x91, 0x0, 0x0};
