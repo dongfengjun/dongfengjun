@@ -2,30 +2,33 @@
 #include <getopt.h>
 
 static void welcome() {
-  printf("Welcome to riscv32e-NPC!\n");
+  Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  IFDEF(CONFIG_TRACE, Log("If trace is enabled, a log file will be generated "
+        "to record the trace. This may lead to a large log file. "
+        "If it is not necessary, you can disable it in menuconfig"));
+  Log("Build time: %s, %s", __TIME__, __DATE__);
+  printf("Welcome to %s-NPC!\n", ANSI_FMT("riscv32e", ANSI_FG_YELLOW ANSI_BG_RED));
   printf("For help, type \"help\"\n");
 }
 
 static char *img_file = NULL;
 static char *diff_so_file = NULL;
-
-extern uint8_t mem[CONFIG_MSIZE];//mem
+extern uint8_t mem[CONFIG_MSIZE];//IM
 
 static long load_img() {
   if(img_file == NULL) {
-    printf("No image is given. Use the default build-in image.\n");
-    return 4096; // built-in image size
+    Log("No image is given. Use the default build-in image.");
+		return 4096; // built-in image size
   }
 	FILE *fp = fopen(img_file, "rb");
   if(fp == NULL) {
-		printf("Can not open '%s'\n", img_file);
-		assert(0);
+		Assert(fp, "Can not open '%s'", img_file);
 	}
 
   fseek(fp, 0, SEEK_END);
   long size = ftell(fp);
 
-  printf("The image is %s, size = %ld\n", img_file, size);
+	Log("The image is %s, size = %ld", img_file, size);
   fseek(fp, 0, SEEK_SET);
   int ret = fread(mem, size, 1, fp);
 

@@ -21,6 +21,7 @@ typedef uint16_t ioaddr_t;
 //Config
 //#define CONFIG_TARGET_AM 0//AM
 //#define CONFIG_DEVICE 0//DEVICE
+#define CONFIG_ITRACE 1
 #define CONFIG_MBASE 0x80000000//IM
 #define CONFIG_MSIZE 0x8000000
 #define CONFIG_MEM_RANDOM 1
@@ -48,5 +49,8 @@ void init_monitor(int argc, char *argv[]);
 void init_sdb();
 void sdb_mainloop();
 void sdb_set_batch_mode();
+
+
+extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
 #endif

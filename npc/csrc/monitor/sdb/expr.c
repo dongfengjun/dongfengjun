@@ -281,9 +281,7 @@ word_t expr(char *e, bool *success) {
 				s[8]='\0';
 				paddr_t addr = 0;
 				sscanf(s, "%x", &addr);
-				//word_t value = *(uint32_t *)guest_to_host(addr);
-				word_t value = 0;//DPI-C
-				printf("* expr wait DPI-C\n");
+				word_t value = pmem_read(addr);
 				sprintf(tokens[i+1].str, "%u", value);
 			}
 			else	printf("EXPR Invalid.\n");
