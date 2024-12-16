@@ -84,7 +84,7 @@ static void itrace(){
 	irp += 1;
 	disassemble(p, logbuf + sizeof(logbuf) - p, top->pc, (uint8_t *)&insts, 4);
 	disassemble(irp, logbuf + sizeof(logbuf) - irp, top->pc, (uint8_t *)&insts, 4);
-	iringbuf_push(rp, irngbuf);
+	iringbuf_push(rp, &iringbuf);
 }
 #endif
 
