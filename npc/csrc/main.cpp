@@ -76,7 +76,8 @@ static void itrace(){
 	p += 1;
 
 	uint32_t pc = top->pc;
-//  uint8_t codes[4] = {0x17, 0x91, 0x0, 0x0};
+  uint8_t codes[4] = {0x17, 0x91, 0x0, 0x0};
+	printf("%x %x %x %x\n",codes[3],codes[2],codes[1],codes[0]);
   uint8_t *code = insts;
 
 #ifndef CONFIG_ISA_loongarch32r
