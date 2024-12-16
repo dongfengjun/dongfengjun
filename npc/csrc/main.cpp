@@ -53,6 +53,9 @@ static void reset(int n) {
 static bool g_print_step = false;
 void assert_fail_msg() {
   isa_regs_display();
+#ifdef CONFIG_ITRACE
+	iringbuf_push(&rp, iringbuf);
+#endif
   //statistic();
 }
 
