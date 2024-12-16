@@ -12,7 +12,6 @@
 VerilatedContext* contextp = NULL;	//verilator指针
 Vtop_ysyx_24110017* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
-IRINGBUF rp;
 /***DPI-C***/
 word_t gpr_regs_display(int raddr) {
   extern int gpr_reg_display(int addr);
@@ -50,6 +49,7 @@ static void reset(int n) {
 
 /***main***/
 #define MAX_INST_TO_PRINT 10//puts inst
+IFDEF(CONFIG_ITRACE, IRINGBUF rp);
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
 IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
 static bool g_print_step = false;
