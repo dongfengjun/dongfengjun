@@ -85,7 +85,7 @@ void init_monitor(int argc, char *argv[]) {
     init_disasm("riscv32-pc-linux-gnu");                                    
 
 		IRINGBUF *rp;
-		iringbuf_init(rq);
+		iringbuf_init(rp);
 	#endif
 
 	/* Display welcome message. */
