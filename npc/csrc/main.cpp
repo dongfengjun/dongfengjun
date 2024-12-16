@@ -75,7 +75,7 @@ static void itrace(){
   }
 	memset(p, ' ', 1);
 	p += 1;
-	disassemble(p, logbuf + sizeof(logbuf) - p, pc, (uint8_t *)&insts, 4);
+	disassemble(p, logbuf + sizeof(logbuf) - p, top->pc, (uint8_t *)&insts, 4);
 }
 #endif
 
