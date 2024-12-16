@@ -82,7 +82,7 @@ static void itrace(){
 	irp += 1;
 	disassemble(p, logbuf + sizeof(logbuf) - p, top->pc, (uint8_t *)&insts, 4);
 	disassemble(irp, logbuf + sizeof(logbuf) - irp, top->pc, (uint8_t *)&insts, 4);
-	irp += snprintf(irp, 3, "%s", " \n");
+	//irp += snprintf(irp, 3, "%s", " \n");
 	iringbuf_push(iringbuf);
 }
 #endif
