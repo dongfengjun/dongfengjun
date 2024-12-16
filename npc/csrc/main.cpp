@@ -50,6 +50,8 @@ static void reset(int n) {
 
 /***main***/
 #define MAX_INST_TO_PRINT 10//puts inst
+IFDEF(CONFIG_ITRACE, char logbuf[128]);
+IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
 static bool g_print_step = false;
 void assert_fail_msg() {
   isa_regs_display();
@@ -59,8 +61,6 @@ void assert_fail_msg() {
   //statistic();
 }
 
-IFDEF(CONFIG_ITRACE, char logbuf[128]);
-IFDEF(CONFIG_ITRACE, char iringbuf[128]);
 #ifdef CONFIG_ITRACE
 static void itrace(){
 	uint8_t insts[4];
