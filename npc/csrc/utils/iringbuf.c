@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "iringbuf.h" 
+#include "./../include/iringbuf.h" 
 #define IRB_SIZE 500
 #define iringbuf_is_empty(q) (q->head == q->tail)
 #define iringbuf_is_full(q) (((q->tail+1)%IRB_SIZE) == q->head )
