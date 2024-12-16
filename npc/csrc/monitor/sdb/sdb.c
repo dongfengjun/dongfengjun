@@ -18,6 +18,7 @@
 #include "sdb.h"
 #include "./../../include/common.h"
 
+extern bool RUNNING;
 static int is_batch_mode = false;
 
 void init_regex();
@@ -45,6 +46,7 @@ static char *line_read = NULL;
 }
 
 static int cmd_c(char *args) {
+	RUNNING = true;
   cpu_exec(-1);
   return 0;
 }
@@ -158,6 +160,7 @@ void init_sdb() {
 }
 
 static int cmd_si(char *args) {
+	RUNNING = true;
   if (args == NULL) {
 		 cpu_exec(1);
 	}
