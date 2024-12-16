@@ -15,12 +15,6 @@ int iringbuf_init(IRINGBUF * iringp) {
    return 0;
 }
  
-int iringbuf_free(IRINGBUF * iringp)
-{
-	free(iringp->str);
-  return 0;
-}
- 
 int iringbuf_push(IRINGBUF * iringp, char *data) {
 	int len = strlen(data);
 	for(int i = 0; i < len; i ++) {

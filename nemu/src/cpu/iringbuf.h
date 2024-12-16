@@ -12,7 +12,6 @@ typedef struct {
 }IRINGBUF;
 
 int iringbuf_init(IRINGBUF * iringp);
-int iringbuf_free(IRINGBUF * iringp);
 int iringbuf_push(IRINGBUF * iringp, char *data);
 void iringbuf_display(IRINGBUF * iringp);
 

@@ -120,7 +120,6 @@ int main(int argc, char *argv[]) {
 	dump_wave();
 
 /***close**/
-	free_memory();//IM
 	tfp->close();
 	delete contextp;
 	return 0;
