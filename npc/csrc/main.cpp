@@ -59,7 +59,6 @@ void assert_fail_msg() {
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
 #ifdef CONFIG_ITRACE
 static void itrace(){
-  uint32_t pc = top->pc;
 	uint8_t insts[4];
   insts[0] = top->inst & 0xFF;
   insts[1] = (top->inst >>  8) & 0xFF;
@@ -121,6 +120,7 @@ int main(int argc, char *argv[]) {
 	dump_wave();
 
 /***close**/
+	free_memory();//IM
 	tfp->close();
 	delete contextp;
 	return 0;
