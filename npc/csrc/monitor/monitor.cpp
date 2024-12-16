@@ -11,6 +11,7 @@ static void welcome() {
   printf("For help, type \"help\"\n");
 }
 
+static char *log_file = NULL;
 static char *img_file = NULL;
 static char *diff_so_file = NULL;
 extern uint8_t mem[CONFIG_MSIZE];//IM
@@ -42,20 +43,23 @@ static long load_img() {
 static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"batch"    , no_argument      , NULL, 'b'},
+		{"log"			, required_argument, NULL, 'L'},
 		{"img"      , required_argument, NULL, 'i'},
     {"diff"     , required_argument, NULL, 'd'},
     {"help"     , no_argument      , NULL, 'h'},
     {0          , 0                , NULL,  0 },
   };
   int o;
-  while ( (o = getopt_long(argc, argv, "-bhd:i:", table, NULL)) != -1) {
+  while ( (o = getopt_long(argc, argv, "-bhd:l:i:", table, NULL)) != -1) {
     switch (o) {
 			case 'b': sdb_set_batch_mode(); break;
+			case 'l': log_file = optarg; break;
       case 'i': img_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
 				printf("\t-b,--batch              run with batch mode\n");
+				printf("\t-l,--log=FILE						output log to FILE\n");
         printf("\t-i,--img=FILE           load img file\n");
         printf("\t-d,--diff=REF_SO        run DiffTest with reference REF_SO\n");
         printf("\n");
@@ -70,6 +74,9 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Parse arguments. */
   parse_args(argc, argv);
+
+	/* Open the log file. */
+  init_log(log_file);
 
 	/* Initialize memory. */
   init_mem();

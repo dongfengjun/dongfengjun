@@ -21,8 +21,11 @@ typedef uint16_t ioaddr_t;
 //Config
 //#define CONFIG_TARGET_AM 0//AM
 //#define CONFIG_DEVICE 0//DEVICE
-#define CONFIG_ITRACE 1
-#define CONFIG_WATCHPOINT 1
+#define CONFIG_TRACE 1
+#ifdef CONFIG_TRACE
+	#define CONFIG_ITRACE 1
+	#define CONFIG_WATCHPOINT 1
+#endif
 
 #define CONFIG_MBASE 0x80000000//IM
 #define CONFIG_MSIZE 0x8000000
