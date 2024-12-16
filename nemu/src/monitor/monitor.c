@@ -23,6 +23,7 @@ void init_difftest(char *ref_so_file, long img_size, int port);
 void init_device();
 void init_sdb();
 void init_disasm(const char *triple);
+void iringbuf_init();
 
 static void welcome() {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
@@ -134,8 +135,7 @@ void init_monitor(int argc, char *argv[]) {
   init_sdb();
 
 	/* Initialize the IRingBuffer. */
-	iringbuf_init(&rq);
-//	iringbuf_display(&rq);	//check NULL
+	iringbuf_init();
 
 #ifndef CONFIG_ISA_loongarch32r
   IFDEF(CONFIG_ITRACE, init_disasm(

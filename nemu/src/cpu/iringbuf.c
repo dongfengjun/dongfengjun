@@ -1,42 +1,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "iringbuf.h" 
 #define IRB_SIZE 500
-#define iringbuf_is_empty(q) (q->head == q->tail)
-#define iringbuf_is_full(q) (((q->tail+1)%IRB_SIZE) == q->head )
+#define iringbuf_is_empty() (head == tail)
+#define iringbuf_is_full() (((tail+1)%IRB_SIZE) == head)
 
 char strarray[IRB_SIZE]={0};
+unsigned head;
+unsigned tail;
 
-int iringbuf_init(IRINGBUF * iringp) {
-	 iringp->str = strarray;
-   iringp->head = 0;
-   iringp->tail = 0;
-   return 0;
+
+void iringbuf_init() {
+   head = 0;
+   tail = 0;
 }
  
-int iringbuf_push(IRINGBUF * iringp, char *data) {
+int iringbuf_push(char *data) {
 	int len = strlen(data);
 	for(int i = 0; i < len; i ++) {
-		iringp->str[iringp->tail] = data[i];
-		iringp->tail = (iringp->tail + 1) % IRB_SIZE;
-    if(iringbuf_is_full(iringp)) {
-			iringp->head = (iringp->head + 1) % IRB_SIZE;
+		strarray[tail] = data[i];
+		tail = (tail + 1) % IRB_SIZE;
+    if(iringbuf_is_full()) {
+			head = (head + 1) % IRB_SIZE;
     }
 	}
     return 0;
 }
  
-void iringbuf_display(IRINGBUF * iringp) {
-  unsigned head = iringp->head;
-  unsigned tail = iringp->tail;
-	char *str = iringp->str;
-  if(iringbuf_is_empty(iringp)) {
+void iringbuf_display() {
+  if(iringbuf_is_empty()) {
     printf("iringbuf is empty.\n");
     return;
   }
   while(head != tail){
-    printf("%c", str[head]); 
+    printf("%c", strarray[head]); 
 		head = (head + 1)%(IRB_SIZE);
   }
   printf("\n");

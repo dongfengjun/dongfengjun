@@ -17,7 +17,6 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
-#include "iringbuf.h"
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -33,6 +32,8 @@ static bool g_print_step = false;
 
 void device_update();
 void checkWatchPoint();
+int iringbuf_push(char *data);
+void iringbuf_display();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
@@ -90,9 +91,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
 #endif
-	char tmp[] = {" \n"};
-	strcat(buf, tmp);
-	iringbuf_push(&rq, buf);
+	strncat(buf, " \n", 3);
+	iringbuf_push(buf);
 }
 
 #ifdef CONFIG_MTRACE
@@ -136,7 +136,7 @@ static void statistic() {
 void assert_fail_msg() {
   isa_reg_display();
   statistic();
-	iringbuf_display(&rq);
+	iringbuf_display();
 }
 
 /* Simulate how the CPU works. */
@@ -165,7 +165,7 @@ void cpu_exec(uint64_t n) {
            (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
             ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
           nemu_state.halt_pc);
-			if(nemu_state.halt_ret != 0) iringbuf_display(&rq);//IRingBuff
+			if(nemu_state.halt_ret != 0) iringbuf_display();//IRingBuff
       // fall through
     case NEMU_QUIT: statistic();
   }

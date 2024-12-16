@@ -14,14 +14,12 @@
 ***************************************************************************************/
 
 #include <common.h>
-#include "cpu/iringbuf.h"
 
 void init_monitor(int, char *[]);
 void am_init_monitor();
 void engine_start();
 int is_exit_status_bad();
 word_t expr(char *e, bool *success);
-IRINGBUF rq;//iringbuffer 全局变量
 
 int main(int argc, char *argv[]) {
   /* Initialize the monitor. */
