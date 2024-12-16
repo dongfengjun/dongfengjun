@@ -7,7 +7,6 @@
 #define iringbuf_is_full(q) (((q->tail+1)%IRB_SIZE) == q->head )
 
 char strarray[IRB_SIZE]={0};
-IRINGBUF *rp;
 
 int iringbuf_init(IRINGBUF * iringp) {
 	 iringp->str = strarray;
