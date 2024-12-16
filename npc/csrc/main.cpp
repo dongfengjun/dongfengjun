@@ -59,9 +59,8 @@ void assert_fail_msg() {
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
 IFDEF(CONFIG_ITRACE, char iringbuf[128]);
 #ifdef CONFIG_ITRACE
-extern IRINGBUF *rp;
-
 static void itrace(){
+	extern IRINGBUF *rp;
 	uint8_t insts[4];
   insts[0] = top->inst & 0xFF;
   insts[1] = (top->inst >>  8) & 0xFF;
