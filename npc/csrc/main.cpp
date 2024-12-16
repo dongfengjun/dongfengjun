@@ -129,7 +129,6 @@ int main(int argc, char *argv[]) {
 	dump_wave();
 
 /***close**/
-	iringbuf_display();
 	tfp->close();
 	delete contextp;
 	return 0;
