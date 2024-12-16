@@ -64,7 +64,7 @@ static void itrace(){
   insts[2] = (top->inst >>  8) & 0xFF;
   insts[1] = (top->inst >> 16) & 0xFF;
 	insts[0] = (top->inst >> 24) & 0xFF;
-	printf("%x%x%x%x\n",insts[3],insts[2],insts[1],insts[0]);
+	printf("%x %x %x %x\n",insts[3],insts[2],insts[1],insts[0]);
   char *p = logbuf;
   p += snprintf(p, sizeof(logbuf), FMT_WORD ":", top->pc);
   int ilen = 4;
