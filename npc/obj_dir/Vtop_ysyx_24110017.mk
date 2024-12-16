@@ -53,6 +53,7 @@ VM_USER_CLASSES = \
 	sdb \
 	watchpoint \
 	disasm \
+	iringbuf \
 	log \
 
 # User .cpp directories (from .cpp's on Verilator command line)
@@ -88,6 +89,8 @@ sdb.o: csrc/monitor/sdb/sdb.c
 watchpoint.o: csrc/monitor/sdb/watchpoint.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 disasm.o: csrc/utils/disasm.cc
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+iringbuf.o: csrc/utils/iringbuf.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 log.o: csrc/utils/log.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
