@@ -12,7 +12,7 @@
 VerilatedContext* contextp = NULL;	//verilator指针
 Vtop_ysyx_24110017* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
-IRINGBUF *rp;
+IRINGBUF rp;
 /***DPI-C***/
 word_t gpr_regs_display(int raddr) {
   extern int gpr_reg_display(int addr);
@@ -82,7 +82,7 @@ static void itrace(){
 	irp += 1;
 	disassemble(p, logbuf + sizeof(logbuf) - p, top->pc, (uint8_t *)&insts, 4);
 	disassemble(irp, logbuf + sizeof(logbuf) - irp, top->pc, (uint8_t *)&insts, 4);
-	iringbuf_push(rp, iringbuf);
+	iringbuf_push(&rp, iringbuf);
 }
 #endif
 
@@ -128,7 +128,7 @@ int main(int argc, char *argv[]) {
 	dump_wave();
 
 /***close**/
-	iringbuf_display(rp);
+	iringbuf_display(&rp);
 	tfp->close();
 	delete contextp;
 	return 0;
