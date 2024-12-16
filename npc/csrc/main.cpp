@@ -57,7 +57,7 @@ void assert_fail_msg() {
 }
 
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
-IFDEF(CONFIG_ITRACE, char iringbuf[1024]);
+IFDEF(CONFIG_ITRACE, char iringbuf[128]);
 #ifdef CONFIG_ITRACE
 static void itrace(){
 	uint8_t insts[4];
@@ -82,6 +82,7 @@ static void itrace(){
 	irp += 1;
 	disassemble(p, logbuf + sizeof(logbuf) - p, top->pc, (uint8_t *)&insts, 4);
 	disassemble(irp, logbuf + sizeof(logbuf) - irp, top->pc, (uint8_t *)&insts, 4);
+	irp += snprintf(irp, 1, " %s", '\n');
 	iringbuf_push(&rp, iringbuf);
 }
 #endif
