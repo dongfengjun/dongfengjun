@@ -84,7 +84,7 @@ void init_monitor(int argc, char *argv[]) {
   #ifdef CONFIG_ITRACE
     init_disasm("riscv32-pc-linux-gnu");                                    
 
-		IRINGBUF *rp;
+		extern IRINGBUF *rp;
 		iringbuf_init(rp);
 	#endif
 

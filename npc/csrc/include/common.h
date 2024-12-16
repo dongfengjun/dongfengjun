@@ -9,6 +9,7 @@
 #include "debug.h"//Assert\Log
 #include "utils.h"//Log
 #include "iringbuf.h"
+IRINGBUF *rp;
 
 //Macro definition
 typedef MUXDEF(CONFIG_ISA64, uint64_t, uint32_t) word_t;
