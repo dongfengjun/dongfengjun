@@ -2,7 +2,7 @@
 #include <getopt.h>
 
 #ifdef CONFIG_ITRACE
-extern "C" void init_disasm(const char *triple);
+//extern "C" void init_disasm(const char *triple);
 #endif
 
 static void welcome() {
