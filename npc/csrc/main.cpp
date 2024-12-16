@@ -107,6 +107,7 @@ void cpu_exec(int n) {
 }
 
 int main(int argc, char *argv[]) {
+	extern IRINGBUF *rp;
 /***inst***/
 	contextp = new VerilatedContext;  //verilator指针
   top = new Vtop_ysyx_24110017{contextp};  //实例化top块
