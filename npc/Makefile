@@ -16,7 +16,7 @@ VERILATOR_FLAGS += -LDFLAGS -lreadline
 
 LOG ?= $(BUILD)/npc-log.txt
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
-#NPC_ARGS += --log=$(LOG)
+NPC_ARGS += --log=$(LOG)
 NPC_ARGS += --img=$(IMG)
 
 run: sim
