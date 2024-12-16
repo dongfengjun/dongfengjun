@@ -14,7 +14,7 @@ VERILATOR_FLAGS += -CFLAGS -g
 VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
 VERILATOR_FLAGS += -LDFLAGS -lreadline
 
-LOG ?= --log=$(BUILD)/npc-log.txt
+LOG ?= $(BUILD)/npc-log.txt
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 NPC_ARGS = --log=$(LOG) --img=$(IMG)
 
