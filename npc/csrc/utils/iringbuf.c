@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "./../include/iringbuf.h" 
 #define IRB_SIZE 500
 #define iringbuf_is_empty() (head == tail)
-#define iringbuf_is_full(q) (((tail+1)%IRB_SIZE) == head )
+#define iringbuf_is_full() (((tail+1)%IRB_SIZE) == head )
 
 char strarray[IRB_SIZE]={0};
   unsigned head;

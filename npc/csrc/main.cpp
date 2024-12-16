@@ -49,7 +49,6 @@ static void reset(int n) {
 
 /***main***/
 #define MAX_INST_TO_PRINT 10//puts inst
-//IFDEF(CONFIG_ITRACE, IRINGBUF rp);
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
 IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
 static bool g_print_step = false;

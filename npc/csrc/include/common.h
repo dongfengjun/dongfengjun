@@ -8,7 +8,6 @@
 #include "macro.h"//宏定义函数
 #include "debug.h"//Assert\Log
 #include "utils.h"//Log
-//#include "iringbuf.h"
 
 //Macro definition
 typedef MUXDEF(CONFIG_ISA64, uint64_t, uint32_t) word_t;
@@ -54,7 +53,7 @@ void sdb_mainloop();
 void sdb_set_batch_mode();
 void checkWatchPoint();
 
-//itrace
+//itrace/iringbuf
 extern "C" void init_disasm(const char *triple);
 extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 int iringbuf_init();
