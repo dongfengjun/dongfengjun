@@ -60,7 +60,6 @@ IFDEF(CONFIG_ITRACE, char logbuf[128]);
 IFDEF(CONFIG_ITRACE, char iringbuf[128]);
 #ifdef CONFIG_ITRACE
 static void itrace(){
-	extern IRINGBUF *rp;
 	uint8_t insts[4];
   insts[0] = top->inst & 0xFF;
   insts[1] = (top->inst >>  8) & 0xFF;
@@ -107,7 +106,6 @@ void cpu_exec(int n) {
 }
 
 int main(int argc, char *argv[]) {
-	extern IRINGBUF *rp;
 /***inst***/
 	contextp = new VerilatedContext;  //verilator指针
   top = new Vtop_ysyx_24110017{contextp};  //实例化top块
