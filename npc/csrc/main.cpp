@@ -96,10 +96,12 @@ static void trace_and_difftest() {
 		IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
 
+uint64_t g_nr_guest_inst = 0;
 void cpu_exec(int n) {
 	g_print_step = (n < MAX_INST_TO_PRINT);
 	while(RUNNING && n != 0) {
 		single_cycle();
+		g_nr_guest_inst++;
 		itrace();
 		trace_and_difftest();
 		n--;
