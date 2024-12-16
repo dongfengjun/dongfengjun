@@ -56,6 +56,10 @@ void sdb_mainloop();
 void sdb_set_batch_mode();
 void checkWatchPoint();
 
+/***utils**/
+//log.c
+void init_log(const char *log_file);
+bool log_enable();
 //itrace/iringbuf
 extern "C" void init_disasm(const char *triple);
 extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
