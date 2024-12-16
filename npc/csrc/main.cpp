@@ -57,7 +57,10 @@ void assert_fail_msg() {
 }
 
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
+IFDEF(CONFIG_ITRACE, char iringbuf[128]);
 #ifdef CONFIG_ITRACE
+extern IRINGBUF *rp;
+
 static void itrace(){
 	uint8_t insts[4];
   insts[0] = top->inst & 0xFF;
@@ -66,16 +69,23 @@ static void itrace(){
   insts[3] = (top->inst >> 24) & 0xFF;
 
   char *p = logbuf;
+	char *irp = iringbuf;
   p += snprintf(p, sizeof(logbuf), FMT_WORD ":", top->pc);
+	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", top->pc);
   int ilen = 4;
   int i;
   for (i = ilen - 1; i >= 0; i --) {
     p += snprintf(p, 4, " %02x", insts[i]);
+		irp += snprintf(irp, 4, " %02x", insts[i]);
   }
 	memset(p, ' ', 1);
+	memset(irp, ' ', 1);
 	p += 1;
+	irp += 1;
 	disassemble(p, logbuf + sizeof(logbuf) - p, top->pc, (uint8_t *)&insts, 4);
+	disassemble(irp, logbuf + sizeof(logbuf) - irp, top->pc, (uint8_t *)&insts, 4);
 }
+	iringbuf_push(rp, &irngbuf);
 #endif
 
 static void trace_and_difftest() {
@@ -120,6 +130,7 @@ int main(int argc, char *argv[]) {
 	dump_wave();
 
 /***close**/
+	iringbuf_display(rp);
 	tfp->close();
 	delete contextp;
 	return 0;
