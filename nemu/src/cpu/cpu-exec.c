@@ -114,7 +114,7 @@ static void execute(uint64_t n) {
     IFDEF(CONFIG_DEVICE, device_update());
   }
 
-//  iringbuf_display(&rq);  //  IRFtrace display
+  iringbuf_display();  //  IRFtrace display
 	#ifdef CONFIG_MTRACE
 		fprintf(mtracelog, "%s", buf);	//Mtrace log
 		fclose(mtracelog);
