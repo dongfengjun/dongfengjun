@@ -49,50 +49,41 @@ static void exec_once(Decode *s, vaddr_t pc) {
   s->snpc = pc;
   isa_exec_once(s);
   cpu.pc = s->dnpc;
-	/***iringbuf***/
-	char buf[128] = {0};
-	char *p2 = buf;
-	p2 += snprintf(p2, sizeof(buf), FMT_WORD ":", s->pc);
-  int ilen2 = s->snpc - s->pc;
-  int j;
-  uint8_t *inst2 = (uint8_t *)&s->isa.inst.val;
-  for (j = ilen2 - 1; j >= 0; j --) {
-    p2 += snprintf(p2, 4, " %02x", inst2[j]);
-  }
-  int ilen_max2 = MUXDEF(CONFIG_ISA_x86, 8, 4);
-  int space_len2 = ilen_max2 - ilen2;
-  if (space_len2 < 0) space_len2 = 0;
-  space_len2 = space_len2 * 3 + 1;
-  memset(p2, ' ', space_len2);
-  p2 += space_len2;
 #ifdef CONFIG_ITRACE
+	char iringbuf[128];
   char *p = s->logbuf;
+	char *irp = iringbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
+	irp += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
   int ilen = s->snpc - s->pc;
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
   for (i = ilen - 1; i >= 0; i --) {
     p += snprintf(p, 4, " %02x", inst[i]);
+		irp += snprintf(irp, 4, " %02x", inst[i]);
   }
   int ilen_max = MUXDEF(CONFIG_ISA_x86, 8, 4);
   int space_len = ilen_max - ilen;
   if (space_len < 0) space_len = 0;
   space_len = space_len * 3 + 1;
   memset(p, ' ', space_len);
+	memset(irp, ' ', space_len);
   p += space_len;
+	irp += space_len;
 
 #ifndef CONFIG_ISA_loongarch32r
 	void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 	disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
 		  MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
-	disassemble(p2, buf + sizeof(buf) - p2,
-			MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen2);
+	disassemble(irp, iringbuf + sizeof(iringbuf) - irp,
+			MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+	strncat(iringbuf, " \n", 3);
+  iringbuf_push(iringbuf);
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
+	iringbuf[0] = '\0';
 #endif
 #endif
-	strncat(buf, " \n", 3);
-	iringbuf_push(buf);
 }
 
 #ifdef CONFIG_MTRACE
@@ -114,7 +105,7 @@ static void execute(uint64_t n) {
     IFDEF(CONFIG_DEVICE, device_update());
   }
 
-  iringbuf_display();  //  IRFtrace display
+//  iringbuf_display();  //  IRFtrace display
 	#ifdef CONFIG_MTRACE
 		fprintf(mtracelog, "%s", buf);	//Mtrace log
 		fclose(mtracelog);
