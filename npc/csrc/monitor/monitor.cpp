@@ -81,13 +81,13 @@ void init_monitor(int argc, char *argv[]) {
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
 
-  /* Itrace */
-	#ifdef CONFIG_ITRACE
-		init_disasm("riscv32-pc-linux-gnu");
-	#endif
-
 	/* Initialize the simple debugger. */
   init_sdb();
+  
+	/* Itrace */
+  #ifdef CONFIG_ITRACE
+    init_disasm("riscv32-pc-linux-gnu");                                    
+  #endif
 
 	/* Display welcome message. */
   welcome();
