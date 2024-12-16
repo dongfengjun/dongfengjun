@@ -22,11 +22,14 @@ typedef uint16_t ioaddr_t;
 //#define CONFIG_TARGET_AM 0//AM
 //#define CONFIG_DEVICE 0//DEVICE
 #define CONFIG_ITRACE 1
+#define CONFIG_WATCHPOINT 1
+
 #define CONFIG_MBASE 0x80000000//IM
 #define CONFIG_MSIZE 0x8000000
 #define CONFIG_MEM_RANDOM 1
 #define PMEM_LEFT ((uint32_t)CONFIG_MBASE)
 #define PMEM_RIGHT ((uint32_t)CONFIG_MBASE + CONFIG_MSIZE - 1)
+
 
 //main
 void cpu_exec(int n);
