@@ -55,9 +55,7 @@ IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
 static bool g_print_step = false;
 void assert_fail_msg() {
   isa_regs_display();
-#ifdef CONFIG_ITRACE
-	iringbuf_push(&rp, iringbuf);
-#endif
+	IFDEF(CONFIG_ITRACE, iringbuf_push(&rp, iringbuf));
   //statistic();
 }
 
