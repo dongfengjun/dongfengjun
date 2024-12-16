@@ -131,7 +131,7 @@ void checkWatchPoint() {
 			word_t tmp = expr(wp_pool[i].expr,&success);
 			if(success){
 				if(tmp != wp_pool[i].value) {
-					printf("watchpoint NO.%d:%s\toldvalue=0x%08x\tnewvalue=0x%08x\n\tNPC_STOP\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].value, tmp);
+					printf("watchpoint NO.%d:%s\toldvalue=0x%08x\tnewvalue=0x%08x\n\t\t[NPC_STOP]\n", wp_pool[i].NO, wp_pool[i].expr, wp_pool[i].value, tmp);
 					extern bool RUNNING;
 					RUNNING = false;
 					return ;
