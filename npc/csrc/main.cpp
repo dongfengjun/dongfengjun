@@ -8,7 +8,6 @@
 #include "svdpi.h"
 #include "Vtop_ysyx_24110017__Dpi.h"
 #include "./include/common.h"
-#include "./include/elf.h"
 
 VerilatedContext* contextp = NULL;	//verilator指针
 Vtop_ysyx_24110017* top = NULL;	//实例化指针
@@ -102,9 +101,9 @@ Ftrace ftracebuf[MAX_FTRACE_SIZE];//ftracebuf
 word_t ftracehead = 0;
 word_t ftracedepth = 0;
 char elfbuf[MAX_ELF_SIZE];//elfbuf
-typedef	Elf32_Ehdr Elf_Ehdr;//elf文件头
-typedef Elf32_Shdr Elf_Shdr;//elf节头
-typedef Elf32_Sym Elf_Sym;//elf符号表条目
+typedef	Elf64_Ehdr Elf_Ehdr;//elf文件头
+typedef Elf64_Shdr Elf_Shdr;//elf节头
+typedef Elf64_Sym Elf_Sym;//elf符号表条目
 Elf_Ehdr elf_ehdr;
 Elf_Shdr *elfshdr_symtab = NULL;//符号表
 Elf_Shdr *elfshdr_strtab = NULL;//字符串表
