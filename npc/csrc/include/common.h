@@ -8,6 +8,7 @@
 #include "macro.h"//宏定义函数
 #include "debug.h"//Assert\Log
 #include "utils.h"//Log
+#include "elf.h"//Ftrace
 
 //Macro definition
 typedef MUXDEF(CONFIG_ISA64, uint64_t, uint32_t) word_t;

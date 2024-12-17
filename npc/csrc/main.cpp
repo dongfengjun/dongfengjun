@@ -87,6 +87,110 @@ static void itrace(){
 }
 #endif
 
+#ifdef CONFIG_FTRACE
+#define MAX_FTRACE_SIZE 1024
+#define MAX_ELF_SIZE 32 * 1024 
+typedef struct Ftrace
+{
+	word_t pc;
+	word_t npc;
+	word_t depth;
+	bool ret;
+} Ftrace;
+Ftrace ftracebuf[MAX_FTRACE_SIZE];//ftracebuf
+word_t ftracehead = 0;
+word_t ftracedepth = 0;
+char elfbuf[MAX_ELF_SIZE];//elfbuf
+typedef Elf32_Ehdr Elf_Ehdr;//elf文件头
+typedef Elf32_Shdr Elf_Shdr;//elf节头
+typedef Elf32_Sym Elf_Sym;//elf符号表条目
+Elf_Ehdr elf_ehdr;
+Elf_Shdr *elfshdr_symtab = NULL;//符号表
+Elf_Shdr *elfshdr_strtab = NULL;//字符串表
+
+uint32_t opcode = top->inst;
+if (opcode == 0b1100111 || op == 0b1101111) {
+	if(ftracebuf[ftracehead].pc != 0) {
+		printf("jal jalr\n");
+		ftracebuf[ftracehead].npc = top->pc;
+	}
+	ftracebuf[ftracehead].pc = top->pc;
+	if(top->inst == 0x00008067) {
+		ftracebuf[ftracehead].ret = true;
+		ftracedepth --;
+		ftracebuf[ftracehead].depth = ftracedepth;
+	}
+	else {
+		ftracebuf[ftracehead].ret = false;
+		ftracebuf[ftracehead].depth = ftracedepth;
+		ftracedepth ++;
+	}
+	ftracehead = (ftracehead + 1) % MAX_FTRACE_SIZE;
+}
+
+void isa_parser_elf(char *filename) {
+	printf("ELF FILE is:%s\n", filename);
+	FILE *fp = fopen(filename, "rb");
+	Assert(fp, "Can not open '%s"", filename);
+	fseek(fp, 0, SEEK_END);
+	long size = ftell(fp);
+	Assert(size < MAX_ELF_SIZE, "elf file is too large");
+	fseek(fp, 0, SEEK_SET);
+	int ret = fread(&elf_ehdr, sizeof(elf_ehdr), 1, fp);
+	assert(ret == 1);
+	assert(memcmp(elf_ehdr.e_ident, ELFMAG, SELFMAG) == 0);//魔数字节
+	fseek(fp, 0, SEEK_SET);
+	ret = fread(elfbuf, size, 1, fp);
+	assert(ret == 1);
+	fclose(fp);
+
+	printf("e_ident: ");//打印魔数字节
+	for(size_t i = 0; i < SELFMAG; i ++) {
+		printf("%02x ", elf_ehdr.e_ident[i]);
+	}
+	for(size_t i = 0; i < elf_ehdr.e_shnum; i ++) {//遍历节头部
+		Elf_Shdr *shdr = (Elf_Shdr *)(elfbuf + elf_ehdr.e_shoff + i * elf_ehdr.e_shentsize);
+		if(shdr->sh_type == SHT_SYMTAB) {//检查symtab strtab节
+			elfshdr_symtab = shdr;
+		}
+		else if(shdr->sh_type == SHT_STRTAB) {
+			elfshdr_strtab = shdr;
+		}
+		if(elfshdr_symtab != NULL && elfshdr_strtab != NULL) {
+			break;
+		}
+	}
+}
+
+void cpu_show_ftrace() {
+	Elf_Sym *sym = NULL;
+	Ftrace *ftrace = NULL;
+	for (size_t i = 0; i < ftracehead; i++) {
+		ftrace = ftracebuf + i;
+		printf("" FMT_WORD ": ", ftrace->pc);
+		for (size_t j = 0; j < ftrace->depth; j++) {
+			printf("  ");
+		}
+		printf("%s ", ftrace->ret ? "ret" : "call");
+		if (elfshdr_symtab == NULL) {
+			printf("\n");
+			continue;
+		}
+		for (int j = elfshdr_symtab->sh_size / sizeof(Elf_Sym) - 1; j >= 0; j--)
+		{//从符号表末遍历，计算当前符号地址，寻找与下一指令匹配的符号
+			sym = (Elf_Sym *)(elfbuf + elfshdr_symtab->sh_offset + j * sizeof(Elf_Sym));
+			if (sym->st_value == ftrace->npc) {
+				break;
+			}
+    }
+		printf(//打印符号与pc
+			"[%s@" FMT_WORD "]\n",
+			elfbuf + elfshdr_strtab->sh_offset + sym->st_name,
+			ftrace->npc);
+	}
+}
+#endif
+
 static void trace_and_difftest() {
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", logbuf); }
@@ -135,3 +239,4 @@ int main(int argc, char *argv[]) {
 	delete contextp;
 	return 0;
 }
+
