@@ -16,9 +16,10 @@ VERILATOR_FLAGS += -LDFLAGS -lreadline
 
 LOG ?= $(BUILD)/npc-log.txt
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
+ELF ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
 NPC_ARGS += --log=$(LOG)
 NPC_ARGS += --img=$(IMG)
-NPC_ARGS += --elf=$(IMG)
+NPC_ARGS += --elf=$(ELF)
 
 run: sim
 	$(OBJ_DIR)/Vtop_ysyx_24110017 $(NPC_ARGS)
