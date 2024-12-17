@@ -1,6 +1,7 @@
 #include <dlfcn.h>
 #include "./../include/common.h"
 
+extern uint8_t mem[CONFIG_MSIZE];
 void (*red_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction) = NULL;
 void (*ref_difftest_regcpy)(void *dut, bool direction) = NULL;
 void (*ref_difftest_exec)(uint64_t n) = NULL;
@@ -26,12 +27,23 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
 		"If it is not necessary, you can turn it off in menuconfig.", ref_so_file);
 	
 	ref_difftest_init(port);//调用ref_init
-	ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);//from mymem to ref IM
+	ref_difftest_memcpy(0x80000000, &mem, img_size, DIFFTEST_TO_REF);//from mymem to ref IM
 	ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);//reg from myreg to ref
 }
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
-  return false;
+  int reg_num = ARRLEN(cpu.gpr);
+	for(int i = 0; i < 32; i ++) {
+		if(ref_r->gpr[i] != cpu.gpr[i]) {
+			printf("gpr_x[%d] diff rff\n", i);
+			return false;
+		}
+	}
+	if(ref_r->pc != cpu.pc) {
+		printf("pc diff ref\n");
+		return false;
+	}
+	return true;
 }
 
 void isa_difftest_attach() {
@@ -40,12 +52,12 @@ void isa_difftest_attach() {
 static void checkregs(CPU_state *ref, vaddr_t pc) {//check regs
 	if(!isa_difftest_checkregs(ref, pc)) {
 		//nemu_state.halt_pc = pc;
-		//isa_reg_display();
+		isa_reg_display();
 		printf("regs different.");
 	}
 }
 
-void difftest_step(vaddr_t pc) {//执行一步差异测试
+void difftest_step(vaddr_t pc, vaddr_t npc) {//执行一步差异测试
 	CPU_state ref_r;
 	ref_difftest_exec(1);//ref 执行1
 	ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);//regs from ref to dut

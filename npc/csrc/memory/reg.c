@@ -25,8 +25,7 @@ word_t isa_reg_str2val(const char *s, bool *success) {
 		}
 	}
 	if(strcmp(s, "pc") == 0) {
-		printf("WAITing!");
-		return 0;
+		return cpu.pc;
 	}  
 	*success = false;
 	printf("Invalid reg name\n");
