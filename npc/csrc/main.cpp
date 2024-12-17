@@ -109,10 +109,8 @@ Elf_Shdr *elfshdr_symtab = NULL;//符号表
 Elf_Shdr *elfshdr_strtab = NULL;//字符串表
 
 void ftrace_push() {
-	printf("check function\n");
 	uint8_t opcode = top->inst & 0x7F;
 	if(opcode == 0b1100111 || opcode == 0b1101111) {
-		printf("jal jalr\n");
 		if(ftracebuf[ftracehead].pc != 0) {
 			printf("jal jalr\n");
 			ftracebuf[ftracehead].npc = top->pc;
