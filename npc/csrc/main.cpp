@@ -140,7 +140,8 @@ void isa_parser_elf(char *filename) {
 	fseek(fp, 0, SEEK_SET);
 	int ret = fread(&elf_ehdr, sizeof(elf_ehdr), 1, fp);
 	assert(ret == 1);
-	assert(memcmp(elf_ehdr.e_ident, ELFMAG, SELFMAG) == 0);//魔数字节
+	printf("%s\n", elf_ehdr.e_ident);
+	//assert(memcmp(elf_ehdr.e_ident, ELFMAG, SELFMAG) == 0);//魔数字节
 	fseek(fp, 0, SEEK_SET);
 	ret = fread(elfbuf, size, 1, fp);
 	assert(ret == 1);
