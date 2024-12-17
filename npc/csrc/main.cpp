@@ -140,7 +140,6 @@ void isa_parser_elf(char *filename) {
 	fseek(fp, 0, SEEK_SET);
 	int ret = fread(&elf_ehdr, sizeof(elf_ehdr), 1, fp);
 	assert(ret == 1);
-	printf("%s\n", elf_ehdr.e_ident);
 	//assert(memcmp(elf_ehdr.e_ident, ELFMAG, SELFMAG) == 0);//魔数字节
 	fseek(fp, 0, SEEK_SET);
 	ret = fread(elfbuf, size, 1, fp);
@@ -149,7 +148,7 @@ void isa_parser_elf(char *filename) {
 
 	printf("e_ident: ");//打印魔数字节
 	for(size_t i = 0; i < SELFMAG; i ++) {
-		printf("%02x ", elf_ehdr.e_ident[i]);
+		printf("%s ", elf_ehdr.e_ident[i]);
 	}
 	for(size_t i = 0; i < elf_ehdr.e_shnum; i ++) {//遍历节头部
 		Elf_Shdr *shdr = (Elf_Shdr *)(elfbuf + elf_ehdr.e_shoff + i * elf_ehdr.e_shentsize);
