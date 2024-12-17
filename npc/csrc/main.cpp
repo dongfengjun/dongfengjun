@@ -148,7 +148,7 @@ void isa_parser_elf(char *filename) {
 
 	printf("e_ident: ");//打印魔数字节
 	for(size_t i = 0; i < SELFMAG; i ++) {
-		printf("%s ", elf_ehdr.e_ident[i]);
+		printf("%02x ", elf_ehdr.e_ident[i]);
 	}
 	for(size_t i = 0; i < elf_ehdr.e_shnum; i ++) {//遍历节头部
 		Elf_Shdr *shdr = (Elf_Shdr *)(elfbuf + elf_ehdr.e_shoff + i * elf_ehdr.e_shentsize);
