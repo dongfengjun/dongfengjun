@@ -173,17 +173,12 @@ void isa_parser_elf(char *filename) {
     }
     if (elfshdr_symtab != NULL && elfshdr_strtab != NULL) {
       break;
-      for (size_t j = 0; j < elfshdr_symtab->sh_size / sizeof(Elf_Sym); j++) {
-        Elf_Sym *sym = (Elf_Sym *)(elfbuf + elfshdr_symtab->sh_offset + j * sizeof(Elf_Sym));
-        printf("" FMT_WORD ": %s\n", sym->st_value, elfbuf + elfshdr_strtab->sh_offset + sym->st_name);
-      }
-      break;
     }
   }
 }
 
 void cpu_show_ftrace() {
-	printf("show function\n");
+	printf("Function trace:\n");
 	Elf_Sym *sym = NULL;
 	Ftrace *ftrace = NULL;
 	for (size_t i = 0; i < ftracehead; i++) {
@@ -227,8 +222,12 @@ void cpu_exec(int n) {
 	while(RUNNING && n != 0) {
 		single_cycle();
 		g_nr_guest_inst++;
+#ifdef CONFIG_ITRACE
 		itrace_push();
+#endif
+#ifdef CONFIG_FTRACE
 		ftrace_push();
+#endif
 		trace_and_difftest();
 		n--;
   }
