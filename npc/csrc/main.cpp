@@ -111,7 +111,7 @@ Elf_Shdr *elfshdr_strtab = NULL;//字符串表
 static uint8_t fopcode;
 static word_t fpc;
 static word_t fnpc;
-static wort_t finst;
+static word_t finst;
 void ftrace_push() {
 	fnpc = top->pc;
 	if(fopcode == 0b1100111 || fopcode == 0b1101111) {
