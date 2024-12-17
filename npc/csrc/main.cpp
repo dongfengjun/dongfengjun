@@ -108,14 +108,16 @@ Elf_Ehdr elf_ehdr;
 Elf_Shdr *elfshdr_symtab = NULL;//符号表
 Elf_Shdr *elfshdr_strtab = NULL;//字符串表
 
-static uint8_t opcode;
-static word_t pc;
+static uint8_t fopcode;
+static word_t fpc;
+static word_t fnpc;
+static wort_t finst;
 void ftrace_push() {
-	word_t npc = top->pc;
-	if(opcode == 0b1100111 || opcode == 0b1101111) {
-		ftracebuf[ftracehead].npc = npc;
-		ftracebuf[ftracehead].pc = pc;
-		if(top->inst == 0x00008067) {
+	fnpc = top->pc;
+	if(fopcode == 0b1100111 || fopcode == 0b1101111) {
+		ftracebuf[ftracehead].npc = fnpc;
+		ftracebuf[ftracehead].pc = fpc;
+		if(finst == 0x00008067) {
 			ftracebuf[ftracehead].ret = true;
 			ftracedepth --;
 			ftracebuf[ftracehead].depth = ftracedepth;
@@ -127,8 +129,9 @@ void ftrace_push() {
 		}
 		ftracehead = (ftracehead + 1) % MAX_FTRACE_SIZE;
 	}
-	pc = npc;
-	opcode = top->inst & 0x7F;
+	fpc = fnpc;
+	finst = top->inst;
+	fopcode = finst & 0x7F;
 }
 
 void isa_parser_elf(char *filename) {
