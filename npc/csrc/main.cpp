@@ -131,27 +131,26 @@ void ftrace_push() {
 }
 
 void isa_parser_elf(char *filename) {
-	printf("ELF FILE is:%s\n", filename);
+  printf("ELF FILE is:%s\n", filename);
 	FILE *fp = fopen(filename, "rb");
-	Assert(fp, "Can not open '%s'", filename);
-	fseek(fp, 0, SEEK_END);
-	long size = ftell(fp);
-	Assert(size < MAX_ELF_SIZE, "elf file is too large");
-	fseek(fp, 0, SEEK_SET);
-	int ret = fread(&elf_ehdr, sizeof(elf_ehdr), 1, fp);
-	printf("elf_ehdr size = %ld\n", sizeof(elf_ehdr));
-	assert(ret == 1);
-	//assert(memcmp(elf_ehdr.e_ident, ELFMAG, SELFMAG) == 0);//魔数字节
-	fseek(fp, 0, SEEK_SET);
-	ret = fread(elfbuf, size, 1, fp);
-	assert(ret == 1);
-	fclose(fp);
+  Assert(fp, "Can not open '%s'", filename);
+  fseek(fp, 0, SEEK_END);
+  long size = ftell(fp);
+  Assert(size < MAX_ELF_SIZE, "elf file is too large");
+  fseek(fp, 0, SEEK_SET);
+  int ret = fread(&elf_ehdr, sizeof(elf_ehdr), 1, fp);
+  assert(ret == 1);
+  assert(memcmp(elf_ehdr.e_ident, ELFMAG, SELFMAG) == 0);
+  fseek(fp, 0, SEEK_SET);
+  ret = fread(elfbuf, size, 1, fp);
+  assert(ret == 1);
+  fclose(fp);
 
-	printf("e_ident: ");//打印魔数字节
-	for(size_t i = 0; i < SELFMAG; i ++) {
-		printf("%02x ", elf_ehdr.e_ident[i]);
-	}
-	printf("\n");
+  printf("e_ident: ");
+  for (size_t i = 0; i < SELFMAG; i++) {
+    printf("%02x ", elf_ehdr.e_ident[i]);
+  }
+  printf("\n");
   printf("e_type: %d\t", elf_ehdr.e_type);
   printf("e_machine: %d\t", elf_ehdr.e_machine);
   printf("e_version: %d\n", elf_ehdr.e_version);
@@ -165,18 +164,22 @@ void isa_parser_elf(char *filename) {
   printf("e_shentsize: %d\t", elf_ehdr.e_shentsize);
   printf("e_shnum: %d\t", elf_ehdr.e_shnum);
   printf("e_shstrndx: %d\n", elf_ehdr.e_shstrndx);
-	for(size_t i = 0; i < elf_ehdr.e_shnum; i ++) {//遍历节头部
-		Elf_Shdr *shdr = (Elf_Shdr *)(elfbuf + elf_ehdr.e_shoff + i * elf_ehdr.e_shentsize);
-		if(shdr->sh_type == SHT_SYMTAB) {//检查symtab strtab节
-			elfshdr_symtab = shdr;
-		}
-		else if(shdr->sh_type == SHT_STRTAB) {
-			elfshdr_strtab = shdr;
-		}
-		if(elfshdr_symtab != NULL && elfshdr_strtab != NULL) {
-			break;
-		}
-	}
+  for (size_t i = 0; i < elf_ehdr.e_shnum; i++) {
+    Elf_Shdr *shdr = (Elf_Shdr *)(elfbuf + elf_ehdr.e_shoff + i * elf_ehdr.e_shentsize);
+    if (shdr->sh_type == SHT_SYMTAB) {
+      elfshdr_symtab = shdr;
+    } else if (shdr->sh_type == SHT_STRTAB) {
+      elfshdr_strtab = shdr;
+    }
+    if (elfshdr_symtab != NULL && elfshdr_strtab != NULL) {
+      break;
+      for (size_t j = 0; j < elfshdr_symtab->sh_size / sizeof(Elf_Sym); j++) {
+        Elf_Sym *sym = (Elf_Sym *)(elfbuf + elfshdr_symtab->sh_offset + j * sizeof(Elf_Sym));
+        printf("" FMT_WORD ": %s\n", sym->st_value, elfbuf + elfshdr_strtab->sh_offset + sym->st_name);
+      }
+      break;
+    }
+  }
 }
 
 void cpu_show_ftrace() {
