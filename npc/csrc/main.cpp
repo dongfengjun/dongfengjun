@@ -108,14 +108,12 @@ Elf_Ehdr elf_ehdr;
 Elf_Shdr *elfshdr_symtab = NULL;//符号表
 Elf_Shdr *elfshdr_strtab = NULL;//字符串表
 
+uint8_t opcode;
 void ftrace_push() {
-	uint8_t opcode = top->inst & 0x7F;
+	word_t npc = top->pc;
 	if(opcode == 0b1100111 || opcode == 0b1101111) {
-		if(ftracebuf[ftracehead].pc != 0) {
-			printf("jal jalr\n");
-			ftracebuf[ftracehead].npc = top->pc;
-		}
-		ftracebuf[ftracehead].pc = top->pc;
+		ftracebuf[ftracehead].npc = npc;
+		ftracebuf[ftracehead].pc = pc;
 		if(top->inst == 0x00008067) {
 			ftracebuf[ftracehead].ret = true;
 			ftracedepth --;
@@ -128,6 +126,8 @@ void ftrace_push() {
 		}
 		ftracehead = (ftracehead + 1) % MAX_FTRACE_SIZE;
 	}
+	word_t pc = npc;
+	opcode = top->inst & 0x7F;
 }
 
 void isa_parser_elf(char *filename) {
@@ -166,11 +166,9 @@ void isa_parser_elf(char *filename) {
   printf("e_shstrndx: %d\n", elf_ehdr.e_shstrndx);
   for (size_t i = 0; i < elf_ehdr.e_shnum; i++) {//遍历节
     Elf_Shdr *shdr = (Elf_Shdr *)(elfbuf + elf_ehdr.e_shoff + i * elf_ehdr.e_shentsize);//节地址
-    if (shdr->sh_type == SHT_SYMTAB) {
-			printf("find symtab successfully\n");
+    if (shdr->sh_type == SHT_SYMTAB) {//符号表
       elfshdr_symtab = shdr;
-    } else if (shdr->sh_type == SHT_STRTAB) {
-			printf("find strtab successfully\n");
+    } else if (shdr->sh_type == SHT_STRTAB) {//字符串表
       elfshdr_strtab = shdr;
     }
     if (elfshdr_symtab != NULL && elfshdr_strtab != NULL) {
