@@ -136,9 +136,10 @@ void isa_parser_elf(char *filename) {
 	Assert(fp, "Can not open '%s'", filename);
 	fseek(fp, 0, SEEK_END);
 	long size = ftell(fp);
-	printf("size=%d\n", size);
+	printf("size=%ld\n", size);
 	Assert(size < MAX_ELF_SIZE, "elf file is too large");
 	fseek(fp, 0, SEEK_SET);
+	printf("elf:%s", fp);
 	int ret = fread(&elf_ehdr, sizeof(elf_ehdr), 1, fp);
 	assert(ret == 1);
 	//assert(memcmp(elf_ehdr.e_ident, ELFMAG, SELFMAG) == 0);//魔数字节
