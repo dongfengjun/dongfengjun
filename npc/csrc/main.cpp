@@ -59,7 +59,7 @@ void assert_fail_msg() {
 }
 
 #ifdef CONFIG_ITRACE
-static void itrace(){
+static void itrace_push(){
 	uint8_t insts[4];
   insts[0] = top->inst & 0xFF;
   insts[1] = (top->inst >>  8) & 0xFF;
@@ -227,7 +227,7 @@ void cpu_exec(int n) {
 	while(RUNNING && n != 0) {
 		single_cycle();
 		g_nr_guest_inst++;
-		itrace();
+		itrace_push();
 		ftrace_push();
 		trace_and_difftest();
 		n--;
