@@ -164,11 +164,13 @@ void isa_parser_elf(char *filename) {
   printf("e_shentsize: %d\t", elf_ehdr.e_shentsize);
   printf("e_shnum: %d\t", elf_ehdr.e_shnum);
   printf("e_shstrndx: %d\n", elf_ehdr.e_shstrndx);
-  for (size_t i = 0; i < elf_ehdr.e_shnum; i++) {
-    Elf_Shdr *shdr = (Elf_Shdr *)(elfbuf + elf_ehdr.e_shoff + i * elf_ehdr.e_shentsize);
+  for (size_t i = 0; i < elf_ehdr.e_shnum; i++) {//遍历节
+    Elf_Shdr *shdr = (Elf_Shdr *)(elfbuf + elf_ehdr.e_shoff + i * elf_ehdr.e_shentsize);//节地址
     if (shdr->sh_type == SHT_SYMTAB) {
+			printf("find symtab successfully\n");
       elfshdr_symtab = shdr;
     } else if (shdr->sh_type == SHT_STRTAB) {
+			printf("find strtab successfully");
       elfshdr_strtab = shdr;
     }
     if (elfshdr_symtab != NULL && elfshdr_strtab != NULL) {
