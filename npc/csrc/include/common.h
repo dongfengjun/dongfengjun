@@ -78,5 +78,7 @@ extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int
 int iringbuf_init();
 int iringbuf_push(char *data);
 void iringbuf_display();
+//difftest
+void init_difftest(char *ref_so_file, long img_size, int port);
 
 #endif
