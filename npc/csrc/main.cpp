@@ -131,7 +131,7 @@ if (opcode == 0b1100111 || op == 0b1101111) {
 void isa_parser_elf(char *filename) {
 	printf("ELF FILE is:%s\n", filename);
 	FILE *fp = fopen(filename, "rb");
-	Assert(fp, "Can not open '%s"", filename);
+	Assert(fp, "Can not open '%s'", filename);
 	fseek(fp, 0, SEEK_END);
 	long size = ftell(fp);
 	Assert(size < MAX_ELF_SIZE, "elf file is too large");
@@ -234,6 +234,9 @@ int main(int argc, char *argv[]) {
 #endif
 	dump_wave();
 
+#ifdef CONFIG_FTRACE
+	cpu_show_ftrace();
+#endif
 /***close**/
 	tfp->close();
 	delete contextp;

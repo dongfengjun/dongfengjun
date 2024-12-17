@@ -28,6 +28,7 @@ typedef uint16_t ioaddr_t;
 #define CONFIG_TRACE 1
 #ifdef CONFIG_TRACE
 	#define CONFIG_ITRACE 1
+	#define CONFIG_FTRACE 1
 	#define CONFIG_WATCHPOINT 1
 #endif
 
@@ -42,6 +43,7 @@ typedef uint16_t ioaddr_t;
 
 //main
 void cpu_exec(int n);
+void isa_parser_elf(char *filename);
 
 //Imemory
 uint8_t guest_to_host(paddr_t paddr);

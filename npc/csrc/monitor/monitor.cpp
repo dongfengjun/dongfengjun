@@ -45,22 +45,25 @@ static int parse_args(int argc, char *argv[]) {
     {"batch"    , no_argument      , NULL, 'b'},
 		{"log"			, required_argument, NULL, 'l'},
 		{"img"      , required_argument, NULL, 'i'},
-    {"diff"     , required_argument, NULL, 'd'},
+		{"elf"			, required_argument, NULL, 'e'},
+		{"diff"     , required_argument, NULL, 'd'},
     {"help"     , no_argument      , NULL, 'h'},
     {0          , 0                , NULL,  0 },
   };
   int o;
-  while ( (o = getopt_long(argc, argv, "-bhd:l:i:", table, NULL)) != -1) {
+  while ( (o = getopt_long(argc, argv, "-bhd:l:i:e:", table, NULL)) != -1) {
     switch (o) {
 			case 'b': sdb_set_batch_mode(); break;
 			case 'l': log_file = optarg; break;
       case 'i': img_file = optarg; break;
+			case 'e': isa_parser_elf(optarg); break;
       case 'd': diff_so_file = optarg; break;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
 				printf("\t-b,--batch              run with batch mode\n");
 				printf("\t-l,--log=FILE           output log to FILE\n");
         printf("\t-i,--img=FILE           load img file\n");
+				printf("\t-e,--elf=ELF						receive elf document\n");
         printf("\t-d,--diff=REF_SO        run DiffTest with reference REF_SO\n");
         printf("\n");
         exit(0);
