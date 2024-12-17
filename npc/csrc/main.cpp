@@ -109,7 +109,7 @@ Elf_Shdr *elfshdr_symtab = NULL;//符号表
 Elf_Shdr *elfshdr_strtab = NULL;//字符串表
 
 uint32_t opcode = top->inst;
-if (opcode == 0b1100111 || op == 0b1101111) {
+if(opcode == 0b1100111 || op == 0b1101111) {
 	if(ftracebuf[ftracehead].pc != 0) {
 		printf("jal jalr\n");
 		ftracebuf[ftracehead].npc = top->pc;
