@@ -1,7 +1,8 @@
-module top_ysyx_24110017(clk,rst,pc,inst);
+module top_ysyx_24110017(clk,rst,pc,dnpc,inst);
 input clk;
 input rst;
 output [31:0]pc;//if
+output [31:0]dnpc;
 input [31:0]inst;
 
 wire [6:0]op;
@@ -13,7 +14,7 @@ wire wr_en,jalen,jalren;
 wire [31:0]res;
 wire [31:0]r1,a,b,xrd;
 
-PCU_ysyx_24110017 PCU(clk,rst,jalen,jalren,offset,r1,pc);
+PCU_ysyx_24110017 PCU(clk,rst,jalen,jalren,offset,r1,pc,dnpc);
 //IFU_ysyx_24110017 IFU(pc,inst); //c++
 IDU_ysyx_24110017 IDU(inst,op,rd,sel,rs1,imm,offset,wr_en);
 RegisterFile_ysyx_24110017 #(5,32) RF(clk,xrd,rd,wr_en,rs1,r1);

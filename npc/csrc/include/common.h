@@ -44,6 +44,10 @@ typedef uint16_t ioaddr_t;
 //main
 void cpu_exec(int n);
 void isa_parser_elf(char *filename);
+typedef struct {
+  word_t gpr[32];
+  vaddr_t pc;
+} CPU_state;
 
 //Imemory
 uint8_t guest_to_host(paddr_t paddr);

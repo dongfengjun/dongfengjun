@@ -38,17 +38,17 @@ void isa_difftest_attach() {
 }
 
 static void checkregs(CPU_state *ref, vaddr_t pc) {//check regs
-	if(!isa_difftest_checkregs(ref,pc)) {
+	if(!isa_difftest_checkregs(ref, pc)) {
 		//nemu_state.halt_pc = pc;
 		//isa_reg_display();
 		printf("regs different.");
 	}
 }
 
-void difftest_step(vaddr_t pc, vaddr_t npc) {//执行一步差异测试
+void difftest_step(vaddr_t pc) {//执行一步差异测试
 	CPU_state ref_r;
 	ref_difftest_exec(1);//ref 执行1
-	ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);//ref from ref to dut
+	ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);//regs from ref to dut
 	checkregs(&ref_r, pc);//check regs dut:myregs
 }
 

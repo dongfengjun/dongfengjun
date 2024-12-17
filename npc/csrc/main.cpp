@@ -49,6 +49,7 @@ static void reset(int n) {
 
 /***main***/
 #define MAX_INST_TO_PRINT 10//puts inst
+CPU_state cpu = {};
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
 IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
 static bool g_print_step = false;
@@ -216,7 +217,7 @@ static void trace_and_difftest() {
   if (ITRACE_COND) { log_write("%s\n", logbuf); }
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(logbuf)); }
-		IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+		IFDEF(CONFIG_DIFFTEST, difftest_step(top->pc));
 		IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
 
