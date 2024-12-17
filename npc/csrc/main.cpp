@@ -101,9 +101,9 @@ Ftrace ftracebuf[MAX_FTRACE_SIZE];//ftracebuf
 word_t ftracehead = 0;
 word_t ftracedepth = 0;
 char elfbuf[MAX_ELF_SIZE];//elfbuf
-typedef Elf32_Ehdr Elf_Ehdr;//elf文件头
-typedef Elf32_Shdr Elf_Shdr;//elf节头
-typedef Elf32_Sym Elf_Sym;//elf符号表条目
+typedef	MUXDEF(CONFIG_ISA64, Elf64_Ehdr, Elf32_Ehdr) Elf_Ehdr;//elf文件头
+typedef MUXDEF(CONFIG_ISA64, Elf64_Shdr, Elf32_Shdr) Elf_Shdr;//elf节头
+typedef MUXDEF(CONFIG_ISA64, Elf64_Sym, Elf32_Sym) Elf_Sym;//elf符号表条目
 Elf_Ehdr elf_ehdr;
 Elf_Shdr *elfshdr_symtab = NULL;//符号表
 Elf_Shdr *elfshdr_strtab = NULL;//字符串表
@@ -139,7 +139,6 @@ void isa_parser_elf(char *filename) {
 	printf("size=%ld\n", size);
 	Assert(size < MAX_ELF_SIZE, "elf file is too large");
 	fseek(fp, 0, SEEK_SET);
-	printf("elf:%s", fp);
 	int ret = fread(&elf_ehdr, sizeof(elf_ehdr), 1, fp);
 	assert(ret == 1);
 	//assert(memcmp(elf_ehdr.e_ident, ELFMAG, SELFMAG) == 0);//魔数字节
