@@ -136,6 +136,7 @@ void isa_parser_elf(char *filename) {
 	Assert(fp, "Can not open '%s'", filename);
 	fseek(fp, 0, SEEK_END);
 	long size = ftell(fp);
+	printf("size=%d\n", size);
 	Assert(size < MAX_ELF_SIZE, "elf file is too large");
 	fseek(fp, 0, SEEK_SET);
 	int ret = fread(&elf_ehdr, sizeof(elf_ehdr), 1, fp);
