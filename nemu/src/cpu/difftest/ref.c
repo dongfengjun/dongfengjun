@@ -29,6 +29,7 @@ __EXPORT void difftest_memcpy(paddr_t addr, uint8_t *buf, size_t n, bool directi
 		for(int i = 0; i < n; i ++) {
 			buf[i] = paddr_read(addr, 1);
 			addr ++;
+
 		}
 	}
 }
