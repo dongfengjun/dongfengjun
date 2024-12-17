@@ -112,6 +112,7 @@ void ftrace_push() {
 	printf("check function\n");
 	uint8_t opcode = top->inst;
 	if(opcode == 0b1100111 || opcode == 0b1101111) {
+		printf("jal jalr\n");
 		if(ftracebuf[ftracehead].pc != 0) {
 			printf("jal jalr\n");
 			ftracebuf[ftracehead].npc = top->pc;
