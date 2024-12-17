@@ -151,6 +151,20 @@ void isa_parser_elf(char *filename) {
 	for(size_t i = 0; i < SELFMAG; i ++) {
 		printf("%02x ", elf_ehdr.e_ident[i]);
 	}
+	printf("\n");
+  printf("e_type: %d\t", elf_ehdr.e_type);
+  printf("e_machine: %d\t", elf_ehdr.e_machine);
+  printf("e_version: %d\n", elf_ehdr.e_version);
+  printf("e_entry: " FMT_WORD "\t", elf_ehdr.e_entry);
+  printf("e_phoff: " FMT_WORD "\n", elf_ehdr.e_phoff);
+  printf("e_shoff: " FMT_WORD "\t", elf_ehdr.e_shoff);
+  printf("e_flags: 0x%016x\n", elf_ehdr.e_flags);
+  printf("e_ehsize: %d\t", elf_ehdr.e_ehsize);
+  printf("e_phentsize: %d\t", elf_ehdr.e_phentsize);
+  printf("e_phnum: %d\n", elf_ehdr.e_phnum);
+  printf("e_shentsize: %d\t", elf_ehdr.e_shentsize);
+  printf("e_shnum: %d\t", elf_ehdr.e_shnum);
+  printf("e_shstrndx: %d\n", elf_ehdr.e_shstrndx);
 	for(size_t i = 0; i < elf_ehdr.e_shnum; i ++) {//遍历节头部
 		Elf_Shdr *shdr = (Elf_Shdr *)(elfbuf + elf_ehdr.e_shoff + i * elf_ehdr.e_shentsize);
 		if(shdr->sh_type == SHT_SYMTAB) {//检查symtab strtab节
