@@ -59,6 +59,7 @@ word_t pmem_write(uint32_t content, uint64_t addr, uint32_t len);
 word_t gpr_regs_display(int raddr);//抓取reg  DPI-C in RF
 void isa_regs_display();
 word_t isa_reg_str2val(const char *s, bool *success);
+void isa_gpr_push();
 
 //monitor
 void init_monitor(int argc, char *argv[]);

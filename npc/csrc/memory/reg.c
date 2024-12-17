@@ -33,3 +33,8 @@ word_t isa_reg_str2val(const char *s, bool *success) {
 	return 0;
 }
 
+void isa_gpr_push() {
+	for(int i = 0; i < 32; i ++) {
+		cpu.gpr[i] = gpr_regs_display(i);
+	}
+}
