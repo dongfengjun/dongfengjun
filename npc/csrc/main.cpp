@@ -101,7 +101,7 @@ Ftrace ftracebuf[MAX_FTRACE_SIZE];//ftracebuf
 word_t ftracehead = 0;
 word_t ftracedepth = 0;
 char elfbuf[MAX_ELF_SIZE];//elfbuf
-typedef	Elf32_Ehdr elf_ehdr;//elf文件头
+Elf32_Ehdr elf_ehdr;//elf文件头
 typedef Elf32_Shdr Elf_Shdr;//elf节头
 typedef Elf32_Sym Elf_Sym;//elf符号表条目
 Elf_Shdr *elfshdr_symtab = NULL;//符号表
