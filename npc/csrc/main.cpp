@@ -8,6 +8,7 @@
 #include "svdpi.h"
 #include "Vtop_ysyx_24110017__Dpi.h"
 #include "./include/common.h"
+#include "./include/elf.h"
 
 VerilatedContext* contextp = NULL;	//verilator指针
 Vtop_ysyx_24110017* top = NULL;	//实例化指针
