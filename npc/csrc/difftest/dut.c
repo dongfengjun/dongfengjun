@@ -18,8 +18,8 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
 	assert(ref_difftest_regcpy);
 	ref_difftest_exec = dlsym(handle, "difftest_exec");
 	assert(ref_difftest_exec);
-	ref_difftest_raise = dlsym(handle, "difftest_intr");
-	assert(ref_difftest_intr);
+	ref_difftest_raise_intr = dlsym(handle, "difftest_intr");
+	assert(ref_difftest_raise_intr);
 	void (*ref_difftest_init)(int) = dlsym(handle, "difftest_init");
 	assert(ref_difftest_init);
 	Log("The result of every instruction will be compared with %s. "
