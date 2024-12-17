@@ -137,8 +137,9 @@ void isa_parser_elf(char *filename) {
 	fseek(fp, 0, SEEK_END);
 	long size = ftell(fp);
 	Assert(size < MAX_ELF_SIZE, "elf file is too large");
-	fseek(fp, 0, SEEK_SET);
+	fseek(fp, -1, SEEK_SET);
 	int ret = fread(&elf_ehdr, sizeof(elf_ehdr), 1, fp);
+
 	assert(ret == 1);
 	//assert(memcmp(elf_ehdr.e_ident, ELFMAG, SELFMAG) == 0);//魔数字节
 	fseek(fp, 0, SEEK_SET);
