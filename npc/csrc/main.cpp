@@ -108,24 +108,26 @@ Elf_Ehdr elf_ehdr;
 Elf_Shdr *elfshdr_symtab = NULL;//符号表
 Elf_Shdr *elfshdr_strtab = NULL;//字符串表
 
-uint32_t opcode = top->inst;
-if(opcode == 0b1100111 || op == 0b1101111) {
-	if(ftracebuf[ftracehead].pc != 0) {
-		printf("jal jalr\n");
-		ftracebuf[ftracehead].npc = top->pc;
+void ftrace_push() {
+	uint32_t opcode = top->inst;
+	if(opcode == 0b1100111 || op == 0b1101111) {
+		if(ftracebuf[ftracehead].pc != 0) {
+			printf("jal jalr\n");
+			ftracebuf[ftracehead].npc = top->pc;
+		}
+		ftracebuf[ftracehead].pc = top->pc;
+		if(top->inst == 0x00008067) {
+			ftracebuf[ftracehead].ret = true;
+			ftracedepth --;
+			ftracebuf[ftracehead].depth = ftracedepth;
+		}
+		else {
+			ftracebuf[ftracehead].ret = false;
+			ftracebuf[ftracehead].depth = ftracedepth;
+			ftracedepth ++;
+		}
+		ftracehead = (ftracehead + 1) % MAX_FTRACE_SIZE;
 	}
-	ftracebuf[ftracehead].pc = top->pc;
-	if(top->inst == 0x00008067) {
-		ftracebuf[ftracehead].ret = true;
-		ftracedepth --;
-		ftracebuf[ftracehead].depth = ftracedepth;
-	}
-	else {
-		ftracebuf[ftracehead].ret = false;
-		ftracebuf[ftracehead].depth = ftracedepth;
-		ftracedepth ++;
-	}
-	ftracehead = (ftracehead + 1) % MAX_FTRACE_SIZE;
 }
 
 void isa_parser_elf(char *filename) {
@@ -207,6 +209,7 @@ void cpu_exec(int n) {
 		single_cycle();
 		g_nr_guest_inst++;
 		itrace();
+		ftrace_push();
 		trace_and_difftest();
 		n--;
   }
