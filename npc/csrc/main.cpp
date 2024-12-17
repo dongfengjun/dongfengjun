@@ -170,7 +170,7 @@ void isa_parser_elf(char *filename) {
 			printf("find symtab successfully\n");
       elfshdr_symtab = shdr;
     } else if (shdr->sh_type == SHT_STRTAB) {
-			printf("find strtab successfully");
+			printf("find strtab successfully\n");
       elfshdr_strtab = shdr;
     }
     if (elfshdr_symtab != NULL && elfshdr_strtab != NULL) {
