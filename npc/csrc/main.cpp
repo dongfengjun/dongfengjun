@@ -114,7 +114,10 @@ static word_t fpc;
 static word_t fnpc;
 static word_t finst;
 void ftrace_push() {
-	fnpc = top->pc;
+	fnpc = top->dnpc;
+	fpc = top->pc;
+  finst = top->inst;
+  fopcode = finst & 0x7F;
 	if(fopcode == 0b1100111 || fopcode == 0b1101111) {
 		ftracebuf[ftracehead].npc = fnpc;
 		ftracebuf[ftracehead].pc = fpc;
@@ -130,9 +133,6 @@ void ftrace_push() {
 		}
 		ftracehead = (ftracehead + 1) % MAX_FTRACE_SIZE;
 	}
-	fpc = fnpc;
-	finst = top->inst;
-	fopcode = finst & 0x7F;
 }
 
 void isa_parser_elf(char *filename) {
