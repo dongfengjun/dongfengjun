@@ -57,6 +57,7 @@ static void checkregs(CPU_state *ref, vaddr_t pc) {//check regs
 	}
 }
 
+enum { DIFFTEST_TO_DUT, DIFFTEST_TO_REF };
 void difftest_step(vaddr_t pc, vaddr_t npc) {//执行一步差异测试
 	CPU_state ref_r;
 	ref_difftest_exec(1);//ref 执行1
