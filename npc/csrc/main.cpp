@@ -108,7 +108,8 @@ Elf_Ehdr elf_ehdr;
 Elf_Shdr *elfshdr_symtab = NULL;//符号表
 Elf_Shdr *elfshdr_strtab = NULL;//字符串表
 
-uint8_t opcode;
+static uint8_t opcode;
+static word_t pc;
 void ftrace_push() {
 	word_t npc = top->pc;
 	if(opcode == 0b1100111 || opcode == 0b1101111) {
@@ -126,7 +127,7 @@ void ftrace_push() {
 		}
 		ftracehead = (ftracehead + 1) % MAX_FTRACE_SIZE;
 	}
-	word_t pc = npc;
+	pc = npc;
 	opcode = top->inst & 0x7F;
 }
 
