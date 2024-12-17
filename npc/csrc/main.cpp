@@ -110,7 +110,7 @@ Elf_Shdr *elfshdr_strtab = NULL;//字符串表
 
 void ftrace_push() {
 	printf("check function\n");
-	uint7_t opcode = top->inst;
+	uint8_t opcode = top->inst;
 	printf("opcode = %07b\n", opcode);
 	if(opcode == 0b1100111 || opcode == 0b11101111) {
 		printf("jal jalr\n");
