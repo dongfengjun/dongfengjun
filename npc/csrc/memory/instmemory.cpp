@@ -63,6 +63,20 @@ void init_mem() {
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
 
+word_t paddr_read(paddr_t addr, int len) {
+  if (likely(in_pmem(addr))) return pmem_read(addr, len);
+  IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
+  out_of_bound(addr);
+  return 0;
+}
+
+void paddr_write(paddr_t addr, int len, word_t data) {
+  if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
+  IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
+  out_of_bound(addr);
+}
+
+/******
 word_t pmem_read(paddr_t addr) { // 内存读取函数
     uint8_t base_addr = addr - 0x80000000; // 计算实际的内存地址偏移
     uint32_t lo0 = (uint32_t)mem[base_addr];
