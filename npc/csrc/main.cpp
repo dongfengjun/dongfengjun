@@ -219,7 +219,7 @@ void single_cycle() {
 static void reset(int n) {
 	top->rst=1;top->eval();
 	while(n-->0) single_cycle();
-//	TODO: restart 默认的pc,reg,im,在这实现
+//restart 默认的pc,reg,im,在这实现
 	cpu.pc = top->dnpc;
 	isa_gpr_push();
   g_nr_guest_inst++;
