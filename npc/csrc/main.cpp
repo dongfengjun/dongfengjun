@@ -53,7 +53,6 @@ static void itrace_push(){
 
   char *p = logbuf;
 	char *irp = iringbuf;
-	printf("pc:%08x\n", top->pc);
   p += snprintf(p, sizeof(logbuf), FMT_WORD ":", top->pc);
 	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", top->pc);
   int ilen = 4;
@@ -70,6 +69,7 @@ static void itrace_push(){
 	disassemble(irp, logbuf + sizeof(logbuf) - irp, top->pc, (uint8_t *)&insts, 4);
 	strncat(iringbuf, " \n", 3);
 	iringbuf_push(iringbuf);
+	puts(buf);
 }
 #endif
 
