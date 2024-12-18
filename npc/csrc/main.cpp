@@ -220,17 +220,6 @@ static void reset(int n) {
 	top->rst=1;top->eval();
 	while(n-->0) single_cycle();
 //restart 默认的pc,reg,im,在这实现
-	cpu.pc = top->dnpc;
-	isa_gpr_push();
-  g_nr_guest_inst++;
-#ifdef CONFIG_ITRACE
-  itrace_push();
-#endif
-#ifdef CONFIG_FTRACE
-  ftrace_push();
-#endif
-	g_print_step = 1;
-	trace_and_difftest();
 	top->rst=0;
 }
 
