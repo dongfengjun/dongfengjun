@@ -35,6 +35,7 @@ typedef uint16_t ioaddr_t;
 
 #define CONFIG_MBASE 0x80000000//IM
 #define CONFIG_MSIZE 0x8000000
+#define CONFIG_PC_RESET_OFFSET = 0	//reset pc offset
 #define CONFIG_MEM_RANDOM 1
 #define CONFIG_TRACE_START 0
 #define CONFIG_TRACE_END 10000
