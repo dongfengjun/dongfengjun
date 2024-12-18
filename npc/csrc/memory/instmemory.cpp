@@ -9,8 +9,8 @@
 	uint8_t mem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
 
-uint8_t guest_to_host(paddr_t paddr) { return paddr - CONFIG_MBASE; }
-paddr_t host_to_guest(uint8_t haddr) { return haddr + CONFIG_MBASE; }
+uint8_t* guest_to_host(paddr_t paddr) { return mem + paddr - CONFIG_MBASE; }
+paddr_t host_to_guest(uint8_t *haddr) { return haddr - mem + CONFIG_MBASE; }
 
 void init_mem() {
 #if   defined(CONFIG_PMEM_MALLOC)
@@ -22,7 +22,7 @@ void init_mem() {
 }
 
 word_t pmem_read(paddr_t addr) { // 内存读取函数
-    uint8_t base_addr = guest_to_host(addr); // 计算实际的内存地址偏移
+    uint8_t base_addr = addr - 0x80000000; // 计算实际的内存地址偏移
     uint32_t lo0 = (uint32_t)mem[base_addr];
     uint32_t lo1 = ((uint32_t)mem[base_addr + 1]) << 8;
     uint32_t lo2 = ((uint32_t)mem[base_addr + 2]) << 16;
@@ -32,7 +32,7 @@ word_t pmem_read(paddr_t addr) { // 内存读取函数
 }
 
 word_t pmem_write(uint32_t content, uint64_t addr, uint32_t len) { // 内存写入函数
-    uint8_t base_addr = guest_to_host(addr); // 计算实际的内存地址偏移
+    uint8_t base_addr = addr - 0x80000000; // 计算实际的内存地址偏移
     for (int i = 0; i < len; ++i) { // 根据len的值写入相应数量的字节
         mem[base_addr + i] = content >> (24 - 8 * i);
     }
