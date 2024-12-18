@@ -12,7 +12,7 @@ void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;//中断
 #ifdef CONFIG_DIFFTEST
 void init_difftest(char *ref_so_file, long img_size, int port) {
 	assert(ref_so_file != NULL);
-	Log("Log is written to %s", ref_so_file);
+	Log("The diff_so_file is written to %s", ref_so_file);
 	void *handle;
 	handle = dlopen(ref_so_file, RTLD_LAZY);//动态库加载函数
 	assert(handle);
