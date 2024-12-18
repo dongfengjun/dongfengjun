@@ -17,6 +17,26 @@ static inline bool in_pmem(paddr_t addr) {
   return addr - CONFIG_MBASE < CONFIG_MSIZE;
 }
 
+static inline word_t host_read(void *addr, int len) {
+  switch (len) {
+    case 1: return *(uint8_t  *)addr;
+    case 2: return *(uint16_t *)addr;
+    case 4: return *(uint32_t *)addr;
+    IFDEF(CONFIG_ISA64, case 8: return *(uint64_t *)addr);
+    default: MUXDEF(CONFIG_RT_CHECK, assert(0), return 0);
+  }
+}
+
+static inline void host_write(void *addr, int len, word_t data) {
+  switch (len) {
+    case 1: *(uint8_t  *)addr = data; return;
+    case 2: *(uint16_t *)addr = data; return;
+    case 4: *(uint32_t *)addr = data; return;
+    IFDEF(CONFIG_ISA64, case 8: *(uint64_t *)addr = data; return);
+    IFDEF(CONFIG_RT_CHECK, default: assert(0));
+  }
+}
+
 uint8_t* guest_to_host(paddr_t paddr) { return mem + paddr - CONFIG_MBASE; }
 paddr_t host_to_guest(uint8_t *haddr) { return haddr - mem + CONFIG_MBASE; }
 
@@ -31,7 +51,7 @@ static void pmem_write(paddr_t addr, int len, word_t data) {
 
 extern CPU_state cpu;
 static void out_of_bound(paddr_t addr) {
-	panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR "] at pc = "FMT_WORD, addr, PMEM_LEFT, PMEM_RIGHT, cpu.pc);
+	panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD, addr, PMEM_LEFT, PMEM_RIGHT, cpu.pc);
 }
 
 void init_mem() {
