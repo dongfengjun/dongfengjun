@@ -54,7 +54,6 @@ __EXPORT void difftest_exec(uint64_t n) {
 }
 
 __EXPORT void difftest_raise_intr(word_t NO) {//中断，暂时不用
-  assert(0);
 }
 
 __EXPORT void difftest_init(int port) {
