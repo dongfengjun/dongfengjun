@@ -194,7 +194,11 @@ void cpu_show_ftrace() {
 			ftrace->npc);
 	}
 }
+#else
+void isa_parser_elf(char *filename){
+}
 #endif
+
 
 static void trace_and_difftest() {
 #ifdef CONFIG_ITRACE_COND
