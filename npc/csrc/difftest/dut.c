@@ -17,11 +17,11 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
 	assert(handle);
 	ref_difftest_memcpy = (void (*)(paddr_t addr, void *buf, size_t n, bool direction))dlsym(handle, "difftest_memcpy");//获取ref函数地址
 	assert(ref_difftest_memcpy);
-	ref_difftest_regcpy = dlsym(handle, "difftest_regcpy");
+	ref_difftest_regcpy = (void (*)(void *dut, bool direction))dlsym(handle, "difftest_regcpy");
 	assert(ref_difftest_regcpy);
-	ref_difftest_exec = dlsym(handle, "difftest_exec");
+	ref_difftest_exec = (void (*)(uint64_t n))dlsym(handle, "difftest_exec");
 	assert(ref_difftest_exec);
-	ref_difftest_raise_intr = dlsym(handle, "difftest_intr");
+	ref_difftest_raise_intr = (void (*)(uint64_t NO))dlsym(handle, "difftest_intr");
 	assert(ref_difftest_raise_intr);
 	void (*ref_difftest_init)(int) = dlsym(handle, "difftest_init");
 	assert(ref_difftest_init);
