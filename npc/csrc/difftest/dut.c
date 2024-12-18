@@ -1,11 +1,12 @@
 #include <dlfcn.h>
 #include "./../include/common.h"
 
+extern "C" {
 extern uint8_t mem[CONFIG_MSIZE];
 extern CPU_state cpu;
 enum { DIFFTEST_TO_DUT, DIFFTEST_TO_REF };
 
-void *(*ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction) = NULL;
+void (*ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction) = NULL;
 void (*ref_difftest_regcpy)(void *dut, bool direction) = NULL;
 void (*ref_difftest_exec)(uint64_t n) = NULL;
 void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;//中断
@@ -71,3 +72,4 @@ void difftest_step(vaddr_t pc, vaddr_t npc) {//执行一步差异测试
 void init_difftest(char *ref_so_file, long img_size, int port) {
 }
 #endif
+}
