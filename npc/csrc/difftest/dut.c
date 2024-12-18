@@ -14,7 +14,10 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
 	assert(ref_so_file != NULL);
 	void *handle;
 	handle = dlopen(ref_so_file, RTLD_LAZY);//动态库加载函数
-	assert(handle);
+	if((handle = dlopen(myso, RTLD_LAZY)) == NULL) {
+        printf("dlopen - %sn", dlerror());  
+        exit(-1);  
+  }
 	ref_difftest_memcpy = (void (*)(paddr_t addr, void *buf, size_t n, bool direction))dlsym(handle, "difftest_memcpy");//获取ref函数地址
 	assert(ref_difftest_memcpy);
 	ref_difftest_regcpy = (void (*)(void *dut, bool direction))dlsym(handle, "difftest_regcpy");
