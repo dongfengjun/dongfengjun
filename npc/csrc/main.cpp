@@ -194,7 +194,11 @@ void cpu_show_ftrace() {
 			ftrace->npc);
 	}
 }
+#else
+void isa_parser_elf(char *filename){
+}
 #endif
+
 
 static void trace_and_difftest() {
 #ifdef CONFIG_ITRACE_COND
@@ -212,7 +216,7 @@ void dump_wave() {
 }
 void single_cycle() {
 	top->clk=1;top->eval();
-	top->inst = pmem_read(top->pc);top->eval();
+	top->inst = paddr_read(top->pc, 4);top->eval();
 	dump_wave();
 	top->clk=0;top->eval();dump_wave();
 }
