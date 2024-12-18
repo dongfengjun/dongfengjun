@@ -6,7 +6,7 @@
 #if   defined(CONFIG_PMEM_MALLOC)
 	uint8_t *mem = NULL;
 #else // CONFIG_PMEM_GARRAY
-	uint8_t mem[CONFIG_MSIZE];
+	uint8_t mem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
 
 uint8_t guest_to_host(paddr_t paddr) { return paddr - CONFIG_MBASE; }
