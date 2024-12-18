@@ -44,6 +44,17 @@ void single_cycle() {
 static void reset(int n) {
 	top->rst=1;top->eval();
 	while(n-->0) single_cycle();
+//	TODO: restart 默认的pc,reg,im,在这实现
+	cpu.pc = top->dnpc;
+	isa_gpr_push();
+  g_nr_guest_inst++;
+#ifdef CONFIG_ITRACE
+  itrace_push();
+#endif
+#ifdef CONFIG_FTRACE
+  ftrace_push();
+#endif
+  trace_and_difftest();
 	top->rst=0;
 }
 
@@ -251,10 +262,9 @@ int main(int argc, char *argv[]) {
 	RUNNING = true;
 
 /***code***/
-	reset(2);
 	init_monitor(argc, argv);//load inst
 //测试inst  std::cout<<std::hex<<pmem_read(0x80000000)<<"\n";	
-//	reset(2);
+	reset(2);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
 #else
