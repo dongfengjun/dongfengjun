@@ -53,6 +53,7 @@ static void itrace_push(){
 
   char *p = logbuf;
 	char *irp = iringbuf;
+	printf("pc:%08x\n", top->pc);
   p += snprintf(p, sizeof(logbuf), FMT_WORD ":", top->pc);
 	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", top->pc);
   int ilen = 4;
@@ -229,7 +230,6 @@ static void reset(int n) {
 #ifdef CONFIG_FTRACE
   ftrace_push();
 #endif
-  printf("123\n");
 	trace_and_difftest();
 	top->rst=0;
 }
