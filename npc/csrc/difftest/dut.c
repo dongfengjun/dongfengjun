@@ -1,6 +1,7 @@
 #include <dlfcn.h>
 #include "./../include/common.h"
 
+extern bool RUNNING;
 extern uint8_t mem[CONFIG_MSIZE];
 extern CPU_state cpu;
 enum { DIFFTEST_TO_DUT, DIFFTEST_TO_REF };
@@ -57,7 +58,7 @@ void isa_difftest_attach() {
 
 static void checkregs(CPU_state *ref, vaddr_t pc) {//check regs
 	if(!isa_difftest_checkregs(ref, pc)) {
-		//nemu_state.halt_pc = pc;
+		RUNNING = false;
 		isa_regs_display();
 	}
 }
