@@ -253,15 +253,18 @@ int main(int argc, char *argv[]) {
 /***code***/
 	init_monitor(argc, argv);//load inst
 //测试inst  std::cout<<std::hex<<pmem_read(0x80000000)<<"\n";	
-	reset(3);
+	reset(2);
+#ifdef CONFIG_FTRACE
+  cpu_show_ftrace();
+#endif
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
 #else
 /* Receive commands from user. */
   sdb_mainloop();
 #endif
+	
 	dump_wave();
-
 #ifdef CONFIG_FTRACE
 	cpu_show_ftrace();
 #endif
