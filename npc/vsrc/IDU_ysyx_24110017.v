@@ -13,6 +13,7 @@ wire [2:0]funct3;
 wire [31:0]immI,immU;
 wire [20:0]offset;
 wire wr_en;
+
 import "DPI-C" function void npc_trap();
 /***pattern***/
 assign op = inst[6:0];
