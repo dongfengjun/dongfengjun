@@ -45,8 +45,6 @@ typedef MUXDEF(PMEM64, uint64_t, uint32_t) paddr_t;
 typedef uint16_t ioaddr_t;
 
 /***TRACE***/
-#include "./../src/cpu/iringbuf.h"
-extern IRINGBUF rq;
 extern char *mtrace_p;
 
 #include <debug.h>
