@@ -93,4 +93,4 @@ word_t pmem_write(uint32_t content, uint64_t addr, uint32_t len) { // 内存写�
     }
     return 0; // 返回0成功
 }
-
+*****/
