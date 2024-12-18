@@ -82,5 +82,6 @@ int iringbuf_push(char *data);
 void iringbuf_display();
 //difftest
 void init_difftest(char *ref_so_file, long img_size, int port);
+void difftest_step(vaddr_t pc, vaddr_t npc);
 
 #endif
