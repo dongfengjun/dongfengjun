@@ -6,7 +6,7 @@ INC_PATH = ./csrc/include
 
 LDFLAGS += $(shell llvm-config --ldflags) -fPIE
 LIBS += $(shell llvm-config --libs)
-LDFLAGS += -fsanitize=address
+LDFLAGS += -fsanitize=address#ASan
 LDLIBS := -lasan $(LDLIBS)
 
 VERILATOR = verilator
