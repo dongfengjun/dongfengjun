@@ -52,8 +52,8 @@ typedef struct {
 uint8_t* guest_to_host(paddr_t paddr);
 paddr_t host_to_guest(uint8_t *haddr);
 void init_mem();
-word_t pmem_read(paddr_t addr);
-word_t pmem_write(uint32_t content, uint64_t addr, uint32_t len);
+word_t paddr_read(paddr_t addr, int len);
+word_t paddr_write(paddr_t addr, int len, word_t data);
 //reg DPI-C
 word_t gpr_regs_display(int raddr);//抓取reg  DPI-C in RF
 void isa_regs_display();
