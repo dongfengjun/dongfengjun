@@ -39,12 +39,13 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   int reg_num = ARRLEN(cpu.gpr);
-	for(int i = 0; i < 32; i ++) {
+	for(int i = 0; i < reg_num; i ++) {
 		if(ref_r->gpr[i] != cpu.gpr[i]) {
 			printf("gpr_x[%d] diff rff\n", i);
 			return false;
 		}
 	}
+	printf("ref_pc= %08x\tcpu.pc = %08x\n", ref_r->pc, cpu.pc);
 	if(ref_r->pc != cpu.pc) {
 		printf("pc diff ref\n");
 		return false;
@@ -59,7 +60,6 @@ static void checkregs(CPU_state *ref, vaddr_t pc) {//check regs
 	if(!isa_difftest_checkregs(ref, pc)) {
 		//nemu_state.halt_pc = pc;
 		isa_regs_display();
-		printf("regs different.");
 	}
 }
 
