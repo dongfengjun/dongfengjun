@@ -9,10 +9,6 @@
 	uint8_t mem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
 
-#define PMEM_LEFT  ((paddr_t)CONFIG_MBASE)
-#define PMEM_RIGHT ((paddr_t)CONFIG_MBASE + CONFIG_MSIZE - 1)
-#define RESET_VECTOR (PMEM_LEFT + CONFIG_PC_RESET_OFFSET)
-
 static inline bool in_pmem(paddr_t addr) {
   return addr - CONFIG_MBASE < CONFIG_MSIZE;
 }
