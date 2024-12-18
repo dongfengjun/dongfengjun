@@ -30,34 +30,6 @@ void npc_trap() {
   RUNNING = false;
 }
 
-/***single_cycle***/
-void dump_wave() {
-	tfp->dump(contextp->time());  
-  contextp->timeInc(1);
-}
-void single_cycle() {
-	top->clk=1;top->eval();
-	top->inst = pmem_read(top->pc);top->eval();
-	dump_wave();
-	top->clk=0;top->eval();dump_wave();
-}
-static void reset(int n) {
-	top->rst=1;top->eval();
-	while(n-->0) single_cycle();
-//	TODO: restart 默认的pc,reg,im,在这实现
-	cpu.pc = top->dnpc;
-	isa_gpr_push();
-  g_nr_guest_inst++;
-#ifdef CONFIG_ITRACE
-  itrace_push();
-#endif
-#ifdef CONFIG_FTRACE
-  ftrace_push();
-#endif
-  trace_and_difftest();
-	top->rst=0;
-}
-
 /***main***/
 #define MAX_INST_TO_PRINT 10//puts inst
 CPU_state cpu = {.gpr = {0}, .pc = 0x80000000};
@@ -231,6 +203,34 @@ static void trace_and_difftest() {
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(logbuf)); }
 		IFDEF(CONFIG_DIFFTEST, difftest_step(top->pc, top->dnpc));
 		IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
+}
+
+/***single_cycle***/
+void dump_wave() {
+	tfp->dump(contextp->time());  
+  contextp->timeInc(1);
+}
+void single_cycle() {
+	top->clk=1;top->eval();
+	top->inst = pmem_read(top->pc);top->eval();
+	dump_wave();
+	top->clk=0;top->eval();dump_wave();
+}
+static void reset(int n) {
+	top->rst=1;top->eval();
+	while(n-->0) single_cycle();
+//	TODO: restart 默认的pc,reg,im,在这实现
+	cpu.pc = top->dnpc;
+	isa_gpr_push();
+  g_nr_guest_inst++;
+#ifdef CONFIG_ITRACE
+  itrace_push();
+#endif
+#ifdef CONFIG_FTRACE
+  ftrace_push();
+#endif
+  trace_and_difftest();
+	top->rst=0;
 }
 
 void cpu_exec(int n) {
