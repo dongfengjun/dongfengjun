@@ -69,7 +69,7 @@ static void itrace_push(){
 	disassemble(irp, logbuf + sizeof(logbuf) - irp, top->pc, (uint8_t *)&insts, 4);
 	strncat(iringbuf, " \n", 3);
 	iringbuf_push(iringbuf);
-	puts(buf);
+	puts(logbuf);
 }
 #endif
 
