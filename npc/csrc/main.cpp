@@ -49,7 +49,7 @@ static void reset(int n) {
 
 /***main***/
 #define MAX_INST_TO_PRINT 10//puts inst
-CPU_state cpu = {};
+CPU_state cpu = {32{0},0x80000000};
 uint64_t g_nr_guest_inst = 0;
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
 IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
