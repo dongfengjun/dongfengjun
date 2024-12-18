@@ -1,7 +1,6 @@
 #include <dlfcn.h>
 #include "./../include/common.h"
 
-extern "C" {
 extern uint8_t mem[CONFIG_MSIZE];
 extern CPU_state cpu;
 enum { DIFFTEST_TO_DUT, DIFFTEST_TO_REF };
@@ -16,7 +15,7 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
 	void *handle;
 	handle = dlopen(ref_so_file, RTLD_LAZY);//动态库加载函数
 	assert(handle);
-	ref_difftest_memcpy = dlsym(handle, "difftest_memcpy");//获取ref函数地址
+	ref_difftest_memcpy = (void (*)(paddr_t addr, void *buf, size_t n, bool direction))dlsym(handle, "difftest_memcpy");//获取ref函数地址
 	assert(ref_difftest_memcpy);
 	ref_difftest_regcpy = dlsym(handle, "difftest_regcpy");
 	assert(ref_difftest_regcpy);
@@ -72,4 +71,3 @@ void difftest_step(vaddr_t pc, vaddr_t npc) {//执行一步差异测试
 void init_difftest(char *ref_so_file, long img_size, int port) {
 }
 #endif
-}
