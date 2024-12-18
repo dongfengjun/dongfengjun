@@ -36,8 +36,6 @@ typedef uint16_t ioaddr_t;
 #define CONFIG_MBASE 0x80000000//IM
 #define CONFIG_MSIZE 0x8000000
 #define CONFIG_MEM_RANDOM 1
-#define PMEM_LEFT ((uint32_t)CONFIG_MBASE)
-#define PMEM_RIGHT ((uint32_t)CONFIG_MBASE + CONFIG_MSIZE - 1)
 #define CONFIG_TRACE_START 0
 #define CONFIG_TRACE_END 10000
 

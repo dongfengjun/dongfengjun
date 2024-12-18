@@ -9,6 +9,14 @@
 	uint8_t mem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
 
+#define PMEM_LEFT  ((paddr_t)CONFIG_MBASE)
+#define PMEM_RIGHT ((paddr_t)CONFIG_MBASE + CONFIG_MSIZE - 1)
+#define RESET_VECTOR (PMEM_LEFT + CONFIG_PC_RESET_OFFSET)
+
+static inline bool in_pmem(paddr_t addr) {
+  return addr - CONFIG_MBASE < CONFIG_MSIZE;
+}
+
 uint8_t* guest_to_host(paddr_t paddr) { return mem + paddr - CONFIG_MBASE; }
 paddr_t host_to_guest(uint8_t *haddr) { return haddr - mem + CONFIG_MBASE; }
 
