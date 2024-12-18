@@ -251,12 +251,10 @@ int main(int argc, char *argv[]) {
 	RUNNING = true;
 
 /***code***/
+	reset(2);
 	init_monitor(argc, argv);//load inst
 //测试inst  std::cout<<std::hex<<pmem_read(0x80000000)<<"\n";	
-	reset(2);
-#ifdef CONFIG_FTRACE
-  cpu_show_ftrace();
-#endif
+//	reset(2);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
 #else
