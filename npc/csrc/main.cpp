@@ -227,7 +227,7 @@ void cpu_exec(int n) {
 	g_print_step = (n < MAX_INST_TO_PRINT);
 	while(RUNNING && n != 0) {
 		single_cycle();
-		cpu.pc = top->dnpc;
+		cpu.pc = top->pc;
 		isa_gpr_push();
 		g_nr_guest_inst++;
 #ifdef CONFIG_ITRACE
