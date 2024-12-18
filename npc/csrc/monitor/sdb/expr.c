@@ -281,7 +281,7 @@ word_t expr(char *e, bool *success) {
 				s[8]='\0';
 				paddr_t addr = 0;
 				sscanf(s, "%x", &addr);
-				word_t value = pmem_read(addr);
+				word_t value = paddr_read(addr, 4);
 				sprintf(tokens[i+1].str, "%u", value);
 			}
 			else	printf("EXPR Invalid.\n");
