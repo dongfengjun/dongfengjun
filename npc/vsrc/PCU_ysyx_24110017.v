@@ -15,7 +15,6 @@ always@(posedge clk)begin
 		pc <= 32'h80000000;
 	else
 		pc <= dnpc;
-	end
 end
 assign dnpc = (jalen) ? (pc + offset) : (jalren) ? ((r1 + offset) & ~1) : pc + 4;
 
