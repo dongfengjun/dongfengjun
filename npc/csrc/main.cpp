@@ -229,7 +229,8 @@ static void reset(int n) {
 #ifdef CONFIG_FTRACE
   ftrace_push();
 #endif
-  trace_and_difftest();
+  printf("123\n");
+	trace_and_difftest();
 	top->rst=0;
 }
 
