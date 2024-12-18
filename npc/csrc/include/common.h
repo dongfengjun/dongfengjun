@@ -27,7 +27,7 @@ typedef uint16_t ioaddr_t;
 #define CONFIG_TARGET_NATIVE_ELF 1
 #define CONFIG_TRACE 1
 #ifdef CONFIG_TRACE
-	#define CONFIG_ITRACE 1
+//	#define CONFIG_ITRACE 1
 	#define CONFIG_FTRACE 1
 	#define CONFIG_WATCHPOINT 1
 #endif
