@@ -32,11 +32,11 @@ EXU_ysyx_24110017 EXU(a,b,sel,op,shamt,imm,res);
 /***riscv32 control***/
 assign raddr1 = rs1;
 assign raddr2 = rs2;
-assign b = (op == 7'b0110011 || op == 7'b0100011) r2 : imm;
+assign b = (op == 7'b0110011 || op == 7'b0100011) ? r2 : imm;
 assign a = (op == 7'b0010011 || op == 7'b0000011 || op == 7'b0100011) ? r1 : pc;
 assign xrd = (op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011	//I 
  || op == 7'b0100011 //S
- || op == 7'b0110011 //R
+ || op == 7'b0110011)//R
  ? res 
  : (op == 7'b1101111) ? (pc + 4) //I_jalr
  : (op == 7'b0110111) ? imm	//U_lui
