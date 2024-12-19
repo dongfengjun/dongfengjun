@@ -3,8 +3,10 @@ module RegisterFile_ysyx_24110017 #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
   input [DATA_WIDTH-1:0] wdata,
   input [ADDR_WIDTH-1:0] waddr,
   input wen,
-	input [ADDR_WIDTH-1:0]raddr,
-	output [DATA_WIDTH-1:0]rdata
+	input [ADDR_WIDTH-1:0]raddr1,
+	output [DATA_WIDTH-1:0]r1,
+	input [ADDR_WIDTH-1:0]raddr2,
+	output [DATA_WIDTH-1:0]r2
 );
   reg [DATA_WIDTH-1:0] rf [2**ADDR_WIDTH-1:0];
   
@@ -12,7 +14,8 @@ module RegisterFile_ysyx_24110017 #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
     if (wen) rf[waddr] <= wdata;
   end
 
-	assign rdata = (raddr == 0) ? 32'b0 : rf[raddr];	
+	assign r1 = (raddr1 == 0) ? 32'b0 : rf[raddr1];
+	assign r2 = (raddr2 == 0) ? 32'b0 : rf[raddr2];	
 /***DPI-C***/
 export "DPI-C" function gpr_reg_display;
 function int gpr_reg_display(int addr);
