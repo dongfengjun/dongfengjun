@@ -55,7 +55,7 @@ assign res =
       ({32{(sel == 3'b110) && (funct7 == 7'b0000001)}} 
           & ($signed(a) % $signed(b))) |  //R_rem
       ({32{(sel == 3'b111) && (funct7 == 7'b0000001)}}
-          & (a % b)) |//R_remui
+          & (a % b)) //R_remui
 /***I_lb~lhu***/																	)) |
 			({32{(op == 7'b0000011) && (sel == 3'b000)}} 
 					& {{24{rdata[7]}},(rdata[7:0])}) | //I_lb
