@@ -1,9 +1,8 @@
-module IDU_ysyx_24110017(inst,op,rd,funct3,sel,rs1,rs2,imm,funct7,shamt,wr_en);
+module IDU_ysyx_24110017(inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,wr_en);
 input [31:0]inst;
 output [6:0]op;
 output [4:0]rd;
 output [2:0]funct3;
-output [2:0]sel;
 output [4:0]rs1;
 output [4:0]rs2;
 output [31:0]imm;
@@ -56,16 +55,6 @@ assign imm = (op == 7'b0110111 || op == 7'b0010111) ? immU
  : imm;
 
 /***riscv32e-control***/
-assign sel = ((op == 7'b0010011) && (funct3 == 3'b000)) ? 3'b000	//addi
- : ((op == 7'b0010011) && (funct3 == 3'b001)) ? 3'b001	//slli
- : ((op == 7'b0010011) && (funct3 == 3'b010)) ? 3'b010	//slti
- : ((op == 7'b0010011) && (funct3 == 3'b011)) ? 3'b011	//sltiu
- : ((op == 7'b0010011) && (funct3 == 3'b100)) ? 3'b100	//xori
- : ((op == 7'b0010011) && (funct3 == 3'b101)) ? 3'b101	//srli
- : ((op == 7'b0010011) && (funct3 == 3'b110)) ? 3'b110	//ori
- : ((op == 7'b0010011) && (funct3 == 3'b111)) ? 3'b111	//andi
- : sel;
-
 assign wr_en = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 || op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011) ? 1'b1 : 1'b0;
 
 always@(*) begin
