@@ -20,7 +20,7 @@ extern "C" {
     extern int gpr_reg_display(int addr);
 
     // DPI IMPORTS
-    // DPI import at vsrc/IDU_ysyx_24110017.v:26:30
+    // DPI import at vsrc/IDU_ysyx_24110017.v:25:30
     extern void npc_trap();
     // DPI import at vsrc/EXU_ysyx_24110017.v:76:29
     extern int pmem_read(const svLogicVecVal* raddr);

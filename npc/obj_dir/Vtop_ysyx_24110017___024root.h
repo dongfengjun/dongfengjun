@@ -15,14 +15,12 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
     // DESIGN SPECIFIC STATE
     VL_IN8(clk,0,0);
     VL_IN8(rst,0,0);
-    CData/*2:0*/ top_ysyx_24110017__DOT__sel;
     CData/*4:0*/ top_ysyx_24110017__DOT__rs1;
     CData/*4:0*/ top_ysyx_24110017__DOT__rs2;
     CData/*6:0*/ top_ysyx_24110017__DOT__funct7;
     CData/*0:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hb469f585__0;
     CData/*0:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hcbe0b758__0;
     CData/*0:0*/ __VdfgTmp_hae92e65f__0;
-    CData/*2:0*/ __Vtrigrprev__TOP__top_ysyx_24110017__DOT__sel;
     CData/*0:0*/ __VstlDidInit;
     CData/*0:0*/ __VicoDidInit;
     CData/*0:0*/ __Vtrigrprev__TOP__clk;
@@ -61,10 +59,10 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
     QData/*63:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h82f6b515__0;
     VlUnpacked<IData/*31:0*/, 32> top_ysyx_24110017__DOT__RF__DOT__rf;
     VlUnpacked<CData/*0:0*/, 2> __Vm_traceActivity;
-    VlTriggerVec<3> __VstlTriggered;
-    VlTriggerVec<3> __VicoTriggered;
-    VlTriggerVec<3> __VactTriggered;
-    VlTriggerVec<3> __VnbaTriggered;
+    VlTriggerVec<2> __VstlTriggered;
+    VlTriggerVec<2> __VicoTriggered;
+    VlTriggerVec<2> __VactTriggered;
+    VlTriggerVec<2> __VnbaTriggered;
 
     // INTERNAL VARIABLES
     Vtop_ysyx_24110017__Syms* const vlSymsp;

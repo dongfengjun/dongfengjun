@@ -80,7 +80,7 @@ wire [31:0]raddr;
 reg [31:0]rdata;
 wire valid,wen;
 wire [31:0]waddr, wdata;
-wire [8:0]wmask;
+wire [7:0]wmask;
 
 assign valid = (op == 7'b0100011 || op == 7'b0000011) ? 1'b1 : 1'b0;
 assign wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
