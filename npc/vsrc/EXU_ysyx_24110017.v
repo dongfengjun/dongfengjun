@@ -1,7 +1,8 @@
-module EXU_ysyx_24110017(a,b,sel,op,shamt,offset,res);
+module EXU_ysyx_24110017(a,b,sel,op,funct7,shamt,offset,res);
 input [31:0] a,b;
 input [2:0] sel;
 input [6:0] op;
+input [6:0] funct7;
 input [4:0] shamt;
 input [31:0] offset;
 output [31:0] res;
