@@ -58,7 +58,7 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root__trace_init_sub__TOP__0(Vtop_ysyx
     tracep->declBit(c+57,"wen", false,-1);
     tracep->declBus(c+58,"waddr", false,-1, 31,0);
     tracep->declBus(c+59,"wdata", false,-1, 31,0);
-    tracep->declBus(c+60,"wmask", false,-1, 8,0);
+    tracep->declBus(c+60,"wmask", false,-1, 7,0);
     tracep->popNamePrefix(1);
     tracep->pushNamePrefix("IDU ");
     tracep->declBus(c+37,"inst", false,-1, 31,0);
@@ -242,7 +242,7 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root__trace_full_sub_0(Vtop_ysyx_24110
     bufp->fullIData(oldp+59,(((0x23U == (0x7fU & vlSelf->inst))
                                ? vlSelf->top_ysyx_24110017__DOT__r2
                                : 0U)),32);
-    bufp->fullSData(oldp+60,((((0x23U == (0x7fU & vlSelf->inst)) 
+    bufp->fullCData(oldp+60,((((0x23U == (0x7fU & vlSelf->inst)) 
                                | (0U == (7U & (vlSelf->inst 
                                                >> 0xcU))))
                                ? 1U : (((0x23U == (0x7fU 
@@ -260,7 +260,7 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root__trace_full_sub_0(Vtop_ysyx_24110
                                                      & (vlSelf->inst 
                                                         >> 0xcU))))
                                                  ? 0xfU
-                                                 : 0U)))),9);
+                                                 : 0U)))),8);
     bufp->fullIData(oldp+61,((((- (IData)((vlSelf->inst 
                                            >> 0x1fU))) 
                                << 0xcU) | (vlSelf->inst 

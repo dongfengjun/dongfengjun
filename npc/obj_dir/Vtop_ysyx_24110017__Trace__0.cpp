@@ -112,7 +112,7 @@ void Vtop_ysyx_24110017___024root__trace_chg_sub_0(Vtop_ysyx_24110017___024root*
     bufp->chgIData(oldp+58,(((0x23U == (0x7fU & vlSelf->inst))
                               ? vlSelf->top_ysyx_24110017__DOT__r2
                               : 0U)),32);
-    bufp->chgSData(oldp+59,((((0x23U == (0x7fU & vlSelf->inst)) 
+    bufp->chgCData(oldp+59,((((0x23U == (0x7fU & vlSelf->inst)) 
                               | (0U == (7U & (vlSelf->inst 
                                               >> 0xcU))))
                               ? 1U : (((0x23U == (0x7fU 
@@ -130,7 +130,7 @@ void Vtop_ysyx_24110017___024root__trace_chg_sub_0(Vtop_ysyx_24110017___024root*
                                                     & (vlSelf->inst 
                                                        >> 0xcU))))
                                                 ? 0xfU
-                                                : 0U)))),9);
+                                                : 0U)))),8);
     bufp->chgIData(oldp+60,((((- (IData)((vlSelf->inst 
                                           >> 0x1fU))) 
                               << 0xcU) | (vlSelf->inst 
