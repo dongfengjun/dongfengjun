@@ -26,7 +26,7 @@ PCU_ysyx_24110017 PCU(clk,rst,op,funct3,imm,r1,r2,pc,dnpc);
 //IFU_ysyx_24110017 IFU(pc,inst); //c++
 IDU_ysyx_24110017 IDU(inst,op,rd,funct3,sel,rs1,rs2,imm,funct7,shamt,wr_en);
 RegisterFile_ysyx_24110017 #(5,32) RF(clk,xrd,rd,wr_en,raddr1,r1,raddr2,r2);
-EXU_ysyx_24110017 EXU(a,b,sel,op,funct7,shamt,imm,imm,res);
+EXU_ysyx_24110017 EXU(a,b,sel,op,funct7,shamt,imm,r1,r2,res);
 
 
 /***riscv32 control***/
