@@ -13,7 +13,7 @@ output [31:0] res;
 /***I TYPE***/
 /***ALU addi~srai***/
 assign res = 
-			((op == 7'b0010011) & (
+			({32{op == 7'b0010011}} & (
 			({32{sel == 3'b000}} & (a + b)) |	//addi
       ({32{sel == 3'b001}} & (a << shamt)) |	//slli
       ({32{sel == 3'b010}} & ($signed(a) < $signed(b))) |	//slti

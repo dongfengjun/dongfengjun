@@ -18,6 +18,7 @@ always@(posedge clk)begin
 		pc <= dnpc;
 end
 
+wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen;
 assign jalen = (op == 7'b1101111) ? 1'b1 : 1'b0;
 assign jalren = (op == 7'b1100111) ? 1'b1 : 1'b0;
 assign beqen = (op == 7'b1100011 && funct3 == 3'b000 && (r1 == r2));
