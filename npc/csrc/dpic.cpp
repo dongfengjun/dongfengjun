@@ -23,4 +23,3 @@ void pmem_write(int waddr, int wdata, char wmask) {
 		default: break;
 	}
 }
-***/
