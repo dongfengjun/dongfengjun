@@ -39,6 +39,7 @@ assign rs2 = (op == 7'b1100011  //B
  || op == 7'b0100011  //S
  || op == 7'b0110011) ? //R
  inst[24:20] : 5'b0;
+assign funct7 = (op == 7'b0110011) ? inst[31:25] : 7'b0;
 assign immI = {{20{inst[31]}},inst[31:20]};	//SEXTIimmediate
 assign shamt = {inst[24:20]};	//I shamt
 assign immU = {inst[31:12],{12{1'b0}}};	//UEXTUimm
