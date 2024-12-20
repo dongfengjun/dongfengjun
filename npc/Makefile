@@ -17,6 +17,7 @@ VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
 VERILATOR_FLAGS += -LDFLAGS -lreadline
 
 LOG ?= $(BUILD)/npc-log.txt
+IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 ELF ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
 REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
 NPC_ARGS += --log=$(LOG)
