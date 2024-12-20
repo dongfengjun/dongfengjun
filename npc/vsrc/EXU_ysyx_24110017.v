@@ -16,8 +16,8 @@ assign res =
 			({32{op == 7'b0010011}} & (
 			({32{sel == 3'b000}} & (a + b)) |	//addi
       ({32{sel == 3'b001}} & (a << shamt)) |	//slli
-      ({32{sel == 3'b010}} & ($signed(a) < $signed(b))) |	//slti
-	    ({32{sel == 3'b011}} & (a < $unsigned(b))) |	//sltiu
+      ({32{sel == 3'b010}} & {32{$signed(a) < $signed(b)}}) |	//slti
+	    ({32{sel == 3'b011}} & {32{a < $unsigned(b)}}) |	//sltiu
       ({32{sel == 3'b100}} & (a ^ b)) |	//xori
       ({32{(sel == 3'b101) && (funct7 == 7'b0000000)}} 
 					& (a >> shamt)) |	//srli
