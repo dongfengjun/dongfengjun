@@ -18,7 +18,7 @@ VERILATOR_FLAGS += -LDFLAGS -lreadline
 
 LOG ?= $(BUILD)/npc-log.txt
 IMG ?= ../am-kernels/tests/cpu-tests/build/add-riscv32-nemu.bin
-ELF ?= ../am-kernels/tests/cpu-tests/build/add-riscv32e-npc.elf
+ELF ?= ../am-kernels/tests/cpu-tests/build/add-riscv32-nemu.elf
 REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
 NPC_ARGS += --log=$(LOG)
 NPC_ARGS += --img=$(IMG)
