@@ -8,7 +8,7 @@
 #include "Vtop_ysyx_24110017__Dpi.h"
 #include "./include/common.h"
 
-int pmem_read(int raddr) {
+uint32_t pmem_read(uint32_t raddr) {
   // 总是读取地址为`raddr & ~0x3u`的4字节返回
 	return paddr_read(raddr, 4);
 }
