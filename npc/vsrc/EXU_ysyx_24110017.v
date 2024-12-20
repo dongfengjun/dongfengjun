@@ -73,7 +73,7 @@ assign res =
 ***/
 
 /***sw sh***/
-import "DPI-C" function int pmem_read(input unsigned int raddr);
+import "DPI-C" function int pmem_read(input unsigned raddr);
 import "DPI-C" function void pmem_write(input unsigned waddr, input unsigned wdata, input int wmask);
 
 wire [31:0]raddr;
