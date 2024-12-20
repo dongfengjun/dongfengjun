@@ -11,7 +11,7 @@ output [31:0] res;
 
 
 wire [63:0]c;
-assign c = {32'b0,signed(a)} * {32'b0,signed(b)} >>> 32;
+assign c = {32'b0,$signed(a)} * {32'b0,$signed(b)} >>> 32;
 /***I TYPE***/
 /***ALU addi~srai***/
 assign res = 
