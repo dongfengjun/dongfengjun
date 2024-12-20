@@ -10,6 +10,8 @@ input [31:0] r2;
 output [31:0] res;
 
 
+wire [63:0]c;
+assign c = {32'b0,signed(a)} * {32'b0,signed(b)} >>> 32;
 /***I TYPE***/
 /***ALU addi~srai***/
 assign res = 
@@ -52,7 +54,7 @@ assign res =
       ({32{(sel == 3'b000) && (funct7 == 7'b0000001)}}
           & (a * b)) | //mul
       ({32{(sel == 3'b001) && (funct7 == 7'b0000001)}} 
-          & ({32'b0,a} * {32'b0,b} >>> 32)[31:0]) /***| //mulh
+          & (c[31:0]) /***| //mulh
       ({32{(sel == 3'b100) && (funct7 == 7'b0000001)}}
           & ($signed(a) / $signed(b))) |  //div
       ({32{(sel == 3'b101) && (funct7 == 7'b0000001)}}
