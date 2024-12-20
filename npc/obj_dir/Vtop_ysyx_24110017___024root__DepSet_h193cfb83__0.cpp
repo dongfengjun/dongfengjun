@@ -8,8 +8,8 @@
 #include "Vtop_ysyx_24110017___024root.h"
 
 void Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__IDU__DOT__npc_trap_TOP();
-void Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__EXU__DOT__pmem_read_TOP(CData/*0:0*/ raddr, IData/*31:0*/ &pmem_read__Vfuncrtn);
-void Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__EXU__DOT__pmem_write_TOP(CData/*0:0*/ waddr, CData/*0:0*/ wdata, IData/*31:0*/ wmask);
+void Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__EXU__DOT__pmem_read_TOP(IData/*31:0*/ raddr, IData/*31:0*/ &pmem_read__Vfuncrtn);
+void Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__EXU__DOT__pmem_write_TOP(IData/*31:0*/ waddr, IData/*31:0*/ wdata, IData/*31:0*/ wmask);
 
 VL_INLINE_OPT void Vtop_ysyx_24110017___024root___ico_sequent__TOP__0(Vtop_ysyx_24110017___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
@@ -208,10 +208,8 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___ico_sequent__TOP__0(Vtop_ysyx_
                                                  : 
                                                 ((IData)(4U) 
                                                  + vlSelf->pc)))))))));
-    Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__EXU__DOT__pmem_read_TOP(
-                                                                                (1U 
-                                                                                & vlSelf->top_ysyx_24110017__DOT__EXU__DOT__raddr), vlSelf->__Vfunc_top_ysyx_24110017__DOT__EXU__DOT__pmem_read__2__Vfuncout);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4fe0fd8d__0 
+    Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__EXU__DOT__pmem_read_TOP(vlSelf->top_ysyx_24110017__DOT__EXU__DOT__raddr, vlSelf->__Vfunc_top_ysyx_24110017__DOT__EXU__DOT__pmem_read__2__Vfuncout);
+    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4a41356a__0 
         = vlSelf->__Vfunc_top_ysyx_24110017__DOT__EXU__DOT__pmem_read__2__Vfuncout;
     vlSelf->top_ysyx_24110017__DOT__res = ((- (IData)(
                                                       (0x13U 
@@ -298,24 +296,20 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___ico_sequent__TOP__0(Vtop_ysyx_
                                               (0x7fU 
                                                & vlSelf->inst)))) {
         vlSelf->top_ysyx_24110017__DOT__EXU__DOT__rdata 
-            = vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4fe0fd8d__0;
+            = vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4a41356a__0;
         if ((0x23U == (0x7fU & vlSelf->inst))) {
             Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__EXU__DOT__pmem_write_TOP(
                                                                                 ((0x23U 
                                                                                 == 
                                                                                 (0x7fU 
                                                                                 & vlSelf->inst))
-                                                                                 ? 
-                                                                                (1U 
-                                                                                & vlSelf->top_ysyx_24110017__DOT__EXU__DOT__raddr)
+                                                                                 ? vlSelf->top_ysyx_24110017__DOT__EXU__DOT__raddr
                                                                                  : 0U), 
                                                                                 ((0x23U 
                                                                                 == 
                                                                                 (0x7fU 
                                                                                 & vlSelf->inst))
-                                                                                 ? 
-                                                                                (1U 
-                                                                                & vlSelf->top_ysyx_24110017__DOT__r2)
+                                                                                 ? vlSelf->top_ysyx_24110017__DOT__r2
                                                                                  : 0U), 
                                                                                 (((0x23U 
                                                                                 == 
@@ -506,10 +500,8 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___nba_sequent__TOP__1(Vtop_ysyx_
                                                  : 
                                                 ((IData)(4U) 
                                                  + vlSelf->pc)))))))));
-    Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__EXU__DOT__pmem_read_TOP(
-                                                                                (1U 
-                                                                                & vlSelf->top_ysyx_24110017__DOT__EXU__DOT__raddr), vlSelf->__Vfunc_top_ysyx_24110017__DOT__EXU__DOT__pmem_read__2__Vfuncout);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4fe0fd8d__0 
+    Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__EXU__DOT__pmem_read_TOP(vlSelf->top_ysyx_24110017__DOT__EXU__DOT__raddr, vlSelf->__Vfunc_top_ysyx_24110017__DOT__EXU__DOT__pmem_read__2__Vfuncout);
+    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4a41356a__0 
         = vlSelf->__Vfunc_top_ysyx_24110017__DOT__EXU__DOT__pmem_read__2__Vfuncout;
     vlSelf->top_ysyx_24110017__DOT__res = ((- (IData)(
                                                       (0x13U 
@@ -596,24 +588,20 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___nba_sequent__TOP__1(Vtop_ysyx_
                                               (0x7fU 
                                                & vlSelf->inst)))) {
         vlSelf->top_ysyx_24110017__DOT__EXU__DOT__rdata 
-            = vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4fe0fd8d__0;
+            = vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4a41356a__0;
         if ((0x23U == (0x7fU & vlSelf->inst))) {
             Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__EXU__DOT__pmem_write_TOP(
                                                                                 ((0x23U 
                                                                                 == 
                                                                                 (0x7fU 
                                                                                 & vlSelf->inst))
-                                                                                 ? 
-                                                                                (1U 
-                                                                                & vlSelf->top_ysyx_24110017__DOT__EXU__DOT__raddr)
+                                                                                 ? vlSelf->top_ysyx_24110017__DOT__EXU__DOT__raddr
                                                                                  : 0U), 
                                                                                 ((0x23U 
                                                                                 == 
                                                                                 (0x7fU 
                                                                                 & vlSelf->inst))
-                                                                                 ? 
-                                                                                (1U 
-                                                                                & vlSelf->top_ysyx_24110017__DOT__r2)
+                                                                                 ? vlSelf->top_ysyx_24110017__DOT__r2
                                                                                  : 0U), 
                                                                                 (((0x23U 
                                                                                 == 

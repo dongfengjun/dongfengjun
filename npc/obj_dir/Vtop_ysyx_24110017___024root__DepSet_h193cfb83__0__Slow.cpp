@@ -164,7 +164,7 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___ctor_var_reset(Vtop_ysyx_241100
     }
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT__raddr = VL_RAND_RESET_I(32);
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT__rdata = VL_RAND_RESET_I(32);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4fe0fd8d__0 = 0;
+    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4a41356a__0 = 0;
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h105484d3__0 = 0;
     vlSelf->__VdfgTmp_hae92e65f__0 = 0;
     vlSelf->__Vfunc_top_ysyx_24110017__DOT__EXU__DOT__pmem_read__2__Vfuncout = 0;
