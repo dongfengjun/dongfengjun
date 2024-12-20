@@ -42,6 +42,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   int reg_num = ARRLEN(cpu.gpr);
 	for(int i = 0; i < reg_num; i ++) {
 		if(ref_r->gpr[i] != cpu.gpr[i]) {
+			Log("npc: %s at pc = " FMT_WORD, (a0 == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED)), pc);
 			printf("gpr_x[%d]:%08x   diff with   ref_x[%d]:%08x\n", i, cpu.gpr[i], i, ref_r->gpr[i]);
 			return false;
 		}
