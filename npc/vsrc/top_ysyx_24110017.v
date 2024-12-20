@@ -33,7 +33,7 @@ EXU_ysyx_24110017 EXU(a,b,funct3,op,funct7,shamt,imm,r1,r2,res);
 assign raddr1 = rs1;
 assign raddr2 = rs2;
 assign b = (op == 7'b0110011 || op == 7'b0100011) ? r2 : imm;
-assign a = (op == 7'b0010011 || op == 7'b0000011 || op == 7'b0100011) ? r1 : pc;
+assign a = (op == 7'b0010011 || op == 7'b0000011 || op == 7'b0100011 || op == 7'b0110011/*R*/) ? r1 : pc;
 assign xrd = (op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011	//I 
  || op == 7'b0100011 //S
  || op == 7'b0110011)//R
