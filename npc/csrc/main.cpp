@@ -19,22 +19,6 @@ word_t gpr_regs_display(int raddr) {
   return gpr_reg_display(raddr);
 }
 
-int pmem_read(int raddr) {
-  // 总是读取地址为`raddr & ~0x3u`的4字节返回
-  return paddr_read(raddr, 4);
-}
-void pmem_write(int waddr, int wdata, char wmask) {
-  // 总是往地址为`waddr & ~0x3u`的4字节按写掩码`wmask`写入`wdata`
-  // `wmask`中每比特表示`wdata`中1个字节的掩码,
-  // 如`wmask = 0x3`代表只写入最低2个字节, 内存中的其它字节保持不变
-  switch(wmask) {
-    case 1: paddr_write(waddr, 1, wdata); break;
-    case 3: paddr_write(waddr, 2, wdata); break;
-    case 15: paddr_write(waddr, 4,wdata); break;
-    default: break;
-  }
-} 
-
 bool RUNNING;
 void npc_trap() {
   extern int gpr_reg_display(int addr);//抓取a0
