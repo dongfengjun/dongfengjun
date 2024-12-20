@@ -56,9 +56,9 @@ assign res =
       ({32{(sel == 3'b100) && (funct7 == 7'b0000001)}}
           & ($signed(a) / $signed(b))) |  //div
       ({32{(sel == 3'b101) && (funct7 == 7'b0000001)}}
-          & (a / b)) /***| //divu
+          & (a / b)) | //divu
       ({32{(sel == 3'b110) && (funct7 == 7'b0000001)}} 
-          & ($signed(a) % $signed(b))) |  //R_rem
+          & ($signed(a) % $signed(b))) /***|  //R_rem
       ({32{(sel == 3'b111) && (funct7 == 7'b0000001)}}
           & (a % b)) //R_remui			***/
 																										))
