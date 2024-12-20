@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <iostream>
+#include "Vtop_ysyx_24110017.h"
+#include "verilated.h"
 #include "svdpi.h"
 #include "Vtop_ysyx_24110017__Dpi.h"
 #include "./include/common.h"
