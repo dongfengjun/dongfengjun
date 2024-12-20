@@ -39,7 +39,7 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
     IData/*31:0*/ top_ysyx_24110017__DOT__b;
     IData/*31:0*/ top_ysyx_24110017__DOT__PCU__DOT____VdfgTmp_h051484d1__0;
     IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT__rdata;
-    IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h24b808c8__0;
+    IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h71c3e6b6__0;
     IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hecdda523__0;
     IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h37e52d1e__0;
     IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_ha4994cf9__0;
