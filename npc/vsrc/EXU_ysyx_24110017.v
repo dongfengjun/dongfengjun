@@ -25,11 +25,12 @@ assign res =
 					& (a >>> shamt) |	//srai
       ({32{sel == 3'b110}} & (a | b)) |	//ori
       ({32{sel == 3'b111}} & (a & b)) 	//andi
-/***R_add~R_remu***/											))				
-			|
+																	 ))				
+																					|
+/***R_add~R_remu***/ 
       ((op == 7'b0110011) & (
       ({32{(sel == 3'b000) && (funct7 == 7'b0000000)}} 
-					& (a + b)) | //add
+					& (a + b)) /***			| //add
 			({32{(sel == 3'b000) && (funct7 == 7'b0100000)}} 
 					& (a + (((4'b1111)^b)+1))) | //sub
       ({32{(sel == 3'b001) && (funct7 == 7'b0000000)}}
@@ -59,7 +60,7 @@ assign res =
       ({32{(sel == 3'b110) && (funct7 == 7'b0000001)}} 
           & ($signed(a) % $signed(b))) |  //R_rem
       ({32{(sel == 3'b111) && (funct7 == 7'b0000001)}}
-          & (a % b)) //R_remui
+          & (a % b)) //R_remui			***/
 																										))
 /***I_lb~lhu***/
 			|
