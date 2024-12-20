@@ -228,7 +228,7 @@ static void reset(int n) {
 }
 
 void cpu_exec(int n) {
-	g_print_step = (n < MAX_INST_TO_PRINT);
+	g_print_step = (n > 0 && n < MAX_INST_TO_PRINT);
 	while(RUNNING && n != 0) {
 		single_cycle();
 		cpu.pc = top->pc;
