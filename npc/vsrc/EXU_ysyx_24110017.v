@@ -80,7 +80,7 @@ wire [31:0]raddr;
 reg [31:0]rdata;
 wire valid,wen;
 wire [31:0]waddr, wdata;
-wire [31:0]wmask;
+wire [7:0]wmask;
 
 import "DPI-C" function int pmem_read(input int raddr);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input int wmask);
@@ -89,10 +89,10 @@ assign valid = (op == 7'b0100011 || op == 7'b0000011) ? 1'b1 : 1'b0;
 assign wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
 assign waddr = (op == 7'b0100011) ? ((r1 + offset)&(32'hfffffffc)) : 32'h80000000;
 assign wdata = (op == 7'b0100011) ? r2 : 32'b0;
-assign wmask = (op == 7'b0100011 && sel == 3'b000) ? 32'h00000001
- : (op == 7'b0100011 && sel == 3'b001) ? 32'h00000003
- : (op == 7'b0100011 && sel == 3'b010) ? 32'h0000000f 
- : 32'h0;
+assign wmask = (op == 7'b0100011 && sel == 3'b000) ? 8'b00000001
+ : (op == 7'b0100011 && sel == 3'b001) ? 8'b00000011
+ : (op == 7'b0100011 && sel == 3'b010) ? 8'b11111111
+ : 8'b0;
 assign raddr = (op == 7'b0000011) ? ((r1 + offset)&(32'hfffffffc)) : 32'h80000000; //lb~lhu
 
 always @(*) begin
