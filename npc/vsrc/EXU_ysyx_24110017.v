@@ -25,7 +25,7 @@ assign res =
 					& (a >>> shamt) |	//srai
       ({32{sel == 3'b110}} & (a | b)) |	//ori
       ({32{sel == 3'b111}} & (a & b)) 	//andi
-/***R_add~R_remu***/											)) |
+/***R_add~R_remu***/											));/*** |
       ((op == 7'b0110011) & (
       ({32{(sel == 3'b000) && (funct7 == 7'b0000000)}} 
 					& (a + b)) | //add
@@ -59,7 +59,7 @@ assign res =
           & ($signed(a) % $signed(b))) |  //R_rem
       ({32{(sel == 3'b111) && (funct7 == 7'b0000001)}}
           & (a % b)) //R_remui
-/***I_lb~lhu***/																	)) |
+/***I_lb~lhu***/							/***										)) |
 			({32{(op == 7'b0000011) && (sel == 3'b000)}} 
 					& {{24{rdata[7]}},(rdata[7:0])}) | //I_lb
 			({32{(op == 7'b0000011) && (sel == 3'b001)}}
@@ -70,7 +70,7 @@ assign res =
           & {24'b0,(rdata[7:0])}) | //I_lbu
 			({32{(op == 7'b0000011) && (sel == 3'b0)}}
           & {16'b0,(rdata[15:0])}); //I_lhu
-
+***/
 
 /***sw sh***/
 import "DPI-C" function int pmem_read(input [31:0]raddr);
