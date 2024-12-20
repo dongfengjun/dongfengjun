@@ -25,13 +25,13 @@ void Vtop_ysyx_24110017___024root____Vdpiexp_top_ysyx_24110017__DOT__RF__DOT__gp
                                  [(0x1fU & addr)]);
 }
 
-extern "C" int pmem_read(const svLogicVecVal* raddr);
+extern "C" int pmem_read(int raddr);
 
 VL_INLINE_OPT void Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__EXU__DOT__pmem_read_TOP(IData/*31:0*/ raddr, IData/*31:0*/ &pmem_read__Vfuncrtn) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__EXU__DOT__pmem_read_TOP\n"); );
     // Body
-    svLogicVecVal raddr__Vcvt[1];
-    for (size_t raddr__Vidx = 0; raddr__Vidx < 1; ++raddr__Vidx) VL_SET_SVLV_I(32, raddr__Vcvt + 1 * raddr__Vidx, raddr);
+    int raddr__Vcvt;
+    for (size_t raddr__Vidx = 0; raddr__Vidx < 1; ++raddr__Vidx) raddr__Vcvt = raddr;
     int pmem_read__Vfuncrtn__Vcvt;
     pmem_read__Vfuncrtn__Vcvt = pmem_read(raddr__Vcvt);
     pmem_read__Vfuncrtn = pmem_read__Vfuncrtn__Vcvt;

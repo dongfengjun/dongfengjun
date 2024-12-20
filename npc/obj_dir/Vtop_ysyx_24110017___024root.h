@@ -37,7 +37,7 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
     IData/*31:0*/ top_ysyx_24110017__DOT__PCU__DOT____VdfgTmp_h051484d1__0;
     IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT__raddr;
     IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT__rdata;
-    IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4a386348__0;
+    IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4a41356a__0;
     IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h105484d3__0;
     IData/*31:0*/ __Vfunc_top_ysyx_24110017__DOT__EXU__DOT__pmem_read__2__Vfuncout;
     IData/*31:0*/ __VstlIterCount;
