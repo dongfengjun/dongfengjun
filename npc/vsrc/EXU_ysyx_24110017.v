@@ -36,9 +36,9 @@ assign res =
       ({32{(sel == 3'b001) && (funct7 == 7'b0000000)}}
 					& (a << b)) |  //sll
       ({32{(sel == 3'b010) && (funct7 == 7'b0000000)}}
-					& {31'b0, ($signed(a) < $signed(b))}) /***| //slt
+					& {31'b0, ($signed(a) < $signed(b))}) | //slt
       ({32{(sel == 3'b011) && (funct7 == 7'b0000000)}} 
-					& (a < $unsigned(b))) |  //sltu
+					& (a < $unsigned(b))) /***|  //sltu
       ({32{(sel == 3'b100) && (funct7 == 7'b0000000)}}
 					& (a ^ b)) | //xor
       ({32{(sel == 3'b101) && (funct7 == 7'b0000000)}} 
