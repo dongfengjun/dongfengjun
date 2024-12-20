@@ -21,14 +21,6 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___ico_sequent__TOP__0(Vtop_ysyx_
     }
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h5705ba9a__0 
         = (- (IData)((IData)((3U == (0x707fU & vlSelf->inst)))));
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_ha4994cf9__0 
-        = (- (IData)((IData)(((0x5000U == (0x7000U 
-                                           & vlSelf->inst)) 
-                              & (0U == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7))))));
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h12d66a67__0 
-        = (- (IData)((IData)(((0x5000U == (0x7000U 
-                                           & vlSelf->inst)) 
-                              & (0x20U == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7))))));
     vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hcabf9aa8__0 
         = ((0x37U == (0x7fU & vlSelf->inst)) | (0x17U 
                                                 == 
@@ -156,8 +148,6 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___ico_sequent__TOP__0(Vtop_ysyx_
                                                  & vlSelf->inst)))
                                           ? vlSelf->top_ysyx_24110017__DOT__r2
                                           : vlSelf->top_ysyx_24110017__DOT__imm);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hd43fef8a__0 
-        = (vlSelf->top_ysyx_24110017__DOT__imm + vlSelf->top_ysyx_24110017__DOT__r1);
     vlSelf->top_ysyx_24110017__DOT__a = (((0x13U == 
                                            (0x7fU & vlSelf->inst)) 
                                           | ((3U == 
@@ -169,6 +159,14 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___ico_sequent__TOP__0(Vtop_ysyx_
                                                  & vlSelf->inst))))
                                           ? vlSelf->top_ysyx_24110017__DOT__r1
                                           : vlSelf->pc);
+    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hd43fef8a__0 
+        = (vlSelf->top_ysyx_24110017__DOT__imm + vlSelf->top_ysyx_24110017__DOT__r1);
+    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hecdda523__0 
+        = (vlSelf->top_ysyx_24110017__DOT__a + vlSelf->top_ysyx_24110017__DOT__b);
+    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h105484d3__0 
+        = (vlSelf->top_ysyx_24110017__DOT__a >> (0x1fU 
+                                                 & (vlSelf->inst 
+                                                    >> 0x14U)));
     vlSelf->dnpc = ((0x6fU == (0x7fU & vlSelf->inst))
                      ? vlSelf->top_ysyx_24110017__DOT__PCU__DOT____VdfgTmp_h051484d1__0
                      : ((0x67U == (0x7fU & vlSelf->inst))
@@ -223,31 +221,6 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___ico_sequent__TOP__0(Vtop_ysyx_
                                                                                  : 0x80000000U), vlSelf->__Vfunc_top_ysyx_24110017__DOT__EXU__DOT__pmem_read__2__Vfuncout);
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4a41356a__0 
         = vlSelf->__Vfunc_top_ysyx_24110017__DOT__EXU__DOT__pmem_read__2__Vfuncout;
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hecdda523__0 
-        = (vlSelf->top_ysyx_24110017__DOT__a + vlSelf->top_ysyx_24110017__DOT__b);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h319e4e75__0 
-        = VL_LTS_III(32, vlSelf->top_ysyx_24110017__DOT__a, vlSelf->top_ysyx_24110017__DOT__b);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h316baba5__0 
-        = (vlSelf->top_ysyx_24110017__DOT__a < vlSelf->top_ysyx_24110017__DOT__b);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h37e52d1e__0 
-        = (vlSelf->top_ysyx_24110017__DOT__a ^ vlSelf->top_ysyx_24110017__DOT__b);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h0f989610__0 
-        = (IData)(((QData)((IData)(vlSelf->top_ysyx_24110017__DOT__a)) 
-                   >> (0x1fU & (vlSelf->inst >> 0x14U))));
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h31150b40__0 
-        = (vlSelf->top_ysyx_24110017__DOT__a | vlSelf->top_ysyx_24110017__DOT__b);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hece52006__0 
-        = (vlSelf->top_ysyx_24110017__DOT__a & vlSelf->top_ysyx_24110017__DOT__b);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hec251a1e__0 
-        = (IData)(((0x3fU >= vlSelf->top_ysyx_24110017__DOT__b)
-                    ? ((QData)((IData)(vlSelf->top_ysyx_24110017__DOT__a)) 
-                       >> vlSelf->top_ysyx_24110017__DOT__b)
-                    : 0ULL));
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h82f6b515__0 
-        = ((QData)((IData)(vlSelf->top_ysyx_24110017__DOT__a)) 
-           * (QData)((IData)(vlSelf->top_ysyx_24110017__DOT__b)));
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h090d658f__0 
-        = (IData)(VL_DIV_QQQ(64, (QData)((IData)(vlSelf->top_ysyx_24110017__DOT__a)), (QData)((IData)(vlSelf->top_ysyx_24110017__DOT__b))));
     if (((0x23U == (0x7fU & vlSelf->inst)) | (3U == 
                                               (0x7fU 
                                                & vlSelf->inst)))) {
@@ -333,171 +306,69 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___ico_sequent__TOP__0(Vtop_ysyx_
                                                                   (7U 
                                                                    & (vlSelf->inst 
                                                                       >> 0xcU))))) 
-                                                      & (- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h319e4e75__0)))) 
+                                                      & (- (IData)(
+                                                                   VL_LTS_III(32, vlSelf->top_ysyx_24110017__DOT__a, vlSelf->top_ysyx_24110017__DOT__b)))) 
                                                      | (((- (IData)(
                                                                     (3U 
                                                                      == 
                                                                      (7U 
                                                                       & (vlSelf->inst 
                                                                          >> 0xcU))))) 
-                                                         & (- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h316baba5__0)))) 
+                                                         & (- (IData)(
+                                                                      (vlSelf->top_ysyx_24110017__DOT__a 
+                                                                       < vlSelf->top_ysyx_24110017__DOT__b)))) 
                                                         | (((- (IData)(
                                                                        (4U 
                                                                         == 
                                                                         (7U 
                                                                          & (vlSelf->inst 
                                                                             >> 0xcU))))) 
-                                                            & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h37e52d1e__0) 
-                                                           | ((vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_ha4994cf9__0 
-                                                               & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h0f989610__0) 
-                                                              | ((vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h12d66a67__0 
-                                                                  & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h0f989610__0) 
+                                                            & (vlSelf->top_ysyx_24110017__DOT__a 
+                                                               ^ vlSelf->top_ysyx_24110017__DOT__b)) 
+                                                           | (((- (IData)((IData)(
+                                                                                ((0x5000U 
+                                                                                == 
+                                                                                (0x7000U 
+                                                                                & vlSelf->inst)) 
+                                                                                & (0U 
+                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
+                                                               & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h105484d3__0) 
+                                                              | (((- (IData)((IData)(
+                                                                                ((0x5000U 
+                                                                                == 
+                                                                                (0x7000U 
+                                                                                & vlSelf->inst)) 
+                                                                                & (0x20U 
+                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
+                                                                  & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h105484d3__0) 
                                                                  | (((- (IData)(
                                                                                 (6U 
                                                                                 == 
                                                                                 (7U 
                                                                                 & (vlSelf->inst 
                                                                                 >> 0xcU))))) 
-                                                                     & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h31150b40__0) 
+                                                                     & (vlSelf->top_ysyx_24110017__DOT__a 
+                                                                        | vlSelf->top_ysyx_24110017__DOT__b)) 
                                                                     | ((- (IData)(
                                                                                 (7U 
                                                                                 == 
                                                                                 (7U 
                                                                                 & (vlSelf->inst 
                                                                                 >> 0xcU))))) 
-                                                                       & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hece52006__0)))))))))) 
+                                                                       & (vlSelf->top_ysyx_24110017__DOT__a 
+                                                                          & vlSelf->top_ysyx_24110017__DOT__b))))))))))) 
                                            | (((0x33U 
                                                 == 
                                                 (0x7fU 
                                                  & vlSelf->inst)) 
-                                               & (((- (IData)((IData)(
-                                                                      ((0U 
-                                                                        == 
-                                                                        (0x7000U 
-                                                                         & vlSelf->inst)) 
-                                                                       & (0U 
-                                                                          == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                   & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hecdda523__0) 
-                                                  | (((- (IData)((IData)(
-                                                                         ((0U 
-                                                                           == 
-                                                                           (0x7000U 
-                                                                            & vlSelf->inst)) 
-                                                                          & (0x20U 
-                                                                             == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                      & ((IData)(1U) 
-                                                         + 
-                                                         (vlSelf->top_ysyx_24110017__DOT__a 
-                                                          + 
-                                                          (0xfU 
-                                                           ^ vlSelf->top_ysyx_24110017__DOT__b)))) 
-                                                     | (((- (IData)((IData)(
-                                                                            ((0x1000U 
-                                                                              == 
-                                                                              (0x7000U 
-                                                                               & vlSelf->inst)) 
-                                                                             & (0U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                         & ((0x1fU 
-                                                             >= vlSelf->top_ysyx_24110017__DOT__b)
-                                                             ? 
-                                                            (vlSelf->top_ysyx_24110017__DOT__a 
-                                                             << vlSelf->top_ysyx_24110017__DOT__b)
-                                                             : 0U)) 
-                                                        | (((- (IData)((IData)(
-                                                                               ((0x2000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (0U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                            & (IData)(vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h319e4e75__0)) 
-                                                           | (((- (IData)((IData)(
-                                                                                ((0x3000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (0U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                               & (IData)(vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h316baba5__0)) 
-                                                              | (((- (IData)((IData)(
-                                                                                ((0x4000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (0U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                  & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h37e52d1e__0) 
-                                                                 | ((vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_ha4994cf9__0 
-                                                                     & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hec251a1e__0) 
-                                                                    | ((vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h12d66a67__0 
-                                                                        & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hec251a1e__0) 
-                                                                       | (((- (IData)((IData)(
-                                                                                ((0x6000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (0U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                           & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h31150b40__0) 
-                                                                          | (((- (IData)((IData)(
-                                                                                ((0x7000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (0U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                              & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hece52006__0) 
-                                                                             | (((- (IData)((IData)(
-                                                                                ((0U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (1U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                                & (IData)(vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h82f6b515__0)) 
-                                                                                | (((- (IData)((IData)(
-                                                                                ((0x1000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (1U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                                & (IData)(
-                                                                                (vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h82f6b515__0 
-                                                                                >> 0x20U))) 
-                                                                                | (((- (IData)((IData)(
-                                                                                ((0x4000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (1U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                                & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h090d658f__0) 
-                                                                                | (((- (IData)((IData)(
-                                                                                ((0x5000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (1U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                                & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h090d658f__0) 
-                                                                                | (((- (IData)((IData)(
-                                                                                ((0x6000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (1U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                                | (- (IData)((IData)(
-                                                                                ((0x7000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (1U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7))))))) 
-                                                                                & (IData)(
-                                                                                VL_MODDIV_QQQ(64, (QData)((IData)(vlSelf->top_ysyx_24110017__DOT__a)), (QData)((IData)(vlSelf->top_ysyx_24110017__DOT__b)))))))))))))))))))) 
+                                               & ((- (IData)((IData)(
+                                                                     ((0U 
+                                                                       == 
+                                                                       (0x7000U 
+                                                                        & vlSelf->inst)) 
+                                                                      & (0U 
+                                                                         == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
+                                                  & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hecdda523__0)) 
                                               | ((vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h5705ba9a__0 
                                                   & (((- (IData)(
                                                                  (1U 
@@ -624,8 +495,6 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___nba_sequent__TOP__1(Vtop_ysyx_
                                                  & vlSelf->inst)))
                                           ? vlSelf->top_ysyx_24110017__DOT__r2
                                           : vlSelf->top_ysyx_24110017__DOT__imm);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hd43fef8a__0 
-        = (vlSelf->top_ysyx_24110017__DOT__imm + vlSelf->top_ysyx_24110017__DOT__r1);
     vlSelf->top_ysyx_24110017__DOT__a = (((0x13U == 
                                            (0x7fU & vlSelf->inst)) 
                                           | ((3U == 
@@ -637,6 +506,14 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___nba_sequent__TOP__1(Vtop_ysyx_
                                                  & vlSelf->inst))))
                                           ? vlSelf->top_ysyx_24110017__DOT__r1
                                           : vlSelf->pc);
+    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hd43fef8a__0 
+        = (vlSelf->top_ysyx_24110017__DOT__imm + vlSelf->top_ysyx_24110017__DOT__r1);
+    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hecdda523__0 
+        = (vlSelf->top_ysyx_24110017__DOT__a + vlSelf->top_ysyx_24110017__DOT__b);
+    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h105484d3__0 
+        = (vlSelf->top_ysyx_24110017__DOT__a >> (0x1fU 
+                                                 & (vlSelf->inst 
+                                                    >> 0x14U)));
     vlSelf->dnpc = ((0x6fU == (0x7fU & vlSelf->inst))
                      ? vlSelf->top_ysyx_24110017__DOT__PCU__DOT____VdfgTmp_h051484d1__0
                      : ((0x67U == (0x7fU & vlSelf->inst))
@@ -691,31 +568,6 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___nba_sequent__TOP__1(Vtop_ysyx_
                                                                                  : 0x80000000U), vlSelf->__Vfunc_top_ysyx_24110017__DOT__EXU__DOT__pmem_read__2__Vfuncout);
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4a41356a__0 
         = vlSelf->__Vfunc_top_ysyx_24110017__DOT__EXU__DOT__pmem_read__2__Vfuncout;
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hecdda523__0 
-        = (vlSelf->top_ysyx_24110017__DOT__a + vlSelf->top_ysyx_24110017__DOT__b);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h319e4e75__0 
-        = VL_LTS_III(32, vlSelf->top_ysyx_24110017__DOT__a, vlSelf->top_ysyx_24110017__DOT__b);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h316baba5__0 
-        = (vlSelf->top_ysyx_24110017__DOT__a < vlSelf->top_ysyx_24110017__DOT__b);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h37e52d1e__0 
-        = (vlSelf->top_ysyx_24110017__DOT__a ^ vlSelf->top_ysyx_24110017__DOT__b);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h0f989610__0 
-        = (IData)(((QData)((IData)(vlSelf->top_ysyx_24110017__DOT__a)) 
-                   >> (0x1fU & (vlSelf->inst >> 0x14U))));
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h31150b40__0 
-        = (vlSelf->top_ysyx_24110017__DOT__a | vlSelf->top_ysyx_24110017__DOT__b);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hece52006__0 
-        = (vlSelf->top_ysyx_24110017__DOT__a & vlSelf->top_ysyx_24110017__DOT__b);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hec251a1e__0 
-        = (IData)(((0x3fU >= vlSelf->top_ysyx_24110017__DOT__b)
-                    ? ((QData)((IData)(vlSelf->top_ysyx_24110017__DOT__a)) 
-                       >> vlSelf->top_ysyx_24110017__DOT__b)
-                    : 0ULL));
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h82f6b515__0 
-        = ((QData)((IData)(vlSelf->top_ysyx_24110017__DOT__a)) 
-           * (QData)((IData)(vlSelf->top_ysyx_24110017__DOT__b)));
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h090d658f__0 
-        = (IData)(VL_DIV_QQQ(64, (QData)((IData)(vlSelf->top_ysyx_24110017__DOT__a)), (QData)((IData)(vlSelf->top_ysyx_24110017__DOT__b))));
     if (((0x23U == (0x7fU & vlSelf->inst)) | (3U == 
                                               (0x7fU 
                                                & vlSelf->inst)))) {
@@ -801,171 +653,69 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___nba_sequent__TOP__1(Vtop_ysyx_
                                                                   (7U 
                                                                    & (vlSelf->inst 
                                                                       >> 0xcU))))) 
-                                                      & (- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h319e4e75__0)))) 
+                                                      & (- (IData)(
+                                                                   VL_LTS_III(32, vlSelf->top_ysyx_24110017__DOT__a, vlSelf->top_ysyx_24110017__DOT__b)))) 
                                                      | (((- (IData)(
                                                                     (3U 
                                                                      == 
                                                                      (7U 
                                                                       & (vlSelf->inst 
                                                                          >> 0xcU))))) 
-                                                         & (- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h316baba5__0)))) 
+                                                         & (- (IData)(
+                                                                      (vlSelf->top_ysyx_24110017__DOT__a 
+                                                                       < vlSelf->top_ysyx_24110017__DOT__b)))) 
                                                         | (((- (IData)(
                                                                        (4U 
                                                                         == 
                                                                         (7U 
                                                                          & (vlSelf->inst 
                                                                             >> 0xcU))))) 
-                                                            & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h37e52d1e__0) 
-                                                           | ((vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_ha4994cf9__0 
-                                                               & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h0f989610__0) 
-                                                              | ((vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h12d66a67__0 
-                                                                  & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h0f989610__0) 
+                                                            & (vlSelf->top_ysyx_24110017__DOT__a 
+                                                               ^ vlSelf->top_ysyx_24110017__DOT__b)) 
+                                                           | (((- (IData)((IData)(
+                                                                                ((0x5000U 
+                                                                                == 
+                                                                                (0x7000U 
+                                                                                & vlSelf->inst)) 
+                                                                                & (0U 
+                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
+                                                               & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h105484d3__0) 
+                                                              | (((- (IData)((IData)(
+                                                                                ((0x5000U 
+                                                                                == 
+                                                                                (0x7000U 
+                                                                                & vlSelf->inst)) 
+                                                                                & (0x20U 
+                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
+                                                                  & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h105484d3__0) 
                                                                  | (((- (IData)(
                                                                                 (6U 
                                                                                 == 
                                                                                 (7U 
                                                                                 & (vlSelf->inst 
                                                                                 >> 0xcU))))) 
-                                                                     & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h31150b40__0) 
+                                                                     & (vlSelf->top_ysyx_24110017__DOT__a 
+                                                                        | vlSelf->top_ysyx_24110017__DOT__b)) 
                                                                     | ((- (IData)(
                                                                                 (7U 
                                                                                 == 
                                                                                 (7U 
                                                                                 & (vlSelf->inst 
                                                                                 >> 0xcU))))) 
-                                                                       & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hece52006__0)))))))))) 
+                                                                       & (vlSelf->top_ysyx_24110017__DOT__a 
+                                                                          & vlSelf->top_ysyx_24110017__DOT__b))))))))))) 
                                            | (((0x33U 
                                                 == 
                                                 (0x7fU 
                                                  & vlSelf->inst)) 
-                                               & (((- (IData)((IData)(
-                                                                      ((0U 
-                                                                        == 
-                                                                        (0x7000U 
-                                                                         & vlSelf->inst)) 
-                                                                       & (0U 
-                                                                          == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                   & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hecdda523__0) 
-                                                  | (((- (IData)((IData)(
-                                                                         ((0U 
-                                                                           == 
-                                                                           (0x7000U 
-                                                                            & vlSelf->inst)) 
-                                                                          & (0x20U 
-                                                                             == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                      & ((IData)(1U) 
-                                                         + 
-                                                         (vlSelf->top_ysyx_24110017__DOT__a 
-                                                          + 
-                                                          (0xfU 
-                                                           ^ vlSelf->top_ysyx_24110017__DOT__b)))) 
-                                                     | (((- (IData)((IData)(
-                                                                            ((0x1000U 
-                                                                              == 
-                                                                              (0x7000U 
-                                                                               & vlSelf->inst)) 
-                                                                             & (0U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                         & ((0x1fU 
-                                                             >= vlSelf->top_ysyx_24110017__DOT__b)
-                                                             ? 
-                                                            (vlSelf->top_ysyx_24110017__DOT__a 
-                                                             << vlSelf->top_ysyx_24110017__DOT__b)
-                                                             : 0U)) 
-                                                        | (((- (IData)((IData)(
-                                                                               ((0x2000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (0U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                            & (IData)(vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h319e4e75__0)) 
-                                                           | (((- (IData)((IData)(
-                                                                                ((0x3000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (0U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                               & (IData)(vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h316baba5__0)) 
-                                                              | (((- (IData)((IData)(
-                                                                                ((0x4000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (0U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                  & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h37e52d1e__0) 
-                                                                 | ((vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_ha4994cf9__0 
-                                                                     & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hec251a1e__0) 
-                                                                    | ((vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h12d66a67__0 
-                                                                        & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hec251a1e__0) 
-                                                                       | (((- (IData)((IData)(
-                                                                                ((0x6000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (0U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                           & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h31150b40__0) 
-                                                                          | (((- (IData)((IData)(
-                                                                                ((0x7000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (0U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                              & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hece52006__0) 
-                                                                             | (((- (IData)((IData)(
-                                                                                ((0U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (1U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                                & (IData)(vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h82f6b515__0)) 
-                                                                                | (((- (IData)((IData)(
-                                                                                ((0x1000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (1U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                                & (IData)(
-                                                                                (vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h82f6b515__0 
-                                                                                >> 0x20U))) 
-                                                                                | (((- (IData)((IData)(
-                                                                                ((0x4000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (1U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                                & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h090d658f__0) 
-                                                                                | (((- (IData)((IData)(
-                                                                                ((0x5000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (1U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                                & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h090d658f__0) 
-                                                                                | (((- (IData)((IData)(
-                                                                                ((0x6000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (1U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                                | (- (IData)((IData)(
-                                                                                ((0x7000U 
-                                                                                == 
-                                                                                (0x7000U 
-                                                                                & vlSelf->inst)) 
-                                                                                & (1U 
-                                                                                == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7))))))) 
-                                                                                & (IData)(
-                                                                                VL_MODDIV_QQQ(64, (QData)((IData)(vlSelf->top_ysyx_24110017__DOT__a)), (QData)((IData)(vlSelf->top_ysyx_24110017__DOT__b)))))))))))))))))))) 
+                                               & ((- (IData)((IData)(
+                                                                     ((0U 
+                                                                       == 
+                                                                       (0x7000U 
+                                                                        & vlSelf->inst)) 
+                                                                      & (0U 
+                                                                         == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
+                                                  & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hecdda523__0)) 
                                               | ((vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h5705ba9a__0 
                                                   & (((- (IData)(
                                                                  (1U 
