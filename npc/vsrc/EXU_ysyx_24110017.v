@@ -79,8 +79,8 @@ wire valid,wen;
 wire [31:0]waddr, wdata;
 wire [7:0]wmask;
 
-import "DPI-C" function int pmem_read(input unsigned raddr);
-import "DPI-C" function void pmem_write(input unsigned waddr, input unsigned wdata, input int wmask);
+import "DPI-C" function int pmem_read(input int raddr);
+import "DPI-C" function void pmem_write(input int waddr, int wdata, int wmask);
 
 assign valid = (op == 7'b0100011 || op == 7'b0000011) ? 1'b1 : 1'b0;
 assign wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
