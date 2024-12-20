@@ -23,9 +23,9 @@ extern "C" {
     // DPI import at vsrc/IDU_ysyx_24110017.v:25:30
     extern void npc_trap();
     // DPI import at vsrc/EXU_ysyx_24110017.v:76:29
-    extern int pmem_read(int raddr);
+    extern int pmem_read(svLogic raddr);
     // DPI import at vsrc/EXU_ysyx_24110017.v:77:30
-    extern void pmem_write(const svLogicVecVal* waddr, const svLogicVecVal* wdata, const svLogicVecVal* wmask);
+    extern void pmem_write(svLogic waddr, svLogic wdata, int wmask);
 
 #ifdef __cplusplus
 }
