@@ -263,9 +263,9 @@ int main(int argc, char *argv[]) {
   cpu_exec(-1);
 #else
 /* Receive commands from user. */
-  sdb_mainloop();
+  std::cout<<std::hex<<"0123"<<"\n"; 
+	sdb_mainloop();
 #endif
-	std::cout<<std::hex<<"0123"<<"\n";	
 	dump_wave();
 #ifdef CONFIG_FTRACE
 	cpu_show_ftrace();
