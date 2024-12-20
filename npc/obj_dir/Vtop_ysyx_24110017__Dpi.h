@@ -22,8 +22,8 @@ extern "C" {
     // DPI IMPORTS
     // DPI import at vsrc/IDU_ysyx_24110017.v:25:30
     extern void npc_trap();
-    // DPI import at vsrc/EXU_ysyx_24110017.v:85:29
-    extern int pmem_read(int raddr);
+    // DPI import at vsrc/EXU_ysyx_24110017.v:85:34
+    extern svLogic pmem_read(int raddr);
     // DPI import at vsrc/EXU_ysyx_24110017.v:86:30
     extern void pmem_write(int waddr, int wdata, char wmask);
 
