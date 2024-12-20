@@ -241,15 +241,17 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___ico_sequent__TOP__0(Vtop_ysyx_
                                                                  (7U 
                                                                   & (vlSelf->inst 
                                                                      >> 0xcU))))) 
-                                                     & VL_LTS_III(32, vlSelf->top_ysyx_24110017__DOT__a, vlSelf->top_ysyx_24110017__DOT__b)) 
+                                                     & (- (IData)(
+                                                                  VL_LTS_III(32, vlSelf->top_ysyx_24110017__DOT__a, vlSelf->top_ysyx_24110017__DOT__b)))) 
                                                     | (((- (IData)(
                                                                    (3U 
                                                                     == 
                                                                     (7U 
                                                                      & (vlSelf->inst 
                                                                         >> 0xcU))))) 
-                                                        & (vlSelf->top_ysyx_24110017__DOT__a 
-                                                           < vlSelf->top_ysyx_24110017__DOT__b)) 
+                                                        & (- (IData)(
+                                                                     (vlSelf->top_ysyx_24110017__DOT__a 
+                                                                      < vlSelf->top_ysyx_24110017__DOT__b)))) 
                                                        | (((- (IData)(
                                                                       (4U 
                                                                        == 
@@ -531,15 +533,17 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___nba_sequent__TOP__1(Vtop_ysyx_
                                                                  (7U 
                                                                   & (vlSelf->inst 
                                                                      >> 0xcU))))) 
-                                                     & VL_LTS_III(32, vlSelf->top_ysyx_24110017__DOT__a, vlSelf->top_ysyx_24110017__DOT__b)) 
+                                                     & (- (IData)(
+                                                                  VL_LTS_III(32, vlSelf->top_ysyx_24110017__DOT__a, vlSelf->top_ysyx_24110017__DOT__b)))) 
                                                     | (((- (IData)(
                                                                    (3U 
                                                                     == 
                                                                     (7U 
                                                                      & (vlSelf->inst 
                                                                         >> 0xcU))))) 
-                                                        & (vlSelf->top_ysyx_24110017__DOT__a 
-                                                           < vlSelf->top_ysyx_24110017__DOT__b)) 
+                                                        & (- (IData)(
+                                                                     (vlSelf->top_ysyx_24110017__DOT__a 
+                                                                      < vlSelf->top_ysyx_24110017__DOT__b)))) 
                                                        | (((- (IData)(
                                                                       (4U 
                                                                        == 
