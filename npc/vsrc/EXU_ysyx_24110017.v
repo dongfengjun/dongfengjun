@@ -10,8 +10,9 @@ input [31:0] r2;
 output [31:0] res;
 
 
-wire sext_a[63:0];
-wire shsext_a[31:0];
+wire [31:0]a;
+wire [63:0]sext_a;
+wire [31:0]shsext_a;
 assign sext_a = {{32{a[31]}}, a};
 assign shsext_a = sext_a >> b[4:0];
 /***I TYPE***/
