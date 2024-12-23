@@ -10,11 +10,6 @@ input [31:0] r2;
 output [31:0] res;
 
 
-/***R_sra***/
-wire [63:0]sext_a;
-wire [63:0]shsext_a;
-assign sext_a = {{32{a[31]}}, a};
-assign shsext_a = sext_a >> b[4:0];
 /***I TYPE***/
 /***ALU addi~srai***/
 assign res = 
@@ -27,7 +22,7 @@ assign res =
       ({32{(sel == 3'b101) && (funct7 == 7'b0000000)}} 
 					& (a >> shamt)) |	//srli
 			({32{(sel == 3'b101) && (funct7 == 7'b0100000)}}) 
-					& (a >>> shamt) |	//srai			//算术移位有问题
+					& ({{{32{a[31]}}, a} >> shamt}[31:0]) |	//srai			//算术移位有问题
       ({32{sel == 3'b110}} & (a | b)) |	//ori
       ({32{sel == 3'b111}} & (a & b)) 	//andi
 																	 ))				
@@ -49,7 +44,7 @@ assign res =
       ({32{(sel == 3'b101) && (funct7 == 7'b0000000)}} 
 		      & (a >> b[4:0])) | //srl
       ({32{(sel == 3'b101) && (funct7 == 7'b0100000)}}
-					&  {{{32{a[31]}}, a} >> b}[31:0] ) | //sra		//算术移位有问题
+					&  {{{32{a[31]}}, a} >> b}[31:0] ) | //sra
       ({32{(sel == 3'b110) && (funct7 == 7'b0000000)}}
 					& (a | b)) | //or
       ({32{(sel == 3'b111) && (funct7 == 7'b0000000)}}
@@ -58,7 +53,6 @@ assign res =
           & (a * b)) | //mul
       ({32{(sel == 3'b001) && (funct7 == 7'b0000001)}} 
           & {{32'b0,$signed(a)} * {32'b0,$signed(b)} >>> 32}[31:0]) | //mulh
-					//算术移位有问题
       ({32{(sel == 3'b100) && (funct7 == 7'b0000001)}}
           & ($signed(a) / $signed(b))) |  //div
       ({32{(sel == 3'b101) && (funct7 == 7'b0000001)}}
