@@ -342,8 +342,6 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
         = (vlSelf->top_ysyx_24110017__DOT__a | vlSelf->top_ysyx_24110017__DOT__b);
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hece52006__0 
         = (vlSelf->top_ysyx_24110017__DOT__a & vlSelf->top_ysyx_24110017__DOT__b);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h313f1017__0 
-        = (vlSelf->top_ysyx_24110017__DOT__a * vlSelf->top_ysyx_24110017__DOT__b);
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hec3fbfad__0 
         = VL_DIV_III(32, vlSelf->top_ysyx_24110017__DOT__a, vlSelf->top_ysyx_24110017__DOT__b);
     if (((0x23U == (0x7fU & vlSelf->inst)) | (3U == 
@@ -558,7 +556,8 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
                                                                                 & vlSelf->inst)) 
                                                                                 & (1U 
                                                                                 == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                                & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h313f1017__0) 
+                                                                                & (vlSelf->top_ysyx_24110017__DOT__a 
+                                                                                * vlSelf->top_ysyx_24110017__DOT__b)) 
                                                                                 | (((- (IData)((IData)(
                                                                                 ((0x1000U 
                                                                                 == 
@@ -566,7 +565,7 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
                                                                                 & vlSelf->inst)) 
                                                                                 & (1U 
                                                                                 == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7)))))) 
-                                                                                & vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h313f1017__0) 
+                                                                                & VL_MULS_III(32, vlSelf->top_ysyx_24110017__DOT__a, vlSelf->top_ysyx_24110017__DOT__b)) 
                                                                                 | (((- (IData)((IData)(
                                                                                 ((0x4000U 
                                                                                 == 
@@ -725,7 +724,6 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___ctor_var_reset(Vtop_ysyx_241100
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h72806210__0 = 0;
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h31150b40__0 = 0;
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hece52006__0 = 0;
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h313f1017__0 = 0;
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hec3fbfad__0 = 0;
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hd43fef8a__0 = 0;
     vlSelf->__Vfunc_top_ysyx_24110017__DOT__IFU__DOT__pmem_read__0__Vfuncout = 0;
