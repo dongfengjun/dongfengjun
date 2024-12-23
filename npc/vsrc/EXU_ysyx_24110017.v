@@ -12,6 +12,14 @@ output [31:0] res;
 
 /***I TYPE***/
 /***ALU addi~srai***/
+wire testi1,test2;
+alway(*) begin
+	if((op == 7'b0010011) && (sel == 3'b101) && (funct7 == 7'b0000000))
+		test1 = 1'b1;
+	else if((op == 7'b0010011) && (sel == 3'b101) && (funct7 == 7'b0100000))
+		test2 = 1'b1;
+end
+
 assign res = 
 			({32{op == 7'b0010011}} & (
 			({32{sel == 3'b000}} & (a + b)) |	//addi
@@ -20,8 +28,7 @@ assign res =
 	    ({32{sel == 3'b011}} & {31'b0, (a < b)}) |	//sltiu
       ({32{sel == 3'b100}} & (a ^ b)) |	//xori
       ({32{(sel == 3'b101) && (funct7 == 7'b0000000)}} 
-					& (32'b0)) |
-				//	& (a >> shamt)) |	//srli
+					& (a >> shamt)) |	//srli
 			({32{(sel == 3'b101) && (funct7 == 7'b0100000)}} 
 					& ({{{32'b1}, a} >> shamt}[31:0])) |	//srai			//算术移位有问题
       ({32{sel == 3'b110}} & (a | b)) |	//ori
