@@ -34,6 +34,7 @@ void Vtop_ysyx_24110017___024root__trace_chg_sub_0(Vtop_ysyx_24110017___024root*
     bufp->chgBit(oldp+6,(vlSelf->rst));
     bufp->chgIData(oldp+7,(vlSelf->pc),32);
     bufp->chgIData(oldp+8,(vlSelf->dnpc),32);
+    bufp->chgBit(oldp+9,((0U != vlSelf->pc)));
 }
 
 void Vtop_ysyx_24110017___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {

@@ -16,19 +16,18 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
     VL_IN8(clk,0,0);
     VL_IN8(rst,0,0);
     CData/*0:0*/ __Vtrigrprev__TOP__clk;
-    CData/*0:0*/ __VactDidInit;
     CData/*0:0*/ __VactContinue;
     VL_OUT(pc,31,0);
     VL_OUT(dnpc,31,0);
     IData/*31:0*/ top_ysyx_24110017__DOT____Vcellout__IFU____pinNumber2;
+    IData/*31:0*/ __Vfunc_top_ysyx_24110017__DOT__IFU__DOT__pmem_read__0__Vfuncout;
     IData/*31:0*/ __VstlIterCount;
-    IData/*31:0*/ __Vtrigrprev__TOP__pc;
     IData/*31:0*/ __VactIterCount;
     VlUnpacked<IData/*31:0*/, 32> top_ysyx_24110017__DOT__RF__DOT__rf;
     VlUnpacked<CData/*0:0*/, 2> __Vm_traceActivity;
     VlTriggerVec<1> __VstlTriggered;
-    VlTriggerVec<2> __VactTriggered;
-    VlTriggerVec<2> __VnbaTriggered;
+    VlTriggerVec<1> __VactTriggered;
+    VlTriggerVec<1> __VnbaTriggered;
 
     // INTERNAL VARIABLES
     Vtop_ysyx_24110017__Syms* const vlSymsp;
