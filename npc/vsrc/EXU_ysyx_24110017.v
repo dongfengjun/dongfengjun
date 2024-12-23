@@ -10,8 +10,6 @@ input [31:0] r2;
 output [31:0] res;
 
 
-wire [4:0]shn;
-assign shn = b[4:0];
 /***I TYPE***/
 /***ALU addi~srai***/
 assign res = 
@@ -46,7 +44,7 @@ assign res =
       ({32{(sel == 3'b101) && (funct7 == 7'b0000000)}} 
 		      & (a >> b)) | //srl
       ({32{(sel == 3'b101) && (funct7 == 7'b0100000)}}
-					& {{5{1'b1}}, (a >> b[4:0])} ) | //sra
+					& {{5{a[31]}}, (a >> b[4:0])} ) | //sra
       ({32{(sel == 3'b110) && (funct7 == 7'b0000000)}}
 					& (a | b)) | //or
       ({32{(sel == 3'b111) && (funct7 == 7'b0000000)}}
