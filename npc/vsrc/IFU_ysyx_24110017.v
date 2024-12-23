@@ -11,7 +11,7 @@ import "DPI-C" function void pmem_write(input int waddr, input int wdata, input 
 assign ifen = (pc != 0) ? 1'b1 : 1'b0;
 always @(*) begin
 	if(ifen) begin
-		inst[0] = pmem_read(pc);
+		inst = pmem_read(pc);
 	end
 end
 

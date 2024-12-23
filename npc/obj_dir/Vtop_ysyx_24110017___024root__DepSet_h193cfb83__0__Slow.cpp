@@ -86,7 +86,8 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
     if ((0U != vlSelf->pc)) {
         Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__IFU__DOT__pmem_read_TOP(vlSelf->pc, vlSelf->__Vfunc_top_ysyx_24110017__DOT__IFU__DOT__pmem_read__0__Vfuncout);
         vlSelf->top_ysyx_24110017__DOT____Vcellout__IFU____pinNumber2 
-            = vlSelf->__Vfunc_top_ysyx_24110017__DOT__IFU__DOT__pmem_read__0__Vfuncout;
+            = ((0xfffffffeU & vlSelf->top_ysyx_24110017__DOT____Vcellout__IFU____pinNumber2) 
+               | (1U & vlSelf->__Vfunc_top_ysyx_24110017__DOT__IFU__DOT__pmem_read__0__Vfuncout));
     }
 }
 
