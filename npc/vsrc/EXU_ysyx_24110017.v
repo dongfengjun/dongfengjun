@@ -12,7 +12,7 @@ output [31:0] res;
 
 /***I TYPE***/
 /***ALU addi~srai***/
-wire testi1,test2;
+wire test1,test2;
 always@(*) begin
 	if((op == 7'b0010011) && (sel == 3'b101) && (funct7 == 7'b0000000))
 		test1 = 1'b1;
