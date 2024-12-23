@@ -12,13 +12,9 @@ output [31:0] res;
 
 /***I TYPE***/
 /***ALU addi~srai***/
-reg test1,test2;
-always@(*) begin
-	if((op == 7'b0010011) && (sel == 3'b101) && (funct7 == 7'b0000000))
-		test1 = 1'b1;
-	else if((op == 7'b0010011) && (sel == 3'b101) && (funct7 == 7'b0100000))
-		test2 = 1'b1;
-end
+wire test1,test2;
+assign test1 = ((op == 7'b0010011) && (sel == 3'b101) && (funct7 == 7'b0000000)) ? 1'b1:1'b0;
+assign test2 = ((op == 7'b0010011) && (sel == 3'b101) && (funct7 == 7'b0100000)) ? 1'b1:1'b0;
 
 assign res = 
 			({32{op == 7'b0010011}} & (
