@@ -5,10 +5,9 @@ wire [31:0]pc;
 reg [31:0]inst;
 
 import "DPI-C" function int pmem_read(input int raddr);
-import "DPI-C" function void ifu(input int raddr, output int rdata);
 
 always @(*) begin
-	ifu(pc, inst);
+	inst = pmem_read(pc);
 end
 
 endmodule
