@@ -13,7 +13,7 @@ wire [31:0]imm;
 wire [6:0]funct7;	//R
 wire [4:0]shamt;	//I shamt
 wire wr_en;
-
+wire [31:0]inst;
 
 wire jalen,jalren;
 wire [31:0]res;
