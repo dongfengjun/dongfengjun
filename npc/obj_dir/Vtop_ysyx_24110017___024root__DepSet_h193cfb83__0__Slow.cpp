@@ -75,7 +75,7 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___dump_triggers__stl(Vtop_ysyx_24
 }
 #endif  // VL_DEBUG
 
-void Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__IFU__DOT__pmem_read_TOP(IData/*31:0*/ raddr, IData/*31:0*/ &pmem_read__Vfuncrtn);
+void Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__IFU__DOT__ifu_TOP(IData/*31:0*/ raddr, IData/*31:0*/ &rdata);
 
 VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_24110017___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
@@ -83,9 +83,9 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop_ysyx_24110017___024root___stl_sequent__TOP__0\n"); );
     // Body
     vlSelf->dnpc = ((IData)(4U) + vlSelf->pc);
-    Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__IFU__DOT__pmem_read_TOP(vlSelf->pc, vlSelf->__Vfunc_top_ysyx_24110017__DOT__IFU__DOT__pmem_read__0__Vfuncout);
+    Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__IFU__DOT__ifu_TOP(vlSelf->pc, vlSelf->__Vtask_top_ysyx_24110017__DOT__IFU__DOT__ifu__0__rdata);
     vlSelf->top_ysyx_24110017__DOT____Vcellout__IFU____pinNumber2 
-        = vlSelf->__Vfunc_top_ysyx_24110017__DOT__IFU__DOT__pmem_read__0__Vfuncout;
+        = vlSelf->__Vtask_top_ysyx_24110017__DOT__IFU__DOT__ifu__0__rdata;
 }
 
 VL_ATTR_COLD void Vtop_ysyx_24110017___024root___eval_stl(Vtop_ysyx_24110017___024root* vlSelf) {
@@ -143,7 +143,7 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___ctor_var_reset(Vtop_ysyx_241100
     for (int __Vi0 = 0; __Vi0 < 32; ++__Vi0) {
         vlSelf->top_ysyx_24110017__DOT__RF__DOT__rf[__Vi0] = VL_RAND_RESET_I(32);
     }
-    vlSelf->__Vfunc_top_ysyx_24110017__DOT__IFU__DOT__pmem_read__0__Vfuncout = 0;
+    vlSelf->__Vtask_top_ysyx_24110017__DOT__IFU__DOT__ifu__0__rdata = 0;
     vlSelf->__Vtrigrprev__TOP__clk = VL_RAND_RESET_I(1);
     for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;

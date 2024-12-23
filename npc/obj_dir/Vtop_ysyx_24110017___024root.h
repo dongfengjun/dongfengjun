@@ -20,7 +20,7 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
     VL_OUT(pc,31,0);
     VL_OUT(dnpc,31,0);
     IData/*31:0*/ top_ysyx_24110017__DOT____Vcellout__IFU____pinNumber2;
-    IData/*31:0*/ __Vfunc_top_ysyx_24110017__DOT__IFU__DOT__pmem_read__0__Vfuncout;
+    IData/*31:0*/ __Vtask_top_ysyx_24110017__DOT__IFU__DOT__ifu__0__rdata;
     IData/*31:0*/ __VstlIterCount;
     IData/*31:0*/ __VactIterCount;
     VlUnpacked<IData/*31:0*/, 32> top_ysyx_24110017__DOT__RF__DOT__rf;
