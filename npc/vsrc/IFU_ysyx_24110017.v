@@ -6,12 +6,13 @@ reg [31:0]inst;
 
 import "DPI-C" function int pmem_read(input int raddr);
 
+assign ifuen = (pc != 32'h80000000) ? 1'b1:1'b0;
 always @(*) begin
-	if(pc == 32'h00000000) begin
-		inst = pmem_read(32'h80000000);
+	if(ifuen) begin
+		inst = pmem_read(pc);
 	end
 	else begin
-		inst = pmem_read(pc);
+		inst = 32'h00000000;
 	end
 end
 
