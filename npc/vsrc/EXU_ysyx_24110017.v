@@ -11,7 +11,9 @@ output [31:0] res;
 
 
 wire sext_a[63:0];
+wire shsext_a[31:0];
 assign sext_a = {{32{a[31]}}, a};
+assign shsext_a = sext_a >> b[4:0];
 /***I TYPE***/
 /***ALU addi~srai***/
 assign res = 
@@ -46,7 +48,7 @@ assign res =
       ({32{(sel == 3'b101) && (funct7 == 7'b0000000)}} 
 		      & (a >> b)) | //srl
       ({32{(sel == 3'b101) && (funct7 == 7'b0100000)}}
-					&  {sext_a >> b[4:0]}[31:0] ) | //sra		//算术移位有问题
+					&  shsext_a[31:0] ) | //sra		//算术移位有问题
       ({32{(sel == 3'b110) && (funct7 == 7'b0000000)}}
 					& (a | b)) | //or
       ({32{(sel == 3'b111) && (funct7 == 7'b0000000)}}
