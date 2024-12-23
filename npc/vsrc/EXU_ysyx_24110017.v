@@ -46,7 +46,7 @@ assign res =
       ({32{(sel == 3'b101) && (funct7 == 7'b0000000)}} 
 		      & (a >> b)) | //srl
       ({32{(sel == 3'b101) && (funct7 == 7'b0100000)}}
-					& ($signed(a) >> $signed(b)) ) | //sra
+					& ($signed(a) >>> $signed(b)) ) | //sra
       ({32{(sel == 3'b110) && (funct7 == 7'b0000000)}}
 					& (a | b)) | //or
       ({32{(sel == 3'b111) && (funct7 == 7'b0000000)}}
