@@ -215,9 +215,7 @@ void dump_wave() {
   contextp->timeInc(1);
 }
 void single_cycle() {
-	top->clk=1;top->eval();
-	top->inst = paddr_read(top->pc, 4);top->eval();
-	dump_wave();
+	top->clk=1;top->eval();dump_wave();
 	top->clk=0;top->eval();dump_wave();
 }
 static void reset(int n) {
