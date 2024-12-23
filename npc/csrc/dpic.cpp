@@ -25,7 +25,3 @@ void pmem_write(int waddr, int wdata, char wmask) {
 	}
 }
 
-void ifu(int raddr, int rdata) {
-  // 总是读取地址为`raddr & ~0x3u`的4字节返回
-  rdata =  paddr_read(raddr, 4);
-}
