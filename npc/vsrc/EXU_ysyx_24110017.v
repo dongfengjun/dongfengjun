@@ -53,6 +53,7 @@ assign res =
           & (a * b)) | //mul
       ({32{(sel == 3'b001) && (funct7 == 7'b0000001)}} 
           & {{32'b0,$signed(a)} * {32'b0,$signed(b)} >>> 32}[31:0]) | //mulh
+					//算术移位有问题
       ({32{(sel == 3'b100) && (funct7 == 7'b0000001)}}
           & ($signed(a) / $signed(b))) |  //div
       ({32{(sel == 3'b101) && (funct7 == 7'b0000001)}}
