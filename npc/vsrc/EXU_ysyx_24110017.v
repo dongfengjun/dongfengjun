@@ -93,10 +93,7 @@ assign wmask = (op == 7'b0100011 && sel == 3'b000) ? 8'b00000001
  : (op == 7'b0100011 && sel == 3'b001) ? 8'b00000011
  : (op == 7'b0100011 && sel == 3'b010) ? 8'b00001111
  : 8'b0;
-assign raddr = (op == 7'b0000011) ? //(
-(r1 + offset)
-//&(32'hfffffffc))
-: 32'h80000000; //lb~lhu
+assign raddr = (op == 7'b0000011) ? ((r1 + offset)&(32'hfffffffc)) : 32'h80000000; //lb~lhu
 
 always @(*) begin
   if (valid) begin // 有读写请求时
