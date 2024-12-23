@@ -22,7 +22,7 @@ assign res =
       ({32{(sel == 3'b101) && (funct7 == 7'b0000000)}} 
 					& (a >> shamt)) |	//srli
 			({32{(sel == 3'b101) && (funct7 == 7'b0100000)}}) 
-					& (a >>> shamt) |	//srai
+					& (a >>> shamt) |	//srai			//算术移位有问题
       ({32{sel == 3'b110}} & (a | b)) |	//ori
       ({32{sel == 3'b111}} & (a & b)) 	//andi
 																	 ))				
