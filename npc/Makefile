@@ -22,7 +22,7 @@ LOG ?= $(BUILD)/npc-log.txt
 #IMG ?= ../am-kernels/tests/cpu-tests/build/movsx-riscv32-nemu.bin
 #IMG ?= ../am-kernels/tests/cpu-tests/build/mul-longlong.bin
 #IMG ?= ../am-kernels/tests/cpu-tests/build/shift-riscv32-nemu.bin
-IMG ?= ../am-kernels/tests/cpu-tests/build/sum-riscv32-nemu.bin
+IMG ?= ../am-kernels/tests/cpu-tests/build/switch-riscv32-nemu.bin
 ELF ?= ../am-kernels/tests/cpu-tests/build/bit-riscv32-nemu.elf
 REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
 NPC_ARGS += --log=$(LOG)
