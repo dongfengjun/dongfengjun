@@ -16,7 +16,7 @@ CFLAGS += -DMAINARGS=\"$(mainargs)\"
 .PHONY: $(AM_HOME)/am/src/riscv/npc/trm.c
 
 REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
-NPC_ARGS += --img=$(IMAGE).bin
+#NPC_ARGS += --img=$(IMAGE).bin
 NPC_ARGS += --elf=$(IMAGE).elf
 NPC_ARGS += --diff=$(REF_SO)
 
@@ -27,7 +27,7 @@ image: $(IMAGE).elf
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 run: image
-	$(MAKE) -C $(NPC_HOME)	run ARGS="$(NPC_ARGS)"
+	$(MAKE) -C $(NPC_HOME)	run ARGS="$(NPC_ARGS)"	IMG=$(IMAGE).bin
 
 gdb: image
 	$(MAKE) -C $(NPC_HOME)	run IMG=$(IMAGE).bin
