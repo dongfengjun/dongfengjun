@@ -15,8 +15,9 @@ LDFLAGS   += --gc-sections -e _start
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
 .PHONY: $(AM_HOME)/am/src/riscv/npc/trm.c
 
-NPC_ARGS += -l $(shell dirname $(IMAGE).elf)/nemu-log.txt
-NPC_ARGS += -e $(IMAGE).elf
+LOG=$(shell dirname $(IMAGE).elf)/nemu-log.txt
+IMG=$(IMAGE).bin
+ELF=$(IMAGE).elf
 
 image: $(IMAGE).elf
 	@$(OBJDUMP) -d $(IMAGE).elf > $(IMAGE).txt
@@ -24,7 +25,7 @@ image: $(IMAGE).elf
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 run: image
-	$(MAKE) -C $(NPC_HOME)	run ARGS="$(NPC_ARGS)"	IMG=$(IMAGE).bin
+	$(MAKE) -C $(NPC_HOME)	LOG	IMG	ELF
 
 gdb: image
 	$(MAKE) -C $(NPC_HOME)	run IMG=$(IMAGE).bin
