@@ -17,13 +17,16 @@ VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
 VERILATOR_FLAGS += -LDFLAGS -lreadline
 
 LOG ?= $(BUILD)/npc-log.txt
-ARGS += --log=$(LOG)
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
+ELF ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
 REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
+ARGS += --log=$(LOG)
+ARGS += --img=$(IMG)
+ARGS += --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
 
 run: sim
-	$(OBJ_DIR)/Vtop_ysyx_24110017 $(ARGS) --img=$(IMG)
+	$(OBJ_DIR)/Vtop_ysyx_24110017 $(ARGS)
 
 sim: $(CSRCS) $(VSRCS)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
