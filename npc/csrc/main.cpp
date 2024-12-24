@@ -199,6 +199,11 @@ void isa_parser_elf(char *filename){
 }
 #endif
 
+#ifdef CONFIG_MTRACE
+	char buf[1048576] = {0};
+	char *mtrace_p = buf;
+	FILE *mtracelog;
+#endif
 
 static void trace_and_difftest() {
 #ifdef CONFIG_ITRACE_COND
@@ -227,6 +232,9 @@ static void reset(int n) {
 
 void cpu_exec(int n) {
 	g_print_step = (n > 0 && n < MAX_INST_TO_PRINT);
+#ifdef CONFIG_MTRACE
+		mtracelog = fopen("build/npc-mtrace-log.txt", "w");  //Mtrace
+#endif
 	while(RUNNING && n != 0) {
 		single_cycle();
 		cpu.pc = top->pc;
@@ -241,6 +249,13 @@ void cpu_exec(int n) {
 		trace_and_difftest();
 		n--;
   }
+#ifdef CONFIG_FTRACE
+		cpu_show_ftrace();
+#endif
+#ifdef CONFIG_MTRACE
+    fprintf(mtracelog, "%s", buf);  //Mtrace log
+    fclose(mtracelog);
+#endif
 }
 
 int main(int argc, char *argv[]) {
