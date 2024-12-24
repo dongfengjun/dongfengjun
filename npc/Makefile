@@ -16,14 +16,9 @@ VERILATOR_FLAGS += -CFLAGS -g
 VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
 VERILATOR_FLAGS += -LDFLAGS -lreadline
 
-LOG ?= $(BUILD)/npc-log.txt
-#IMG ?= ../am-kernels/tests/cpu-tests/build/movsx-riscv32-nemu.bin
-#ELF ?= ../am-kernels/tests/cpu-tests/build/bit-riscv32-nemu.elf
-#REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
+LOG = $(BUILD)/npc-log.txt
 ARGS += --log=$(LOG)
-#NPC_ARGS += --img=$(IMG)
-#NPC_ARGS += --elf=$(ELF)
-#NPC_ARGS += --diff=$(REF_SO)
+IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 
 run: sim
 	$(OBJ_DIR)/Vtop_ysyx_24110017 $(ARGS) --img=$(IMG)
