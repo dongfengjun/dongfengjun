@@ -17,7 +17,7 @@ VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
 VERILATOR_FLAGS += -LDFLAGS -lreadline
 
 ELF += ./am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
-override ARGS ?= --log=$(BUILD_DIR)/nemu-log.txt
+override ARGS ?= --log=$(BUILD_DIR)/npc-log.txt
 override ARGS += --elf=$(ELF)
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
