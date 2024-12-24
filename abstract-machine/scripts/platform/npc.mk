@@ -15,8 +15,8 @@ LDFLAGS   += --gc-sections -e _start
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
 .PHONY: $(AM_HOME)/am/src/riscv/npc/trm.c
 
-ELF += $(IMAGE).elf
-NPC_ARGS += --elf=$(ELF)
+NPC_ARGS += -l $(shell dirname $(IMAGE).elf)/nemu-log.txt
+NPC_ARGS += -e $(IMAGE).elf
 
 image: $(IMAGE).elf
 	@$(OBJDUMP) -d $(IMAGE).elf > $(IMAGE).txt
