@@ -20,9 +20,9 @@ LOG ?= $(BUILD)/npc-log.txt
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 ELF ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
 REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
+ARGS ?= --elf=$(ELF) 
 ARGS += --log=$(LOG)
 ARGS += --img=$(IMG)
-ARGS ?= --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
 
 run: sim
