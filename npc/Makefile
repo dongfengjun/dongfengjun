@@ -20,7 +20,7 @@ ELF += ./am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
 override ARGS ?= --log=$(BUILD)/npc-log.txt
 override ARGS += --elf=$(ELF)
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
-REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
+REF_SO += ../nemu/build/riscv32-nemu-interpreter-so
 ARGS += --img=$(IMG)
 ARGS += --diff=$(REF_SO)
 
