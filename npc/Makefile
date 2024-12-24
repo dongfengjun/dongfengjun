@@ -22,7 +22,7 @@ ELF ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
 REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
 ARGS += --log=$(LOG)
 ARGS += --img=$(IMG)
-ARGS += --elf=$(ELF)
+ARGS ?= --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
 
 run: sim
