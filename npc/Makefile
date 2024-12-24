@@ -16,12 +16,13 @@ VERILATOR_FLAGS += -CFLAGS -g
 VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
 VERILATOR_FLAGS += -LDFLAGS -lreadline
 
-ELF += ./am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
-override ARGS ?= --log=$(BUILD)/npc-log.txt
-override ARGS += --elf=$(ELF)
-IMG += ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
-REF_SO += ../nemu/build/riscv32-nemu-interpreter-so
+LOG ?= $(BUILD)/npc-log.txt
+IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
+ELF ?= ./am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
+REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
+ARGS += --log=$(LOG)
 ARGS += --img=$(IMG)
+ARGS += --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
 
 run: sim
