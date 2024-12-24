@@ -26,7 +26,7 @@ ARGS += --log=$(LOG)
 #NPC_ARGS += --diff=$(REF_SO)
 
 run: sim
-	$(OBJ_DIR)/Vtop_ysyx_24110017 $(ARGS) --img=$(IMG)
+	$(OBJ_DIR)/Vtop_ysyx_24110017 $(ARGS) $(IMG)
 
 sim: $(CSRCS) $(VSRCS)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
