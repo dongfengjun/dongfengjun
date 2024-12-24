@@ -279,9 +279,6 @@ int main(int argc, char *argv[]) {
 	sdb_mainloop();
 #endif
 	dump_wave();
-#ifdef CONFIG_FTRACE
-	cpu_show_ftrace();
-#endif
 /***close**/
 	tfp->close();
 	delete contextp;
