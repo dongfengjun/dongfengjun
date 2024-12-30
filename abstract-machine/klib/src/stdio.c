@@ -5,6 +5,7 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
+/***
 int printf(const char *fmt, ...) {
   panic("Not implemented");
 }
@@ -12,6 +13,7 @@ int printf(const char *fmt, ...) {
 int vsprintf(char *out, const char *fmt, va_list ap) {
   panic("Not implemented");
 }
+***/
 
 void int2str(char *str,int value)
 {
@@ -87,12 +89,14 @@ int sprintf(char *out, const char *fmt, ...) {
 	return 0;
 }
 
+/***
 int snprintf(char *out, size_t n, const char *fmt, ...) {
-  panic("Not implemented");
+  //panic("Not implemented");
 }
 
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
-  panic("Not implemented");
+  //panic("Not implemented");
 }
+***/
 
 #endif
