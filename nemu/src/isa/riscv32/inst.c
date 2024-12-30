@@ -25,7 +25,7 @@
 
 /***ftrace***/
 #define MAX_FTRACE_SIZE 1024
-#define MAX_ELF_SIZE 32 * 1024
+#define MAX_ELF_SIZE 2 * 1024 * 1024
 void difftest_skip_ref();
 typedef struct Ftrace
 {
