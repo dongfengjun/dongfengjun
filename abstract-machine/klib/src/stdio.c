@@ -6,9 +6,8 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap);
-
+static char buf[1024];
 int printf(const char *fmt, ...) {
-	char buf[1024] = {0};
 	va_list ap;
 	va_start(ap, fmt);
 	int val = vsnprintf(buf, 1024, fmt, ap);
