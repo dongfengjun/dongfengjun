@@ -5,6 +5,7 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
+int vsnprintf(char *out, size_t n, const char *fmt, va_list ap);
 void int2str(char *str,int value) {                                         
   char tmp_str[20] = {0};
   int lidx = 0;
@@ -38,51 +39,17 @@ void int2str(char *str,int value) {
 }
 
 int printf(const char *fmt, ...) {
-	va_list args;
-	va_start(args, fmt);
-	while(*fmt != '\0') {
-		switch(*fmt){
-			case '%': {
-				++ fmt;
-				switch(*fmt) {
-		 			case 'd' : {
-						int val = va_arg(args, int);
-						char str[32]={0};
-						char *strp = str;
-						int2str(str, val);
-						while(*strp != '\0'){
-							putch(*strp);
-							++ strp;
-						}
-						break;
-					}
-					case 's' : {
-						char *tmp = va_arg(args, char *);
-						while(*tmp != '\0') {
-							putch(*tmp);
-							++ tmp;
-						}
-						break;
-		 			}
-					default: {
-						putch('W');
-						putch('A');
-						putch('I');
-						putch('T');
-						putch('\n');
-						break;
-		 			}
-		 		}
-		 	}
-		 	default: {
-				putch(*fmt);
-				break;
-			}
-		++ fmt;
-		 }
+	char buf[1024] = {0};
+	va_list ap;
+	va_start(ap, fmt);
+	int val = vsnprintf(buf, 1024, fmt, ap);
+	char *str = buf;
+	while(*str != '\0'){
+		putch(*str);
+		++ str;
 	}
-	va_end(args);
-	return 0;
+	va_end(ap);
+	return val;
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
@@ -91,43 +58,11 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 
 int sprintf(char *out, const char *fmt, ...) {
 	memset(out, 0, strlen(out));
-	char str[32]={0};
-	va_list args;
-  va_start(args, fmt);
-  while(*fmt != '\0') {
-    switch(*fmt) {
-      case '%': {
-        ++ fmt;
-        switch(*fmt) {
-          case 'd': {
-            int val = va_arg(args, int);
-            int2str(str, val);
-            strcat(out, str);
-            break;
-           }
-          case 's': {
-            char *tmp = va_arg(args, char *);
-            strcat(out, tmp);
-            break;
-           }
-          default:
-						printf("wait complete.\n");
-            break;
-				}
-				break;
-			}
-      default: {
-				char tmp[2] = {0};
-				tmp[0] = *fmt;
-				tmp[1] = '\0';
-				strcat(out, tmp);
-        break;
-			}
-    }
-    ++ fmt;
-  }
-	va_end(args);
-	return 0;
+	va_list ap;
+  va_start(ap, fmt);
+	int val = vsnprintf(out, 1024, fmt, ap);
+	va_end(ap);
+	return val;
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
@@ -135,7 +70,45 @@ int snprintf(char *out, size_t n, const char *fmt, ...) {
 }
 
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
-  panic("Not implemented");
+	char *start = out;
+	while(n -- && *fmt != '\0'){
+		switch(*fmt){
+			case '%': {
+				++ fmt;
+				switch(*fmt) {
+					case 'd': {
+						int val = va_arg(ap, int);
+						int2str(out, val);
+						break;
+					}
+					case 's': {
+						char *tmp = va_arg(ap, char *);
+						strcat(out, tmp);
+						break;
+					}
+					case 'c': {
+						char tmp = va_arg(ap, int);
+						*out ++ = tmp;
+						break;
+					}
+					default: {
+						putch('W');
+						putch('a');
+						putch('i');
+						putch('t');
+						return -1;
+					}
+				}
+			}
+			default: {
+				*out++ = *fmt;
+				break;
+			}
+		}
+		fmt ++;
+	}
+	*out = '\0';
+	return out - start;
 }
 
 #endif
