@@ -7,7 +7,7 @@
 
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap);
 static char buf[1024];
-int printf(const char *fmt, ...) {
+int myprintf(const char *fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
 	int val = vsnprintf(buf, 1024, fmt, ap);
