@@ -24,6 +24,7 @@
 #define Mw vaddr_write
 
 /***ftrace***/
+#ifdef CONFIG_FTRACE
 #define MAX_FTRACE_SIZE 1024
 #define MAX_ELF_SIZE 2 * 1024 * 1024
 void difftest_skip_ref();
@@ -43,6 +44,7 @@ typedef MUXDEF(CONFIG_ISA64, Elf64_Shdr, Elf32_Shdr) Elf_Shdr;
 typedef MUXDEF(CONFIG_ISA64, Elf64_Sym, Elf32_Sym) Elf_Sym;
 Elf_Ehdr elf_ehdr;
 Elf_Shdr *elfshdr_symtab = NULL, *elfshdr_strtab = NULL;
+#endif
 /******/
 
 enum {
@@ -138,6 +140,7 @@ static int decode_exec(Decode *s) {
 
   R(0) = 0; // reset $zero to 0
 
+#ifdef CONFIG_FTRACE
 	//fbreak jalr: 0b1100111 ; jal: 0b1101111
 	uint32_t opcode = BITS(s->isa.inst.val, 6, 0);
   if (opcode == 0b1100111 || opcode == 0b1101111) {
@@ -155,6 +158,7 @@ static int decode_exec(Decode *s) {
     }
     ftracehead = (ftracehead + 1) % MAX_FTRACE_SIZE;
   }
+#endif
 	
   return 0;
 }
@@ -165,6 +169,7 @@ int isa_exec_once(Decode *s) {
 }
 
 /***ftrace***/
+#ifdef CONFIG_FTRACE
 void isa_parser_elf(char *filename) {
   printf("ELF FILE is:%s\n", filename);
 	FILE *fp = fopen(filename, "rb");
@@ -244,4 +249,7 @@ void cpu_show_ftrace() {
       ftrace->npc);
   }
 }
+#else
+void isa_parser_elf(char *filename){};
+#endif
 /******/
