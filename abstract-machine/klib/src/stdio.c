@@ -121,7 +121,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 								out = out + len - 1;
 								long int tmp_len = len;
 								while(tmp_len --) {
-									long int tmp = val % 10;
+								  int tmp = val % 10;
 									*out-- = tmp + 48;
 									val /= 10;
 								}
