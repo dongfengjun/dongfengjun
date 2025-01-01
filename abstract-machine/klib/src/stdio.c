@@ -44,42 +44,99 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 			case '%': {
 				fmt ++;
 				switch(*fmt) {
-					case 'd': {
-						int val = va_arg(ap, int);
-						if(val < 0) {
-							*out ++ = '-';
-							val = -val;
+					case '0': {
+						fmt ++;
+						switch(*fmt) {
+							case '2': {
+								fmt ++;
+								switch(*fmt) {
+									case 'd': {
+										int val = va_arg(ap, int);
+										if(val < 0) {
+											*out ++ = '-';
+											val = -val;
+										}
+										int len = 0;
+										int number = val;
+										do {
+											number /= 10;
+											len ++;
+										} while(number);
+										if(len < 2){
+											out = out + 2 - 1;
+                      int tmp_len = 2;
+                      while(tmp_len --) {
+                        int tmp = val % 10;
+                        *out-- = tmp + 48;
+                        val /= 10;
+                      }
+                      out += (len + 1);
+                      break;
+										}
+										else {
+											out = out + len - 1;
+											int tmp_len = len;
+											while(tmp_len --) {
+												int tmp = val % 10;
+												*out-- = tmp + 48;
+												val /= 10;
+											}
+											out += (len + 1);
+											break;
+										}
+									}
+									default: {
+										return -1;
+									}
+								}
+								break;
+							}
+							default: {
+								return -1;
+							}
 						}
-						int len = 0;
-						int number = val;
-						do {
-							number /= 10;
-							len ++;
-						} while(number);
-						out = out + len - 1;
-						int tmp_len = len;
-						while(tmp_len --) {
-							int tmp = val % 10;
-							*out-- = tmp + 48;
-							val /= 10;
-						}
-						out += (len + 1);
-						break;
-					}
-					case 's': {
-						char *tmp = va_arg(ap, char *);
-						while(*tmp != '\0') {
-							*out++ = *tmp++;
-						}
-						break;
-					}
-					case 'c': {
-						char tmp = va_arg(ap, int);
-						*out ++ = tmp;
 						break;
 					}
 					default: {
-						return -1;
+						switch(*fmt) {
+							case 'd': {
+								int val = va_arg(ap, int);
+								if(val < 0) {
+									*out ++ = '-';
+									val = -val;
+								}
+								int len = 0;
+								int number = val;
+								do {
+									number /= 10;
+									len ++;
+								} while(number);
+								out = out + len - 1;
+								int tmp_len = len;
+								while(tmp_len --) {
+									int tmp = val % 10;
+									*out-- = tmp + 48;
+									val /= 10;
+								}
+								out += (len + 1);
+								break;
+							}
+							case 's': {
+								char *tmp = va_arg(ap, char *);
+								while(*tmp != '\0') {
+									*out++ = *tmp++;
+								}
+								break;
+							}
+							case 'c': {
+								char tmp = va_arg(ap, int);
+								*out ++ = tmp;
+								break;
+							}
+							default: {
+								return -1;
+							}
+						}
 					}
 				}
 				break;
