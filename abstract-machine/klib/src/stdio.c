@@ -63,7 +63,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 											len ++;
 										} while(number);
 										if(len < 2){
-											out = out + 2 - 1;
+											out = out + 2;
                       int tmp_len = 2;
                       while(tmp_len --) {
                         int tmp = val % 10;
