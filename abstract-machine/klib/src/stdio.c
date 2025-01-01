@@ -109,9 +109,8 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 							case 'd': {
 								int val = va_arg(ap, int);
 								if(val < 0) {
-									*out ++ = '-';
+								//	*out ++ = '-';
 									val = -val;
-									putch('a');
 								}
 								int len = 0;
 								int number = val;
