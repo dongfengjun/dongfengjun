@@ -107,19 +107,19 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 					default: {
 						switch(*fmt) {
 							case 'd': {
-								long int val = va_arg(ap, long int);
+								int val = va_arg(ap, long int);
 								if(val < 0) {
-								//	*out ++ = '-';
+									*out ++ = '-';
 									val = -val;
 								}
-								long int len = 0;
-								long int number = val;
+								int len = 0;
+								int number = val;
 								do {
 									number /= 10;
 									len ++;
 								} while(number);
 								out = out + len - 1;
-								long int tmp_len = len;
+								int tmp_len = len;
 								while(tmp_len --) {
 								  int tmp = val % 10;
 									*out-- = tmp + 48;
