@@ -46,9 +46,15 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 				switch(*fmt) {
 					case '0': {
 						fmt ++;
-						int num = atoi(fmt);
+						int i = atoi(fmt);
 						switch(*fmt) {
-							case '2': {
+							case '2':
+							case '3':
+							case '4':
+							case '5':
+							case '6':
+							case '7':
+							case '8':{
 								fmt ++;
 								switch(*fmt) {
 									case 'd': {
@@ -63,15 +69,15 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 											number /= 10;
 											len ++;
 										} while(number);
-										if(len < num){
-											out = out + num - 1;
-                      int tmp_len = num;
+										if(len < i){
+											out = out + i - 1;
+                      int tmp_len = i;
                       while(tmp_len --) {
                         int tmp = val % 10;
                         *out-- = tmp + 48;
                         val /= 10;
                       }
-                      out += (num + 1);
+                      out += (i + 1);
                       break;
 										}
 										else {
