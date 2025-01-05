@@ -91,11 +91,19 @@ char buf[1048576] = {0};	//有些程序太大装不下，如recursion
 char *mtrace_p = buf;
 FILE *mtracelog;
 #endif
+#ifdef CONFIG_DTRACE
+char dtrace_buf[66536] = {0};
+char *dtrace_p = dtrace_buf;
+FILE *dtrace_log;
+#endif
 void cpu_show_ftrace();
 static void execute(uint64_t n) {
   Decode s;
 	#ifdef CONFIG_MTRACE
 		mtracelog = fopen("build/nemu-mtrace-log.txt", "w");	//Mtrace
+	#endif
+	#ifdef CONFIG_DTRACE
+		dtrace_log = fopen("build/nemu-dtrace-log.txt", "w");	//Dtrace
 	#endif
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
@@ -113,6 +121,10 @@ static void execute(uint64_t n) {
 	#ifdef CONFIG_FTRACE
 		cpu_show_ftrace();  //Ftrace display
   #endif
+	#ifdef CONFIG_DTRACE
+		fprintf(dtrace_log, "%s", dtrace_buf);	//Dtrace log
+		fclose(dtrace_log);
+	#endif
 }
 
 static void statistic() {

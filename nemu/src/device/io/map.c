@@ -22,6 +22,7 @@
 
 static uint8_t *io_space = NULL;
 static uint8_t *p_space = NULL;
+extern char *dtrace_p;
 
 uint8_t* new_space(int size) {
   uint8_t *p = p_space;
@@ -50,19 +51,13 @@ void init_map() {
   io_space = malloc(IO_SPACE_MAX);
   assert(io_space);
   p_space = io_space;
-#ifdef CONGIG_DTRACE
-	char dtrace_buf[65536] = {0};	//64k
-	char *dtrace_p = dtrace_buf;
-	FILE *dtrace_log;
-	dtrace_log = fopen("build/nemu-dtrace-log.txt", "w");	//Dtrace
-#endif
 }
 
 word_t map_read(paddr_t addr, int len, IOMap *map) {
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
   paddr_t offset = addr - map->low;
-  invoke_callback(map->callback, offset, len, false); // prepare data to read
+  invoke_callback(map->callback, offset, len, false); //prepare data to read
   word_t ret = host_read(map->space + offset, len);
 #ifdef CONFIG_DTRACE
 	dtrace_p += sprintf(dtrace_p, "device map:%s addr:%u len:%d read:%u\n", map->name, addr, len, ret);
