@@ -20,13 +20,13 @@ LOG ?= $(BUILD)/npc-log.txt
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 ELF ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
 REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
-NPC_ARGS += --log=$(LOG)
-NPC_ARGS += --img=$(IMG)
-NPC_ARGS += --elf=$(ELF)
-NPC_ARGS += --diff=$(REF_SO)
+ARGS += --log=$(LOG)
+ARGS += --img=$(IMG)
+ARGS += --elf=$(ELF)
+ARGS += --diff=$(REF_SO)
 
 run: sim
-	$(OBJ_DIR)/Vtop_ysyx_24110017 $(NPC_ARGS)
+	$(OBJ_DIR)/Vtop_ysyx_24110017 $(ARGS)
 
 sim: $(CSRCS) $(VSRCS)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
