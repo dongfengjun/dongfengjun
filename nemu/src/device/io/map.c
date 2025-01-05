@@ -50,6 +50,12 @@ void init_map() {
   io_space = malloc(IO_SPACE_MAX);
   assert(io_space);
   p_space = io_space;
+#ifdef CONGIG_DTRACE
+	char dtrace_buf[65536] = {0};	//64k
+	char *dtrace_p = dtrace_buf;
+	FILE *dtrace_log;
+	dtrace_log = fopen("build/nemu-dtrace-log.txt", "w");	//Dtrace
+#endif
 }
 
 word_t map_read(paddr_t addr, int len, IOMap *map) {
@@ -58,6 +64,9 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
   paddr_t offset = addr - map->low;
   invoke_callback(map->callback, offset, len, false); // prepare data to read
   word_t ret = host_read(map->space + offset, len);
+#ifdef CONFIG_DTRACE
+	dtrace_p += sprintf(dtrace_p, "device map:%s addr:%u len:%d read:%u\n", map->name, addr, len, ret);
+#endif
   return ret;
 }
 
@@ -67,4 +76,7 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   paddr_t offset = addr - map->low;
   host_write(map->space + offset, len, data);
   invoke_callback(map->callback, offset, len, true);
+#ifdef CONFIG_DTRACE
+	dtrace_p += sprintf(dtrace_p, "device map:%s addr:%u len:%d read:%u\n", map->name, addr, len, data);
+#endif
 }
