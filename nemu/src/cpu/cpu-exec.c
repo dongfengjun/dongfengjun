@@ -92,7 +92,7 @@ char *mtrace_p = buf;
 FILE *mtracelog;
 #endif
 #ifdef CONFIG_DTRACE
-char dtrace_buf[1048576] = {0};
+char dtrace_buf[1024] = {0};
 char *dtrace_p = dtrace_buf;
 FILE *dtrace_log;
 #endif
