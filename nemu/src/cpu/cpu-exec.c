@@ -88,12 +88,12 @@ static void exec_once(Decode *s, vaddr_t pc) {
 }
 
 #ifdef CONFIG_MTRACE
-char buf[1073741824] = {0};	//1G
+char buf[2 * 1024 * 1024] = {0};	//2M
 char *mtrace_p = buf;
 FILE *mtracelog;
 #endif
 #ifdef CONFIG_DTRACE
-char dtrace_buf[10485760] = {0};
+char dtrace_buf[2 * 1024 * 1024] = {0};	//2M
 char *dtrace_p = dtrace_buf;
 FILE *dtrace_log;
 #endif
