@@ -110,6 +110,7 @@ static void execute(uint64_t n) {
 	char mtrace_path[64] = {0};
 	//mtracelog = fopen("build/nemu-mtrace-log.txt", "w");	//Mtrace
 	snprintf(mtrace_path, 64, "%s/%s", file_path,"build/nemu-mtrace-log.txt");
+	printf("mlog:%s\n",mtrace_path);
 	mtracelog = fopen(mtrace_path, "w");
 #endif
 #ifdef CONFIG_DTRACE
