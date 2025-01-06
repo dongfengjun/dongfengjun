@@ -101,10 +101,12 @@ void cpu_show_ftrace();
 static void execute(uint64_t n) {
   Decode s;
 #if (CONFIG_MTRACE || CONFIG_DTRACE)
-	char file_path[32] = {0};
+	//char file_path[32] = {0};
+	const char *file_path = getenv("PWD");
+	 /***
 	 if (getcwd(file_path, 32) == NULL) {
         perror("getcwd failed");
-	 }
+	 }***/
 #endif
 #ifdef CONFIG_MTRACE
 	char mtrace_path[64] = {0};
