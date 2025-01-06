@@ -88,12 +88,12 @@ static void exec_once(Decode *s, vaddr_t pc) {
 }
 
 #ifdef CONFIG_MTRACE
-char buf[1048576] = {0};	//有些程序太大装不下，如recursion
+char buf[10485760] = {0};	//有些程序太大装不下，如recursion
 char *mtrace_p = buf;
 FILE *mtracelog;
 #endif
 #ifdef CONFIG_DTRACE
-char dtrace_buf[1048576] = {0};
+char dtrace_buf[10485760] = {0};
 char *dtrace_p = dtrace_buf;
 FILE *dtrace_log;
 #endif
@@ -110,7 +110,6 @@ static void execute(uint64_t n) {
 	char mtrace_path[64] = {0};
 	//mtracelog = fopen("build/nemu-mtrace-log.txt", "w");	//Mtrace
 	snprintf(mtrace_path, 64, "%s/%s", file_path,"build/nemu-mtrace-log.txt");
-	printf("mlog:%s\n",mtrace_path);
 	mtracelog = fopen(mtrace_path, "w");
 #endif
 #ifdef CONFIG_DTRACE
