@@ -88,7 +88,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 }
 
 #ifdef CONFIG_MTRACE
-char buf[104857600] = {0};	//有些程序太大装不下，如recursion
+char buf[1073741824] = {0};	//1G
 char *mtrace_p = buf;
 FILE *mtracelog;
 #endif
