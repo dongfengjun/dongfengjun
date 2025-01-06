@@ -17,6 +17,7 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+#include <unistd.h>
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -99,8 +100,14 @@ FILE *dtrace_log;
 void cpu_show_ftrace();
 static void execute(uint64_t n) {
   Decode s;
+	char file_path[64] = {0};
+	if (getcwd(file_path, 64) == NULL) {
+        perror("getcwd failed");
+  }
 	#ifdef CONFIG_MTRACE
-		mtracelog = fopen("build/nemu-mtrace-log.txt", "w");	//Mtrace
+		snprintf(file_path, 64, "%s", "build/name-mtrace-log.txt");
+		//mtracelog = fopen("build/nemu-mtrace-log.txt", "w");	//Mtrace
+		mtracelog = fopen(file_path, "w");
 	#endif
 	#ifdef CONFIG_DTRACE
 		dtrace_log = fopen("build/nemu-dtrace-log.txt", "w");	//Dtrace
