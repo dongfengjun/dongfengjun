@@ -17,7 +17,6 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
-#include <unistd.h>
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -101,23 +100,21 @@ void cpu_show_ftrace();
 static void execute(uint64_t n) {
   Decode s;
 #if (CONFIG_MTRACE || CONFIG_DTRACE)
-	//char file_path[32] = {0};
 	const char *file_path = getenv("PWD");
-	 /***
-	 if (getcwd(file_path, 32) == NULL) {
-        perror("getcwd failed");
-	 }***/
+	if (file_path == NULL) {
+		perror("getenv failed");
+	}
 #endif
 #ifdef CONFIG_MTRACE
-	char mtrace_path[64] = {0};
+	char mtrace_path[128] = {0};
 	//mtracelog = fopen("build/nemu-mtrace-log.txt", "w");	//Mtrace
-	snprintf(mtrace_path, 64, "%s/%s", file_path,"build/nemu-mtrace-log.txt");
+	snprintf(mtrace_path, 128, "%s/%s", file_path, "build/nemu-mtrace-log.txt");
 	mtracelog = fopen(mtrace_path, "w");
 #endif
 #ifdef CONFIG_DTRACE
-	char dtrace_path[64] = {0};
+	char dtrace_path[128] = {0};
 	//dtrace_log = fopen("build/nemu-dtrace-log.txt", "w");	//Dtrace
-	snprintf(dtrace_path, 64, "%s/%s", file_path,"build/nemu-dtrace-log.txt");
+	snprintf(dtrace_path, 128, "%s/%s", file_path, "build/nemu-dtrace-log.txt");
 	dtrace_log = fopen(dtrace_path, "w");
 #endif
   for (;n > 0; n --) {
