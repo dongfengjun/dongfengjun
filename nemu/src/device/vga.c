@@ -72,8 +72,12 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen() {
-  // TODO: call `update_screen()` when the sync register is non-zero,
+  // call `update_screen()` when the sync register is non-zero,
   // then zero out the sync register
+	if(vmem != 0) {
+		update_screen();
+	}
+	free(vmem);
 }
 
 void init_vga() {
