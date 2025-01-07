@@ -5,8 +5,8 @@
 
 int printf(const char *fmt, ...);
 void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
-  uint32_t k = inl(0xa0000060);
+  uint32_t k = inl(KBD_ADDR);
 	kbd->keydown = true;
-	kbd->keycode = k & ~KEYDOWN_MASK;
+	kbd->keycode = k;
 	//printf("keycode:%d\n", kbd->keycode);
 }
