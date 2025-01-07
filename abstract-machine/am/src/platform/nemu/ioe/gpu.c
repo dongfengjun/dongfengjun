@@ -21,19 +21,15 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
   };
 }
 
-static uint32_t color_buf[300 * 400];
-uint32_t *colorbuf_p = color_buf;
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
-  if (!ctl->sync) {
-		for (int i = 0; i < (ctl -> x / ctl -> w); i ++) {
-				*colorbuf_p ++ = *(uint32_t *)(ctl -> pixels) ++;
+	uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
+	uint32_t *pixels = ctl->pixels;
+	for(int i = ctl->y; i < ctl->y + ctl->h; i ++) {
+		for(int j = ctl->x; j < ctl->x + ctl->w; j ++) {
+			fb[inw(VGACTL_ADDR + 2) * i + j] = pixels[(ctl->w) * (i - ctl->y) + (j - ctl->x)];
 		}
-  }
-	else {
-		uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-		for(int k = 300 * 400 - 1; k >= 0; k --) {
-			fb[k] = color_buf[k];
-		}
+	}
+	if(ctl -> sync) {
 		outl(SYNC_ADDR, 1);
 	}
 }
