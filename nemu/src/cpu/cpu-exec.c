@@ -131,7 +131,6 @@ static void execute(uint64_t n) {
 		fclose(mtracelog);
 	#endif
 	#ifdef CONFIG_FTRACE
-		printf("asdadsfadf\n");
 		cpu_show_ftrace();  //Ftrace display
   #endif
 	#ifdef CONFIG_DTRACE
