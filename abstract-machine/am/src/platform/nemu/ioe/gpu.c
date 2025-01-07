@@ -17,7 +17,7 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
     .present = true, .has_accel = false,
     .width = inw(VGACTL_ADDR), 
 		.height = inw(VGACTL_ADDR + 2),
-    .vmemsz = inw(VGACTL_ADDR) * inw(VGACTL_ADDR + 2)
+    .vmemsz = 0
   };
 }
 
@@ -32,8 +32,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 	else {
 		uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
 		for(int k = 300 * 400 - 1; k >= 0; k --) {
-			fb[k] = 50;
-			//color_buf[k];
+			fb[k] = color_buf[k];
 		}
 		outl(SYNC_ADDR, 1);
 	}
