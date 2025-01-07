@@ -77,7 +77,9 @@ void vga_update_screen() {
 	if(vmem != 0) {
 		update_screen();
 	}
-	free(vmem);
+	for(uint32_t *p = vmem; p != vmem + screen_size(); p ++) {
+		*p = 0;
+	}
 }
 
 void init_vga() {
