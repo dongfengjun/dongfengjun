@@ -9,5 +9,4 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
 	if(k & KEYDOWN_MASK) kbd->keydown = true;
 	else kbd->keydown = false;
 	kbd->keycode = k & ~KEYDOWN_MASK;
-	//printf("keycode:%d\n", kbd->keycode);
 }
