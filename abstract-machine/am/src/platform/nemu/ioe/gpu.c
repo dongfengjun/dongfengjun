@@ -32,7 +32,8 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 	else {
 		uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
 		for(int k = 300 * 400 - 1; k >= 0; k --) {
-			fb[k] = color_buf[k];
+			fb[k] = 50;
+			//color_buf[k];
 		}
 		outl(SYNC_ADDR, 1);
 	}
