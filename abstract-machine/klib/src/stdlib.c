@@ -50,7 +50,7 @@ void *malloc(size_t size) {
 /***
 #endif
 ***/
-  return NULL;
+ // return NULL;
 }
 
 void free(void *ptr) {
