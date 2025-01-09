@@ -57,6 +57,6 @@ void init_audio() {
 
 void audio_callback(uint8_t *sbuf, int len) {
 	for (int i = 0; i < len; i ++) {
-		sbuf[i] = paddr_read(0xa10000000 + i, 1);
+		sbuf[i] = paddr_read(0xa1200000 + i, 1);
 	}
 }
