@@ -23,6 +23,7 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
   };
 }
 
+static int k = 0;
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 	if(!ctl->sync && (ctl->w == 0 || ctl->h == 0))
 		return;
@@ -32,7 +33,6 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 	//int y = ctl->y/ctl->h;
 	//int w = ctl->w;
 	//int h = ctl->h;
-	int k = 0;
 	for(int i = ctl->y; i < (ctl->y + ctl->h); i ++) {
 		for(int j = ctl->x; j < (ctl->x + ctl->w); j ++) {
 			fb[k ++] = pixels[0];
