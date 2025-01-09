@@ -48,9 +48,9 @@ void init_audio() {
   SDL_AudioSpec s = {};
   s.format = AUDIO_S16SYS;  // 假设系统中音频数据的格式总是使用16位有符号数>来表示
   s.userdata = NULL;	// 不使用
-  s.freq = paddr_read(0xa0000000, 4);
-  s.channels = paddr_read(0xa0000004, 4);
-  s.samples = paddr_read(0xa0000008, 4);
+  s.freq = paddr_read(0xa0000200, 4);
+  s.channels = paddr_read(0xa0000204, 4);
+  s.samples = paddr_read(0xa0000208, 4);
   SDL_InitSubSystem(SDL_INIT_AUDIO);
   SDL_OpenAudio(&s, NULL);
 }
