@@ -1,6 +1,6 @@
 #include <am.h>
 #include <nemu.h>
-#include "./../../../../../klib/include/klib.h"
+//#include "./../../../../../klib/include/klib.h"
 
 #define SYNC_ADDR (VGACTL_ADDR + 4)
 
@@ -18,7 +18,7 @@ void __am_gpu_init() {
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
   *cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
-    .width = inw(VGACTL_ADDR + 2), 
+    .width = inw(VGACTL_ADDR + 2),	//小端系统 
 		.height = inw(VGACTL_ADDR),
     .vmemsz = 0
   };
@@ -31,7 +31,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 	uint32_t *pixels = ctl->pixels;
 	for(int i = ctl->y; i < (ctl->y + ctl->h); i ++) {
 		for(int j = ctl->x; j < (ctl->x + ctl->w); j ++) {
-			fb[inw(VGACTL_ADDR+2) * i + j] = pixels[0];	//w*i+j 
+			fb[inw(VGACTL_ADDR+2) * i + j] = pixels[inw(VGACTL_ADDR+2) * (i-ctl->y) + (j-ctl->x)];	//w*i+j 
 		}
 	}
 	if(ctl -> sync) {
