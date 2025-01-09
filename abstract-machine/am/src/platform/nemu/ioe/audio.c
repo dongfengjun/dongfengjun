@@ -31,6 +31,6 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 	uint32_t *ctlbuf = ctl->buf.start;
 	while((64*1024*8 - inl(AUDIO_COUNT_ADDR)) < ctl->buf.end - ctl->buf.start){};
 	for(sbuf = ctl->buf.start; sbuf != (ctl->buf.end); sbuf ++) {
-		*sbuf ++ = *ctlbuf ++;
+		*sbuf = *ctlbuf ++;
 	}
 }

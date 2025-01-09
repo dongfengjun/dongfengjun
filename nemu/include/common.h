@@ -47,6 +47,8 @@ typedef uint16_t ioaddr_t;
 /***TRACE***/
 extern char *mtrace_p;
 
+/***audio play***/
+void audio_callback(uint8_t *sbuf, int len);
 #include <debug.h>
 
 #endif
