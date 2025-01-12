@@ -34,8 +34,6 @@ uint8_t* audio_pos;
 void audio_callback(void* udata, uint8_t *stream, int len);
 
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
-	audio_pos = guest_to_host(0xa1200000);                                    
-  printf("audio_pos:%d\n", *audio_pos);
 }
 
 void init_audio() {
