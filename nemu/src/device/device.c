@@ -37,13 +37,6 @@ void vga_update_screen();
 extern uint8_t *audio_pos;
 #define AUDIO_SBUF_ADDR (0xa0000000 + 0x1200000)
 void device_update() {
-/***audio***/
-	//*audio_pos = mmio_read(0xa1200000, 1);
-	//printf("audio_pos = %d\n", *audio_pos);
-  SDL_PauseAudio(0);
-	SDL_Delay(200);
-/******/
-
   static uint64_t last = 0;
   uint64_t now = get_time();
   if (now - last < 1000000 / TIMER_HZ) {
@@ -52,6 +45,12 @@ void device_update() {
   last = now;
 
   IFDEF(CONFIG_HAS_VGA, vga_update_screen());
+
+/***audio***/
+  SDL_PauseAudio(0);
+  SDL_Delay(200);
+/******/
+
 
 #ifndef CONFIG_TARGET_AM
   SDL_Event event;
