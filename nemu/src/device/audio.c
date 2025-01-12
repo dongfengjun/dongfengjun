@@ -30,7 +30,7 @@ enum {
 
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
-uint8_t* audio_pos;
+uint8_t *audio_pos;
 #define AUDIO_SBUF_ADDR (0xa0000000 + 0x1200000)
 void audio_callback(void* udata, uint8_t *stream, int len);
 
@@ -67,6 +67,6 @@ void audio_callback(void* udata, uint8_t *stream, int len) {
 	SDL_memset(stream, 0, len);
 	printf("len:%d\n", len);
 	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
-	audio_pos += len;
-	printf("audio_pos = %d\n", *audio_pos);
+	audio_pos += 2048;
+	printf("audio_pos %hhn = %d\n", audio_pos, *audio_pos);
 }
