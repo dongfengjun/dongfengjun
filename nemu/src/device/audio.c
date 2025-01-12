@@ -60,7 +60,7 @@ void init_audio() {
 		printf("open audio fail!\n");
 		assert(0);
 	}
-	audio_pos = (uint8_t *)audio_base;
+	audio_pos = sbuf;
 }
 
 void audio_callback(void* udata, uint8_t *stream, int len) {

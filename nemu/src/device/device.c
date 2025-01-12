@@ -34,20 +34,19 @@ void init_alarm();
 void send_key(uint8_t, bool);
 void vga_update_screen();
 
-extern uint8_t *audio_pos;
-#define AUDIO_SBUF_ADDR (0xa0000000 + 0x1200000)
 void device_update() {
+
+/***audio***/
+  SDL_PauseAudio(0);
+  SDL_Delay(200);
+/******/ 
+
   static uint64_t last = 0;
   uint64_t now = get_time();
   if (now - last < 1000000 / TIMER_HZ) {
     return;
   }
   last = now;
-
-/***audio***/
-  SDL_PauseAudio(0);
-  SDL_Delay(200);
-/******/
 
   IFDEF(CONFIG_HAS_VGA, vga_update_screen());
 
