@@ -59,7 +59,7 @@ void init_audio() {
 		printf("open audio fail!\n");
 		assert(0);
 	}
-	uintptr_t integer = 0xa1200000;
+	uintptr_t integer = 2703228928;
 	audio_pos = (void*)integer;
 }
 
