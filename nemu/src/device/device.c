@@ -44,7 +44,7 @@ void device_update() {
 
 /***audio***/
   SDL_PauseAudio(0);
-  SDL_Delay(200);
+  SDL_Delay(1000);
   printf("pause audio\n");
 /******/
 

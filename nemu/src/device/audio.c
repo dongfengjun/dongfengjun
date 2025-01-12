@@ -67,7 +67,5 @@ void audio_callback(void* udata, uint8_t *stream, int len) {
 	SDL_memset(stream, 0, len);
 	printf("len:%d\n", len);
 	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
-	printf("stream :%d\n", *stream);
-	audio_pos += 2048;
-	printf("audio_pos = %d\n", *audio_pos);
+	audio_pos += len;
 }
