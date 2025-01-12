@@ -61,7 +61,7 @@ void init_audio() {
 		assert(0);
 	}
 	audio_pos = sbuf;
-	mmio_write(0xa0000214, 4, 1);
+//	mmio_write(0xa0000214, 4, 1);
 }
 
 void audio_callback(void* udata, uint8_t *stream, int len) {
