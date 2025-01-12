@@ -42,6 +42,7 @@ void device_update() {
   last = now;
 
   IFDEF(CONFIG_HAS_VGA, vga_update_screen());
+	printf("aaaa\n");
 /***audio***
   void *udata = 0;
   uint8_t buf[512] = {0};
