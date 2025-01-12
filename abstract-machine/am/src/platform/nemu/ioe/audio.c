@@ -33,6 +33,5 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 	while((64*1024*8 - inl(AUDIO_COUNT_ADDR)) < ctl->buf.end - ctl->buf.start){};
 	for(sbuf = ctl->buf.start; sbuf != (ctl->buf.end); sbuf ++) {
 		*sbuf = *ctlbuf ++;
-		printf("sbuf:%d\n",*sbuf);
 	}
 }

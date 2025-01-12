@@ -63,6 +63,7 @@ void init_audio() {
 
 void audio_callback(void* udata, uint8_t *stream, int len) {
 	audio_pos = guest_to_host(0xa1200000);
+	printf("audio_pos:%d\n", *audio_pos);
 	SDL_memset(stream, 0, len);
 	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
 	audio_pos += len;
