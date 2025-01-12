@@ -38,7 +38,7 @@ extern uint8_t *audio_pos;
 #define AUDIO_SBUF_ADDR (0xa0000000 + 0x1200000)
 void device_update() {
 /***audio***/
-	*audio_pos = mmio_read(AUDIO_SBUF_ADDR, 1);
+	*audio_pos = mmio_read(0xa1200000, 1);
 	printf("audio_pos = %d\n", *audio_pos);
   SDL_PauseAudio(0);
   SDL_CloseAudioDevice(0);
