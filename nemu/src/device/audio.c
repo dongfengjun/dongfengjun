@@ -59,7 +59,7 @@ void init_audio() {
 		printf("open audio fail!\n");
 		assert(0);
 	}
-	printf("open audio success\n");
+	printf("freq = %d\n", s.freq);
 }
 
 void audio_callback(void* udata, uint8_t *stream, int len) {
