@@ -36,10 +36,10 @@ void vga_update_screen();
 void device_update() {
 
 /***audio***/
-  void *udata = 0;
-  uint8_t buf[512] = {0};
-  uint8_t *p = buf;
-  audio_callback(udata, p, 512);
+//  void *udata = 0;
+//  uint8_t buf[512] = {0};
+//  uint8_t *p = buf;
+//  audio_callback(udata, p, 512);
   printf("aaaaa\n");
   SDL_PauseAudio(0);
   SDL_CloseAudioDevice(0);
