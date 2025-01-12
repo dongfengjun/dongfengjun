@@ -37,7 +37,7 @@ void vga_update_screen();
 extern uint8_t *audio_pos;
 void device_update() {
 /***audio***/
-	audio_pos = (uint8_t *)(uintptr_t)(0x80000000);
+	audio_pos = (uint8_t *)(uintptr_t)(0xa1200000);
 	printf("audio_pos = %d\n", *audio_pos);
   SDL_PauseAudio(0);
   SDL_CloseAudioDevice(0);
