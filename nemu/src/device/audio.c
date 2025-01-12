@@ -30,6 +30,8 @@ enum {
 
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
+uint8_t* audio_pos;
+void audio_callback(void* udata, uint8_t *stream, int len);
 
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
 }
@@ -51,12 +53,17 @@ void init_audio() {
   s.freq = paddr_read(0xa0000200, 4);
   s.channels = paddr_read(0xa0000204, 4);
   s.samples = paddr_read(0xa0000208, 4);
+	s.callback = audio_callback;
   SDL_InitSubSystem(SDL_INIT_AUDIO);
-  SDL_OpenAudio(&s, NULL);
+  if(SDL_OpenAudio(&s, NULL) < 0) {
+		printf("open audio fail!\n");
+		assert(0);
+	}
 }
 
-void audio_callback(uint8_t *sbuf, int len) {
-	for (int i = 0; i < len; i ++) {
-		sbuf[i] = paddr_read(0xa1200000 + i, 1);
-	}
+void audio_callback(void* udata, uint8_t *stream, int len) {
+	audio_pos = guest_to_host(0xa1200000);
+	SDL_memset(stream, 0, len);
+	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
+	audio_pos += len;
 }

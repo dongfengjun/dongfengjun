@@ -65,9 +65,6 @@ void device_update() {
   }
 #endif
 /***audio***/
-	uint8_t sbuf[512] = {0};
-	audio_callback(sbuf, 512);
-  SDL_QueueAudio(0, sbuf, 512);
 	SDL_PauseAudio(0);
   SDL_CloseAudioDevice(0);
   SDL_CloseAudio();
