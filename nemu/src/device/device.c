@@ -33,9 +33,10 @@ void init_alarm();
 void send_key(uint8_t, bool);
 void vga_update_screen();
 
+extern uint8_t *audio_pos;
 void device_update() {
-
 /***audio***/
+  printf("audio_pos:%d\n", *audio_pos);
   SDL_PauseAudio(0);
   SDL_CloseAudioDevice(0);
   SDL_CloseAudio();
