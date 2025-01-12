@@ -42,9 +42,6 @@ void device_update() {
 	//printf("audio_pos = %d\n", *audio_pos);
   SDL_PauseAudio(0);
 	SDL_Delay(200);
-  SDL_CloseAudioDevice(0);
-  SDL_CloseAudio();
-  SDL_Quit();
 /******/
 
   static uint64_t last = 0;
