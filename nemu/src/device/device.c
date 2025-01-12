@@ -14,6 +14,7 @@
 ***************************************************************************************/
 
 #include <common.h>
+#include <memory/paddr.h>
 #include <utils.h>
 #include <device/alarm.h>
 #ifndef CONFIG_TARGET_AM
@@ -36,6 +37,7 @@ void vga_update_screen();
 extern uint8_t *audio_pos;
 void device_update() {
 /***audio***/
+	audio_pos = guest_to_host(0xa1200000);
   printf("audio_pos:%d\n", *audio_pos);
   SDL_PauseAudio(0);
   SDL_CloseAudioDevice(0);
