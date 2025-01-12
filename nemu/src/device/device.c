@@ -63,18 +63,18 @@ void device_update() {
       default: break;
     }
   }
-#endif
 /***audio***/
-	void *udata = 0;
-	uint8_t buf[512] = {0};
-	uint8_t *p = buf;
-	audio_callback(udata, p, 512);
-	printf("aaaaa\n");
-	SDL_PauseAudio(0);
+  void *udata = 0;
+  uint8_t buf[512] = {0};
+  uint8_t *p = buf;
+  audio_callback(udata, p, 512);
+  printf("aaaaa\n");
+  SDL_PauseAudio(0);
   SDL_CloseAudioDevice(0);
   SDL_CloseAudio();
   SDL_Quit();
 /******/
+#endif
 }
 
 void sdl_clear_event_queue() {
