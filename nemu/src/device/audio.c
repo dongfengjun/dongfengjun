@@ -60,7 +60,7 @@ void init_audio() {
 		printf("open audio fail!\n");
 		assert(0);
 	}
-	audio_pos = (uint8_t *)(uintptr_t)AUDIO_SBUF_ADDR;
+	audio_pos = (uint8_t *)audio_base;
 	printf("audio_pos = %d\n", *audio_pos);
 }
 
