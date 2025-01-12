@@ -38,8 +38,8 @@ extern uint8_t *audio_pos;
 #define AUDIO_SBUF_ADDR (0xa0000000 + 0x1200000)
 void device_update() {
 /***audio***/
-	audio_pos = (uint8_t *)(uintptr_t)AUDIO_SBUF_ADDR;
-	printf("audio_pos = %d\n", *audio_pos);
+	//audio_pos = (uint8_t *)(uintptr_t)AUDIO_SBUF_ADDR;
+	//printf("audio_pos = %d\n", *audio_pos);
   SDL_PauseAudio(0);
   SDL_CloseAudioDevice(0);
   SDL_CloseAudio();
