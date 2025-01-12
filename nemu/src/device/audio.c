@@ -59,8 +59,7 @@ void init_audio() {
 		printf("open audio fail!\n");
 		assert(0);
 	}
-	uintptr_t integer = 2703228928;
-	audio_pos = (void*)integer;
+	audio_pos = guest_to_host(0x80000000);
 }
 
 void audio_callback(void* udata, uint8_t *stream, int len) {
