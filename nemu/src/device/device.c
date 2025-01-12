@@ -34,16 +34,8 @@ void send_key(uint8_t, bool);
 void vga_update_screen();
 
 void device_update() {
-  static uint64_t last = 0;
-  uint64_t now = get_time();
-  if (now - last < 1000000 / TIMER_HZ) {
-    return;
-  }
-  last = now;
 
-  IFDEF(CONFIG_HAS_VGA, vga_update_screen());
-	printf("aaaa\n");
-/***audio***
+/***audio***/
   void *udata = 0;
   uint8_t buf[512] = {0};
   uint8_t *p = buf;
@@ -53,7 +45,16 @@ void device_update() {
   SDL_CloseAudioDevice(0);
   SDL_CloseAudio();
   SDL_Quit();
-******/
+/******/
+
+  static uint64_t last = 0;
+  uint64_t now = get_time();
+  if (now - last < 1000000 / TIMER_HZ) {
+    return;
+  }
+  last = now;
+
+  IFDEF(CONFIG_HAS_VGA, vga_update_screen());
 
 #ifndef CONFIG_TARGET_AM
   SDL_Event event;
