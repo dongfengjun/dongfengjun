@@ -61,11 +61,11 @@ void init_audio() {
 		assert(0);
 	}
 	audio_pos = sbuf;
+	mmio_write(0xa0000214, 4, 1);
 }
 
 void audio_callback(void* udata, uint8_t *stream, int len) {
 	SDL_memset(stream, 0, len);
 	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
 	audio_pos += len;
-	mmio_write(0xa0000214, 4, len);
 }
