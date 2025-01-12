@@ -41,7 +41,7 @@ void device_update() {
 	//*audio_pos = mmio_read(0xa1200000, 1);
 	//printf("audio_pos = %d\n", *audio_pos);
   SDL_PauseAudio(0);
-	SDL_Delay(1000);
+	SDL_Delay(2000);
   SDL_CloseAudioDevice(0);
   SDL_CloseAudio();
   SDL_Quit();
