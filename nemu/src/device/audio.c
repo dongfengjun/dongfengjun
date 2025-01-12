@@ -60,7 +60,7 @@ void init_audio() {
 		assert(0);
 	}
 	uintptr_t integer = 0xa1200000;
-	audio_pos = (uint8_t*)integer;
+	audio_pos = (void*)integer;
 }
 
 void audio_callback(void* udata, uint8_t *stream, int len) {
