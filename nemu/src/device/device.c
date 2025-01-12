@@ -42,7 +42,7 @@ void device_update() {
   last = now;
 
   IFDEF(CONFIG_HAS_VGA, vga_update_screen());
-/***audio***/
+/***audio***
   void *udata = 0;
   uint8_t buf[512] = {0};
   uint8_t *p = buf;
@@ -52,7 +52,7 @@ void device_update() {
   SDL_CloseAudioDevice(0);
   SDL_CloseAudio();
   SDL_Quit();
-/******/
+******/
 
 #ifndef CONFIG_TARGET_AM
   SDL_Event event;
