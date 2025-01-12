@@ -31,6 +31,7 @@ enum {
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 uint8_t* audio_pos;
+#define AUDIO_SBUF_ADDR (0xa0000000 + 0x1200000)
 void audio_callback(void* udata, uint8_t *stream, int len);
 
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
@@ -59,6 +60,8 @@ void init_audio() {
 		printf("open audio fail!\n");
 		assert(0);
 	}
+	audio_pos = (uint8_t *)(uintptr_t)AUDIO_SBUF_ADDR;
+	printf("audio_pos = %d\n", *audio_pos);
 }
 
 void audio_callback(void* udata, uint8_t *stream, int len) {
