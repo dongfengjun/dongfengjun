@@ -45,20 +45,19 @@ void init_audio() {
 #endif
   sbuf = (uint8_t *)new_space(CONFIG_SB_SIZE);
   add_mmio_map("audio-sbuf", CONFIG_SB_ADDR, sbuf, CONFIG_SB_SIZE, NULL);
-/***audio play***
+/***audio play***/
   SDL_AudioSpec s = {};
   s.format = AUDIO_S16SYS;  // 系统中音频数据的格式使用16位有符号数来表示
   s.userdata = NULL;	// 不使用
-  s.freq = mmio_read(0xa0000200, 4);
-  s.channels = mmio_read(0xa0000204, 4);
-  s.samples = mmio_read(0xa0000208, 4);
+  s.freq = 8000;//mmio_read(0xa0000200, 4);
+  s.channels = 1;//mmio_read(0xa0000204, 4);
+  s.samples = 1024;//mmio_read(0xa0000208, 4);
 	s.callback = audio_callback;
   SDL_InitSubSystem(SDL_INIT_AUDIO);
   if(SDL_OpenAudio(&s, NULL) < 0) {
 		printf("open audio fail!\n");
 		assert(0);
 	}
-***/
 	audio_pos = sbuf;
 }
 
