@@ -21,16 +21,6 @@
 #include <SDL2/SDL.h>
 #endif
 
-enum {
-  reg_freq,
-  reg_channels,
-  reg_samples,
-  reg_sbuf_size,
-  reg_init,
-  reg_count,
-  nr_reg
-};
-
 void init_map();
 void init_serial();
 void init_timer();
