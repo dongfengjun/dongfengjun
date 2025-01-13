@@ -106,14 +106,18 @@ static void execute(uint64_t n) {
   Decode s;
 #ifdef CONFIG_DEVICE
 /***audio inst***/
+printf("1 ");
   SDL_AudioSpec sdl = {};
-  sdl.format = AUDIO_S16SYS;  // 系统中音频数据的格式使用16位有符号数来表示
+printf("2 ");
+sdl.format = AUDIO_S16SYS;  // 系统中音频数据的格式使用16位有符号数来表示
   sdl.userdata = NULL;  // 不使用
   sdl.freq = 8000;//mmio_read(0xa0000200, 4);
   sdl.channels = 1;//mmio_read(0xa0000204, 4);
   sdl.samples = 1024;//mmio_read(0xa0000208, 4);
   sdl.callback = audio_callback;
-  SDL_InitSubSystem(SDL_INIT_AUDIO);
+printf("3 ");
+SDL_InitSubSystem(SDL_INIT_AUDIO);
+printf("4 ");
   if(SDL_OpenAudio(&sdl, NULL) < 0) {
     printf("open audio fail!\n");
     assert(0);
