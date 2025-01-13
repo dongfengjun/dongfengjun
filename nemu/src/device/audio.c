@@ -31,7 +31,6 @@ enum {
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 uint8_t *audio_pos;
-#define AUDIO_SBUF_ADDR (0xa0000000 + 0x1200000)
 void audio_callback(void* udata, uint8_t *stream, int len);
 
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
@@ -51,9 +50,9 @@ void init_audio() {
   SDL_AudioSpec s = {};
   s.format = AUDIO_S16SYS;  // 假设系统中音频数据的格式总是使用16位有符号数>来表示
   s.userdata = NULL;	// 不使用
-  s.freq = 8000;//paddr_read(0xa0000200, 4);
-  s.channels = 1;//paddr_read(0xa0000204, 4);
-  s.samples = 1024;//paddr_read(0xa0000208, 4);
+  s.freq = mmio_read(0xa0000200, 4);
+  s.channels = mmio_read(0xa0000204, 4);
+  s.samples = mmio_read(0xa0000208, 4);
 	s.callback = audio_callback;
   SDL_InitSubSystem(SDL_INIT_AUDIO);
   if(SDL_OpenAudio(&s, NULL) < 0) {
