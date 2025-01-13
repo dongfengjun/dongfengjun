@@ -45,7 +45,6 @@ void device_update() {
 /***audio***/
   SDL_PauseAudio(0);
   SDL_Delay(200);
-  printf("pause audio\n");
 /******/
 
   IFDEF(CONFIG_HAS_VGA, vga_update_screen());
