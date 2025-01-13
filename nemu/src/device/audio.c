@@ -68,3 +68,18 @@ void audio_callback(void* userdata, uint8_t *stream, int len) {
 	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
 	audio_pos += len;
 }
+
+void audio_init() {
+  SDL_AudioSpec s = {};
+  s.format = AUDIO_S16SYS;  // 系统中音频数据的格式使用16位有符号数来表示
+  s.userdata = NULL;  // 不使用
+  s.freq = 8000;//mmio_read(0xa0000200, 4);
+  s.channels = 1;//mmio_read(0xa0000204, 4);
+  s.samples = 1024;//mmio_read(0xa0000208, 4);
+  s.callback = audio_callback;
+  SDL_InitSubSystem(SDL_INIT_AUDIO);
+  if(SDL_OpenAudio(&s, NULL) < 0) {
+    printf("open audio fail!\n");
+    assert(0);
+  }                                                                         
+}
