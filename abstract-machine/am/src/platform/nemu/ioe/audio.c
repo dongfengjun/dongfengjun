@@ -34,4 +34,5 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 	for(uint32_t *p = ctl->buf.start; p != (ctl->buf.end); p ++) {
 		*sbuf ++ = *ctlbuf ++;
 	}
+	outl(0xa0000214, ctl->buf.end - ctl->buf.start);
 }
