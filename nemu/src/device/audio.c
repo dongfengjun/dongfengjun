@@ -45,7 +45,7 @@ void init_audio() {
 #endif
   sbuf = (uint8_t *)new_space(CONFIG_SB_SIZE);
   add_mmio_map("audio-sbuf", CONFIG_SB_ADDR, sbuf, CONFIG_SB_SIZE, NULL);
-/***audio play***/
+/***audio play***
   SDL_AudioSpec s = {};
   s.format = AUDIO_S16SYS;  // 系统中音频数据的格式使用16位有符号数来表示
   s.userdata = NULL;	// 不使用
@@ -58,6 +58,7 @@ void init_audio() {
 		printf("open audio fail!\n");
 		assert(0);
 	}
+***/
 	audio_pos = sbuf;
 }
 

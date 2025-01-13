@@ -17,6 +17,9 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+#ifndef CONFIG_TARGET_AM
+#include <SDL2/SDL.h>
+#endif
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -97,8 +100,25 @@ char *dtrace_p = dtrace_buf;
 FILE *dtrace_log;
 #endif
 void cpu_show_ftrace();
+void audio_callback(void* userdata, uint8_t *stream, int len);
+
 static void execute(uint64_t n) {
   Decode s;
+#ifdef CONFIG_DEVICE
+/***audio inst***/
+  SDL_AudioSpec sdl = {};
+  sdl.format = AUDIO_S16SYS;  // 系统中音频数据的格式使用16位有符号数来表示
+  sdl.userdata = NULL;  // 不使用
+  sdl.freq = 8000;//mmio_read(0xa0000200, 4);
+  sdl.channels = 1;//mmio_read(0xa0000204, 4);
+  sdl.samples = 1024;//mmio_read(0xa0000208, 4);
+  sdl.callback = audio_callback;
+  SDL_InitSubSystem(SDL_INIT_AUDIO);
+  if(SDL_OpenAudio(&sdl, NULL) < 0) {
+    printf("open audio fail!\n");
+    assert(0);
+  }
+#endif
 #if (CONFIG_MTRACE || CONFIG_DTRACE)
 	const char *file_path = getenv("PWD");
 	if (file_path == NULL) {
