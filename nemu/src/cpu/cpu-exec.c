@@ -17,9 +17,6 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
-#ifndef CONFIG_TARGET_AM
-#include <SDL2/SDL.h>
-#endif
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -121,26 +118,6 @@ static void execute(uint64_t n) {
 	//dtrace_log = fopen("build/nemu-dtrace-log.txt", "w");	//Dtrace
 	snprintf(dtrace_path, 128, "%s/%s", file_path, "build/nemu-dtrace-log.txt");
 	dtrace_log = fopen(dtrace_path, "w");
-#endif
-
-#ifdef CONFIG_DEVICE
-/***audio inst***/
-printf("1 ");
-  SDL_AudioSpec sdl = {};
-printf("2 ");
-	sdl.format = AUDIO_S16SYS;  // 系统中音频数据的格式使用16位有符号数来表示
-	sdl.userdata = NULL;  // 不使用
-  sdl.freq = 8000;//mmio_read(0xa0000200, 4);
-  sdl.channels = 1;//mmio_read(0xa0000204, 4);
-  sdl.samples = 1024;//mmio_read(0xa0000208, 4);
-  sdl.callback = audio_callback;
-printf("3 ");
-	SDL_InitSubSystem(SDL_INIT_AUDIO);
-printf("4 ");
-  if(SDL_OpenAudio(&sdl, NULL) < 0) {
-    printf("open audio fail!\n");
-    assert(0);
-  }
 #endif
 
   for (;n > 0; n --) {
