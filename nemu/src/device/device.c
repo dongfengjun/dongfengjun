@@ -33,7 +33,6 @@ void init_alarm();
 
 void send_key(uint8_t, bool);
 void vga_update_screen();
-void audio_init();
 
 void device_update() {
   static uint64_t last = 0;
@@ -44,7 +43,6 @@ void device_update() {
   last = now;
 
 /***audio***/
-	audio_init();
   SDL_PauseAudio(0);
   SDL_Delay(200);
 /******/
