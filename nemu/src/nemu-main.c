@@ -14,12 +14,14 @@
 ***************************************************************************************/
 
 #include <common.h>
+#include <SDL2/SDL.h>
 
 void init_monitor(int, char *[]);
 void am_init_monitor();
 void engine_start();
 int is_exit_status_bad();
 word_t expr(char *e, bool *success);
+void audio_callback(void* userdata, uint8_t *stream, int len);
 
 int main(int argc, char *argv[]) {
   /* Initialize the monitor. */
@@ -27,6 +29,25 @@ int main(int argc, char *argv[]) {
   am_init_monitor();
 #else
   init_monitor(argc, argv);
+#ifdef CONFIG_DEVICE
+/***audio inst***/
+printf("1 ");
+  SDL_AudioSpec s = {};
+printf("2 ");
+  s.format = AUDIO_S16SYS;  // 系统中音频数据的格式使用16位有符号数来表示
+  s.userdata = NULL;  // 不使用
+  s.freq = 8000;//mmio_read(0xa0000200, 4);
+  s.channels = 1;//mmio_read(0xa0000204, 4);
+  s.samples = 1024;//mmio_read(0xa0000208, 4);
+  s.callback = audio_callback;
+printf("3 ");
+  SDL_InitSubSystem(SDL_INIT_AUDIO);
+printf("4 ");
+  if(SDL_OpenAudio(&s, NULL) < 0) {
+    printf("open audio fail!\n");
+	  assert(0);
+  }
+#endif
 #endif
 /***gen-expr test***
 FILE *file;
