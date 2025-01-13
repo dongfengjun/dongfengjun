@@ -104,25 +104,6 @@ void audio_callback(void* userdata, uint8_t *stream, int len);
 
 static void execute(uint64_t n) {
   Decode s;
-#ifdef CONFIG_DEVICE
-/***audio inst***/
-printf("1 ");
-  SDL_AudioSpec sdl = {};
-printf("2 ");
-sdl.format = AUDIO_S16SYS;  // 系统中音频数据的格式使用16位有符号数来表示
-  sdl.userdata = NULL;  // 不使用
-  sdl.freq = 8000;//mmio_read(0xa0000200, 4);
-  sdl.channels = 1;//mmio_read(0xa0000204, 4);
-  sdl.samples = 1024;//mmio_read(0xa0000208, 4);
-  sdl.callback = audio_callback;
-printf("3 ");
-SDL_InitSubSystem(SDL_INIT_AUDIO);
-printf("4 ");
-  if(SDL_OpenAudio(&sdl, NULL) < 0) {
-    printf("open audio fail!\n");
-    assert(0);
-  }
-#endif
 #if (CONFIG_MTRACE || CONFIG_DTRACE)
 	const char *file_path = getenv("PWD");
 	if (file_path == NULL) {
@@ -141,6 +122,27 @@ printf("4 ");
 	snprintf(dtrace_path, 128, "%s/%s", file_path, "build/nemu-dtrace-log.txt");
 	dtrace_log = fopen(dtrace_path, "w");
 #endif
+
+#ifdef CONFIG_DEVICE
+/***audio inst***/
+printf("1 ");
+  SDL_AudioSpec sdl = {};
+printf("2 ");
+	sdl.format = AUDIO_S16SYS;  // 系统中音频数据的格式使用16位有符号数来表示
+	sdl.userdata = NULL;  // 不使用
+  sdl.freq = 8000;//mmio_read(0xa0000200, 4);
+  sdl.channels = 1;//mmio_read(0xa0000204, 4);
+  sdl.samples = 1024;//mmio_read(0xa0000208, 4);
+  sdl.callback = audio_callback;
+printf("3 ");
+	SDL_InitSubSystem(SDL_INIT_AUDIO);
+printf("4 ");
+  if(SDL_OpenAudio(&sdl, NULL) < 0) {
+    printf("open audio fail!\n");
+    assert(0);
+  }
+#endif
+
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
