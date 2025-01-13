@@ -33,7 +33,7 @@ void init_alarm();
 
 void send_key(uint8_t, bool);
 void vga_update_screen();
-void audio_callback(void* udata, uint8_t *stream, int len);
+void audio_callback(void* userdata, uint8_t *stream, int len);
 
 void device_update() {
 
@@ -41,6 +41,7 @@ void device_update() {
   s.format = AUDIO_S16SYS;  // 系统中音频数据的格式使用16位有符号数来表示
   s.userdata = NULL;  // 不使用
   s.freq = mmio_read(0xa0000200, 4);
+	printf("freq=%d\n", s.freq);
   s.channels = mmio_read(0xa0000204, 4);
   s.samples = mmio_read(0xa0000208, 4);
   s.callback = audio_callback;
