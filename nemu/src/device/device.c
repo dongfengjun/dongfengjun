@@ -33,6 +33,7 @@ void init_alarm();
 
 void send_key(uint8_t, bool);
 void vga_update_screen();
+void audio_callback(void* udata, uint8_t *stream, int len);
 
 void device_update() {
 

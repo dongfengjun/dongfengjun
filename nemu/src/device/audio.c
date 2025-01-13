@@ -31,7 +31,6 @@ enum {
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 uint8_t *audio_pos;
-void audio_callback(void* udata, uint8_t *stream, int len);
 
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
 }
