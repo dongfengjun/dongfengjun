@@ -142,7 +142,7 @@ static void execute(uint64_t n) {
 		fclose(dtrace_log);
 	#endif
 	#ifdef CONFIG_HAS_AUDIO
-		SDL_Delay(500000);
+		SDL_Delay(1000);
 		SDL_CloseAudio();
     SDL_Quit();
 	#endif
