@@ -44,7 +44,7 @@ void device_update() {
 
 #ifdef CONFIG_HAS_AUDIO
   SDL_PauseAudio(0);
-//  SDL_Delay(100);
+  SDL_Delay(10);
 //	SDL_PauseAudio(1);
 #endif
 
