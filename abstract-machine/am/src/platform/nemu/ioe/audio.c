@@ -1,6 +1,6 @@
 #include <am.h>
 #include <nemu.h>
-#include <stdio.h>//测试audio
+//#include <stdio.h>//测试audio
 
 #define AUDIO_FREQ_ADDR      (AUDIO_ADDR + 0x00)
 #define AUDIO_CHANNELS_ADDR  (AUDIO_ADDR + 0x04)
@@ -13,7 +13,7 @@ void __am_audio_init() {
 }
 
 void __am_audio_config(AM_AUDIO_CONFIG_T *cfg) {
-  cfg->present = true;
+  cfg->present = false;
 	cfg->bufsize = inl(AUDIO_SBUF_SIZE_ADDR);
 }
 
