@@ -42,12 +42,12 @@ void device_update() {
   }
   last = now;
 
-  IFDEF(CONFIG_HAS_VGA, vga_update_screen());
-
 #ifdef CONFIG_HAS_AUDIO
-	SDL_PauseAudio(0);
-	SDL_Delay(200);
+  SDL_PauseAudio(0);
+  SDL_Delay(200);
 #endif
+
+  IFDEF(CONFIG_HAS_VGA, vga_update_screen());
 
 #ifndef CONFIG_TARGET_AM
   SDL_Event event;
