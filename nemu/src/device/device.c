@@ -35,6 +35,12 @@ void send_key(uint8_t, bool);
 void vga_update_screen();
 
 void device_update() {
+
+#ifdef CONFIG_HAS_AUDIO
+  SDL_PauseAudio(0);
+  SDL_Delay(200);
+#endif
+
   static uint64_t last = 0;
   uint64_t now = get_time();
   if (now - last < 1000000 / TIMER_HZ) {
@@ -42,10 +48,12 @@ void device_update() {
   }
   last = now;
 
+/***
 #ifdef CONFIG_HAS_AUDIO
   SDL_PauseAudio(0);
-  SDL_Delay(500);
+  SDL_Delay(200);
 #endif
+***/
 
   IFDEF(CONFIG_HAS_VGA, vga_update_screen());
 
