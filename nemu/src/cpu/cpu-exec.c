@@ -17,6 +17,7 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+#include <SDL2/SDL.h>
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -139,6 +140,10 @@ static void execute(uint64_t n) {
 	#ifdef CONFIG_DTRACE
 		fprintf(dtrace_log, "%s", dtrace_buf);	//Dtrace log
 		fclose(dtrace_log);
+	#endif
+	#ifdef CONFIG_HAS_AUDIO
+		SDL_CloseAudio();
+    SDL_Quit();
 	#endif
 }
 
