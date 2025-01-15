@@ -55,7 +55,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   char *p = s->logbuf;
 	char *irp = iringbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
-	irp += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
+	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", s->pc);
   int ilen = s->snpc - s->pc;
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
