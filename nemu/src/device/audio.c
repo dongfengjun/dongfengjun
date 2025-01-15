@@ -46,7 +46,7 @@ void init_audio() {
   sbuf = (uint8_t *)new_space(CONFIG_SB_SIZE);
   add_mmio_map("audio-sbuf", CONFIG_SB_ADDR, sbuf, CONFIG_SB_SIZE, NULL);
 /***audio play***/
-	mmio_write(0xa000020c, 4, CONFIG_SB_SIZE);
+	mmio_write(0xa000020c, 4, CONFIG_SB_SIZE);//AUDIO_SBUF_SIZE_ADDR写入sbsize
   SDL_AudioSpec s = {};
   s.format = AUDIO_S16SYS;  // 系统中音频数据的格式使用16位有符号数来表示
   s.userdata = NULL;	// 不使用
@@ -68,7 +68,12 @@ void audio_callback(void* userdata, uint8_t *stream, int len) {
 	mmio_write(0xa0000214, 4, count - len);
 	SDL_memset(stream, 0, len);
 	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
-	audio_pos += len;
+	if(audio_pos - sbuf + len == CONFIG_SB_SIZE) {
+		audio_pos = sbuf;
+	}
+	else {
+		audio_pos += len;
+	}
 }
 
 /***
