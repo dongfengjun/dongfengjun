@@ -1,6 +1,6 @@
 #include <am.h>
 #include <nemu.h>
-//#include <stdio.h>//测试audio
+#include <stdio.h>//测试audio
 
 #define AUDIO_FREQ_ADDR      (AUDIO_ADDR + 0x00)
 #define AUDIO_CHANNELS_ADDR  (AUDIO_ADDR + 0x04)
@@ -31,6 +31,7 @@ uint32_t *sbuf = (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 	if(sbuf - (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR == 
 		inl(AUDIO_SBUF_SIZE_ADDR)) {
+		printf("sizeboom\n");
 	}
 	else {
 		uint32_t *ctlbuf = ctl->buf.start;
