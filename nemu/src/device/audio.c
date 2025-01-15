@@ -63,7 +63,8 @@ void init_audio() {
 }
 
 void audio_callback(void* userdata, uint8_t *stream, int len) {
-	mmio_write(0xa0000214, 4, 0);
+	uint32_t count = mmio_read(0xa0000214, 4);
+	mmio_write(0xa0000214, 4, count - len);
 	SDL_memset(stream, 0, len);
 	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
 	audio_pos += len;

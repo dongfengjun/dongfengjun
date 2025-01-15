@@ -29,10 +29,15 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
 
 uint32_t *sbuf = (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
-	//uint32_t *sbuf = (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
-	uint32_t *ctlbuf = ctl->buf.start;
-	for(uint32_t *p = ctl->buf.start; p != (ctl->buf.end); p ++) {
-		*sbuf ++ = *ctlbuf ++;
+	if(sbuf - (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR == 
+		inl(AUDIO_SBUF_SIZE_ADDR)) {
 	}
-	outl(0xa0000214, 1);
+	else {
+		uint32_t *ctlbuf = ctl->buf.start;
+		for(uint32_t *p = ctl->buf.start; p != (ctl->buf.end); p ++) {
+			*sbuf ++ = *ctlbuf ++;
+		}
+		uint32_t count = sbuf - (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
+		outl(0xa0000214, count);
+	}
 }
