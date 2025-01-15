@@ -44,7 +44,7 @@ void device_update() {
 
 #ifdef CONFIG_HAS_AUDIO
 	SDL_PauseAudio(0);
-	//SDL_Delay(1000);
+	SDL_Delay(500);
 #endif
 
   IFDEF(CONFIG_HAS_VGA, vga_update_screen());
