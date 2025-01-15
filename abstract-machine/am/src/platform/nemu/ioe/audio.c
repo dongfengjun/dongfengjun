@@ -30,7 +30,7 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
 uint32_t *sbuf = (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 	if(sbuf - (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR == 
-		inl(AUDIO_SBUF_SIZE_ADDR)) {
+		inl(AUDIO_SBUF_SIZE_ADDR) - 1) {
 		sbuf = (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
 	}
 	else {
