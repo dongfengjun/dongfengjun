@@ -75,8 +75,6 @@ void audio_callback(void* userdata, uint8_t *stream, int len) {
 	else {
 		audio_pos += len;
 	}
-	int i = 0;
-	while(i < 100000000) {i ++;}
 }
 
 /***
