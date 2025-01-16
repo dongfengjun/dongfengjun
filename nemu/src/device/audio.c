@@ -68,6 +68,7 @@ void audio_callback(void* userdata, uint8_t *stream, int len) {
 	mmio_write(0xa0000214, 4, count - len);
 	SDL_memset(stream, 0, len);
 	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
+	memset(audio_pos, 0, len);
 	if((audio_pos - sbuf + len) == CONFIG_SB_SIZE/4) {
 		audio_pos = sbuf;
 	}
