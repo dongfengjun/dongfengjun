@@ -61,6 +61,7 @@ void init_audio() {
 	}
 /***/
 	audio_pos = sbuf;
+	printf("sbufinitstart:%p\n", sbuf);
 }
 
 void audio_callback(void* userdata, uint8_t *stream, int len) {
