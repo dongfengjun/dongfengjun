@@ -31,8 +31,7 @@ uint32_t *sbuf = (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 	uint32_t *ctlbuf = ctl->buf.start;
 	for(uint32_t *p = ctl->buf.start; p != (ctl->buf.end); p ++) {
-		if(sbuf - (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR >= (inl(AUDIO_SBUF_SIZE_ADDR)/4 - 32)) {
-			printf("abcabcabcacb\n\n");
+		if(sbuf - (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR >= (inl(AUDIO_SBUF_SIZE_ADDR)/4)) {
 		  sbuf = (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
 		}
 		*sbuf ++ = *ctlbuf ++;
