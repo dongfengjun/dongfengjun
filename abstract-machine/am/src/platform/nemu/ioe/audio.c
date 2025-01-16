@@ -39,6 +39,7 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 			*sbuf ++ = *ctlbuf ++;
 		}
 		uint32_t count = sbuf - (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
+		printf("playcount=%d\n", count);
 		outl(0xa0000214, count);
 	}
 }
