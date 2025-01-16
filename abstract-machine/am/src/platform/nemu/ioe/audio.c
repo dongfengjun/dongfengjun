@@ -27,21 +27,19 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
   stat->count = inl(AUDIO_COUNT_ADDR);
 }
 
-//uint32_t *sbuf = (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
+uint32_t *sbuf = (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
-	/***
+	printf("sbuf.end=%x\n", (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR + inl(AUDIO_SBUF_SIZE_ADDR) - 1);
 	if(sbuf >= (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR + inl(AUDIO_SBUF_SIZE_ADDR) - 1) {
 		printf("abcabcabcacb\n\n");
 		sbuf = (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
 	}
-	***/
-	//else {
-		uint32_t *sbuf = (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
+	else {
 		uint32_t *ctlbuf = ctl->buf.start;
 		for(uint32_t *p = ctl->buf.start; p != (ctl->buf.end); p ++) {
 			*sbuf ++ = *ctlbuf ++;
 		}
 		uint32_t count = sbuf - (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
 		outl(0xa0000214, count);
-	//}
+	}
 }
