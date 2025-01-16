@@ -70,12 +70,13 @@ void audio_callback(void* userdata, uint8_t *stream, int len) {
 	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
 	memset(audio_pos, 0, len);
 	if((audio_pos - sbuf + len) == CONFIG_SB_SIZE/4) {
-		printf("aaa\n");
 		audio_pos = sbuf;
 	}
 	else {
 		audio_pos += len;
 	}
+	int i = 0;
+	while(i < 1000000) {i ++;}
 }
 
 /***
