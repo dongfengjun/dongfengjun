@@ -17,6 +17,7 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+#include <SDL2/SDL.h>
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -54,7 +55,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   char *p = s->logbuf;
 	char *irp = iringbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
-	irp += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
+	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", s->pc);
   int ilen = s->snpc - s->pc;
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
@@ -87,16 +88,39 @@ static void exec_once(Decode *s, vaddr_t pc) {
 }
 
 #ifdef CONFIG_MTRACE
-char buf[1048576] = {0};	//有些程序太大装不下，如recursion
+char buf[2 * 1024 * 1024] = {0};	//2M
 char *mtrace_p = buf;
 FILE *mtracelog;
 #endif
+#ifdef CONFIG_DTRACE
+char dtrace_buf[2 * 1024 * 1024] = {0};	//2M
+char *dtrace_p = dtrace_buf;
+FILE *dtrace_log;
+#endif
 void cpu_show_ftrace();
+void audio_callback(void* userdata, uint8_t *stream, int len);
+
 static void execute(uint64_t n) {
   Decode s;
-	#ifdef CONFIG_MTRACE
-		mtracelog = fopen("build/nemu-mtrace-log.txt", "w");	//Mtrace
-	#endif
+#if (CONFIG_MTRACE || CONFIG_DTRACE)
+	const char *file_path = getenv("PWD");
+	if (file_path == NULL) {
+		perror("getenv failed");
+	}
+#endif
+#ifdef CONFIG_MTRACE
+	char mtrace_path[128] = {0};
+	//mtracelog = fopen("build/nemu-mtrace-log.txt", "w");	//Mtrace
+	snprintf(mtrace_path, 128, "%s/%s", file_path, "build/nemu-mtrace-log.txt");
+	mtracelog = fopen(mtrace_path, "w");
+#endif
+#ifdef CONFIG_DTRACE
+	char dtrace_path[128] = {0};
+	//dtrace_log = fopen("build/nemu-dtrace-log.txt", "w");	//Dtrace
+	snprintf(dtrace_path, 128, "%s/%s", file_path, "build/nemu-dtrace-log.txt");
+	dtrace_log = fopen(dtrace_path, "w");
+#endif
+
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
@@ -113,6 +137,15 @@ static void execute(uint64_t n) {
 	#ifdef CONFIG_FTRACE
 		cpu_show_ftrace();  //Ftrace display
   #endif
+	#ifdef CONFIG_DTRACE
+		fprintf(dtrace_log, "%s", dtrace_buf);	//Dtrace log
+		fclose(dtrace_log);
+	#endif
+	#ifdef CONFIG_HAS_AUDIO
+	//	SDL_Delay(5000);
+		SDL_CloseAudio();
+    SDL_Quit();
+	#endif
 }
 
 static void statistic() {

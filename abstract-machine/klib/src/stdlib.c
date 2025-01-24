@@ -2,7 +2,7 @@
 #include <klib.h>
 #include <klib-macros.h>
 
-#if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
+#if defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 static unsigned long int next = 1;
 char *hbrk = NULL;
 
@@ -30,11 +30,11 @@ int atoi(const char* nptr) {
   return x;
 }
 
+#if !(defined(__ISA_NATIVE__) && defined(__NATIVE_USE_KLIB__))
 void *malloc(size_t size) {
   // On native, malloc() will be called during initializaion of C runtime.
   // Therefore do not call panic() here, else it will yield a dead recursion:
   //   panic() -> putchar() -> (glibc) -> malloc() -> panic()
-#if !(defined(__ISA_NATIVE__) && defined(__NATIVE_USE_KLIB__))
 	if(hbrk == NULL) {
 		hbrk = (void *)ROUNDUP(heap.start, 8);
 	}
@@ -47,11 +47,9 @@ void *malloc(size_t size) {
 	}
 	//assert((uintptr_t)hbrk - (uintptr_t)heap.start <= MAX_MALLOC);//越界
 	return old;
-#endif
-  return NULL;
 }
+#endif
 
 void free(void *ptr) {
 }
-
 #endif
