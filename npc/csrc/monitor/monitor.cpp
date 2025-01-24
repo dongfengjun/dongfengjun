@@ -84,6 +84,9 @@ void init_monitor(int argc, char *argv[]) {
 
 	/* Initialize memory. */
   init_mem();
+
+	/* Initialize devices. */
+  IFDEF(CONFIG_DEVICE, init_device());
 	
 	/* Perform ISA dependent initialization. TODO:Restart default im reg pc
   init_isa();*/
