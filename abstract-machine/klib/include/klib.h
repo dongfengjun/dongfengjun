@@ -9,7 +9,7 @@
 extern "C" {
 #endif
 
-#define __NATIVE_USE_KLIB__		//native连接klib/stdlib.c/malloc有问题
+//#define __NATIVE_USE_KLIB__		//native连接klib/stdlib.c/malloc有问题
 
 // string.h
 void  *memset    (void *s, int c, size_t n);
