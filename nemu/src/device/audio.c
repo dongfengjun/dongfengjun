@@ -81,7 +81,6 @@ void init_audio() {
 	audio_base[reg_init] = 0;
 	audio_base[reg_count] = 0;
 	audio_base[reg_sbuf_size] = CONFIG_SB_SIZE;
-	
 	SDL_InitSubSystem(SDL_INIT_AUDIO);
 /***audio play***
 	mmio_write(0xa000020c, 4, CONFIG_SB_SIZE);//AUDIO_SBUF_SIZE_ADDR写入sbsize
