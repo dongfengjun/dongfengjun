@@ -32,7 +32,6 @@ static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 //uint8_t *audio_pos;
 static int pos = 0;
-#define SBUF_SIZE CONFIG_SB_SIZE
 
 static void audio_callback(void *udata, uint8_t *stream, int len) {
 	SDL_LockAudio();
@@ -40,13 +39,13 @@ static void audio_callback(void *udata, uint8_t *stream, int len) {
 	len = len > audio_base[reg_count] ? audio_base[reg_count] : len;
 	if(audio_base[reg_count] == 0)
 		return;
-	if((pos + len) < SBUF_SIZE) {
+	if((pos + len) < CONFIG_SB_SIZE) {
 		memcpy(stream, sbuf + pos, len);
 		pos += len;
 	}
 	else {
-		memcpy(stream, sbuf + pos, (SBUF_SIZE - pos));
-		pos = SBUF_SIZE - pos;
+		memcpy(stream, sbuf + pos, (CONFIG_SB_SIZE - pos));
+		pos = CONFIG_SB_SIZE - pos;
 		memcpy(stream + pos, sbuf, len - pos);
 		pos = len - pos;
 	}
