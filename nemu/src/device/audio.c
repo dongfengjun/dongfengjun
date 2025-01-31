@@ -30,9 +30,42 @@ enum {
 
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
-uint8_t *audio_pos;
+//uint8_t *audio_pos;
+static int pos = 0;
+#define SBUF_SIZE audio_base[reg_sbuf_size]
+
+static void audio_callback(void *udata, uint8_t *stream, int len) {
+	SDL_LockAudio();
+	SDL_memset(stream, 0, len);
+	len = len > audio_base[reg_count] ? audio_base[reg_count] : len;
+	if(audio_base[reg_count] == 0)
+		return;
+	if((pos + len) < SBUF_SIZE) {
+		memcpy(stream, sbuf + pos, len);
+		pos += len;
+	}
+	else {
+		memcpy(stream, sbuf + pos, (SBUF_SIZE - pos));
+		pos = SBUF_SIZE - pos;
+		memcpy(stream + pos, sbuf, len - pos);
+		pos = len - pos;
+	}
+	SDL_UnlockAudio();
+	audio_base[reg_count] -= len;
+}
 
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
+	if(offset == 0x10 && is_write) {
+		SDL_AudioSpec audio = {};
+		audio.freq = audio_base[reg_freq];
+		audio.format = AUDIO_S16SYS;
+		audio.channels = audio_base[reg_channels];
+		audio.samples = audio_base[reg_samples];
+		audio.callback = audio_callback;
+
+		SDL_OpenAudio(&audio, NULL);
+		SDL_PauseAudio(0);
+	}
 }
 
 void init_audio() {
@@ -45,10 +78,16 @@ void init_audio() {
 #endif
   sbuf = (uint8_t *)new_space(CONFIG_SB_SIZE);
   add_mmio_map("audio-sbuf", CONFIG_SB_ADDR, sbuf, CONFIG_SB_SIZE, NULL);
-/***audio play***/
+	
+	audio_base[reg_init] = 0;
+	audio_base[reg_count] = 0;
+	audio_base[reg_sbuf_size] = CONFIG_SB_SIZE;
+	
+	SDL_InitSubSystem(SDL_INIT_AUDIO);
+/***audio play***
 	mmio_write(0xa000020c, 4, CONFIG_SB_SIZE);//AUDIO_SBUF_SIZE_ADDR写入sbsize
   SDL_AudioSpec s = {};
-  s.format = AUDIO_S16SYS;  // 系统中音频数据的格式使用16位有符号数来表示
+  s.format = AUDIO_S1SYS;  // 系统中音频数据的格式使用16位有符号数来表示
   s.userdata = NULL;	// 不使用
   s.freq = 44100;//mmio_read(0xa0000200, 4);
   s.channels = 1;//mmio_read(0xa0000204, 4);
@@ -59,10 +98,11 @@ void init_audio() {
 		printf("open audio fail!\n");
 		assert(0);
 	}
-/***/
 	audio_pos = sbuf;
+	***/
 }
 
+/***
 void audio_callback(void* userdata, uint8_t *stream, int len) {
 	uint32_t count = mmio_read(0xa0000214, 4);
 	mmio_write(0xa0000214, 4, count - len);
@@ -76,6 +116,7 @@ void audio_callback(void* userdata, uint8_t *stream, int len) {
 		audio_pos += len;
 	}
 }
+***/
 
 /***
 void audio_init() {

@@ -1,6 +1,6 @@
 #include <am.h>
 #include <nemu.h>
-#include <stdio.h>//测试audio
+//#include <stdio.h>//测试audio
 
 #define AUDIO_FREQ_ADDR      (AUDIO_ADDR + 0x00)
 #define AUDIO_CHANNELS_ADDR  (AUDIO_ADDR + 0x04)
@@ -21,12 +21,36 @@ void __am_audio_ctrl(AM_AUDIO_CTRL_T *ctrl) {
 	outl(AUDIO_FREQ_ADDR, ctrl->freq);
 	outl(AUDIO_CHANNELS_ADDR, ctrl->channels);
 	outl(AUDIO_SAMPLES_ADDR, ctrl->samples);
+	outl(AUDIO_INIT_ADDR, 1);
 }
 
 void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
   stat->count = inl(AUDIO_COUNT_ADDR);
 }
 
+/***分享会***/
+static uint32_t pos = 0;
+static void audio_write(uint8_t *buf, int len) {
+	while(len > 0) {
+		if(pos >= 66536)
+			pos = 0;
+		outb((AUDIO_SBUF_ADDR + pos), *(unsigned *)buf);
+		buf++;
+		pos++;
+		len--;
+	}
+}
+
+void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
+	int len = ctl->buf.end - ctl->buf.start;
+	len = len > 65535 ? 65535 : len;
+	audio_write(ctl->buf.start, len);
+	int count = inl(AUDIO_COUNT_ADDR);
+	outl(AUDIO_COUNT_ADDR, len + count);
+}
+
+
+/***
 uint32_t *sbuf = (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 	uint32_t *ctlbuf = ctl->buf.start;
@@ -39,3 +63,4 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 	uint32_t count = sbuf - (uint32_t *)(uintptr_t)AUDIO_SBUF_ADDR;
 	outl(0xa0000214, count);
 }
+***/
