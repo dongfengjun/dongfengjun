@@ -32,7 +32,7 @@ static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 //uint8_t *audio_pos;
 static int pos = 0;
-#define SBUF_SIZE audio_base[reg_sbuf_size]
+#define SBUF_SIZE 1024
 
 static void audio_callback(void *udata, uint8_t *stream, int len) {
 	SDL_LockAudio();
