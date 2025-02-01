@@ -32,7 +32,7 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
 static uint32_t pos = 0;
 static void audio_write(uint8_t *buf, int len) {
 	while(len > 0) {
-		if(pos >= 66530)
+		if(pos >= 66536-10000)
 			pos = 0;
 		outb((AUDIO_SBUF_ADDR + pos), *(unsigned *)buf);
 		buf++;
