@@ -45,13 +45,11 @@ void pmem_write(int waddr, int wdata, char wmask) {
 		putc((char)wdata, stderr);
 		return;
 	}
-	else {
-		switch(wmask) {
-			case 1:	paddr_write(waddr, 1, wdata); break;
-			case 3: paddr_write(waddr, 2, wdata); break;
-			case 15: paddr_write(waddr, 4, wdata); break;
-			default: break;
-		}
+	switch(wmask) {
+		case 1:	paddr_write(waddr, 1, wdata); break;
+		case 3: paddr_write(waddr, 2, wdata); break;
+		case 15: paddr_write(waddr, 4, wdata); break;
+		default: break;
 	}
 }
 
