@@ -1,6 +1,5 @@
 #include <am.h>
 #include <nemu.h>
-//#include <stdio.h>//测试audio
 
 #define AUDIO_FREQ_ADDR      (AUDIO_ADDR + 0x00)
 #define AUDIO_CHANNELS_ADDR  (AUDIO_ADDR + 0x04)
@@ -28,7 +27,6 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
   stat->count = inl(AUDIO_COUNT_ADDR);
 }
 
-/***分享会***/
 static uint32_t pos = 0;
 static void audio_write(uint8_t *buf, int len) {
 	while(len > 0) {

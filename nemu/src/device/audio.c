@@ -40,8 +40,8 @@ static void audio_callback(void *udata, uint8_t *stream, int len) {
 	if(audio_base[reg_count] == 0)
 		return;
 	if((pos + len) < CONFIG_SB_SIZE) {
-		//memcpy(stream, sbuf + pos, len);
-		SDL_MixAudio(stream, sbuf + pos, len, SDL_MIX_MAXVOLUME);
+		memcpy(stream, sbuf + pos, len);
+		//SDL_MixAudio(stream, sbuf + pos, len, SDL_MIX_MAXVOLUME);
 		pos += len;
 	}
 	else {
@@ -114,22 +114,5 @@ void audio_callback(void* userdata, uint8_t *stream, int len) {
 	else {
 		audio_pos += len;
 	}
-}
-***/
-
-/***
-void audio_init() {
-  SDL_AudioSpec sdl = {};
-  sdl.format = AUDIO_S16SYS;  // 系统中音频数据的格式使用16位有符号数来表示
-  sdl.userdata = NULL;  // 不使用
-  sdl.freq = 8000;//mmio_read(0xa0000200, 4);
-  sdl.channels = 1;//mmio_read(0xa0000204, 4);
-  sdl.samples = 1024;//mmio_read(0xa0000208, 4);
-  sdl.callback = audio_callback;
-  SDL_InitSubSystem(SDL_INIT_AUDIO);
-	if(SDL_OpenAudio(&s, NULL) < 0) {
-    printf("open audio fail!\n");
-    assert(0);
-  }
 }
 ***/
