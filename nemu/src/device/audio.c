@@ -44,6 +44,7 @@ static void audio_callback(void *udata, uint8_t *stream, int len) {
 		pos += len;
 	}
 	else {
+		printf("else\n");
 		memcpy(stream, sbuf + pos, (CONFIG_SB_SIZE - pos));
 		pos = CONFIG_SB_SIZE - pos;
 		memcpy(stream + pos, sbuf, len - pos);
