@@ -13,13 +13,14 @@
   extern char *mtrace_p;
 #endif
 
+static uint64_t us = 0;
 int pmem_read(int raddr) {
   // 总是读取地址为`raddr & ~0x3u`的4字节返回
 	uint32_t result;
 	if (raddr == 0xa0000052) {
 		struct timespec now;
 		clock_gettime(CLOCK_MONOTONIC_COARSE, &now);
-		uint64_t us = now.tv_sec * 1000000 + now.tv_nsec / 1000;
+		us = now.tv_sec * 1000000 + now.tv_nsec / 1000;
 		result = us >> 32;
 	}
 	else if(raddr == 0xa0000048) {
