@@ -43,7 +43,7 @@ static void audio_write(uint8_t *buf, int len) {
 
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 	int len = ctl->buf.end - ctl->buf.start;
-	//len = len >= 65536 ? 65536 : len;
+	len = len >= 65536 ? 65536 : len;
 	audio_write(ctl->buf.start, len);
 	int count = inl(AUDIO_COUNT_ADDR);
 	outl(AUDIO_COUNT_ADDR, len + count);
