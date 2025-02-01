@@ -40,9 +40,9 @@ static void audio_callback(void *udata, uint8_t *stream, int len) {
 	if(audio_base[reg_count] == 0)
 		return;
 	if((pos + len) < CONFIG_SB_SIZE) {
-		memcpy(stream, sbuf + pos, len);
+	//	memcpy(stream, sbuf + pos, len);
+		SDL_MixAudio(stream, sbuf + pos, len, SDL_MIX_MAXVOLUME);
 		pos += len;
-		printf("pos:%d\n\n\n", pos);
 	}
 	else {
 		memcpy(stream, sbuf + pos, (CONFIG_SB_SIZE - pos));
