@@ -42,7 +42,7 @@ void pmem_write(int waddr, int wdata, char wmask) {
 		mtrace_p += sprintf(mtrace_p, "waddr:%08x write:%08x\n", waddr, wdata);
 #endif
 	if(waddr == 0xa00003F8) {
-		putchar(wdata);
+		putc(wdata, stderr);
 	}
 	else {
 		switch(wmask) {
