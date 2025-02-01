@@ -22,9 +22,11 @@ int pmem_read(int raddr) {
 		clock_gettime(CLOCK_MONOTONIC_COARSE, &now);
 		us = now.tv_sec * 1000000 + now.tv_nsec / 1000;
 		result = us >> 32;
+		printf("time high:%d\n", result);
 	}
 	else if(raddr == 0xa0000048) {
 		result = (uint32_t)us;
+		printf("time low:%d\n", result);
 	}
 	else {
 		result = paddr_read(raddr, 4);
