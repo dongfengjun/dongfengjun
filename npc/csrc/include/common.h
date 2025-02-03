@@ -32,7 +32,7 @@ typedef uint16_t ioaddr_t;
 	#define CONFIG_MTRACE 1 
 //	#define CONFIG_WATCHPOINT 1
 #endif
-#define CONFIG_DIFFTEST 1
+//#define CONFIG_DIFFTEST 1
 
 #define CONFIG_MBASE 0x80000000//IM
 #define CONFIG_MSIZE 0x8000000
