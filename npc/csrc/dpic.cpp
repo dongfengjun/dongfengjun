@@ -31,9 +31,13 @@ int pmem_read(int raddr) {
 	else {
 		result = paddr_read(raddr, 4);
 	}
-#ifdef CONFIG_MTRACE
-	   mtrace_p += sprintf(mtrace_p, "raddr:%08x read:%08x\n", raddr, result);
-#endif
+	/***
+	if() {
+	#ifdef CONFIG_MTRACE
+		mtrace_p += sprintf(mtrace_p, "raddr:%08x read:%08x\n", raddr, result);
+	#endif
+	}
+	***/
 	return result;
 }
 void pmem_write(int waddr, int wdata, char wmask) {
