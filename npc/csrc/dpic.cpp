@@ -32,8 +32,8 @@ int pmem_read(int raddr) {
 		result = paddr_read(raddr, 4);
 	}
 	/***
-	if() {
 	#ifdef CONFIG_MTRACE
+	if(inst == || inst == || inst == ) {
 		mtrace_p += sprintf(mtrace_p, "raddr:%08x read:%08x\n", raddr, result);
 	#endif
 	}
