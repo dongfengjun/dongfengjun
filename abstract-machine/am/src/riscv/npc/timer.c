@@ -5,8 +5,8 @@ void __am_timer_init() {
 }
 
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
-  uint32_t high = inw(0xa0000052);
-	uint32_t low = inw(0xa0000048);
+  uint32_t high = inl(0xa0000052);
+	uint32_t low = inl(0xa0000048);
 	uptime->us = low + ((uint64_t)high << 32);
 }
 
