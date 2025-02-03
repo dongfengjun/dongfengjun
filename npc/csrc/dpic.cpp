@@ -17,7 +17,7 @@ static uint64_t us = 0;
 int pmem_read(int raddr) {
   // 总是读取地址为`raddr & ~0x3u`的4字节返回
 	uint32_t result;
-	if (raddr == 0xa0000052) {
+	if (raddr == 0xa0000052 || raddr == 0xa0000054) {
 		struct timespec now;
 		clock_gettime(CLOCK_MONOTONIC_COARSE, &now);
 		us = now.tv_sec * 1000000 + now.tv_nsec / 1000;
