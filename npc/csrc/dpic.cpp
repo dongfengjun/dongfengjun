@@ -24,8 +24,8 @@ int pmem_read(int raddr) {
 		result = us >> 32;
 		printf("time high:%d\n", result);
 	}
-	else if (raddr == 0xa0000054) {
-	}
+	//else if (raddr == 0xa0000054) {
+	//}
 	else if(raddr == 0xa0000048) {
 		result = (uint32_t)us;
 		printf("time low:%d\n", result);
