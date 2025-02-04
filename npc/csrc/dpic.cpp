@@ -18,9 +18,9 @@ int pmem_read(int raddr) {
   // 总是读取地址为`raddr & ~0x3u`的4字节返回
 	uint32_t result;
 	if (raddr == 0xa000004c) {
-		struct timespec now;
-		clock_gettime(CLOCK_MONOTONIC_COARSE, &now);
-		us = now.tv_sec * 1000000 + now.tv_nsec / 1000;
+		struct timeval now;
+		gettimeofday(&now, NULL);
+		us = now.tv_sec * 1000000 + now.tv_usec;
 		result = us >> 32;
 	}
 	else if(raddr == 0xa0000048) {
