@@ -220,8 +220,8 @@ void dump_wave() {
   contextp->timeInc(1);
 }
 void single_cycle() {
-	top->clk=1;top->eval();dump_wave();
-	top->clk=0;top->eval();dump_wave();
+	top->clk=1;top->eval();//dump_wave();
+	top->clk=0;top->eval();//dump_wave();
 }
 static void reset(int n) {
 	top->rst=1;top->eval();
