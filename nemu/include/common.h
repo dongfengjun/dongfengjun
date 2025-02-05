@@ -49,6 +49,4 @@ extern char *mtrace_p;
 
 #include <debug.h>
 
-void audio_callback(void* udata, uint8_t *stream, int len);
-
 #endif
