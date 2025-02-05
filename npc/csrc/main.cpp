@@ -219,14 +219,21 @@ void dump_wave() {
 	tfp->dump(contextp->time());  
   contextp->timeInc(1);
 }
+
 void single_cycle() {
-	top->clk=1;top->eval();//dump_wave();
-	top->clk=0;top->eval();//dump_wave();
+	top->clk=1;top->eval();
+#ifdef CONFIG_DUMP_WAVE
+	dump_wave();
+#endif
+	top->clk=0;top->eval();
+#ifdef CONFIG_DUMP_WAVE
+	dump_wave();
+#endif
 }
 static void reset(int n) {
 	top->rst=1;top->eval();
 	while(n-->0) single_cycle();
-//restart 默认的pc,reg,im,在这实现
+//restart 默认的pc,reg,im,等在这实现
 	top->rst=0;
 }
 
