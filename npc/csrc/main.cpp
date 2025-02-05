@@ -37,6 +37,7 @@ uint64_t g_nr_guest_inst = 0;
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
 IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
 static bool g_print_step = false;
+uint8_t fopcode;
 void assert_fail_msg() {
   isa_regs_display();
 	IFDEF(CONFIG_ITRACE, iringbuf_push(iringbuf));
@@ -72,7 +73,6 @@ static void itrace_push(){
 }
 #endif
 
-static uint8_t fopcode;
 #ifdef CONFIG_FTRACE
 #define MAX_FTRACE_SIZE 1024
 #define MAX_ELF_SIZE 32 * 1024 
