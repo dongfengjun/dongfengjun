@@ -30,13 +30,12 @@ int pmem_read(int raddr) {
 #else
 	result = paddr_read(raddr, 4);
 #endif
-	/***
-	#ifdef CONFIG_MTRACE
-	if(inst == || inst == || inst == ) {
+#ifdef CONFIG_MTRACE
+	extern uint8_t fopcode;
+	if(fopcode == 0b0000011) {
 		mtrace_p += sprintf(mtrace_p, "raddr:%08x read:%08x\n", raddr, result);
-	#endif
 	}
-	***/
+#endif
 	return result;
 }
 void pmem_write(int waddr, int wdata, char wmask) {

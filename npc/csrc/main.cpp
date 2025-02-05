@@ -93,7 +93,7 @@ Elf_Ehdr elf_ehdr;
 Elf_Shdr *elfshdr_symtab = NULL;//符号表
 Elf_Shdr *elfshdr_strtab = NULL;//字符串表
 
-static uint8_t fopcode;
+uint8_t fopcode;
 static word_t fpc;
 static word_t fnpc;
 static word_t finst;
