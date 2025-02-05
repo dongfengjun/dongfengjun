@@ -72,6 +72,7 @@ static void itrace_push(){
 }
 #endif
 
+static uint8_t fopcode;
 #ifdef CONFIG_FTRACE
 #define MAX_FTRACE_SIZE 1024
 #define MAX_ELF_SIZE 32 * 1024 
@@ -93,7 +94,6 @@ Elf_Ehdr elf_ehdr;
 Elf_Shdr *elfshdr_symtab = NULL;//符号表
 Elf_Shdr *elfshdr_strtab = NULL;//字符串表
 
-uint8_t fopcode;
 static word_t fpc;
 static word_t fnpc;
 static word_t finst;
