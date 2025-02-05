@@ -7,7 +7,6 @@
 #include "svdpi.h"
 #include "Vtop_ysyx_24110017__Dpi.h"
 #include "./include/common.h"
-#include <sys/time.h>
 
 #ifdef CONFIG_MTRACE
   extern char *mtrace_p;

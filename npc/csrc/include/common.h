@@ -24,14 +24,14 @@ typedef uint16_t ioaddr_t;
 #define CONFIG_DEVICE 1//DEVICE
 #define ITRACE_COND 1
 #define CONFIG_TARGET_NATIVE_ELF 1
-#define CONFIG_TRACE 1
-#ifdef CONFIG_TRACE
-	#define CONFIG_ITRACE 1
+//#define CONFIG_TRACE 1
+//#ifdef CONFIG_TRACE
+//	#define CONFIG_ITRACE 1
 //			#define CONFIG_ITRACE_COND 1
 //	#define CONFIG_FTRACE 1
-	#define CONFIG_MTRACE 1 
+//	#define CONFIG_MTRACE 1 
 //	#define CONFIG_WATCHPOINT 1
-#endif
+//#endif
 //#define CONFIG_DIFFTEST 1
 
 #define CONFIG_MBASE 0x80000000//IM
