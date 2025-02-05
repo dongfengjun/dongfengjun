@@ -141,11 +141,6 @@ static void execute(uint64_t n) {
 		fprintf(dtrace_log, "%s", dtrace_buf);	//Dtrace log
 		fclose(dtrace_log);
 	#endif
-	#ifdef CONFIG_HAS_AUDIO
-	//	SDL_Delay(5000);
-		SDL_CloseAudio();
-    SDL_Quit();
-	#endif
 }
 
 static void statistic() {
