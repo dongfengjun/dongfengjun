@@ -31,7 +31,7 @@ typedef uint16_t ioaddr_t;
 	//#ifdef CONFIG_TRACE
 		//#define CONFIG_ITRACE 1
 			//#define CONFIG_ITRACE_COND 1
-		//#define CONFIG_FTRACE 1
+		#define CONFIG_FTRACE 1
 		#define CONFIG_MTRACE 1 
 		//#define CONFIG_WATCHPOINT 1
 	//#endif
