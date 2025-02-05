@@ -16,6 +16,7 @@ static uint64_t us = 0;
 int pmem_read(int raddr) {
   // 总是读取地址为`raddr & ~0x3u`的4字节返回
 	uint32_t result;
+#ifdef CONFIG_DEVICE
 	if (raddr == 0xa000004c) {
 		us = get_time();
 		result = us >> 32;
@@ -26,6 +27,9 @@ int pmem_read(int raddr) {
 	else {
 		result = paddr_read(raddr, 4);
 	}
+#else
+	result = paddr_read(raddr, 4);
+#endif
 	/***
 	#ifdef CONFIG_MTRACE
 	if(inst == || inst == || inst == ) {
@@ -42,11 +46,13 @@ void pmem_write(int waddr, int wdata, char wmask) {
 #ifdef CONFIG_MTRACE
 		mtrace_p += sprintf(mtrace_p, "waddr:%08x write:%08x\n", waddr, wdata);
 #endif
+#ifdef CONFIG_DEVICE
 	if(waddr == 0xa00003F8) {
 		putchar((char)wdata);
 		//putc((char)wdata, stderr);
 		return;
 	}
+#endif
 	switch(wmask) {
 		case 1:	paddr_write(waddr, 1, wdata); break;
 		case 3: paddr_write(waddr, 2, wdata); break;
