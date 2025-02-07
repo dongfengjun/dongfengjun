@@ -88,21 +88,27 @@ static void exec_once(Decode *s, vaddr_t pc) {
 }
 
 #ifdef CONFIG_MTRACE
-char buf[2 * 1024 * 1024] = {0};	//2M
-char *mtrace_p = buf;
-FILE *mtracelog;
+char mtrace_buf[2 * 1024 * 1024] = {0};	//2M
+char *mtrace_p = mbuf;
+FILE *mtrace log;
 #endif
 #ifdef CONFIG_DTRACE
 char dtrace_buf[2 * 1024 * 1024] = {0};	//2M
 char *dtrace_p = dtrace_buf;
 FILE *dtrace_log;
 #endif
+#ifdef CONFIG_ETRACE
+char etrace_buf[1024 * 1024]; //1M
+char *etrace_p = etrace_buf;
+FILE *etrace_log;
+#endif
+
 void cpu_show_ftrace();
 void audio_callback(void* userdata, uint8_t *stream, int len);
 
 static void execute(uint64_t n) {
   Decode s;
-#if (CONFIG_MTRACE || CONFIG_DTRACE)
+#if (CONFIG_MTRACE || CONFIG_DTRACE || CONFIG_ETRACE)
 	const char *file_path = getenv("PWD");
 	if (file_path == NULL) {
 		perror("getenv failed");
@@ -119,6 +125,11 @@ static void execute(uint64_t n) {
 	//dtrace_log = fopen("build/nemu-dtrace-log.txt", "w");	//Dtrace
 	snprintf(dtrace_path, 128, "%s/%s", file_path, "build/nemu-dtrace-log.txt");
 	dtrace_log = fopen(dtrace_path, "w");
+#endif
+#ifdef CONFIG_ETRACE
+	char etrace_path[128] = {0};
+	snprintf(etrace_path, 128, "%s/%s", file_path, "build/nemu-etrace-log.txt");
+	etrace_log = fopen(etrace_path, "w");
 #endif
 
   for (;n > 0; n --) {
@@ -140,6 +151,10 @@ static void execute(uint64_t n) {
 	#ifdef CONFIG_DTRACE
 		fprintf(dtrace_log, "%s", dtrace_buf);	//Dtrace log
 		fclose(dtrace_log);
+	#endif
+	#ifdef CONFIG_ETRACE
+		fprintf(etrace_log, "%s", etrace_buf);	//Etrace log
+		fclose(etrace_log);
 	#endif
 }
 
