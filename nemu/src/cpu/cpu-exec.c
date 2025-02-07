@@ -98,7 +98,7 @@ char *dtrace_p = dtrace_buf;
 FILE *dtrace_log;
 #endif
 #ifdef CONFIG_ETRACE
-char etrace_buf[1024 * 1024]; //1M
+char etrace_buf[2 * 1024 * 1024] = {0}; //2M
 char *etrace_p = etrace_buf;
 FILE *etrace_log;
 #endif

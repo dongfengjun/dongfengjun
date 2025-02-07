@@ -46,6 +46,8 @@ static vaddr_t *CSRs(word_t csr) {
 	static void ETRACE() {
 		etrace_p += sprintf(etrace_p, "ecall in mepc = %08x, mcause = %08x\n", cpu.csr.mepc, cpu.csr.mcause);
 	}
+#else
+	static void ETRACE(){};
 #endif
 /***ftrace***/
 #ifdef CONFIG_FTRACE
