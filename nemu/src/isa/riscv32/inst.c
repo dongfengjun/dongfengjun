@@ -33,6 +33,7 @@ static vaddr_t *CSRs(word_t csr) {
 	}
 }
 
+#define CSR(i) *(CSRs(i))
 #define MRET() { \
 	s->dnpc = *CSRs(0x341); \
 	cpu.csr.mstatus &= ~(1<<3); \
@@ -167,7 +168,7 @@ static int decode_exec(Decode *s) {
 /******/
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , I, s->dnpc = isa_raise_intr(R(17), s->pc); ETRACE()); //R(17) is $a7
-	INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, R(rd) = *CSRs(imm); *CSRs(imm) = src1);
+	INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, R(rd) = CSR(imm); *CSRs(imm) = src1);
 	INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, R(rd) = *CSRs(imm); *CSRs(imm) |= src1);
 	INSTPAT("??????? ????? ????? 011 ????? 11100 11", csrrc  , I, R(rd) = *CSRs(imm); *CSRs(imm) &= ~src1);
 	INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , R, MRET(););
