@@ -23,7 +23,7 @@
 #define Mr vaddr_read
 #define Mw vaddr_write
 //CSRs
-static vaddr_t *Control_and_Status_Register(word_t csr) {
+static vaddr_t *CSRs(word_t csr) {
 	switch(csr){
 		case 0x341: return &(cpu.csr.mepc);
 		case 0x342: return &(cpu.csr.mcause);
@@ -32,7 +32,6 @@ static vaddr_t *Control_and_Status_Register(word_t csr) {
 		default: panic("Wait Add CSR");
 	}
 }
-#define CSRs(i) Control_and_Status_Register(i);
 
 /***ftrace***/
 #ifdef CONFIG_FTRACE
@@ -152,8 +151,8 @@ static int decode_exec(Decode *s) {
 /******/
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , I, bool success; s->dnpc = isa_raise_intr(isa_reg_str2val("a7", &success), s->pc));
-	INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, R(rd) = *CSRs(imm); *Control_and_Status_Register(imm) = src1);
-	INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, R(rd) = *CSRs(imm); *Control_and_Status_Register(imm) |= src1);
+	INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, R(rd) = *CSRs(imm); *CSRs(imm) = src1);
+	INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, R(rd) = *CSRs(imm); *CSRs(imm) |= src1);
 	INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 
