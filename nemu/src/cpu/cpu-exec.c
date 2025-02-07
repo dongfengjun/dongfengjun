@@ -89,8 +89,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
 
 #ifdef CONFIG_MTRACE
 char mtrace_buf[2 * 1024 * 1024] = {0};	//2M
-char *mtrace_p = mbuf;
-FILE *mtrace log;
+char *mtrace_p = mtrace_buf;
+FILE *mtrace_log;
 #endif
 #ifdef CONFIG_DTRACE
 char dtrace_buf[2 * 1024 * 1024] = {0};	//2M
@@ -118,7 +118,7 @@ static void execute(uint64_t n) {
 	char mtrace_path[128] = {0};
 	//mtracelog = fopen("build/nemu-mtrace-log.txt", "w");	//Mtrace
 	snprintf(mtrace_path, 128, "%s/%s", file_path, "build/nemu-mtrace-log.txt");
-	mtracelog = fopen(mtrace_path, "w");
+	mtrace_log = fopen(mtrace_path, "w");
 #endif
 #ifdef CONFIG_DTRACE
 	char dtrace_path[128] = {0};
@@ -142,8 +142,8 @@ static void execute(uint64_t n) {
 
 //  iringbuf_display();  //  IRFtrace display
 	#ifdef CONFIG_MTRACE
-		fprintf(mtracelog, "%s", buf);	//Mtrace log
-		fclose(mtracelog);
+		fprintf(mtrace_log, "%s", mtrace_buf);	//Mtrace log
+		fclose(mtrace_log);
 	#endif
 	#ifdef CONFIG_FTRACE
 		cpu_show_ftrace();  //Ftrace display
