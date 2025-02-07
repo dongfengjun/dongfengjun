@@ -66,7 +66,7 @@ void sim_t::diff_get_regs(void* diff_context) {
   }
   ctx->pc = state->pc;
 	//system regs
-	ctx->mpec = state->mpec->read();
+	ctx->mepc = state->mepc->read();
 	ctx->mstatus = state->mstatus->read();
 	ctx->mcause = state->mcause->read();
 	ctx->mtvec = state->mtvec->read();
