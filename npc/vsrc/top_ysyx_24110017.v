@@ -20,13 +20,19 @@ wire jalen,jalren;
 wire [31:0]res;
 wire [4:0]raddr1,raddr2;
 wire [31:0]r1,r2,a,b,xrd;
+wire [31:0]csrs, mepc, mstatus, mcause, mtvec;
+wire mepc_en, mstatus_en, mcause_en, mtvec_en;
 
 
 PCU_ysyx_24110017 PCU(clk,rst,op,funct3,imm,r1,r2,pc,dnpc);
 IFU_ysyx_24110017 IFU(pc,inst);
 IDU_ysyx_24110017 IDU(inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,wr_en);
-RegisterFile_ysyx_24110017 #(5,32) RF(clk,xrd,rd,wr_en,raddr1,r1,raddr2,r2);
-EXU_ysyx_24110017 EXU(a,b,funct3,op,funct7,shamt,imm,r1,r2,res);
+RegisterFile_ysyx_24110017 #(5,32) GPRs (clk,xrd,rd,wr_en,raddr1,r1,raddr2,r2);
+Reg_ysyx_24110017 #(32, 32'b0) mepc (clk, rst, r1, mepc, mepc_wen);
+Reg_ysyx_24110017 #(32, 32'b0) mstatus (clk, rst, r1, mstatus, mstatus_wen);
+Reg_ysyx_24110017 #(32, 32'b0) mcause (clk, rst, r1, mcause, mcause_wen);
+Reg_ysyx_24110017 #(32, 32'b0) mtvec (clk, rst, r1, mtvec, mtvec_wen);
+EXU_ysyx_24110017 EXU(a,b,funct3,op,funct7,shamt,imm,r1,r2,csrs,res);
 
 
 /***riscv32 control***/
@@ -45,5 +51,13 @@ assign xrd = (op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 
  : 32'b0;
 assign jalen = (op == 7'b1101111) ? 1'b1 : 1'b0;
 assign jalren = (op == 7'b1100111) ? 1'b1 : 1'b0;
+assign csrs = (op == 7'b1110011 && imm == 12'h341) ? mepc :
+							(op == 7'b1110011 && imm == 12'h300) ? mstatus : 
+							(op == 7'b1110011 && imm == 12'h342) ? mcause :
+							(op == 7'b1110011 && imm == 12'h341) ? mtvec : 32'b0;
+assign mepc_en = (op == 7'b1110011 && imm == 12'h341) ? 1'b1 : 1'b0;
+assign mstatus_en = (op == 7'b1110011 && imm == 12'h300) ? 1'b1 : 1'b0;
+assign mcause_en = (op == 7'b1110011 && imm == 12'h342) ? 1'b1 : 1'b0;
+assign mtvec_en =	(op == 7'b1110011 && imm == 12'h341) ? 1'b1 : 1'b0;
 
 endmodule
