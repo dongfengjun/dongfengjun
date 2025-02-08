@@ -21,7 +21,7 @@ wire [31:0]res;
 wire [4:0]raddr1,raddr2;
 wire [31:0]r1,r2,a,b,xrd;
 wire [31:0]csrs, mepc, mstatus, mcause, mtvec;
-wire mepc_en, mstatus_en, mcause_en, mtvec_en;
+wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
 
 
 PCU_ysyx_24110017 PCU(clk,rst,op,funct3,imm,r1,r2,pc,dnpc);
@@ -55,9 +55,9 @@ assign csrs = (op == 7'b1110011 && imm == 12'h341) ? mepc :
 							(op == 7'b1110011 && imm == 12'h300) ? mstatus : 
 							(op == 7'b1110011 && imm == 12'h342) ? mcause :
 							(op == 7'b1110011 && imm == 12'h341) ? mtvec : 32'b0;
-assign mepc_en = (op == 7'b1110011 && imm == 12'h341) ? 1'b1 : 1'b0;
-assign mstatus_en = (op == 7'b1110011 && imm == 12'h300) ? 1'b1 : 1'b0;
-assign mcause_en = (op == 7'b1110011 && imm == 12'h342) ? 1'b1 : 1'b0;
-assign mtvec_en =	(op == 7'b1110011 && imm == 12'h341) ? 1'b1 : 1'b0;
+assign mepc_wen = (op == 7'b1110011 && imm == 12'h341) ? 1'b1 : 1'b0;
+assign mstatus_wen = (op == 7'b1110011 && imm == 12'h300) ? 1'b1 : 1'b0;
+assign mcause_wen = (op == 7'b1110011 && imm == 12'h342) ? 1'b1 : 1'b0;
+assign mtvec_wen =	(op == 7'b1110011 && imm == 12'h341) ? 1'b1 : 1'b0;
 
 endmodule
