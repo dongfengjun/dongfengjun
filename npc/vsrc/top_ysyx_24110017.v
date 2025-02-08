@@ -51,13 +51,13 @@ assign xrd = (op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 
  : 32'b0;
 assign jalen = (op == 7'b1101111) ? 1'b1 : 1'b0;
 assign jalren = (op == 7'b1100111) ? 1'b1 : 1'b0;
-assign csrs = (op == 7'b1110011 && imm == 12'h341) ? mepc :
-							(op == 7'b1110011 && imm == 12'h300) ? mstatus : 
-							(op == 7'b1110011 && imm == 12'h342) ? mcause :
-							(op == 7'b1110011 && imm == 12'h341) ? mtvec : 32'b0;
-assign mepc_wen = (op == 7'b1110011 && imm == 12'h341) ? 1'b1 : 1'b0;
-assign mstatus_wen = (op == 7'b1110011 && imm == 12'h300) ? 1'b1 : 1'b0;
-assign mcause_wen = (op == 7'b1110011 && imm == 12'h342) ? 1'b1 : 1'b0;
-assign mtvec_wen =	(op == 7'b1110011 && imm == 12'h341) ? 1'b1 : 1'b0;
+assign csrs = (op == 7'b1110011 && imm == 12'd833) ? mepc :
+							(op == 7'b1110011 && imm == 12'd768) ? mstatus : 
+							(op == 7'b1110011 && imm == 12'd834) ? mcause :
+							(op == 7'b1110011 && imm == 12'd773) ? mtvec : 32'b0;
+assign mepc_wen = (op == 7'b1110011 && imm == 12'd833) ? 1'b1 : 1'b0;
+assign mstatus_wen = (op == 7'b1110011 && imm == 12'd768) ? 1'b1 : 1'b0;
+assign mcause_wen = (op == 7'b1110011 && imm == 12'd834) ? 1'b1 : 1'b0;
+assign mtvec_wen =	(op == 7'b1110011 && imm == 12'd773) ? 1'b1 : 1'b0;
 
 endmodule
