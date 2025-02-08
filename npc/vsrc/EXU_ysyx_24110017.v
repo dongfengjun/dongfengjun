@@ -1,4 +1,4 @@
-module EXU_ysyx_24110017(a,b,sel,op,funct7,shamt,offset,r1,r2,csrs,res);
+module EXU_ysyx_24110017(a,b,sel,op,funct7,shamt,offset,r1,r2,csrs,csrs_in,res);
 input [31:0] a,b;
 input [2:0] sel;
 input [6:0] op;
@@ -8,6 +8,7 @@ input [31:0] offset;
 input [31:0] r1;
 input [31:0] r2;
 input [31:0] csrs;
+output [31:0] csrs_in;
 output [31:0] res;
 
 
@@ -87,7 +88,15 @@ assign res =
 					& csrs) |	//I_csrrs
 			({32{(op == 7'b1110011) && (sel == 3'b000)}}
 					& csrs) ;	//I_csrrc
-			
+
+/***csrrw~csrrc***/
+assign csrs_in = 
+			({32{(op == 7'b1110011) && (sel == 3'b001)}}
+          & r1) | //I_csrrw
+			({32{(op == 7'b1110011) && (sel == 3'b010)}}
+          & (csrs | r1)) | //I_csrrs
+      ({32{(op == 7'b1110011) && (sel == 3'b000)}}
+          & (csrs &~r1)) ; //I_csrrc
 
 /***sw sh***/
 wire [31:0]raddr;

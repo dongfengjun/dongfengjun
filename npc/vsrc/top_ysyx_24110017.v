@@ -20,7 +20,7 @@ wire jalen,jalren;
 wire [31:0]res;
 wire [4:0]raddr1,raddr2;
 wire [31:0]r1,r2,a,b,xrd;
-wire [31:0]csrs, mepc, mstatus, mcause, mtvec;
+wire [31:0]csrs,csrs_in, mepc, mstatus, mcause, mtvec;
 wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
 
 
@@ -28,11 +28,11 @@ PCU_ysyx_24110017 PCU(clk,rst,op,funct3,imm,r1,r2,pc,dnpc);
 IFU_ysyx_24110017 IFU(pc,inst);
 IDU_ysyx_24110017 IDU(inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,wr_en);
 RegisterFile_ysyx_24110017 #(5,32) RF (clk,xrd,rd,wr_en,raddr1,r1,raddr2,r2);
-Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk, rst, r1, mepc, mepc_wen);
-Reg_ysyx_24110017 #(32, 32'b0) mstatus_ysyx_24110017 (clk, rst, r1, mstatus, mstatus_wen);
-Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk, rst, r1, mcause, mcause_wen);
-Reg_ysyx_24110017 #(32, 32'b0) mtvec_ysyx_24110017 (clk, rst, r1, mtvec, mtvec_wen);
-EXU_ysyx_24110017 EXU(a,b,funct3,op,funct7,shamt,imm,r1,r2,csrs,res);
+Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk, rst, csrs_in, mepc, mepc_wen);
+Reg_ysyx_24110017 #(32, 32'b0) mstatus_ysyx_24110017 (clk, rst, csrs_in, mstatus, mstatus_wen);
+Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk, rst, csrs_in, mcause, mcause_wen);
+Reg_ysyx_24110017 #(32, 32'b0) mtvec_ysyx_24110017 (clk, rst, csrs_in, mtvec, mtvec_wen);
+EXU_ysyx_24110017 EXU(a, b, funct3, op, funct7, shamt, imm, r1, r2, csrs, csrs_in, res);
 
 
 /***riscv32 control***/
