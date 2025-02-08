@@ -22,6 +22,7 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
     CData/*0:0*/ top_ysyx_24110017__DOT__mepc_wen;
     CData/*0:0*/ top_ysyx_24110017__DOT__mstatus_wen;
     CData/*0:0*/ top_ysyx_24110017__DOT__mcause_wen;
+    CData/*0:0*/ top_ysyx_24110017__DOT__mtvec_wen;
     CData/*0:0*/ top_ysyx_24110017__DOT____VdfgTmp_hee636fe3__0;
     CData/*0:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_he7ae3448__0;
     CData/*0:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hcbe0b758__0;
