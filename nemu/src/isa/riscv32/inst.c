@@ -36,11 +36,14 @@ static vaddr_t *csrs(word_t csr) {
 
 #define MRET() { \
 	s->dnpc = CSRs(0x341); \
+}
+/***
 	cpu.csr.mstatus &= ~(1<<3); \
 	cpu.csr.mstatus |= ((cpu.csr.mstatus&(1<<7))>>4); \
 	cpu.csr.mstatus |= (1<<7); \
 	cpu.csr.mstatus &= ~((1<<11)+(1<<12)); \
 }
+***/
 
 #ifdef CONFIG_ETRACE
 	extern char *etrace_p;
