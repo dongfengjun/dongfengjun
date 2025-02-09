@@ -19,7 +19,7 @@ wire [31:0]inst;
 wire [31:0]res;
 wire [4:0]raddr1,raddr2;
 wire [31:0]r1,r2,a,b,xrd;
-wire [31:0]csrs, csrs_in, mepc_in, mepc, mstatus_in, mstatus, mcause, mtvec;
+wire [31:0]csrs, csrs_in, mepc_in, mepc, mstatus, mcause_in, mcause, mtvec;
 wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
 
 
@@ -29,7 +29,7 @@ IDU_ysyx_24110017 IDU(inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,wr_en);
 RegisterFile_ysyx_24110017 #(5,32) RF (clk,xrd,rd,wr_en,raddr1,r1,raddr2,r2);
 Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk, rst, mepc_in, mepc, mepc_wen);
 Reg_ysyx_24110017 #(32, 32'h1800) mstatus_ysyx_24110017 (clk, rst, csrs_in, mstatus, mstatus_wen);
-Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk, rst, csrs_in, mcause, mcause_wen);
+Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk, rst, mcause_in, mcause, mcause_wen);
 Reg_ysyx_24110017 #(32, 32'b0) mtvec_ysyx_24110017 (clk, rst, csrs_in, mtvec, mtvec_wen);
 EXU_ysyx_24110017 EXU(a, b, funct3, op, funct7, shamt, imm, r1, r2, csrs, csrs_in, res);
 
@@ -53,12 +53,10 @@ assign csrs = (op == 7'b1110011 && imm == 32'd833) ? mepc :
 							(op == 7'b1110011 && imm == 32'd834) ? mcause :
 							(op == 7'b1110011 && imm == 32'd773) ? mtvec : 32'b0;
 assign mepc_wen = ((op == 7'b1110011 && imm == 32'd833) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
-assign mstatus_wen = ((op == 7'b1110011 && imm == 32'd768) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
-assign mcause_wen = (op == 7'b1110011 && imm == 32'd834) ? 1'b1 : 1'b0;
+assign mstatus_wen = (op == 7'b1110011 && imm == 32'd768) ? 1'b1 : 1'b0;
+assign mcause_wen = (op == 7'b1110011 && imm == 32'd834 || (op == 7'b1110    011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
 assign mtvec_wen =	(op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
 assign mepc_in = (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? pc : csrs_in;	//ecall
-assign mstatus_in = (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? r2 : //ecall
- (op == 7'b1110011 && (funct3 == 3'b001 || funct3 == 3'b010 || funct3 == 3'b011)) ? csrs_in : //csrr_w_s_c
- 32'h1800 ;
+assign mcause_in = (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? r2 : csrs_in; //ecall
 
 endmodule
