@@ -16,19 +16,18 @@ wire [4:0]shamt;	//I shamt
 wire wr_en;
 wire [31:0]inst;
 
-wire jalen,jalren;
 wire [31:0]res;
 wire [4:0]raddr1,raddr2;
 wire [31:0]r1,r2,a,b,xrd;
-wire [31:0]csrs,csrs_in, mepc, mstatus, mcause, mtvec;
+wire [31:0]csrs, csrs_in, mepc_in, mepc, mstatus_in, mstatus, mcause, mtvec;
 wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
 
 
-PCU_ysyx_24110017 PCU(clk,rst,op,funct3,imm,r1,r2,pc,dnpc);
+PCU_ysyx_24110017 PCU(clk,rst,op,funct3,imm,r1,r2,mtvec,pc,dnpc);
 IFU_ysyx_24110017 IFU(pc,inst);
 IDU_ysyx_24110017 IDU(inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,wr_en);
 RegisterFile_ysyx_24110017 #(5,32) RF (clk,xrd,rd,wr_en,raddr1,r1,raddr2,r2);
-Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk, rst, csrs_in, mepc, mepc_wen);
+Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk, rst, mepc_in, mepc, mepc_wen);
 Reg_ysyx_24110017 #(32, 32'b0) mstatus_ysyx_24110017 (clk, rst, csrs_in, mstatus, mstatus_wen);
 Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk, rst, csrs_in, mcause, mcause_wen);
 Reg_ysyx_24110017 #(32, 32'b0) mtvec_ysyx_24110017 (clk, rst, csrs_in, mtvec, mtvec_wen);
@@ -37,7 +36,8 @@ EXU_ysyx_24110017 EXU(a, b, funct3, op, funct7, shamt, imm, r1, r2, csrs, csrs_i
 
 /***riscv32 control***/
 assign raddr1 = rs1;
-assign raddr2 = rs2;
+assign raddr2 = (op == 7'b1110011 && imm = 32'd0 && funct == 3'b000) ? 5'd17
+ : rs2; //ecall
 assign b = (op == 7'b0110011 || op == 7'b0100011) ? r2 : imm;
 assign a = (op == 7'b0010011 || op == 7'b0000011 || op == 7'b0100011 || op == 7'b0110011/*R*/) ? r1 : pc;
 assign xrd = (op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011	//I 
@@ -49,8 +49,6 @@ assign xrd = (op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 
  : (op == 7'b0110111) ? imm	//U_lui
  : (op == 7'b0010111) ? (pc + imm) //U_auipc
  : 32'b0;
-assign jalen = (op == 7'b1101111) ? 1'b1 : 1'b0;
-assign jalren = (op == 7'b1100111) ? 1'b1 : 1'b0;
 assign csrs = (op == 7'b1110011 && imm == 32'd833) ? mepc :
 							(op == 7'b1110011 && imm == 32'd768) ? mstatus : 
 							(op == 7'b1110011 && imm == 32'd834) ? mcause :
@@ -59,5 +57,7 @@ assign mepc_wen = (op == 7'b1110011 && imm == 32'd833) ? 1'b1 : 1'b0;
 assign mstatus_wen = (op == 7'b1110011 && imm == 32'd768) ? 1'b1 : 1'b0;
 assign mcause_wen = (op == 7'b1110011 && imm == 32'd834) ? 1'b1 : 1'b0;
 assign mtvec_wen =	(op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
+assign mepc_in = (op == 7'b1110011 && imm = 32'd0 && funct == 3'b000) ? pc : csrs_in;	//ecall
+assign mstatus_in = (op == 7'b1110011 && imm = 32'd0 && funct == 3'b000) ? r2 : csrs_in; //ecall
 
 endmodule
