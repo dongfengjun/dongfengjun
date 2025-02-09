@@ -56,7 +56,7 @@ assign mepc_wen = (op == 7'b1110011 && imm == 32'd833) ? 1'b1 : 1'b0;
 assign mstatus_wen = (op == 7'b1110011 && imm == 32'd768) ? 1'b1 : 1'b0;
 assign mcause_wen = (op == 7'b1110011 && imm == 32'd834) ? 1'b1 : 1'b0;
 assign mtvec_wen =	(op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
-assign mepc_in = (op == 7'b1110011 && imm == 32'd0 && funct == 3'b000) ? pc : csrs_in;	//ecall
-assign mstatus_in = (op == 7'b1110011 && imm == 32'd0 && funct == 3'b000) ? r2 : csrs_in; //ecall
+assign mepc_in = (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? pc : csrs_in;	//ecall
+assign mstatus_in = (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? r2 : csrs_in; //ecall
 
 endmodule
