@@ -52,8 +52,16 @@ typedef uint16_t ioaddr_t;
 void cpu_exec(int n);
 void isa_parser_elf(char *filename);
 typedef struct {
+	vaddr_t mepc;
+	word_t mstatus;
+	word_t mcause;
+	word_t mtvec;
+} riscv32_CSRs;
+
+typedef struct {
   word_t gpr[32];
   vaddr_t pc;
+	riscv32_CSRs csr;
 } CPU_state;
 
 //Imemory
@@ -67,6 +75,7 @@ word_t gpr_regs_display(int raddr);//抓取reg  DPI-C in RF
 void isa_regs_display();
 word_t isa_reg_str2val(const char *s, bool *success);
 void isa_gpr_push();
+word_t csrs_display(int i);
 
 //monitor
 void init_monitor(int argc, char *argv[]);

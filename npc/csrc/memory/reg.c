@@ -37,4 +37,8 @@ void isa_gpr_push() {
 	for(int i = 0; i < 32; i ++) {
 		cpu.gpr[i] = gpr_regs_display(i);
 	}
+	cpu.csr.mepc = csrs_display(0);
+	cpu.csr.mstatus = csrs_display(1);
+	cpu.csr.mcause = csrs_display(2);
+	cpu.csr.mtvec = csrs_display(3);
 }
