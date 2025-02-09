@@ -28,7 +28,7 @@ assign blten = (op == 7'b1100011 && funct3 == 3'b100 && ($signed(r1) < $signed(r
 assign bgeen = (op == 7'b1100011 && funct3 == 3'b101 && ($signed(r1) >= $signed(r2)));
 assign bltuen = (op == 7'b1100011 && funct3 == 3'b110 && (r1 < r2));
 assign bgeuen = (op == 7'b1100011 && funct3 == 3'b111 && (r1 >= r2));
-assign ecall_en = (op == 7'b1110011 && offset = 32'd0 && funct == 3'b000);
+assign ecall_en = (op == 7'b1110011 && offset == 32'd0 && funct == 3'b000);
 
 assign dnpc = (jalen) ? (pc + offset)	//jal
 	: (jalren) ? ((r1 + offset) & ~1) //jalr
