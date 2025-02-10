@@ -29,7 +29,6 @@ __EXPORT void difftest_memcpy(paddr_t addr, uint8_t *buf, size_t n, bool directi
 		for(int i = 0; i < n; i ++) {
 			buf[i] = paddr_read(addr, 1);
 			addr ++;
-
 		}
 	}
 }
@@ -52,8 +51,8 @@ __EXPORT void difftest_regcpy(CPU_state *dut, bool direction) {
 		dut->pc = cpu.pc;
 		dut->csr.mepc = cpu.csr.mepc;
 		dut->csr.mstatus = cpu.csr.mstatus;
-		dut->csr.mcause = dut->csr.mcause;
-		dut->csr.mtvec = dut->csr.mtvec;
+		dut->csr.mcause = cpu.csr.mcause;
+		dut->csr.mtvec = cpu.csr.mtvec;
 	}
 }
 
