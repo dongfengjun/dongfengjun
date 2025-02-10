@@ -63,7 +63,7 @@ assign res =
       ({32{(sel == 3'b001) && (funct7 == 7'b0000001)}} 
 					& {{{32{a[31]}},$signed(a)} * {{32{b[31]}},$signed(b)}}[63:32]) | //mulh
       ({32{(sel == 3'b100) && (funct7 == 7'b0000001)}}
-          & ($sigend($signed(a) / $signed(b)))) |  //div
+          & ($signed($signed(a) / $signed(b)))) |  //div
       ({32{(sel == 3'b101) && (funct7 == 7'b0000001)}}
           & (a / b)) | //divu
       ({32{(sel == 3'b110) && (funct7 == 7'b0000001)}} 
