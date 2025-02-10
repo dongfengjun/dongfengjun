@@ -17,7 +17,7 @@ output [31:0] res;
 wire [31:0]test1,test2,test3;
 assign test1 = a;
 assign test2 = b;
-assign $signed(test3) = $signed(test1) / $signed(test2);
+assign test3 = $signed($signed(test1) / $signed(test2));
 
 
 assign res = 
