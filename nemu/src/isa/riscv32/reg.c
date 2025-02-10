@@ -62,7 +62,7 @@ void isa_reg_display() {
 	printf("%s:0x%08x\n", "pc", cpu.pc);
 	printf("%s:0x%08x\n", "mepc", cpu.csr.mepc);
 	printf("%s:0x%08x\n", "mstatus", cpu.csr.mstatus);
-	printf("%s:0x%08x\n", "mcause", cpu.csr.mstatus);
+	printf("%s:0x%08x\n", "mcause", cpu.csr.mcause);
 	printf("%s:0x%08x\n", "mtvec", cpu.csr.mtvec);
 }
 
