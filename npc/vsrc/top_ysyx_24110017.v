@@ -36,7 +36,7 @@ EXU_ysyx_24110017 EXU(a, b, funct3, op, funct7, shamt, imm, r1, r2, csrs, csrs_i
 
 /***riscv32 control***/
 assign raddr1 = rs1;
-assign raddr2 = (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? 5'd17 : rs2; //ecall
+assign raddr2 = (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? 5'd15 : rs2; //ecall
 assign b = (op == 7'b0110011 || op == 7'b0100011) ? r2 : imm;
 assign a = (op == 7'b0010011 || op == 7'b0000011 || op == 7'b0100011 || op == 7'b0110011/*R*/) ? r1 : pc;
 assign xrd = (op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011	//I 
