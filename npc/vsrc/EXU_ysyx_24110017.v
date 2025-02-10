@@ -14,9 +14,11 @@ output [31:0] res;
 
 /***I TYPE***/
 /***ALU addi~srai***/
-wire test1,test2;
-assign test1 = ((op == 7'b0010011) && (sel == 3'b101) && (funct7 == 7'b0000000)) ? 1'b1:1'b0;
-assign test2 = ((op == 7'b0010011) && (sel == 3'b101) && (funct7 == 7'b0100000)) ? 1'b1:1'b0;
+wire [31:0]test1,test2,test3;
+assign test1 = $signed(a);
+assign test2 = $signed(b);
+assign test3 = test1 / test2;
+
 
 assign res = 
 			({32{op == 7'b0010011}} & (
