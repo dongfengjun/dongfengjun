@@ -15,8 +15,8 @@ output [31:0] res;
 /***I TYPE***/
 /***ALU addi~srai***/
 wire [31:0]test1,test2,test3;
-assign test1 = $signed(a);
-assign test2 = $signed(b);
+assign test1 = a - 2^32;
+assign test2 = b - 2^32;
 assign test3 = test1 / test2;
 
 
