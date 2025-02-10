@@ -14,11 +14,12 @@ output [31:0] res;
 
 /***I TYPE***/
 /***ALU addi~srai***/
+/***test***
 wire [31:0]test1,test2,test3;
 assign test1 = a;
 assign test2 = b;
 assign test3 = $signed($signed(test1) / $signed(test2));
-
+***test end***/
 
 assign res = 
 			({32{op == 7'b0010011}} & (
@@ -62,7 +63,7 @@ assign res =
       ({32{(sel == 3'b001) && (funct7 == 7'b0000001)}} 
 					& {{{32{a[31]}},$signed(a)} * {{32{b[31]}},$signed(b)}}[63:32]) | //mulh
       ({32{(sel == 3'b100) && (funct7 == 7'b0000001)}}
-          & ($signed(a) / $signed(b))) |  //div
+          & ($sigend($signed(a) / $signed(b)))) |  //div
       ({32{(sel == 3'b101) && (funct7 == 7'b0000001)}}
           & (a / b)) | //divu
       ({32{(sel == 3'b110) && (funct7 == 7'b0000001)}} 
