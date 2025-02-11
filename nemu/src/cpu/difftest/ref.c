@@ -29,7 +29,6 @@ __EXPORT void difftest_memcpy(paddr_t addr, uint8_t *buf, size_t n, bool directi
 		for(int i = 0; i < n; i ++) {
 			buf[i] = paddr_read(addr, 1);
 			addr ++;
-
 		}
 	}
 }
@@ -40,12 +39,20 @@ __EXPORT void difftest_regcpy(CPU_state *dut, bool direction) {
 			cpu.gpr[i] = dut->gpr[i];//结构体实现
 		}
 		cpu.pc = dut->pc;
+		cpu.csr.mepc = dut->csr.mepc;
+		cpu.csr.mstatus = dut->csr.mstatus;
+		cpu.csr.mcause = dut->csr.mcause;
+		cpu.csr.mtvec = dut->csr.mtvec;
 	}
 	else {
 		for(int i = 0; i < 32; i ++) {
 			dut->gpr[i] = cpu.gpr[i];
 		}
 		dut->pc = cpu.pc;
+		dut->csr.mepc = cpu.csr.mepc;
+		dut->csr.mstatus = cpu.csr.mstatus;
+		dut->csr.mcause = cpu.csr.mcause;
+		dut->csr.mtvec = cpu.csr.mtvec;
 	}
 }
 

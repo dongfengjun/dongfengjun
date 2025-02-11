@@ -22,7 +22,37 @@
 #define R(i) gpr(i)
 #define Mr vaddr_read
 #define Mw vaddr_write
+//CSRs
+static vaddr_t *csrs(word_t csr) {
+	switch(csr){
+		case 0x341: return &(cpu.csr.mepc);
+		case 0x342: return &(cpu.csr.mcause);
+		case 0x300: return &(cpu.csr.mstatus);
+		case 0x305: return &(cpu.csr.mtvec);
+		default: panic("Wait Add CSR");
+	}
+}
+#define CSRs(i) *(csrs(i))
 
+#define MRET() { \
+	s->dnpc = CSRs(0x341); \
+}
+/***
+	cpu.csr.mstatus &= ~(1<<3); \
+	cpu.csr.mstatus |= ((cpu.csr.mstatus&(1<<7))>>4); \
+	cpu.csr.mstatus |= (1<<7); \
+	cpu.csr.mstatus &= ~((1<<11)+(1<<12)); \
+}
+***/
+
+#ifdef CONFIG_ETRACE
+	extern char *etrace_p;
+	static void ETRACE() {
+		etrace_p += sprintf(etrace_p, "ecall in mepc = %08x, mcause = %08x\n", cpu.csr.mepc, cpu.csr.mcause);
+	}
+#else
+	static void ETRACE() {};
+#endif
 /***ftrace***/
 #ifdef CONFIG_FTRACE
 #define MAX_FTRACE_SIZE 1024
@@ -140,7 +170,12 @@ static int decode_exec(Decode *s) {
 	INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(rd) = s->pc + 4; s->dnpc = s->pc + imm);
 /******/
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
-  INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , I, s->dnpc = isa_raise_intr(R(17), s->pc); ETRACE()); //R(17) is $a7
+	INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, R(rd) = CSRs(imm); CSRs(imm) = src1);
+	INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, R(rd) = CSRs(imm); CSRs(imm) |= src1);
+	INSTPAT("??????? ????? ????? 011 ????? 11100 11", csrrc  , I, R(rd) = CSRs(imm); CSRs(imm) &= ~src1);
+	INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , R, MRET(););
+	INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 
   R(0) = 0; // reset $zero to 0

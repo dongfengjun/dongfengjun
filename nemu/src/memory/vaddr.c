@@ -15,6 +15,7 @@
 
 #include <isa.h>
 #include <memory/paddr.h>
+extern char *mtrace_p;
 
 word_t vaddr_ifetch(vaddr_t addr, int len) {
   return paddr_read(addr, len);

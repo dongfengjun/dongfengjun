@@ -18,6 +18,11 @@ word_t gpr_regs_display(int raddr) {
   svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017.RF"));
   return gpr_reg_display(raddr);
 }
+word_t csrs_display(int i) {
+  extern int csr_display(int i);
+  svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017"));
+  return csr_display(i);
+}
 
 bool RUNNING;
 void npc_trap() {
