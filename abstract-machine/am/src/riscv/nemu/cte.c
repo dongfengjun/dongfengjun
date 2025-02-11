@@ -10,13 +10,13 @@ Context* __am_irq_handle(Context *c) {
     switch (c->mcause) {
 			//case : ev.event = EVENT_IRQ_TIMER; break;
 			//case : ev.event = EVENT_IRQ_IODEV; break;
-			case -1: {ev.event = EVENT_YIELD; c->mepc += 4; break;}
+			case -1: ev.event = EVENT_YIELD; break;
       default: ev.event = EVENT_ERROR; break;
     }
 		
-		printf("mepc = %d\n", c->mepc);
+		//printf("mepc = %d\n", c->mepc);
     c = user_handler(ev, c);
-		printf("		mepc = %d\n", c->mepc);
+		//printf("		mepc = %d\n", c->mepc);
     assert(c != NULL);
   }
 
