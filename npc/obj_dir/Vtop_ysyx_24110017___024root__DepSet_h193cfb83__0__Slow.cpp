@@ -742,10 +742,9 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___ctor_var_reset(Vtop_ysyx_241100
     vlSelf->top_ysyx_24110017__DOT____VdfgTmp_h4e2d1a8e__0 = 0;
     vlSelf->top_ysyx_24110017__DOT__PCU__DOT__ecall_en = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__PCU__DOT____VdfgTmp_h051484d1__0 = 0;
-    vlSelf->top_ysyx_24110017__DOT__IFU__DOT__wata = VL_RAND_RESET_I(32);
+    vlSelf->top_ysyx_24110017__DOT__IFU__DOT__wdata = VL_RAND_RESET_I(32);
     vlSelf->top_ysyx_24110017__DOT__IFU__DOT__waddr = VL_RAND_RESET_I(8);
     vlSelf->top_ysyx_24110017__DOT__IFU__DOT__raddr2 = VL_RAND_RESET_I(8);
-    vlSelf->top_ysyx_24110017__DOT__IFU__DOT__wdata = VL_RAND_RESET_I(1);
     for (int __Vi0 = 0; __Vi0 < 256; ++__Vi0) {
         vlSelf->top_ysyx_24110017__DOT__IFU__DOT__IM__DOT__rf[__Vi0] = VL_RAND_RESET_I(32);
     }

@@ -32,7 +32,6 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ top_ysyx_24110017__DOT__PCU__DOT__ecall_en;
         CData/*7:0*/ top_ysyx_24110017__DOT__IFU__DOT__waddr;
         CData/*7:0*/ top_ysyx_24110017__DOT__IFU__DOT__raddr2;
-        CData/*0:0*/ top_ysyx_24110017__DOT__IFU__DOT__wdata;
         CData/*4:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hdc3969ba__0;
         CData/*0:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_he7ae3448__0;
         CData/*0:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hcbe0b758__0;
@@ -57,7 +56,7 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         IData/*31:0*/ top_ysyx_24110017__DOT__mcause;
         IData/*31:0*/ top_ysyx_24110017__DOT__mtvec;
         IData/*31:0*/ top_ysyx_24110017__DOT__PCU__DOT____VdfgTmp_h051484d1__0;
-        IData/*31:0*/ top_ysyx_24110017__DOT__IFU__DOT__wata;
+        IData/*31:0*/ top_ysyx_24110017__DOT__IFU__DOT__wdata;
         IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT__rdata;
         IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4a41356a__0;
         IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h56110f4f__0;
@@ -79,9 +78,9 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         IData/*31:0*/ __VactIterCount;
         QData/*63:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h72806210__0;
         VlUnpacked<IData/*31:0*/, 256> top_ysyx_24110017__DOT__IFU__DOT__IM__DOT__rf;
+        VlUnpacked<IData/*31:0*/, 32> top_ysyx_24110017__DOT__RF__DOT__rf;
     };
     struct {
-        VlUnpacked<IData/*31:0*/, 32> top_ysyx_24110017__DOT__RF__DOT__rf;
         VlUnpacked<CData/*0:0*/, 2> __Vm_traceActivity;
     };
     VlTriggerVec<1> __VstlTriggered;
