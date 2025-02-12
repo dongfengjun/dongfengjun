@@ -26,7 +26,6 @@ void init_wp_pool();
 void sdb_watchpoint_display();
 void create_watchpoint(char* args);
 void delete_watchpoint(int no);
-int pmem_read(int raddr);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -204,7 +203,7 @@ static int cmd_x(char *args) {
 		sprintf(s, "%x", tmp);
 		sscanf(s, "%x", &addr); 
 		for(int i = 0; i < N; i++) {
-			printf("0x%08x  ",pmem_read(addr));
+			printf("0x%08x  ", paddr_read(addr, 4));
 			addr = addr + 4;
 		}
 		printf("\n");
