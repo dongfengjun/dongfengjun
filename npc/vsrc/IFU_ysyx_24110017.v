@@ -21,7 +21,7 @@ end
 ***E*N*D***/
 
 /***yosys-sta***/
-wire [31:0]wata, r2;
+wire [31:0]wdata, r2;
 wire [7:0]waddr, raddr2;
 RegisterFile_ysyx_24110017 #(8, 32) IM (clk,wdata,waddr,1'b0,pc,inst,raddr2,r2);
 /***E*N*D***/
