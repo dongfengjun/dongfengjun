@@ -32,9 +32,9 @@ assign res =
       ({32{sel == 3'b100}} & (a ^ b)) |	//xori
       ({32{(sel == 3'b101) && (funct7 == 7'b0000000)}} 
 					& (a >> shamt)) |	//srli
-			({32{(sel == 3'b101) && (funct7 == 7'b0100000)}} 
-					& ({{{32{a[31]}}, $signed(a)} >> shamt}[31:0])) |	//srai
-      ({32{sel == 3'b110}} & (a | b)) |	//ori
+//			({32{(sel == 3'b101) && (funct7 == 7'b0100000)}} 
+//					& ({{{32{a[31]}}, $signed(a)} >> shamt}[31:0])) |	//srai
+//      ({32{sel == 3'b110}} & (a | b)) |	//ori
       ({32{sel == 3'b111}} & (a & b)) 	//andi
 																	 ))				
 																					|
@@ -54,16 +54,16 @@ assign res =
 					& (a ^ b)) | //xor
       ({32{(sel == 3'b101) && (funct7 == 7'b0000000)}} 
 		      & (a >> b[4:0])) | //srl
-      ({32{(sel == 3'b101) && (funct7 == 7'b0100000)}}
-					&  {{{32{a[31]}}, a} >> b}[31:0] ) | //sra
+//      ({32{(sel == 3'b101) && (funct7 == 7'b0100000)}}
+//					&  {{{32{a[31]}}, a} >> b}[31:0] ) | //sra
       ({32{(sel == 3'b110) && (funct7 == 7'b0000000)}}
 					& (a | b)) | //or
       ({32{(sel == 3'b111) && (funct7 == 7'b0000000)}}
 					& (a & b)) | //and
       ({32{(sel == 3'b000) && (funct7 == 7'b0000001)}}
           & (a * b)) | //mul
-      ({32{(sel == 3'b001) && (funct7 == 7'b0000001)}} 
-					& {{{32{a[31]}},$signed(a)} * {{32{b[31]}},$signed(b)}}[63:32]) | //mulh
+//      ({32{(sel == 3'b001) && (funct7 == 7'b0000001)}} 
+//					& {{{32{a[31]}},$signed(a)} * {{32{b[31]}},$signed(b)}}[63:32]) | //mulh
       ({32{(sel == 3'b100) && (funct7 == 7'b0000001)}}
           & ($signed($signed(a) / $signed(b)))) |  //div
       ({32{(sel == 3'b101) && (funct7 == 7'b0000001)}}
@@ -110,9 +110,6 @@ wire valid,wen;
 wire [31:0]waddr, wdata;
 wire [7:0]wmask;
 
-import "DPI-C" function int pmem_read(input int raddr);
-import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
-
 assign valid = (op == 7'b0100011 || op == 7'b0000011) ? 1'b1 : 1'b0;
 assign wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
 assign waddr = (op == 7'b0100011) ? (r1 + offset) : 32'h80000000;
@@ -124,6 +121,9 @@ assign wmask = (op == 7'b0100011 && sel == 3'b000) ? 8'b00000001
 assign raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000; //lb~lhu
 
 /***DPIC***
+import "DPI-C" function int pmem_read(input int raddr);
+import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
+
 always @(*) begin
   if (valid) begin // 有读写请求时
     rdata = pmem_read(raddr);

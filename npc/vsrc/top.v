@@ -58,12 +58,14 @@ assign mcause_wen = (op == 7'b1110011 && imm == 32'd834 || (op == 7'b1110011 && 
 assign mtvec_wen =	(op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
 assign mepc_in = (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? pc : csrs_in;	//ecall
 assign mcause_in = (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? r2 : csrs_in; //ecall
-/***DPI-C***/
+
+/***DPI-C***
 export "DPI-C" function csr_display;                                    
 function int csr_display(int i);
   begin
     assign csr_display = (i == 0) ? mepc : (i == 1) ? mstatus : (i == 2) ? mcause : (i == 3) ? mtvec : 32'b0;
   end
 endfunction
+***E*N*D***/
 
 endmodule
