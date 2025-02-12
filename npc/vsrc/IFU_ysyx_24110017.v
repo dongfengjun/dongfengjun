@@ -1,9 +1,11 @@
-module IFU_ysyx_24110017(pc,inst);
+module IFU_ysyx_24110017(clk,pc,inst);
+input clk;
 input [31:0]pc;
 output [31:0]inst;
 wire [31:0]pc;
 reg [31:0]inst;
 
+/***DPIC***
 import "DPI-C" function int pmem_read(input int raddr);
 
 wire ifuen;
@@ -16,5 +18,11 @@ always @(*) begin
 		inst = 32'h00000000;
 	end
 end
+***E*N*D***/
 
+/***yosys-sta***/
+wire [31:0]wata, r2;
+wire [7:0]waddr, raddr2;
+RegisterFile_ysyx_24110017 #(8, 32) IM (clk,wdata,waddr,wen,pc,inst,raddr2,r2);
+/***E*N*D***/
 endmodule
