@@ -1,4 +1,6 @@
-module EXU_ysyx_24110017(a,b,sel,op,funct7,shamt,offset,r1,r2,csrs,csrs_in,res);
+module EXU_ysyx_24110017(clk,a,b,sel,op,funct7,shamt,offset,r1,r2,csrs,csrs_in,res);
+
+input clk;
 input [31:0] a,b;
 input [2:0] sel;
 input [6:0] op;
@@ -121,6 +123,7 @@ assign wmask = (op == 7'b0100011 && sel == 3'b000) ? 8'b00000001
  : 8'b0;
 assign raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000; //lb~lhu
 
+/***DPIC***
 always @(*) begin
   if (valid) begin // 有读写请求时
     rdata = pmem_read(raddr);
@@ -132,4 +135,13 @@ always @(*) begin
     rdata = 0;
   end
 end
+***E*N*D***/
+
+/***yosys-sta***/
+wire [31:0]rdata2;
+wire [7:0]raddr2;
+RegisterFile_ysyx_24110017 #(8, 32) WRINST (clk,wdata,waddr[7:0],wen,raddr[7:0],rdata,raddr2,rdata2);
+
+/***E*N*D***/
+
 endmodule
