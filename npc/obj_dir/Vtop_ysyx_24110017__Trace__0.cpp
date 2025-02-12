@@ -22,6 +22,7 @@ void Vtop_ysyx_24110017___024root__trace_chg_sub_0(Vtop_ysyx_24110017___024root*
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop_ysyx_24110017___024root__trace_chg_sub_0\n"); );
     // Init
     uint32_t* const oldp VL_ATTR_UNUSED = bufp->oldp(vlSymsp->__Vm_baseCode + 1);
+    VlWide<8>/*255:0*/ __Vtemp_hcc0ac917__0;
     // Body
     if (VL_UNLIKELY(vlSelf->__Vm_traceActivity[1U])) {
         bufp->chgCData(oldp+0,(vlSelf->top_ysyx_24110017__DOT__op),7);
@@ -172,76 +173,71 @@ void Vtop_ysyx_24110017___024root__trace_chg_sub_0(Vtop_ysyx_24110017___024root*
     bufp->chgIData(oldp+82,(((IData)(vlSelf->top_ysyx_24110017__DOT__PCU__DOT__ecall_en)
                               ? vlSelf->pc : vlSelf->top_ysyx_24110017__DOT__csrs_in)),32);
     bufp->chgIData(oldp+83,((((- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hdcea48d4__0))) 
-                              << 0xcU) | ((0U == (0xffU 
-                                                  & vlSelf->pc))
-                                           ? 0U : (vlSelf->__VdfgTmp_hfab7399b__0 
+                              << 0xcU) | ((0U == vlSelf->pc)
+                                           ? 0U : (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                    >> 0x14U)))),32);
-    bufp->chgIData(oldp+84,((((0U == (0xffU & vlSelf->pc))
-                               ? 0U : (vlSelf->__VdfgTmp_hfab7399b__0 
-                                       >> 0xcU)) << 0xcU)),32);
+    bufp->chgIData(oldp+84,((((0U == vlSelf->pc) ? 0U
+                               : (vlSelf->__VdfgTmp_ha49b2b96__0 
+                                  >> 0xcU)) << 0xcU)),32);
     bufp->chgIData(oldp+85,((((- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hdcea48d4__0))) 
                               << 0xdU) | (((IData)(vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hdcea48d4__0) 
                                            << 0xcU) 
                                           | ((0xfffff800U 
                                               & (((0U 
-                                                   != 
-                                                   (0xffU 
-                                                    & vlSelf->pc)) 
+                                                   != vlSelf->pc) 
                                                   << 0xbU) 
-                                                 & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                 & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                     << 4U))) 
                                              | ((((0U 
-                                                   == 
-                                                   (0xffU 
-                                                    & vlSelf->pc))
+                                                   == vlSelf->pc)
                                                    ? 0U
                                                    : 
                                                   (0x3fU 
-                                                   & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                   & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                       >> 0x19U))) 
                                                  << 5U) 
                                                 | (((0U 
-                                                     == 
-                                                     (0xffU 
-                                                      & vlSelf->pc))
+                                                     == vlSelf->pc)
                                                      ? 0U
                                                      : 
                                                     (0xfU 
-                                                     & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                     & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                         >> 8U))) 
                                                    << 1U)))))),32);
     bufp->chgIData(oldp+86,((((- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hdcea48d4__0))) 
                               << 0x15U) | (((IData)(vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hdcea48d4__0) 
                                             << 0x14U) 
                                            | ((((0U 
-                                                 == 
-                                                 (0xffU 
-                                                  & vlSelf->pc))
+                                                 == vlSelf->pc)
                                                  ? 0U
                                                  : 
                                                 (0xffU 
-                                                 & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                 & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                     >> 0xcU))) 
                                                << 0xcU) 
                                               | ((0x7ff800U 
                                                   & (((0U 
-                                                       != 
-                                                       (0xffU 
-                                                        & vlSelf->pc)) 
+                                                       != vlSelf->pc) 
                                                       << 0xbU) 
-                                                     & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                     & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                         >> 9U))) 
                                                  | (((0U 
-                                                      == 
-                                                      (0xffU 
-                                                       & vlSelf->pc))
+                                                      == vlSelf->pc)
                                                       ? 0U
                                                       : 
                                                      (0x3ffU 
-                                                      & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                      & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                          >> 0x15U))) 
                                                     << 1U)))))),32);
-    bufp->chgCData(oldp+87,((0xffU & vlSelf->pc)),8);
+    __Vtemp_hcc0ac917__0[0U] = vlSelf->pc;
+    __Vtemp_hcc0ac917__0[1U] = 0U;
+    __Vtemp_hcc0ac917__0[2U] = 0U;
+    __Vtemp_hcc0ac917__0[3U] = 0U;
+    __Vtemp_hcc0ac917__0[4U] = 0U;
+    __Vtemp_hcc0ac917__0[5U] = 0U;
+    __Vtemp_hcc0ac917__0[6U] = 0U;
+    __Vtemp_hcc0ac917__0[7U] = 0U;
+    bufp->chgWData(oldp+87,(__Vtemp_hcc0ac917__0),256);
 }
 
 void Vtop_ysyx_24110017___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {

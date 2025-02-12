@@ -25,7 +25,8 @@ void Vtop_ysyx_24110017___024root____Vdpiexp_top_ysyx_24110017__DOT__IFU__DOT__I
     // Body
     gpr_reg_display__Vfuncrtn = ((0U == addr) ? 0U : 
                                  vlSymsp->TOP.top_ysyx_24110017__DOT__IFU__DOT__IM__DOT__rf
-                                 [(0xffU & addr)]);
+                                 [(1U & ((IData)(1U) 
+                                         + addr))]);
 }
 
 extern "C" void npc_trap();

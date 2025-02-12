@@ -84,9 +84,9 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
     Vtop_ysyx_24110017__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop_ysyx_24110017___024root___stl_sequent__TOP__0\n"); );
     // Body
-    vlSelf->__VdfgTmp_hfab7399b__0 = vlSelf->top_ysyx_24110017__DOT__IFU__DOT__IM__DOT__rf
-        [(0xffU & vlSelf->pc)];
-    if ((0U == (0xffU & vlSelf->pc))) {
+    vlSelf->__VdfgTmp_ha49b2b96__0 = vlSelf->top_ysyx_24110017__DOT__IFU__DOT__IM__DOT__rf
+        [(1U & ((IData)(1U) + vlSelf->pc))];
+    if ((0U == vlSelf->pc)) {
         vlSelf->inst = 0U;
         vlSelf->top_ysyx_24110017__DOT__shamt = 0U;
         vlSelf->top_ysyx_24110017__DOT__funct3 = 0U;
@@ -94,24 +94,24 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
         vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hdc327e75__0 = 0U;
         vlSelf->top_ysyx_24110017__DOT__op = 0U;
     } else {
-        vlSelf->inst = vlSelf->__VdfgTmp_hfab7399b__0;
+        vlSelf->inst = vlSelf->__VdfgTmp_ha49b2b96__0;
         vlSelf->top_ysyx_24110017__DOT__shamt = (0x1fU 
-                                                 & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                 & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                     >> 0x14U));
         vlSelf->top_ysyx_24110017__DOT__funct3 = (7U 
-                                                  & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                  & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                      >> 0xcU));
         vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hdc3969ba__0 
-            = (0x1fU & (vlSelf->__VdfgTmp_hfab7399b__0 
+            = (0x1fU & (vlSelf->__VdfgTmp_ha49b2b96__0 
                         >> 7U));
         vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hdc327e75__0 
-            = (vlSelf->__VdfgTmp_hfab7399b__0 >> 0x19U);
+            = (vlSelf->__VdfgTmp_ha49b2b96__0 >> 0x19U);
         vlSelf->top_ysyx_24110017__DOT__op = (0x7fU 
-                                              & vlSelf->__VdfgTmp_hfab7399b__0);
+                                              & vlSelf->__VdfgTmp_ha49b2b96__0);
     }
     vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hdcea48d4__0 
-        = ((0U != (0xffU & vlSelf->pc)) & (vlSelf->__VdfgTmp_hfab7399b__0 
-                                           >> 0x1fU));
+        = ((0U != vlSelf->pc) & (vlSelf->__VdfgTmp_ha49b2b96__0 
+                                 >> 0x1fU));
     if ((0x100073U == vlSelf->inst)) {
         Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__IDU__DOT__npc_trap_TOP();
     }
@@ -168,12 +168,10 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
            | (IData)(vlSelf->top_ysyx_24110017__DOT____VdfgTmp_hee636fe3__0));
     vlSelf->top_ysyx_24110017__DOT__imm = ((IData)(vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hcabf9aa8__0)
                                             ? (((0U 
-                                                 == 
-                                                 (0xffU 
-                                                  & vlSelf->pc))
+                                                 == vlSelf->pc)
                                                  ? 0U
                                                  : 
-                                                (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                  >> 0xcU)) 
                                                << 0xcU)
                                             : ((0x6fU 
@@ -184,31 +182,25 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
                                                    | (((IData)(vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hdcea48d4__0) 
                                                        << 0x14U) 
                                                       | ((((0U 
-                                                            == 
-                                                            (0xffU 
-                                                             & vlSelf->pc))
+                                                            == vlSelf->pc)
                                                             ? 0U
                                                             : 
                                                            (0xffU 
-                                                            & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                            & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                                >> 0xcU))) 
                                                           << 0xcU) 
                                                          | ((0x7ff800U 
                                                              & (((0U 
-                                                                  != 
-                                                                  (0xffU 
-                                                                   & vlSelf->pc)) 
+                                                                  != vlSelf->pc) 
                                                                  << 0xbU) 
-                                                                & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                                & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                                    >> 9U))) 
                                                             | (((0U 
-                                                                 == 
-                                                                 (0xffU 
-                                                                  & vlSelf->pc))
+                                                                 == vlSelf->pc)
                                                                  ? 0U
                                                                  : 
                                                                 (0x3ffU 
-                                                                 & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                                 & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                                     >> 0x15U))) 
                                                                << 1U)))))
                                                 : (
@@ -221,30 +213,24 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
                                                         << 0xcU) 
                                                        | ((0xfffff800U 
                                                            & (((0U 
-                                                                != 
-                                                                (0xffU 
-                                                                 & vlSelf->pc)) 
+                                                                != vlSelf->pc) 
                                                                << 0xbU) 
-                                                              & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                              & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                                  << 4U))) 
                                                           | ((((0U 
-                                                                == 
-                                                                (0xffU 
-                                                                 & vlSelf->pc))
+                                                                == vlSelf->pc)
                                                                 ? 0U
                                                                 : 
                                                                (0x3fU 
-                                                                & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                                & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                                    >> 0x19U))) 
                                                               << 5U) 
                                                              | (((0U 
-                                                                  == 
-                                                                  (0xffU 
-                                                                   & vlSelf->pc))
+                                                                  == vlSelf->pc)
                                                                   ? 0U
                                                                   : 
                                                                  (0xfU 
-                                                                  & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                                  & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                                      >> 8U))) 
                                                                 << 1U)))))
                                                     : 
@@ -262,23 +248,19 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
                                                      (((- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hdcea48d4__0))) 
                                                        << 0xcU) 
                                                       | ((0U 
-                                                          == 
-                                                          (0xffU 
-                                                           & vlSelf->pc))
+                                                          == vlSelf->pc)
                                                           ? 0U
                                                           : 
-                                                         (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                         (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                           >> 0x14U)))
                                                       : 0U)))));
     vlSelf->top_ysyx_24110017__DOT__rs1 = (((IData)(vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_he7ae3448__0) 
                                             | (IData)(vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hcbe0b758__0))
                                             ? ((0U 
-                                                == 
-                                                (0xffU 
-                                                 & vlSelf->pc))
+                                                == vlSelf->pc)
                                                 ? 0U
                                                 : (0x1fU 
-                                                   & (vlSelf->__VdfgTmp_hfab7399b__0 
+                                                   & (vlSelf->__VdfgTmp_ha49b2b96__0 
                                                       >> 0xfU)))
                                             : 0U);
     vlSelf->top_ysyx_24110017__DOT__PCU__DOT____VdfgTmp_h051484d1__0 
@@ -302,7 +284,7 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
         = ((0x73U == (IData)(vlSelf->top_ysyx_24110017__DOT__op)) 
            & ((0U == vlSelf->top_ysyx_24110017__DOT__imm) 
               & (0U == (IData)(vlSelf->top_ysyx_24110017__DOT__funct3))));
-    vlSelf->__VdfgTmp_h67df1909__0 = vlSelf->top_ysyx_24110017__DOT__RF__DOT__rf
+    vlSelf->__VdfgTmp_hbfd751e9__0 = vlSelf->top_ysyx_24110017__DOT__RF__DOT__rf
         [vlSelf->top_ysyx_24110017__DOT__rs1];
     vlSelf->top_ysyx_24110017__DOT__csrs = ((IData)(vlSelf->top_ysyx_24110017__DOT____VdfgTmp_h4e2b3a6e__0)
                                              ? vlSelf->top_ysyx_24110017__DOT__mepc
@@ -321,7 +303,7 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
                                                    ? (IData)(vlSelf->top_ysyx_24110017__DOT__shamt)
                                                    : 0U));
     vlSelf->top_ysyx_24110017__DOT__r1 = ((0U == (IData)(vlSelf->top_ysyx_24110017__DOT__rs1))
-                                           ? 0U : vlSelf->__VdfgTmp_h67df1909__0);
+                                           ? 0U : vlSelf->__VdfgTmp_hbfd751e9__0);
     vlSelf->top_ysyx_24110017__DOT__r2 = ((0U == (IData)(vlSelf->top_ysyx_24110017__DOT__raddr2))
                                            ? 0U : vlSelf->top_ysyx_24110017__DOT__RF__DOT__rf
                                           [vlSelf->top_ysyx_24110017__DOT__raddr2]);
@@ -335,7 +317,7 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
                                                           == (IData)(vlSelf->top_ysyx_24110017__DOT__rs1))
                                                           ? 0xffffffffU
                                                           : 
-                                                         (~ vlSelf->__VdfgTmp_h67df1909__0)) 
+                                                         (~ vlSelf->__VdfgTmp_hbfd751e9__0)) 
                                                         & vlSelf->top_ysyx_24110017__DOT__csrs))));
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hd43fef8a__0 
         = (vlSelf->top_ysyx_24110017__DOT__imm + vlSelf->top_ysyx_24110017__DOT__r1);
@@ -743,9 +725,9 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___ctor_var_reset(Vtop_ysyx_241100
     vlSelf->top_ysyx_24110017__DOT__PCU__DOT__ecall_en = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__PCU__DOT____VdfgTmp_h051484d1__0 = 0;
     vlSelf->top_ysyx_24110017__DOT__IFU__DOT__wdata = VL_RAND_RESET_I(32);
-    vlSelf->top_ysyx_24110017__DOT__IFU__DOT__waddr = VL_RAND_RESET_I(8);
-    vlSelf->top_ysyx_24110017__DOT__IFU__DOT__raddr2 = VL_RAND_RESET_I(8);
-    for (int __Vi0 = 0; __Vi0 < 256; ++__Vi0) {
+    VL_RAND_RESET_W(256, vlSelf->top_ysyx_24110017__DOT__IFU__DOT__waddr);
+    VL_RAND_RESET_W(256, vlSelf->top_ysyx_24110017__DOT__IFU__DOT__raddr2);
+    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
         vlSelf->top_ysyx_24110017__DOT__IFU__DOT__IM__DOT__rf[__Vi0] = VL_RAND_RESET_I(32);
     }
     vlSelf->top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hdc3969ba__0 = 0;
@@ -772,8 +754,8 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___ctor_var_reset(Vtop_ysyx_241100
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h31150b40__0 = 0;
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hece52006__0 = 0;
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hd43fef8a__0 = 0;
-    vlSelf->__VdfgTmp_hfab7399b__0 = 0;
-    vlSelf->__VdfgTmp_h67df1909__0 = 0;
+    vlSelf->__VdfgTmp_ha49b2b96__0 = 0;
+    vlSelf->__VdfgTmp_hbfd751e9__0 = 0;
     vlSelf->__Vfunc_top_ysyx_24110017__DOT__EXU__DOT__pmem_read__2__Vfuncout = 0;
     vlSelf->__Vtrigrprev__TOP__clk = VL_RAND_RESET_I(1);
     for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {

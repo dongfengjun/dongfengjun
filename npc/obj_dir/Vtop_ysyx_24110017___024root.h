@@ -30,8 +30,6 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ top_ysyx_24110017__DOT____VdfgTmp_h4e2b3a6e__0;
         CData/*0:0*/ top_ysyx_24110017__DOT____VdfgTmp_h4e2d1a8e__0;
         CData/*0:0*/ top_ysyx_24110017__DOT__PCU__DOT__ecall_en;
-        CData/*7:0*/ top_ysyx_24110017__DOT__IFU__DOT__waddr;
-        CData/*7:0*/ top_ysyx_24110017__DOT__IFU__DOT__raddr2;
         CData/*4:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hdc3969ba__0;
         CData/*0:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_he7ae3448__0;
         CData/*0:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hcbe0b758__0;
@@ -57,6 +55,8 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         IData/*31:0*/ top_ysyx_24110017__DOT__mtvec;
         IData/*31:0*/ top_ysyx_24110017__DOT__PCU__DOT____VdfgTmp_h051484d1__0;
         IData/*31:0*/ top_ysyx_24110017__DOT__IFU__DOT__wdata;
+        VlWide<8>/*255:0*/ top_ysyx_24110017__DOT__IFU__DOT__waddr;
+        VlWide<8>/*255:0*/ top_ysyx_24110017__DOT__IFU__DOT__raddr2;
         IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT__rdata;
         IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgExtracted_h4a41356a__0;
         IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h56110f4f__0;
@@ -71,13 +71,13 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h31150b40__0;
         IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hece52006__0;
         IData/*31:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_hd43fef8a__0;
-        IData/*31:0*/ __VdfgTmp_hfab7399b__0;
-        IData/*31:0*/ __VdfgTmp_h67df1909__0;
+        IData/*31:0*/ __VdfgTmp_ha49b2b96__0;
+        IData/*31:0*/ __VdfgTmp_hbfd751e9__0;
         IData/*31:0*/ __Vfunc_top_ysyx_24110017__DOT__EXU__DOT__pmem_read__2__Vfuncout;
         IData/*31:0*/ __VstlIterCount;
         IData/*31:0*/ __VactIterCount;
         QData/*63:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h72806210__0;
-        VlUnpacked<IData/*31:0*/, 256> top_ysyx_24110017__DOT__IFU__DOT__IM__DOT__rf;
+        VlUnpacked<IData/*31:0*/, 2> top_ysyx_24110017__DOT__IFU__DOT__IM__DOT__rf;
         VlUnpacked<IData/*31:0*/, 32> top_ysyx_24110017__DOT__RF__DOT__rf;
     };
     struct {
