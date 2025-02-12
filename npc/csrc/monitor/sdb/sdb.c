@@ -26,6 +26,7 @@ void init_wp_pool();
 void sdb_watchpoint_display();
 void create_watchpoint(char* args);
 void delete_watchpoint(int no);
+int pmem_read(int raddr);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
