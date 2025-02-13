@@ -13,11 +13,11 @@ void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;//中断
 
 #ifdef CONFIG_DIFFTEST
 
-static bool is_skip_ref = false;
+static int is_skip_ref = 0;
 
 void difftest_skip_ref() {
   //printf("abc\n");
-	is_skip_ref = true;
+	is_skip_ref = 2;
 }
 
 void init_difftest(char *ref_so_file, long img_size, int port) {
@@ -97,9 +97,9 @@ static void checkregs(CPU_state *ref, vaddr_t pc) {//check regs
 void difftest_step(vaddr_t pc, vaddr_t npc) {//执行一步差异测试
 	CPU_state ref_r;
 	
-	if(is_skip_ref) {
+	if(is_skip_ref > 0) {
 		ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
-		is_skip_ref = false;
+		is_skip_ref --;
 		return;
 	}
 
