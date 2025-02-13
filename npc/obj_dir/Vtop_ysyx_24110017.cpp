@@ -12,14 +12,8 @@
 Vtop_ysyx_24110017::Vtop_ysyx_24110017(VerilatedContext* _vcontextp__, const char* _vcname__)
     : VerilatedModel{*_vcontextp__}
     , vlSymsp{new Vtop_ysyx_24110017__Syms(contextp(), _vcname__, this)}
-    , Sta_RegisterFile__02Eclk{vlSymsp->TOP.Sta_RegisterFile__02Eclk}
-    , top_ysyx_24110017__02Eclk{vlSymsp->TOP.top_ysyx_24110017__02Eclk}
-    , waddr{vlSymsp->TOP.waddr}
-    , wen{vlSymsp->TOP.wen}
-    , raddr1{vlSymsp->TOP.raddr1}
+    , clk{vlSymsp->TOP.clk}
     , rst{vlSymsp->TOP.rst}
-    , wdata{vlSymsp->TOP.wdata}
-    , r1{vlSymsp->TOP.r1}
     , pc{vlSymsp->TOP.pc}
     , dnpc{vlSymsp->TOP.dnpc}
     , inst{vlSymsp->TOP.inst}

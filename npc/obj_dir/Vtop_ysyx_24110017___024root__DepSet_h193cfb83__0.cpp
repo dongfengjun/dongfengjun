@@ -7,67 +7,19 @@
 
 #include "Vtop_ysyx_24110017___024root.h"
 
-VL_INLINE_OPT void Vtop_ysyx_24110017___024root___ico_sequent__TOP__0(Vtop_ysyx_24110017___024root* vlSelf) {
-    if (false && vlSelf) {}  // Prevent unused
-    Vtop_ysyx_24110017__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop_ysyx_24110017___024root___ico_sequent__TOP__0\n"); );
-    // Body
-    vlSelf->r1 = ((0U == (IData)(vlSelf->raddr1)) ? 0U
-                   : vlSelf->Sta_RegisterFile__DOT__rf
-                  [vlSelf->raddr1]);
-}
-
-void Vtop_ysyx_24110017___024root___eval_ico(Vtop_ysyx_24110017___024root* vlSelf) {
-    if (false && vlSelf) {}  // Prevent unused
-    Vtop_ysyx_24110017__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop_ysyx_24110017___024root___eval_ico\n"); );
-    // Body
-    if (vlSelf->__VicoTriggered.at(0U)) {
-        Vtop_ysyx_24110017___024root___ico_sequent__TOP__0(vlSelf);
-    }
-}
-
 void Vtop_ysyx_24110017___024root___eval_act(Vtop_ysyx_24110017___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vtop_ysyx_24110017__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop_ysyx_24110017___024root___eval_act\n"); );
 }
 
+void Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__IFU__DOT__pmem_read_TOP(IData/*31:0*/ raddr, IData/*31:0*/ &pmem_read__Vfuncrtn);
+void Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__EXU__DOT__pmem_write_TOP(IData/*31:0*/ waddr, IData/*31:0*/ wdata, CData/*7:0*/ wmask);
+
 VL_INLINE_OPT void Vtop_ysyx_24110017___024root___nba_sequent__TOP__0(Vtop_ysyx_24110017___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vtop_ysyx_24110017__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop_ysyx_24110017___024root___nba_sequent__TOP__0\n"); );
-    // Init
-    CData/*7:0*/ __Vdlyvdim0__Sta_RegisterFile__DOT__rf__v0;
-    __Vdlyvdim0__Sta_RegisterFile__DOT__rf__v0 = 0;
-    IData/*31:0*/ __Vdlyvval__Sta_RegisterFile__DOT__rf__v0;
-    __Vdlyvval__Sta_RegisterFile__DOT__rf__v0 = 0;
-    CData/*0:0*/ __Vdlyvset__Sta_RegisterFile__DOT__rf__v0;
-    __Vdlyvset__Sta_RegisterFile__DOT__rf__v0 = 0;
-    // Body
-    __Vdlyvset__Sta_RegisterFile__DOT__rf__v0 = 0U;
-    if (vlSelf->wen) {
-        __Vdlyvval__Sta_RegisterFile__DOT__rf__v0 = vlSelf->wdata;
-        __Vdlyvset__Sta_RegisterFile__DOT__rf__v0 = 1U;
-        __Vdlyvdim0__Sta_RegisterFile__DOT__rf__v0 
-            = vlSelf->waddr;
-    }
-    if (__Vdlyvset__Sta_RegisterFile__DOT__rf__v0) {
-        vlSelf->Sta_RegisterFile__DOT__rf[__Vdlyvdim0__Sta_RegisterFile__DOT__rf__v0] 
-            = __Vdlyvval__Sta_RegisterFile__DOT__rf__v0;
-    }
-    vlSelf->r1 = ((0U == (IData)(vlSelf->raddr1)) ? 0U
-                   : vlSelf->Sta_RegisterFile__DOT__rf
-                  [vlSelf->raddr1]);
-}
-
-void Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__IFU__DOT__pmem_read_TOP(IData/*31:0*/ raddr, IData/*31:0*/ &pmem_read__Vfuncrtn);
-void Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__EXU__DOT__pmem_write_TOP(IData/*31:0*/ waddr, IData/*31:0*/ wdata, CData/*7:0*/ wmask);
-
-VL_INLINE_OPT void Vtop_ysyx_24110017___024root___nba_sequent__TOP__1(Vtop_ysyx_24110017___024root* vlSelf) {
-    if (false && vlSelf) {}  // Prevent unused
-    Vtop_ysyx_24110017__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop_ysyx_24110017___024root___nba_sequent__TOP__1\n"); );
     // Init
     CData/*4:0*/ __Vdlyvdim0__top_ysyx_24110017__DOT__RF__DOT__rf__v0;
     __Vdlyvdim0__top_ysyx_24110017__DOT__RF__DOT__rf__v0 = 0;
@@ -786,17 +738,10 @@ void Vtop_ysyx_24110017___024root___eval_nba(Vtop_ysyx_24110017___024root* vlSel
     // Body
     if (vlSelf->__VnbaTriggered.at(0U)) {
         Vtop_ysyx_24110017___024root___nba_sequent__TOP__0(vlSelf);
-    }
-    if (vlSelf->__VnbaTriggered.at(1U)) {
-        Vtop_ysyx_24110017___024root___nba_sequent__TOP__1(vlSelf);
         vlSelf->__Vm_traceActivity[1U] = 1U;
     }
 }
 
-void Vtop_ysyx_24110017___024root___eval_triggers__ico(Vtop_ysyx_24110017___024root* vlSelf);
-#ifdef VL_DEBUG
-VL_ATTR_COLD void Vtop_ysyx_24110017___024root___dump_triggers__ico(Vtop_ysyx_24110017___024root* vlSelf);
-#endif  // VL_DEBUG
 void Vtop_ysyx_24110017___024root___eval_triggers__act(Vtop_ysyx_24110017___024root* vlSelf);
 #ifdef VL_DEBUG
 VL_ATTR_COLD void Vtop_ysyx_24110017___024root___dump_triggers__act(Vtop_ysyx_24110017___024root* vlSelf);
@@ -810,29 +755,10 @@ void Vtop_ysyx_24110017___024root___eval(Vtop_ysyx_24110017___024root* vlSelf) {
     Vtop_ysyx_24110017__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop_ysyx_24110017___024root___eval\n"); );
     // Init
-    CData/*0:0*/ __VicoContinue;
-    VlTriggerVec<2> __VpreTriggered;
+    VlTriggerVec<1> __VpreTriggered;
     IData/*31:0*/ __VnbaIterCount;
     CData/*0:0*/ __VnbaContinue;
     // Body
-    vlSelf->__VicoIterCount = 0U;
-    __VicoContinue = 1U;
-    while (__VicoContinue) {
-        __VicoContinue = 0U;
-        Vtop_ysyx_24110017___024root___eval_triggers__ico(vlSelf);
-        if (vlSelf->__VicoTriggered.any()) {
-            __VicoContinue = 1U;
-            if (VL_UNLIKELY((0x64U < vlSelf->__VicoIterCount))) {
-#ifdef VL_DEBUG
-                Vtop_ysyx_24110017___024root___dump_triggers__ico(vlSelf);
-#endif
-                VL_FATAL_MT("vsrc/RegisterFile.v", 1, "", "Input combinational region did not converge.");
-            }
-            vlSelf->__VicoIterCount = ((IData)(1U) 
-                                       + vlSelf->__VicoIterCount);
-            Vtop_ysyx_24110017___024root___eval_ico(vlSelf);
-        }
-    }
     __VnbaIterCount = 0U;
     __VnbaContinue = 1U;
     while (__VnbaContinue) {
@@ -849,7 +775,7 @@ void Vtop_ysyx_24110017___024root___eval(Vtop_ysyx_24110017___024root* vlSelf) {
 #ifdef VL_DEBUG
                     Vtop_ysyx_24110017___024root___dump_triggers__act(vlSelf);
 #endif
-                    VL_FATAL_MT("vsrc/RegisterFile.v", 1, "", "Active region did not converge.");
+                    VL_FATAL_MT("vsrc/top_ysyx_24110017.v", 1, "", "Active region did not converge.");
                 }
                 vlSelf->__VactIterCount = ((IData)(1U) 
                                            + vlSelf->__VactIterCount);
@@ -864,7 +790,7 @@ void Vtop_ysyx_24110017___024root___eval(Vtop_ysyx_24110017___024root* vlSelf) {
 #ifdef VL_DEBUG
                 Vtop_ysyx_24110017___024root___dump_triggers__nba(vlSelf);
 #endif
-                VL_FATAL_MT("vsrc/RegisterFile.v", 1, "", "NBA region did not converge.");
+                VL_FATAL_MT("vsrc/top_ysyx_24110017.v", 1, "", "NBA region did not converge.");
             }
             __VnbaIterCount = ((IData)(1U) + __VnbaIterCount);
             Vtop_ysyx_24110017___024root___eval_nba(vlSelf);
@@ -878,14 +804,8 @@ void Vtop_ysyx_24110017___024root___eval_debug_assertions(Vtop_ysyx_24110017___0
     Vtop_ysyx_24110017__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop_ysyx_24110017___024root___eval_debug_assertions\n"); );
     // Body
-    if (VL_UNLIKELY((vlSelf->Sta_RegisterFile__02Eclk 
-                     & 0xfeU))) {
-        Verilated::overWidthError("Sta_RegisterFile.clk");}
-    if (VL_UNLIKELY((vlSelf->wen & 0xfeU))) {
-        Verilated::overWidthError("wen");}
-    if (VL_UNLIKELY((vlSelf->top_ysyx_24110017__02Eclk 
-                     & 0xfeU))) {
-        Verilated::overWidthError("top_ysyx_24110017.clk");}
+    if (VL_UNLIKELY((vlSelf->clk & 0xfeU))) {
+        Verilated::overWidthError("clk");}
     if (VL_UNLIKELY((vlSelf->rst & 0xfeU))) {
         Verilated::overWidthError("rst");}
 }

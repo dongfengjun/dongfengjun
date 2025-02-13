@@ -54,23 +54,6 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017_
 }
 
 #ifdef VL_DEBUG
-VL_ATTR_COLD void Vtop_ysyx_24110017___024root___dump_triggers__ico(Vtop_ysyx_24110017___024root* vlSelf);
-#endif  // VL_DEBUG
-
-void Vtop_ysyx_24110017___024root___eval_triggers__ico(Vtop_ysyx_24110017___024root* vlSelf) {
-    if (false && vlSelf) {}  // Prevent unused
-    Vtop_ysyx_24110017__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop_ysyx_24110017___024root___eval_triggers__ico\n"); );
-    // Body
-    vlSelf->__VicoTriggered.at(0U) = (0U == vlSelf->__VicoIterCount);
-#ifdef VL_DEBUG
-    if (VL_UNLIKELY(vlSymsp->_vm_contextp__->debug())) {
-        Vtop_ysyx_24110017___024root___dump_triggers__ico(vlSelf);
-    }
-#endif
-}
-
-#ifdef VL_DEBUG
 VL_ATTR_COLD void Vtop_ysyx_24110017___024root___dump_triggers__act(Vtop_ysyx_24110017___024root* vlSelf);
 #endif  // VL_DEBUG
 
@@ -79,14 +62,9 @@ void Vtop_ysyx_24110017___024root___eval_triggers__act(Vtop_ysyx_24110017___024r
     Vtop_ysyx_24110017__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop_ysyx_24110017___024root___eval_triggers__act\n"); );
     // Body
-    vlSelf->__VactTriggered.at(0U) = ((IData)(vlSelf->Sta_RegisterFile__02Eclk) 
-                                      & (~ (IData)(vlSelf->__Vtrigrprev__TOP__Sta_RegisterFile__02Eclk)));
-    vlSelf->__VactTriggered.at(1U) = ((IData)(vlSelf->top_ysyx_24110017__02Eclk) 
-                                      & (~ (IData)(vlSelf->__Vtrigrprev__TOP__top_ysyx_24110017__02Eclk)));
-    vlSelf->__Vtrigrprev__TOP__Sta_RegisterFile__02Eclk 
-        = vlSelf->Sta_RegisterFile__02Eclk;
-    vlSelf->__Vtrigrprev__TOP__top_ysyx_24110017__02Eclk 
-        = vlSelf->top_ysyx_24110017__02Eclk;
+    vlSelf->__VactTriggered.at(0U) = ((IData)(vlSelf->clk) 
+                                      & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clk)));
+    vlSelf->__Vtrigrprev__TOP__clk = vlSelf->clk;
 #ifdef VL_DEBUG
     if (VL_UNLIKELY(vlSymsp->_vm_contextp__->debug())) {
         Vtop_ysyx_24110017___024root___dump_triggers__act(vlSelf);

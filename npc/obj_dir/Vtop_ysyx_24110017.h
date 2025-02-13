@@ -26,14 +26,8 @@ class Vtop_ysyx_24110017 VL_NOT_FINAL : public VerilatedModel {
     // PORTS
     // The application code writes and reads these signals to
     // propagate new values into/out from the Verilated model.
-    VL_IN8(&Sta_RegisterFile__02Eclk,0,0);
-    VL_IN8(&top_ysyx_24110017__02Eclk,0,0);
-    VL_IN8(&waddr,7,0);
-    VL_IN8(&wen,0,0);
-    VL_IN8(&raddr1,7,0);
+    VL_IN8(&clk,0,0);
     VL_IN8(&rst,0,0);
-    VL_IN(&wdata,31,0);
-    VL_OUT(&r1,31,0);
     VL_OUT(&pc,31,0);
     VL_OUT(&dnpc,31,0);
     VL_OUT(&inst,31,0);
