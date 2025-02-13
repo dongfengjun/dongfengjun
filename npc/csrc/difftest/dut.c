@@ -16,7 +16,7 @@ void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;//中断
 static bool is_skip_ref = false;
 
 void difftest_skip_ref() {
-  printf("abc\n");
+  //printf("abc\n");
 	is_skip_ref = true;
 }
 
