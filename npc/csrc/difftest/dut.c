@@ -16,7 +16,8 @@ void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;//中断
 static bool is_skip_ref = false;
 
 void difftest_skip_ref() {
-  is_skip_ref = true;
+  printf("abc\n");
+	is_skip_ref = true;
 }
 
 void init_difftest(char *ref_so_file, long img_size, int port) {
