@@ -26,7 +26,6 @@ int pmem_read(int raddr) {
 	}
 	else if(raddr == 0xa0000048) {
 		#ifdef CONFIG_DIFFTEST
-			printf("abc\n");
 			difftest_skip_ref();
 		#endif
 		result = (uint32_t)us;
