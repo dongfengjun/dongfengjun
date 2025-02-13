@@ -18,10 +18,12 @@ int pmem_read(int raddr) {
 	uint32_t result;
 #ifdef CONFIG_DEVICE
 	if (raddr == 0xa000004c) {
+		difftest_skip_ref();
 		us = get_time();
 		result = us >> 32;
 	}
 	else if(raddr == 0xa0000048) {
+		difftest_skip_ref();
 		result = (uint32_t)us;
 	}
 	else {
@@ -47,6 +49,7 @@ void pmem_write(int waddr, int wdata, char wmask) {
 #endif
 #ifdef CONFIG_DEVICE
 	if(waddr == 0xa00003F8) {
+		difftest_skip_ref();
 		putchar((char)wdata);
 		//putc((char)wdata, stderr);
 		return;
