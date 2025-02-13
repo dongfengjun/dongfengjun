@@ -10,7 +10,11 @@ void (*ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction) =
 void (*ref_difftest_regcpy)(void *dut, bool direction) = NULL;
 void (*ref_difftest_exec)(uint64_t n) = NULL;
 void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;//中断
+
 #ifdef CONFIG_DIFFTEST
+
+static bool is_skip_ref = false;
+
 void init_difftest(char *ref_so_file, long img_size, int port) {
 	assert(ref_so_file != NULL);
 	void *handle;
@@ -87,6 +91,13 @@ static void checkregs(CPU_state *ref, vaddr_t pc) {//check regs
 
 void difftest_step(vaddr_t pc, vaddr_t npc) {//执行一步差异测试
 	CPU_state ref_r;
+	
+	if(is_skip_ref) {
+		ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
+		is_skip_ref = false;
+		return;
+	}
+
 	ref_difftest_exec(1);//ref 执行1
 	ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);//regs from ref to dut
 	checkregs(&ref_r, pc);//check regs dut:myregs
