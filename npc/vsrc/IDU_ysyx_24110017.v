@@ -58,12 +58,12 @@ assign imm = (op == 7'b0110111 || op == 7'b0010111) ? immU
 /***riscv32e-control***/
 assign wr_en = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 || op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011 || op == 7'b0110011) ? 1'b1 : 1'b0;
 
-/***DPIC***
+/***DPIC***/
 always@(*) begin
 	if(inst == 32'b00000000000100000000000001110011) begin
 		npc_trap();
 	end
 end
-***E*N*D***/
+/***E*N*D***/
 
 endmodule
