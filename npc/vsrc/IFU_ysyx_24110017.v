@@ -1,5 +1,6 @@
 module IFU_ysyx_24110017(clk,rst,pc,inst);
 input clk;
+input rst;
 input [31:0]pc;
 output [31:0]inst;
 wire [31:0]pc;
