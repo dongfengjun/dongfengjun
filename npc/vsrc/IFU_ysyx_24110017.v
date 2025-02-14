@@ -29,7 +29,7 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,pc[7:0],inst);
 /***多周期sram***/
 import "DPI-C" function int pmem_read(input int raddr);
 
-reg [31:0]rdata
+reg [31:0]rdata;
 always @(*) begin
   if(pc != 32'h0) begin
     rdata = pmem_read(pc);
