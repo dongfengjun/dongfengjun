@@ -1,4 +1,4 @@
-module IFU_ysyx_24110017(clk,pc,inst);
+module IFU_ysyx_24110017(clk,rst,pc,inst);
 input clk;
 input [31:0]pc;
 output [31:0]inst;
