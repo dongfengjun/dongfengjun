@@ -46,6 +46,6 @@ always @(posedge clk) begin
 	else begin
 		inst <= rdata;
 	end
-endmodule
+end
 
 endmodule
