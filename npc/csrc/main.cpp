@@ -26,9 +26,9 @@ word_t csrs_display(int i) {
 
 bool RUNNING;
 void npc_trap() {
-  extern int gpr_reg_display(int addr);//抓取a0
-  svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017.RF"));
-  int a0 = gpr_reg_display(10);
+  //extern int gpr_reg_display(int addr);//抓取a0
+  //svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017.RF"));
+  int a0 = gpr_regs_display(10);
   char str[15];
   Log("npc: %s at pc = " FMT_WORD, (a0 == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED)), top->pc);
                                                                             
