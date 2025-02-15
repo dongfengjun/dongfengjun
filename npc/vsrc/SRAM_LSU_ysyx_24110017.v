@@ -14,7 +14,7 @@ wire [31:0]wdata;
 wire [7:0]wmask;
 wire [31:0]raddr;
 reg [31:0]rdata;
-reg [31:0]tmp;
+wire [31:0]tmp;
 
 import "DPI-C" function int pmem_read(input int raddr);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
