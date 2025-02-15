@@ -103,7 +103,7 @@ assign csrs_in =
       ({32{(op == 7'b1110011) && (sel == 3'b000)}}
           & (csrs &~r1)) ; //I_csrrc
 
-/***sw sh***/
+/***load*store***
 wire [31:0]raddr;
 reg [31:0]rdata;
 wire valid,wen;
@@ -141,7 +141,10 @@ end
 Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 ***E*N*D***/
 
-/***多周期***/
+/***多周期***
 SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,valid,wen,waddr,wdata,wmask,raddr,rdata);
+/***E*N*D***/
+
+LSU_ysyx_24110017 LSU_ysyx_24110017(clk,rst,op,r1,r2,offset,rdata);
 
 endmodule
