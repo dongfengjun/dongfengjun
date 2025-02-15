@@ -14,19 +14,29 @@ wire [31:0]wdata;
 wire [7:0]wmask;
 wire [31:0]raddr;
 reg [31:0]rdata;
+reg [31:0]tmp;
 
 import "DPI-C" function int pmem_read(input int raddr);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
 
 always @(*) begin
 	if(valid) begin
-		rdata = pmem_read(raddr);
+		tmp = pmem_read(raddr);
 		if(wen) begin
 			pmem_write(waddr,wdata,wmask);
 		end
 	end
 	else begin
-		rdata = 0;
+		rdata = 32'b0;
+	end
+end
+
+always @(posedge clk) begin
+	if(rst) begin
+		rdata <= 32'b0;
+	end
+	else begin
+		rdata <= tmp;
 	end
 end
 
