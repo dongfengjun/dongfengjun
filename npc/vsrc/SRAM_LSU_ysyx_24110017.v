@@ -5,12 +5,14 @@ input valid;
 input wen;
 input [31:0]waddr;
 input [31:0]wdata;
+input [7:0]wmask;
 input [31:0]raddr;
 output [31:0]rdata;
 
 wire [31:0]waddr;
 wire [31:0]wdata;
-wire [31:0]waddr;
+wire [7:0]wmask;
+wire [31:0]raddr;
 reg [31:0]rdata;
 
 always @(*) begin

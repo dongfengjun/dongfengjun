@@ -141,6 +141,6 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 ***E*N*D***/
 
 /***多周期***/
-SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,valid,wen,waddr,wdata,raddr,rdata);
+SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,valid,wen,waddr,wdata,wmask,raddr,rdata);
 
 endmodule
