@@ -18,7 +18,7 @@ always @(*) begin
 	end
 end
 
-always @(*) begin
+always @(posedge clk) begin
 	if(rst) begin
 		rdata <= 32'h0;
 	end
