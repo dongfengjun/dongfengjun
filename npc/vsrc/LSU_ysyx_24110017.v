@@ -16,7 +16,7 @@ assign valid = (op == 7'b0100011 || op == 7'b0000011) ? 1'b1 : 1'b0;
 assign wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
 assign waddr = (op == 7'b0100011) ? (r1 + offset) : 32'h80000000;
 assign wdata = (op == 7'b0100011) ? r2 : 32'b0;
-assign wmask = (op == 7'b0100011 && sel == 3'b000) ? 8'b00000001
+assign wmask = (op == 7'b0100011 && function3 == 3'b000) ? 8'b00000001
  : (op == 7'b0100011 && sel == 3'b001) ? 8'b00000011
  : (op == 7'b0100011 && sel == 3'b010) ? 8'b00001111
  : 8'b0;
