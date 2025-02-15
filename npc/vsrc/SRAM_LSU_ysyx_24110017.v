@@ -1,4 +1,4 @@
-module SRAM_LSU_ysyx_24110017(clk,rst,valid,wen,waddr,wdata,raddr,rdata);
+module SRAM_LSU_ysyx_24110017(clk,rst,valid,wen,waddr,wdata,wmask,raddr,rdata);
 input clk;
 input rst;
 input valid;
