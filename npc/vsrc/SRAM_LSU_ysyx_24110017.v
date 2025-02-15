@@ -27,7 +27,7 @@ always @(*) begin
 		end
 	end
 	else begin
-		rdata = 32'b0;
+		tmp = 32'b0;
 	end
 end
 
