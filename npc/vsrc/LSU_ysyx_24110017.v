@@ -1,9 +1,10 @@
-module LSU_ysyx_24110017(clk,rst,op,r1,r2,offset,rdata);
+module LSU_ysyx_24110017(clk,rst,op,r1,r2,offset,function3,rdata);
 input clk;
 input rst;
 input [6:0]op;
 input [31:0]r1,r2;
 input [31:0]offset;
+input [2:0]function3;
 output [31:0]rdata;
 
 wire valid,wen;
