@@ -2,7 +2,7 @@ module SRAM_IFU_ysyx_24110017(clk,rst,raddr,rdata);
 input clk;
 input rst;
 input [31:0]raddr;
-otput [31:0]rdata;
+output [31:0]rdata;
 
 reg[31:0]tmp;
 import "DPI-C" function int pmem_read(input int raddr);
