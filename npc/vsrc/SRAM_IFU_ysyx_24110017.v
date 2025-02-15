@@ -4,6 +4,7 @@ input rst;
 input [31:0]raddr;
 output [31:0]rdata;
 
+wire [31:0]raddr,rdata;
 reg[31:0]tmp;
 import "DPI-C" function int pmem_read(input int raddr);
 
