@@ -1,5 +1,6 @@
-module EXU_ysyx_24110017(clk,a,b,sel,op,funct7,shamt,offset,r1,r2,csrs,csrs_in,res);
+module EXU_ysyx_24110017(clk,rst,a,b,sel,op,funct7,shamt,offset,r1,r2,csrs,csrs_in,res);
 input clk;
+input rst;
 input [31:0] a,b;
 input [2:0] sel;
 input [6:0] op;
