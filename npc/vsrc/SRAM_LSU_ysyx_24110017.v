@@ -24,3 +24,5 @@ always @(*) begin
 		rdata = 0;
 	end
 end
+
+endmodule
