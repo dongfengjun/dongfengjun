@@ -119,7 +119,7 @@ assign wmask = (op == 7'b0100011 && sel == 3'b000) ? 8'b00000001
  : 8'b0;
 assign raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000; //lb~lhu
 
-/***DPIC***/
+/***单周期*DPIC***
 import "DPI-C" function int pmem_read(input int raddr);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
 
@@ -136,8 +136,11 @@ always @(*) begin
 end
 /***E*N*D***/
 
-/***yosys-sta***
+/***单周期*yosys-sta***
 Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 ***E*N*D***/
+
+/***多周期***/
+SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,valid,wen,waddr,wdata,raddr,rdata);
 
 endmodule
