@@ -28,26 +28,7 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,pc[7:0],inst);
 /***E*N*D***/
 
 /***多周期sram***/
-import "DPI-C" function int pmem_read(input int raddr);
-
-reg [31:0]rdata;
-always @(*) begin
-  if(pc != 32'h0) begin
-    rdata = pmem_read(pc);
-  end
-  else begin
-    rdata = 32'h0;
-  end
-end
-
-always @(posedge clk) begin
-	if(rst) begin
-		inst <= 32'h0;
-	end
-	else begin
-		inst <= rdata;
-	end
-end
+SRAM_IFU_ysyx_24110017 SRAM_IFU_ysyx_24110017(clk,rst,pc,inst);
 /***E*N*D***/
 
 endmodule
