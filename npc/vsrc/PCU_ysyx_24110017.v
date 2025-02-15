@@ -34,12 +34,12 @@ assign mret_en = (op == 7'b1110011 && offset == 32'b1100000010 && funct3 == 3'b0
 
 assign dnpc = (jalen) ? (pc + offset - 4)	//jal
 	: (jalren) ? ((r1 + offset) & ~1) //jalr
-	: (beqen) ? (pc + offset)	//beq
-	: (bneen) ? (pc + offset)	//bne
-	: (blten) ? (pc + offset)	//blt
-	: (bgeen) ? (pc + offset)	//bge
-	: (bltuen) ? (pc + offset)	//bltu
-	:	(bgeuen) ? (pc + offset)	//bgeu
+	: (beqen) ? (pc + offset - 4)	//beq
+	: (bneen) ? (pc + offset - 4)	//bne
+	: (blten) ? (pc + offset - 4)	//blt
+	: (bgeen) ? (pc + offset - 4)	//bge
+	: (bltuen) ? (pc + offset - 4)	//bltu
+	:	(bgeuen) ? (pc + offset - 4)	//bgeu
 	: (ecall_en) ? mtvec  //ecall
 	: (mret_en) ? mepc  //mret
 	: pc + 4;
