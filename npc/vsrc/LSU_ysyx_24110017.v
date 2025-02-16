@@ -8,7 +8,8 @@ input [2:0]function3;
 output [31:0]rdata;
 
 wire valid,wen;
-wire [31:0]raddr,rdata;
+wire [31:0]raddr;
+reg [31:0]rdata;
 wire [31:0]waddr, wdata;
 wire [7:0]wmask;
  
