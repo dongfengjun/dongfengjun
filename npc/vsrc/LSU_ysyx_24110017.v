@@ -9,7 +9,6 @@ output [31:0]rdata;
 
 wire valid,wen;
 wire [31:0]raddr;
-reg [31:0]rdata;
 wire [31:0]waddr, wdata;
 wire [7:0]wmask;
  
@@ -27,6 +26,7 @@ assign raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
 import "DPI-C" function int pmem_read(input int raddr);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
 
+reg [31:0]rdata;
 always @(*) begin
   if (valid) begin // 有读写请求时
     rdata = pmem_read(raddr);
@@ -45,6 +45,7 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 ***E*N*D***/
 
 /***多周期***
+wire [31:0]wdata;
 SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,valid,wen,waddr,wdata,wmask,raddr,rdata);
 /***E*N*D***/
 
