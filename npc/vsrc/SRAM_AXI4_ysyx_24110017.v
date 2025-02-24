@@ -87,8 +87,8 @@
     //------------------------------------------------
     wire     slv_reg_rden;
     wire     slv_reg_wren;
-    //reg [C_S_AXI_DATA_WIDTH-1:0]     reg_data_out;
-    wire [C_S_AXI_DATA_WIDTH-1:0]     reg_data_out;
+    reg [C_S_AXI_DATA_WIDTH-1:0]     reg_data_out;
+    //wire [C_S_AXI_DATA_WIDTH-1:0]     reg_data_out;
     integer  byte_index;
     reg  aw_en;
  
