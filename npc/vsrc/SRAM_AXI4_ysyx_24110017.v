@@ -303,7 +303,7 @@
     always @(*)
     begin
        Address decoding for reading registers
-      reg_data_out = pmem_read(axi_araddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB]);
+      reg_data_out = pmem_read(axi_araddr));
     end
  
     // Output register or memory read data
