@@ -1,4 +1,4 @@
-    module SRAM_AXI4 #
+    module SRAM_AXI4_ysyx_24110017 #
     (
         // Users to add parameters here
  
