@@ -302,7 +302,7 @@
     //begin
       // Address decoding for reading registers
       //reg_data_out = DPIC:pmem_read(axi_araddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB]);
-     assign reg_data_out = 32'hffffffff;
+     assign reg_data_out = 32'h00001111;
     //end
  
     // Output register or memory read data
