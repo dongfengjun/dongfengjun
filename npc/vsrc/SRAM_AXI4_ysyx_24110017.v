@@ -302,7 +302,7 @@
     assign slv_reg_rden = axi_arready & S_AXI_ARVALID & ~axi_rvalid;
     always @(*)
 		begin
-			if(pc != 32'h0)
+			if(axi_araddr != 32'h0)
 				reg_data_out = pmem_read(axi_araddr);
 			else 
 				reg_data_out = 32'h00000000;
