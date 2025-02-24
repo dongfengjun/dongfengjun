@@ -302,7 +302,10 @@
     assign slv_reg_rden = axi_arready & S_AXI_ARVALID & ~axi_rvalid;
     always @(*)
 		begin
-			reg_data_out = pmem_read(axi_araddr);
+			if(pc != 32'h0)
+				reg_data_out = pmem_read(axi_araddr);
+			else 
+				reg_data_out = 32'h00000000;
 		end
  
     // Output register or memory read data
