@@ -302,7 +302,7 @@
     assign slv_reg_rden = axi_arready & S_AXI_ARVALID & ~axi_rvalid;
     always @(*)
 		begin
-			reg_data_out = pmem_read(axi_araddr));
+			reg_data_out = pmem_read(axi_araddr);
 		end
  
     // Output register or memory read data
