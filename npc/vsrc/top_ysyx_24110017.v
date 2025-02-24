@@ -42,7 +42,7 @@ wire INIT_AXI_TXN,ERROR,TXN_DONE,AXI_AWVALID,AXI_AWREADY,AXI_WVALID,AXI_WREADY,A
 
 PCU_ysyx_24110017 PCU(clk,rst,op,funct3,imm,r1,r2,mtvec,mepc,pc,dnpc,INIT_AXI_TXN,TXN_DONE);
 IDU_ysyx_24110017 IDU(inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,wr_en);
-RegisterFile_ysyx_24110017 #(5,32) RF (clk,xrd,rd,(wr_en&&TXN_DONE),raddr1,r1,raddr2,r2);
+RegisterFile_ysyx_24110017 #(5,32) RF (clk,xrd,rd,(wr_en&&TXN_DONE),raddr1,r1,raddr2,r2);//(wr_en&&TXN_DONE) 寄存器多个时钟周期不变
 Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk, rst, mepc_in, mepc, mepc_wen);
 Reg_ysyx_24110017 #(32, 32'h1800) mstatus_ysyx_24110017 (clk, rst, csrs_in, mstatus, mstatus_wen);
 Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk, rst, mcause_in, mcause, mcause_wen);
