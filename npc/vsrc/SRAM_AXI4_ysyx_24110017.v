@@ -1,5 +1,3 @@
-`timescale 1 ns / 1 ps
- 
     module SRAM_AXI4 #
     (
         // Users to add parameters here
@@ -191,13 +189,13 @@
     // These registers are cleared when reset (active low) is applied.
     // Slave register write enable is asserted when valid address and data are available
     // and the slave is ready to accept the write address and write data.
-    assign slv_reg_wren = axi_wready && S_AXI_WVALID && axi_awready && S_AXI_AWVALID;
- 
+    import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
+		assign slv_reg_wren = axi_wready && S_AXI_WVALID && axi_awready && S_AXI_AWVALID;
     always @( posedge S_AXI_ACLK )
     begin
       if (slv_reg_wren)
         begin
-            DPIC:pmem_write(axi_awaddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB],S_AXI_WDATA,S_AXI_WSTRB);    
+					pmem_write(axi_awaddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB],S_AXI_WDATA,S_AXI_WSTRB);
         end
     end   
  
@@ -298,11 +296,12 @@
     // Implement memory mapped register select and read logic generation
     // Slave register read enable is asserted when valid address is available
     // and the slave is ready to accept the read address.
+		import "DPI-C" function int pmem_read(input int raddr);
     assign slv_reg_rden = axi_arready & S_AXI_ARVALID & ~axi_rvalid;
     always @(*)
     begin
       // Address decoding for reading registers
-      reg_data_out = DPIC:pmem_read(axi_araddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB]);
+      reg_data_out = pmem_read(axi_araddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB]);
     end
  
     // Output register or memory read data
