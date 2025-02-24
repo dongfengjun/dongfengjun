@@ -85,7 +85,8 @@
     //------------------------------------------------
     wire     slv_reg_rden;
     wire     slv_reg_wren;
-    reg [C_S_AXI_DATA_WIDTH-1:0]     reg_data_out;
+    //reg [C_S_AXI_DATA_WIDTH-1:0]     reg_data_out;
+    wire [C_S_AXI_DATA_WIDTH-1:0]     reg_data_out;
     integer  byte_index;
     reg  aw_en;
  
@@ -161,7 +162,7 @@
  
     always @( posedge S_AXI_ACLK )
     begin
-      if ( S_AXI_ARESETN )
+      if ( S_AXI_ARESET )
         begin
           axi_wready <= 1'b0;
         end
@@ -189,13 +190,13 @@
     // These registers are cleared when reset (active low) is applied.
     // Slave register write enable is asserted when valid address and data are available
     // and the slave is ready to accept the write address and write data.
-    import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
-		assign slv_reg_wren = axi_wready && S_AXI_WVALID && axi_awready && S_AXI_AWVALID;
+    assign slv_reg_wren = axi_wready && S_AXI_WVALID && axi_awready && S_AXI_AWVALID;
+ 
     always @( posedge S_AXI_ACLK )
     begin
       if (slv_reg_wren)
         begin
-					pmem_write(axi_awaddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB],S_AXI_WDATA,S_AXI_WSTRB);
+          //DPIC:pmem_write(axi_awaddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB],S_AXI_WDATA,S_AXI_WSTRB);    
         end
     end   
  
@@ -207,7 +208,7 @@
  
     always @( posedge S_AXI_ACLK )
     begin
-      if ( S_AXI_ARESETN )
+      if ( S_AXI_ARESET )
         begin
           axi_bvalid  <= 0;
           axi_bresp   <= 2'b0;
@@ -241,7 +242,7 @@
  
     always @( posedge S_AXI_ACLK )
     begin
-      if ( S_AXI_ARESETN )
+      if ( S_AXI_ARESET )
         begin
           axi_arready <= 1'b0;
           axi_araddr  <= 32'b0;
@@ -272,7 +273,7 @@
     // cleared to zero on reset (active low). 
     always @( posedge S_AXI_ACLK )
     begin
-      if ( S_AXI_ARESETN )
+      if ( S_AXI_ARESET )
         begin
           axi_rvalid <= 0;
           axi_rresp  <= 0;
@@ -296,18 +297,18 @@
     // Implement memory mapped register select and read logic generation
     // Slave register read enable is asserted when valid address is available
     // and the slave is ready to accept the read address.
-		import "DPI-C" function int pmem_read(input int raddr);
     assign slv_reg_rden = axi_arready & S_AXI_ARVALID & ~axi_rvalid;
-    always @(*)
-    begin
+    //always @(*)
+    //begin
       // Address decoding for reading registers
-      reg_data_out = pmem_read(axi_araddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB]);
-    end
+      //reg_data_out = DPIC:pmem_read(axi_araddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB]);
+     assign reg_data_out = 32'hffffffff;
+    //end
  
     // Output register or memory read data
     always @( posedge S_AXI_ACLK )
     begin
-      if ( S_AXI_ARESETN )
+      if ( S_AXI_ARESET )
         begin
           axi_rdata  <= 0;
         end
