@@ -15,6 +15,7 @@ input TXN_DONE;
 
 reg [31:0]pc;
 wire [31:0]dnpc;
+
 assign INIT_AXI_TXN = 1'b1;
 
 
