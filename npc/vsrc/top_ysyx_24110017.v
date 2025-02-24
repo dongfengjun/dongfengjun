@@ -104,6 +104,7 @@ SRAM_AXI4_ysyx_24110017 SRAM_AXI4_ysyx_24110017(clk,rst,
         AXI_RREADY// 主机读数据ready，表示主机可以接受读取的数据和响应信息
 );
 
+
 /***riscv32 control***/
 assign raddr1 = rs1;
 assign raddr2 = (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? 5'd15 : rs2; //ecall

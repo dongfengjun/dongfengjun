@@ -22,11 +22,14 @@ always@(posedge clk)begin
 	if(rst)
 		pc <= 32'h80000000;
 	else if(TXN_DONE)
-		pc <= dnpc;
-		INIT_AXI_TXN <= 1'b1;
-	else
-		pc <= pc;
-		INIT_AXI_TXN <= 1'b0;
+		begin
+			pc <= dnpc;
+			INIT_AXI_TXN <= 1'b1;
+		end
+	else begin
+			pc <= pc;
+			INIT_AXI_TXN <= 1'b0;
+		end
 end
 
 wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
