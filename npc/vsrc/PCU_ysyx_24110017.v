@@ -15,7 +15,7 @@ input TXN_DONE;
 
 reg [31:0]pc;
 wire [31:0]dnpc;
-reg INIT_AXI_TXN;
+assign INIT_AXI_TXN = 1'b1;
 
 
 always@(posedge clk)begin
@@ -24,7 +24,7 @@ always@(posedge clk)begin
 	else if(TXN_DONE)
 		begin
 			pc <= dnpc;
-			INIT_AXI_TXN <= 1'b1;
+		//	INIT_AXI_TXN <= 1'b1;
 		end
 	else begin
 			pc <= pc;
