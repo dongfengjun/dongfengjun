@@ -28,7 +28,7 @@ always@(posedge clk)begin
 		end
 	else begin
 			pc <= pc;
-			INIT_AXI_TXN <= 1'b0;
+		//	INIT_AXI_TXN <= 1'b0;
 		end
 end
 
