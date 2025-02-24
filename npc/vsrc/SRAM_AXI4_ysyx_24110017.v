@@ -61,7 +61,9 @@
         input wire  S_AXI_RREADY
     );
  
-    // AXI4LITE signals
+    import "DPI-C" function int pmem_read(input int raddr);
+		import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
+		// AXI4LITE signals
     reg [C_S_AXI_ADDR_WIDTH-1 : 0]  axi_awaddr;
     reg     axi_awready;
     reg     axi_wready;
@@ -298,12 +300,11 @@
     // Slave register read enable is asserted when valid address is available
     // and the slave is ready to accept the read address.
     assign slv_reg_rden = axi_arready & S_AXI_ARVALID & ~axi_rvalid;
-    //always @(*)
-    //begin
-      // Address decoding for reading registers
-      //reg_data_out = DPIC:pmem_read(axi_araddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB]);
-     assign reg_data_out = 32'h00001111;
-    //end
+    always @(*)
+    begin
+       Address decoding for reading registers
+      reg_data_out = pmem_read(axi_araddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB]);
+    end
  
     // Output register or memory read data
     always @( posedge S_AXI_ACLK )
