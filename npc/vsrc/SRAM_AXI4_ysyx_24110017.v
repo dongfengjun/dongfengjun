@@ -140,7 +140,7 @@
  
     always @( posedge S_AXI_ACLK )
     begin
-      if ( S_AXI_ARESETN )
+      if ( S_AXI_ARESET )
         begin
           axi_awaddr <= 0;
         end
