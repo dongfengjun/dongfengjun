@@ -399,7 +399,7 @@
               end                                                  
               // Signals a new write address/ write data is        
               // available by user logic                           
-            else if (M_AXI_RVALID && axi_rready)                   
+            else if (M_AXI_RVALID && axi_rready M_AXI_RVALID && axi_rready && (mst_exec_state == (2'b10)))                   
               begin                                                
                 inst <= M_AXI_RDATA;
               end                                                  
