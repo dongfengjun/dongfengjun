@@ -417,7 +417,6 @@
             write_issued  <= 1'b0;                                                     
             start_single_read  <= 1'b0;                                                
             read_issued   <= 1'b0;                                                     
-            txn_done  <= 1'b0;                                                     
             ERROR <= 1'b0;
           end                                                                          
         else                                                                           
