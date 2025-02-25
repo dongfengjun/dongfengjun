@@ -128,7 +128,7 @@
     //The error register is asserted when any of the write response error, read response error or the data mismatch flags are asserted.
     reg     error_reg;
     //Flag marks the completion of comparison of the read data with the expected read data
-    reg     txn_done;
+    wire     txn_done;
     //Flag is asserted when the write index reaches the last write transction number
     reg     last_write;
  
@@ -432,7 +432,6 @@
                   begin                                                                
                     mst_exec_state  <= INIT_READ;                                     
                     ERROR <= 1'b0;
-                    txn_done <= 1'b0;
                   end                                                                  
                 else                                                                   
                   begin                                                                
@@ -502,7 +501,6 @@
                      // txn_done signal will be asseted to indicate success.           
                      ERROR <= error_reg;
                      mst_exec_state <= IDLE;                                   
-                     txn_done <= 1'b1;                                             
                  end                                                                 
                default :                                                               
                  begin                                                                 
@@ -583,7 +581,7 @@
           error_reg <= error_reg;                                                      
       end                                                                              
     // Add user logic here
- 
+		assign txn_done = (mst_exec_state == INIT_COMPARE) ? 1'b1:1'b0; 
     // User logic ends
  
     endmodule
