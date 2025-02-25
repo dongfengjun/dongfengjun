@@ -502,7 +502,7 @@
                      // txn_done signal will be asseted to indicate success.           
                      ERROR <= error_reg;
                      mst_exec_state <= IDLE;                                   
-                     txn_done <= 1'b1;                                             
+                     txn_done = 1'b1;                                             
                  end                                                                 
                default :                                                               
                  begin                                                                 
