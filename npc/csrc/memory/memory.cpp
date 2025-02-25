@@ -60,6 +60,7 @@ void init_mem() {
 }
 
 word_t paddr_read(paddr_t addr, int len) {
+	printf("read addr = %08x\n", addr);
   if (likely(in_pmem(addr))) return mem_read(addr, len);
   //IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
   out_of_bound(addr);
