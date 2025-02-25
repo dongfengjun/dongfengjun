@@ -26,7 +26,9 @@ word_t csrs_display(int i) {
 
 bool RUNNING;
 void npc_trap() {
-  int a0 = gpr_regs_display(10);
+  extern int gpr_reg_display(int addr);//抓取a0
+  svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017.RF"));
+  int a0 = gpr_reg_display(10);
   char str[15];
   Log("npc: %s at pc = " FMT_WORD, (a0 == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED)), top->pc);
                                                                             
@@ -37,25 +39,14 @@ void npc_trap() {
 #define MAX_INST_TO_PRINT 10//puts inst
 CPU_state cpu = {.gpr = {0}, .pc = 0x80000000};
 uint64_t g_nr_guest_inst = 0;
-static uint64_t g_timer = 0; //unit: us
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
 IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
 static bool g_print_step = false;
 uint8_t fopcode;
-
-static void statistic() {
-  IFNDEF(CONFIG_TARGET_AM, setlocale(LC_NUMERIC, ""));
-#define NUMBERIC_FMT MUXDEF(CONFIG_TARGET_AM, "%", "%'") PRIu64
-  Log("host time spent = " NUMBERIC_FMT " us", g_timer);
-  Log("total guest instructions = " NUMBERIC_FMT, g_nr_guest_inst);
-  if (g_timer > 0) Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
-  else Log("Finish running in less than 1 us and can not calculate the simulation frequency");
-}
-
 void assert_fail_msg() {
   isa_regs_display();
 	IFDEF(CONFIG_ITRACE, iringbuf_push(iringbuf));
-  statistic();
+  //statistic();
 }
 
 #ifdef CONFIG_ITRACE
@@ -256,7 +247,6 @@ void cpu_exec(int n) {
 #ifdef CONFIG_MTRACE
 		mtracelog = fopen("build/npc-mtrace-log.txt", "w");  //Mtrace
 #endif
-	uint64_t timer_start = get_time();
 	while(RUNNING && n != 0) {
 		single_cycle();
 		cpu.pc = top->pc;
@@ -271,8 +261,6 @@ void cpu_exec(int n) {
 		trace_and_difftest();
 		n--;
   }
-	uint64_t timer_end = get_time();
-  g_timer += timer_end - timer_start;
 #ifdef CONFIG_FTRACE
 		cpu_show_ftrace();
 #endif
@@ -304,7 +292,6 @@ int main(int argc, char *argv[]) {
 #endif
 	dump_wave();
 /***close**/
-	statistic();
 	tfp->close();
 	delete contextp;
 	return 0;
