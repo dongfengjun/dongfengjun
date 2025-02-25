@@ -404,7 +404,7 @@
                 inst <= M_AXI_RDATA;
               end                   
 						else
-							inst <= C_M_START_DATA_VALUE;                               
+							inst <= 32'b0;                               
           end
 
       //implement master command interface state machine                        
