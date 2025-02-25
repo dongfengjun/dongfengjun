@@ -106,6 +106,6 @@ assign csrs_in =
 
 /***load*store***/
 wire [31:0]rdata;
-LSU_ysyx_24110017 LSU_ysyx_24110017(clk,rst,op,r1,r2,offset,sel,rdata);
+LSU_ysyx_24110017 LSU_ysyx_24110017(clk,rst,op,r1,r2,offset,sel,rdata,TXN_DONE);
 
 endmodule
