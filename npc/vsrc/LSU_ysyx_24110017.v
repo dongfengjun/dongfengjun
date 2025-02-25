@@ -1,4 +1,4 @@
-module LSU_ysyx_24110017(clk,rst,op,r1,r2,offset,function3,rdata);
+module LSU_ysyx_24110017(clk,rst,op,r1,r2,offset,function3,rdata,TXN_DONE);
 input clk;
 input rst;
 input [6:0]op;
@@ -6,13 +6,14 @@ input [31:0]r1,r2;
 input [31:0]offset;
 input [2:0]function3;
 output [31:0]rdata;
+input TXN_DONE;
 
 wire valid,wen;
 wire [31:0]raddr;
 wire [31:0]waddr, wdata;
 wire [7:0]wmask;
  
-assign valid = (op == 7'b0100011 || op == 7'b0000011) ? 1'b1 : 1'b0;
+assign valid = (op == 7'b0100011 || op == 7'b0000011 && TXN_DONE) ? 1'b1 : 1'b0;
 assign wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
 assign waddr = (op == 7'b0100011) ? (r1 + offset) : 32'h80000000;
 assign wdata = (op == 7'b0100011) ? r2 : 32'b0;

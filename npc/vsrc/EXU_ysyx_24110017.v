@@ -1,4 +1,4 @@
-module EXU_ysyx_24110017(clk,rst,a,b,sel,op,funct7,shamt,offset,r1,r2,csrs,csrs_in,res);
+module EXU_ysyx_24110017(clk,rst,a,b,sel,op,funct7,shamt,offset,r1,r2,csrs,csrs_in,res,TXN_DONE);
 input clk;
 input rst;
 input [31:0] a,b;
@@ -12,6 +12,7 @@ input [31:0] r2;
 input [31:0] csrs;
 output [31:0] csrs_in;
 output [31:0] res;
+input TXN_DONE;
 
 
 /***I TYPE***/
