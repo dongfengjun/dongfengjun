@@ -109,15 +109,15 @@ SRAM_AXI4_ysyx_24110017 SRAM_AXI4_ysyx_24110017(clk,rst,
 assign raddr1 = rs1;
 assign raddr2 = (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? 5'd15 : rs2; //ecall
 assign b = (op == 7'b0110011 || op == 7'b0100011) ? r2 : imm;
-assign a = (op == 7'b0010011 || op == 7'b0000011 || op == 7'b0100011 || op == 7'b0110011/*R*/) ? r1 : pc;
+assign a = (op == 7'b0010011 || op == 7'b0000011 || op == 7'b0100011 || op == 7'b0110011/*R*/) ? r1 : pc - 4;
 assign xrd = (op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011	//I 
  || op == 7'b0100011 //S
  || op == 7'b0110011)//R
  ? res 
- : (op == 7'b1101111) ? (pc + 4) //I_jal
- : (op == 7'b1100111) ? (pc + 4) //I_jalr
+ : (op == 7'b1101111) ? (pc + 4 - 4) //I_jal
+ : (op == 7'b1100111) ? (pc + 4 - 4) //I_jalr
  : (op == 7'b0110111) ? imm	//U_lui
- : (op == 7'b0010111) ? (pc + imm) //U_auipc
+ : (op == 7'b0010111) ? (pc + imm - 4) //U_auipc
  : 32'b0;
 assign csrs = (op == 7'b1110011 && imm == 32'd833) ? mepc :
 							(op == 7'b1110011 && imm == 32'd768) ? mstatus : 
