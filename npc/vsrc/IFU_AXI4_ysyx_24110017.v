@@ -402,7 +402,9 @@
             else if (M_AXI_RVALID && axi_rready && (mst_exec_state == (2'b10)))                   
               begin                                                
                 inst <= M_AXI_RDATA;
-              end                                                  
+              end                   
+						else
+							inst <= C_M_START_DATA_VALUE;                               
           end
 
       //implement master command interface state machine                        
