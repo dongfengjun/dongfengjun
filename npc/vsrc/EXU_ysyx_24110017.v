@@ -97,11 +97,11 @@ assign res =
 /***csrrw~csrrc***/
 assign csrs_in = 
 			({32{(op == 7'b1110011) && (sel == 3'b001)}}
-          & a) | //I_csrrw
+          & r1) | //I_csrrw
 			({32{(op == 7'b1110011) && (sel == 3'b010)}}
-          & (csrs | a)) | //I_csrrs
+          & (csrs | r1)) | //I_csrrs
       ({32{(op == 7'b1110011) && (sel == 3'b000)}}
-          & (csrs &~a)) ; //I_csrrc
+          & (csrs &~r1)) ; //I_csrrc
 
 /***load*store***/
 wire [31:0]rdata;
