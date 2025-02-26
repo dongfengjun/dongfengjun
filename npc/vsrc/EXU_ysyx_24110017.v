@@ -1,4 +1,4 @@
-module EXU_ysyx_24110017(clk,rst,a,b,sel,op,funct7,shamt,offset,r1,r2,csrs,csrs_in,res);
+module EXU_ysyx_24110017(clk,rst,a,b,sel,op,funct7,shamt,offset,csrs,csrs_in,res);
 input clk;
 input rst;
 input [31:0] a,b;
@@ -7,8 +7,6 @@ input [6:0] op;
 input [6:0] funct7;
 input [4:0] shamt;
 input [31:0] offset;
-input [31:0] r1;
-input [31:0] r2;
 input [31:0] csrs;
 output [31:0] csrs_in;
 output [31:0] res;
@@ -97,14 +95,14 @@ assign res =
 /***csrrw~csrrc***/
 assign csrs_in = 
 			({32{(op == 7'b1110011) && (sel == 3'b001)}}
-          & r1) | //I_csrrw
+          & a) | //I_csrrw
 			({32{(op == 7'b1110011) && (sel == 3'b010)}}
-          & (csrs | r1)) | //I_csrrs
+          & (csrs | a)) | //I_csrrs
       ({32{(op == 7'b1110011) && (sel == 3'b000)}}
-          & (csrs &~r1)) ; //I_csrrc
+          & (csrs &~a)) ; //I_csrrc
 
 /***load*store***/
 wire [31:0]rdata;
-LSU_ysyx_24110017 LSU_ysyx_24110017(clk,rst,op,r1,r2,offset,sel,rdata);
+LSU_ysyx_24110017 LSU_ysyx_24110017(clk,rst,op,a,b,offset,sel,rdata);
 
 endmodule

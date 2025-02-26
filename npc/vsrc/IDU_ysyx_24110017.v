@@ -1,4 +1,4 @@
-module IDU_ysyx_24110017(inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,wr_en);
+module IDU_ysyx_24110017(inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);
 input [31:0]inst;
 output [6:0]op;
 output [4:0]rd;
@@ -8,7 +8,7 @@ output [4:0]rs2;
 output [31:0]imm;
 output [6:0]funct7;
 output [4:0]shamt;
-output wr_en;
+output wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 
 /***TPYE***/
 wire [6:0]op;
@@ -22,6 +22,7 @@ wire [6:0]funct7;	//R
 
 wire [4:0]shamt;	//I shamt
 wire wr_en;	//gpr_wr
+wire mepc_wen,mstatus_wen,mcause_wen,mtvec_wen; //csr_wr
 import "DPI-C" function void npc_trap();
 
 /***pattern***/
@@ -37,8 +38,9 @@ assign rs1 = (op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 
  inst[19:15] : 5'b0;
 assign rs2 = (op == 7'b1100011  //B
  || op == 7'b0100011  //S
- || op == 7'b0110011) ? //R
- inst[24:20] : 5'b0;
+ || op == 7'b0110011) ? inst[24:20] //R
+ : (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? 5'd15 //ecall
+ : 5'b0;
 assign funct7 = (op == 7'b0110011 || op == 7'b0010011) ? inst[31:25] : 7'b0;
 assign immI = {{20{inst[31]}},inst[31:20]};	//SEXTIimmediate
 assign shamt = {inst[24:20]};	//I shamt
@@ -57,6 +59,10 @@ assign imm = (op == 7'b0110111 || op == 7'b0010111) ? immU
 
 /***riscv32e-control***/
 assign wr_en = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 || op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011 || op == 7'b0110011) ? 1'b1 : 1'b0;
+assign mepc_wen = ((op == 7'b1110011 && imm == 32'd833) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
+assign mstatus_wen = (op == 7'b1110011 && imm == 32'd768) ? 1'b1 : 1'b0;
+assign mcause_wen = (op == 7'b1110011 && imm == 32'd834 || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
+assign mtvec_wen = (op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
 
 /***DPIC***/
 always@(*) begin
