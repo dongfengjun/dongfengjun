@@ -27,6 +27,8 @@ always@(posedge clk)begin
 			pc <= dnpc;
 		//	INIT_AXI_TXN <= 1'b1;
 		end
+	else 
+		pc <= pc;
 end
 
 wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
