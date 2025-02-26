@@ -582,7 +582,7 @@
           error_reg <= error_reg;                                                      
       end                                                                              
     // Add user logic here
-		assign txn_done = (mst_exec_state == INIT_READ) ? 1'b1:1'b0; 
+		assign txn_done = (mst_exec_state == INIT_COMPARE) ? 1'b1:1'b0; 
     // User logic ends
  
     endmodule
