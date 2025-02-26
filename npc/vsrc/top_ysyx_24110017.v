@@ -40,7 +40,7 @@ wire [3 : 0] AXI_WSTRB;
 wire [1 : 0] AXI_BRESP,AXI_RRESP;
 wire INIT_AXI_TXN,ERROR,TXN_DONE,AXI_AWVALID,AXI_AWREADY,AXI_WVALID,AXI_WREADY,AXI_BVALID,AXI_BREADY,AXI_ARVALID,AXI_ARREADY,AXI_RVALID,AXI_RREADY;
 
-PCU_ysyx_24110017 PCU(clk,rst,op,funct3,imm,r1,r2,mtvec,mepc,pc,dnpc,INIT_AXI_TXN,TXN_DONE);
+PCU_ysyx_24110017 PCU(clk,rst,op,funct3,imm,r1,r2,mtvec,mepc,pc,dnpc,INIT_AXI_TXN,wr_en);
 IDU_ysyx_24110017 IDU(inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,wr_en);
 RegisterFile_ysyx_24110017 #(5,32) RF (clk,xrd,rd,wr_en,raddr1,r1,raddr2,r2);
 Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk, rst, mepc_in, mepc, mepc_wen);
