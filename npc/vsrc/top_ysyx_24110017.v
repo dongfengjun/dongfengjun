@@ -36,7 +36,7 @@ EXU_ysyx_24110017 EXU(clk, rst, a, b, funct3, op, funct7, shamt, imm, r1, r2, cs
 
 /***riscv32 control***/
 assign b = (op == 7'b0110011 || op == 7'b0100011) ? r2 : imm;
-assign a = (op == 7'b0010011 || op == 7'b0000011 || op == 7'b0100011 || op == 7'b0110011/*R*/ || op == 7'b1110011) ? r1 : pc;
+assign a = (op == 7'b0010011 || op == 7'b0000011 || op == 7'b0100011 || op == 7'b0110011/*R*/ || (op == 7'b1110011 && (sel == 3'b001 || sel == 3'b010 || sel == 3'b011))/*csr*/) ? r1 : pc;
 assign xrd = (op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011	//I 
  || op == 7'b0100011 //S
  || op == 7'b0110011)//R
