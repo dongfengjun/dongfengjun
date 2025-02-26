@@ -1,4 +1,4 @@
-module WBU_ysyx_24110017(clk,rst,op,imm,funct3,pc,r1,r2,a,b,xrd,mepc,mstatus,mcause,mtvec,csrs,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen,csrs_in,mepc_in,mcause_in);
+module WBU_ysyx_24110017(clk,rst,op,imm,funct3,pc,r1,r2,res,a,b,xrd,mepc,mstatus,mcause,mtvec,csrs,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen,csrs_in,mepc_in,mcause_in);
 input clk;
 input rst;
 input [6:0]op;
@@ -6,6 +6,7 @@ input [31:0]imm;
 input [2:0]funct3;
 input [31:0]pc;
 input [31:0]r1,r2;
+input [31:0]res;
 output [31:0]a;
 output [31:0]b;
 output [31:0]xrd;
