@@ -17,7 +17,6 @@ wire wr_en;
 wire [31:0]inst;
 
 wire [31:0]res;
-wire [4:0]raddr1,raddr2;
 wire [31:0]r1,r2,a,b,xrd;
 wire [31:0]csrs, csrs_in, mepc_in, mepc, mstatus, mcause_in, mcause, mtvec;
 wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
@@ -31,7 +30,7 @@ Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk, rst, mepc_in, mepc, mepc
 Reg_ysyx_24110017 #(32, 32'h1800) mstatus_ysyx_24110017 (clk, rst, csrs_in, mstatus, mstatus_wen);
 Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk, rst, mcause_in, mcause, mcause_wen);
 Reg_ysyx_24110017 #(32, 32'b0) mtvec_ysyx_24110017 (clk, rst, csrs_in, mtvec, mtvec_wen);
-EXU_ysyx_24110017 EXU(clk, rst, a, b, funct3, op, funct7, shamt, imm, r1, r2, csrs, csrs_in, res);
+EXU_ysyx_24110017 EXU(clk,rst,a,b,funct3,op,funct7,shamt,imm,csrs,csrs_in,res);
 
 
 /***riscv32 control***/
