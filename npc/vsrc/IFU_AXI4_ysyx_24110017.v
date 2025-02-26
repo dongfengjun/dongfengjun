@@ -474,7 +474,7 @@
                 // read controller                                                    
                 if (reads_done)                                                       
                   begin
-                    mst_exec_state <= INIT_IDLE;                                  
+                    mst_exec_state <= IDLE;                                  
                   end                                                                 
                 else                                                                  
                   begin                                                               
