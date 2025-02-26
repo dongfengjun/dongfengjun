@@ -24,7 +24,7 @@
         // Users to add ports here
         input wire [C_M_AXI_ADDR_WIDTH-1 : 0]pc,
         output reg [C_M_AXI_ADDR_WIDTH-1 : 0]inst,
-				output reads_done,
+				output reg reads_done,
  
         // User ports ends
         // Do not modify the ports beyond this line
