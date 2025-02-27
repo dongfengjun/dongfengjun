@@ -1,4 +1,6 @@
-module IDU_ysyx_24110017(inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);
+module IDU_ysyx_24110017(clk,rst,inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);
+input clk;
+input rst;
 input [31:0]inst;
 output [6:0]op;
 output [4:0]rd;
