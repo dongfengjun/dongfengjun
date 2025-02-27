@@ -49,7 +49,6 @@ assign immS = {{20{inst[31]}}, inst[31:25], inst[11:7]};	//SEXTSimm
 assign immB = {{19{inst[31]}}, inst[31], inst[7], inst[30:25], inst[11:8], 1'b0};	//SEXTBimm
 assign immJ = {{11{inst[31]}}, inst[31], inst[19:12], inst[20], inst[30:21], 1'b0};	//SEXTJimm
 
-
 assign imm = (op == 7'b0110111 || op == 7'b0010111) ? immU
  : (op == 7'b1101111) ? immJ
  : (op == 7'b1100011) ? immB

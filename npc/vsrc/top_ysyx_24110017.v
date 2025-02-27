@@ -5,6 +5,7 @@ output [31:0]pc;//if
 output [31:0]dnpc;
 output [31:0]inst;
 
+
 wire [6:0]op;
 wire [4:0]rd;	//R I U J
 wire [2:0]funct3;
@@ -42,5 +43,6 @@ function int csr_display(int i);
   end
 endfunction
 /***E*N*D***/
+
 
 endmodule
