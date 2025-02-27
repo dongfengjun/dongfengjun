@@ -47,7 +47,7 @@ assign start = (pc >= 32'h80000000);
 always @(posedge clk) begin
         if (rst) begin
             state <= IDLE;
-						araddr <= 8'h80000000;
+						araddr <= 32'h80000000;
             arvalid <= 0;
             rready <= 0;
         end 
