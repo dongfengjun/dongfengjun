@@ -24,17 +24,24 @@ wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
 
 
 PCU_ysyx_24110017 PCU
-		(clk,rst,op,funct3,imm,
+		(clk,rst,
+		op,funct3,imm,
 		r1,r2,mtvec,mepc,
 		pc,dnpc);
 IFU_ysyx_24110017 IFU(clk,rst,pc,inst);
 IDU_ysyx_24110017 IDU
-		(clk,rst,inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,
+		(clk,rst,inst,
+		op,rd,funct3,rs1,rs2,imm,funct7,shamt,
 		wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);
 EXU_ysyx_24110017 EXU
-		(clk,rst,funct3,op,funct7,shamt,imm,
+		(clk,rst,
+		op,funct3,funct7,shamt,imm,
 		a,b,csrs,csrs_in,res);
-WBU_ysyx_24110017 WBU(clk,rst,op,imm,funct3,pc,r1,r2,res,a,b,xrd,mepc,mstatus,mcause,mtvec,csrs,csrs_in,mepc_in,mcause_in);
+WBU_ysyx_24110017 WBU
+		(clk,rst,op,imm,funct3,
+		pc,r1,r2,res,
+		a,b,xrd,mepc,mstatus,mcause,mtvec,csrs,csrs_in,mepc_in,mcause_in);
+
 RegisterFile_ysyx_24110017 #(5,32) RF (clk,xrd,rd,wr_en,rs1,r1,rs2,r2);
 Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk,rst,mepc_in,mepc,mepc_wen);
 Reg_ysyx_24110017 #(32, 32'h1800) mstatus_ysyx_24110017 (clk,rst,csrs_in,mstatus,mstatus_wen);
