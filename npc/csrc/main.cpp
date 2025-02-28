@@ -215,10 +215,10 @@ static void trace_and_difftest() {
   if (ITRACE_COND) { log_write("%s\n", logbuf); }
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(logbuf)); }
-		//IFDEF(CONFIG_DIFFTEST, difftest_step(top->pc, top->dnpc));
-#ifdef CONFIG_DIFFTEST
-	if(top->IF_DONE) {difftest_step(top->pc, top->dnpc);}
-#endif
+		IFDEF(CONFIG_DIFFTEST, if(top->IF_DONE){difftest_step(top->pc, top->dnpc);});
+//#ifdef CONFIG_DIFFTEST
+	//if(top->IF_DONE) {difftest_step(top->pc, top->dnpc);}
+//#endif
 		IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
 
