@@ -25,7 +25,7 @@ output M_AXI_BREADY;
 output [31:0] M_AXI_ARADDR;
 output M_AXI_ARVALID;
 input M_AXI_ARREADY;
-input [C_M_AXI_DATA_WIDTH-1 : 0] M_AXI_RDATA;
+input [31:0] M_AXI_RDATA;
 input [1 : 0] M_AXI_RRESP;
 input M_AXI_RVALID;
 output M_AXI_RREADY;
