@@ -74,7 +74,6 @@ always @(posedge clk) begin
                     end
                     if (AXI_RVALID) begin
                         axi_rready <= 1'b0;
-												done <= 1'b1;
                         state <= DONE;
                     end
                 end
