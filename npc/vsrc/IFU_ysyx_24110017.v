@@ -39,9 +39,10 @@ assign AXI_ARADDR = axi_araddr;
 assign AXI_ARVALID = axi_arvalid;
 assign AXI_RREADY = axi_rready;
 
+
 parameter [1:0] IDLE=2'b00,FETCH=2'b01,DONE=2'b10;
 reg [1:0]state;
-
+wire start;
 assign start = (pc >= 32'h80000000);
 
 always @(posedge clk) begin
@@ -66,7 +67,7 @@ always @(posedge clk) begin
 												axi_araddr <= pc;
                     end
                     if (AXI_RVALID) begin
-                        inst <= RDATA;
+                        inst <= AXI_RDATA;
                         AXI_RREADY <= 0;
                         state <= DONE;
                     end
