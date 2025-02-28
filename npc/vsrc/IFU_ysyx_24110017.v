@@ -47,23 +47,23 @@ assign start = (pc >= 32'h80000000);
 always @(posedge clk) begin
         if (rst) begin
             state <= IDLE;
-						araddr <= 32'h80000000;
-            arvalid <= 0;
-            rready <= 0;
+						axi_araddr <= 32'h80000000;
+            axi_arvalid <= 0;
+            axi_rready <= 0;
         end 
 				else begin
             case (state)
                 IDLE: begin
                     if (start) begin
-                        arvalid <= 1'b1;
+                        axi_arvalid <= 1'b1;
                         state <= FETCH;
                     end
                 end
                 FETCH: begin
                     if (AXI_ARREADY) begin
-                        arvalid <= 1'b0;
-                        rready <= 1'b1;
-												araddr <= pc;
+                        axi_arvalid <= 1'b0;
+                        axi_rready <= 1'b1;
+												axi_araddr <= pc;
                     end
                     if (AXI_RVALID) begin
                         inst <= RDATA;
