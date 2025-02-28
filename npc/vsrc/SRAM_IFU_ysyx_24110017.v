@@ -47,6 +47,7 @@ reg arready,rvalid;
 assign S_AXI_ARREADY = arready;
 assign S_AXI_RVALID = rvalid;
 assign S_AXI_RDATA = rdata;
+assign slv_reg_rden = arready & S_AXI_ARVALID & ~axi_rvalid;
 
 always @(posedge clk) begin
         if (rst) begin
@@ -56,7 +57,7 @@ always @(posedge clk) begin
             if (S_AXI_ARVALID && !S_AXI_ARREADY) begin
                 arready <= 1;
             end
-            if (S_AXI_ARREADY && S_AXI_ARVALID) begin
+            if (slv_reg_rden) begin
                 rdata <= tmp; //假设地址是字对齐的
                 rvalid <= 1;
                 arready <= 0;
