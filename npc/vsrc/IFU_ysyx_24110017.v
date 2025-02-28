@@ -79,6 +79,7 @@ always @(posedge clk) begin
                 end
                 DONE: begin
                     state <= IDLE;
+										inst <= 32'h00000000;
 										done <= 1'b1;
                 end
 								NULL: begin
