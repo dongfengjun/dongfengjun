@@ -45,8 +45,8 @@ always @(posedge clk) begin
 end
 ***/
 reg arready,rvalid;
-assign S_ARREADY = arready;
-assign S_RVALID = rvalid;
+assign S_AXI_ARREADY = arready;
+assign S_AXI_RVALID = rvalid;
 
 always @(posedge clk) begin
         if (rst) begin
