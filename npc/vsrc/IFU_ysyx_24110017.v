@@ -78,11 +78,14 @@ always @(posedge clk) begin
                     end
                 end
                 DONE: begin
-                    state <= IDLE;
+                    state <= NULL;
 										inst <= AXI_RDATA;
-										done <= 1'b1;
+										done <= 1'b0;
                 end
 								NULL: begin
+										state <= IDLE;
+										inst <= 32'h0;
+										done <= 1'b1;
 								end 
             endcase
         end
