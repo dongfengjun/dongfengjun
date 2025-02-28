@@ -74,13 +74,14 @@ always @(posedge clk) begin
                     if (AXI_RVALID) begin
                         inst <= AXI_RDATA;
                         axi_rready <= 1'b0;
+												done <= 1'b1;
                         state <= DONE;
                     end
                 end
                 DONE: begin
                     state <= IDLE;
 										inst <= 32'h00000000;
-										done <= 1'b1;
+										done <= 1'b0;
                 end
 								NULL: begin
 								end 
