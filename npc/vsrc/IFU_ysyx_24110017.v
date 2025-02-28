@@ -60,14 +60,14 @@ always @(posedge clk) begin
                     end
                 end
                 FETCH: begin
-                    if (ARREADY) begin
+                    if (AXI_ARREADY) begin
                         arvalid <= 1'b0;
                         rready <= 1'b1;
 												araddr <= pc;
                     end
-                    if (RVALID) begin
+                    if (AXI_RVALID) begin
                         inst <= RDATA;
-                        RREADY <= 0;
+                        AXI_RREADY <= 0;
                         state <= DONE;
                     end
                 end
