@@ -51,7 +51,7 @@ assign start = (pc >= 32'h80000000);
 always @(posedge clk) begin
         if (rst) begin
             state <= IDLE;
-						axi_araddr <= 32'h80000000;
+						axi_araddr <= 32'h00000000;
             axi_arvalid <= 1'b0;
             axi_rready <= 1'b0;
 						done <= 1'b0;
