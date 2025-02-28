@@ -60,9 +60,9 @@ always @(posedge clk) begin
                 axi_rvalid <= 1;
                 axi_arready <= 0;
             end
-            if (S_AXI_RVALID && S_AXI_RREADY) begin
+						if (S_AXI_RREADY) begin
+								axi_rvalid <= 0;
 								axi_rdata <= tmp;
-                axi_rvalid <= 0;
             end
         end
     end

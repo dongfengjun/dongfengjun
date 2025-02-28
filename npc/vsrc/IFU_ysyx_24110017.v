@@ -72,7 +72,6 @@ always @(posedge clk) begin
 												axi_araddr <= pc;
                     end
                     if (AXI_RVALID) begin
-                        inst <= AXI_RDATA;
                         axi_rready <= 1'b0;
 												done <= 1'b1;
                         state <= DONE;
@@ -80,7 +79,7 @@ always @(posedge clk) begin
                 end
                 DONE: begin
                     state <= IDLE;
-										inst <= 32'h00000000;
+										inst <= AXI_RDATA;
 										done <= 1'b0;
                 end
 								NULL: begin
