@@ -53,15 +53,15 @@ always @(posedge clk) begin
             arready <= 0;
             rvalid <= 0;
         end else begin
-            if (S_ARVALID && !S_ARREADY) begin
+            if (S_AXI_ARVALID && !S_AXI_ARREADY) begin
                 arready <= 1;
             end
-            if (S_ARREADY && S_ARVALID) begin
+            if (S_AXI_ARREADY && S_AXI_ARVALID) begin
                 rdata <= tmp; //假设地址是字对齐的
                 rvalid <= 1;
                 arready <= 0;
             end
-            if (S_RVALID && S_RREADY) begin
+            if (S_AXI_RVALID && S_AXI_RREADY) begin
                 rvalid <= 0;
             end
         end
