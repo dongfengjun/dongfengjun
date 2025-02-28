@@ -26,8 +26,10 @@ wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
 PCU_ysyx_24110017 PCU(clk,rst,
 		op,funct3,imm,
 		r1,r2,mtvec,mepc,
-		pc,dnpc);
-IFU_ysyx_24110017 IFU(clk,rst,pc,inst);
+		pc,dnpc,
+		IF_DONE
+);
+IFU_ysyx_24110017 IFU(clk,rst,pc,inst,IF_DONE);
 IDU_ysyx_24110017 IDU(clk,rst,inst,
 		op,rd,funct3,rs1,rs2,imm,funct7,shamt,
 		wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);

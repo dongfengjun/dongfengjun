@@ -1,8 +1,9 @@
-module IFU_ysyx_24110017(clk,rst,pc,inst);
+module IFU_ysyx_24110017(clk,rst,pc,inst,done);
 input clk;
 input rst;
 input [31:0]pc;
 output [31:0]inst;
+output done;
 wire [31:0]pc;
 reg [31:0]inst;
 //wire [31:0]inst;
@@ -41,9 +42,10 @@ assign AXI_ARVALID = axi_arvalid;
 assign AXI_RREADY = axi_rready;
 
 
-parameter [1:0] IDLE=2'b00,FETCH=2'b01,DONE=2'b10,NULL=2'B11;
+parameter [1:0] IDLE=2'b00,FETCH=2'b01,DONE=2'b10,NULL=2'b11;
 reg [1:0]state;
 wire start;
+reg done;
 assign start = (pc >= 32'h80000000);
 
 always @(posedge clk) begin
@@ -75,6 +77,7 @@ always @(posedge clk) begin
                 end
                 DONE: begin
                     state <= IDLE;
+										done <= 1'b1;
                 end
 								NULL: begin
 								end 

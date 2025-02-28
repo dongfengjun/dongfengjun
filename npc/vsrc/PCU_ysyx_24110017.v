@@ -1,4 +1,4 @@
-module PCU_ysyx_24110017(clk,rst,op,funct3,offset,r1,r2,mtvec,mepc,pc,dnpc);
+module PCU_ysyx_24110017(clk,rst,op,funct3,offset,r1,r2,mtvec,mepc,pc,dnpc,IF_DONE);
 input	clk;
 input rst;
 input [6:0]op;
@@ -16,8 +16,10 @@ wire [31:0]dnpc;
 always@(posedge clk)begin
 	if(rst)
 		pc <= 32'h80000000;
-	else
+	else if(IF_DONE)
 		pc <= dnpc;
+	else
+		pc <= pc;
 end
 
 wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
