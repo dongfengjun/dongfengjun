@@ -54,12 +54,14 @@ always @(posedge clk) begin
 						axi_araddr <= 32'h80000000;
             axi_arvalid <= 1'b0;
             axi_rready <= 1'b0;
+						done <= 1'b0;
         end 
 				else begin
             case (state)
                 IDLE: begin
                     if (start) begin
                         axi_arvalid <= 1'b1;
+												done <= 1'b0;
                         state <= FETCH;
                     end
                 end
