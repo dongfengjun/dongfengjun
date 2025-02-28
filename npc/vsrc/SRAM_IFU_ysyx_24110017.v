@@ -44,9 +44,11 @@ always @(posedge clk) begin
 end
 ***/
 reg axi_arready,axi_rvalid;
+reg [1:0]axi_rresp;
 assign S_AXI_ARREADY = axi_arready;
 assign S_AXI_RVALID = axi_rvalid;
 assign S_AXI_RDATA = axi_rdata;
+assign S_AXI_RRESP = axi_rresp;
 
 always @(posedge clk) begin
         if (rst) begin
@@ -57,8 +59,9 @@ always @(posedge clk) begin
                 axi_arready <= 1;
             end
             if (axi_arready & S_AXI_ARVALID) begin
-                axi_rvalid <= 1;
+                axi_rvalid <= 1;//判断条件
                 axi_arready <= 0;
+								axi_rresp  <= 2'b0;
             end
 						if (S_AXI_RREADY) begin
 								axi_rvalid <= 0;
