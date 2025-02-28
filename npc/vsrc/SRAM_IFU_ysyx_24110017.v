@@ -46,7 +46,6 @@ end
 reg arready,rvalid;
 assign S_ARREADY = arready;
 assign S_RVALID = rvalid;
-assign S_ARREADY = arready;
 
 always @(posedge clk) begin
         if (rst) begin
