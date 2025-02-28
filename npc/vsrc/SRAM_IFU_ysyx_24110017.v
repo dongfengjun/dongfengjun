@@ -44,11 +44,9 @@ always @(posedge clk) begin
 end
 ***/
 reg axi_arready,axi_rvalid;
-wire slv_reg_rden;
 assign S_AXI_ARREADY = axi_arready;
 assign S_AXI_RVALID = axi_rvalid;
 assign S_AXI_RDATA = axi_rdata;
-assign slv_reg_rden = axi_arready & S_AXI_ARVALID;
 
 always @(posedge clk) begin
         if (rst) begin
@@ -58,12 +56,12 @@ always @(posedge clk) begin
             if (S_AXI_ARVALID && !S_AXI_ARREADY) begin
                 axi_arready <= 1;
             end
-            if (slv_reg_rden) begin
-                axi_rdata <= tmp; //假设地址是字对齐的
+            if (axi_arready & S_AXI_ARVALID) begin
                 axi_rvalid <= 1;
                 axi_arready <= 0;
             end
             if (S_AXI_RVALID && S_AXI_RREADY) begin
+								axi_rdata <= tmp;
                 axi_rvalid <= 0;
             end
         end
