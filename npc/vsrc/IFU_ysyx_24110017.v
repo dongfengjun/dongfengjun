@@ -41,7 +41,7 @@ assign AXI_ARVALID = axi_arvalid;
 assign AXI_RREADY = axi_rready;
 
 
-parameter [1:0] IDLE=2'b00,FETCH=2'b01,DONE=2'b10;
+parameter [1:0] IDLE=2'b00,FETCH=2'b01,DONE=2'b10,NULL=2'B11;
 reg [1:0]state;
 wire start;
 assign start = (pc >= 32'h80000000);
@@ -76,6 +76,7 @@ always @(posedge clk) begin
                 DONE: begin
                     state <= IDLE;
                 end
+								NULL: 
             endcase
         end
     end
