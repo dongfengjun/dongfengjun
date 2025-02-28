@@ -44,6 +44,7 @@ always @(posedge clk) begin
 end
 ***/
 reg arready,rvalid;
+wire slv_reg_rden;
 assign S_AXI_ARREADY = arready;
 assign S_AXI_RVALID = rvalid;
 assign S_AXI_RDATA = rdata;
