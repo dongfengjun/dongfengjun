@@ -61,6 +61,7 @@ always @(posedge clk) begin
                 IDLE: begin
                     if (start) begin
                         axi_arvalid <= 1'b1;
+												inst <= 32'h00000000;
 												done <= 1'b0;
                         state <= FETCH;
                     end
@@ -80,7 +81,7 @@ always @(posedge clk) begin
                 DONE: begin
                     state <= IDLE;
 										inst <= AXI_RDATA;
-										done <= 1'b0;
+										done <= 1'b1;
                 end
 								NULL: begin
 								end 
