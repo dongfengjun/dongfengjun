@@ -76,7 +76,8 @@ always @(posedge clk) begin
                 DONE: begin
                     state <= IDLE;
                 end
-								NULL: 
+								NULL: begin
+								end 
             endcase
         end
     end
