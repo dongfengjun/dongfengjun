@@ -45,26 +45,26 @@ end
 ***/
 reg arready,rvalid;
 wire slv_reg_rden;
-assign S_AXI_ARREADY = arready;
-assign S_AXI_RVALID = rvalid;
-assign S_AXI_RDATA = rdata;
-assign slv_reg_rden = arready & S_AXI_ARVALID & ~axi_rvalid;
+assign S_AXI_ARREADY = axi_arready;
+assign S_AXI_RVALID = axi_rvalid;
+assign S_AXI_RDATA = axi_rdata;
+assign slv_reg_rden = axi_arready & S_AXI_ARVALID & ~axi_rvalid;
 
 always @(posedge clk) begin
         if (rst) begin
-            arready <= 0;
-            rvalid <= 0;
+            axi_arready <= 0;
+            axi_rvalid <= 0;
         end else begin
             if (S_AXI_ARVALID && !S_AXI_ARREADY) begin
-                arready <= 1;
+                axi_arready <= 1;
             end
             if (slv_reg_rden) begin
-                rdata <= tmp; //假设地址是字对齐的
-                rvalid <= 1;
-                arready <= 0;
+                axi_rdata <= tmp; //假设地址是字对齐的
+                axi_rvalid <= 1;
+                axi_arready <= 0;
             end
             if (S_AXI_RVALID && S_AXI_RREADY) begin
-                rvalid <= 0;
+                axi_rvalid <= 0;
             end
         end
     end
