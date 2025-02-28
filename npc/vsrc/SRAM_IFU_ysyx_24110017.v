@@ -43,7 +43,7 @@ always @(posedge clk) begin
 	end
 end
 ***/
-reg arready,rvalid;
+reg axi_arready,axi_rvalid;
 wire slv_reg_rden;
 assign S_AXI_ARREADY = axi_arready;
 assign S_AXI_RVALID = axi_rvalid;
