@@ -48,7 +48,7 @@ assign S_ARREADY = arready;
 assign S_RVALID = rvalid;
 assign S_ARREADY = arready;
 
-always @(posedge clk or posedge reset) begin
+always @(posedge clk) begin
         if (rst) begin
             arready <= 0;
             rvalid <= 0;
