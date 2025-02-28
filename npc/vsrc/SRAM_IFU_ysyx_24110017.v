@@ -48,7 +48,7 @@ wire slv_reg_rden;
 assign S_AXI_ARREADY = axi_arready;
 assign S_AXI_RVALID = axi_rvalid;
 assign S_AXI_RDATA = axi_rdata;
-assign slv_reg_rden = axi_arready & S_AXI_ARVALID & ~axi_rvalid;
+assign slv_reg_rden = axi_arready & S_AXI_ARVALID;
 
 always @(posedge clk) begin
         if (rst) begin
