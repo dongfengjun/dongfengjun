@@ -10,6 +10,7 @@ input [31:0]mtvec;
 input [31:0]mepc;
 output [31:0]pc;
 output [31:0]dnpc;
+input IF_DONE;
 reg [31:0]pc;
 wire [31:0]dnpc;
 
