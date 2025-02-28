@@ -1,4 +1,10 @@
-module IFU_ysyx_24110017(clk,rst,pc,inst,if_done,difftest,);
+module IFU_ysyx_24110017(clk,rst,pc,inst,if_done,difftest,
+				M_AXI_AWADDR,M_AXI_AWVALID,M_AXI_AWREADY,
+        M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WVALID,M_AXI_WREADY,
+        M_AXI_BRESP,M_AXI_BVALID,M_AXI_BREADY,
+        M_AXI_ARADDR,M_AXI_ARVALID,M_AXI_ARREADY,
+        M_AXI_RDATA,M_AXI_RRESP,M_AXI_RVALID,M_AXI_RREADY
+);
 input clk;
 input rst;
 input [31:0]pc;
