@@ -28,7 +28,8 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,pc[7:0],inst);
 /***E*N*D***/
 
 /***多周期sram***AXI4_LITE***/
-wire [31:0]pc,inst;
+wire [31:0]pc;
+reg [31:0]inst;
 wire [31:0] AXI_AWADDR,AXI_WDATA,AXI_ARADDR,AXI_RDATA;
 wire [3:0] AXI_WSTRB;
 wire [1:0] AXI_BRESP,AXI_RRESP;
