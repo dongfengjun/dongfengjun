@@ -43,7 +43,7 @@ assign AXI_ARVALID = axi_arvalid;
 assign AXI_RREADY = axi_rready;
 
 
-parameter [1:0] IDLE=2'b00,FETCH=2'b01,DONE=2'b10,DIFFTEST=2'b11;
+parameter [1:0] IDLE=2'b00,FETCH=2'b01,DONE=2'b10,DIFF=2'b11;
 reg [1:0]state;
 wire start;
 reg done,difftest;
