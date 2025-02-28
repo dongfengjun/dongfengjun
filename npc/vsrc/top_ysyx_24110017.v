@@ -21,7 +21,12 @@ wire [31:0]res;
 wire [31:0]r1,r2,a,b,xrd;
 wire [31:0]csrs, csrs_in, mepc_in, mepc, mstatus, mcause_in, mcause, mtvec;
 wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
-wire IF_DONE,DIFFTEST;
+
+wire IF_DONE,DIFFTEST;//IFU_AXI4-LITE
+wire [31:0] AXI_AWADDR,AXI_WDATA,AXI_ARADDR,AXI_RDATA;
+wire [3:0] AXI_WSTRB;
+wire [1:0] AXI_BRESP,AXI_RRESP;
+wire AXI_AWVALID,AXI_AWREADY,AXI_WVALID,AXI_WREADY,AXI_BVALID,AXI_BREADY,AXI_ARVALID,AXI_ARREADY,AXI_RVALID,AXI_RREADY;
 
 PCU_ysyx_24110017 PCU(clk,rst,
 		op,funct3,imm,
@@ -29,7 +34,20 @@ PCU_ysyx_24110017 PCU(clk,rst,
 		pc,dnpc,
 		IF_DONE
 );
-IFU_ysyx_24110017 IFU(clk,rst,pc,inst,IF_DONE,DIFFTEST);
+IFU_ysyx_24110017 IFU(clk,rst,pc,inst,IF_DONE,DIFFTEST,
+        AXI_AWADDR,AXI_AWVALID,AXI_AWREADY,
+        AXI_WDATA,AXI_WSTRB,AXI_WVALID,AXI_WREADY,
+        AXI_BRESP,AXI_BVALID,AXI_BREADY,
+        AXI_ARADDR,AXI_ARVALID,AXI_ARREADY,
+        AXI_RDATA,AXI_RRESP,AXI_RVALID,AXI_RREADY
+);
+SRAM_IFU_ysyx_24110017 SRAM_IFU_ysyx_24110017(clk,rst,
+        AXI_AWADDR,AXI_AWVALID,AXI_AWREADY,
+        AXI_WDATA,AXI_WSTRB,AXI_WVALID,AXI_WREADY,
+        AXI_BRESP,AXI_BVALID,AXI_BREADY,
+        AXI_ARADDR,AXI_ARVALID,AXI_ARREADY,
+        AXI_RDATA,AXI_RRESP,AXI_RVALID,AXI_RREADY
+);
 IDU_ysyx_24110017 IDU(clk,rst,inst,
 		op,rd,funct3,rs1,rs2,imm,funct7,shamt,
 		wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);

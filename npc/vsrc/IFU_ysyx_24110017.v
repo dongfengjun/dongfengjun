@@ -1,10 +1,29 @@
-module IFU_ysyx_24110017(clk,rst,pc,inst,if_done,difftest);
+module IFU_ysyx_24110017(clk,rst,pc,inst,if_done,difftest,);
 input clk;
 input rst;
 input [31:0]pc;
 output [31:0]inst;
 output if_done;
 output difftest;
+output [31:0] M_AXI_AWADDR;
+output M_AXI_AWVALID;
+input  M_AXI_AWREADY;
+output [31:0] M_AXI_WDATA;
+output [3:0] M_AXI_WSTRB;
+output M_AXI_WVALID;
+input  M_AXI_WREADY;
+input [1:0] M_AXI_BRESP;
+input M_AXI_BVALID;
+output M_AXI_BREADY;
+
+output [31:0] M_AXI_ARADDR;
+output M_AXI_ARVALID;
+input M_AXI_ARREADY;
+input [C_M_AXI_DATA_WIDTH-1 : 0] M_AXI_RDATA;
+input [1 : 0] M_AXI_RRESP;
+input M_AXI_RVALID;
+output M_AXI_RREADY;
+
 wire [31:0]pc;
 reg [31:0]inst;
 //wire [31:0]inst;
@@ -32,15 +51,15 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,pc[7:0],inst);
 /***多周期sram***AXI4_LITE***/
 wire [31:0]pc;
 reg [31:0]inst;
-wire [31:0] AXI_AWADDR,AXI_WDATA,AXI_ARADDR,AXI_RDATA;
-wire [3:0] AXI_WSTRB;
-wire [1:0] AXI_BRESP,AXI_RRESP;
-wire AXI_AWVALID,AXI_AWREADY,AXI_WVALID,AXI_WREADY,AXI_BVALID,AXI_BREADY,AXI_ARVALID,AXI_ARREADY,AXI_RVALID,AXI_RREADY;
+wire [31:0] M_AXI_AWADDR,M_AXI_WDATA,M_AXI_ARADDR,M_AXI_RDATA;
+wire [3:0] M_AXI_WSTRB;
+wire [1:0] M_AXI_BRESP,M_AXI_RRESP;
+wire M_AXI_AWVALID,M_AXI_AWREADY,M_AXI_WVALID,M_AXI_WREADY,M_AXI_BVALID,M_AXI_BREADY,M_AXI_ARVALID,M_AXI_ARREADY,M_AXI_RVALID,M_AXI_RREADY;
 reg [31:0]axi_araddr;
 reg axi_arvalid,axi_rready;
-assign AXI_ARADDR = axi_araddr;
-assign AXI_ARVALID = axi_arvalid;
-assign AXI_RREADY = axi_rready;
+assign M_AXI_ARADDR = axi_araddr;
+assign M_AXI_ARVALID = axi_arvalid;
+assign M_AXI_RREADY = axi_rready;
 
 
 parameter [1:0] IDLE=2'b00,FETCH=2'b01,DONE=2'b10,DIFF=2'b11;
@@ -69,19 +88,19 @@ always @(posedge clk) begin
                     end
                 end
                 FETCH: begin
-                    if (AXI_ARREADY) begin
+                    if (M_AXI_ARREADY) begin
                         axi_arvalid <= 1'b0;
                         axi_rready <= 1'b1;
 												axi_araddr <= pc;
                     end
-                    if (AXI_RVALID) begin
+                    if (M_AXI_RVALID) begin
                         axi_rready <= 1'b0;
                         state <= DONE;
                     end
                 end
                 DONE: begin
                     state <= DIFF;
-										inst <= AXI_RDATA;
+										inst <= M_AXI_RDATA;
 										if_done <= 1'b1;
                 end
 								DIFF: begin
@@ -94,13 +113,6 @@ always @(posedge clk) begin
         end
     end
 
-SRAM_IFU_ysyx_24110017 SRAM_IFU_ysyx_24110017(clk,rst,
-        AXI_AWADDR,AXI_AWVALID,AXI_AWREADY,
-				AXI_WDATA,AXI_WSTRB,AXI_WVALID,AXI_WREADY,
-				AXI_BRESP,AXI_BVALID,AXI_BREADY,
-				AXI_ARADDR,AXI_ARVALID,AXI_ARREADY,
-        AXI_RDATA,AXI_RRESP,AXI_RVALID,AXI_RREADY
-);
 /***E*N*D***/
 
 endmodule
