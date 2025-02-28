@@ -21,14 +21,13 @@ output wire  S_AXI_RVALID,
 input wire  S_AXI_RREADY
 );
 
-wire [31:0]raddr;
 reg [31:0]rdata;
 reg[31:0]tmp;
 import "DPI-C" function int pmem_read(input int raddr);
 
 always @(*) begin
-	if(raddr != 32'h0) begin
-		tmp = pmem_read(raddr);
+	if(S_AXI_ARADDR != 32'h0) begin
+		tmp = pmem_read(S_AXI_ARADDR);
 	end
 	else begin
 		tmp = 32'h0;
@@ -47,6 +46,7 @@ end
 reg arready,rvalid;
 assign S_AXI_ARREADY = arready;
 assign S_AXI_RVALID = rvalid;
+assign S_AXI_RDATA = rdata;
 
 always @(posedge clk) begin
         if (rst) begin
