@@ -4,6 +4,7 @@ input rst;
 output [31:0]pc;//if
 output [31:0]dnpc;
 output [31:0]inst;
+output IF_DONE;
 
 
 wire [6:0]op;
