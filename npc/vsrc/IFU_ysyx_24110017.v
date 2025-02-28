@@ -1,9 +1,10 @@
-module IFU_ysyx_24110017(clk,rst,pc,inst,done);
+module IFU_ysyx_24110017(clk,rst,pc,inst,done,difftest);
 input clk;
 input rst;
 input [31:0]pc;
 output [31:0]inst;
 output done;
+output difftest;
 wire [31:0]pc;
 reg [31:0]inst;
 //wire [31:0]inst;
@@ -45,7 +46,7 @@ assign AXI_RREADY = axi_rready;
 parameter [1:0] IDLE=2'b00,FETCH=2'b01,DONE=2'b10,NULL=2'b11;
 reg [1:0]state;
 wire start;
-reg done;
+reg done,difftest;
 assign start = (pc >= 32'h80000000);
 
 always @(posedge clk) begin
@@ -63,6 +64,7 @@ always @(posedge clk) begin
                         axi_arvalid <= 1'b1;
 												inst <= 32'h00000000;
 												done <= 1'b0;
+												difftest <= 1'b0;
                         state <= FETCH;
                     end
                 end
@@ -78,14 +80,15 @@ always @(posedge clk) begin
                     end
                 end
                 DONE: begin
-                    state <= NULL;
+                    state <= DIFF;
 										inst <= AXI_RDATA;
-										done <= 1'b0;
+										done <= 1'b1;
                 end
-								NULL: begin
+								DIFF: begin
 										state <= IDLE;
 										inst <= 32'h0;
-										done <= 1'b1;
+										done <= 1'b0;
+										difftest <= 1'b1;
 								end 
             endcase
         end
