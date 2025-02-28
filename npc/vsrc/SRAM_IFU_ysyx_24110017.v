@@ -21,7 +21,7 @@ output wire  S_AXI_RVALID,
 input wire  S_AXI_RREADY
 );
 
-reg [31:0]rdata;
+reg [31:0]axi_rdata;
 reg[31:0]tmp;
 import "DPI-C" function int pmem_read(input int raddr);
 
