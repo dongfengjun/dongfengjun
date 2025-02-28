@@ -21,7 +21,7 @@ wire [31:0]res;
 wire [31:0]r1,r2,a,b,xrd;
 wire [31:0]csrs, csrs_in, mepc_in, mepc, mstatus, mcause_in, mcause, mtvec;
 wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
-
+wire IF_DONE;
 
 PCU_ysyx_24110017 PCU(clk,rst,
 		op,funct3,imm,
