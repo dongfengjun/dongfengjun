@@ -50,8 +50,8 @@ always @(posedge clk) begin
         if (rst) begin
             state <= IDLE;
 						axi_araddr <= 32'h80000000;
-            axi_arvalid <= 0;
-            axi_rready <= 0;
+            axi_arvalid <= 1'b0;
+            axi_rready <= 1'b0;
         end 
 				else begin
             case (state)
@@ -69,7 +69,7 @@ always @(posedge clk) begin
                     end
                     if (AXI_RVALID) begin
                         inst <= AXI_RDATA;
-                        AXI_RREADY <= 0;
+                        axi_rready <= 1'b0;
                         state <= DONE;
                     end
                 end
