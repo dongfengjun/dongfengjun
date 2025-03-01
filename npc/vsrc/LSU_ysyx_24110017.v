@@ -115,7 +115,7 @@ always @(posedge clk or posedge rst) begin
 					if(AXI_WREADY) begin
 						axi_wvalid <= 0;
 						axi_wdata <= wdata;//加判断条件
-						axi_wstrb <= wstrb;
+						axi_wstrb <= wmask;
 						axi_bready <= 1;
 					end
 					if(AXI_BVALID) begin
