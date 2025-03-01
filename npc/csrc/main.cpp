@@ -24,6 +24,7 @@ word_t csrs_display(int i) {
   return csr_display(i);
 }
 
+static void statistic();
 bool RUNNING;
 void npc_trap() {
   extern int gpr_reg_display(int addr);//抓取a0
