@@ -61,8 +61,6 @@ reg [3:0]axi_wstrb;
 reg axi_bready;
 reg [1:0]axi_bresp;
 assign AXI_AWVALID = axi_awvalid;
-assign AXI_WREADY = axi_wready;
-assign AXI_AWADRR = axi_awaddr;
 assign AXI_WDATA = axi_wdata;
 assign AXI_WSTRB = axi_wstrb;
 assign AXI_BREADY = axi_bready;
