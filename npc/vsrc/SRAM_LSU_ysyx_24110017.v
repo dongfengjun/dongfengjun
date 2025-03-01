@@ -56,7 +56,7 @@ always @(posedge clk) begin
     if(S_AXI_ARVALID && S_AXI_ARREADY) begin
       axi_rvalid <= 1;//判断条件
       axi_arready <= 0;
-      axi_rresp  <= 2'b0;
+      axi_rresp  <= 2'b11;
     end
     if(S_AXI_RREADY) begin
       axi_rvalid <= 0;
@@ -75,7 +75,7 @@ always @(posedge clk) begin
 		end
 		if(S_AXI_BVALID && S_AXI_BREADY) begin
 			axi_bvalid <= 0;
-			axi_bresp <= 2'b0;
+			axi_bresp <= 2'b11;
 		end
   end
 end

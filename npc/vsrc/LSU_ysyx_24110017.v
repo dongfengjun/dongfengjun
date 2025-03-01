@@ -79,6 +79,7 @@ always @(posedge clk or posedge rst) begin
       axi_wstrb <= 8'b0;
 		  axi_wvalid <= 0;
       axi_bready <= 0;
+			axi_bresp <= 0;
     end 
 		else begin
       case (state)
