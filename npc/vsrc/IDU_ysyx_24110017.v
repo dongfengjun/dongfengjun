@@ -30,7 +30,7 @@ import "DPI-C" function void npc_trap();
 /***pattern***/
 assign op = inst[6:0];
 assign rd = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 || 
-op == 7'b1100111 || op == 7'b0010011 || op == 7'b0001111
+op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111
  || op == 7'b1110011 || op == 7'b0110011) ? inst[11:7] : 5'b0;
 assign funct3 = inst[14:12];
 assign rs1 = (op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011	//I
