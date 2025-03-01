@@ -30,13 +30,15 @@ wire [3:0] S_AXI_WSTRB;
 wire [1:0] S_AXI_BRESP,S_AXI_RRESP;
 wire S_AXI_AWVALID,S_AXI_AWREADY,S_AXI_WVALID,S_AXI_WREADY,S_AXI_BVALID,S_AXI_BREADY,S_AXI_ARVALID,S_AXI_ARREADY,S_AXI_RVALID,S_AXI_RREADY;
 reg axi_arready,axi_rvalid,axi_awready,axi_wready,axi_bvalid;
-reg [1:0]axi_bresp;
+reg [1:0]axi_rresp,axi_bresp;
+reg [31:0]axi_rdata;
 assign S_AXI_ARREADY = axi_arready;
 assign S_AXI_RVALID = axi_rvalid;
 assign S_AXI_AWREADY = axi_awready;
 assign S_AXI_WREADY = axi_wready;
 assign S_AXI_BRESP = axi_bresp;
 assign S_AXI_BVALID = axi_bvalid;
+assign S_AXI_RDATA = axi_rdata;
 
 always @(posedge clk) begin
   if(rst) begin
@@ -69,9 +71,6 @@ always @(posedge clk) begin
 		end
 		if(S_AXI_WVALID && S_AXI_WREADY) begin
 			axi_wready <= 0;
-			axi_awaddr <= S_AXI_AWADDR;
-			axi_wdata <= S_AXI_WDATA;
-			axi_wstrb <= S_AXI_WSTRB;
 			axi_bvalid <= 1;
 		end
 		if(S_AXI_BVALID && S_AXI_BREADY) begin
