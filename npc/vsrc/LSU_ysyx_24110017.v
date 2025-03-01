@@ -89,9 +89,9 @@ always @(posedge clk or posedge rst) begin
 						if(wen) begin
 							axi_awvalid <= 1'b1;
 		          state <= WRITE;
-							axi_awaddr <= waddr;
-							axi_wdata <= wdata;
-							axi_wstrb <= wmask;
+							axi_awaddr_reg <= waddr;
+							axi_wdata_reg <= wdata;
+							axi_wstrbreg <= wmask;
 	          end
 						else begin
 							axi_arvalid <= 1'b1;
@@ -115,12 +115,12 @@ always @(posedge clk or posedge rst) begin
 					if(AXI_AWREADY) begin
 						axi_awvalid <= 0;
 						axi_wvalid <= 1;
-						axi_awaddr <= axi_awaddr_reg;
+						axi_awaddr <= axi_awaddr;
 					end
 					if(AXI_WREADY) begin
 						axi_wvalid <= 0;
-						axi_wdata <= axi_wdata_reg;//加判断条件
-						axi_wstrb <= axi_wstrb_reg;
+						axi_wdata <= axi_wdata;//加判断条件
+						axi_wstrb <= axi_wstrb;
 						axi_bready <= 1;
 					end
 					if(AXI_BVALID) begin
