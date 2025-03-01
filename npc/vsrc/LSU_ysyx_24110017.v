@@ -9,6 +9,7 @@ output [31:0]rdata;
 
 wire valid,wen;
 wire [31:0]raddr;
+reg [31:0]rdata;
 wire [31:0]waddr, wdata;
 wire [7:0]wmask;
  
@@ -26,7 +27,6 @@ assign raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
 import "DPI-C" function int pmem_read(input int raddr);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
 
-reg [31:0]rdata;
 always @(*) begin
   if (valid) begin // 有读写请求时
     rdata = pmem_read(raddr);
@@ -45,7 +45,6 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 ***E*N*D***/
 
 /***多周期***/
-reg [31:0]rdata;
 wire [31:0] AXI_AWADDR,AXI_WDATA,AXI_ARADDR,AXI_RDATA;
 wire [7:0] AXI_WSTRB;
 wire [1:0] AXI_BRESP,AXI_RRESP;
@@ -61,14 +60,12 @@ reg axi_awvalid,axi_wvalid;
 reg [31:0]axi_awaddr,axi_wdata;
 reg [7:0]axi_wstrb;
 reg axi_bready;
-reg [1:0]axi_bresp;
 assign AXI_AWVALID = axi_awvalid;
 assign AXI_WVALID = axi_wvalid;
 assign AXI_AWADDR = axi_awaddr;
 assign AXI_WDATA = axi_wdata;
 assign AXI_WSTRB = axi_wstrb;
 assign AXI_BREADY = axi_bready;
-assign AXI_BRESP = axi_bresp;
 
 always @(posedge clk or posedge rst) begin
 		if (rst) begin
