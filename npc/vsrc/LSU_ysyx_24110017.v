@@ -45,7 +45,7 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 ***E*N*D***/
 
 /***多周期***/
-wire [31:0]rdata;
+reg [31:0]rdata;
 wire [31:0] AXI_AWADDR,AXI_WDATA,AXI_ARADDR,AXI_RDATA;
 wire [7:0] AXI_WSTRB;
 wire [1:0] AXI_BRESP,AXI_RRESP;
