@@ -44,7 +44,6 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_he7ae3448__0;
         CData/*0:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hcbe0b758__0;
         CData/*0:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hcabf9aa8__0;
-        CData/*1:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__AXI_BRESP;
         CData/*1:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__AXI_RRESP;
         CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__AXI_AWREADY;
         CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__AXI_WREADY;
@@ -57,7 +56,6 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__axi_wvalid;
         CData/*7:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__axi_wstrb;
         CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__axi_bready;
-        CData/*1:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__axi_bresp;
         CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_arready;
         CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rvalid;
         CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_awready;
@@ -79,10 +77,10 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ __Vdly__top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_bvalid;
         CData/*0:0*/ __Vdly__top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_awready;
         CData/*0:0*/ __Vdly__top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_wready;
-    };
-    struct {
         CData/*0:0*/ __Vdly__top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rvalid;
         CData/*0:0*/ __Vdly__top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_arready;
+    };
+    struct {
         CData/*0:0*/ __Vtrigrprev__TOP__clk;
         CData/*0:0*/ __Vtrigrprev__TOP__rst;
         CData/*0:0*/ __VactContinue;

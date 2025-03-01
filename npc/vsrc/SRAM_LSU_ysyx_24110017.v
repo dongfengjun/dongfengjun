@@ -88,9 +88,9 @@ always @(*) begin
   if(S_AXI_ARVALID && S_AXI_ARREADY) begin // 有读写请求时
     rdata = pmem_read(S_AXI_ARADDR);
 	end
-  else if(S_AXI_WVALID && S_AXI_WREADY) begin // 有写请求时
-    pmem_write(S_AXI_AWADDR,S_AXI_WDATA,S_AXI_WSTRB);
-  end
+  //else if(S_AXI_WVALID && S_AXI_WREADY) begin // 有写请求时
+    //pmem_write(S_AXI_AWADDR,S_AXI_WDATA,S_AXI_WSTRB);
+  //end
 	else begin
     rdata = 32'h0;
   end
