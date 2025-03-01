@@ -53,14 +53,18 @@ wire AXI_AWVALID,AXI_AWREADY,AXI_WVALID,AXI_WREADY,AXI_BVALID,AXI_BREADY,AXI_ARV
 parameter IDLE=2'b0,READ=2'b01,WRITE=2'b10,DONE=2'b11;
 reg state;
 reg axi_arvalid,axi_rready;
+reg [31:0]araddr;
 assign AXI_ARVALID = axi_arvalid;
 assign AXI_RREADY = axi_rready;
+assign AXI_ARADDR = axi_araddr;
 reg axi_awvalid,axi_wvalid;
 reg [31:0]axi_awadrr,axi_wdata;
 reg [3:0]axi_wstrb;
 reg axi_bready;
 reg [1:0]axi_bresp;
 assign AXI_AWVALID = axi_awvalid;
+assign AXI_WVALID = axi_wvalid;
+assign AXI_AWADDR = axi_awaddr;
 assign AXI_WDATA = axi_wdata;
 assign AXI_WSTRB = axi_wstrb;
 assign AXI_BREADY = axi_bready;
@@ -73,7 +77,7 @@ always @(posedge clk or posedge rst) begin
       axi_rready <= 0;
       axi_araddr <= 32'h0;
       axi_awvalid <= 0;
-      axi_awaddr <= 0;
+      axi_awaddr <= 32'h0;
       axi_wdata <= 32'h0;
       axi_wstrb <= 4'b0;
 		  axi_wvalid <= 0;
