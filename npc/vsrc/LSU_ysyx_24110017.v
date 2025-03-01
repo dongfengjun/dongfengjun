@@ -114,7 +114,7 @@ always @(posedge clk or posedge rst) begin
 					if(AXI_AWREADY) begin
 						axi_awvalid <= 0;
 						axi_wvalid <= 1;
-						axi_waddr <= waddr;
+						axi_awaddr <= waddr;
 					end
 					if(AXI_WREADY) begin
 						axi_wvalid <= 0;
