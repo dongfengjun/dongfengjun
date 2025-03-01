@@ -98,6 +98,7 @@ always @(posedge clk or posedge rst) begin
 						else begin
 							axi_arvalid <= 1'b1;
 							state <= READ;
+							rdata <= 32'h0;
 							axi_araddr_reg <= raddr;
 						end
 					end
@@ -135,7 +136,6 @@ always @(posedge clk or posedge rst) begin
 					axi_arvalid <= 0;
 					axi_rready <= 0;
 					axi_araddr <= 32'h0;
-					rdata <= 32'h0;
 					axi_awvalid <= 0;
 					axi_awaddr <= 0;
 					axi_wdata <= 32'h0;

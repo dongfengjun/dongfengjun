@@ -60,7 +60,7 @@ always @(posedge clk) begin
     end
     if(S_AXI_RREADY) begin
       axi_rvalid <= 0;
-      axi_rdata <= rdata;
+      axi_rdata <= s_rdata;
     end
 		if(S_AXI_AWVALID && !S_AXI_AWREADY) begin
 			axi_awready <= 1;//判断条件
@@ -83,13 +83,13 @@ end
 import "DPI-C" function int pmem_read(input int raddr);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
  
-reg [31:0]rdata;
+reg [31:0]s_rdata;
 always @(*) begin
   if(S_AXI_RVALID && S_AXI_RREADY) begin // 有读写请求时
-    rdata = pmem_read(S_AXI_ARADDR);
+    s_rdata = pmem_read(S_AXI_ARADDR);
 	end
 	else begin
-    rdata = 32'h0;
+    s_rdata = 32'h0;
   end
 end
 always @(*) begin
