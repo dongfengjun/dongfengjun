@@ -120,7 +120,6 @@ always @(posedge clk or posedge rst) begin
 					end
 					if(AXI_BVALID) begin
 						axi_bready <= 0;
-						axi_bresp <= AXI_BRESP;
 						state <= DONE;
 					end
 				end
