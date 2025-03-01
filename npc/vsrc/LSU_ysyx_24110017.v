@@ -45,6 +45,7 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 ***E*N*D***/
 
 /***多周期***/
+reg [31:0]axi_araddr_reg;
 reg [31:0]axi_awaddr_reg,axi_wdata_reg;
 reg [7:0]axi_wstrb_reg;
 wire [31:0] AXI_AWADDR,AXI_WDATA,AXI_ARADDR,AXI_RDATA;
@@ -96,6 +97,7 @@ always @(posedge clk or posedge rst) begin
 						else begin
 							axi_arvalid <= 1'b1;
 							state <= READ;
+							axi_araddr_reg <= raddr;
 						end
 					end
 				end
@@ -103,7 +105,7 @@ always @(posedge clk or posedge rst) begin
           if(AXI_ARREADY) begin
 						axi_arvalid <= 0;
             axi_rready <= 1;//加判断条件
-						axi_araddr <= raddr;
+						axi_araddr <= axi_araddr_reg;
           end
 	        if(AXI_RVALID) begin
             rdata <= AXI_RDATA;
