@@ -9,7 +9,7 @@ output [31:0]rdata;
 
 wire valid,wen;
 wire [31:0]raddr;
-reg [31:0]rdata;
+wire [31:0]rdata = AXI_RDATA;
 wire [31:0]waddr, wdata;
 wire [7:0]wmask;
  
@@ -98,7 +98,6 @@ always @(posedge clk or posedge rst) begin
 						else begin
 							axi_arvalid <= 1'b1;
 							state <= READ;
-							rdata <= 32'h0;
 							axi_araddr_reg <= raddr;
 						end
 					end
@@ -110,7 +109,6 @@ always @(posedge clk or posedge rst) begin
 						axi_araddr <= axi_araddr_reg;
           end
 	        if(AXI_RVALID) begin
-            rdata <= AXI_RDATA;
             axi_rready <= 0;
             state <= DONE;
           end
