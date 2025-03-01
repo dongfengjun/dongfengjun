@@ -53,7 +53,7 @@ wire AXI_AWVALID,AXI_AWREADY,AXI_WVALID,AXI_WREADY,AXI_BVALID,AXI_BREADY,AXI_ARV
 parameter IDLE=2'b0,READ=2'b01,WRITE=2'b10,DONE=2'b11;
 reg state;
 reg axi_arvalid,axi_rready;
-reg [31:0]araddr;
+reg [31:0]axi_araddr;
 assign AXI_ARVALID = axi_arvalid;
 assign AXI_RREADY = axi_rready;
 assign AXI_ARADDR = axi_araddr;
