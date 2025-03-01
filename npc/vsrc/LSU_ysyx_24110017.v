@@ -133,7 +133,6 @@ always @(posedge clk or posedge rst) begin
 					axi_wstrb <= 8'b0;
 					axi_wvalid <= 0;
 					axi_bready <= 0;
-					axi_bresp <= 2'b0;
           state <= IDLE;
         end
       endcase
