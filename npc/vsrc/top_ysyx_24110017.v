@@ -18,6 +18,7 @@ wire wr_en;
 wire [31:0]inst;
 
 wire [31:0]res;
+wire ldone;
 wire [31:0]r1,r2,a,b,xrd;
 wire [31:0]csrs, csrs_in, mepc_in, mepc, mstatus, mcause_in, mcause, mtvec;
 wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
