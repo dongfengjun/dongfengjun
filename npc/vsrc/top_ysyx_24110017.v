@@ -53,7 +53,7 @@ IDU_ysyx_24110017 IDU(clk,rst,inst,
 		op,rd,funct3,rs1,rs2,imm,funct7,shamt,
 		wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);
 EXU_ysyx_24110017 EXU(clk,rst,
-		op,funct3,imm,funct7,shamt,
+		op,funct3,imm,funct7,shamt,rd,
 		a,b,csrs,csrs_in,res,ldone);
 WBU_ysyx_24110017 WBU(clk,rst,
 		op,imm,funct3,
