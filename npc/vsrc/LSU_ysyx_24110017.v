@@ -12,7 +12,7 @@ wire [31:0]raddr;
 wire [31:0]waddr, wdata;
 wire [7:0]wmask;
  
-assign valid = (op == 7'b0000011) ? 1'b1 : 1'b0;
+assign valid = (op == 7'b0000011 || op == 7'b0100011) ? 1'b1 : 1'b0;
 assign wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
 assign waddr = (op == 7'b0100011) ? (r1 + offset) : 32'h80000000;
 assign wdata = (op == 7'b0100011) ? r2 : 32'b0;
@@ -58,38 +58,51 @@ assign AXI_RREADY = axi_rready;
 reg axi_awvalid,axi_wvalid;
 reg [31:0]axi_awadrr,axi_wdata;
 reg [3:0]axi_wstrb;
+reg axi_bready;
+reg [1:0]axi_bresp;
 assign AXI_AWVALID = axi_awvalid;
 assign AXI_WREADY = axi_wready;
 assign AXI_AWADRR = axi_awaddr;
 assign AXI_WDATA = axi_wdata;
 assign AXI_WSTRB = axi_wstrb;
+assign AXI_BREADY = axi_bready;
+assign AXI_BRESP = axi_bresp;
 
 always @(posedge clk or posedge rst) begin
 		if (rst) begin
 			state <= IDLE;
-			axi_arvalid <= 1'b0;
-			axi_rready <= 1'b0;
+      axi_arvalid <= 0;
+      axi_rready <= 0;
+      axi_araddr <= 32'h0;
+      axi_awvalid <= 0;
+      axi_awaddr <= 0;
+      axi_wdata <= 32'h0;
+      axi_wstrb <= 4'b0;
+		  axi_wvalid <= 0;
+      axi_bready <= 0;
+			axi_bresp <= 2'b0;
     end 
 		else begin
       case (state)
         IDLE: begin
 				  if(valid) begin
-          axi_araddr <= raddr;
-          axi_arvalid <= 1'b1;
-          state <= READ;
-					end
-					if(wen) begin
-					axi_awaddr <= waddr;
-					axi_awvalid <= 1'b1;
-					state <= WRITE;
+						if(wen) begin
+							axi_awvalid <= 1'b1;
+		          state <= WRITE;
+	          end
+						else begin
+							axi_arvalid <= 1'b1;
+							state <= READ;
+						end
 					end
 				end
 				READ: begin
-          if (AXI_ARREADY) begin
+          if(AXI_ARREADY) begin
 						axi_arvalid <= 0;
             axi_rready <= 1;//加判断条件
+						axi_araddr <= raddr;
           end
-	        if (AXI_RVALID) begin
+	        if(AXI_RVALID) begin
             rdata <= AXI_RDATA;
             axi_rready <= 0;
             state <= DONE;
@@ -99,23 +112,43 @@ always @(posedge clk or posedge rst) begin
 					if(AXI_AWREADY) begin
 						axi_awvalid <= 0;
 						axi_wvalid <= 1;
-						axi_wdata <= wdata;
+						axi_waddr <= waddr;
 					end
 					if(AXI_WREADY) begin
 						axi_wvalid <= 0;
 						axi_wdata <= wdata;//加判断条件
 						axi_wstrb <= wmask;
+						axi_bready <= 1;
 					end
+					if(AXI_BVALID) begin
+						axi_bready <= 0;
+						axi_bresp <= AXI_BRESP;
+						state <= DONE;
 				end
         DONE: begin
+					axi_arvalid <= 0;
+					axi_rready <= 0;
+					axi_araddr <= 32'h0;
+					axi_awvalid <= 0;
+					axi_awaddr <= 0;
+					axi_wdata <= 32'h0;
+					axi_wstrb <= 4'b0;
+					axi_wvalid <= 0;
+					axi_bready <= 0;
+					axi_bresp <= 2'b0;
           state <= IDLE;
         end
       endcase
 		end
 end
 
-SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,valid,wen,waddr,wdata,wmask,raddr,rdata);
+SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,
+				AXI_AWADDR,AXI_AWVALID,AXI_AWREADY,
+        AXI_WDATA,AXI_WSTRB,AXI_WVALID,AXI_WREADY,
+        AXI_BRESP,AXI_BVALID,AXI_BREADY,
+        AXI_ARADDR,AXI_ARVALID,AXI_ARREADY,
+        AXI_RDATA,AXI_RRESP,AXI_RVALID,AXI_RREADY
+);
 /***E*N*D***/
-
 
 endmodule
