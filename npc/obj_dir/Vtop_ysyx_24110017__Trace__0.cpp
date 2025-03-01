@@ -65,9 +65,9 @@ void Vtop_ysyx_24110017___024root__trace_chg_sub_0(Vtop_ysyx_24110017___024root*
         bufp->chgIData(oldp+38,(vlSelf->top_ysyx_24110017__DOT__RF__DOT__rf[31]),32);
     }
     if (VL_UNLIKELY(vlSelf->__Vm_traceActivity[2U])) {
-        bufp->chgBit(oldp+39,((1U & (IData)(vlSelf->top_ysyx_24110017__DOT__EXU__DOT____Vcellout__LSU_ysyx_24110017____pinNumber10))));
-        bufp->chgCData(oldp+40,(vlSelf->top_ysyx_24110017__DOT__EXU__DOT____Vcellout__LSU_ysyx_24110017____pinNumber10),5);
-        bufp->chgBit(oldp+41,(vlSelf->top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__ldone));
+        bufp->chgBit(oldp+39,(vlSelf->top_ysyx_24110017__DOT__ldone));
+        bufp->chgBit(oldp+40,((1U & (IData)(vlSelf->top_ysyx_24110017__DOT____Vcellout__EXU____pinNumber15))));
+        bufp->chgCData(oldp+41,(vlSelf->top_ysyx_24110017__DOT____Vcellout__EXU____pinNumber15),5);
         bufp->chgIData(oldp+42,(vlSelf->top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__axi_araddr_reg),32);
         bufp->chgIData(oldp+43,(vlSelf->top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__axi_awaddr_reg),32);
         bufp->chgIData(oldp+44,(vlSelf->top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__axi_wdata_reg),32);
@@ -251,8 +251,10 @@ void Vtop_ysyx_24110017___024root__trace_chg_sub_0(Vtop_ysyx_24110017___024root*
     bufp->chgBit(oldp+122,((IData)(((0x73U == (0x707fU 
                                                & vlSelf->inst)) 
                                     & (0x302U == vlSelf->top_ysyx_24110017__DOT__imm)))));
-    bufp->chgBit(oldp+123,((1U & ((IData)(vlSelf->top_ysyx_24110017__DOT__EXU__DOT____Vcellout__LSU_ysyx_24110017____pinNumber10) 
-                                  | (IData)(vlSelf->top_ysyx_24110017__DOT__wr_en)))));
+    bufp->chgCData(oldp+123,(((IData)(vlSelf->top_ysyx_24110017__DOT__rd) 
+                              | (1U & (IData)(vlSelf->top_ysyx_24110017__DOT____Vcellout__EXU____pinNumber15)))),5);
+    bufp->chgBit(oldp+124,(((IData)(vlSelf->top_ysyx_24110017__DOT__ldone) 
+                            | (IData)(vlSelf->top_ysyx_24110017__DOT__wr_en))));
 }
 
 void Vtop_ysyx_24110017___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {

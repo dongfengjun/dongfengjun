@@ -7,7 +7,7 @@ output [31:0]inst;
 output DIFFTEST;
 
 wire [6:0]op;
-wire [4:0]rd;	//R I U J
+wire [4:0]rd,lrd;	//R I U J
 wire [2:0]funct3;
 wire [4:0]rs1;	//R I S B 
 wire [4:0]rs2;	//R S B

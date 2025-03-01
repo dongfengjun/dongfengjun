@@ -23,6 +23,7 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*4:0*/ top_ysyx_24110017__DOT__rs2;
         CData/*6:0*/ top_ysyx_24110017__DOT__funct7;
         CData/*0:0*/ top_ysyx_24110017__DOT__wr_en;
+        CData/*0:0*/ top_ysyx_24110017__DOT__ldone;
         CData/*0:0*/ top_ysyx_24110017__DOT__mstatus_wen;
         CData/*0:0*/ top_ysyx_24110017__DOT__mtvec_wen;
         CData/*0:0*/ top_ysyx_24110017__DOT__IF_DONE;
@@ -35,6 +36,7 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ top_ysyx_24110017__DOT__AXI_BVALID;
         CData/*0:0*/ top_ysyx_24110017__DOT__AXI_BREADY;
         CData/*0:0*/ top_ysyx_24110017__DOT__AXI_ARREADY;
+        CData/*4:0*/ top_ysyx_24110017__DOT____Vcellout__EXU____pinNumber15;
         CData/*0:0*/ top_ysyx_24110017__DOT__PCU__DOT__ecall_en;
         CData/*0:0*/ top_ysyx_24110017__DOT__IFU__DOT__axi_arvalid;
         CData/*0:0*/ top_ysyx_24110017__DOT__IFU__DOT__axi_rready;
@@ -45,8 +47,6 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_he7ae3448__0;
         CData/*0:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hcbe0b758__0;
         CData/*0:0*/ top_ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hcabf9aa8__0;
-        CData/*4:0*/ top_ysyx_24110017__DOT__EXU__DOT____Vcellout__LSU_ysyx_24110017____pinNumber10;
-        CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__ldone;
         CData/*7:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__axi_wstrb_reg;
         CData/*1:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__AXI_RRESP;
         CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT__LSU_ysyx_24110017__DOT__AXI_AWREADY;
