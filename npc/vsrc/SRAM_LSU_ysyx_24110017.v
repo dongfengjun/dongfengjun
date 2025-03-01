@@ -29,6 +29,8 @@ wire [31:0] S_AXI_AWADDR,S_AXI_WDATA,S_AXI_ARADDR,S_AXI_RDATA;
 wire [3:0] S_AXI_WSTRB;
 wire [1:0] S_AXI_BRESP,S_AXI_RRESP;
 wire S_AXI_AWVALID,S_AXI_AWREADY,S_AXI_WVALID,S_AXI_WREADY,S_AXI_BVALID,S_AXI_BREADY,S_AXI_ARVALID,S_AXI_ARREADY,S_AXI_RVALID,S_AXI_RREADY;
+reg axi_arready,axi_rvalid,axi_awready,axi_wready,axi_bvalid;
+reg [1:0]axi_bresp;
 assign S_AXI_ARREADY = axi_arready;
 assign S_AXI_RVALID = axi_rvalid;
 assign S_AXI_AWREADY = axi_awready;
