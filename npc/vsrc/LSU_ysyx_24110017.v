@@ -58,7 +58,7 @@ assign AXI_ARVALID = axi_arvalid;
 assign AXI_RREADY = axi_rready;
 assign AXI_ARADDR = axi_araddr;
 reg axi_awvalid,axi_wvalid;
-reg [31:0]axi_awadrr,axi_wdata;
+reg [31:0]axi_awaddr,axi_wdata;
 reg [3:0]axi_wstrb;
 reg axi_bready;
 reg [1:0]axi_bresp;
