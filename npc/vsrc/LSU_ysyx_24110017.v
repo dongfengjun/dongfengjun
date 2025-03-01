@@ -89,9 +89,9 @@ always @(posedge clk or posedge rst) begin
 						if(wen) begin
 							axi_awvalid <= 1'b1;
 		          state <= WRITE;
-							axi_awaddr_reg <= waddr;
-							axi_wdata_reg <= wdata;
-							axi_wstrbreg <= wmask;
+							axi_awaddr <= waddr;
+							axi_wdata <= wdata;
+							axi_wstrb <= wmask;
 	          end
 						else begin
 							axi_arvalid <= 1'b1;
