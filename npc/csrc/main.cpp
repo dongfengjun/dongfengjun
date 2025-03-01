@@ -24,7 +24,6 @@ word_t csrs_display(int i) {
   return csr_display(i);
 }
 
-static void statistic();
 bool RUNNING;
 void npc_trap() {
   extern int gpr_reg_display(int addr);//抓取a0
@@ -33,7 +32,6 @@ void npc_trap() {
   char str[15];
   Log("npc: %s at pc = " FMT_WORD, (a0 == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED)), top->pc);
   RUNNING = false;
-	statistic();
 }
 
 /***main***/
@@ -307,6 +305,7 @@ int main(int argc, char *argv[]) {
 #endif
 	dump_wave();
 /***close**/
+	statistic();
 	tfp->close();
 	delete contextp;
 	return 0;
