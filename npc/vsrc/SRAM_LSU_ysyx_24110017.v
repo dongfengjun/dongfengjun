@@ -10,7 +10,7 @@ input [31:0] S_AXI_AWADDR;
 input S_AXI_AWVALID;
 output S_AXI_AWREADY;
 input [31:0] S_AXI_WDATA;
-input [3:0] S_AXI_WSTRB;
+input [7:0] S_AXI_WSTRB;
 input S_AXI_WVALID;
 output S_AXI_WREADY;
 output [1:0] S_AXI_BRESP;
@@ -26,7 +26,7 @@ output S_AXI_RVALID;
 input S_AXI_RREADY;
 
 wire [31:0] S_AXI_AWADDR,S_AXI_WDATA,S_AXI_ARADDR,S_AXI_RDATA;
-wire [3:0] S_AXI_WSTRB;
+wire [7:0] S_AXI_WSTRB;
 wire [1:0] S_AXI_BRESP,S_AXI_RRESP;
 wire S_AXI_AWVALID,S_AXI_AWREADY,S_AXI_WVALID,S_AXI_WREADY,S_AXI_BVALID,S_AXI_BREADY,S_AXI_ARVALID,S_AXI_ARREADY,S_AXI_RVALID,S_AXI_RREADY;
 reg axi_arready,axi_rvalid,axi_awready,axi_wready,axi_bvalid;

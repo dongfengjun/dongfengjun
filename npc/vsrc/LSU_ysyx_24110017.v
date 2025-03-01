@@ -47,7 +47,7 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 /***多周期***/
 wire [31:0]rdata;
 wire [31:0] AXI_AWADDR,AXI_WDATA,AXI_ARADDR,AXI_RDATA;
-wire [3:0] AXI_WSTRB;
+wire [7:0] AXI_WSTRB;
 wire [1:0] AXI_BRESP,AXI_RRESP;
 wire AXI_AWVALID,AXI_AWREADY,AXI_WVALID,AXI_WREADY,AXI_BVALID,AXI_BREADY,AXI_ARVALID,AXI_ARREADY,AXI_RVALID,AXI_RREADY;
 parameter IDLE=2'b0,READ=2'b01,WRITE=2'b10,DONE=2'b11;
@@ -59,7 +59,7 @@ assign AXI_RREADY = axi_rready;
 assign AXI_ARADDR = axi_araddr;
 reg axi_awvalid,axi_wvalid;
 reg [31:0]axi_awaddr,axi_wdata;
-reg [3:0]axi_wstrb;
+reg [7:0]axi_wstrb;
 reg axi_bready;
 reg [1:0]axi_bresp;
 assign AXI_AWVALID = axi_awvalid;
@@ -79,7 +79,7 @@ always @(posedge clk or posedge rst) begin
       axi_awvalid <= 0;
       axi_awaddr <= 32'h0;
       axi_wdata <= 32'h0;
-      axi_wstrb <= 4'b0;
+      axi_wstrb <= 8'b0;
 		  axi_wvalid <= 0;
       axi_bready <= 0;
 			axi_bresp <= 2'b0;
@@ -135,7 +135,7 @@ always @(posedge clk or posedge rst) begin
 					axi_awvalid <= 0;
 					axi_awaddr <= 0;
 					axi_wdata <= 32'h0;
-					axi_wstrb <= 4'b0;
+					axi_wstrb <= 8'b0;
 					axi_wvalid <= 0;
 					axi_bready <= 0;
 					axi_bresp <= 2'b0;
