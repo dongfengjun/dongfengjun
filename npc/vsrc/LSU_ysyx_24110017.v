@@ -46,7 +46,7 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 
 /***多周期***/
 wire [31:0]rdata;
-wire wire [31:0] AXI_AWADDR,AXI_WDATA,AXI_ARADDR,AXI_RDATA;
+wire [31:0] AXI_AWADDR,AXI_WDATA,AXI_ARADDR,AXI_RDATA;
 wire [3:0] AXI_WSTRB;
 wire [1:0] AXI_BRESP,AXI_RRESP;
 wire AXI_AWVALID,AXI_AWREADY,AXI_WVALID,AXI_WREADY,AXI_BVALID,AXI_BREADY,AXI_ARVALID,AXI_ARREADY,AXI_RVALID,AXI_RREADY;
@@ -124,6 +124,7 @@ always @(posedge clk or posedge rst) begin
 						axi_bready <= 0;
 						axi_bresp <= AXI_BRESP;
 						state <= DONE;
+					end
 				end
         DONE: begin
 					axi_arvalid <= 0;
