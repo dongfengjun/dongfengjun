@@ -12,7 +12,7 @@ wire [31:0]raddr;
 wire [31:0]waddr, wdata;
 wire [7:0]wmask;
  
-assign valid = (op == 7'b0100011 || op == 7'b0000011) ? 1'b1 : 1'b0;
+assign valid = (op == 7'b0000011) ? 1'b1 : 1'b0;
 assign wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
 assign waddr = (op == 7'b0100011) ? (r1 + offset) : 32'h80000000;
 assign wdata = (op == 7'b0100011) ? r2 : 32'b0;
@@ -22,7 +22,7 @@ assign wmask = (op == 7'b0100011 && function3 == 3'b000) ? 8'b00000001
  : 8'b0;
 assign raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
 
-/***单周期*DPIC***/
+/***单周期*DPIC***
 import "DPI-C" function int pmem_read(input int raddr);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
 
@@ -44,8 +44,76 @@ end
 Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 ***E*N*D***/
 
-/***多周期***
-wire [31:0]wdata;
+/***多周期***/
+wire [31:0]rdata;
+wire wire [31:0] AXI_AWADDR,AXI_WDATA,AXI_ARADDR,AXI_RDATA;
+wire [3:0] AXI_WSTRB;
+wire [1:0] AXI_BRESP,AXI_RRESP;
+wire AXI_AWVALID,AXI_AWREADY,AXI_WVALID,AXI_WREADY,AXI_BVALID,AXI_BREADY,AXI_ARVALID,AXI_ARREADY,AXI_RVALID,AXI_RREADY;
+parameter IDLE=2'b0,READ=2'b01,WRITE=2'b10,DONE=2'b11;
+reg state;
+reg axi_arvalid,axi_rready;
+assign AXI_ARVALID = axi_arvalid;
+assign AXI_RREADY = axi_rready;
+reg axi_awvalid,axi_wvalid;
+reg [31:0]axi_awadrr,axi_wdata;
+reg [3:0]axi_wstrb;
+assign AXI_AWVALID = axi_awvalid;
+assign AXI_WREADY = axi_wready;
+assign AXI_AWADRR = axi_awaddr;
+assign AXI_WDATA = axi_wdata;
+assign AXI_WSTRB = axi_wstrb;
+
+always @(posedge clk or posedge rst) begin
+		if (rst) begin
+			state <= IDLE;
+			axi_arvalid <= 1'b0;
+			axi_rready <= 1'b0;
+    end 
+		else begin
+      case (state)
+        IDLE: begin
+				  if(valid) begin
+          axi_araddr <= raddr;
+          axi_arvalid <= 1'b1;
+          state <= READ;
+					end
+					if(wen) begin
+					axi_awaddr <= waddr;
+					axi_awvalid <= 1'b1;
+					state <= WRITE;
+					end
+				end
+				READ: begin
+          if (AXI_ARREADY) begin
+						axi_arvalid <= 0;
+            axi_rready <= 1;//加判断条件
+          end
+	        if (AXI_RVALID) begin
+            rdata <= AXI_RDATA;
+            axi_rready <= 0;
+            state <= DONE;
+          end
+        end
+				WRITE: begin
+					if(AXI_AWREADY) begin
+						axi_awvalid <= 0;
+						axi_wvalid <= 1;
+						axi_wdata <= wdata;
+					end
+					if(AXI_WREADY) begin
+						axi_wvalid <= 0;
+						axi_wdata <= wdata;//加判断条件
+						axi_wstrb <= wmask;
+					end
+				end
+        DONE: begin
+          state <= IDLE;
+        end
+      endcase
+		end
+end
+
 SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,valid,wen,waddr,wdata,wmask,raddr,rdata);
 /***E*N*D***/
 
