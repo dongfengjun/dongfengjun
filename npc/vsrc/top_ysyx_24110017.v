@@ -53,13 +53,13 @@ IDU_ysyx_24110017 IDU(clk,rst,inst,
 		wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);
 EXU_ysyx_24110017 EXU(clk,rst,
 		op,funct3,imm,funct7,shamt,
-		a,b,csrs,csrs_in,res);
+		a,b,csrs,csrs_in,res,ldone);
 WBU_ysyx_24110017 WBU(clk,rst,
 		op,imm,funct3,
 		pc,r1,r2,res,
 		a,b,xrd,mepc,mstatus,mcause,mtvec,csrs,csrs_in,mepc_in,mcause_in);
 
-RegisterFile_ysyx_24110017 #(5,32) RF (clk,xrd,rd,wr_en,rs1,r1,rs2,r2);
+RegisterFile_ysyx_24110017 #(5,32) RF (clk,xrd,rd,(wr_en || ldone),rs1,r1,rs2,r2);
 Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk,rst,mepc_in,mepc,mepc_wen);
 Reg_ysyx_24110017 #(32, 32'h1800) mstatus_ysyx_24110017 (clk,rst,csrs_in,mstatus,mstatus_wen);
 Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk,rst,mcause_in,mcause,mcause_wen);

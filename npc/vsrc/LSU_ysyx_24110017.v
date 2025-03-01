@@ -1,4 +1,4 @@
-module LSU_ysyx_24110017(clk,rst,op,r1,r2,offset,function3,rdata);
+module LSU_ysyx_24110017(clk,rst,op,r1,r2,offset,function3,rdata,ldone);
 input clk;
 input rst;
 input [6:0]op;
@@ -6,12 +6,14 @@ input [31:0]r1,r2;
 input [31:0]offset;
 input [2:0]function3;
 output [31:0]rdata;
+output ldone;
 
 wire valid,wen;
 wire [31:0]raddr;
 wire [31:0]rdata = AXI_RDATA;
 wire [31:0]waddr, wdata;
 wire [7:0]wmask;
+reg ldone;
  
 assign valid = (op == 7'b0000011 || op == 7'b0100011) ? 1'b1 : 1'b0;
 assign wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
@@ -109,6 +111,7 @@ always @(posedge clk or posedge rst) begin
           end
 	        if(AXI_RVALID) begin
             axi_rready <= 0;
+						ldone <= 1;
             state <= DONE;
           end
         end
@@ -139,6 +142,7 @@ always @(posedge clk or posedge rst) begin
 					axi_wstrb <= 8'b0;
 					axi_wvalid <= 0;
 					axi_bready <= 0;
+					ldone <= 0;
           state <= IDLE;
         end
       endcase
