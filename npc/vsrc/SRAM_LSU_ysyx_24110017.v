@@ -85,7 +85,7 @@ import "DPI-C" function void pmem_write(input int waddr, input int wdata, input 
  
 reg [31:0]rdata;
 always @(*) begin
-  if(S_AXI_ARVALID && S_AXI_ARREADY) begin // 有读写请求时
+  if(S_AXI_RVALID && S_AXI_RREADY) begin // 有读写请求时
     rdata = pmem_read(S_AXI_ARADDR);
 	end
 	else begin
