@@ -1,4 +1,4 @@
-module LSU_ysyx_24110017(clk,rst,op,rd,r1,r2,offset,function3,rdata,lrd,ldone);
+module LSU_ysyx_24110017(clk,rst,op,rd,r1,r2,offset,function3,rdata,lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone);
 input clk;
 input rst;
 input [6:0]op;
@@ -9,6 +9,7 @@ input [2:0]function3;
 output [31:0]rdata;
 output [4:0]lrd;
 output ldone;
+output lbdone,lhdone,lwdone,lbudone,lhudone;
 
 wire valid,wen;
 wire [31:0]raddr;
