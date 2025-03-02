@@ -40,6 +40,7 @@ assign S_AXI_BRESP = axi_bresp;
 assign S_AXI_BVALID = axi_bvalid;
 assign S_AXI_RDATA = axi_rdata;
 
+reg s_wen;
 always @(posedge clk) begin
   if(rst) begin
 	  axi_arready <= 0;
@@ -48,6 +49,7 @@ always @(posedge clk) begin
 		axi_wready <= 0;
 		axi_bresp <= 2'b00;
 		axi_bvalid <= 0;
+		s_ween <= 0;
   end 
 	else begin
 	  if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
@@ -72,10 +74,12 @@ always @(posedge clk) begin
 		if(S_AXI_WVALID && S_AXI_WREADY) begin
 			axi_wready <= 0;
 			axi_bvalid <= 1;
+			s_wen <= 1;
 		end
 		if(S_AXI_BVALID && S_AXI_BREADY) begin
 			axi_bvalid <= 0;
 			axi_bresp <= 2'b11;
+			s_wen <= 0;
 		end
   end
 end
@@ -93,7 +97,7 @@ always @(*) begin
   end
 end
 always @(*) begin
-  if(S_AXI_WVALID && S_AXI_WREADY) begin // 有写请求时
+  if(s_wen) begin // 有写请求时
     pmem_write(S_AXI_AWADDR,S_AXI_WDATA,S_AXI_WSTRB);
   end
 end
