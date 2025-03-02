@@ -84,7 +84,7 @@ assign res =
           & (rdata)) | //I_lw
 			({32{lbudone}}
           & {24'b0,(rdata[7:0])}) | //I_lbu
-			({32{lhdone}}
+			({32{lhudone}}
           & {16'b0,(rdata[15:0])}) //I_lhu
 /***I_csrrw~csrrc***/
 			|
