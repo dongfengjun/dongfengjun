@@ -1,11 +1,11 @@
-module LSU_ysyx_24110017(clk,rst,op,rd,r1,r2,offset,function3,rdata,lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone);
+module LSU_ysyx_24110017(clk,rst,op,rd,r1,r2,offset,funct3,rdata,lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone);
 input clk;
 input rst;
 input [6:0]op;
 input [4:0]rd;
 input [31:0]r1,r2;
 input [31:0]offset;
-input [2:0]function3;
+input [2:0]funct3;
 output [31:0]rdata;
 output [4:0]lrd;
 output ldone;
@@ -24,9 +24,9 @@ assign valid = (op == 7'b0000011 || op == 7'b0100011) ? 1'b1 : 1'b0;
 assign wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
 assign waddr = (op == 7'b0100011) ? (r1 + offset) : 32'h80000000;
 assign wdata = (op == 7'b0100011) ? r2 : 32'b0;
-assign wmask = (op == 7'b0100011 && function3 == 3'b000) ? 8'b00000001
- : (op == 7'b0100011 && function3 == 3'b001) ? 8'b00000011
- : (op == 7'b0100011 && function3 == 3'b010) ? 8'b00001111
+assign wmask = (op == 7'b0100011 && funct3 == 3'b000) ? 8'b00000001
+ : (op == 7'b0100011 && funct3 == 3'b001) ? 8'b00000011
+ : (op == 7'b0100011 && funct3 == 3'b010) ? 8'b00001111
  : 8'b0;
 assign raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
 
@@ -106,11 +106,11 @@ always @(posedge clk or posedge rst) begin
 							state <= READ;
 							axi_araddr_reg <= raddr;
 							lrd <= rd;
-							lbdone <= (op == 7'b0000011) && (sel == 3'b000);
-							lhdone <= (op == 7'b0000011) && (sel == 3'b010);
-							lwdone <= (op == 7'b0000011) && (sel == 3'b011);
-							lbudone <= (op == 7'b0000011) && (sel == 3'b100);
-							lhudone <= (op == 7'b0000011) && (sel == 3'b111);
+							lbdone <= (op == 7'b0000011) && (funct3 == 3'b000);
+							lhdone <= (op == 7'b0000011) && (funct3 == 3'b010);
+							lwdone <= (op == 7'b0000011) && (funct3 == 3'b011);
+							lbudone <= (op == 7'b0000011) && (funct3 == 3'b100);
+							lhudone <= (op == 7'b0000011) && (funct3 == 3'b111);
 						end
 					end
 				end
