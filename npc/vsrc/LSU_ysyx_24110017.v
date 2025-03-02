@@ -107,10 +107,10 @@ always @(posedge clk or posedge rst) begin
 							axi_araddr_reg <= raddr;
 							lrd <= rd;
 							lbdone <= (op == 7'b0000011) && (funct3 == 3'b000);
-							lhdone <= (op == 7'b0000011) && (funct3 == 3'b010);
-							lwdone <= (op == 7'b0000011) && (funct3 == 3'b011);
+							lhdone <= (op == 7'b0000011) && (funct3 == 3'b001);
+							lwdone <= (op == 7'b0000011) && (funct3 == 3'b010);
 							lbudone <= (op == 7'b0000011) && (funct3 == 3'b100);
-							lhudone <= (op == 7'b0000011) && (funct3 == 3'b111);
+							lhudone <= (op == 7'b0000011) && (funct3 == 3'b101);
 						end
 					end
 				end
