@@ -80,7 +80,7 @@ assign res =
 					& {{24{rdata[7]}},(rdata[7:0])}) | //I_lb
 			({32{lhdone}}
           & {{16{rdata[15]}},(rdata[15:0])}) | //I_lh
-			({32{(lwdone}} 
+			({32{lwdone}} 
           & (rdata)) | //I_lw
 			({32{lbudone}}
           & {24'b0,(rdata[7:0])}) | //I_lbu
