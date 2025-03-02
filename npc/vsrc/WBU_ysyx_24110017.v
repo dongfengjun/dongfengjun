@@ -10,6 +10,7 @@ input [31:0]res;
 output [31:0]a;
 output [31:0]b;
 output [31:0]xrd;
+input ldone;
 input [31:0]mepc,mstatus,mcause,mtvec;
 output [31:0]csrs;
 input [31:0]csrs_in;
