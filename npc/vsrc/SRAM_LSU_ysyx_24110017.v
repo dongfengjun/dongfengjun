@@ -49,7 +49,7 @@ always @(posedge clk) begin
 		axi_wready <= 0;
 		axi_bresp <= 2'b00;
 		axi_bvalid <= 0;
-		s_ween <= 0;
+		s_wen <= 0;
   end 
 	else begin
 	  if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
