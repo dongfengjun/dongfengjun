@@ -76,15 +76,15 @@ assign res =
 																										))
 /***I_lb~lhu***/
 			|
-			({32{ldone}} 
+			({32{lbdone}} 
 					& {{24{rdata[7]}},(rdata[7:0])}) | //I_lb
-			({32{ldone}}
+			({32{lhdone}}
           & {{16{rdata[15]}},(rdata[15:0])}) | //I_lh
-			({32{ldone}} 
+			({32{(lwdone}} 
           & (rdata)) | //I_lw
-			({32{(op == 7'b0000011) && (sel == 3'b100)}}
+			({32{lbudone}}
           & {24'b0,(rdata[7:0])}) | //I_lbu
-			({32{(op == 7'b0000011) && (sel == 3'b101)}}
+			({32{lhdone}}
           & {16'b0,(rdata[15:0])}) //I_lhu
 /***I_csrrw~csrrc***/
 			|
@@ -106,6 +106,6 @@ assign csrs_in =
 
 /***load*store***/
 wire [31:0]rdata;
-LSU_ysyx_24110017 LSU_ysyx_24110017(clk,rst,op,rd,a,b,imm,sel,rdata,lrd,ldone);
+LSU_ysyx_24110017 LSU_ysyx_24110017(clk,rst,op,rd,a,b,imm,sel,rdata,lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone);
 
 endmodule

@@ -17,6 +17,7 @@ wire [31:0]rdata = AXI_RDATA;
 wire [31:0]waddr, wdata;
 wire [7:0]wmask;
 reg ldone;
+reg lbdone,lhdone,lwdone,lbudone,lhudone;
  
 assign valid = (op == 7'b0000011 || op == 7'b0100011) ? 1'b1 : 1'b0;
 assign wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
@@ -104,6 +105,11 @@ always @(posedge clk or posedge rst) begin
 							state <= READ;
 							axi_araddr_reg <= raddr;
 							lrd <= rd;
+							lbdone <= (op == 7'b0000011) && (sel == 3'b000);
+							lhdone <= (op == 7'b0000011) && (sel == 3'b010);
+							lwdone <= (op == 7'b0000011) && (sel == 3'b011);
+							lbudone <= (op == 7'b0000011) && (sel == 3'b100);
+							lhudone <= (op == 7'b0000011) && (sel == 3'b111);
 						end
 					end
 				end
@@ -147,6 +153,11 @@ always @(posedge clk or posedge rst) begin
 					axi_wvalid <= 0;
 					axi_bready <= 0;
 					ldone <= 0;
+					lbdone <= 0;
+					lhdone <= 0;
+					lwdone <= 0;
+					lbudone <= 0;
+					lhudone <= 0;
 					lrd <= 0;
           state <= IDLE;
         end
