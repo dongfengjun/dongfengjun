@@ -76,9 +76,9 @@ assign res =
 																										))
 /***I_lb~lhu***/
 			|
-			({32{(op == 7'b0000011) && (sel == 3'b000)}} 
+			({32{ldone}} 
 					& {{24{rdata[7]}},(rdata[7:0])}) | //I_lb
-			({32{(op == 7'b0000011) && (sel == 3'b001)}}
+			({32{ldone}}
           & {{16{rdata[15]}},(rdata[15:0])}) | //I_lh
 			({32{ldone}} 
           & (rdata)) | //I_lw

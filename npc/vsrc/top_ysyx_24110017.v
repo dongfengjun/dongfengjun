@@ -58,7 +58,8 @@ EXU_ysyx_24110017 EXU(clk,rst,
 WBU_ysyx_24110017 WBU(clk,rst,
 		op,imm,funct3,
 		pc,r1,r2,res,
-		a,b,xrd,mepc,mstatus,mcause,mtvec,csrs,csrs_in,mepc_in,mcause_in);
+		a,b,xrd,ldone,
+		mepc,mstatus,mcause,mtvec,csrs,csrs_in,mepc_in,mcause_in);
 
 RegisterFile_ysyx_24110017 #(5,32) RF (clk,xrd,(rd | lrd),(wr_en || ldone),rs1,r1,rs2,r2);
 Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk,rst,mepc_in,mepc,mepc_wen);
