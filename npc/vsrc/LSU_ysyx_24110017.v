@@ -1,4 +1,4 @@
-module LSU_ysyx_24110017(clk,rst,op,rd,r1,r2,offset,funct3,rdata,lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone);
+module LSU_ysyx_24110017(clk,rst,op,rd,offset,funct3,r1,r2,rdata,lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone);
 input clk;
 input rst;
 input [6:0]op;

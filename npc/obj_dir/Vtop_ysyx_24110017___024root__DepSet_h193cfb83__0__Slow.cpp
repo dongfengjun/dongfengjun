@@ -789,6 +789,11 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___ctor_var_reset(Vtop_ysyx_241100
     vlSelf->top_ysyx_24110017__DOT__IFU_AXI_BVALID = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__IFU_AXI_BREADY = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__IFU_AXI_ARREADY = VL_RAND_RESET_I(1);
+    vlSelf->top_ysyx_24110017__DOT__lbdone = VL_RAND_RESET_I(1);
+    vlSelf->top_ysyx_24110017__DOT__lhdone = VL_RAND_RESET_I(1);
+    vlSelf->top_ysyx_24110017__DOT__lwdone = VL_RAND_RESET_I(1);
+    vlSelf->top_ysyx_24110017__DOT__lbudone = VL_RAND_RESET_I(1);
+    vlSelf->top_ysyx_24110017__DOT__lhudone = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__LSU_AXI_AWADDR = VL_RAND_RESET_I(32);
     vlSelf->top_ysyx_24110017__DOT__LSU_AXI_WDATA = VL_RAND_RESET_I(32);
     vlSelf->top_ysyx_24110017__DOT__LSU_AXI_ARADDR = VL_RAND_RESET_I(32);
@@ -806,11 +811,6 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___ctor_var_reset(Vtop_ysyx_241100
     vlSelf->top_ysyx_24110017__DOT__LSU_AXI_ARREADY = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__LSU_AXI_RVALID = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__LSU_AXI_RREADY = VL_RAND_RESET_I(1);
-    vlSelf->top_ysyx_24110017__DOT__lbdone = VL_RAND_RESET_I(1);
-    vlSelf->top_ysyx_24110017__DOT__lhdone = VL_RAND_RESET_I(1);
-    vlSelf->top_ysyx_24110017__DOT__lwdone = VL_RAND_RESET_I(1);
-    vlSelf->top_ysyx_24110017__DOT__lbudone = VL_RAND_RESET_I(1);
-    vlSelf->top_ysyx_24110017__DOT__lhudone = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__PCU__DOT__ecall_en = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__PCU__DOT____VdfgTmp_h051484d1__0 = 0;
     vlSelf->top_ysyx_24110017__DOT__IFU__DOT__axi_araddr = VL_RAND_RESET_I(32);

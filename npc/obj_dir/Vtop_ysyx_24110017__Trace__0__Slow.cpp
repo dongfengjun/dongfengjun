@@ -72,6 +72,11 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root__trace_init_sub__TOP__0(Vtop_ysyx
     tracep->declBit(c+85,"IFU_AXI_RVALID", false,-1);
     tracep->declBit(c+86,"IFU_AXI_RREADY", false,-1);
     tracep->declBus(c+5,"rdata", false,-1, 31,0);
+    tracep->declBit(c+43,"lbdone", false,-1);
+    tracep->declBit(c+44,"lhdone", false,-1);
+    tracep->declBit(c+45,"lwdone", false,-1);
+    tracep->declBit(c+46,"lbudone", false,-1);
+    tracep->declBit(c+47,"lhudone", false,-1);
     tracep->declBus(c+143,"LSU_AXI_AWADDR", false,-1, 31,0);
     tracep->declBus(c+144,"LSU_AXI_WDATA", false,-1, 31,0);
     tracep->declBus(c+145,"LSU_AXI_ARADDR", false,-1, 31,0);
@@ -89,11 +94,6 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root__trace_init_sub__TOP__0(Vtop_ysyx
     tracep->declBit(c+157,"LSU_AXI_ARREADY", false,-1);
     tracep->declBit(c+158,"LSU_AXI_RVALID", false,-1);
     tracep->declBit(c+159,"LSU_AXI_RREADY", false,-1);
-    tracep->declBit(c+43,"lbdone", false,-1);
-    tracep->declBit(c+44,"lhdone", false,-1);
-    tracep->declBit(c+45,"lwdone", false,-1);
-    tracep->declBit(c+46,"lbudone", false,-1);
-    tracep->declBit(c+47,"lhudone", false,-1);
     tracep->pushNamePrefix("EXU ");
     tracep->declBit(c+96,"clk", false,-1);
     tracep->declBit(c+97,"rst", false,-1);

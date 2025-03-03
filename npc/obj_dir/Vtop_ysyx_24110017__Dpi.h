@@ -16,7 +16,7 @@ extern "C" {
 
 
     // DPI EXPORTS
-    // DPI export at vsrc/top_ysyx_24110017.v:85:14
+    // DPI export at vsrc/top_ysyx_24110017.v:86:14
     extern int csr_display(int i);
     // DPI export at vsrc/RegisterFile_ysyx_24110017.v:22:14
     extern int gpr_reg_display(int addr);

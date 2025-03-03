@@ -36,6 +36,11 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ top_ysyx_24110017__DOT__IFU_AXI_BVALID;
         CData/*0:0*/ top_ysyx_24110017__DOT__IFU_AXI_BREADY;
         CData/*0:0*/ top_ysyx_24110017__DOT__IFU_AXI_ARREADY;
+        CData/*0:0*/ top_ysyx_24110017__DOT__lbdone;
+        CData/*0:0*/ top_ysyx_24110017__DOT__lhdone;
+        CData/*0:0*/ top_ysyx_24110017__DOT__lwdone;
+        CData/*0:0*/ top_ysyx_24110017__DOT__lbudone;
+        CData/*0:0*/ top_ysyx_24110017__DOT__lhudone;
         CData/*3:0*/ top_ysyx_24110017__DOT__LSU_AXI_WSTRB;
         CData/*1:0*/ top_ysyx_24110017__DOT__LSU_AXI_BRESP;
         CData/*1:0*/ top_ysyx_24110017__DOT__LSU_AXI_RRESP;
@@ -49,11 +54,6 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ top_ysyx_24110017__DOT__LSU_AXI_ARREADY;
         CData/*0:0*/ top_ysyx_24110017__DOT__LSU_AXI_RVALID;
         CData/*0:0*/ top_ysyx_24110017__DOT__LSU_AXI_RREADY;
-        CData/*0:0*/ top_ysyx_24110017__DOT__lbdone;
-        CData/*0:0*/ top_ysyx_24110017__DOT__lhdone;
-        CData/*0:0*/ top_ysyx_24110017__DOT__lwdone;
-        CData/*0:0*/ top_ysyx_24110017__DOT__lbudone;
-        CData/*0:0*/ top_ysyx_24110017__DOT__lhudone;
         CData/*0:0*/ top_ysyx_24110017__DOT__PCU__DOT__ecall_en;
         CData/*0:0*/ top_ysyx_24110017__DOT__IFU__DOT__axi_arvalid;
         CData/*0:0*/ top_ysyx_24110017__DOT__IFU__DOT__axi_rready;
