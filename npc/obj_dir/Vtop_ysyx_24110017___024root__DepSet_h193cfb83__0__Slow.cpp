@@ -666,19 +666,28 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
                                                                                 & (1U 
                                                                                 == (IData)(vlSelf->top_ysyx_24110017__DOT__funct7))))))) 
                                                                                 & VL_MODDIV_III(32, vlSelf->top_ysyx_24110017__DOT__a, vlSelf->top_ysyx_24110017__DOT__b))))))))))))))))) 
-                                              | ((1U 
-                                                  & ((- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__lbdone))) 
-                                                     & vlSelf->top_ysyx_24110017__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rdata)) 
-                                                 | ((1U 
-                                                     & ((- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__lhdone))) 
-                                                        & vlSelf->top_ysyx_24110017__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rdata)) 
-                                                    | ((1U 
-                                                        & ((- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__lwdone))) 
-                                                           & vlSelf->top_ysyx_24110017__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rdata)) 
-                                                       | ((1U 
+                                              | (((- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__lbdone))) 
+                                                  & (((- (IData)(
+                                                                 (1U 
+                                                                  & (vlSelf->top_ysyx_24110017__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rdata 
+                                                                     >> 7U)))) 
+                                                      << 8U) 
+                                                     | (0xffU 
+                                                        & vlSelf->top_ysyx_24110017__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rdata))) 
+                                                 | (((- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__lhdone))) 
+                                                     & (((- (IData)(
+                                                                    (1U 
+                                                                     & (vlSelf->top_ysyx_24110017__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rdata 
+                                                                        >> 0xfU)))) 
+                                                         << 0x10U) 
+                                                        | (0xffffU 
+                                                           & vlSelf->top_ysyx_24110017__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rdata))) 
+                                                    | (((- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__lwdone))) 
+                                                        & vlSelf->top_ysyx_24110017__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rdata) 
+                                                       | ((0xffU 
                                                            & ((- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__lbudone))) 
                                                               & vlSelf->top_ysyx_24110017__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rdata)) 
-                                                          | ((1U 
+                                                          | ((0xffffU 
                                                               & ((- (IData)((IData)(vlSelf->top_ysyx_24110017__DOT__lhudone))) 
                                                                  & vlSelf->top_ysyx_24110017__DOT__LSU_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rdata)) 
                                                              | ((vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h56110f4f__0 
