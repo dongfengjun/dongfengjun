@@ -1,20 +1,44 @@
-module LSU_ysyx_24110017(clk,rst,op,rd,r1,r2,offset,funct3,rdata,lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone);
+module LSU_ysyx_24110017(clk,rst,op,rd,offset,funct3,r1,r2,rdata,lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone,
+			M_AXI_AWADDR,M_AXI_AWVALID,M_AXI_AWREADY,
+			M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WVALID,M_AXI_WREADY,
+			M_AXI_BRESP,M_AXI_BVALID,M_AXI_BREADY,
+			M_AXI_ARADDR,M_AXI_ARVALID,M_AXI_ARREADY,
+			M_AXI_RDATA,M_AXI_RRESP,M_AXI_RVALID,M_AXI_RREADY
+);
 input clk;
 input rst;
 input [6:0]op;
 input [4:0]rd;
-input [31:0]r1,r2;
 input [31:0]offset;
 input [2:0]funct3;
+input [31:0]r1,r2;
 output [31:0]rdata;
 output [4:0]lrd;
 output ldone;
 output lbdone,lhdone,lwdone,lbudone,lhudone;
+output [31:0] M_AXI_AWADDR;
+output M_AXI_AWVALID;
+input  M_AXI_AWREADY;
+output [31:0] M_AXI_WDATA;
+output [7:0] M_AXI_WSTRB;
+output M_AXI_WVALID;
+input  M_AXI_WREADY;
+input [1:0] M_AXI_BRESP;
+input M_AXI_BVALID;
+output M_AXI_BREADY;
+
+output [31:0] M_AXI_ARADDR;
+output M_AXI_ARVALID;
+input M_AXI_ARREADY;
+input [31:0] M_AXI_RDATA;
+input [1:0] M_AXI_RRESP;
+input M_AXI_RVALID;
+output M_AXI_RREADY;
 
 wire valid,wen;
 wire [31:0]raddr;
 reg [4:0]lrd;
-wire [31:0]rdata = AXI_RDATA;
+wire [31:0]rdata = M_AXI_RDATA;
 wire [31:0]waddr, wdata;
 wire [7:0]wmask;
 reg ldone;
@@ -55,27 +79,27 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 reg [31:0]axi_araddr_reg;
 reg [31:0]axi_awaddr_reg,axi_wdata_reg;
 reg [7:0]axi_wstrb_reg;
-wire [31:0] AXI_AWADDR,AXI_WDATA,AXI_ARADDR,AXI_RDATA;
-wire [7:0] AXI_WSTRB;
-wire [1:0] AXI_BRESP,AXI_RRESP;
-wire AXI_AWVALID,AXI_AWREADY,AXI_WVALID,AXI_WREADY,AXI_BVALID,AXI_BREADY,AXI_ARVALID,AXI_ARREADY,AXI_RVALID,AXI_RREADY;
+wire [31:0] M_AXI_AWADDR,M_AXI_WDATA,M_AXI_ARADDR,M_AXI_RDATA;
+wire [7:0] M_AXI_WSTRB;
+wire [1:0] M_AXI_BRESP,M_AXI_RRESP;
+wire M_AXI_AWVALID,M_AXI_AWREADY,M_AXI_WVALID,M_AXI_WREADY,M_AXI_BVALID,M_AXI_BREADY,M_AXI_ARVALID,M_AXI_ARREADY,M_AXI_RVALID,M_AXI_RREADY;
 parameter IDLE=2'b0,READ=2'b01,WRITE=2'b10,DONE=2'b11;
 reg [1:0]state;
 reg axi_arvalid,axi_rready;
 reg [31:0]axi_araddr;
-assign AXI_ARVALID = axi_arvalid;
-assign AXI_RREADY = axi_rready;
-assign AXI_ARADDR = axi_araddr;
+assign M_AXI_ARVALID = axi_arvalid;
+assign M_AXI_RREADY = axi_rready;
+assign M_AXI_ARADDR = axi_araddr;
 reg axi_awvalid,axi_wvalid;
 reg [31:0]axi_awaddr,axi_wdata;
 reg [7:0]axi_wstrb;
 reg axi_bready;
-assign AXI_AWVALID = axi_awvalid;
-assign AXI_WVALID = axi_wvalid;
-assign AXI_AWADDR = axi_awaddr;
-assign AXI_WDATA = axi_wdata;
-assign AXI_WSTRB = axi_wstrb;
-assign AXI_BREADY = axi_bready;
+assign M_AXI_AWVALID = axi_awvalid;
+assign M_AXI_WVALID = axi_wvalid;
+assign M_AXI_AWADDR = axi_awaddr;
+assign M_AXI_WDATA = axi_wdata;
+assign M_AXI_WSTRB = axi_wstrb;
+assign M_AXI_BREADY = axi_bready;
 
 always @(posedge clk or posedge rst) begin
 		if (rst) begin
@@ -115,30 +139,30 @@ always @(posedge clk or posedge rst) begin
 					end
 				end
 				READ: begin
-          if(AXI_ARREADY) begin
+          if(M_AXI_ARREADY) begin
 						axi_arvalid <= 0;
             axi_rready <= 1;//加判断条件
 						axi_araddr <= axi_araddr_reg;
           end
-	        if(AXI_RVALID) begin
+	        if(M_AXI_RVALID) begin
             axi_rready <= 0;
 						ldone <= 1;
             state <= DONE;
           end
         end
 				WRITE: begin
-					if(AXI_AWREADY) begin
+					if(M_AXI_AWREADY) begin
 						axi_awvalid <= 0;
 						axi_wvalid <= 1;
 						axi_awaddr <= axi_awaddr_reg;
 					end
-					if(AXI_WREADY) begin
+					if(M_AXI_WREADY) begin
 						axi_wvalid <= 0;
 						axi_wdata <= axi_wdata_reg;//加判断条件
 						axi_wstrb <= axi_wstrb_reg;
 						axi_bready <= 1;
 					end
-					if(AXI_BVALID) begin
+					if(M_AXI_BVALID) begin
 						axi_bready <= 0;
 						state <= DONE;
 					end
@@ -166,13 +190,5 @@ always @(posedge clk or posedge rst) begin
 		end
 end
 
-SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,
-				AXI_AWADDR,AXI_AWVALID,AXI_AWREADY,
-        AXI_WDATA,AXI_WSTRB,AXI_WVALID,AXI_WREADY,
-        AXI_BRESP,AXI_BVALID,AXI_BREADY,
-        AXI_ARADDR,AXI_ARVALID,AXI_ARREADY,
-        AXI_RDATA,AXI_RRESP,AXI_RVALID,AXI_RREADY
-);
 /***E*N*D***/
-
 endmodule
