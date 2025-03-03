@@ -106,6 +106,7 @@ wire lbdone,lhdone,lwdone,lbudone,lhudone;
 wire [31:0]pc;
 wire [31:0]dnpc;
 wire funct3 = sel;
+wire offset = imm;
 wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
 assign jalen = (op == 7'b1101111) ? 1'b1 : 1'b0;
 assign jalren = (op == 7'b1100111) ? 1'b1 : 1'b0;
