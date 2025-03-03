@@ -1,4 +1,4 @@
-module EXU_ysyx_24110017(clk,rst,op,sel,imm,funct7,shamt,a,b,csrs,csrs_in,res,rdata,lbdone,lhdone,lwdone,lbudone,lhudone,pc,dnpc);
+module EXU_ysyx_24110017(clk,rst,op,sel,imm,funct7,shamt,a,b,csrs,csrs_in,res,r1,r2,rdata,lbdone,lhdone,lwdone,lbudone,lhudone,pc,dnpc,mepc,mtvec);
 input clk;
 input rst;
 input [6:0]op;
@@ -10,10 +10,12 @@ input [31:0]a,b;
 input [31:0]csrs;
 output [31:0]csrs_in;
 output [31:0]res;
+input [31:0]r1,r2;
 input [31:0]rdata;
 input lbdone,lhdone,lwdone,lbudone,lhudone;
 input [31:0]pc;
 output [31:0]dnpc;
+input [31:0]mepc,mtvec;
 
 
 /***I TYPE***/
