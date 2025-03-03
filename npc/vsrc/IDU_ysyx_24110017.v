@@ -1,4 +1,4 @@
-module IDU_ysyx_24110017(clk,rst,inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,);
+module IDU_ysyx_24110017(clk,rst,inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt);
 input clk;
 input rst;
 input [31:0]inst;
@@ -63,6 +63,6 @@ always@(*) begin
 		npc_trap();
 	end
 end
-/***E*N*D***/
+/***DPIC*END***/
 
 endmodule
