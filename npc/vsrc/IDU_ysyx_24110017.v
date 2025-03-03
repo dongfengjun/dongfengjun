@@ -1,4 +1,4 @@
-module IDU_ysyx_24110017(clk,rst,inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);
+module IDU_ysyx_24110017(clk,rst,inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt,);
 input clk;
 input rst;
 input [31:0]inst;
@@ -10,7 +10,6 @@ output [4:0]rs2;
 output [31:0]imm;
 output [6:0]funct7;
 output [4:0]shamt;
-output wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 
 /***TPYE***/
 wire [6:0]op;
@@ -20,9 +19,8 @@ wire [4:0]rs1;	//R I S B
 wire [4:0]rs2;	//R S B
 wire [31:0]immI, immU, immS, immB, immJ;
 wire [6:0]funct7;	//R
-
-
 wire [4:0]shamt;	//I shamt
+
 wire wr_en;	//gpr_wr
 wire mepc_wen,mstatus_wen,mcause_wen,mtvec_wen; //csr_wr
 import "DPI-C" function void npc_trap();
@@ -58,14 +56,8 @@ assign imm = (op == 7'b0110111 || op == 7'b0010111) ? immU
  : (op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011) ? immI 
  : 32'b0;
 
-/***riscv32e-control***/
-assign wr_en = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 || op == 7'b1100111 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011 || op == 7'b0110011) ? 1'b1 : 1'b0;
-assign mepc_wen = ((op == 7'b1110011 && imm == 32'd833) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
-assign mstatus_wen = (op == 7'b1110011 && imm == 32'd768) ? 1'b1 : 1'b0;
-assign mcause_wen = (op == 7'b1110011 && imm == 32'd834 || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
-assign mtvec_wen = (op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
 
-/***DPIC***/
+/***DPIC*etrace***/
 always@(*) begin
 	if(inst == 32'b00000000000100000000000001110011) begin
 		npc_trap();

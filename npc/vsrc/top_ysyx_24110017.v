@@ -55,13 +55,13 @@ SRAM_IFU_ysyx_24110017 SRAM_IFU_ysyx_24110017(clk,rst,
         IFU_AXI_RDATA,IFU_AXI_RRESP,IFU_AXI_RVALID,IFU_AXI_RREADY
 );
 IDU_ysyx_24110017 IDU(clk,rst,inst,
-		op,rd,funct3,rs1,rs2,imm,funct7,shamt,
-		wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);
+		op,rd,funct3,rs1,rs2,imm,funct7,shamt);
 EXU_ysyx_24110017 EXU(clk,rst,
 		op,funct3,imm,funct7,shamt,
 		a,b,csrs,csrs_in,res,
 		r1,r2,rdata,lbdone,lhdone,lwdone,lbudone,lhudone,
-		pc,dnpc,mepc,mtvec
+		pc,dnpc,mepc,mtvec,
+		wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
 );
 LSU_ysyx_24110017 LSU_ysyx_24110017(clk,rst,
 		op,rd,imm,funct3,

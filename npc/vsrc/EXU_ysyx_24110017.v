@@ -1,4 +1,4 @@
-module EXU_ysyx_24110017(clk,rst,op,sel,imm,funct7,shamt,a,b,csrs,csrs_in,res,r1,r2,rdata,lbdone,lhdone,lwdone,lbudone,lhudone,pc,dnpc,mepc,mtvec);
+module EXU_ysyx_24110017(clk,rst,op,sel,imm,funct7,shamt,a,b,csrs,csrs_in,res,r1,r2,rdata,lbdone,lhdone,lwdone,lbudone,lhudone,pc,dnpc,mepc,mtvec,wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);
 input clk;
 input rst;
 input [6:0]op;
@@ -16,7 +16,7 @@ input lbdone,lhdone,lwdone,lbudone,lhudone;
 input [31:0]pc;
 output [31:0]dnpc;
 input [31:0]mepc,mtvec;
-
+output wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 
 /***I TYPE***/
 /***ALU addi~srai***/
@@ -132,5 +132,13 @@ assign dnpc = (jalen) ? (pc + offset)	//jal
 	: (ecall_en) ? mtvec  //ecall
 	: (mret_en) ? mepc  //mret
 	: pc + 4;
+
+/***riscv32e_regs_controller***/
+wire wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
+assign wr_en = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 || op == 7'b1100111 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011 || op == 7'b0110011) ? 1'b1 : 1'b0;
+assign mepc_wen = ((op == 7'b1110011 && imm == 32'd833) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
+assign mstatus_wen = (op == 7'b1110011 && imm == 32'd768) ? 1'b1 : 1'b0;
+assign mcause_wen = (op == 7'b1110011 && imm == 32'd834 || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
+assign mtvec_wen = (op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
 
 endmodule
