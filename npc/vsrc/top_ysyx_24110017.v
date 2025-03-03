@@ -55,7 +55,8 @@ SRAM_IFU_ysyx_24110017 SRAM_IFU_ysyx_24110017(clk,rst,
         IFU_AXI_RDATA,IFU_AXI_RRESP,IFU_AXI_RVALID,IFU_AXI_RREADY
 );
 IDU_ysyx_24110017 IDU(clk,rst,inst,
-		op,rd,funct3,rs1,rs2,imm,funct7,shamt);
+		op,rd,funct3,rs1,rs2,imm,funct7,shamt
+);
 EXU_ysyx_24110017 EXU(clk,rst,
 		op,funct3,imm,funct7,shamt,
 		a,b,csrs,csrs_in,res,
@@ -86,7 +87,7 @@ WBU_ysyx_24110017 WBU(clk,rst,
 		a,b,xrd,ldone,
 		mepc,mstatus,mcause,mtvec,csrs,csrs_in,mepc_in,mcause_in);
 
-RegisterFile_ysyx_24110017 #(5,32) RF (clk,xrd,(rd | lrd),(wr_en || ldone),rs1,r1,rs2,r2);
+RegisterFile_ysyx_24110017 #(5,32) RFU (clk,xrd,(rd | lrd),(wr_en || ldone),rs1,r1,rs2,r2);
 Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk,rst,mepc_in,mepc,mepc_wen);
 Reg_ysyx_24110017 #(32, 32'h1800) mstatus_ysyx_24110017 (clk,rst,csrs_in,mstatus,mstatus_wen);
 Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk,rst,mcause_in,mcause,mcause_wen);
