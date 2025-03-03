@@ -103,7 +103,7 @@ assign csrs_in =
       ({32{(op == 7'b1110011) && (sel == 3'b000)}}
           & (csrs &~a)) ; //I_csrrc
 
-/***load*store***/
+/***load*store*LSU**/
 wire [31:0]rdata;
 wire lbdone,lhdone,lwdone,lbudone,lhudone;
 
