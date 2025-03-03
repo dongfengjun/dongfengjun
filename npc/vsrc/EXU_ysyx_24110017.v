@@ -1,4 +1,4 @@
-module EXU_ysyx_24110017(clk,rst,op,sel,imm,funct7,shamt,a,b,csrs,csrs_in,res,rdata,lbdone,lhdone,lwdone,lbudone,lhudone,dnpc);
+module EXU_ysyx_24110017(clk,rst,op,sel,imm,funct7,shamt,a,b,csrs,csrs_in,res,rdata,lbdone,lhdone,lwdone,lbudone,lhudone,pc,dnpc);
 input clk;
 input rst;
 input [6:0]op;
@@ -12,7 +12,8 @@ output [31:0]csrs_in;
 output [31:0]res;
 input [31:0]rdata;
 input lbdone,lhdone,lwdone,lbudone,lhudone;
-output dnpc;
+input [31:0]pc;
+output [31:0]dnpc;
 
 
 /***I TYPE***/
@@ -102,6 +103,7 @@ wire [31:0]rdata;
 wire lbdone,lhdone,lwdone,lbudone,lhudone;
 
 /***J_B_dnpc***/
+wire [31:0]pc;
 wire [31:0]dnpc;
 wire funct3 = sel;
 wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
