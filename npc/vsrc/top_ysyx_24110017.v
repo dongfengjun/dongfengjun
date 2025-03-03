@@ -29,6 +29,12 @@ wire [3:0] IFU_AXI_WSTRB;
 wire [1:0] IFU_AXI_BRESP,IFU_AXI_RRESP;
 wire IFU_AXI_AWVALID,IFU_AXI_AWREADY,IFU_AXI_WVALID,IFU_AXI_WREADY,IFU_AXI_BVALID,IFU_AXI_BREADY,IFU_AXI_ARVALID,IFU_AXI_ARREADY,IFU_AXI_RVALID,IFU_AXI_RREADY;
 
+//LSU_AXI4-LITE
+wire [31:0] LSU_AXI_AWADDR,LSU_AXI_WDATA,LSU_AXI_ARADDR,LSU_AXI_RDATA;
+wire [3:0] LSU_AXI_WSTRB;
+wire [1:0] LSU_AXI_BRESP,LSU_AXI_RRESP;
+wire LSU_AXI_AWVALID,LSU_AXI_AWREADY,LSU_AXI_WVALID,LSU_AXI_WREADY,LSU_AXI_BVALID,LSU_AXI_BREADY,LSU_AXI_ARVALID,LSU_AXI_ARREADY,LSU_AXI_RVALID,LSU_AXI_RREADY;
+
 PCU_ysyx_24110017 PCU(clk,rst,
 		op,funct3,imm,
 		r1,r2,mtvec,mepc,
@@ -53,8 +59,14 @@ IDU_ysyx_24110017 IDU(clk,rst,inst,
 		op,rd,funct3,rs1,rs2,imm,funct7,shamt,
 		wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);
 EXU_ysyx_24110017 EXU(clk,rst,
-		op,funct3,imm,funct7,shamt,rd,
-		a,b,csrs,csrs_in,res,ldone,lrd);
+		op,funct3,imm,funct7,shamt,
+		a,b,csrs,csrs_in,res,
+		rdata,lbdone,lhdone,lwdone,lbudone,lhudone
+);
+LSU_ysyx_24110017 LSU_ysyx_24110017(clk,rst,
+		op,rd,imm,funct3,
+		a,b,rdata,
+		lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone);
 WBU_ysyx_24110017 WBU(clk,rst,
 		op,imm,funct3,
 		pc,r1,r2,res,
