@@ -1,4 +1,4 @@
-module EXU_ysyx_24110017(clk,rst,op,sel,imm,funct7,shamt,a,b,csrs,csrs_in,res,rdata,lbdone,lhdone,lwdone,lbudone,lhudone);
+module EXU_ysyx_24110017(clk,rst,op,sel,imm,funct7,shamt,a,b,csrs,csrs_in,res,rdata,lbdone,lhdone,lwdone,lbudone,lhudone,dnpc);
 input clk;
 input rst;
 input [6:0]op;
@@ -12,17 +12,11 @@ output [31:0]csrs_in;
 output [31:0]res;
 input [31:0]rdata;
 input lbdone,lhdone,lwdone,lbudone,lhudone;
+output dnpc;
 
 
 /***I TYPE***/
 /***ALU addi~srai***/
-/***test***
-wire [31:0]test1,test2,test3;
-assign test1 = a;
-assign test2 = b;
-assign test3 = $signed($signed(test1) / $signed(test2));
-***test end***/
-
 assign res = 
 			({32{op == 7'b0010011}} & (
 			({32{sel == 3'b000}} & (a + b)) |	//addi
@@ -106,5 +100,32 @@ assign csrs_in =
 /***load*store*LSU**/
 wire [31:0]rdata;
 wire lbdone,lhdone,lwdone,lbudone,lhudone;
+
+/***J_B_dnpc***/
+wire [31:0]dnpc;
+wire funct3 = sel;
+wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
+assign jalen = (op == 7'b1101111) ? 1'b1 : 1'b0;
+assign jalren = (op == 7'b1100111) ? 1'b1 : 1'b0;
+assign beqen = (op == 7'b1100011 && funct3 == 3'b000 && (r1 == r2));
+assign bneen = (op == 7'b1100011 && funct3 == 3'b001 && (r1 != r2));
+assign blten = (op == 7'b1100011 && funct3 == 3'b100 && ($signed(r1) < $signed(r2)));
+assign bgeen = (op == 7'b1100011 && funct3 == 3'b101 && ($signed(r1) >= $signed(r2)));
+assign bltuen = (op == 7'b1100011 && funct3 == 3'b110 && (r1 < r2));
+assign bgeuen = (op == 7'b1100011 && funct3 == 3'b111 && (r1 >= r2));
+assign ecall_en = (op == 7'b1110011 && offset == 32'd0 && funct3 == 3'b000);
+assign mret_en = (op == 7'b1110011 && offset == 32'b1100000010 && funct3 == 3'b000);
+
+assign dnpc = (jalen) ? (pc + offset)	//jal
+	: (jalren) ? ((r1 + offset) & ~1) //jalr
+	: (beqen) ? (pc + offset)	//beq
+	: (bneen) ? (pc + offset)	//bne
+	: (blten) ? (pc + offset)	//blt
+	: (bgeen) ? (pc + offset)	//bge
+	: (bltuen) ? (pc + offset)	//bltu
+	:	(bgeuen) ? (pc + offset)	//bgeu
+	: (ecall_en) ? mtvec  //ecall
+	: (mret_en) ? mepc  //mret
+	: pc + 4;
 
 endmodule
