@@ -1,8 +1,8 @@
-module EXU_ysyx_24110017(clk,rst,op,sel,imm,funct7,shamt,a,b,csrs,csrs_in,res,r1,r2,rdata,lbdone,lhdone,lwdone,lbudone,lhudone,pc,dnpc,mepc,mtvec,wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);
+module EXU_ysyx_24110017(clk,rst,op,funct3,imm,funct7,shamt,a,b,csrs,csrs_in,res,r1,r2,rdata,lbdone,lhdone,lwdone,lbudone,lhudone,pc,dnpc,mepc,mtvec,wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);
 input clk;
 input rst;
 input [6:0]op;
-input [2:0]sel;
+input [2:0]funct3;
 input [31:0]imm;
 input [6:0]funct7;
 input [4:0]shamt;
@@ -22,52 +22,52 @@ output wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 /***ALU addi~srai***/
 assign res = 
 			({32{op == 7'b0010011}} & (
-			({32{sel == 3'b000}} & (a + b)) |	//addi
-      ({32{sel == 3'b001}} & (a << shamt)) |	//slli
-      ({32{sel == 3'b010}} & {31'b0, ($signed(a) < $signed(b))}) |	//slti
-	    ({32{sel == 3'b011}} & {31'b0, (a < b)}) |	//sltiu
-      ({32{sel == 3'b100}} & (a ^ b)) |	//xori
-      ({32{(sel == 3'b101) && (funct7 == 7'b0000000)}} 
+			({32{funct3 == 3'b000}} & (a + b)) |	//addi
+      ({32{funct3 == 3'b001}} & (a << shamt)) |	//slli
+      ({32{funct3 == 3'b010}} & {31'b0, ($signed(a) < $signed(b))}) |	//slti
+	    ({32{funct3 == 3'b011}} & {31'b0, (a < b)}) |	//sltiu
+      ({32{funct3 == 3'b100}} & (a ^ b)) |	//xori
+      ({32{(funct3 == 3'b101) && (funct7 == 7'b0000000)}} 
 					& (a >> shamt)) |	//srli
-			({32{(sel == 3'b101) && (funct7 == 7'b0100000)}} 
+			({32{(funct3 == 3'b101) && (funct7 == 7'b0100000)}} 
 					& ({{{32{a[31]}}, $signed(a)} >> shamt}[31:0])) |	//srai
-      ({32{sel == 3'b110}} & (a | b)) |	//ori
-      ({32{sel == 3'b111}} & (a & b)) 	//andi
+      ({32{funct3 == 3'b110}} & (a | b)) |	//ori
+      ({32{funct3 == 3'b111}} & (a & b)) 	//andi
 																	 ))				
 																					|
 /***R_add~R_remu***/ 
       ({32{op == 7'b0110011}} & (
-      ({32{(sel == 3'b000) && (funct7 == 7'b0000000)}} 
+      ({32{(funct3 == 3'b000) && (funct7 == 7'b0000000)}} 
 					& (a + b)) | //add
-			({32{(sel == 3'b000) && (funct7 == 7'b0100000)}} 
+			({32{(funct3 == 3'b000) && (funct7 == 7'b0100000)}} 
 					& (a + ((~b)+1))) |	//sub
-      ({32{(sel == 3'b001) && (funct7 == 7'b0000000)}}
+      ({32{(funct3 == 3'b001) && (funct7 == 7'b0000000)}}
 					& (a << b[4:0])) |  //sll
-      ({32{(sel == 3'b010) && (funct7 == 7'b0000000)}}
+      ({32{(funct3 == 3'b010) && (funct7 == 7'b0000000)}}
 					& {31'b0, ($signed(a) < $signed(b))}) | //slt
-      ({32{(sel == 3'b011) && (funct7 == 7'b0000000)}} 
+      ({32{(funct3 == 3'b011) && (funct7 == 7'b0000000)}} 
 					& {31'b0,(a < $unsigned(b))}) |  //sltu
-      ({32{(sel == 3'b100) && (funct7 == 7'b0000000)}}
+      ({32{(funct3 == 3'b100) && (funct7 == 7'b0000000)}}
 					& (a ^ b)) | //xor
-      ({32{(sel == 3'b101) && (funct7 == 7'b0000000)}} 
+      ({32{(funct3 == 3'b101) && (funct7 == 7'b0000000)}} 
 		      & (a >> b[4:0])) | //srl
-      ({32{(sel == 3'b101) && (funct7 == 7'b0100000)}}
+      ({32{(funct3 == 3'b101) && (funct7 == 7'b0100000)}}
 					&  {{{32{a[31]}}, a} >> b}[31:0] ) | //sra
-      ({32{(sel == 3'b110) && (funct7 == 7'b0000000)}}
+      ({32{(funct3 == 3'b110) && (funct7 == 7'b0000000)}}
 					& (a | b)) | //or
-      ({32{(sel == 3'b111) && (funct7 == 7'b0000000)}}
+      ({32{(funct3 == 3'b111) && (funct7 == 7'b0000000)}}
 					& (a & b)) | //and
-      ({32{(sel == 3'b000) && (funct7 == 7'b0000001)}}
+      ({32{(funct3 == 3'b000) && (funct7 == 7'b0000001)}}
           & (a * b)) | //mul
-      ({32{(sel == 3'b001) && (funct7 == 7'b0000001)}} 
+      ({32{(funct3 == 3'b001) && (funct7 == 7'b0000001)}} 
 					& {{{32{a[31]}},$signed(a)} * {{32{b[31]}},$signed(b)}}[63:32]) | //mulh
-      ({32{(sel == 3'b100) && (funct7 == 7'b0000001)}}
+      ({32{(funct3 == 3'b100) && (funct7 == 7'b0000001)}}
           & ($signed($signed(a) / $signed(b)))) |  //div
-      ({32{(sel == 3'b101) && (funct7 == 7'b0000001)}}
+      ({32{(funct3 == 3'b101) && (funct7 == 7'b0000001)}}
           & (a / b)) | //divu
-      ({32{(sel == 3'b110) && (funct7 == 7'b0000001)}} 
+      ({32{(funct3 == 3'b110) && (funct7 == 7'b0000001)}} 
           & ($signed(a) % $signed(b))) |  //R_rem
-      ({32{(sel == 3'b111) && (funct7 == 7'b0000001)}}
+      ({32{(funct3 == 3'b111) && (funct7 == 7'b0000001)}}
           & (a % b)) //R_remui			
 																										))
 /***I_lb~lhu***/
@@ -84,20 +84,20 @@ assign res =
           & {16'b0,(rdata[15:0])}) //I_lhu
 /***I_csrrw~csrrc***/
 			|
-			({32{(op == 7'b1110011) && (sel == 3'b001)}}
+			({32{(op == 7'b1110011) && (funct3 == 3'b001)}}
 					& csrs) |	//I_csrrw
-			({32{(op == 7'b1110011) && (sel == 3'b010)}}
+			({32{(op == 7'b1110011) && (funct3 == 3'b010)}}
 					& csrs) |	//I_csrrs
-			({32{(op == 7'b1110011) && (sel == 3'b000)}}
+			({32{(op == 7'b1110011) && (funct3 == 3'b000)}}
 					& csrs) ;	//I_csrrc
 
 /***csrrw~csrrc***/
 assign csrs_in = 
-			({32{(op == 7'b1110011) && (sel == 3'b001)}}
+			({32{(op == 7'b1110011) && (funct3 == 3'b001)}}
           & a) | //I_csrrw
-			({32{(op == 7'b1110011) && (sel == 3'b010)}}
+			({32{(op == 7'b1110011) && (funct3 == 3'b010)}}
           & (csrs | a)) | //I_csrrs
-      ({32{(op == 7'b1110011) && (sel == 3'b000)}}
+      ({32{(op == 7'b1110011) && (funct3 == 3'b000)}}
           & (csrs &~a)) ; //I_csrrc
 
 /***load*store*LSU**/
@@ -107,7 +107,6 @@ wire lbdone,lhdone,lwdone,lbudone,lhudone;
 /***J_B_dnpc***/
 wire [31:0]pc;
 wire [31:0]dnpc;
-wire [2:0]funct3 = sel;
 wire [31:0]offset = imm;
 wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
 assign jalen = (op == 7'b1101111) ? 1'b1 : 1'b0;
