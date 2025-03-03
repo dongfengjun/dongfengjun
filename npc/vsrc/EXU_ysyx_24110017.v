@@ -1,4 +1,4 @@
-module EXU_ysyx_24110017(clk,rst,op,sel,imm,funct7,shamt,a,b,csrs,csrs_in,res);
+module EXU_ysyx_24110017(clk,rst,op,sel,imm,funct7,shamt,rd,a,b,csrs,csrs_in,res,ldone,lrd);
 input clk;
 input rst;
 input [6:0]op;
@@ -6,10 +6,13 @@ input [2:0]sel;
 input [31:0]imm;
 input [6:0]funct7;
 input [4:0]shamt;
+input [4:0]rd;
 input [31:0]a,b;
 input [31:0]csrs;
 output [31:0]csrs_in;
 output [31:0]res;
+output ldone;
+output [4:0]lrd;
 
 
 /***I TYPE***/
@@ -73,15 +76,15 @@ assign res =
 																										))
 /***I_lb~lhu***/
 			|
-			({32{(op == 7'b0000011) && (sel == 3'b000)}} 
+			({32{lbdone}} 
 					& {{24{rdata[7]}},(rdata[7:0])}) | //I_lb
-			({32{(op == 7'b0000011) && (sel == 3'b001)}}
-          & {{16{rdata[15]}},(rdata[15:0])}) | //I_lw
-			({32{(op == 7'b0000011) && (sel == 3'b010)}} 
+			({32{lhdone}}
+          & {{16{rdata[15]}},(rdata[15:0])}) | //I_lh
+			({32{lwdone}} 
           & (rdata)) | //I_lw
-			({32{(op == 7'b0000011) && (sel == 3'b100)}}
+			({32{lbudone}}
           & {24'b0,(rdata[7:0])}) | //I_lbu
-			({32{(op == 7'b0000011) && (sel == 3'b101)}}
+			({32{lhudone}}
           & {16'b0,(rdata[15:0])}) //I_lhu
 /***I_csrrw~csrrc***/
 			|
@@ -103,6 +106,7 @@ assign csrs_in =
 
 /***load*store***/
 wire [31:0]rdata;
-LSU_ysyx_24110017 LSU_ysyx_24110017(clk,rst,op,a,b,imm,sel,rdata);
+wire lbdone,lhdone,lwdone,lbudone,lhudone;
+LSU_ysyx_24110017 LSU_ysyx_24110017(clk,rst,op,rd,a,b,imm,sel,rdata,lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone);
 
 endmodule
