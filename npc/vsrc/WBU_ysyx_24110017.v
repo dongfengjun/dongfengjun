@@ -34,7 +34,7 @@ assign xrd = (op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011  //I
  || (op == 7'b1101111) //I_jal
  || (op == 7'b1100111) //I_jalr
  || (op == 7'b0110111) //U_lui
- || (op == 7'b0010111) //U_auipc
+ || (op == 7'b0010111)) //U_auipc
  ? res : 32'b0;
 assign csrs = (op == 7'b1110011 && imm == 32'd833) ? mepc
  : (op == 7'b1110011 && imm == 32'd768) ? mstatus

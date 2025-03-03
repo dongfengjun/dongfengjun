@@ -104,7 +104,7 @@ assign res =
 			({32{(op == 7'b1100111)}}
 					& (pc + 4)) | //I_jalr
 			({32{(op == 7'b0110111)}}
-					& imm | //U_lui
+					& imm) | //U_lui
 			({32{(op == 7'b0010111)}}
 					& (pc + imm)); //U_auipc
 
