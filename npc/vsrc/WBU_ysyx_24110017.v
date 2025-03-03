@@ -1,4 +1,9 @@
-module WBU_ysyx_24110017(clk,rst,op,imm,funct3,pc,r1,r2,res,a,b,xrd,ldone,mepc,mstatus,mcause,mtvec,csrs,csrs_in,mepc_in,mcause_in);
+module WBU_ysyx_24110017(clk,rst,op,imm,funct3,
+												pc,r1,r2,res,a,b,xrd,
+												ldone,
+												mepc,mstatus,mcause,mtvec,
+												csrs,csrs_in,mepc_in,mcause_in
+												);
 input clk;
 input rst;
 input [6:0]op;
@@ -25,13 +30,12 @@ assign a = (op == 7'b0010011 || op == 7'b0000011 || op == 7'b0100011 || op == 7'
 assign xrd = (op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011  //I
  || op == 7'b0100011 //S
  || op == 7'b0110011 //R
- || ldone) //load
- ? res
- : (op == 7'b1101111) ? (pc + 4) //I_jal
- : (op == 7'b1100111) ? (pc + 4) //I_jalr
- : (op == 7'b0110111) ? imm //U_lui
- : (op == 7'b0010111) ? (pc + imm) //U_auipc
- : 32'b0;
+ || ldone //load
+ || (op == 7'b1101111) //I_jal
+ || (op == 7'b1100111) //I_jalr
+ || (op == 7'b0110111) //U_lui
+ || (op == 7'b0010111) //U_auipc
+ ? res : 32'b0;
 assign csrs = (op == 7'b1110011 && imm == 32'd833) ? mepc
  : (op == 7'b1110011 && imm == 32'd768) ? mstatus
  : (op == 7'b1110011 && imm == 32'd834) ? mcause

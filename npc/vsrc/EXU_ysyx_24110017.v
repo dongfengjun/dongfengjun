@@ -1,4 +1,12 @@
-module EXU_ysyx_24110017(clk,rst,op,funct3,imm,funct7,shamt,a,b,csrs,csrs_in,res,r1,r2,rdata,lbdone,lhdone,lwdone,lbudone,lhudone,pc,dnpc,mepc,mtvec,wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen);
+module EXU_ysyx_24110017(
+			clk,rst,op,funct3,imm,funct7,shamt,
+			a,b,csrs,csrs_in,res,
+			r1,r2,rdata,
+			lbdone,lhdone,lwdone,lbudone,lhudone,
+			pc,dnpc,
+			mepc,mtvec,
+			wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
+);
 input clk;
 input rst;
 input [6:0]op;
@@ -89,7 +97,16 @@ assign res =
 			({32{(op == 7'b1110011) && (funct3 == 3'b010)}}
 					& csrs) |	//I_csrrs
 			({32{(op == 7'b1110011) && (funct3 == 3'b000)}}
-					& csrs) ;	//I_csrrc
+					& csrs) 	//I_csrrc
+			|
+			({32{(op == 7'b1101111)}}
+					& (pc + 4)) | //I_jal
+			({32{(op == 7'b1100111)}}
+					& (pc + 4)) | //I_jalr
+			({32{(op == 7'b0110111)}}
+					& imm | //U_lui
+			({32{(op == 7'b0010111)}}
+					& (pc + imm)); //U_auipc
 
 /***csrrw~csrrc***/
 assign csrs_in = 
