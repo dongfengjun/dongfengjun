@@ -20,7 +20,7 @@ output [31:0] M_AXI_AWADDR;
 output M_AXI_AWVALID;
 input  M_AXI_AWREADY;
 output [31:0] M_AXI_WDATA;
-output [3:0] M_AXI_WSTRB;
+output [7:0] M_AXI_WSTRB;
 output M_AXI_WVALID;
 input  M_AXI_WREADY;
 input [1:0] M_AXI_BRESP;
