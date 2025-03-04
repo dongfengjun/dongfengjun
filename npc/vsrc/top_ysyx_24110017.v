@@ -93,10 +93,12 @@ SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,
 );
 WBU_ysyx_24110017 WBU(clk,rst,
 		xrd,res,ls_rdata,
-		l_wen,lb_w,lh_w,lw_w,lbu_w,lhu_w,
+		lb_w,lh_w,lw_w,lbu_w,lhu_w,
+		rf_raddr,rd,l_rd,
+		rf_wen,gpr_wen,l_wen,
 		o_mepc,o_mstatus,o_mcause,o_mtvec,w_mepc,w_mstatus,w_mcause,w_mtvec
 );
-RegisterFile_ysyx_24110017 #(5,32) RFU (clk,xrd,(rd | l_rd),(gpr_wen || l_wen),rs1,r1,rs2,r2);
+RegisterFile_ysyx_24110017 #(5,32) RFU (clk,xrd,rf_addr,rf_wen,rs1,r1,rs2,r2);
 Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk,rst,w_mepc,mepc,mepc_wen);
 Reg_ysyx_24110017 #(32, 32'h1800) mstatus_ysyx_24110017 (clk,rst,w_mstatus,mstatus,mstatus_wen);
 Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk,rst,w_mcause,mcause,mcause_wen);
