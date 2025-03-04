@@ -1,5 +1,5 @@
-module PCU_ysyx_24110017(clk,rst,pc,dnpc
-		PC_VALID,IFU_READY
+module PCU_ysyx_24110017(clk,rst,pc,dnpc,
+			PC_VALID,IFU_READY
 );
 input	clk;
 input rst;
