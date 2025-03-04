@@ -83,12 +83,7 @@ SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,
     LSU_AXI_ARADDR,LSU_AXI_ARVALID,LSU_AXI_ARREADY,
     LSU_AXI_RDATA,LSU_AXI_RRESP,LSU_AXI_RVALID,LSU_AXI_RREADY
 );
-WBU_ysyx_24110017 WBU(clk,rst,
-		op,imm,funct3,
-		pc,r1,r2,res,
-		xrd,
-		mepc,mstatus,mcause,mtvec,csrs,csrs_in,mepc_in,mcause_in
-);
+WBU_ysyx_24110017 WBU(clk,rst,res,xrd);
 RegisterFile_ysyx_24110017 #(5,32) RFU (clk,xrd,(rd | lrd),(wr_en || ldone),rs1,r1,rs2,r2);
 Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk,rst,w_mepc,mepc,mepc_wen);
 Reg_ysyx_24110017 #(32, 32'h1800) mstatus_ysyx_24110017 (clk,rst,w_mstatus,mstatus,mstatus_wen);
