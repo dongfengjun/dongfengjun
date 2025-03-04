@@ -96,7 +96,7 @@ SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,
 WBU_ysyx_24110017 WBU(clk,rst,
 		xrd,res,ls_rdata,
 		lb_w,lh_w,lw_w,lbu_w,lhu_w,
-		rf_raddr,rd,l_rd,
+		rf_addr,rd,l_rd,
 		rf_wen,gpr_wen,l_wen,
 		o_mepc,o_mstatus,o_mcause,o_mtvec,w_mepc,w_mstatus,w_mcause,w_mtvec
 );

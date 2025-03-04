@@ -26,6 +26,7 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ top_ysyx_24110017__DOT__l_wen;
         CData/*0:0*/ top_ysyx_24110017__DOT__mstatus_wen;
         CData/*0:0*/ top_ysyx_24110017__DOT__mtvec_wen;
+        CData/*4:0*/ top_ysyx_24110017__DOT__rf_addr;
         CData/*0:0*/ top_ysyx_24110017__DOT__IFU_DONE;
         CData/*3:0*/ top_ysyx_24110017__DOT__IFU_AXI_WSTRB;
         CData/*1:0*/ top_ysyx_24110017__DOT__IFU_AXI_BRESP;
@@ -47,7 +48,6 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ top_ysyx_24110017__DOT__LSU_AXI_WREADY;
         CData/*0:0*/ top_ysyx_24110017__DOT__LSU_AXI_BVALID;
         CData/*0:0*/ top_ysyx_24110017__DOT__LSU_AXI_ARREADY;
-        CData/*0:0*/ top_ysyx_24110017__DOT__rf_addr;
         CData/*0:0*/ top_ysyx_24110017__DOT__IFU__DOT__axi_arvalid;
         CData/*0:0*/ top_ysyx_24110017__DOT__IFU__DOT__axi_rready;
         CData/*1:0*/ top_ysyx_24110017__DOT__IFU__DOT__state;
