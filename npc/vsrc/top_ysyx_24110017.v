@@ -35,6 +35,7 @@ wire [31:0]mepc,o_mepc,mstatus,o_mstatus,mcause,o_mcause,mtvec,o_mtvec;
 wire gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 /***LSU***/
 wire [31:0]ls_rdata;//LSU_AXI4-LITE
+wire l_wen;
 wire [4:0]l_rd;
 wire lb_w,lh_w,lw_w,lbu_w,lhu_w;
 wire [31:0] LSU_AXI_AWADDR,LSU_AXI_WDATA,LSU_AXI_ARADDR,LSU_AXI_RDATA;
