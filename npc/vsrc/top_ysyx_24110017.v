@@ -35,6 +35,7 @@ wire IFU_AXI_AWVALID,IFU_AXI_AWREADY,IFU_AXI_WVALID,IFU_AXI_WREADY,IFU_AXI_BVALI
 
 wire [31:0]ls_rdata;//LSU_AXI4-LITE
 wire [4:0]l_rd;
+wire lbdone,lhdone,lwdone,lbudone,lhudone;
 wire lb_w,lh_w,lw_w,lbu_w,lhu_w;
 wire [31:0] LSU_AXI_AWADDR,LSU_AXI_WDATA,LSU_AXI_ARADDR,LSU_AXI_RDATA;
 wire [7:0] LSU_AXI_WSTRB;
