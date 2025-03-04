@@ -14,7 +14,7 @@ wire [4:0]rs2;	//R S B
 wire [31:0]imm;
 wire [6:0]funct7;	//R
 wire [4:0]shamt;	//I shamt
-wire wr_en;
+wire gpr_wen;
 wire [31:0]inst;
 
 wire [31:0]res;
@@ -64,7 +64,7 @@ EXU_ysyx_24110017 EXU(clk,rst,
 		lbdone,lhdone,lwdone,lbudone,lhudone,
 		pc,dnpc,
 		mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec,
-		wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
+		gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
 );
 LSU_ysyx_24110017 LSU(clk,rst,
 		op,rd,imm,funct3,
@@ -84,7 +84,7 @@ SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,
     LSU_AXI_RDATA,LSU_AXI_RRESP,LSU_AXI_RVALID,LSU_AXI_RREADY
 );
 WBU_ysyx_24110017 WBU(clk,rst,res,o_mepc,o_mstatus,o_mcause,o_mtvec,xrd,w_mepc,w_mstatus,w_mcause,w_mtvec);
-RegisterFile_ysyx_24110017 #(5,32) RFU (clk,xrd,(rd | lrd),(wr_en || ldone),rs1,r1,rs2,r2);
+RegisterFile_ysyx_24110017 #(5,32) RFU (clk,xrd,(rd | lrd),(gpr_wen || ldone),rs1,r1,rs2,r2);
 Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk,rst,w_mepc,mepc,mepc_wen);
 Reg_ysyx_24110017 #(32, 32'h1800) mstatus_ysyx_24110017 (clk,rst,w_mstatus,mstatus,mstatus_wen);
 Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk,rst,w_mcause,mcause,mcause_wen);

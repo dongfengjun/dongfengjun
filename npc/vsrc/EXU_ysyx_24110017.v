@@ -5,7 +5,7 @@ module EXU_ysyx_24110017(
 			lbdone,lhdone,lwdone,lbudone,lhudone,
 			pc,dnpc,
 			mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec,
-			wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
+			gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
 );
 input clk;
 input rst;
@@ -22,7 +22,7 @@ input [31:0]pc;
 output [31:0]dnpc;
 input [31:0]mepc,mstatus,mcause,mtvec;
 output [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
-output wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
+output gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 
 
 wire [31:0]a,b;
