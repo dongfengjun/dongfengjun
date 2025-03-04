@@ -40,7 +40,7 @@ output M_AXI_RREADY;
 reg [4:0]l_rd;
 wire [31:0]ls_rdata = M_AXI_RDATA;
 reg l_wen;
-reg lb_w,lh_w,lw_w,lbu_w,lh_w;
+reg lb_w,lh_w,lw_w,lbu_w,lhu_w;
 
 /***单周期*DPIC***
 import "DPI-C" function int pmem_read(input int raddr);
