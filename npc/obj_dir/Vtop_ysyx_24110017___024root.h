@@ -18,7 +18,6 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         VL_IN8(clk,0,0);
         VL_IN8(rst,0,0);
         VL_OUT8(DIFFTEST,0,0);
-        CData/*0:0*/ top_ysyx_24110017__DOT__PC_VALID;
         CData/*0:0*/ top_ysyx_24110017__DOT__IFU_DONE;
         CData/*3:0*/ top_ysyx_24110017__DOT__IFU_AXI_WSTRB;
         CData/*1:0*/ top_ysyx_24110017__DOT__IFU_AXI_BRESP;
@@ -79,9 +78,9 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ top_ysyx_24110017__DOT__LSU__DOT__axi_bready;
         CData/*0:0*/ top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_arready;
         CData/*0:0*/ top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rvalid;
+        CData/*0:0*/ top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_awready;
     };
     struct {
-        CData/*0:0*/ top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_awready;
         CData/*0:0*/ top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_wready;
         CData/*0:0*/ top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_bvalid;
         CData/*1:0*/ top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rresp;

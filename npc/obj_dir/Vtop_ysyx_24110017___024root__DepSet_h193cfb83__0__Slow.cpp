@@ -425,7 +425,6 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___ctor_var_reset(Vtop_ysyx_241100
     vlSelf->dnpc = VL_RAND_RESET_I(32);
     vlSelf->inst = VL_RAND_RESET_I(32);
     vlSelf->DIFFTEST = VL_RAND_RESET_I(1);
-    vlSelf->top_ysyx_24110017__DOT__PC_VALID = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__IFU_DONE = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__IFU_AXI_AWADDR = VL_RAND_RESET_I(32);
     vlSelf->top_ysyx_24110017__DOT__IFU_AXI_WDATA = VL_RAND_RESET_I(32);

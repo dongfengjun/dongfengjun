@@ -47,12 +47,11 @@ always @(*) begin
     endcase
 end
 
+assign pc_valid = (dnpc > 32'h80000000);
 always @(*) begin
 		pc = 32'h80000000;
     case (state)
         IDLE: begin
-					if(dnpc >= 32'h80000000) begin
-						pc_valid = 1'b1;
 					end
         end
         WAIT_READY: begin
