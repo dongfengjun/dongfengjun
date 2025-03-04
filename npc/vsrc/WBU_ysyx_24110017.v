@@ -1,15 +1,15 @@
 module WBU_ysyx_24110017(clk,rst,
-			res,ls_rdata,
+			xrd,res,ls_rdata,
 			l_wen,lb_w,lh_w,lw_w,lbu_w,lhu_w,
-			xrd,
+			
 			o_mepc,o_mstatus,o_mcause,o_mtvec,
 			w_mepc,w_mstatus,w_mcause,w_mtvec
 );
 input clk;
 input rst;
+output [31:0]xrd;
 input [31:0]res,ls_rdata;
 input l_wen,lb_w,lh_w,lw_w,lbu_w,lhu_w;
-output [31:0]xrd;
 input [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
 output [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
 

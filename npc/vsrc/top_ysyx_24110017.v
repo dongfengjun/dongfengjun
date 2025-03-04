@@ -92,8 +92,8 @@ SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,
     LSU_AXI_RDATA,LSU_AXI_RRESP,LSU_AXI_RVALID,LSU_AXI_RREADY
 );
 WBU_ysyx_24110017 WBU(clk,rst,
-		res,ls_rdata,
-		l_wen,lb_w,lh_w,lw_w,lbu_w,lhu_w,xrd,
+		xrd,res,ls_rdata,
+		l_wen,lb_w,lh_w,lw_w,lbu_w,lhu_w,
 		o_mepc,o_mstatus,o_mcause,o_mtvec,w_mepc,w_mstatus,w_mcause,w_mtvec
 );
 RegisterFile_ysyx_24110017 #(5,32) RFU (clk,xrd,(rd | l_rd),(gpr_wen || l_wen),rs1,r1,rs2,r2);

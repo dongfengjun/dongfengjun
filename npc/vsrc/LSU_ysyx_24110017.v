@@ -1,4 +1,7 @@
-module LSU_ysyx_24110017(clk,rst,ls_rdata,l_rd,rd,l_wen,lbdone,lhdone,lwdone,lbudone,lhudone,lb_w,lh_w,lw_w,lbu_w,lhu_w,valid,wen,waddr,wdata,raddr,wmask,
+module LSU_ysyx_24110017(clk,rst,
+			ls_rdata,l_rd,rd,l_wen,lbdone,lhdone,lwdone,lbudone,lhudone,
+			lb_w,lh_w,lw_w,lbu_w,lhu_w,
+			valid,wen,waddr,wdata,raddr,wmask,
 			M_AXI_AWADDR,M_AXI_AWVALID,M_AXI_AWREADY,
 			M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WVALID,M_AXI_WREADY,
 			M_AXI_BRESP,M_AXI_BVALID,M_AXI_BREADY,
