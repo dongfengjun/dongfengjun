@@ -9,7 +9,7 @@ output DIFFTEST;
 /***PCU***/
 wire [31:0]pc;
 wire [31:0]dnpc;
-wire PC_VALID,IFU_READY;
+wire PCU_VALID,IFU_READY;
 /***IFU***/
 wire [31:0]inst;
 wire IFU_DONE,DIFFTEST;//IFU_AXI4-LITE
