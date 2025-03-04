@@ -64,8 +64,8 @@ IDU_ysyx_24110017 IDU(clk,rst,inst,
 EXU_ysyx_24110017 EXU(clk,rst,
 		op,funct3,imm,funct7,shamt,r1,r2,
 		res,
-		//ls_rdata,lbdone,lhdone,lwdone,lbudone,lhudone,
 		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,
+		lbdone,lhdone,lwdone,lbudone,lhudone,
 		pc,dnpc,
 		mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec,
 		gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
@@ -73,7 +73,8 @@ EXU_ysyx_24110017 EXU(clk,rst,
 LSU_ysyx_24110017 LSU(clk,rst,
 		op,funct3,
 		ls_rdata,
-		lrd,rd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone,
+		l_rd,rd,l_wen,lbdone,lhdone,lwdone,lbudone,lhudone,
+		lb_w,lh_w,lw_w,lbu_w,lhu_w,
 		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,
 
 		LSU_AXI_AWADDR,LSU_AXI_AWVALID,LSU_AXI_AWREADY,
@@ -91,10 +92,10 @@ SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,
 );
 WBU_ysyx_24110017 WBU(clk,rst,
 		res,ls_rdata,
-		ldone,lbdone,lhdone,lwdone,lbudone,lhudone,xrd,
+		l_wen,lb_w,lh_w,lw_w,lbu_w,lhu_w,xrd,
 		o_mepc,o_mstatus,o_mcause,o_mtvec,w_mepc,w_mstatus,w_mcause,w_mtvec
 );
-RegisterFile_ysyx_24110017 #(5,32) RFU (clk,xrd,(rd | lrd),(gpr_wen || ldone),rs1,r1,rs2,r2);
+RegisterFile_ysyx_24110017 #(5,32) RFU (clk,xrd,(rd | l_rd),(gpr_wen || l_wen),rs1,r1,rs2,r2);
 Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk,rst,w_mepc,mepc,mepc_wen);
 Reg_ysyx_24110017 #(32, 32'h1800) mstatus_ysyx_24110017 (clk,rst,w_mstatus,mstatus,mstatus_wen);
 Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk,rst,w_mcause,mcause,mcause_wen);

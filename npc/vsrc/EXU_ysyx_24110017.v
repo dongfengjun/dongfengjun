@@ -1,10 +1,11 @@
 module EXU_ysyx_24110017(clk,rst,
 			op,funct3,imm,funct7,shamt,r1,r2, //i_IDU
 			res, //o_WBU
-			//ls_rdata,lbdone,lhdone,lwdone,lbudone,lhudone, //LSU
-			ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,
+			ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask, //o_LSU
+			lbdone,lhdone,lwdone,lbudone,lhudone,
 			pc,dnpc,	//PCU
-			mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec, //csr
+			mepc,mstatus,mcause,mtvec, //i_csr
+			o_mepc,o_mstatus,o_mcause,o_mtvec, //o_csr
 			gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen	//reg_wen
 );
 input clk;
@@ -17,11 +18,10 @@ input [4:0]shamt;
 input [31:0]r1,r2;
 output [31:0]res;
 
-//input [31:0]ls_rdata;
-//input lbdone,lhdone,lwdone,lbudone,lhudone;
 output ls_valid,ls_wen;
 output [31:0]ls_waddr,ls_wdata,ls_raddr;
 output [7:0]ls_wmask;
+output lbdone,lhdone,lwdone,lbudone,lhudone;
 
 input [31:0]pc;
 output [31:0]dnpc;
@@ -85,18 +85,6 @@ assign res =
       ({32{(funct3 == 3'b111) && (funct7 == 7'b0000001)}}
           & (a % b)) //R_remui			
 																										))
-/***I_lb~lhu***
-			|
-			({32{lbdone}} 
-					& {{24{ls_rdata[7]}},(ls_rdata[7:0])}) | //I_lb
-			({32{lhdone}}
-          & {{16{ls_rdata[15]}},(ls_rdata[15:0])}) | //I_lh
-			({32{lwdone}} 
-          & (ls_rdata)) | //I_lw
-			({32{lbudone}}
-          & {24'b0,(ls_rdata[7:0])}) | //I_lbu
-			({32{lhudone}}
-          & {16'b0,(ls_rdata[15:0])}) //I_lhu
 /***I_csrrw~csrrc***/
 			|
 			({32{(op == 7'b1110011) && (funct3 == 3'b001)}}
@@ -136,8 +124,6 @@ assign w_csrs =
           & (csr &~r1)) ; //I_csrrc
 
 /***load*store*LSU**/
-wire [31:0]ls_rdata;
-wire lbdone,lhdone,lwdone,lbudone,lhudone;
 wire ls_valid,ls_wen;
 wire [31:0]ls_waddr,ls_wdata,ls_raddr;
 wire [7:0]ls_wmask;
@@ -150,7 +136,11 @@ assign ls_wmask = (op == 7'b0100011 && funct3 == 3'b000) ? 8'b00000001
  : (op == 7'b0100011 && funct3 == 3'b010) ? 8'b00001111
  : 8'b0;
 assign ls_raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
-
+assign lbdone = (op == 7'b0000011) && (funct3 == 3'b000);           
+assign lhdone = (op == 7'b0000011) && (funct3 == 3'b001);
+assign lwdone = (op == 7'b0000011) && (funct3 == 3'b010);
+assign lbudone = (op == 7'b0000011) && (funct3 == 3'b100);
+assign lhudone = (op == 7'b0000011) && (funct3 == 3'b101);
 /***J_B_dnpc***/
 wire [31:0]pc;
 wire [31:0]dnpc;
