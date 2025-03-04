@@ -15,7 +15,6 @@ output [4:0]o_rf_raddr;
 input [4:0]rd,l_rd;
 output o_rf_wen;
 input gpr_wen,l_wen;
-output o_rf_wen;
 input [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
 output [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
 
