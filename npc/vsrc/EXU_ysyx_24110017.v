@@ -5,7 +5,8 @@ module EXU_ysyx_24110017(
 			lbdone,lhdone,lwdone,lbudone,lhudone,
 			pc,dnpc,
 			mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec,
-			gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
+			gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen,
+			ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask
 );
 input clk;
 input rst;
@@ -23,6 +24,9 @@ output [31:0]dnpc;
 input [31:0]mepc,mstatus,mcause,mtvec;
 output [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
 output gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
+output ls_valid,ls_wen;
+output [31:0]ls_waddr,ls_wdata,ls_raddr;
+output [7:0]ls_wmask;
 
 
 wire [31:0]a,b;
@@ -132,6 +136,18 @@ assign w_csrs =
 /***load*store*LSU**/
 wire [31:0]rdata;
 wire lbdone,lhdone,lwdone,lbudone,lhudone;
+wire ls_valid,ls_wen;
+wire [31:0]ls_waddr,ls_wdata,ls_raddr;
+wire [7:0]ls_wmask;
+assign ls_valid = (op == 7'b0000011 || op == 7'b0100011) ? 1'b1 : 1'b0;
+assign ls_wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
+assign ls_waddr = (op == 7'b0100011) ? (r1 + offset) : 32'h80000000;
+assign ls_wdata = (op == 7'b0100011) ? r2 : 32'b0;
+assign ls_wmask = (op == 7'b0100011 && funct3 == 3'b000) ? 8'b00000001
+ : (op == 7'b0100011 && funct3 == 3'b001) ? 8'b00000011
+ : (op == 7'b0100011 && funct3 == 3'b010) ? 8'b00001111
+ : 8'b0;
+assign ls_raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
 
 /***J_B_dnpc***/
 wire [31:0]pc;

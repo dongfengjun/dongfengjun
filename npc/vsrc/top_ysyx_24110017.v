@@ -64,12 +64,15 @@ EXU_ysyx_24110017 EXU(clk,rst,
 		lbdone,lhdone,lwdone,lbudone,lhudone,
 		pc,dnpc,
 		mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec,
-		gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
+		gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen,
+		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask
 );
 LSU_ysyx_24110017 LSU(clk,rst,
-		op,rd,imm,funct3,
-		r1,r2,rdata,
+		op,funct3,
+		rdata,
 		lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone,
+		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,
+
 		LSU_AXI_AWADDR,LSU_AXI_AWVALID,LSU_AXI_AWREADY,
     LSU_AXI_WDATA,LSU_AXI_WSTRB,LSU_AXI_WVALID,LSU_AXI_WREADY,
     LSU_AXI_BRESP,LSU_AXI_BVALID,LSU_AXI_BREADY,

@@ -1,4 +1,4 @@
-module LSU_ysyx_24110017(clk,rst,op,rd,offset,funct3,r1,r2,rdata,lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone,
+module LSU_ysyx_24110017(clk,rst,op,funct3,rdata,lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone,valid,wen,waddr,wdata,raddr,wmask,
 			M_AXI_AWADDR,M_AXI_AWVALID,M_AXI_AWREADY,
 			M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WVALID,M_AXI_WREADY,
 			M_AXI_BRESP,M_AXI_BVALID,M_AXI_BREADY,
@@ -8,14 +8,15 @@ module LSU_ysyx_24110017(clk,rst,op,rd,offset,funct3,r1,r2,rdata,lrd,ldone,lbdon
 input clk;
 input rst;
 input [6:0]op;
-input [4:0]rd;
-input [31:0]offset;
 input [2:0]funct3;
-input [31:0]r1,r2;
 output [31:0]rdata;
 output [4:0]lrd;
 output ldone;
 output lbdone,lhdone,lwdone,lbudone,lhudone;
+input valid,wen;
+input [31:0]waddr,wdata,raddr;
+input [7:0]wmask;
+
 output [31:0] M_AXI_AWADDR;
 output M_AXI_AWVALID;
 input  M_AXI_AWREADY;
@@ -35,24 +36,10 @@ input [1:0] M_AXI_RRESP;
 input M_AXI_RVALID;
 output M_AXI_RREADY;
 
-wire valid,wen;
-wire [31:0]raddr;
 reg [4:0]lrd;
 wire [31:0]rdata = M_AXI_RDATA;
-wire [31:0]waddr,wdata;
-wire [7:0]wmask;
 reg ldone;
 reg lbdone,lhdone,lwdone,lbudone,lhudone;
- 
-assign valid = (op == 7'b0000011 || op == 7'b0100011) ? 1'b1 : 1'b0;
-assign wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
-assign waddr = (op == 7'b0100011) ? (r1 + offset) : 32'h80000000;
-assign wdata = (op == 7'b0100011) ? r2 : 32'b0;
-assign wmask = (op == 7'b0100011 && funct3 == 3'b000) ? 8'b00000001
- : (op == 7'b0100011 && funct3 == 3'b001) ? 8'b00000011
- : (op == 7'b0100011 && funct3 == 3'b010) ? 8'b00001111
- : 8'b0;
-assign raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
 
 /***单周期*DPIC***
 import "DPI-C" function int pmem_read(input int raddr);
