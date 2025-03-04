@@ -17,8 +17,8 @@ input [4:0]shamt;
 input [31:0]r1,r2;
 output [31:0]res;
 
-input [31:0]ls_rdata;
-input lbdone,lhdone,lwdone,lbudone,lhudone;
+//input [31:0]ls_rdata;
+//input lbdone,lhdone,lwdone,lbudone,lhudone;
 output ls_valid,ls_wen;
 output [31:0]ls_waddr,ls_wdata,ls_raddr;
 output [7:0]ls_wmask;
