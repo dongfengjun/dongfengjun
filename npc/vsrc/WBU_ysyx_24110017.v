@@ -1,6 +1,6 @@
 module WBU_ysyx_24110017(clk,rst,
 			res,ls_rdata,
-			ld_w,lb_w,lh_w,lw_w,lbu_w,lhu_w,
+			l_wen,lb_w,lh_w,lw_w,lbu_w,lhu_w,
 			xrd,
 			o_mepc,o_mstatus,o_mcause,o_mtvec,
 			w_mepc,w_mstatus,w_mcause,w_mtvec
