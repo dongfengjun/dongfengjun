@@ -53,8 +53,10 @@ always @(posedge clk) begin
 		end
     case (state)
         IDLE: begin
-					pc_valid <= 1'b1;
-					pc <= pc;
+					if(dnpc > 32'h80000000) begin
+						pc_valid <= 1'b1;
+						pc <= pc;
+					end
 				end
         WAIT_READY: begin
 					if(IFU_READY) begin
