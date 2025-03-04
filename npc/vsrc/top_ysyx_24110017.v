@@ -23,6 +23,10 @@ wire [31:0]r1,r2,a,b,xrd;
 wire [31:0]mepc,o_mepc,w_mepc,mstatus,o_mstatus,w_mstatus,mcause,o_mcause,w_mcause,mtvec,o_mtvec,w_mtvec;
 wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
 
+wire ls_valid,ls_wen;
+wire [31:0]ls_waddr,ls_wdata,ls_raddr;
+wire [7:0]ls_wmask;
+
 wire IFU_DONE,DIFFTEST;//IFU_AXI4-LITE
 wire [31:0] IFU_AXI_AWADDR,IFU_AXI_WDATA,IFU_AXI_ARADDR,IFU_AXI_RDATA;
 wire [3:0] IFU_AXI_WSTRB;
