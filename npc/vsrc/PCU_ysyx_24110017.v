@@ -51,7 +51,8 @@ assign pc_valid = (dnpc > 32'h80000000);
 always @(*) begin
 		pc = 32'h80000000;
     case (state)
-        IDLE: 
+        IDLE: begin
+				end
         WAIT_READY: begin
 					if(IFU_READY) begin
 						pc_valid = 1'b0;
