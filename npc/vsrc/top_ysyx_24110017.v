@@ -21,7 +21,9 @@ wire [31:0]res;
 wire l_wen;
 wire [31:0]r1,r2,a,b,xrd;
 wire [31:0]mepc,o_mepc,w_mepc,mstatus,o_mstatus,w_mstatus,mcause,o_mcause,w_mcause,mtvec,o_mtvec,w_mtvec;
-wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
+wire mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
+wire [4:0]rf_addr;
+wire rf_wen;
 
 wire ls_valid,ls_wen;
 wire [31:0]ls_waddr,ls_wdata,ls_raddr;
