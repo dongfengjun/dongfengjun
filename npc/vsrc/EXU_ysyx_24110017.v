@@ -4,7 +4,7 @@ module EXU_ysyx_24110017(
 			r1,r2,rdata,
 			lbdone,lhdone,lwdone,lbudone,lhudone,
 			pc,dnpc,
-			mepc,mstatus,mcause,mtvec,w_mepc,w_mstatus,w_mcause,w_mtvec,
+			mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec,
 			wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
 );
 input clk;
@@ -21,7 +21,7 @@ input lbdone,lhdone,lwdone,lbudone,lhudone;
 input [31:0]pc;
 output [31:0]dnpc;
 input [31:0]mepc,mstatus,mcause,mtvec;
-output [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
+output [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
 output wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 
 
@@ -116,11 +116,11 @@ assign csr = (op == 7'b1110011 && imm == 32'd833) ? mepc
  : (op == 7'b1110011 && imm == 32'd834) ? mcause
  : (op == 7'b1110011 && imm == 32'd773) ? mtvec
  : 32'b0;
-assign w_mepc= (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? pc
+assign o_mepc= (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? pc
  : w_csrs; //ecall
-assign w_mstatus = w_csrs;
-assign w_mcause = (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? r2 : w_csrs; //ecall
-assign w_mtvec = w_csrs;
+assign o_mstatus = w_csrs;
+assign o_mcause = (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? r2 : w_csrs; //ecall
+assign o_mtvec = w_csrs;
 assign w_csrs = 
 			({32{(op == 7'b1110011) && (funct3 == 3'b001)}}
           & r1) | //I_csrrw
