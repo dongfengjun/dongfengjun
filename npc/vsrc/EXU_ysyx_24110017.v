@@ -134,7 +134,7 @@ assign w_csrs =
           & (csr &~r1)) ; //I_csrrc
 
 /***load*store*LSU**/
-wire [31:0]rdata;
+wire [31:0]ls_rdata;
 wire lbdone,lhdone,lwdone,lbudone,lhudone;
 wire ls_valid,ls_wen;
 wire [31:0]ls_waddr,ls_wdata,ls_raddr;
