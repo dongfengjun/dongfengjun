@@ -1,8 +1,8 @@
 module WBU_ysyx_24110017(clk,rst,op,imm,funct3,
-												pc,r1,r2,res,a,b,xrd,
+												pc,r1,r2,res,xrd,
 												mepc,mstatus,mcause,mtvec,
 												csrs,csrs_in,mepc_in,mcause_in
-												);
+);
 input clk;
 input rst;
 input [6:0]op;
@@ -11,20 +11,16 @@ input [2:0]funct3;
 input [31:0]pc;
 input [31:0]r1,r2;
 input [31:0]res;
-output [31:0]a;
-output [31:0]b;
 output [31:0]xrd;
 input [31:0]mepc,mstatus,mcause,mtvec;
 output [31:0]csrs;
 input [31:0]csrs_in;
 output [31:0]mepc_in,mcause_in;
 
-wire [31:0]a,b,xrd;
+wire [31:0]xrd;
 wire [31:0]csrs,csrs_in,mepc_in,mepc,mstatus,mcause_in,mcause,mtvec;
 wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
 
-assign b = (op == 7'b0110011 || op == 7'b0100011) ? r2 : imm;
-assign a = (op == 7'b0010011 || op == 7'b0000011 || op == 7'b0100011 || op == 7'b0110011/*R*/ || (op == 7'b1110011 && (funct3 == 3'b001 || funct3 == 3'b010 || funct3 == 3'b011))/*csr*/) ? r1 : pc;
 assign xrd = res;
 assign csrs = (op == 7'b1110011 && imm == 32'd833) ? mepc
  : (op == 7'b1110011 && imm == 32'd768) ? mstatus

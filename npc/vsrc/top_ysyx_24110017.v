@@ -20,7 +20,7 @@ wire [31:0]inst;
 wire [31:0]res;
 wire ldone;
 wire [31:0]r1,r2,a,b,xrd;
-wire [31:0]csrs, csrs_in, mepc_in, mepc, mstatus, mcause_in, mcause, mtvec;
+wire [31:0]csrs,csrs_in,mepc_in,mepc,mstatus,mcause_in,mcause,mtvec;
 wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
 
 wire IFU_DONE,DIFFTEST;//IFU_AXI4-LITE
@@ -84,7 +84,7 @@ SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,
 WBU_ysyx_24110017 WBU(clk,rst,
 		op,imm,funct3,
 		pc,r1,r2,res,
-		a,b,xrd,
+		xrd,
 		mepc,mstatus,mcause,mtvec,csrs,csrs_in,mepc_in,mcause_in
 );
 RegisterFile_ysyx_24110017 #(5,32) RFU (clk,xrd,(rd | lrd),(wr_en || ldone),rs1,r1,rs2,r2);
