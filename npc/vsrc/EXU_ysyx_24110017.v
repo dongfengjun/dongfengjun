@@ -1,10 +1,10 @@
 module EXU_ysyx_24110017(
 			clk,rst,op,funct3,imm,funct7,shamt,
-			csrs,csrs_in,res,
+			res,
 			r1,r2,rdata,
 			lbdone,lhdone,lwdone,lbudone,lhudone,
 			pc,dnpc,
-			mepc,mtvec,
+			mepc,mstatus,mcause,mtvec,w_mepc,w_mstatus,w_mcause,w_mtvec,
 			wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
 );
 input clk;
@@ -14,15 +14,14 @@ input [2:0]funct3;
 input [31:0]imm;
 input [6:0]funct7;
 input [4:0]shamt;
-input [31:0]csrs;
-output [31:0]csrs_in;
 output [31:0]res;
 input [31:0]r1,r2;
 input [31:0]rdata;
 input lbdone,lhdone,lwdone,lbudone,lhudone;
 input [31:0]pc;
 output [31:0]dnpc;
-input [31:0]mepc,mtvec;
+input [31:0]mepc,mstatus,mcause,mtvec;
+output [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
 output wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 
 
@@ -95,11 +94,11 @@ assign res =
 /***I_csrrw~csrrc***/
 			|
 			({32{(op == 7'b1110011) && (funct3 == 3'b001)}}
-					& csrs) |	//I_csrrw
+					& csr) |	//I_csrrw
 			({32{(op == 7'b1110011) && (funct3 == 3'b010)}}
-					& csrs) |	//I_csrrs
+					& csr) |	//I_csrrs
 			({32{(op == 7'b1110011) && (funct3 == 3'b000)}}
-					& csrs) 	//I_csrrc
+					& csr) 	//I_csrrc
 			|
 			({32{(op == 7'b1101111)}}
 					& (pc + 4)) | //I_jal
@@ -111,13 +110,24 @@ assign res =
 					& (pc + imm)); //U_auipc
 
 /***csrrw~csrrc***/
-assign csrs_in = 
+wire [31:0]csr,w_csrs;
+assign csr = (op == 7'b1110011 && imm == 32'd833) ? mepc
+ : (op == 7'b1110011 && imm == 32'd768) ? mstatus
+ : (op == 7'b1110011 && imm == 32'd834) ? mcause
+ : (op == 7'b1110011 && imm == 32'd773) ? mtvec
+ : 32'b0;
+assign w_mepc= (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? pc
+ : w_csrs; //ecall
+assign w_mstatus = w_csrs;
+assign w_mcause = (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? r2 : w_csrs; //ecall
+assign w_mtvec = w_csrs;
+assign w_csrs = 
 			({32{(op == 7'b1110011) && (funct3 == 3'b001)}}
-          & a) | //I_csrrw
+          & r1) | //I_csrrw
 			({32{(op == 7'b1110011) && (funct3 == 3'b010)}}
-          & (csrs | a)) | //I_csrrs
+          & (csr | r1)) | //I_csrrs
       ({32{(op == 7'b1110011) && (funct3 == 3'b000)}}
-          & (csrs &~a)) ; //I_csrrc
+          & (csr &~r1)) ; //I_csrrc
 
 /***load*store*LSU**/
 wire [31:0]rdata;

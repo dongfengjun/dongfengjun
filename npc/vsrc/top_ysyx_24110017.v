@@ -20,7 +20,7 @@ wire [31:0]inst;
 wire [31:0]res;
 wire ldone;
 wire [31:0]r1,r2,a,b,xrd;
-wire [31:0]csrs,csrs_in,mepc_in,mepc,mstatus,mcause_in,mcause,mtvec;
+wire [31:0]mepc,w_mepc,mstatus,w_mstatus,mcause,w_mcause,mtvec,w_mtvec;
 wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
 
 wire IFU_DONE,DIFFTEST;//IFU_AXI4-LITE
@@ -59,9 +59,11 @@ IDU_ysyx_24110017 IDU(clk,rst,inst,
 );
 EXU_ysyx_24110017 EXU(clk,rst,
 		op,funct3,imm,funct7,shamt,
-		csrs,csrs_in,res,
-		r1,r2,rdata,lbdone,lhdone,lwdone,lbudone,lhudone,
-		pc,dnpc,mepc,mtvec,
+		res,
+		r1,r2,rdata,
+		lbdone,lhdone,lwdone,lbudone,lhudone,
+		pc,dnpc,
+		mepc,mstatus,mcause,mtvec,w_mepc,w_mstatus,w_mcause,w_tvec,
 		wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
 );
 LSU_ysyx_24110017 LSU(clk,rst,
@@ -88,10 +90,10 @@ WBU_ysyx_24110017 WBU(clk,rst,
 		mepc,mstatus,mcause,mtvec,csrs,csrs_in,mepc_in,mcause_in
 );
 RegisterFile_ysyx_24110017 #(5,32) RFU (clk,xrd,(rd | lrd),(wr_en || ldone),rs1,r1,rs2,r2);
-Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk,rst,mepc_in,mepc,mepc_wen);
-Reg_ysyx_24110017 #(32, 32'h1800) mstatus_ysyx_24110017 (clk,rst,csrs_in,mstatus,mstatus_wen);
-Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk,rst,mcause_in,mcause,mcause_wen);
-Reg_ysyx_24110017 #(32, 32'b0) mtvec_ysyx_24110017 (clk,rst,csrs_in,mtvec,mtvec_wen);
+Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk,rst,w_mepc,mepc,mepc_wen);
+Reg_ysyx_24110017 #(32, 32'h1800) mstatus_ysyx_24110017 (clk,rst,w_mstatus,mstatus,mstatus_wen);
+Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk,rst,w_mcause,mcause,mcause_wen);
+Reg_ysyx_24110017 #(32, 32'b0) mtvec_ysyx_24110017 (clk,rst,w_mtvec,mtvec,mtvec_wen);
 
 
 /***DPI-C*CSR***/
