@@ -16,7 +16,7 @@ wire PC_VALID = pc_valid;
 reg [31:0]pc;
 wire [31:0]dnpc;
 
-parameter IDLE = 1'b0,WAIT_READY=1'b1;
+parameter IDLE = 1'b0,WAIT_READY = 1'b1;
 reg state,next_state;
 
 always @(posedge clk) begin
