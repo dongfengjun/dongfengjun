@@ -47,17 +47,19 @@ always @(*) begin
     endcase
 end
 
-assign pc_valid = (dnpc > 32'h80000000);
-always @(*) begin
-		pc = 32'h80000000;
+always @(posedge clk) begin
+		if(rst) begin
+			pc <= 32'h80000000;
+		end
     case (state)
         IDLE: begin
-					pc = pc;
+					pc_valid <= 1'b1;
+					pc <= pc;
 				end
         WAIT_READY: begin
 					if(IFU_READY) begin
-						pc_valid = 1'b0;
-						pc = dnpc;
+						pc_valid <= 1'b0;
+						pc <= dnpc;
 					end
         end
     endcase
