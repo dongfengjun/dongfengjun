@@ -59,7 +59,7 @@ IDU_ysyx_24110017 IDU(clk,rst,inst,
 );
 EXU_ysyx_24110017 EXU(clk,rst,
 		op,funct3,imm,funct7,shamt,
-		a,b,csrs,csrs_in,res,
+		csrs,csrs_in,res,
 		r1,r2,rdata,lbdone,lhdone,lwdone,lbudone,lhudone,
 		pc,dnpc,mepc,mtvec,
 		wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen

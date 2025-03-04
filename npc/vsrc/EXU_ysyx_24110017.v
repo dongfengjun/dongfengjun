@@ -1,6 +1,6 @@
 module EXU_ysyx_24110017(
 			clk,rst,op,funct3,imm,funct7,shamt,
-			a,b,csrs,csrs_in,res,
+			csrs,csrs_in,res,
 			r1,r2,rdata,
 			lbdone,lhdone,lwdone,lbudone,lhudone,
 			pc,dnpc,
@@ -14,7 +14,6 @@ input [2:0]funct3;
 input [31:0]imm;
 input [6:0]funct7;
 input [4:0]shamt;
-input [31:0]a,b;
 input [31:0]csrs;
 output [31:0]csrs_in;
 output [31:0]res;
