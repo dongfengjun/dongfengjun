@@ -33,7 +33,7 @@ wire [3:0] IFU_AXI_WSTRB;
 wire [1:0] IFU_AXI_BRESP,IFU_AXI_RRESP;
 wire IFU_AXI_AWVALID,IFU_AXI_AWREADY,IFU_AXI_WVALID,IFU_AXI_WREADY,IFU_AXI_BVALID,IFU_AXI_BREADY,IFU_AXI_ARVALID,IFU_AXI_ARREADY,IFU_AXI_RVALID,IFU_AXI_RREADY;
 
-wire [31:0]rdata;//LSU_AXI4-LITE
+wire [31:0]ls_rdata;//LSU_AXI4-LITE
 wire lbdone,lhdone,lwdone,lbudone,lhudone;
 wire [31:0] LSU_AXI_AWADDR,LSU_AXI_WDATA,LSU_AXI_ARADDR,LSU_AXI_RDATA;
 wire [7:0] LSU_AXI_WSTRB;
@@ -64,7 +64,7 @@ IDU_ysyx_24110017 IDU(clk,rst,inst,
 EXU_ysyx_24110017 EXU(clk,rst,
 		op,funct3,imm,funct7,shamt,
 		res,
-		r1,r2,rdata,
+		r1,r2,ls_rdata,
 		lbdone,lhdone,lwdone,lbudone,lhudone,
 		pc,dnpc,
 		mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec,
@@ -73,7 +73,7 @@ EXU_ysyx_24110017 EXU(clk,rst,
 );
 LSU_ysyx_24110017 LSU(clk,rst,
 		op,funct3,
-		rdata,
+		ls_rdata,
 		lrd,rd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone,
 		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,
 
