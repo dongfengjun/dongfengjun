@@ -1,12 +1,11 @@
 module EXU_ysyx_24110017(clk,rst,
-			op,funct3,imm,funct7,shamt,r1,r2,
-			res,
-			ls_rdata,
-			lbdone,lhdone,lwdone,lbudone,lhudone,
-			pc,dnpc,
-			mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec,
-			gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen,
-			ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask
+			op,funct3,imm,funct7,shamt,r1,r2, //i_IDU
+			res, //o_WBU
+			ls_rdata,lbdone,lhdone,lwdone,lbudone,lhudone, //LSU
+			ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,
+			pc,dnpc,	//PCU
+			mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec, //csr
+			gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen,	//reg_wen
 );
 input clk;
 input rst;
@@ -19,14 +18,14 @@ input [31:0]r1,r2;
 output [31:0]res;
 input [31:0]ls_rdata;
 input lbdone,lhdone,lwdone,lbudone,lhudone;
+output ls_valid,ls_wen;
+output [31:0]ls_waddr,ls_wdata,ls_raddr;
+output [7:0]ls_wmask;
 input [31:0]pc;
 output [31:0]dnpc;
 input [31:0]mepc,mstatus,mcause,mtvec;
 output [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
 output gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
-output ls_valid,ls_wen;
-output [31:0]ls_waddr,ls_wdata,ls_raddr;
-output [7:0]ls_wmask;
 
 
 wire [31:0]a,b;
