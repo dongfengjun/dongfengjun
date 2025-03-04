@@ -5,7 +5,7 @@ module EXU_ysyx_24110017(clk,rst,
 			ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,
 			pc,dnpc,	//PCU
 			mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec, //csr
-			gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen,	//reg_wen
+			gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen	//reg_wen
 );
 input clk;
 input rst;
