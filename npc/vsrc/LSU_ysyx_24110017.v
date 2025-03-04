@@ -39,7 +39,7 @@ wire valid,wen;
 wire [31:0]raddr;
 reg [4:0]lrd;
 wire [31:0]rdata = M_AXI_RDATA;
-wire [31:0]waddr, wdata;
+wire [31:0]waddr,wdata;
 wire [7:0]wmask;
 reg ldone;
 reg lbdone,lhdone,lwdone,lbudone,lhudone;
