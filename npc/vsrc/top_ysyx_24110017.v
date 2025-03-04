@@ -9,6 +9,7 @@ output DIFFTEST;
 /***PCU***/
 wire [31:0]pc;
 wire [31:0]dnpc;
+wire PC_VALID,IFU_READY;
 /***IFU***/
 wire [31:0]inst;
 wire IFU_DONE,DIFFTEST;//IFU_AXI4-LITE
@@ -53,9 +54,10 @@ wire [31:0]r1,r2;
 
 PCU_ysyx_24110017 PCU(clk,rst,
 		pc,dnpc,
-		IFU_DONE
+		PCU_VALID,
+		IFU_READY
 );
-IFU_ysyx_24110017 IFU(clk,rst,pc,inst,IFU_DONE,DIFFTEST,
+IFU_ysyx_24110017 IFU(clk,rst,pc,inst,PCU_VALID,IFU_READY,DIFFTEST,
         IFU_AXI_AWADDR,IFU_AXI_AWVALID,IFU_AXI_AWREADY,
         IFU_AXI_WDATA,IFU_AXI_WSTRB,IFU_AXI_WVALID,IFU_AXI_WREADY,
         IFU_AXI_BRESP,IFU_AXI_BVALID,IFU_AXI_BREADY,

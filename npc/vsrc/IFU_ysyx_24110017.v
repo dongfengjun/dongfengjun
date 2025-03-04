@@ -1,4 +1,4 @@
-module IFU_ysyx_24110017(clk,rst,pc,inst,if_done,difftest,
+module IFU_ysyx_24110017(clk,rst,pc,inst,PCU_VALID,IFU_READY,difftest,
 				M_AXI_AWADDR,M_AXI_AWVALID,M_AXI_AWREADY,
         M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WVALID,M_AXI_WREADY,
         M_AXI_BRESP,M_AXI_BVALID,M_AXI_BREADY,
@@ -9,7 +9,8 @@ input clk;
 input rst;
 input [31:0]pc;
 output [31:0]inst;
-output if_done;
+input PCU_VALID;
+output IFU_READY;
 output difftest;
 output [31:0] M_AXI_AWADDR;
 output M_AXI_AWVALID;
@@ -32,6 +33,7 @@ output M_AXI_RREADY;
 
 wire [31:0]pc;
 reg [31:0]inst;
+assign IFU_READY = if_done;
 //wire [31:0]inst;
 
 /***单周期***
