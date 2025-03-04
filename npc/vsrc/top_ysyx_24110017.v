@@ -20,7 +20,7 @@ wire [31:0]inst;
 wire [31:0]res;
 wire ldone;
 wire [31:0]r1,r2,a,b,xrd;
-wire [31:0]mepc,w_mepc,mstatus,w_mstatus,mcause,w_mcause,mtvec,w_mtvec;
+wire [31:0]mepc,o_mepc,w_mepc,mstatus,o_mstatus,w_mstatus,mcause,o_mcause,w_mcause,mtvec,o_mtvec,w_mtvec;
 wire mepc_wen, mstatus_wen, mcause_wen, mtvec_wen;
 
 wire IFU_DONE,DIFFTEST;//IFU_AXI4-LITE
