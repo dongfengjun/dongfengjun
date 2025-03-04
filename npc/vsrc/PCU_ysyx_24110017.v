@@ -52,6 +52,7 @@ always @(*) begin
 		pc = 32'h80000000;
     case (state)
         IDLE: begin
+					pc = pc;
 				end
         WAIT_READY: begin
 					if(IFU_READY) begin

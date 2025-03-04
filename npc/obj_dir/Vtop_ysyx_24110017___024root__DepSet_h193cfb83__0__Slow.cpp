@@ -105,6 +105,13 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
     if (vlSelf->top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__s_wen) {
         Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__pmem_write_TOP(vlSelf->top_ysyx_24110017__DOT__LSU__DOT__axi_awaddr, vlSelf->top_ysyx_24110017__DOT__LSU__DOT__axi_wdata, (IData)(vlSelf->top_ysyx_24110017__DOT__LSU__DOT__axi_wstrb));
     }
+    if (vlSelf->top_ysyx_24110017__DOT__PCU__DOT__state) {
+        if (vlSelf->top_ysyx_24110017__DOT__PCU__DOT__state) {
+            if (vlSelf->top_ysyx_24110017__DOT__IFU__DOT__if_done) {
+                vlSelf->top_ysyx_24110017__DOT__PCU__DOT__pc_valid = 0U;
+            }
+        }
+    }
     if ((0U != vlSelf->top_ysyx_24110017__DOT__IFU__DOT__axi_araddr)) {
         Vtop_ysyx_24110017___024root____Vdpiimwrap_top_ysyx_24110017__DOT__SRAM_IFU_ysyx_24110017__DOT__pmem_read_TOP(vlSelf->top_ysyx_24110017__DOT__IFU__DOT__axi_araddr, vlSelf->__Vfunc_top_ysyx_24110017__DOT__SRAM_IFU_ysyx_24110017__DOT__pmem_read__0__Vfuncout);
         vlSelf->top_ysyx_24110017__DOT__SRAM_IFU_ysyx_24110017__DOT__tmp 

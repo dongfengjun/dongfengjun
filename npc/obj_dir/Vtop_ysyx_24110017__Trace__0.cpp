@@ -132,7 +132,7 @@ void Vtop_ysyx_24110017___024root__trace_chg_sub_0(Vtop_ysyx_24110017___024root*
     bufp->chgIData(oldp+96,(vlSelf->dnpc),32);
     bufp->chgIData(oldp+97,(vlSelf->inst),32);
     bufp->chgBit(oldp+98,(vlSelf->DIFFTEST));
-    bufp->chgBit(oldp+99,(vlSelf->top_ysyx_24110017__DOT__PCU__DOT__pc_valid));
+    bufp->chgBit(oldp+99,((0x80000000U < vlSelf->dnpc)));
     bufp->chgCData(oldp+100,((0x7fU & vlSelf->inst)),7);
     bufp->chgCData(oldp+101,((7U & (vlSelf->inst >> 0xcU))),3);
     bufp->chgCData(oldp+102,((0x1fU & (vlSelf->inst 
@@ -284,8 +284,9 @@ void Vtop_ysyx_24110017___024root__trace_chg_sub_0(Vtop_ysyx_24110017___024root*
                                                      & (vlSelf->inst 
                                                         >> 0x14U))))))),32);
     bufp->chgBit(oldp+135,((0x80000000U <= vlSelf->pc)));
-    bufp->chgBit(oldp+136,(vlSelf->top_ysyx_24110017__DOT__PCU__DOT__next_state));
-    bufp->chgIData(oldp+137,(vlSelf->top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__s_rdata),32);
+    bufp->chgBit(oldp+136,(vlSelf->top_ysyx_24110017__DOT__PCU__DOT__pc_valid));
+    bufp->chgBit(oldp+137,(vlSelf->top_ysyx_24110017__DOT__PCU__DOT__next_state));
+    bufp->chgIData(oldp+138,(vlSelf->top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__s_rdata),32);
 }
 
 void Vtop_ysyx_24110017___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {

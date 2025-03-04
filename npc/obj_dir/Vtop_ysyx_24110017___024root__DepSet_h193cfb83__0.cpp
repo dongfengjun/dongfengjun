@@ -88,24 +88,23 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___act_sequent__TOP__0(Vtop_ysyx_
                                                    : 
                                                   ((IData)(4U) 
                                                    + vlSelf->pc)))))))))));
-    vlSelf->pc = 0x80000000U;
+    vlSelf->top_ysyx_24110017__DOT__PCU__DOT__pc_valid 
+        = (0x80000000U < vlSelf->dnpc);
     if (vlSelf->top_ysyx_24110017__DOT__PCU__DOT__state) {
         vlSelf->top_ysyx_24110017__DOT__PCU__DOT__next_state = 1U;
+        vlSelf->pc = 0x80000000U;
         if (vlSelf->top_ysyx_24110017__DOT__PCU__DOT__state) {
             if (vlSelf->top_ysyx_24110017__DOT__IFU__DOT__if_done) {
-                vlSelf->top_ysyx_24110017__DOT__PCU__DOT__pc_valid = 0U;
-                vlSelf->pc = vlSelf->dnpc;
                 vlSelf->top_ysyx_24110017__DOT__PCU__DOT__next_state = 0U;
+                vlSelf->pc = vlSelf->dnpc;
             }
         } else {
             vlSelf->top_ysyx_24110017__DOT__PCU__DOT__next_state = 0U;
         }
     } else {
         vlSelf->top_ysyx_24110017__DOT__PCU__DOT__next_state = 0U;
-        if ((0x80000000U <= vlSelf->dnpc)) {
-            vlSelf->top_ysyx_24110017__DOT__PCU__DOT__pc_valid = 1U;
-        }
-        if (vlSelf->top_ysyx_24110017__DOT__PCU__DOT__pc_valid) {
+        vlSelf->pc = 0x80000000U;
+        if ((0x80000000U < vlSelf->dnpc)) {
             vlSelf->top_ysyx_24110017__DOT__PCU__DOT__next_state = 1U;
         }
     }
@@ -809,6 +808,13 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___nba_sequent__TOP__2(Vtop_ysyx_
         if (vlSelf->top_ysyx_24110017__DOT__IFU__DOT__axi_rready) {
             vlSelf->top_ysyx_24110017__DOT__SRAM_IFU_ysyx_24110017__DOT__axi_rdata 
                 = vlSelf->top_ysyx_24110017__DOT__SRAM_IFU_ysyx_24110017__DOT__tmp;
+        }
+    }
+    if (vlSelf->top_ysyx_24110017__DOT__PCU__DOT__state) {
+        if (vlSelf->top_ysyx_24110017__DOT__PCU__DOT__state) {
+            if (vlSelf->top_ysyx_24110017__DOT__IFU__DOT__if_done) {
+                vlSelf->top_ysyx_24110017__DOT__PCU__DOT__pc_valid = 0U;
+            }
         }
     }
     if ((0x100073U == vlSelf->inst)) {
