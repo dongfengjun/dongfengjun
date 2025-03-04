@@ -1,4 +1,4 @@
-module LSU_ysyx_24110017(clk,rst,op,funct3,rdata,lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone,valid,wen,waddr,wdata,raddr,wmask,
+module LSU_ysyx_24110017(clk,rst,op,funct3,rdata,lrd,rd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone,valid,wen,waddr,wdata,raddr,wmask,
 			M_AXI_AWADDR,M_AXI_AWVALID,M_AXI_AWREADY,
 			M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WVALID,M_AXI_WREADY,
 			M_AXI_BRESP,M_AXI_BVALID,M_AXI_BREADY,
@@ -11,6 +11,7 @@ input [6:0]op;
 input [2:0]funct3;
 output [31:0]rdata;
 output [4:0]lrd;
+input [4:0]rd;
 output ldone;
 output lbdone,lhdone,lwdone,lbudone,lhudone;
 input valid,wen;

@@ -70,7 +70,7 @@ EXU_ysyx_24110017 EXU(clk,rst,
 LSU_ysyx_24110017 LSU(clk,rst,
 		op,funct3,
 		rdata,
-		lrd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone,
+		lrd,rd,ldone,lbdone,lhdone,lwdone,lbudone,lhudone,
 		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,
 
 		LSU_AXI_AWADDR,LSU_AXI_AWVALID,LSU_AXI_AWREADY,
