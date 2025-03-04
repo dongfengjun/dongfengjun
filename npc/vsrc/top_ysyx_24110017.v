@@ -63,7 +63,7 @@ EXU_ysyx_24110017 EXU(clk,rst,
 		r1,r2,rdata,
 		lbdone,lhdone,lwdone,lbudone,lhudone,
 		pc,dnpc,
-		mepc,mstatus,mcause,mtvec,w_mepc,w_mstatus,w_mcause,w_tvec,
+		mepc,mstatus,mcause,mtvec,w_mepc,w_mstatus,w_mcause,w_mtvec,
 		wr_en,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
 );
 LSU_ysyx_24110017 LSU(clk,rst,

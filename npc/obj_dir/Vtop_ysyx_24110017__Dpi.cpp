@@ -17,7 +17,7 @@
 #ifndef VL_DPIDECL_csr_display_
 #define VL_DPIDECL_csr_display_
 int csr_display(int i) {
-    // DPI export at vsrc/top_ysyx_24110017.v:101:14
+    // DPI export at vsrc/top_ysyx_24110017.v:96:14
     return Vtop_ysyx_24110017::csr_display(i);
 }
 #endif

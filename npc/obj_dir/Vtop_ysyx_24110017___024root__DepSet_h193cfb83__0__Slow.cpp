@@ -842,7 +842,6 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___ctor_var_reset(Vtop_ysyx_241100
     vlSelf->top_ysyx_24110017__DOT__LSU_AXI_WREADY = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__LSU_AXI_BVALID = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__LSU_AXI_ARREADY = VL_RAND_RESET_I(1);
-    vlSelf->top_ysyx_24110017__DOT__csrs_in = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__IFU__DOT__axi_araddr = VL_RAND_RESET_I(32);
     vlSelf->top_ysyx_24110017__DOT__IFU__DOT__axi_arvalid = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__IFU__DOT__axi_rready = VL_RAND_RESET_I(1);
@@ -904,10 +903,6 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___ctor_var_reset(Vtop_ysyx_241100
     vlSelf->top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rdata = VL_RAND_RESET_I(32);
     vlSelf->top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__s_wen = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__s_rdata = VL_RAND_RESET_I(32);
-    vlSelf->top_ysyx_24110017__DOT__WBU__DOT__mepc_wen = VL_RAND_RESET_I(1);
-    vlSelf->top_ysyx_24110017__DOT__WBU__DOT__mstatus_wen = VL_RAND_RESET_I(1);
-    vlSelf->top_ysyx_24110017__DOT__WBU__DOT__mcause_wen = VL_RAND_RESET_I(1);
-    vlSelf->top_ysyx_24110017__DOT__WBU__DOT__mtvec_wen = VL_RAND_RESET_I(1);
     for (int __Vi0 = 0; __Vi0 < 32; ++__Vi0) {
         vlSelf->top_ysyx_24110017__DOT__RFU__DOT__rf[__Vi0] = VL_RAND_RESET_I(32);
     }

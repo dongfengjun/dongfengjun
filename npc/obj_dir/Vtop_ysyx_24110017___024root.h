@@ -46,7 +46,6 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ top_ysyx_24110017__DOT__LSU_AXI_WREADY;
         CData/*0:0*/ top_ysyx_24110017__DOT__LSU_AXI_BVALID;
         CData/*0:0*/ top_ysyx_24110017__DOT__LSU_AXI_ARREADY;
-        CData/*0:0*/ top_ysyx_24110017__DOT__csrs_in;
         CData/*0:0*/ top_ysyx_24110017__DOT__IFU__DOT__axi_arvalid;
         CData/*0:0*/ top_ysyx_24110017__DOT__IFU__DOT__axi_rready;
         CData/*1:0*/ top_ysyx_24110017__DOT__IFU__DOT__state;
@@ -79,13 +78,9 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_bvalid;
         CData/*1:0*/ top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_rresp;
         CData/*1:0*/ top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__axi_bresp;
+        CData/*0:0*/ top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__s_wen;
     };
     struct {
-        CData/*0:0*/ top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__s_wen;
-        CData/*0:0*/ top_ysyx_24110017__DOT__WBU__DOT__mepc_wen;
-        CData/*0:0*/ top_ysyx_24110017__DOT__WBU__DOT__mstatus_wen;
-        CData/*0:0*/ top_ysyx_24110017__DOT__WBU__DOT__mcause_wen;
-        CData/*0:0*/ top_ysyx_24110017__DOT__WBU__DOT__mtvec_wen;
         CData/*0:0*/ __VdfgTmp_h066b65f5__0;
         CData/*1:0*/ __Vdly__top_ysyx_24110017__DOT__IFU__DOT__state;
         CData/*0:0*/ __Vdly__top_ysyx_24110017__DOT__IFU__DOT__axi_arvalid;
@@ -145,13 +140,13 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         IData/*31:0*/ top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__s_rdata;
         IData/*31:0*/ __VdfgTmp_h1fd29a4c__0;
         IData/*31:0*/ __Vfunc_top_ysyx_24110017__DOT__SRAM_IFU_ysyx_24110017__DOT__pmem_read__0__Vfuncout;
-    };
-    struct {
         IData/*31:0*/ __Vfunc_top_ysyx_24110017__DOT__SRAM_LSU_ysyx_24110017__DOT__pmem_read__2__Vfuncout;
         IData/*31:0*/ __Vdly__pc;
         IData/*31:0*/ __VstlIterCount;
         IData/*31:0*/ __VactIterCount;
         QData/*63:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_ha05d5428__0;
+    };
+    struct {
         VlUnpacked<IData/*31:0*/, 32> top_ysyx_24110017__DOT__RFU__DOT__rf;
         VlUnpacked<CData/*0:0*/, 4> __Vm_traceActivity;
     };
