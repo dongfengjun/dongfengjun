@@ -1,7 +1,7 @@
 module EXU_ysyx_24110017(
 			clk,rst,op,funct3,imm,funct7,shamt,
 			res,
-			r1,r2,rdata,
+			r1,r2,ls_rdata,
 			lbdone,lhdone,lwdone,lbudone,lhudone,
 			pc,dnpc,
 			mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec,
@@ -17,7 +17,7 @@ input [6:0]funct7;
 input [4:0]shamt;
 output [31:0]res;
 input [31:0]r1,r2;
-input [31:0]rdata;
+input [31:0]ls_rdata;
 input lbdone,lhdone,lwdone,lbudone,lhudone;
 input [31:0]pc;
 output [31:0]dnpc;
@@ -86,15 +86,15 @@ assign res =
 /***I_lb~lhu***/
 			|
 			({32{lbdone}} 
-					& {{24{rdata[7]}},(rdata[7:0])}) | //I_lb
+					& {{24{ls_rdata[7]}},(ls_rdata[7:0])}) | //I_lb
 			({32{lhdone}}
-          & {{16{rdata[15]}},(rdata[15:0])}) | //I_lh
+          & {{16{ls_rdata[15]}},(ls_rdata[15:0])}) | //I_lh
 			({32{lwdone}} 
-          & (rdata)) | //I_lw
+          & (ls_rdata)) | //I_lw
 			({32{lbudone}}
-          & {24'b0,(rdata[7:0])}) | //I_lbu
+          & {24'b0,(ls_rdata[7:0])}) | //I_lbu
 			({32{lhudone}}
-          & {16'b0,(rdata[15:0])}) //I_lhu
+          & {16'b0,(ls_rdata[15:0])}) //I_lhu
 /***I_csrrw~csrrc***/
 			|
 			({32{(op == 7'b1110011) && (funct3 == 3'b001)}}
