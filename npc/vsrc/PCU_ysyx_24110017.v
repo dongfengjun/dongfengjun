@@ -9,7 +9,7 @@ input [31:0]dnpc;
 output PC_VALID;
 input IFU_READY;
 reg pc_valid;
-wire IFU_VALID;
+wire IFU_READY;
 wire PC_VALID = pc_valid;
 
 
