@@ -64,12 +64,12 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,pc[7:0],inst);
 /***多周期*分布式控制***/
 reg [31:0]inst;
 
-parameter IDLE = 1'b0,WAIT_READY = 1'b1;
+parameter WAIT_VALID = 1'b0,WAIT_READY = 1'b1;
 reg state,next_state;
 
 always @(posedge clk) begin
   if (rst) begin
-    state <= IDLE;
+    state <= WAIT_VALID;
   end
 	else begin
     state <= next_state;
@@ -79,18 +79,18 @@ end
 always @(*) begin
   next_state = state;
 	if(rst) begin
-		next_state = IDLE;
+		next_state = WAIT_VALID;
 	end
   else begin
 		case (state)
-			IDLE: begin
+			WAIT_VALID: begin
 				if(IFU_VALID) begin
 					next_state = WAIT_READY;
 				end
 			end
 			WAIT_READY: begin
 				if(IDU_READY) begin
-					next_state = IDLE;
+					next_state = WAIT_VALID;
 				end
 			end
 			default: begin
@@ -107,7 +107,7 @@ always @(posedge clk) begin
 	end
 	else begin
 		case (state)
-			IDLE: begin
+			WAIT_VALID: begin
 				if(if_done) begin //判断条件
 					ifu_valid <= 1'b1;
 				end
