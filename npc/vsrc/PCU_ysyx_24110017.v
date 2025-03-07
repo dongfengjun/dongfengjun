@@ -30,6 +30,9 @@ end
 
 always @(*) begin
   next_state = state;
+	if(rst) begin
+		next_state = IDLE;
+	end
   case (state)
 		IDLE: begin
       if(PC_VALID) begin
