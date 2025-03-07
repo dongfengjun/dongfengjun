@@ -63,7 +63,7 @@ always @(posedge clk) begin
                 axi_arready <= 0;
 								axi_rresp  <= 2'b0;
             end
-						if (S_AXI_RREADY) begin
+						if (S_AXI_RREADY && S_AXI_RVALID) begin
 								axi_rvalid <= 0;
 								axi_rdata <= tmp;
             end

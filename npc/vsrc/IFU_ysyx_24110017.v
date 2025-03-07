@@ -115,7 +115,7 @@ always @(posedge clk) begin
 			WAIT_READY: begin
 				if(IFU_READY) begin
 					ifu_valid <= 1'b0;
-					inst <= inst_reg;
+					inst <= M_AXI_RDATA;
 				end
 			end
 		endcase
