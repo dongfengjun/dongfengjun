@@ -36,7 +36,7 @@ input M_AXI_RVALID;
 output M_AXI_RREADY;
 
 wire [31:0]pc;
-wire IFU_READY = ("WBU complete");
+wire IFU_READY = 1'b1;
 wire IDU_READY;
 reg ifu_valid;
 wire IFU_VALID = ifu_valid;
@@ -94,7 +94,7 @@ always @(*) begin
 				end
 			end
 			default: begin
-				next_state = IDLE; // 默认回到初始状态
+				next_state = WAIT_VALID; // 默认回到初始状态
 			end
 		endcase
 	end
