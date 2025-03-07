@@ -20,50 +20,52 @@ parameter IDLE = 1'b0,WAIT_READY = 1'b1;
 reg state,next_state;
 
 always @(posedge clk) begin
-    if (rst) begin
-        state <= IDLE;
-    end 
-		else begin
-        state <= next_state;
-    end
+  if (rst) begin
+    state <= IDLE;
+  end 
+	else begin
+    state <= next_state;
+  end
 end
 
 always @(*) begin
-    next_state = state;
-    case (state)
-        IDLE: begin
-            if(PC_VALID) begin
-                next_state = WAIT_READY;
-            end
-        end
-        WAIT_READY: begin
-            if(IFU_READY) begin
-                next_state = IDLE;
-            end
-        end
-        default: begin
-            next_state = IDLE; // 默认回到初始状态
-        end
-    endcase
+  next_state = state;
+  case (state)
+		IDLE: begin
+      if(PC_VALID) begin
+        next_state = WAIT_READY;
+      end
+    end
+    WAIT_READY: begin
+      if(IFU_READY) begin
+        next_state = IDLE;
+      end
+    end
+    default: begin
+      next_state = IDLE; // 默认回到初始状态
+    end
+  endcase
 end
 
 always @(posedge clk) begin
-		if(rst) begin
-			pc <= 32'h80000000;
+	if(rst) begin
+		pc_valid <= 1'b0;
+		pc <= 32'h80000000;
+	end
+  case (state)
+    IDLE: begin
+			if(dnpc > 32'h80000000) begin //判断条件
+				pc_valid <= 1'b1;
+				pc <= pc;
+			end
 		end
-    case (state)
-        IDLE: begin
-					if(dnpc > 32'h80000000) begin
-						pc_valid <= 1'b1;
-						pc <= pc;
-					end
-				end
-        WAIT_READY: begin
-					if(IFU_READY) begin
-						pc_valid <= 1'b0;
-						pc <= dnpc;
-					end
-        end
-    endcase
+    WAIT_READY: begin
+			if(IFU_READY) begin
+				pc_valid <= 1'b0;
+				pc <= dnpc;
+			end
+    end
+  endcase
 end
+
 endmodule
