@@ -55,20 +55,22 @@ always @(posedge clk) begin
 		pc_valid <= 1'b0;
 		pc <= 32'h80000000;
 	end
-  case (state)
-    IDLE: begin
-			if(dnpc > 32'h80000000) begin //判断条件
-				pc_valid <= 1'b1;
-				pc <= pc;
+	else begin
+		case (state)
+			IDLE: begin
+				if(dnpc > 32'h80000000) begin //判断条件
+					pc_valid <= 1'b1;
+					pc <= pc;
+				end
 			end
-		end
-    WAIT_READY: begin
-			if(IFU_READY) begin
-				pc_valid <= 1'b0;
-				pc <= dnpc;
+			WAIT_READY: begin
+				if(IFU_READY) begin
+					pc_valid <= 1'b0;
+					pc <= dnpc;
+				end
 			end
-    end
-  endcase
+		endcase
+	end
 end
 
 endmodule
