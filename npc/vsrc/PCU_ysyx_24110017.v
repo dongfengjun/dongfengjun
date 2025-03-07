@@ -33,21 +33,23 @@ always @(*) begin
 	if(rst) begin
 		next_state = IDLE;
 	end
-  case (state)
-		IDLE: begin
-      if(PC_VALID) begin
-        next_state = WAIT_READY;
-      end
-    end
-    WAIT_READY: begin
-      if(IFU_READY) begin
-        next_state = IDLE;
-      end
-    end
-    default: begin
-      next_state = IDLE; // 默认回到初始状态
-    end
-  endcase
+  else begin
+		case (state)
+			IDLE: begin
+				if(PC_VALID) begin
+					next_state = WAIT_READY;
+				end
+			end
+			WAIT_READY: begin
+				if(IFU_READY) begin
+					next_state = IDLE;
+				end
+			end
+			default: begin
+				next_state = IDLE; // 默认回到初始状态
+			end
+		endcase
+	end
 end
 
 always @(posedge clk) begin
