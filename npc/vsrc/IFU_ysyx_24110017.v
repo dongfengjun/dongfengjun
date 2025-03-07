@@ -180,8 +180,10 @@ always @(posedge clk) begin
                     end
                 end
                 DONE: begin
-                    state <= DIFF;
+									if(IFU_READY) begin
+                    state <= IDLE;
 										if_done <= 1'b1;
+									end
                 end
 								DIFF: begin
 										state <= IDLE;
