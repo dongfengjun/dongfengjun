@@ -111,9 +111,9 @@ always @(posedge clk) begin
 	else begin
 		case (current_state)
 			WAIT_VALID: begin
+				ifu_ready <= 1'b0;
 				if(if_done) begin //判断条件
 					ifu_valid <= 1'b1;
-					ifu_ready <= 1'b0;
 				end
 			end
 			WAIT_READY: begin
