@@ -36,10 +36,12 @@ input M_AXI_RVALID;
 output M_AXI_RREADY;
 
 wire [31:0]pc;
-wire IFU_READY = 1'b1;
-wire IDU_READY;
+wire PCU_VALID,IFU_READY;
+reg ifu_ready;
+assign IFU_READY =ifu_ready;
+wire IFU_VALID,IDU_READY;
 reg ifu_valid;
-wire IFU_VALID = ifu_valid;
+assign IFU_VALID = ifu_valid;
 
 /***单周期***
 import "DPI-C" function int pmem_read(input int raddr);
@@ -103,6 +105,7 @@ end
 always @(posedge clk) begin
 	if(rst) begin
 		ifu_valid <= 1'b0;
+		ifu_ready <= 1'b0;
 		inst <= 32'h0;
 	end
 	else begin
@@ -110,11 +113,13 @@ always @(posedge clk) begin
 			WAIT_VALID: begin
 				if(if_done) begin //判断条件
 					ifu_valid <= 1'b1;
+					ifu_ready <= 1'b0;
 				end
 			end
 			WAIT_READY: begin
-				if(IFU_READY) begin
+				if(IFU_VALID && IDU_READY) begin
 					ifu_valid <= 1'b0;
+					ifu_ready <= 1'b1;
 					inst <= M_AXI_RDATA;
 				end
 			end

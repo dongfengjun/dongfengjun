@@ -24,7 +24,7 @@ wire [31:0]immI, immU, immS, immB, immJ;
 wire [6:0]funct7;	//R
 wire [4:0]shamt;	//I shamt
 
-wire IDU_READY = 1'b1;//TEST***
+wire IDU_READY = 1'b1;//WAIT***********/******///*******
 
 /***pattern***/
 assign op = inst[6:0];
