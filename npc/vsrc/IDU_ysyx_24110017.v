@@ -1,7 +1,10 @@
-module IDU_ysyx_24110017(clk,rst,inst,op,rd,funct3,rs1,rs2,imm,funct7,shamt);
+module IDU_ysyx_24110017(clk,rst,
+			inst,IDU_READY,
+			op,rd,funct3,rs1,rs2,imm,funct7,shamt);
 input clk;
 input rst;
 input [31:0]inst;
+output IDU_READY;
 output [6:0]op;
 output [4:0]rd;
 output [2:0]funct3;
@@ -21,9 +24,8 @@ wire [31:0]immI, immU, immS, immB, immJ;
 wire [6:0]funct7;	//R
 wire [4:0]shamt;	//I shamt
 
-wire wr_en;	//gpr_wr
-wire mepc_wen,mstatus_wen,mcause_wen,mtvec_wen; //csr_wr
-import "DPI-C" function void npc_trap();
+wire IDU_READY = 1'b1;//TEST***
+
 
 /***pattern***/
 assign op = inst[6:0];

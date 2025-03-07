@@ -1,20 +1,78 @@
-module PCU_ysyx_24110017(clk,rst,pc,dnpc,IF_DONE);
+module PCU_ysyx_24110017(clk,rst,pc,dnpc,
+			PCU_VALID,IFU_READY
+);
 input	clk;
 input rst;
 output [31:0]pc;
 input [31:0]dnpc;
-input IF_DONE;
+
+output PCU_VALID;
+input IFU_READY;
+reg pcu_valid;
+wire IFU_READY;
+wire PCU_VALID = pcu_valid;
+
 
 reg [31:0]pc;
 wire [31:0]dnpc;
 
-always@(posedge clk)begin
-	if(rst)
+parameter IDLE = 1'b0,WAIT_READY = 1'b1;
+reg state,next_state;
+
+always @(posedge clk) begin
+  if (rst) begin
+    state <= IDLE;
+  end 
+	else begin
+    state <= next_state;
+  end
+end
+
+always @(*) begin
+  next_state = state;
+	if(rst) begin
+		next_state = IDLE;
+	end
+  else begin
+		case (state)
+			IDLE: begin
+				if(PCU_VALID) begin
+					next_state = WAIT_READY;
+				end
+			end
+			WAIT_READY: begin
+				if(IFU_READY) begin
+					next_state = IDLE;
+				end
+			end
+			default: begin
+				next_state = IDLE; // 默认回到初始状态
+			end
+		endcase
+	end
+end
+
+always @(posedge clk) begin
+	if(rst) begin
+		pcu_valid <= 1'b0;
 		pc <= 32'h80000000;
-	else if(IF_DONE)
-		pc <= dnpc;
-	else
-		pc <= pc;
+	end
+	else begin
+		case (state)
+			IDLE: begin
+				if(dnpc > 32'h80000000) begin //判断条件
+					pcu_valid <= 1'b1;
+					pc <= pc;
+				end
+			end
+			WAIT_READY: begin
+				if(IFU_READY) begin
+					pcu_valid <= 1'b0;
+					pc <= dnpc;
+				end
+			end
+		endcase
+	end
 end
 
 endmodule
