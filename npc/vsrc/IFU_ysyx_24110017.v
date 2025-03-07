@@ -145,7 +145,7 @@ reg [1:0]state;
 wire start;
 reg if_done,difftest;
 reg [31:0]inst_reg;
-assign start = (pc >= 32'h80000000);
+assign start = PCU_VALID;
 
 always @(posedge clk) begin
         if (rst) begin
