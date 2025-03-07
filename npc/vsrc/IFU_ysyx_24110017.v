@@ -65,24 +65,24 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,pc[7:0],inst);
 reg [31:0]inst;
 
 parameter WAIT_VALID = 1'b0,WAIT_READY = 1'b1;
-reg state,next_state;
+reg current_state,next_state;
 
 always @(posedge clk) begin
   if (rst) begin
-    state <= WAIT_VALID;
+    current_state <= WAIT_VALID;
   end
 	else begin
-    state <= next_state;
+    current_state <= next_state;
   end
 end
 
 always @(*) begin
-  next_state = state;
+  next_state = current_state;
 	if(rst) begin
 		next_state = WAIT_VALID;
 	end
   else begin
-		case (state)
+		case (current_state)
 			WAIT_VALID: begin
 				if(IFU_VALID) begin
 					next_state = WAIT_READY;
@@ -106,7 +106,7 @@ always @(posedge clk) begin
 		inst <= 32'h0;
 	end
 	else begin
-		case (state)
+		case (current_state)
 			WAIT_VALID: begin
 				if(if_done) begin //判断条件
 					ifu_valid <= 1'b1;
