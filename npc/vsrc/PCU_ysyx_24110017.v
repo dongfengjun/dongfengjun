@@ -1,16 +1,16 @@
 module PCU_ysyx_24110017(clk,rst,pc,dnpc,
-			PC_VALID,IFU_READY
+			PCU_VALID,IFU_READY
 );
 input	clk;
 input rst;
 output [31:0]pc;
 input [31:0]dnpc;
 
-output PC_VALID;
+output PCU_VALID;
 input IFU_READY;
-reg pc_valid;
+reg pcu_valid;
 wire IFU_READY;
-wire PC_VALID = pc_valid;
+wire PCU_VALID = pcu_valid;
 
 
 reg [31:0]pc;
@@ -36,7 +36,7 @@ always @(*) begin
   else begin
 		case (state)
 			IDLE: begin
-				if(PC_VALID) begin
+				if(PCU_VALID) begin
 					next_state = WAIT_READY;
 				end
 			end
@@ -54,20 +54,20 @@ end
 
 always @(posedge clk) begin
 	if(rst) begin
-		pc_valid <= 1'b0;
+		pcu_valid <= 1'b0;
 		pc <= 32'h80000000;
 	end
 	else begin
 		case (state)
 			IDLE: begin
 				if(dnpc > 32'h80000000) begin //判断条件
-					pc_valid <= 1'b1;
+					pcu_valid <= 1'b1;
 					pc <= pc;
 				end
 			end
 			WAIT_READY: begin
 				if(IFU_READY) begin
-					pc_valid <= 1'b0;
+					pcu_valid <= 1'b0;
 					pc <= dnpc;
 				end
 			end
