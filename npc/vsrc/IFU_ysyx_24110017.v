@@ -178,8 +178,8 @@ always @(posedge clk) begin
                 SRAM_IDLE: begin
 										sram_ifu_done <= 1'b0;
                     if (sram_start) begin
-                        axi_arvalid <= 1'b1;
                         state <= SRAM_FETCH;
+												axi_arvalid <= 1'b1;
                     end
                 end
                 SRAM_FETCH: begin
@@ -189,8 +189,8 @@ always @(posedge clk) begin
 												axi_araddr <= pc;
                     end
                     if (M_AXI_RVALID) begin
+												state <= SRAM_DONE; 
                         axi_rready <= 1'b0;
-                        state <= SRAM_DONE;
                     end
                 end
                 SRAM_DONE: begin
