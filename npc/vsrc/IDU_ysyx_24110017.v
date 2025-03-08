@@ -1,10 +1,15 @@
 module IDU_ysyx_24110017(clk,rst,
-			inst,IDU_READY,
-			op,rd,funct3,rs1,rs2,imm,funct7,shamt);
+			inst,IFU_VALID,IDU_READY,IDU_VALID,EXU_READY,
+			op,rd,funct3,rs1,rs2,imm,funct7,shamt
+);
 input clk;
 input rst;
 input [31:0]inst;
+input IFU_VALID;
 output IDU_READY;
+output IDU_VALID;
+input EXU_READY;
+
 output [6:0]op;
 output [4:0]rd;
 output [2:0]funct3;
@@ -23,9 +28,13 @@ wire [4:0]rs2;	//R S B
 wire [31:0]immI, immU, immS, immB, immJ;
 wire [6:0]funct7;	//R
 wire [4:0]shamt;	//I shamt
-
-wire IDU_READY = 1'b1;//TEST***
-
+/***分布式控制***/
+reg idu_ready;
+reg idu_valid;
+wire IFU_VALID;
+wire IDU_READY = 1'b1;
+wire IDU_VALID = idu_valid;
+wire EXU_READY;
 
 /***pattern***/
 assign op = inst[6:0];
@@ -60,6 +69,7 @@ assign imm = (op == 7'b0110111 || op == 7'b0010111) ? immU
 
 
 /***DPIC*etrace***/
+import "DPI-C" function void npc_trap();
 always@(*) begin
 	if(inst == 32'b00000000000100000000000001110011) begin
 		npc_trap();

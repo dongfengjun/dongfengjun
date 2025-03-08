@@ -6,19 +6,20 @@ output [31:0]dnpc;
 output [31:0]inst;
 output DIFFTEST;
 
+wire DIFFTEST = 1'b0;
 /***PCU***/
 wire [31:0]pc;
 wire [31:0]dnpc;
-wire PCU_VALID,IFU_READY;//分布式控制
+wire PCU_VALID,IFU_READY; //分布式控制
 /***IFU***/
 wire [31:0]inst;
-wire IFU_VALID,IDU_READY;//分布式控制
-wire DIFFTEST;//IFU_AXI4-LITE
+wire IFU_VALID,IDU_READY; //分布式控制
 wire [31:0] IFU_AXI_AWADDR,IFU_AXI_WDATA,IFU_AXI_ARADDR,IFU_AXI_RDATA;
 wire [3:0] IFU_AXI_WSTRB;
 wire [1:0] IFU_AXI_BRESP,IFU_AXI_RRESP;
 wire IFU_AXI_AWVALID,IFU_AXI_AWREADY,IFU_AXI_WVALID,IFU_AXI_WREADY,IFU_AXI_BVALID,IFU_AXI_BREADY,IFU_AXI_ARVALID,IFU_AXI_ARREADY,IFU_AXI_RVALID,IFU_AXI_RREADY;
 /***IDU***/
+wire IDU_VALID,EXU_READY; //分布式控制
 wire [6:0]op;
 wire [4:0]rd;	//R I U J
 wire [2:0]funct3;
@@ -36,7 +37,7 @@ wire [7:0]ls_wmask;
 wire [31:0]mepc,o_mepc,mstatus,o_mstatus,mcause,o_mcause,mtvec,o_mtvec;
 wire gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 /***LSU***/
-wire [31:0]ls_rdata;//LSU_AXI4-LITE
+wire [31:0]ls_rdata; //LSU_AXI4-LITE
 wire l_wen;
 wire [4:0]l_rd;
 wire lb_w,lh_w,lw_w,lbu_w,lhu_w;
@@ -59,7 +60,7 @@ PCU_ysyx_24110017 PCU(clk,rst,
 		IFU_READY
 );
 IFU_ysyx_24110017 IFU(clk,rst,
-				pc,inst,PCU_VALID,IFU_READY,IFU_VALID,IDU_READY,DIFFTEST,
+				pc,inst,PCU_VALID,IFU_READY,IFU_VALID,IDU_READY,
         IFU_AXI_AWADDR,IFU_AXI_AWVALID,IFU_AXI_AWREADY,
         IFU_AXI_WDATA,IFU_AXI_WSTRB,IFU_AXI_WVALID,IFU_AXI_WREADY,
         IFU_AXI_BRESP,IFU_AXI_BVALID,IFU_AXI_BREADY,
@@ -74,7 +75,7 @@ SRAM_IFU_ysyx_24110017 SRAM_IFU_ysyx_24110017(clk,rst,
         IFU_AXI_RDATA,IFU_AXI_RRESP,IFU_AXI_RVALID,IFU_AXI_RREADY
 );
 IDU_ysyx_24110017 IDU(clk,rst,
-		inst,IDU_READY,
+		inst,IFU_VALID,IDU_READY,IDU_VALID,EXU_READY,
 		op,rd,funct3,rs1,rs2,imm,funct7,shamt
 );
 EXU_ysyx_24110017 EXU(clk,rst,

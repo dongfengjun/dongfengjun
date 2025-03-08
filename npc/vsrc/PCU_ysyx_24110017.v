@@ -41,7 +41,7 @@ always @(*) begin
 				end
 			end
 			WAIT_READY: begin
-				if(IFU_READY) begin
+				if(PCU_VALID && IFU_READY) begin
 					next_state = IDLE;
 				end
 			end
@@ -62,11 +62,10 @@ always @(posedge clk) begin
 			IDLE: begin
 				if(dnpc > 32'h80000000) begin //判断条件
 					pcu_valid <= 1'b1;
-					pc <= pc;
 				end
 			end
 			WAIT_READY: begin
-				if(IFU_READY) begin
+				if(PCU_VALID && IFU_READY) begin
 					pcu_valid <= 1'b0;
 					pc <= dnpc;
 				end
