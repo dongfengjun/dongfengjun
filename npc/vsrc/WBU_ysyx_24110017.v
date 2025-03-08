@@ -1,5 +1,5 @@
 module WBU_ysyx_24110017(clk,rst,
-			EXU,VALID,WBU_READY,
+			EXU_VALID,WBU_READY,
 			xrd,res,ls_rdata,
 			lb_w,lh_w,lw_w,lbu_w,lhu_w,
 			o_rf_raddr,rd,l_rd,
