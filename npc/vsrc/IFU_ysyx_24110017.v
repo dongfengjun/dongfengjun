@@ -117,6 +117,9 @@ always @(posedge clk) begin
 				if(sram_start == 1'b1) begin
 					sram_start <= 1'b0;
 				end
+				else begin
+					sram_start <= sram_start;
+				end
 				if(if_done) begin //判断条件
 					ifu_valid <= 1'b1;
 					sram_start <= 1'b0;
