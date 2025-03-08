@@ -71,7 +71,7 @@ reg current_state,next_state;
 
 always @(posedge clk) begin
   if (rst) begin
-    current_state <= WAIT_VALID;
+    current_state <= WAIT_SRAM;
   end
 	else begin
     current_state <= next_state;
