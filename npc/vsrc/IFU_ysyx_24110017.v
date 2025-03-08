@@ -66,12 +66,12 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,pc[7:0],inst);
 /***多周期*分布式控制***/
 reg [31:0]inst;
 
-parameter WAIT_SRAM = 1'b0,WAIT_READY = 1'b1;
+parameter IDLE_IFU = 2'b00,WAIT_SRAM = 2'b01,WAIT_IDU_READY = 2'b10,DONE_IFU = 2'b11;
 reg current_state,next_state;
 
 always @(posedge clk) begin
   if (rst) begin
-    current_state <= WAIT_SRAM;
+    current_state <= IDLE_IFU;
   end
 	else begin
     current_state <= next_state;
@@ -81,22 +81,30 @@ end
 always @(*) begin
   next_state = current_state;
 	if(rst) begin
-		next_state = WAIT_SRAM;
+		next_state = IDLE_IFU;
 	end
   else begin
 		case (current_state)
-			WAIT_SRAM: begin
-				if(IFU_VALID) begin
-					next_state = WAIT_READY;
-				end
-			end
-			WAIT_READY: begin
-				if(IDU_READY) begin
+			IDLE_IFU: begin
+				if(PCU_VALID) begin
 					next_state = WAIT_SRAM;
 				end
 			end
+			WAIT_SRAM: begin
+				if(IFU_VALID) begin
+					next_state = WAIT_IDU_READY;
+				end
+			end
+			WAIT_IDU_READY: begin
+				if(IDU_READY) begin
+					next_state = DONE_IFU;
+				end
+			end
+			DONE_IFU: begin
+				next_state = IDLE_IFU;
+			end
 			default: begin
-				next_state = WAIT_SRAM; // 默认回到初始状态
+				next_state = IDLE_IFU;
 			end
 		endcase
 	end
@@ -111,14 +119,13 @@ always @(posedge clk) begin
 	end
 	else begin
 		case (current_state)
-			WAIT_SRAM: begin
+			IDLE_IFU: begin
+				ifu_valid <= 1'b0;
+				sram_start <= 1'b1;
 				ifu_ready <= 1'b0;
-				if(PCU_VALID && (sram_start == 1'b0)) begin
-					sram_start <= 1'b1;
-				end
-				if(sram_start) begin
-					sram_start <= 1'b0;
-				end
+			end
+			WAIT_SRAM: begin
+				sram_start <= 1'b0;
 				if(if_done) begin //判断条件
 					ifu_valid <= 1'b1;
 				end
@@ -130,6 +137,8 @@ always @(posedge clk) begin
 					ifu_ready <= 1'b1;
 				end
 			end
+			DONE_IFU: begin
+				ifu_ready <= 1'b0;
 		endcase
 	end
 end
