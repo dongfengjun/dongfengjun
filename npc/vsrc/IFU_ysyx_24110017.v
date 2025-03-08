@@ -66,7 +66,7 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,pc[7:0],inst);
 /***多周期*分布式控制***/
 reg [31:0]inst;
 
-parameter WAIT_VALID = 1'b0,WAIT_READY = 1'b1;
+parameter WAIT_SRAM = 1'b0,WAIT_READY = 1'b1;
 reg current_state,next_state;
 
 always @(posedge clk) begin
@@ -106,14 +106,19 @@ always @(posedge clk) begin
 	if(rst) begin
 		ifu_valid <= 1'b0;
 		ifu_ready <= 1'b0;
+		sram_start <= 1'b0;
 		inst <= 32'h0;
 	end
 	else begin
 		case (current_state)
 			WAIT_VALID: begin
 				ifu_ready <= 1'b0;
+				if(PCU_VALID) begin
+					sram_start <= 1'b1;
+				end
 				if(if_done) begin //判断条件
 					ifu_valid <= 1'b1;
+					sram_start <= 1'b0;
 				end
 			end
 			WAIT_READY: begin
@@ -142,10 +147,9 @@ assign M_AXI_RREADY = axi_rready;
 
 parameter [1:0] IDLE=2'b00,FETCH=2'b01,DONE=2'b10,DIFF=2'b11;
 reg [1:0]state;
-wire start;
+reg sram_start;
 reg if_done,difftest;
 reg [31:0]inst_reg;
-assign start = PCU_VALID;
 
 always @(posedge clk) begin
         if (rst) begin
@@ -155,12 +159,11 @@ always @(posedge clk) begin
             axi_rready <= 1'b0;
 						if_done <= 1'b0;
 						difftest <= 1'b0;
-						inst_reg <= 32'h0;
         end 
 				else begin
             case (state)
                 IDLE: begin
-                    if (start) begin
+                    if (sram_start) begin
                         axi_arvalid <= 1'b1;
 												if_done <= 1'b0;
 												difftest <= 1'b0;
@@ -175,7 +178,6 @@ always @(posedge clk) begin
                     end
                     if (M_AXI_RVALID) begin
                         axi_rready <= 1'b0;
-												inst_reg <= M_AXI_RDATA;
                         state <= DONE;
                     end
                 end
