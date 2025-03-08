@@ -1,4 +1,5 @@
 module WBU_ysyx_24110017(clk,rst,
+			EXU,VALID,WBU_READY,
 			xrd,res,ls_rdata,
 			lb_w,lh_w,lw_w,lbu_w,lhu_w,
 			o_rf_raddr,rd,l_rd,
@@ -17,6 +18,9 @@ output o_rf_wen;
 input gpr_wen,l_wen;
 input [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
 output [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
+
+wire EXU_VALID,WBU_READY = 1'b1;
+reg wbu_ready;
 
 wire [31:0]xrd;
 wire [4:0]o_rf_raddr;
