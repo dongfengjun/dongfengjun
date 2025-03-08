@@ -164,9 +164,9 @@ always @(posedge clk) begin
 				else begin
             case (state)
                 IDLE: begin
+										if_done <= 1'b0;
                     if (sram_start) begin
                         axi_arvalid <= 1'b1;
-												if_done <= 1'b0;
 												difftest <= 1'b0;
                         state <= FETCH;
                     end
