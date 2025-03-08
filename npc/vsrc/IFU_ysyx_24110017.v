@@ -1,5 +1,5 @@
 module IFU_ysyx_24110017(clk,rst,
-				pc,inst,PCU_VALID,IFU_READY,IFU_VALID,IDU_READY,difftest,
+				pc,inst,PCU_VALID,IFU_READY,IFU_VALID,IDU_READY,
 				M_AXI_AWADDR,M_AXI_AWVALID,M_AXI_AWREADY,
         M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WVALID,M_AXI_WREADY,
         M_AXI_BRESP,M_AXI_BVALID,M_AXI_BREADY,
@@ -14,7 +14,6 @@ input PCU_VALID;
 output IFU_READY;
 output IFU_VALID;
 input IDU_READY;
-output difftest;
 /***SRAM*W**/
 output [31:0] M_AXI_AWADDR;
 output M_AXI_AWVALID;

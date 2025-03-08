@@ -1,10 +1,15 @@
 module IDU_ysyx_24110017(clk,rst,
-			inst,IDU_READY,
-			op,rd,funct3,rs1,rs2,imm,funct7,shamt);
+			inst,IDU_READY,IDU_VALID,
+			op,rd,funct3,rs1,rs2,imm,funct7,shamt
+);
 input clk;
 input rst;
 input [31:0]inst;
+input IFU_VALID;
 output IDU_READY;
+output IDU_VALID;
+input EXU_READY;
+
 output [6:0]op;
 output [4:0]rd;
 output [2:0]funct3;
@@ -23,8 +28,13 @@ wire [4:0]rs2;	//R S B
 wire [31:0]immI, immU, immS, immB, immJ;
 wire [6:0]funct7;	//R
 wire [4:0]shamt;	//I shamt
-
-wire IDU_READY = 1'b1;//WAIT***********/******///*******
+/***分布式控制***/
+reg idu_ready;
+reg idu_valid;
+wire IFU_VALID;
+wire IDU_READY = 1'b1;
+wire IDU_VALID = idu_valid;
+wire EXU_READY;
 
 /***pattern***/
 assign op = inst[6:0];
