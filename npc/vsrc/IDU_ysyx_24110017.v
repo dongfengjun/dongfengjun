@@ -71,7 +71,7 @@ always @(*) begin
 				end
 			end
 			WAIT_READY: begin
-				if(IDU_READY) begin
+				if(IDU_VALID && EXU_READY) begin
 					next_state = IDLE;
 				end
 			end
