@@ -182,15 +182,13 @@ always @(posedge clk) begin
                     end
                 end
                 DONE: begin
-									if(IFU_READY) begin
-                    state <= IDLE;
-										if_done <= 1'b1;
-									end
+                  state <= IDLE;
+									if_done <= 1'b1;
                 end
 								DIFF: begin
-										state <= IDLE;
-										if_done <= 1'b0;
-										difftest <= 1'b1;
+									state <= IDLE;
+									if_done <= 1'b0;
+									difftest <= 1'b1;
 								end 
             endcase
         end
