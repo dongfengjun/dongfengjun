@@ -101,7 +101,9 @@ always @(*) begin
 				end
 			end
 			DONE_IFU: begin
-				next_state = IDLE_IFU;
+				if(wbu_done) begin
+					next_state = IDLE_IFU;
+				end
 			end
 			default: begin
 				next_state = IDLE_IFU;
