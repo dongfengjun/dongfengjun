@@ -21,8 +21,6 @@ input gpr_wen,l_wen;
 input [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
 output [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
 
-wire EXU_VALID,WBU_READY = 1'b1;
-reg wbu_ready;
 
 wire [31:0]xrd;
 wire [4:0]o_rf_raddr;
@@ -42,5 +40,77 @@ assign w_mepc = o_mepc;
 assign w_mstatus = o_mstatus;
 assign w_mcause = o_mcause;
 assign w_mtvec = o_mtvec;
+
+wire EXU_VALID,WBU_READY = wbu_ready;
+reg wbu_ready;
+
+reg [31:0]xrd_reg;
+reg [4:0]rd_reg;
+reg wen_reg;
+
+parameter IDLE = 1'b0,DONE = 1'b1;
+reg state,next_state;
+
+always @(posedge clk) begin
+  if (rst) begin
+    state <= IDLE;
+  end 
+	else begin
+    state <= next_state;
+  end
+end
+
+always @(*) begin
+  next_state = state;
+	if(rst) begin
+		next_state = IDLE;
+	end
+  else begin
+		case (state)
+			IDLE: begin
+				if(EXU_VALID && WBU_READY) begin
+					next_state = DONE;
+				end
+			end
+			DONE: begin
+				if(o_rf_wen) begin
+					next_state = IDLE;
+				end
+			end
+			default: begin
+				next_state = IDLE; // 默认回到初始状态
+			end
+		endcase
+	end
+end
+
+always @(posedge clk) begin
+	if(rst) begin
+		wbu_ready <= 1'b0;
+		xrd_reg <= 32'h80000000;
+		rd_reg <= 5'b0;
+		wen_reg <= 1'b0;
+	end
+	else begin
+		case (state)
+			IDLE: begin
+				if(EXU_VALID) begin //判断条件
+					wbu_ready <= 1'b1;
+				end
+				if(EXU_VALID && WBU_READY) begin
+					wbu_ready <= 1'b0;
+					xrd_reg <= xrd;
+					rd_reg <= o_rf_raddr;
+					wen_reg <= o_rf_wen;
+				end
+			end
+			DONE: begin
+				xrd_reg <= 32'h0;
+        rd_reg <= 5'b0;
+        wen_reg <= 1'b0;
+			end
+		endcase
+	end
+end
 
 endmodule
