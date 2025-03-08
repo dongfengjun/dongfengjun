@@ -96,7 +96,7 @@ always @(*) begin
 				end
 			end
 			default: begin
-				next_state = WAIT_VALID; // 默认回到初始状态
+				next_state = WAIT_SRAM; // 默认回到初始状态
 			end
 		endcase
 	end
