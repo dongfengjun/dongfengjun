@@ -158,11 +158,10 @@ assign M_AXI_ARVALID = axi_arvalid;
 assign M_AXI_RREADY = axi_rready;
 
 
-parameter [1:0] IDLE=2'b00,FETCH=2'b01,DONE=2'b10,DIFF=2'b11;
+parameter [1:0] SRAM_IDLE=2'b00,SRAM_FETCH=2'b01,SRAM_DONE=2'b10,SRAM_NULL=2'b11;
 reg [1:0]state;
 reg sram_start;
-reg if_done,difftest;
-reg [31:0]inst_reg;
+reg sram_ifu_done;
 
 always @(posedge clk) begin
         if (rst) begin
@@ -170,20 +169,18 @@ always @(posedge clk) begin
 						axi_araddr <= 32'h00000000;
             axi_arvalid <= 1'b0;
             axi_rready <= 1'b0;
-						if_done <= 1'b0;
-						difftest <= 1'b0;
+						sram_ifu_done <= 1'b0;
         end 
 				else begin
             case (state)
-                IDLE: begin
-										if_done <= 1'b0;
+                SRAM_IDLE: begin
+										sram_ifu_done <= 1'b0;
                     if (sram_start) begin
                         axi_arvalid <= 1'b1;
-												difftest <= 1'b0;
-                        state <= FETCH;
+                        state <= SRAM_FETCH;
                     end
                 end
-                FETCH: begin
+                SRAM_FETCH: begin
                     if (M_AXI_ARREADY) begin
                         axi_arvalid <= 1'b0;
                         axi_rready <= 1'b1;
@@ -191,17 +188,15 @@ always @(posedge clk) begin
                     end
                     if (M_AXI_RVALID) begin
                         axi_rready <= 1'b0;
-                        state <= DONE;
+                        state <= SRAM_DONE;
                     end
                 end
-                DONE: begin
-                  state <= IDLE;
-									if_done <= 1'b1;
+                SRAM_DONE: begin
+                  state <= SRAM_IDLE;
+									sram_ifu_done <= 1'b1;
                 end
-								DIFF: begin
-									state <= IDLE;
-									if_done <= 1'b0;
-									difftest <= 1'b1;
+								SRAM_NULL: begin
+									state <= SRAM_IDLE;
 								end 
             endcase
         end
