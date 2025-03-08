@@ -139,7 +139,7 @@ always @(posedge clk) begin
 				end
 			end
 			DONE_IFU: begin
-				inst <= 32'h0;
+				//inst <= 32'h0;
 				ifu_ready <= 1'b0;
 			end
 		endcase
