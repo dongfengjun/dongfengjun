@@ -130,7 +130,7 @@ always @(posedge clk) begin
 					ifu_valid <= 1'b1;
 				end
 			end
-			WAIT_READY: begin
+			WAIT_IDU_READY: begin
 				if(IFU_VALID && IDU_READY) begin
 					ifu_valid <= 1'b0;
 					inst <= M_AXI_RDATA;
