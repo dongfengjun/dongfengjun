@@ -113,7 +113,7 @@ always @(posedge clk) begin
 		case (current_state)
 			WAIT_SRAM: begin
 				ifu_ready <= 1'b0;
-				if(PCU_VALID) begin
+				if(pc != M_AXI_ARADDR) begin
 					sram_start <= 1'b1;
 				end
 				if(if_done) begin //判断条件
