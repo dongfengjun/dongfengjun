@@ -109,7 +109,7 @@ always @(posedge clk) begin
 	end
 end
 
-wire [31:0]a,b;
+wire [31:0]a,b,res;
 assign b = (op == 7'b0110011 || op == 7'b0100011) ? r2 : imm;
 assign a = (op == 7'b0010011 || op == 7'b0000011 || op == 7'b0100011 || op == 7'b0110011/*R*/ || (op == 7'b1110011 && (funct3 == 3'b001 || funct3 == 3'b010 || funct3 == 3'b011))/*csr*/) ? r1 : pc;
 /***ALU I*addi~srai***/
