@@ -81,7 +81,7 @@ end
 always @(*) begin
   next_state = current_state;
 	if(rst) begin
-		next_state = WAIT_VALID;
+		next_state = WAIT_SRAM;
 	end
   else begin
 		case (current_state)
