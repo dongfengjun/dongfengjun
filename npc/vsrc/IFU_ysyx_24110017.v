@@ -126,7 +126,7 @@ always @(posedge clk) begin
 			end
 			WAIT_SRAM: begin
 				sram_start <= 1'b0;
-				if(if_done) begin //判断条件
+				if(sram_ifu_done) begin //判断条件
 					ifu_valid <= 1'b1;
 				end
 			end
@@ -165,7 +165,7 @@ reg sram_ifu_done;
 
 always @(posedge clk) begin
         if (rst) begin
-            state <= IDLE;
+            state <= SRAM_IDLE;
 						axi_araddr <= 32'h00000000;
             axi_arvalid <= 1'b0;
             axi_rready <= 1'b0;
