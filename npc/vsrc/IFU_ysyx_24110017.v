@@ -67,7 +67,7 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,pc[7:0],inst);
 reg [31:0]inst;
 
 parameter IDLE_IFU = 2'b00,WAIT_SRAM = 2'b01,WAIT_IDU_READY = 2'b10,DONE_IFU = 2'b11;
-reg current_state,next_state;
+reg [1:0]current_state,next_state;
 
 always @(posedge clk) begin
   if (rst) begin
