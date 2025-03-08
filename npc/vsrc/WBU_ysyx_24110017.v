@@ -75,9 +75,7 @@ always @(*) begin
 				end
 			end
 			DONE: begin
-				if(o_rf_wen) begin
-					next_state = IDLE;
-				end
+				next_state = IDLE;
 			end
 			default: begin
 				next_state = IDLE; // 默认回到初始状态
