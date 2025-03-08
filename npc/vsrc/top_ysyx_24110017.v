@@ -29,6 +29,7 @@ wire [31:0]imm;
 wire [6:0]funct7;	//R
 wire [4:0]shamt; //I shamt
 /***EXU***/
+wire EXU_VALID,WBU_READY;
 wire [31:0]res;
 wire ls_valid,ls_wen;
 wire [31:0]ls_waddr,ls_wdata,ls_raddr;
@@ -79,6 +80,7 @@ IDU_ysyx_24110017 IDU(clk,rst,
 		op,rd,funct3,rs1,rs2,imm,funct7,shamt
 );
 EXU_ysyx_24110017 EXU(clk,rst,
+		IDU_VALID,EXU_READY,EXU_VALID,WBU_READY, //分布式控制
 		op,funct3,imm,funct7,shamt,r1,r2,
 		res,
 		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,

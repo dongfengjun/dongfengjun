@@ -1,4 +1,5 @@
 module EXU_ysyx_24110017(clk,rst,
+			IDU_VALID,EXU_READY,EXU_VALID,WBU_READY,
 			op,funct3,imm,funct7,shamt,r1,r2, //i_IDU
 			res, //o_WBU
 			ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask, //o_LSU
@@ -10,6 +11,10 @@ module EXU_ysyx_24110017(clk,rst,
 );
 input clk;
 input rst;
+input IDU_VALID;
+output EXU_READY;
+output EXU_VALID;
+input WBU_READY;
 input [6:0]op;
 input [2:0]funct3;
 input [31:0]imm;
@@ -30,6 +35,10 @@ input [31:0]mepc,mstatus,mcause,mtvec;
 output [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
 output gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 
+wire IDU_VALID,EXU_READY = 1'b1;
+reg exu_ready;
+wire EXU_VALID,WBU_READY;
+reg exu_valid;
 
 wire [31:0]a,b;
 assign b = (op == 7'b0110011 || op == 7'b0100011) ? r2 : imm;
