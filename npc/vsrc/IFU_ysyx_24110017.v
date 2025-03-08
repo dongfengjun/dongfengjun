@@ -85,14 +85,14 @@ always @(*) begin
 	end
   else begin
 		case (current_state)
-			WAIT_VALID: begin
+			WAIT_SRAM: begin
 				if(IFU_VALID) begin
 					next_state = WAIT_READY;
 				end
 			end
 			WAIT_READY: begin
 				if(IDU_READY) begin
-					next_state = WAIT_VALID;
+					next_state = WAIT_SRAM;
 				end
 			end
 			default: begin
