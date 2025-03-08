@@ -42,7 +42,7 @@ wire EXU_VALID = exu_valid,WBU_READY;
 reg exu_valid;
 
 reg [31:0]res_reg;
-res gpr_wen_reg;
+reg gpr_wen_reg;
 
 parameter IDLE = 1'b0,WAIT_READY = 1'b1;
 reg state,next_state;
