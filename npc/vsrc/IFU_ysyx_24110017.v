@@ -111,7 +111,7 @@ always @(posedge clk) begin
 	end
 	else begin
 		case (current_state)
-			WAIT_VALID: begin
+			WAIT_SRAM: begin
 				ifu_ready <= 1'b0;
 				if(PCU_VALID) begin
 					sram_start <= 1'b1;
