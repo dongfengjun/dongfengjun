@@ -75,7 +75,7 @@ always @(*) begin
 				end
 			end
 			DONE: begin
-				next_state = IDLE;
+					next_state = IDLE;
 			end
 			default: begin
 				next_state = IDLE; // 默认回到初始状态
