@@ -1,5 +1,5 @@
 module WBU_ysyx_24110017(clk,rst,
-			EXU_VALID,WBU_READY,
+			EXU_VALID,WBU_READY,wbu_done,
 			xrd_reg,res,ls_rdata,
 			lb_w,lh_w,lw_w,lbu_w,lhu_w,
 			rd_reg,rd,l_rd,
@@ -11,6 +11,7 @@ input clk;
 input rst;
 input EXU_VALID;
 output WBU_READY;
+output wbu_done;
 output [31:0]xrd_reg;
 input [31:0]res,ls_rdata;
 input lb_w,lh_w,lw_w,lbu_w,lhu_w;
@@ -44,6 +45,7 @@ assign w_mtvec = o_mtvec;
 wire EXU_VALID,WBU_READY = wbu_ready;
 reg wbu_ready;
 
+reg wbu_done;
 reg [31:0]xrd_reg;
 reg [4:0]rd_reg;
 reg wen_reg;
@@ -90,6 +92,7 @@ always @(posedge clk) begin
 		xrd_reg <= 32'h80000000;
 		rd_reg <= 5'b0;
 		wen_reg <= 1'b0;
+		wbu_done <= 1'b0;
 	end
 	else begin
 		case (state)
@@ -102,12 +105,14 @@ always @(posedge clk) begin
 					xrd_reg <= xrd;
 					rd_reg <= o_rf_raddr;
 					wen_reg <= o_rf_wen;
+					wbu_done <= 1'b1;
 				end
 			end
 			DONE: begin
 				xrd_reg <= 32'h0;
         rd_reg <= 5'b0;
         wen_reg <= 1'b0;
+				wbu_done <= 1'b0;
 			end
 		endcase
 	end
