@@ -1,5 +1,5 @@
 module IDU_ysyx_24110017(clk,rst,
-			inst,IDU_READY,IDU_VALID,
+			inst,IFU_VALID,IDU_READY,IDU_VALID,EXU_READY,
 			op,rd,funct3,rs1,rs2,imm,funct7,shamt
 );
 input clk;
