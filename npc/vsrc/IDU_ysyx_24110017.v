@@ -32,7 +32,7 @@ wire [4:0]shamt;	//I shamt
 reg idu_ready;
 reg idu_valid;
 wire IFU_VALID;
-wire IDU_READY = 1'b1;
+wire IDU_READY = idu_ready;
 wire IDU_VALID = idu_valid;
 wire EXU_READY;
 
