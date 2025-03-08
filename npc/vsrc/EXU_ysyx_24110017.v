@@ -99,7 +99,7 @@ always @(posedge clk) begin
 				end
 			end
 			WAIT_READY: begin
-				if(IFU_READY) begin
+				if(EXU_VALID && WBU_READY) begin
 					exu_valid <= 1'b0;
 					res_reg <= res;
 					gpr_wen_reg <= gpr_wen;
