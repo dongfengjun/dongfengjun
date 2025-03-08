@@ -66,7 +66,7 @@ always @(*) begin
   else begin
 		case (state)
 			IDLE: begin
-				if(IDU_VALID) begin
+				if(IFU_VALID && IDU_READY) begin
 					next_state = WAIT_READY;
 				end
 			end
