@@ -9,6 +9,8 @@ module WBU_ysyx_24110017(clk,rst,
 );
 input clk;
 input rst;
+input EXU_VALID;
+output WBU_READY;
 output [31:0]xrd;
 input [31:0]res,ls_rdata;
 input lb_w,lh_w,lw_w,lbu_w,lhu_w;
