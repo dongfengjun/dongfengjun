@@ -1,5 +1,5 @@
 module WBU_ysyx_24110017(clk,rst,
-			EXU_VALID,WBU_READY,wbu_done,diff,
+			EXU_VALID,WBU_READY,wbu_done,difftest,
 			xrd_reg,res,ls_rdata,
 			lb_w,lh_w,lw_w,lbu_w,lhu_w,
 			rd_reg,rd,l_rd,
@@ -12,7 +12,7 @@ input rst;
 input EXU_VALID;
 output WBU_READY;
 output wbu_done;
-output diff;
+output difftest;
 output [31:0]xrd_reg;
 input [31:0]res,ls_rdata;
 input lb_w,lh_w,lw_w,lbu_w,lhu_w;
@@ -47,7 +47,7 @@ wire EXU_VALID,WBU_READY = wbu_ready;
 reg wbu_ready;
 
 reg wbu_done;
-reg diff;
+reg difftest;
 reg [31:0]xrd_reg;
 reg [4:0]rd_reg;
 reg wen_reg;
@@ -96,10 +96,11 @@ always @(posedge clk) begin
 		rd_reg <= 5'b0;
 		wen_reg <= 1'b0;
 		wbu_done <= 1'b0;
+		difftest <= 1'b0;
 	end
 	else begin
 		case (state)
-			diff <= 1'b0;
+			difftest <= 1'b0;
 			IDLE: begin
 				if(EXU_VALID) begin //判断条件
 					wbu_ready <= 1'b1;
@@ -116,7 +117,7 @@ always @(posedge clk) begin
 			end
 			DIFF: begin
 				wbu_done <= 1'b0;
-				diff <= 1'b1;
+				difftest <= 1'b1;
 			end
 		endcase
 	end
