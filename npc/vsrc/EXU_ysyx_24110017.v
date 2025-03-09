@@ -6,8 +6,8 @@ module EXU_ysyx_24110017(clk,rst,sram_lsu_start,LSU_DONE,
 			ls_rdata, //i_LSU
 			pc,dnpc,	//PCU
 			mepc,mstatus,mcause,mtvec, //i_csr
-			o_mepc,o_mstatus,o_mcause,o_mtvec, //o_csr
-			gpr_wen_reg,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen	//reg_wen
+			o_mepc_reg,o_mstatus_reg,o_mcause_reg,o_mtvec_reg, //o_csr
+			gpr_wen_reg,mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg
 );
 input clk;
 input rst;

@@ -4,8 +4,8 @@ module WBU_ysyx_24110017(clk,rst,
 			rd_reg,rd,
 			wen_reg,gpr_wen,
 			o_mepc,o_mstatus,o_mcause,o_mtvec,
-			w_mepc,w_mstatus,w_mcause,w_mtvec,
-			mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
+			w_mepc_reg,w_mstatus_reg,w_mcause_reg,w_mtvec_reg,
+			mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg
 );
 input clk;
 input rst;
@@ -20,7 +20,7 @@ input [4:0]rd;
 output wen_reg;
 input gpr_wen;
 input [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
-output [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
+output [31:0]w_mepc_reg,w_mstatus_reg,w_mcause_reg,w_mtvec_reg;
 input mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 output mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg;
 
