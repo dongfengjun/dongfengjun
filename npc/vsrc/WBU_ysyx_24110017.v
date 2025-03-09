@@ -87,7 +87,7 @@ end
 always @(posedge clk) begin
 	if(rst) begin
 		wbu_ready <= 1'b0;
-		xrd_reg <= 32'h80000000;
+		xrd_reg <= 32'h0;
 		rd_reg <= 5'b0;
 		wen_reg <= 1'b0;
 		wbu_done <= 1'b0;
@@ -95,22 +95,20 @@ always @(posedge clk) begin
 	else begin
 		case (state)
 			IDLE: begin
+				wbu_done <= 1'b0;
+				wen_reg <= 1'b0;
 				if(EXU_VALID) begin //判断条件
 					wbu_ready <= 1'b1;
 				end
 				if(EXU_VALID && WBU_READY) begin
 					wbu_ready <= 1'b0;
-					xrd_reg <= xrd;
-					rd_reg <= o_rf_raddr;
-					wen_reg <= o_rf_wen;
-					wbu_done <= 1'b1;
 				end
 			end
 			DONE: begin
-				xrd_reg <= 32'h0;
-        rd_reg <= 5'b0;
-        wen_reg <= 1'b0;
-				wbu_done <= 1'b0;
+	      xrd_reg <= xrd;
+        rd_reg <= o_rf_raddr;
+        wen_reg <= o_rf_wen;
+        wbu_done <= 1'b1;
 			end
 		endcase
 	end
