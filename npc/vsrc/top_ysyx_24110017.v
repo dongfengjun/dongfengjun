@@ -29,7 +29,7 @@ wire [31:0]imm;
 wire [6:0]funct7;	//R
 wire [4:0]shamt; //I shamt
 /***EXU***/
-wire sram_lsu_start,LSU_DONE,EXU_VALID,WBU_READY;
+wire sram_lsu_read,sram_lsu_write,LSU_DONE,EXU_VALID,WBU_READY;
 wire [31:0]res;
 wire ls_valid,ls_wen;
 wire [31:0]ls_waddr,ls_wdata,ls_raddr;
@@ -77,7 +77,7 @@ IDU_ysyx_24110017 IDU(clk,rst,
 		inst,IFU_VALID,IDU_READY,IDU_VALID,EXU_READY,
 		op,rd,funct3,rs1,rs2,imm,funct7,shamt
 );
-EXU_ysyx_24110017 EXU(clk,rst,sram_lsu_start,LSU_DONE,
+EXU_ysyx_24110017 EXU(clk,rst,sram_lsu_read,sram_lsu_write,LSU_DONE,
 		IDU_VALID,EXU_READY,EXU_VALID,WBU_READY, //分布式控制
 		op,funct3,imm,funct7,shamt,r1,r2,
 		res,
@@ -87,7 +87,7 @@ EXU_ysyx_24110017 EXU(clk,rst,sram_lsu_start,LSU_DONE,
 		mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec,
 		gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
 );
-LSU_ysyx_24110017 LSU(clk,rst,sram_lsu_start,LSU_DONE,
+LSU_ysyx_24110017 LSU(clk,rst,sram_lsu_read,sram_lsu_write,LSU_DONE,
 		ls_rdata,
 		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,
 

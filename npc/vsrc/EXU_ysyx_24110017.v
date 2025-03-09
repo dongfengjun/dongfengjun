@@ -1,4 +1,4 @@
-module EXU_ysyx_24110017(clk,rst,sram_lsu_start,LSU_DONE,
+module EXU_ysyx_24110017(clk,rst,sram_lsu_read,sram_lsu_write,LSU_DONE,
 			IDU_VALID,EXU_READY,EXU_VALID,WBU_READY,
 			op,funct3,imm,funct7,shamt,r1,r2, //i_IDU
 			res_reg, //o_WBU
@@ -11,7 +11,7 @@ module EXU_ysyx_24110017(clk,rst,sram_lsu_start,LSU_DONE,
 );
 input clk;
 input rst;
-output sram_lsu_start;
+output sram_lsu_read,sram_lsu_write;
 input LSU_DONE;
 input IDU_VALID;
 output EXU_READY;
@@ -43,7 +43,7 @@ reg exu_ready;
 wire EXU_VALID = exu_valid,WBU_READY;
 reg exu_valid;
 
-reg sram_lsu_start;
+reg sram_lsu_read,sram_lsu_write;
 reg [31:0]res_reg;
 reg gpr_wen_reg;
 reg [31:0]o_mepc_reg,o_mstatus_reg,o_mcause_reg,o_mtvec_reg;
@@ -110,6 +110,8 @@ always @(posedge clk) begin
     mstatus_wen_reg <= 1'b0;
     mcause_wen_reg <= 1'b0;
     mtvec_wen_reg <= 1'b0;
+		sram_lsu_read <= 1'b0;
+		sram_lsu_write <= 1'b0;
 	end
 	else begin
 		case (state)
@@ -124,10 +126,14 @@ always @(posedge clk) begin
 			WAIT_SRAM: begin
 				if(ls_valid && (!ls_wen)) begin
 					res_reg <= 32'h0;
-					sram_lsu_start <= 1'b1;
+					sram_lsu_read <= 1'b1;
+				end
+				if(ls_wen) begin
+					sram_lsu_write <= 1'b1;
 				end
 				if(LSU_DONE) begin
-					sram_lsu_start <= 1'b0;
+					sram_lsu_read <= 1'b0;
+					sram_lsu_write <= 1'b0;
 				end
 			end
 			WAIT_READY: begin

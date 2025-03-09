@@ -1,4 +1,4 @@
-module LSU_ysyx_24110017(clk,rst,sram_lsu_start,LSU_DONE,
+module LSU_ysyx_24110017(clk,rst,sram_lsu_read,sram_lsu_write,LSU_DONE,
 			ls_rdata,
 			valid,wen,waddr,wdata,raddr,wmask,
 			M_AXI_AWADDR,M_AXI_AWVALID,M_AXI_AWREADY,
@@ -9,7 +9,7 @@ module LSU_ysyx_24110017(clk,rst,sram_lsu_start,LSU_DONE,
 );
 input clk;
 input rst;
-input sram_lsu_start;
+input sram_lsu_read,sram_lsu_write;
 output LSU_DONE;
 output [31:0]ls_rdata;
 
@@ -103,11 +103,11 @@ always @(posedge clk or posedge rst) begin
 		else begin
       case (state)
         IDLE: begin
-				  if(sram_lsu_start) begin
+				  if(sram_lsu_read) begin
             axi_arvalid <= 1'b1;
             state <= READ;
 					end
-					if(wen) begin
+					if(sram_lsu_write) begin
 						axi_awvalid <= 1'b1;
 		        state <= WRITE;
 						axi_awaddr_reg <= waddr;
