@@ -76,7 +76,7 @@ always @(*) begin
 			end
 			WAIT_SRAM: begin
 				if(LSU_DONE) begin
-					next_state = WAIT_RAEDY;
+					next_state = WAIT_READY;
 				end
 			end
 			WAIT_READY: begin
