@@ -70,7 +70,7 @@ always @(*) begin
 				end
 			end
 			WAIT_SRAM: begin
-				if(!(ls_valid) || ls_wen) begin
+				if((!ls_valid) || ls_wen) begin
 					next_state = WAIT_READY;
 				end
 				if(LSU_DONE) begin
