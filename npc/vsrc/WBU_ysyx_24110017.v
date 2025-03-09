@@ -96,7 +96,7 @@ always @(posedge clk) begin
 		case (state)
 			IDLE: begin
 				wbu_done <= 1'b0;
-				wen_reg <= 1'b0;
+				//wen_reg <= 1'b0;
 				if(EXU_VALID) begin //判断条件
 					wbu_ready <= 1'b1;
 				end
