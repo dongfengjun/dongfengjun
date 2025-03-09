@@ -142,6 +142,7 @@ always @(posedge clk or posedge rst) begin
 					if(M_AXI_BVALID) begin
 						axi_bready <= 0;
 						state <= DONE;
+						LSU_DONE <= 1'b1;
 					end
 				end
         DONE: begin
