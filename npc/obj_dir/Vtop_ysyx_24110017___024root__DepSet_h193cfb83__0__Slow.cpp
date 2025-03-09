@@ -445,14 +445,14 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___stl_sequent__TOP__0(Vtop_ysyx_2
                                                    + vlSelf->pc)))))))))));
     if (vlSelf->top_ysyx_24110017__DOT__EXU__DOT__ecall_en) {
         vlSelf->top_ysyx_24110017__DOT__EXU__DOT__o_mepc 
-            = (1U & vlSelf->pc);
+            = vlSelf->pc;
         vlSelf->top_ysyx_24110017__DOT__EXU__DOT__o_mcause 
-            = (1U & vlSelf->top_ysyx_24110017__DOT__r2);
+            = vlSelf->top_ysyx_24110017__DOT__r2;
     } else {
         vlSelf->top_ysyx_24110017__DOT__EXU__DOT__o_mepc 
-            = (1U & vlSelf->top_ysyx_24110017__DOT__EXU__DOT__w_csrs);
+            = vlSelf->top_ysyx_24110017__DOT__EXU__DOT__w_csrs;
         vlSelf->top_ysyx_24110017__DOT__EXU__DOT__o_mcause 
-            = (1U & vlSelf->top_ysyx_24110017__DOT__EXU__DOT__w_csrs);
+            = vlSelf->top_ysyx_24110017__DOT__EXU__DOT__w_csrs;
     }
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_ha05d5428__0 
         = (((QData)((IData)((- (IData)((vlSelf->top_ysyx_24110017__DOT__EXU__DOT__a 
@@ -811,8 +811,8 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root___ctor_var_reset(Vtop_ysyx_241100
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT__res = VL_RAND_RESET_I(32);
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT__csr = VL_RAND_RESET_I(32);
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT__w_csrs = VL_RAND_RESET_I(32);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT__o_mepc = VL_RAND_RESET_I(1);
-    vlSelf->top_ysyx_24110017__DOT__EXU__DOT__o_mcause = VL_RAND_RESET_I(1);
+    vlSelf->top_ysyx_24110017__DOT__EXU__DOT__o_mepc = VL_RAND_RESET_I(32);
+    vlSelf->top_ysyx_24110017__DOT__EXU__DOT__o_mcause = VL_RAND_RESET_I(32);
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT__ecall_en = VL_RAND_RESET_I(1);
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h7a84a28f__0 = 0;
     vlSelf->top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h8a6dd475__0 = 0;

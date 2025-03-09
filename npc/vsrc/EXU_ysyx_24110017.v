@@ -139,10 +139,10 @@ always @(posedge clk) begin
 					o_mstatus_reg <= o_mstatus;
 					o_mcause_reg <= o_mcause;
 					o_mtvec_reg <= o_mtvec;
-					mepc_wen_reg <= o_mepc;
-					mstatus_wen_reg <= o_mstatus;
-					mcause_wen_reg <= o_mcause;
-					mtvec_wen_reg <= o_mtvec;
+					mepc_wen_reg <= mepc_wen;
+					mstatus_wen_reg <= mstatus_wen;
+					mcause_wen_reg <= mcause_wen;
+					mtvec_wen_reg <= mtvec_wen;
 				end
 			end
 			DONE_EXU: begin
