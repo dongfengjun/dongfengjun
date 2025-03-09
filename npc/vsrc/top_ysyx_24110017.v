@@ -6,7 +6,7 @@ output [31:0]dnpc;
 output [31:0]inst;
 output DIFFTEST;
 
-wire DIFFTEST = wbu_done;
+wire DIFFTEST = diff;
 /***PCU***/
 wire [31:0]pc;
 wire [31:0]dnpc;
@@ -110,7 +110,7 @@ SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,
     LSU_AXI_RDATA,LSU_AXI_RRESP,LSU_AXI_RVALID,LSU_AXI_RREADY
 );
 WBU_ysyx_24110017 WBU(clk,rst,
-		EXU_VALID,WBU_READY,wbu_done,
+		EXU_VALID,WBU_READY,wbu_done,diff,
 		xrd,res,ls_rdata,
 		lb_w,lh_w,lw_w,lbu_w,lhu_w,
 		rf_addr,rd,l_rd,

@@ -1,5 +1,5 @@
 module WBU_ysyx_24110017(clk,rst,
-			EXU_VALID,WBU_READY,wbu_done,
+			EXU_VALID,WBU_READY,wbu_done,diff,
 			xrd_reg,res,ls_rdata,
 			lb_w,lh_w,lw_w,lbu_w,lhu_w,
 			rd_reg,rd,l_rd,
@@ -12,6 +12,7 @@ input rst;
 input EXU_VALID;
 output WBU_READY;
 output wbu_done;
+output diff;
 output [31:0]xrd_reg;
 input [31:0]res,ls_rdata;
 input lb_w,lh_w,lw_w,lbu_w,lhu_w;
@@ -46,12 +47,13 @@ wire EXU_VALID,WBU_READY = wbu_ready;
 reg wbu_ready;
 
 reg wbu_done;
+reg diff;
 reg [31:0]xrd_reg;
 reg [4:0]rd_reg;
 reg wen_reg;
 
-parameter IDLE = 1'b0,DONE = 1'b1;
-reg state,next_state;
+parameter IDLE = 2'b00,WRITE = 2'b01,DIFF = 2'10,NULL = 2'11;
+reg [1:0]state,next_state;
 
 always @(posedge clk) begin
   if (rst) begin
@@ -71,14 +73,17 @@ always @(*) begin
 		case (state)
 			IDLE: begin
 				if(EXU_VALID && WBU_READY) begin
-					next_state = DONE;
+					next_state = WRITE;
 				end
 			end
-			DONE: begin
-					next_state = IDLE;
+			WRITE: begin
+					next_state = DIFF;
+			end
+			DIFF: begin
+				next_state = DONE;
 			end
 			default: begin
-				next_state = IDLE; // 默认回到初始状态
+				next_state = IDLE;
 			end
 		endcase
 	end
@@ -94,9 +99,8 @@ always @(posedge clk) begin
 	end
 	else begin
 		case (state)
+			diff <= 1'b0;
 			IDLE: begin
-				wbu_done <= 1'b0;
-				//wen_reg <= 1'b0;
 				if(EXU_VALID) begin //判断条件
 					wbu_ready <= 1'b1;
 				end
@@ -104,11 +108,15 @@ always @(posedge clk) begin
 					wbu_ready <= 1'b0;
 				end
 			end
-			DONE: begin
+			WRITE: begin
 	      xrd_reg <= xrd;
         rd_reg <= o_rf_raddr;
         wen_reg <= o_rf_wen;
         wbu_done <= 1'b1;
+			end
+			DIFF: begin
+				wbu_done <= 1'b0;
+				diff <= 1'b1;
 			end
 		endcase
 	end
