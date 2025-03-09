@@ -81,6 +81,7 @@ EXU_ysyx_24110017 EXU(clk,rst,sram_lsu_start,LSU_DONE,
 		op,funct3,imm,funct7,shamt,r1,r2,
 		res,
 		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,
+		ls_rdata,
 		pc,dnpc,
 		mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec,
 		gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
@@ -104,7 +105,7 @@ SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,
 );
 WBU_ysyx_24110017 WBU(clk,rst,
 		EXU_VALID,WBU_READY,wbu_done,difftest,
-		xrd,res,ls_rdata,
+		xrd,res,
 		rf_addr,rd,
 		rf_wen,gpr_wen,
 		o_mepc,o_mstatus,o_mcause,o_mtvec,w_mepc,w_mstatus,w_mcause,w_mtvec

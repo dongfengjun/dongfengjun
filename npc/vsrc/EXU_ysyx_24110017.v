@@ -3,6 +3,7 @@ module EXU_ysyx_24110017(clk,rst,sram_lsu_start,LSU_DONE,
 			op,funct3,imm,funct7,shamt,r1,r2, //i_IDU
 			res_reg, //o_WBU
 			ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask, //o_LSU
+			ls_rdata, //i_LSU
 			pc,dnpc,	//PCU
 			mepc,mstatus,mcause,mtvec, //i_csr
 			o_mepc,o_mstatus,o_mcause,o_mtvec, //o_csr
@@ -184,6 +185,17 @@ assign res =
       ({32{(funct3 == 3'b111) && (funct7 == 7'b0000001)}}
           & (a % b)) //R_remui			
 																										))
+			| //I_lb~lhu
+      ({32{(op == 7'b0000011) && (funct3 == 3'b000)}}
+          & {24{ls_rdata[7]},ls_rdata[7:0]}) | //I_lb
+			({32{(op == 7'b0000011) && (funct3 == 3'b001)}}
+          & {16{ls_rdata[15]},ls_rdata[15:0]}) | //I_lh 
+			({32{(op == 7'b0000011) && (funct3 == 3'b010)}}
+          & ls_rdata) | //I_lw
+			({32{(op == 7'b0000011) && (funct3 == 3'b100)}}
+          & {24{1'b0},ls_rdata[7:0]}) | //I_lbu
+			({32{(op == 7'b0000011) && (funct3 == 3'b101)}}
+          & {16{1'b0},ls_rdata[15:0]}) //I_lhu
 /***I_csrrw~csrrc***/
 			|
 			({32{(op == 7'b1110011) && (funct3 == 3'b001)}}
