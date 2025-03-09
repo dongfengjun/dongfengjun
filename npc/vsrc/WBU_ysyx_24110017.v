@@ -14,7 +14,6 @@ output wbu_done;
 output difftest;
 output [31:0]xrd_reg;
 input [31:0]res,ls_rdata;
-input lb_w,lh_w,lw_w,lbu_w,lhu_w;
 output [4:0]rd_reg;
 input [4:0]rd,l_rd;
 output wen_reg;

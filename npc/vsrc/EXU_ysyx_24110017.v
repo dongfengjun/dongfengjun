@@ -27,7 +27,6 @@ output [31:0]res_reg;
 output ls_valid,ls_wen;
 output [31:0]ls_waddr,ls_wdata,ls_raddr;
 output [7:0]ls_wmask;
-output lbdone,lhdone,lwdone,lbudone,lhudone;
 
 input [31:0]pc;
 output [31:0]dnpc;
