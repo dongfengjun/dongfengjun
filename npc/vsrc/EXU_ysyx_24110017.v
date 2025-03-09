@@ -66,15 +66,13 @@ always @(*) begin
 		case (state)
 			IDLE: begin
 				if(IDU_VALID && EXU_READY) begin
-					if(ls_valid && (!ls_wen)) begin
-						next_state = WAIT_SRAM;
-					end
-					else begin
-						next_state = WAIT_READY;
-					end
+					next_state = WAIT_SRAM;
 				end
 			end
 			WAIT_SRAM: begin
+				if(!(ls_valid) || ls_wen) begin
+					next_state = WAIT_READY;
+				end
 				if(LSU_DONE) begin
 					next_state = WAIT_READY;
 				end
