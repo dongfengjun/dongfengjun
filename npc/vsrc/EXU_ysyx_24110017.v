@@ -1,4 +1,4 @@
-module EXU_ysyx_24110017(clk,rst,
+module EXU_ysyx_24110017(clk,rst,LSU_DONE,
 			IDU_VALID,EXU_READY,EXU_VALID,WBU_READY,
 			op,funct3,imm,funct7,shamt,r1,r2, //i_IDU
 			res_reg, //o_WBU
@@ -11,6 +11,7 @@ module EXU_ysyx_24110017(clk,rst,
 );
 input clk;
 input rst;
+input LSU_DONE;
 input IDU_VALID;
 output EXU_READY;
 output EXU_VALID;
@@ -44,8 +45,8 @@ reg exu_valid;
 reg [31:0]res_reg;
 reg gpr_wen_reg;
 
-parameter IDLE = 1'b0,WAIT_READY = 1'b1;
-reg state,next_state;
+parameter IDLE = 2'b00,WAIT_SRAM = 2'b01,WAIT_READY = 2'b10,DONE_EXU=2'b11;
+reg [1:0]state,next_state;
 
 always @(posedge clk) begin
   if (rst) begin
@@ -65,13 +66,26 @@ always @(*) begin
 		case (state)
 			IDLE: begin
 				if(IDU_VALID && EXU_READY) begin
-					next_state = WAIT_READY;
+					if(op == 7'b0000011) begin
+						next_state = WAIT_SRAM;
+					end
+					else begin
+						next_state = WAIT_READY;
+					end
+				end
+			end
+			WAIT_SRAM: begin
+				if(LSU_DONE) begin
+					next_state = WAIT_RAEDY;
 				end
 			end
 			WAIT_READY: begin
 				if(EXU_VALID && WBU_READY) begin
-					next_state = IDLE;
+					next_state = DONE_EXU;
 				end
+			end
+			DONE_EXU: begin
+				next_state = IDLE;
 			end
 			default: begin
 				next_state = IDLE; // 默认回到初始状态
@@ -95,15 +109,19 @@ always @(posedge clk) begin
 				end
 				if(IDU_VALID && EXU_READY) begin
 					exu_ready <= 1'b0;
-					exu_valid <= 1'b1;
 				end
 			end
+			WAIT_SRAM: begin
+			end
 			WAIT_READY: begin
+				exu_valid <= 1'b1;
 				if(EXU_VALID && WBU_READY) begin
 					exu_valid <= 1'b0;
 					res_reg <= res;
 					gpr_wen_reg <= gpr_wen;
 				end
+			end
+			DONE_EXU: begin
 			end
 		endcase
 	end

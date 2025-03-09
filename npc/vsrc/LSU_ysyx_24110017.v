@@ -1,4 +1,4 @@
-module LSU_ysyx_24110017(clk,rst,
+module LSU_ysyx_24110017(clk,rst,LSU_DONE,
 			ls_rdata,l_rd,rd,l_wen,lbdone,lhdone,lwdone,lbudone,lhudone,
 			lb_w,lh_w,lw_w,lbu_w,lhu_w,
 			valid,wen,waddr,wdata,raddr,wmask,
@@ -10,6 +10,7 @@ module LSU_ysyx_24110017(clk,rst,
 );
 input clk;
 input rst;
+output LSU_DONE;
 output [31:0]ls_rdata;
 output [4:0]l_rd;
 input [4:0]rd;
@@ -40,6 +41,7 @@ input [1:0] M_AXI_RRESP;
 input M_AXI_RVALID;
 output M_AXI_RREADY;
 
+reg LSU_DONE;
 reg [4:0]l_rd;
 wire [31:0]ls_rdata = M_AXI_RDATA;
 reg l_wen;
@@ -104,6 +106,7 @@ always @(posedge clk or posedge rst) begin
       axi_wstrb <= 8'b0;
 		  axi_wvalid <= 0;
       axi_bready <= 0;
+			LSU_DONE <= 0;
     end 
 		else begin
       case (state)
@@ -139,6 +142,7 @@ always @(posedge clk or posedge rst) begin
             axi_rready <= 0;
 						l_wen <= 1;
             state <= DONE;
+						LSU_DONE <= 1'b1;
           end
         end
 				WRITE: begin
@@ -175,6 +179,7 @@ always @(posedge clk or posedge rst) begin
 					lbu_w <= 0;
 					lhu_w <= 0;
 					l_rd <= 0;
+					LSU_DONE <= 0;
           state <= IDLE;
         end
       endcase
