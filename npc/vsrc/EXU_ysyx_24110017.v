@@ -111,6 +111,7 @@ always @(posedge clk) begin
 			end
 			WAIT_SRAM: begin
 				if(ls_valid && (!ls_wen)) begin
+					res_reg <= 32'h0;
 					sram_lsu_start <= 1'b1;
 				end
 			end
