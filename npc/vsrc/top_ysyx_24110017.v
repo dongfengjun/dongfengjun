@@ -48,6 +48,7 @@ wire [31:0]xrd;
 wire [4:0]rf_addr;
 wire rf_wen;
 wire [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
+wire mepc_en,mstatus_en,mcause_en,mtvec_en;
 /***RFU***/
 wire [31:0]r1,r2;
 
@@ -108,13 +109,15 @@ WBU_ysyx_24110017 WBU(clk,rst,
 		xrd,res,
 		rf_addr,rd,
 		rf_wen,gpr_wen,
-		o_mepc,o_mstatus,o_mcause,o_mtvec,w_mepc,w_mstatus,w_mcause,w_mtvec
+		o_mepc,o_mstatus,o_mcause,o_mtvec,w_mepc,w_mstatus,w_mcause,w_mtvec,
+		mepc_wen,mstatus_wen,mcause_wen,mtvec_wen,
+		mepc_en,mstatus_en,mcause_en,mtvec_en
 );
 RegisterFile_ysyx_24110017 #(5,32) RFU (clk,xrd,rf_addr,rf_wen,rs1,r1,rs2,r2);
-Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk,rst,w_mepc,mepc,mepc_wen);
-Reg_ysyx_24110017 #(32, 32'h1800) mstatus_ysyx_24110017 (clk,rst,w_mstatus,mstatus,mstatus_wen);
-Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk,rst,w_mcause,mcause,mcause_wen);
-Reg_ysyx_24110017 #(32, 32'b0) mtvec_ysyx_24110017 (clk,rst,w_mtvec,mtvec,mtvec_wen);
+Reg_ysyx_24110017 #(32, 32'b0) mepc_ysyx_24110017 (clk,rst,w_mepc,mepc,mepc_en);
+Reg_ysyx_24110017 #(32, 32'h1800) mstatus_ysyx_24110017 (clk,rst,w_mstatus,mstatus,mstatus_en);
+Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk,rst,w_mcause,mcause,mcause_en);
+Reg_ysyx_24110017 #(32, 32'b0) mtvec_ysyx_24110017 (clk,rst,w_mtvec,mtvec,mtvec_en);
 
 
 /***DPI-C*CSR***/

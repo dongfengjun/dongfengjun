@@ -34,8 +34,8 @@ input [31:0]pc;
 output [31:0]dnpc;
 
 input [31:0]mepc,mstatus,mcause,mtvec;
-output [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
-output gpr_wen_reg,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
+output [31:0]o_mepc_reg,o_mstatus_reg,o_mcause_reg_reg,o_mtvec_reg;
+output gpr_wen_reg,mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg;
 
 /***分布式控制***/
 wire IDU_VALID,EXU_READY = exu_ready;
@@ -46,6 +46,8 @@ reg exu_valid;
 reg sram_lsu_start;
 reg [31:0]res_reg;
 reg gpr_wen_reg;
+reg [31:0]o_mepc_reg,o_mstatus_reg,o_mcause_reg,o_mtvec_reg;
+reg mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg;
 
 parameter IDLE = 2'b00,WAIT_SRAM = 2'b01,WAIT_READY = 2'b10,DONE_EXU=2'b11;
 reg [1:0]state,next_state;
@@ -100,6 +102,14 @@ always @(posedge clk) begin
 		exu_ready <= 1'b0;
 		res_reg <= 32'h80000000;
 		gpr_wen_reg <= 1'b0;
+		o_mepc_reg <= 32'h0;
+    o_mstatus_reg <= 32'h0;
+    o_mcause_reg <= 32'h0;
+    o_mtvec_reg <= 32'h0;
+    mepc_wen_reg <= 1'b0;
+    mstatus_wen_reg <= 1'b0;
+    mcause_wen_reg <= 1'b0;
+    mtvec_wen_reg <= 1'b0;
 	end
 	else begin
 		case (state)
@@ -124,6 +134,15 @@ always @(posedge clk) begin
 					exu_valid <= 1'b0;
 					res_reg <= res;
 					gpr_wen_reg <= gpr_wen;
+
+					o_mepc_reg <= o_mepc;
+					o_mstatus_reg <= o_mstatus;
+					o_mcause_reg <= o_mcause;
+					o_mtvec_reg <= o_mtvec;
+					mepc_wen_reg <= o_mepc;
+					mstatus_wen_reg <= o_mstatus;
+					mcause_wen_reg <= o_mcause;
+					mtvec_wen_reg <= o_mtvec;
 				end
 			end
 			DONE_EXU: begin
