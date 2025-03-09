@@ -1,5 +1,5 @@
 module LSU_ysyx_24110017(clk,rst,sram_lsu_start,LSU_DONE,
-			ls_rdata,l_rd,rd,l_wen,
+			ls_rdata,
 			valid,wen,waddr,wdata,raddr,wmask,
 			M_AXI_AWADDR,M_AXI_AWVALID,M_AXI_AWREADY,
 			M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WVALID,M_AXI_WREADY,
@@ -12,9 +12,6 @@ input rst;
 input sram_lsu_start;
 output LSU_DONE;
 output [31:0]ls_rdata;
-output [4:0]l_rd;
-input [4:0]rd;
-output l_wen;
 
 input valid,wen;
 input [31:0]waddr,wdata,raddr;
@@ -40,9 +37,7 @@ input M_AXI_RVALID;
 output M_AXI_RREADY;
 
 reg LSU_DONE;
-reg [4:0]l_rd;
 wire [31:0]ls_rdata = M_AXI_RDATA;
-reg l_wen;
 
 /***单周期*DPIC***
 import "DPI-C" function int pmem_read(input int raddr);
@@ -112,8 +107,6 @@ always @(posedge clk or posedge rst) begin
 				  if(sram_lsu_start) begin
             axi_arvalid <= 1'b1;
             state <= READ;
-            axi_araddr_reg <= raddr;
-            l_rd <= rd;
 					end
 					if(wen) begin
 						axi_awvalid <= 1'b1;
@@ -131,7 +124,6 @@ always @(posedge clk or posedge rst) begin
           end
 	        if(M_AXI_RVALID) begin
             axi_rready <= 0;
-						l_wen <= 1;
             state <= DONE;
 						LSU_DONE <= 1'b1;
           end
@@ -163,8 +155,6 @@ always @(posedge clk or posedge rst) begin
 					axi_wstrb <= 8'b0;
 					axi_wvalid <= 0;
 					axi_bready <= 0;
-					l_wen <= 0;
-					l_rd <= 0;
 					LSU_DONE <= 0;
           state <= IDLE;
         end
