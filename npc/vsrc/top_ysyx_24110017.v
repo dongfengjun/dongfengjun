@@ -38,9 +38,6 @@ wire [31:0]mepc,o_mepc,mstatus,o_mstatus,mcause,o_mcause,mtvec,o_mtvec;
 wire gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 /***LSU***/
 wire [31:0]ls_rdata; //LSU_AXI4-LITE
-wire l_wen;
-wire [4:0]l_rd;
-wire lb_w,lh_w,lw_w,lbu_w,lhu_w;
 wire [31:0] LSU_AXI_AWADDR,LSU_AXI_WDATA,LSU_AXI_ARADDR,LSU_AXI_RDATA;
 wire [7:0] LSU_AXI_WSTRB;
 wire [1:0] LSU_AXI_BRESP,LSU_AXI_RRESP;
@@ -90,7 +87,6 @@ EXU_ysyx_24110017 EXU(clk,rst,sram_lsu_start,LSU_DONE,
 );
 LSU_ysyx_24110017 LSU(clk,rst,sram_lsu_start,LSU_DONE,
 		ls_rdata,
-		l_rd,rd,l_wen,
 		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,
 
 		LSU_AXI_AWADDR,LSU_AXI_AWVALID,LSU_AXI_AWREADY,
@@ -109,8 +105,8 @@ SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,
 WBU_ysyx_24110017 WBU(clk,rst,
 		EXU_VALID,WBU_READY,wbu_done,difftest,
 		xrd,res,ls_rdata,
-		rf_addr,rd,l_rd,
-		rf_wen,gpr_wen,l_wen,
+		rf_addr,rd,
+		rf_wen,gpr_wen,
 		o_mepc,o_mstatus,o_mcause,o_mtvec,w_mepc,w_mstatus,w_mcause,w_mtvec
 );
 RegisterFile_ysyx_24110017 #(5,32) RFU (clk,xrd,rf_addr,rf_wen,rs1,r1,rs2,r2);
