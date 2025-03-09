@@ -100,8 +100,8 @@ always @(posedge clk) begin
 	end
 	else begin
 		case (state)
-			difftest <= 1'b0;
 			IDLE: begin
+				difftest <= 1'b0;
 				if(EXU_VALID) begin //判断条件
 					wbu_ready <= 1'b1;
 				end
