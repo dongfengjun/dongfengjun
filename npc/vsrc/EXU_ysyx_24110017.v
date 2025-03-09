@@ -90,17 +90,17 @@ always @(posedge clk) begin
 	else begin
 		case (state)
 			IDLE: begin
-				exu_valid <= 1'b0;
 				if(IDU_VALID) begin //判断条件
 					exu_ready <= 1'b1;
 				end
 				if(IDU_VALID && EXU_READY) begin
 					exu_ready <= 1'b0;
+					exu_valid <= 1'b1;
 				end
 			end
 			WAIT_READY: begin
 				if(EXU_VALID && WBU_READY) begin
-					exu_valid <= 1'b1;
+					exu_valid <= 1'b0;
 					res_reg <= res;
 					gpr_wen_reg <= gpr_wen;
 				end
