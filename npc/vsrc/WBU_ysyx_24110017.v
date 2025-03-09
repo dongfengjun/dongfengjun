@@ -1,8 +1,8 @@
 module WBU_ysyx_24110017(clk,rst,
 			EXU_VALID,WBU_READY,wbu_done,difftest,
 			xrd_reg,res,ls_rdata,
-			rd_reg,rd,l_rd,
-			wen_reg,gpr_wen,l_wen,
+			rd_reg,rd,
+			wen_reg,gpr_wen,
 			o_mepc,o_mstatus,o_mcause,o_mtvec,
 			w_mepc,w_mstatus,w_mcause,w_mtvec
 );
@@ -15,9 +15,9 @@ output difftest;
 output [31:0]xrd_reg;
 input [31:0]res,ls_rdata;
 output [4:0]rd_reg;
-input [4:0]rd,l_rd;
+input [4:0]rd;
 output wen_reg;
-input gpr_wen,l_wen;
+input gpr_wen;
 input [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
 output [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
 
@@ -28,8 +28,8 @@ wire o_rf_wen;
 wire [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
 
 assign xrd = res | ls_rdata;
-assign o_rf_raddr = (rd | l_rd);
-assign o_rf_wen = gpr_wen || l_wen;
+assign o_rf_raddr = rd;
+assign o_rf_wen = gpr_wen;
 
 assign w_mepc = o_mepc;
 assign w_mstatus = o_mstatus;
