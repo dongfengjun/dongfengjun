@@ -90,8 +90,7 @@ EXU_ysyx_24110017 EXU(clk,rst,sram_lsu_start,LSU_DONE,
 );
 LSU_ysyx_24110017 LSU(clk,rst,sram_lsu_start,LSU_DONE,
 		ls_rdata,
-		l_rd,rd,l_wen,lbdone,lhdone,lwdone,lbudone,lhudone,
-		lb_w,lh_w,lw_w,lbu_w,lhu_w,
+		l_rd,rd,l_wen,
 		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,
 
 		LSU_AXI_AWADDR,LSU_AXI_AWVALID,LSU_AXI_AWREADY,
