@@ -1,5 +1,5 @@
 module IFU_ysyx_24110017(clk,rst,
-				pc,inst,PCU_VALID,IFU_READY,IFU_VALID,IDU_READY,
+				pc,inst,PCU_VALID,IFU_READY,IFU_VALID,IDU_READY,wbu_done,
 				M_AXI_AWADDR,M_AXI_AWVALID,M_AXI_AWREADY,
         M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WVALID,M_AXI_WREADY,
         M_AXI_BRESP,M_AXI_BVALID,M_AXI_BREADY,
@@ -14,6 +14,7 @@ input PCU_VALID;
 output IFU_READY;
 output IFU_VALID;
 input IDU_READY;
+input wbu_done;
 /***SRAM*W**/
 output [31:0] M_AXI_AWADDR;
 output M_AXI_AWVALID;
@@ -100,7 +101,9 @@ always @(*) begin
 				end
 			end
 			DONE_IFU: begin
-				next_state = IDLE_IFU;
+				if(wbu_done) begin
+					next_state = IDLE_IFU;
+				end
 			end
 			default: begin
 				next_state = IDLE_IFU;
@@ -127,7 +130,7 @@ always @(posedge clk) begin
 			end
 			WAIT_SRAM: begin
 				sram_start <= 1'b0;
-				if(sram_ifu_done) begin //判断条件
+				if(sram_ifu_done) begin
 					ifu_valid <= 1'b1;
 				end
 			end
@@ -135,12 +138,12 @@ always @(posedge clk) begin
 				if(IFU_VALID && IDU_READY) begin
 					ifu_valid <= 1'b0;
 					inst <= M_AXI_RDATA;
-					ifu_ready <= 1'b1;
 				end
 			end
 			DONE_IFU: begin
-				inst <= 32'h0;
-				ifu_ready <= 1'b0;
+				if(wbu_done) begin
+          ifu_ready <= 1'b1;
+        end
 			end
 		endcase
 	end

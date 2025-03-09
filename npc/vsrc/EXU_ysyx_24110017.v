@@ -1,22 +1,27 @@
 module EXU_ysyx_24110017(clk,rst,
+			IDU_VALID,EXU_READY,EXU_VALID,WBU_READY,
 			op,funct3,imm,funct7,shamt,r1,r2, //i_IDU
-			res, //o_WBU
+			res_reg, //o_WBU
 			ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask, //o_LSU
 			lbdone,lhdone,lwdone,lbudone,lhudone,
 			pc,dnpc,	//PCU
 			mepc,mstatus,mcause,mtvec, //i_csr
 			o_mepc,o_mstatus,o_mcause,o_mtvec, //o_csr
-			gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen	//reg_wen
+			gpr_wen_reg,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen	//reg_wen
 );
 input clk;
 input rst;
+input IDU_VALID;
+output EXU_READY;
+output EXU_VALID;
+input WBU_READY;
 input [6:0]op;
 input [2:0]funct3;
 input [31:0]imm;
 input [6:0]funct7;
 input [4:0]shamt;
 input [31:0]r1,r2;
-output [31:0]res;
+output [31:0]res_reg;
 
 output ls_valid,ls_wen;
 output [31:0]ls_waddr,ls_wdata,ls_raddr;
@@ -28,10 +33,83 @@ output [31:0]dnpc;
 
 input [31:0]mepc,mstatus,mcause,mtvec;
 output [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
-output gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
+output gpr_wen_reg,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 
+/***分布式控制***/
+wire IDU_VALID,EXU_READY = exu_ready;
+reg exu_ready;
+wire EXU_VALID = exu_valid,WBU_READY;
+reg exu_valid;
 
-wire [31:0]a,b;
+reg [31:0]res_reg;
+reg gpr_wen_reg;
+
+parameter IDLE = 1'b0,WAIT_READY = 1'b1;
+reg state,next_state;
+
+always @(posedge clk) begin
+  if (rst) begin
+    state <= IDLE;
+  end
+	else begin
+    state <= next_state;
+  end
+end
+
+always @(*) begin
+  next_state = state;
+	if(rst) begin
+		next_state = IDLE;
+	end
+  else begin
+		case (state)
+			IDLE: begin
+				if(IDU_VALID && EXU_READY) begin
+					next_state = WAIT_READY;
+				end
+			end
+			WAIT_READY: begin
+				if(EXU_VALID && WBU_READY) begin
+					next_state = IDLE;
+				end
+			end
+			default: begin
+				next_state = IDLE; // 默认回到初始状态
+			end
+		endcase
+	end
+end
+
+always @(posedge clk) begin
+	if(rst) begin
+		exu_valid <= 1'b0;
+		exu_ready <= 1'b0;
+		res_reg <= 32'h80000000;
+		gpr_wen_reg <= 1'b0;
+	end
+	else begin
+		case (state)
+			IDLE: begin
+				if(IDU_VALID) begin //判断条件
+					exu_ready <= 1'b1;
+				end
+				if(IDU_VALID && EXU_READY) begin
+					exu_ready <= 1'b0;
+					exu_valid <= 1'b1;
+				end
+			end
+			WAIT_READY: begin
+				if(EXU_VALID && WBU_READY) begin
+					exu_valid <= 1'b0;
+					res_reg <= res;
+					gpr_wen_reg <= gpr_wen;
+				end
+			end
+		endcase
+	end
+end
+
+wire [31:0]a,b,res;
 assign b = (op == 7'b0110011 || op == 7'b0100011) ? r2 : imm;
 assign a = (op == 7'b0010011 || op == 7'b0000011 || op == 7'b0100011 || op == 7'b0110011/*R*/ || (op == 7'b1110011 && (funct3 == 3'b001 || funct3 == 3'b010 || funct3 == 3'b011))/*csr*/) ? r1 : pc;
 /***ALU I*addi~srai***/

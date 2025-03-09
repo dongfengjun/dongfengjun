@@ -6,7 +6,7 @@ output [31:0]dnpc;
 output [31:0]inst;
 output DIFFTEST;
 
-wire DIFFTEST = 1'b0;
+wire DIFFTEST = difftest;
 /***PCU***/
 wire [31:0]pc;
 wire [31:0]dnpc;
@@ -29,6 +29,7 @@ wire [31:0]imm;
 wire [6:0]funct7;	//R
 wire [4:0]shamt; //I shamt
 /***EXU***/
+wire EXU_VALID,WBU_READY;
 wire [31:0]res;
 wire ls_valid,ls_wen;
 wire [31:0]ls_waddr,ls_wdata,ls_raddr;
@@ -46,6 +47,7 @@ wire [7:0] LSU_AXI_WSTRB;
 wire [1:0] LSU_AXI_BRESP,LSU_AXI_RRESP;
 wire LSU_AXI_AWVALID,LSU_AXI_AWREADY,LSU_AXI_WVALID,LSU_AXI_WREADY,LSU_AXI_BVALID,LSU_AXI_BREADY,LSU_AXI_ARVALID,LSU_AXI_ARREADY,LSU_AXI_RVALID,LSU_AXI_RREADY;
 /***WBU***/
+wire EXU_VALID,WBU_READY,wbu_done,difftest;
 wire [31:0]xrd;
 wire [4:0]rf_addr;
 wire rf_wen;
@@ -60,7 +62,7 @@ PCU_ysyx_24110017 PCU(clk,rst,
 		IFU_READY
 );
 IFU_ysyx_24110017 IFU(clk,rst,
-				pc,inst,PCU_VALID,IFU_READY,IFU_VALID,IDU_READY,
+				pc,inst,PCU_VALID,IFU_READY,IFU_VALID,IDU_READY,wbu_done,
         IFU_AXI_AWADDR,IFU_AXI_AWVALID,IFU_AXI_AWREADY,
         IFU_AXI_WDATA,IFU_AXI_WSTRB,IFU_AXI_WVALID,IFU_AXI_WREADY,
         IFU_AXI_BRESP,IFU_AXI_BVALID,IFU_AXI_BREADY,
@@ -79,6 +81,7 @@ IDU_ysyx_24110017 IDU(clk,rst,
 		op,rd,funct3,rs1,rs2,imm,funct7,shamt
 );
 EXU_ysyx_24110017 EXU(clk,rst,
+		IDU_VALID,EXU_READY,EXU_VALID,WBU_READY, //分布式控制
 		op,funct3,imm,funct7,shamt,r1,r2,
 		res,
 		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,
@@ -107,6 +110,7 @@ SRAM_LSU_ysyx_24110017 SRAM_LSU_ysyx_24110017(clk,rst,
     LSU_AXI_RDATA,LSU_AXI_RRESP,LSU_AXI_RVALID,LSU_AXI_RREADY
 );
 WBU_ysyx_24110017 WBU(clk,rst,
+		EXU_VALID,WBU_READY,wbu_done,difftest,
 		xrd,res,ls_rdata,
 		lb_w,lh_w,lw_w,lbu_w,lhu_w,
 		rf_addr,rd,l_rd,
