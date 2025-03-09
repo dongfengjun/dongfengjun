@@ -80,7 +80,7 @@ always @(*) begin
 					next_state = DIFF;
 			end
 			DIFF: begin
-				next_state = DONE;
+				next_state = IDLE;
 			end
 			default: begin
 				next_state = IDLE;
