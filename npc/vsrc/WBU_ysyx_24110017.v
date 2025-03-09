@@ -5,6 +5,7 @@ module WBU_ysyx_24110017(clk,rst,
 			wen_reg,gpr_wen,
 			o_mepc,o_mstatus,o_mcause,o_mtvec,
 			w_mepc_reg,w_mstatus_reg,w_mcause_reg,w_mtvec_reg,
+			mepc_wen,mstatus_wen,mcause_wen,mtvec_wen,
 			mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg
 );
 input clk;
