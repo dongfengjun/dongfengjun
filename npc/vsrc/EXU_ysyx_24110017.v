@@ -34,7 +34,7 @@ input [31:0]pc;
 output [31:0]dnpc;
 
 input [31:0]mepc,mstatus,mcause,mtvec;
-output [31:0]o_mepc_reg,o_mstatus_reg,o_mcause_reg_reg,o_mtvec_reg;
+output [31:0]o_mepc_reg,o_mstatus_reg,o_mcause_reg,o_mtvec_reg;
 output gpr_wen_reg,mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg;
 
 /***分布式控制***/
