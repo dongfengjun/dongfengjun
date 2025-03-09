@@ -126,6 +126,9 @@ always @(posedge clk) begin
 					res_reg <= 32'h0;
 					sram_lsu_start <= 1'b1;
 				end
+				if(LSU_DONE) begin
+					sram_lsu_start <= 1'b0;
+				end
 			end
 			WAIT_READY: begin
 				sram_lsu_start <= 1'b0;
