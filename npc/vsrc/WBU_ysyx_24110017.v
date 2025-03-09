@@ -1,7 +1,6 @@
 module WBU_ysyx_24110017(clk,rst,
 			EXU_VALID,WBU_READY,wbu_done,difftest,
 			xrd_reg,res,ls_rdata,
-			lb_w,lh_w,lw_w,lbu_w,lhu_w,
 			rd_reg,rd,l_rd,
 			wen_reg,gpr_wen,l_wen,
 			o_mepc,o_mstatus,o_mcause,o_mtvec,

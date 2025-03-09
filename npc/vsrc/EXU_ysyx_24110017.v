@@ -1,9 +1,8 @@
-module EXU_ysyx_24110017(clk,rst,LSU_DONE,
+module EXU_ysyx_24110017(clk,rst,sram_lsu_start,LSU_DONE,
 			IDU_VALID,EXU_READY,EXU_VALID,WBU_READY,
 			op,funct3,imm,funct7,shamt,r1,r2, //i_IDU
 			res_reg, //o_WBU
 			ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask, //o_LSU
-			lbdone,lhdone,lwdone,lbudone,lhudone,
 			pc,dnpc,	//PCU
 			mepc,mstatus,mcause,mtvec, //i_csr
 			o_mepc,o_mstatus,o_mcause,o_mtvec, //o_csr
@@ -11,6 +10,7 @@ module EXU_ysyx_24110017(clk,rst,LSU_DONE,
 );
 input clk;
 input rst;
+output sram_lsu_start;
 input LSU_DONE;
 input IDU_VALID;
 output EXU_READY;
@@ -42,6 +42,7 @@ reg exu_ready;
 wire EXU_VALID = exu_valid,WBU_READY;
 reg exu_valid;
 
+reg sram_lsu_start;
 reg [31:0]res_reg;
 reg gpr_wen_reg;
 
@@ -66,7 +67,7 @@ always @(*) begin
 		case (state)
 			IDLE: begin
 				if(IDU_VALID && EXU_READY) begin
-					if(op == 7'b0000011) begin
+					if(ls_valid && (!ls_wen)) begin
 						next_state = WAIT_SRAM;
 					end
 					else begin
@@ -112,8 +113,10 @@ always @(posedge clk) begin
 				end
 			end
 			WAIT_SRAM: begin
+				sram_lsu_start <= 1'b1;
 			end
 			WAIT_READY: begin
+				sram_lsu_start <= 1'b0;
 				exu_valid <= 1'b1;
 				if(EXU_VALID && WBU_READY) begin
 					exu_valid <= 1'b0;
@@ -219,7 +222,7 @@ assign w_csrs =
       ({32{(op == 7'b1110011) && (funct3 == 3'b000)}}
           & (csr &~r1)) ; //I_csrrc
 
-/***load*store*LSU**/
+/***load*store*LSU***/
 wire ls_valid,ls_wen;
 wire [31:0]ls_waddr,ls_wdata,ls_raddr;
 wire [7:0]ls_wmask;
@@ -232,11 +235,6 @@ assign ls_wmask = (op == 7'b0100011 && funct3 == 3'b000) ? 8'b00000001
  : (op == 7'b0100011 && funct3 == 3'b010) ? 8'b00001111
  : 8'b0;
 assign ls_raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
-assign lbdone = (op == 7'b0000011) && (funct3 == 3'b000);           
-assign lhdone = (op == 7'b0000011) && (funct3 == 3'b001);
-assign lwdone = (op == 7'b0000011) && (funct3 == 3'b010);
-assign lbudone = (op == 7'b0000011) && (funct3 == 3'b100);
-assign lhudone = (op == 7'b0000011) && (funct3 == 3'b101);
 /***J_B_dnpc***/
 wire [31:0]pc;
 wire [31:0]dnpc;

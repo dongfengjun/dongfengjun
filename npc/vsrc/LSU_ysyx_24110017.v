@@ -1,6 +1,5 @@
-module LSU_ysyx_24110017(clk,rst,LSU_DONE,
-			ls_rdata,l_rd,rd,l_wen,lbdone,lhdone,lwdone,lbudone,lhudone,
-			lb_w,lh_w,lw_w,lbu_w,lhu_w,
+module LSU_ysyx_24110017(clk,rst,sram_lsu_start,LSU_DONE,
+			ls_rdata,l_rd,rd,l_wen,
 			valid,wen,waddr,wdata,raddr,wmask,
 			M_AXI_AWADDR,M_AXI_AWVALID,M_AXI_AWREADY,
 			M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WVALID,M_AXI_WREADY,
@@ -10,13 +9,12 @@ module LSU_ysyx_24110017(clk,rst,LSU_DONE,
 );
 input clk;
 input rst;
+input sram_lsu_start;
 output LSU_DONE;
 output [31:0]ls_rdata;
 output [4:0]l_rd;
 input [4:0]rd;
 output l_wen;
-input lbdone,lhdone,lwdone,lbudone,lhudone;
-output lb_w,lh_w,lw_w,lbu_w,lhu_w;
 
 input valid,wen;
 input [31:0]waddr,wdata,raddr;
@@ -45,7 +43,6 @@ reg LSU_DONE;
 reg [4:0]l_rd;
 wire [31:0]ls_rdata = M_AXI_RDATA;
 reg l_wen;
-reg lb_w,lh_w,lw_w,lbu_w,lhu_w;
 
 /***单周期*DPIC***
 import "DPI-C" function int pmem_read(input int raddr);
@@ -76,6 +73,7 @@ wire [31:0] M_AXI_AWADDR,M_AXI_WDATA,M_AXI_ARADDR,M_AXI_RDATA;
 wire [7:0] M_AXI_WSTRB;
 wire [1:0] M_AXI_BRESP,M_AXI_RRESP;
 wire M_AXI_AWVALID,M_AXI_AWREADY,M_AXI_WVALID,M_AXI_WREADY,M_AXI_BVALID,M_AXI_BREADY,M_AXI_ARVALID,M_AXI_ARREADY,M_AXI_RVALID,M_AXI_RREADY;
+
 parameter IDLE=2'b0,READ=2'b01,WRITE=2'b10,DONE=2'b11;
 reg [1:0]state;
 reg axi_arvalid,axi_rready;
@@ -111,26 +109,19 @@ always @(posedge clk or posedge rst) begin
 		else begin
       case (state)
         IDLE: begin
-				  if(valid) begin
-						if(wen) begin
-							axi_awvalid <= 1'b1;
-		          state <= WRITE;
-							axi_awaddr_reg <= waddr;
-							axi_wdata_reg <= wdata;
-							axi_wstrb_reg <= wmask;
-	          end
-						else begin
-							axi_arvalid <= 1'b1;
-							state <= READ;
-							axi_araddr_reg <= raddr;
-							l_rd <= rd;
-							lb_w <= lbdone;
-							lh_w <= lhdone;
-							lw_w <= lwdone;
-							lbu_w <= lbudone;
-							lhu_w <= lhudone;
-						end
+				  if(sram_lsu_start) begin
+            axi_arvalid <= 1'b1;
+            state <= READ;
+            axi_araddr_reg <= raddr;
+            l_rd <= rd;
 					end
+					if(wen) begin
+						axi_awvalid <= 1'b1;
+		        state <= WRITE;
+						axi_awaddr_reg <= waddr;
+						axi_wdata_reg <= wdata;
+						axi_wstrb_reg <= wmask;
+	        end
 				end
 				READ: begin
           if(M_AXI_ARREADY) begin
@@ -173,11 +164,6 @@ always @(posedge clk or posedge rst) begin
 					axi_wvalid <= 0;
 					axi_bready <= 0;
 					l_wen <= 0;
-					lb_w <= 0;
-					lh_w <= 0;
-					lw_w <= 0;
-					lbu_w <= 0;
-					lhu_w <= 0;
 					l_rd <= 0;
 					LSU_DONE <= 0;
           state <= IDLE;
