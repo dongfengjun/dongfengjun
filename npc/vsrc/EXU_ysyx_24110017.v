@@ -131,7 +131,6 @@ always @(posedge clk) begin
 				end
 			end
 			WAIT_READY: begin
-				sram_lsu_start <= 1'b0;
 				exu_valid <= 1'b1;
 				if(EXU_VALID && WBU_READY) begin
 					exu_valid <= 1'b0;
