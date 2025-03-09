@@ -236,7 +236,7 @@ assign res =
 
 /***csrrw~csrrc***/
 wire [31:0]csr,w_csrs;
-wire o_mepc,o_mstatus,o_mcause,o_mtvec;
+wire [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
 assign csr = (op == 7'b1110011 && imm == 32'd833) ? mepc
  : (op == 7'b1110011 && imm == 32'd768) ? mstatus
  : (op == 7'b1110011 && imm == 32'd834) ? mcause

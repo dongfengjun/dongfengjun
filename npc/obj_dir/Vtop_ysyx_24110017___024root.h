@@ -91,9 +91,9 @@ class Vtop_ysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT__exu_valid;
         CData/*1:0*/ top_ysyx_24110017__DOT__EXU__DOT__state;
         CData/*1:0*/ top_ysyx_24110017__DOT__EXU__DOT__next_state;
-        CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT__ecall_en;
         CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT__o_mepc;
         CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT__o_mcause;
+        CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT__ecall_en;
         CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h4e2b38c4__0;
         CData/*0:0*/ top_ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h4e2d1b28__0;
         CData/*7:0*/ top_ysyx_24110017__DOT__LSU__DOT__axi_wstrb_reg;
