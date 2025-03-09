@@ -6,7 +6,7 @@ output [31:0]dnpc;
 output [31:0]inst;
 output DIFFTEST;
 
-wire DIFFTEST = 1'b0;
+wire DIFFTEST = wbu_done;
 /***PCU***/
 wire [31:0]pc;
 wire [31:0]dnpc;
