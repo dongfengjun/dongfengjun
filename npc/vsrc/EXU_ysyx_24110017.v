@@ -187,15 +187,15 @@ assign res =
 																										))
 			| //I_lb~lhu
       ({32{(op == 7'b0000011) && (funct3 == 3'b000)}}
-          & {24{ls_rdata[7]},ls_rdata[7:0]}) | //I_lb
+          & {{24{ls_rdata[7]}},ls_rdata[7:0]}) | //I_lb
 			({32{(op == 7'b0000011) && (funct3 == 3'b001)}}
-          & {16{ls_rdata[15]},ls_rdata[15:0]}) | //I_lh 
+          & {{16{ls_rdata[15]}},ls_rdata[15:0]}) | //I_lh 
 			({32{(op == 7'b0000011) && (funct3 == 3'b010)}}
           & ls_rdata) | //I_lw
 			({32{(op == 7'b0000011) && (funct3 == 3'b100)}}
-          & {24{1'b0},ls_rdata[7:0]}) | //I_lbu
+          & {{24{1'b0}},ls_rdata[7:0]}) | //I_lbu
 			({32{(op == 7'b0000011) && (funct3 == 3'b101)}}
-          & {16{1'b0},ls_rdata[15:0]}) //I_lhu
+          & {{16{1'b0}},ls_rdata[15:0]}) //I_lhu
 /***I_csrrw~csrrc***/
 			|
 			({32{(op == 7'b1110011) && (funct3 == 3'b001)}}
