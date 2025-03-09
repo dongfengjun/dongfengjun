@@ -27,12 +27,7 @@ wire [4:0]o_rf_raddr;
 wire o_rf_wen;
 wire [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
 
-assign xrd = res |
-	({32{lb_w}} & {{24{ls_rdata[7]}},(ls_rdata[7:0])}) | //I_lb
-	({32{lh_w}} & {{16{ls_rdata[15]}},(ls_rdata[15:0])}) | //I_lh
-	({32{lw_w}} & (ls_rdata)) | //I_lw
-	({32{lbu_w}} & {24'b0,(ls_rdata[7:0])}) | //I_lbu
-	({32{lhu_w}} & {16'b0,(ls_rdata[15:0])}); //I_lhu
+assign xrd = res | ls_rdata;
 assign o_rf_raddr = (rd | l_rd);
 assign o_rf_wen = gpr_wen || l_wen;
 
