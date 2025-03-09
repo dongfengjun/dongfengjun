@@ -52,7 +52,7 @@ reg [31:0]xrd_reg;
 reg [4:0]rd_reg;
 reg wen_reg;
 
-parameter IDLE = 2'b00,WRITE = 2'b01,DIFF = 2'10,NULL = 2'11;
+parameter IDLE = 2'b00,WRITE = 2'b01,DIFF = 2'b10,NULL = 2'b11;
 reg [1:0]state,next_state;
 
 always @(posedge clk) begin
