@@ -119,6 +119,8 @@ always @(posedge clk) begin
 				wbu_done <= 1'b0;
 				difftest <= 1'b1;
 			end
+			NULL: begin
+			end
 		endcase
 	end
 end
