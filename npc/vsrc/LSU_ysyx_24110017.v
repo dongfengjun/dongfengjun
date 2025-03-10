@@ -172,13 +172,14 @@ always @(posedge clk or posedge rst) begin
 						if(delay_counter == 0) begin
               delay_counter <= delay_counter;
             end
-          else if(delay_counter == 1) begin
-            axi_wvalid <= 1;
-            delay_counter <= 0;
-          end
-          else begin
-            delay_counter <= delay_counter - 1;
-          end
+						else if(delay_counter == 1) begin
+							axi_wvalid <= 1;
+							delay_counter <= 0;
+						end
+						else begin
+							delay_counter <= delay_counter - 1;
+						end
+					end
 /***END***/
 					if(M_AXI_WVALID && M_AXI_WREADY) begin
 						axi_wvalid <= 0;
