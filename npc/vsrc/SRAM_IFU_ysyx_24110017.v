@@ -56,19 +56,19 @@ wire [7:0]rand_delay;
 reg [7:0] delay_counter;
 reg [7:0] current_delay;
 lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
-always @(posedge clk or posedge rst) begin
-  if (rst) begin
+always @(posedge clk) begin
+  if(rst) begin
     axi_arready <= 0;
     delay_counter <= 8'b0;
     current_delay <= 8'b0;
   end 
 	else begin
-    if (S_AXI_ARVALID && !S_AXI_ARREADY) begin
-      if (delay_counter == 0) begin
+    if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
+      if(delay_counter == 0) begin
         current_delay <= rand_delay;
         delay_counter <= current_delay;
       end
-			else if (delay_counter == 1) begin
+			else if(delay_counter == 1) begin
 				axi_arready <= 1;
         delay_counter <= 0;
       end
@@ -84,7 +84,7 @@ end
 
 always @(posedge clk) begin
         if (rst) begin
-            axi_arready <= 0;
+            //axi_arready <= 0;
             axi_rvalid <= 0;
 						delay_test <= 6'b0;
         end else begin
@@ -118,7 +118,7 @@ always @(posedge clk) begin
 
             if (axi_arready & S_AXI_ARVALID) begin
                 axi_rvalid <= 1;//判断条件
-                axi_arready <= 0;
+                //axi_arready <= 0;
 								axi_rresp  <= 2'b0;
             end
 						if (S_AXI_RREADY && S_AXI_RVALID) begin
