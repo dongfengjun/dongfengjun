@@ -91,8 +91,7 @@ always @(posedge clk) begin
 /***DELAY_TEST_RAND***/
     if(S_AXI_AWVALID && !S_AXI_AWREADY) begin
       if(delay_counter == 0) begin
-	      current_delay <= rand_delay;
-        delay_counter <= current_delay;
+        delay_counter <= rand_delay;
       end
       else if(delay_counter == 1) begin
         axi_awready <= 1;
