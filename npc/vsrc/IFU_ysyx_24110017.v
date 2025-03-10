@@ -236,7 +236,6 @@ always @(posedge clk) begin
                       end
                     end
 										/***END***/
-                    end
                     if (M_AXI_RVALID && M_AXI_RREADY) begin
 												state <= SRAM_DONE; 
                         axi_rready <= 1'b0;
