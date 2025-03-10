@@ -211,11 +211,12 @@ always @(posedge clk) begin
 								/***END***/
                 end
                 SRAM_FETCH: begin
-                    if (M_AXI_ARREADY) begin
+                    if (M_AXI_ARVALID && M_AXI_ARREADY) begin
                         axi_arvalid <= 1'b0;
-                        axi_rready <= 1'b1;
 												axi_araddr <= pc;
+												axi_rready <= 1'b1;
                     end
+
                     if (M_AXI_RVALID) begin
 												state <= SRAM_DONE; 
                         axi_rready <= 1'b0;
