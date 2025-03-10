@@ -120,7 +120,7 @@ always @(posedge clk or posedge rst) begin
 				end
 				READ: begin
 					//axi_arvalid <= 1'b1;
-			/***DELAY_TEST_AR*AWVALID***/
+/***DELAY_TEST_AR*AWVALID***/
 		      if(delay_counter == 0) begin
 	          delay_counter <= delay_counter;
           end
@@ -131,14 +131,15 @@ always @(posedge clk or posedge rst) begin
           else begin
             delay_counter <= delay_counter - 1;
           end
-			/***END***/
-
-          if(M_AXI_ARREADY) begin
+/***END***/
+          if(M_AXI_ARVALID && M_AXI_ARREADY) begin
 						axi_arvalid <= 1'b0;
-            axi_rready <= 1'b1;//加判断条件
 						axi_araddr <= raddr;
           end
-	        if(M_AXI_RVALID) begin
+					if(M_AXI_RVALID && !M_AXI_RREADY) begin
+						axi_rready <= 1'b1;
+					end
+	        if(M_AXI_RVALID && M_AXI_RREADY) begin
             axi_rready <= 0;
             state <= DONE;
 						LSU_DONE <= 1'b1;
