@@ -215,17 +215,26 @@ always @(posedge clk) begin
                         axi_arvalid <= 1'b0;
 												axi_araddr <= pc;
 												//axi_rready <= 1'b1;
+										end
 										/***DELAY_TEST_RAND***M_AXI_RRDEADY***/
-												if(delay_counter == 0) begin
-													delay_counter <= rand_delay;
-												end
-												else if(delay_counter == 1) begin
-													axi_rready <= 1;
-													delay_counter <= 0;
-												end
-												else begin
-													delay_counter <= delay_counter - 1;
-												end
+										if (M_AXI_ARVALID && M_AXI_ARREADY) begin
+											if(delay_counter == 0) begin
+												delay_counter <= rand_delay;
+											end
+										end
+										else begin
+                      if(delay_counter == 0) begin
+                        delay_counter <= delay_counter;
+                      end
+                      else if(delay_counter == 1) begin
+                        state <= SRAM_FETCH;
+                        axi_rready <= 1;
+                        delay_counter <= 0;
+                      end
+                      else begin
+                        delay_counter <= delay_counter - 1;
+                      end
+                    end
 										/***END***/
                     end
                     if (M_AXI_RVALID && M_AXI_RREADY) begin
