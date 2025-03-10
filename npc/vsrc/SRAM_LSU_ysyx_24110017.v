@@ -146,7 +146,7 @@ always @(*) begin
   end
 end
 always @(*) begin
-  if(S_AXI_WVALID && S_AXI_WREADY) begin // 有写请求时
+  if(S_AXI_BVALID && S_AXI_BREADY) begin // 有写请求时
     pmem_write(S_AXI_AWADDR,S_AXI_WDATA,S_AXI_WSTRB);
   end
 end
