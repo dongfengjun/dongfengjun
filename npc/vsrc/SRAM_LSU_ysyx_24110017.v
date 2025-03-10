@@ -129,7 +129,7 @@ always @(posedge clk) begin
 		end
 		if(S_AXI_BVALID && S_AXI_BREADY) begin
 			axi_bvalid <= 0;
-			axi_bresp <= 2'b11;
+			axi_bresp <= 2'b00;
 			s_wen <= 0;
 		end
 	end

@@ -187,9 +187,25 @@ always @(posedge clk or posedge rst) begin
 						axi_wvalid <= 0;
 						axi_wdata <= wdata;//加判断条件
 						axi_wstrb <= wmask;
-						axi_bready <= 1;
 					end
-					if(M_AXI_BVALID) begin
+					//if(M_AXI_BVALID && !M_AXI_BREADY) begin
+						//axi_bready <= 1;
+					//end
+/***DELAY_TEST_RAND*BREADY***/
+					if(M_AXI_BVALID && !M_AXI_BREADY) begin
+			      if(delay_counter == 0) begin
+			        delay_counter <= rand_delay;
+			      end
+						else if(delay_counter == 1) begin
+							axi_wready <= 1;
+							delay_counter <= 0;
+						end
+						else begin
+							delay_counter <= delay_counter - 1;
+						end
+					end
+/***END***/
+					if(M_AXI_BVALID && M_AXI_BREADY) begin
 						axi_bready <= 0;
 						state <= DONE;
 						LSU_DONE <= 1'b1;
