@@ -56,11 +56,12 @@ always @(posedge clk) begin
         if (rst) begin
             axi_arready <= 0;
             axi_rvalid <= 0;
+						delay_test <= 6'b0;
         end else begin
-						/***Delay-Test***/
             //if (S_AXI_ARVALID && !S_AXI_ARREADY) begin
                //axi_arready <= 1;
             //end
+						/***DELAY_TEST***/
 						if(S_AXI_ARVALID && !S_AXI_ARREADY)
 							delay_test[0] <= 1;
 						if(delay_test[0] <= 1) delay_test[1] <= 1;
