@@ -88,7 +88,7 @@ always @(posedge clk) begin
 		//if(S_AXI_AWVALID && !S_AXI_AWREADY) begin
 			//axi_awready <= 1;//判断条件
 		//end
-/***DELAY_TEST_RAND***/
+/***DELAY_TEST_RAND*AWREADY***/
     if(S_AXI_AWVALID && !S_AXI_AWREADY) begin
       if(delay_counter == 0) begin
         delay_counter <= rand_delay;
@@ -105,9 +105,23 @@ always @(posedge clk) begin
 		if(S_AXI_AWVALID && S_AXI_AWREADY) begin
 			axi_awready <= 0;
 		end
-		if(S_AXI_WVALID && !S_AXI_WREADY) begin
-			axi_wready <= 1;
+		//if(S_AXI_WVALID && !S_AXI_WREADY) begin
+			//axi_wready <= 1;
+		//end
+/***DELAY_TEST_RAND*AWREADY***/
+    if(S_AXI_WVALID && !S_AXI_WREADY) begin
+      if(delay_counter == 0) begin
+        delay_counter <= rand_delay;
+      end
+      else if(delay_counter == 1) begin
+        axi_wready <= 1;
+        delay_counter <= 0;
+      end
+      else begin
+        delay_counter <= delay_counter - 1;
+      end
 		end
+/***END***/
 		if(S_AXI_WVALID && S_AXI_WREADY) begin
 			axi_wready <= 0;
 			axi_bvalid <= 1;
