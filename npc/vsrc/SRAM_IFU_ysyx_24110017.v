@@ -62,7 +62,6 @@ always @(posedge clk) begin
 				    delay_counter <= 8'b0; //delay_test_rand
 				    current_delay <= 8'b0; 
             axi_rvalid <= 0;
-						delay_test <= 6'b0;
         end else begin
             //if (S_AXI_ARVALID && !S_AXI_ARREADY) begin
               //axi_arready <= 1;
