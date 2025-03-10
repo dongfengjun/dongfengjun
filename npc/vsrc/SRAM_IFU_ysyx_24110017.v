@@ -55,6 +55,7 @@ wire [7:0]rand_delay;
 reg [7:0]delay_counter;
 reg [7:0]current_delay;
 lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
+/***END***/
 
 always @(posedge clk) begin
         if (rst) begin
