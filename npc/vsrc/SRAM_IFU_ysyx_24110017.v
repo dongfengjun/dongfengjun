@@ -62,14 +62,25 @@ always @(posedge clk) begin
               //axi_arready <= 1;
             //end
 						/***DELAY_TEST***/
-						if(S_AXI_ARVALID && !S_AXI_ARREADY)
+						if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
 							delay_test[0] <= 1;
-						if(delay_test[0] <= 1) delay_test[1] <= 1;
-						if(delay_test[1] <= 1) delay_test[2] <= 1;
-						if(delay_test[2] <= 1) delay_test[3] <= 1;
-						if(delay_test[3] <= 1) delay_test[4] <= 1;
-						if(delay_test[4] <= 1) delay_test[5] <= 1;
-						if(delay_test[5] <= 1) begin
+						end
+						if(delay_test[0] == 1) begin
+							delay_test[1] <= 1;
+						end
+						if(delay_test[1] == 1) begin
+							delay_test[2] <= 1;
+						end
+						if(delay_test[2] == 1) begin
+							delay_test[3] <= 1;
+						end
+						if(delay_test[3] == 1) begin
+							delay_test[4] <= 1;
+						end
+						if(delay_test[4] == 1) begin
+							delay_test[5] <= 1;
+						end
+						if(delay_test[5] == 1) begin
 							axi_arready <= 1;
 							delay_test[5:0] <= 6'b0;
 						end
