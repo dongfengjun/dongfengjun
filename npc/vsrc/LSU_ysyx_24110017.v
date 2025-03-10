@@ -112,11 +112,11 @@ always @(posedge clk or posedge rst) begin
 					if(sram_lsu_write) begin
 		        state <= WRITE;
 	        end
-			/***DELAY_TEST_AR*AWVALID***/
+/***DELAY_TEST_AR*AWVALID***/
 					if(sram_lsu_read || sram_lsu_write) begin
 						delay_counter <= rand_delay;
 					end
-			/***END***/
+/***END***/
 				end
 				READ: begin
 					//axi_arvalid <= 1'b1;
@@ -147,7 +147,7 @@ always @(posedge clk or posedge rst) begin
         end
 				WRITE: begin
 					//axi_awvalid <= 1'b1;
-		/***DELAY_TEST_AR*AWVALID***/
+/***DELAY_TEST_AR*AWVALID***/
           if(delay_counter == 0) begin
             delay_counter <= delay_counter;
           end
@@ -158,13 +158,29 @@ always @(posedge clk or posedge rst) begin
           else begin
             delay_counter <= delay_counter - 1;
           end
-      /***END***/
-					if(M_AXI_AWREADY) begin
+/***END***/
+					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
 						axi_awvalid <= 0;
-						axi_wvalid <= 1;
+						//axi_wvalid <= 1;
 						axi_awaddr <= waddr;
 					end
-					if(M_AXI_WREADY) begin
+/***DELAY_TEST_WVALID***/
+					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
+            delay_counter <= rand_delay;
+          end
+					else begin
+						if(delay_counter == 0) begin
+              delay_counter <= delay_counter;
+            end
+          else if(delay_counter == 1) begin
+            axi_wvalid <= 1;
+            delay_counter <= 0;
+          end
+          else begin
+            delay_counter <= delay_counter - 1;
+          end
+/***END***/
+					if(M_AXI_WVALID && M_AXI_WREADY) begin
 						axi_wvalid <= 0;
 						axi_wdata <= wdata;//加判断条件
 						axi_wstrb <= wmask;
