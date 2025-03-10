@@ -110,7 +110,6 @@ always @(posedge clk or posedge rst) begin
             state <= READ;
 					end
 					if(sram_lsu_write) begin
-						axi_awvalid <= 1'b1;
 		        state <= WRITE;
 	        end
 				end
@@ -128,6 +127,7 @@ always @(posedge clk or posedge rst) begin
           end
         end
 				WRITE: begin
+					axi_awvalid <= 1'b1;
 					if(M_AXI_AWREADY) begin
 						axi_awvalid <= 0;
 						axi_wvalid <= 1;
