@@ -197,7 +197,7 @@ always @(posedge clk or posedge rst) begin
 			        delay_counter <= rand_delay;
 			      end
 						else if(delay_counter == 1) begin
-							axi_wready <= 1;
+							axi_bready <= 1;
 							delay_counter <= 0;
 						end
 						else begin
