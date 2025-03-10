@@ -66,8 +66,6 @@ wire [7:0]rand_delay;
 reg [7:0]delay_counter;
 lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
 /***END***/
-reg [31:0]axi_awaddr_reg,axi_wdata_reg;
-reg [7:0]axi_wstrb_reg;
 wire [31:0] M_AXI_AWADDR,M_AXI_WDATA,M_AXI_ARADDR,M_AXI_RDATA;
 wire [7:0] M_AXI_WSTRB;
 wire [1:0] M_AXI_BRESP,M_AXI_RRESP;
@@ -114,9 +112,6 @@ always @(posedge clk or posedge rst) begin
 					if(sram_lsu_write) begin
 						axi_awvalid <= 1'b1;
 		        state <= WRITE;
-						axi_awaddr_reg <= waddr;
-						axi_wdata_reg <= wdata;
-						axi_wstrb_reg <= wmask;
 	        end
 				end
 				READ: begin
@@ -136,12 +131,12 @@ always @(posedge clk or posedge rst) begin
 					if(M_AXI_AWREADY) begin
 						axi_awvalid <= 0;
 						axi_wvalid <= 1;
-						axi_awaddr <= axi_awaddr_reg;
+						axi_awaddr <= waddr;
 					end
 					if(M_AXI_WREADY) begin
 						axi_wvalid <= 0;
-						axi_wdata <= axi_wdata_reg;//加判断条件
-						axi_wstrb <= axi_wstrb_reg;
+						axi_wdata <= wdata;//加判断条件
+						axi_wstrb <= wstrb;
 						axi_bready <= 1;
 					end
 					if(M_AXI_BVALID) begin
