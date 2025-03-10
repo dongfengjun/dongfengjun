@@ -65,7 +65,7 @@ always @(posedge clk) begin
             //if (S_AXI_ARVALID && !S_AXI_ARREADY) begin
               //axi_arready <= 1;
             //end
-						/***DELAY_TEST_RAND***/
+						/***DELAY_TEST_RAND_S_ARREADY***/
 						if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
 				      if(delay_counter == 0) begin
 								delay_counter <= rand_delay;
