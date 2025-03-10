@@ -41,8 +41,17 @@ assign S_AXI_BVALID = axi_bvalid;
 assign S_AXI_RDATA = axi_rdata;
 
 reg s_wen;
+
+/***DELAY_TEST_RAND***/
+wire [7:0]rand_delay;
+reg [7:0]delay_counter;
+reg [7:0]current_delay;
+lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
+
 always @(posedge clk) begin
   if(rst) begin
+		delay_counter <= 8'b0; //delay_test_rand
+    current_delay <= 8'b0;
 	  axi_arready <= 0;
     axi_rvalid <= 0;
 		axi_awready <= 0;
@@ -52,21 +61,51 @@ always @(posedge clk) begin
 		s_wen <= 0;
   end 
 	else begin
-	  if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
-			axi_arready <= 1;//判断条件
-    end
-    if(S_AXI_ARVALID && S_AXI_ARREADY) begin
-      axi_rvalid <= 1;//判断条件
-      axi_arready <= 0;
-      axi_rresp  <= 2'b11;
-    end
-    if(S_AXI_RREADY) begin
-      axi_rvalid <= 0;
-      axi_rdata <= s_rdata;
-    end
-		if(S_AXI_AWVALID && !S_AXI_AWREADY) begin
-			axi_awready <= 1;//判断条件
+	  //if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
+			//axi_arready <= 1;//判断条件
+    //end
+/***DELAY_TEST_RAND***/
+    if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
+      if(delay_counter == 0) begin
+        current_delay <= rand_delay;
+        delay_counter <= current_delay;
+      end
+			else if(delay_counter == 1) begin
+				axi_arready <= 1;
+				delay_counter <= 0;
+			end
+			else begin
+				delay_counter <= delay_counter - 1;
+			end
 		end
+/***END***/
+		if(S_AXI_ARVALID && S_AXI_ARREADY) begin
+			axi_rvalid <= 1;//判断条件
+			axi_arready <= 0;
+			axi_rresp  <= 2'b11;
+		end
+		if(S_AXI_RREADY) begin
+			axi_rvalid <= 0;
+			axi_rdata <= s_rdata;
+		end
+		//if(S_AXI_AWVALID && !S_AXI_AWREADY) begin
+			//axi_awready <= 1;//判断条件
+		//end
+/***DELAY_TEST_RAND***/
+    if(S_AXI_AWVALID && !S_AXI_AWREADY) begin
+      if(delay_counter == 0) begin
+	      current_delay <= rand_delay;
+        delay_counter <= current_delay;
+      end
+      else if(delay_counter == 1) begin
+        axi_awready <= 1;
+        delay_counter <= 0;
+      end
+      else begin
+        delay_counter <= delay_counter - 1;
+      end
+    end
+/***END***/
 		if(S_AXI_AWVALID && S_AXI_AWREADY) begin
 			axi_awready <= 0;
 			axi_wready <= 1;
@@ -81,7 +120,7 @@ always @(posedge clk) begin
 			axi_bresp <= 2'b11;
 			s_wen <= 0;
 		end
-  end
+	end
 end
 
 import "DPI-C" function int pmem_read(input int raddr);
