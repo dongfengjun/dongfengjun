@@ -195,8 +195,10 @@ always @(posedge clk) begin
                     //end
 								/***DELAY_TEST_RAND***M_AXI_ARVALID***/
 										if(sram_start) begin
-				              if(delay_counter == 0) begin
 								        current_delay <= rand_delay;
+										end
+										else begin
+											if(delay_counter == 0) begin
 												delay_counter <= current_delay;
 											end
 											else if(delay_counter == 1) begin
