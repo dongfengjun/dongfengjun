@@ -58,10 +58,10 @@ always @(posedge clk) begin
             axi_rvalid <= 0;
 						delay_test <= 6'b0;
         end else begin
-            if (S_AXI_ARVALID && !S_AXI_ARREADY) begin
-               axi_arready <= 1;
-            end
-						/***DELAY_TEST***
+            //if (S_AXI_ARVALID && !S_AXI_ARREADY) begin
+              //axi_arready <= 1;
+            //end
+						/***DELAY_TEST***/
 						if(S_AXI_ARVALID && !S_AXI_ARREADY)
 							delay_test[0] <= 1;
 						if(delay_test[0] <= 1) delay_test[1] <= 1;
@@ -73,7 +73,7 @@ always @(posedge clk) begin
 							axi_arready <= 1;
 							delay_test[5:0] <= 6'b0;
 						end
-						***END***/
+						/***END***/
 
             if (axi_arready & S_AXI_ARVALID) begin
                 axi_rvalid <= 1;//判断条件
