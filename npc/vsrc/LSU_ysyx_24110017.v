@@ -169,7 +169,7 @@ always @(posedge clk or posedge rst) begin
             avalid_delay_counter <= avalid_delay_counter;
           end
           else if(avalid_delay_counter == 1) begin
-            avalid_axi_awvalid <= 1;
+            axi_awvalid <= 1;
             avalid_delay_counter <= 0;
           end
           else begin
