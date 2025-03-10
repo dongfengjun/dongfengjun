@@ -104,6 +104,8 @@ always @(posedge clk) begin
 /***END***/
 		if(S_AXI_AWVALID && S_AXI_AWREADY) begin
 			axi_awready <= 0;
+		end
+		if(S_AXI_WVALID && !S_AXI_WREADY) begin
 			axi_wready <= 1;
 		end
 		if(S_AXI_WVALID && S_AXI_WREADY) begin
