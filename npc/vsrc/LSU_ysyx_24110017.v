@@ -171,7 +171,7 @@ always @(posedge clk or posedge rst) begin
             delay_counter_2 <= rand_delay;
           end
 					else begin
-						if(delay_counter == 0) begin
+						if(delay_counter_2 == 0) begin
               delay_counter_2 <= delay_counter_2;
             end
 						else if(delay_counter_2 == 1) begin
