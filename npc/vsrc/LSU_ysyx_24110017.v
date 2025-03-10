@@ -63,7 +63,7 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 /***多周期***/
 /***DELAY_TEST_RAND***/
 wire [7:0]rand_delay;
-reg [7:0]delay_counter,delay_counter_2;
+reg [7:0]delay_counter,avalid_delay_counter,wvalid_delay_counter;
 lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
 /***END***/
 wire [31:0] M_AXI_AWADDR,M_AXI_WDATA,M_AXI_ARADDR,M_AXI_RDATA;
@@ -103,7 +103,8 @@ always @(posedge clk or posedge rst) begin
       axi_bready <= 0;
 			LSU_DONE <= 0;
 			delay_counter <= 0;
-			delay_counter_2 <= 0;
+			avalid_delay_counter <= 0;
+			wvalid_delay_counter <= 0;
     end 
 		else begin
       case (state)
@@ -116,31 +117,45 @@ always @(posedge clk or posedge rst) begin
 	        end
 /***DELAY_TEST_AR*AWVALID***/
 					if(sram_lsu_read || sram_lsu_write) begin
-						delay_counter <= rand_delay;
+						avalid_delay_counter <= rand_delay;
 					end
 /***END***/
 				end
 				READ: begin
 					//axi_arvalid <= 1'b1;
-/***DELAY_TEST_AR*AWVALID***/
-		      if(delay_counter == 0) begin
-	          delay_counter <= delay_counter;
+/***DELAY_TEST_AR*ARVALID***/
+		      if(avalid_delay_counter == 0) begin
+	          avalid_delay_counter <= avalid_delay_counter;
           end
-          else if(delay_counter == 1) begin
+          else if(avalid_delay_counter == 1) begin
             axi_arvalid <= 1;
-            delay_counter <= 0;
+            avalid_delay_counter <= 0;
           end
           else begin
-            delay_counter <= delay_counter - 1;
+            avalid_delay_counter <= avalid_delay_counter - 1;
           end
 /***END***/
           if(M_AXI_ARVALID && M_AXI_ARREADY) begin
 						axi_arvalid <= 1'b0;
 						axi_araddr <= raddr;
           end
-					if(M_AXI_RVALID && !M_AXI_RREADY) begin
-						axi_rready <= 1'b1;
-					end
+					//if(M_AXI_RVALID && !M_AXI_RREADY) begin
+						//axi_rready <= 1'b1;
+					//end
+/***DELAY_TEST_RAND*RREADY***/
+          if(M_AXI_RVALID && !M_AXI_RREADY) begin
+            if(delay_counter == 0) begin
+              delay_counter <= rand_delay;
+            end
+            else if(delay_counter == 1) begin
+              axi_rready <= 1;
+              delay_counter <= 0;
+            end
+            else begin
+              delay_counter <= delay_counter - 1;
+            end
+          end
+/***END***/
 	        if(M_AXI_RVALID && M_AXI_RREADY) begin
             axi_rready <= 0;
             state <= DONE;
@@ -150,15 +165,15 @@ always @(posedge clk or posedge rst) begin
 				WRITE: begin
 					//axi_awvalid <= 1'b1;
 /***DELAY_TEST_AR*AWVALID***/
-          if(delay_counter == 0) begin
-            delay_counter <= delay_counter;
+          if(avalid_delay_counter == 0) begin
+            avalid_delay_counter <= avalid_delay_counter;
           end
-          else if(delay_counter == 1) begin
-            axi_awvalid <= 1;
-            delay_counter <= 0;
+          else if(avalid_delay_counter == 1) begin
+            avalid_axi_awvalid <= 1;
+            avalid_delay_counter <= 0;
           end
           else begin
-            delay_counter <= delay_counter - 1;
+            avalid_delay_counter <= avalid_delay_counter - 1;
           end
 /***END***/
 					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
@@ -168,18 +183,18 @@ always @(posedge clk or posedge rst) begin
 					end
 /***DELAY_TEST_WVALID***/
 					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
-            delay_counter_2 <= rand_delay;
+            wvalid_delay_counter <= rand_delay;
           end
 					else begin
-						if(delay_counter_2 == 0) begin
-              delay_counter_2 <= delay_counter_2;
+						if(wvalid_delay_counter == 0) begin
+              wvalid_delay_counter <= wvalid_delay_counter;
             end
-						else if(delay_counter_2 == 1) begin
+						else if(wvalid_delay_counter == 1) begin
 							axi_wvalid <= 1;
-							delay_counter_2 <= 0;
+							wvalid_delay_counter <= 0;
 						end
 						else begin
-							delay_counter_2 <= delay_counter_2 - 1;
+							wvalid_delay_counter <= wvalid_delay_counter - 1;
 						end
 					end
 /***END***/
