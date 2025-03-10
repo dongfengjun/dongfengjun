@@ -50,14 +50,25 @@ assign S_AXI_RVALID = axi_rvalid;
 assign S_AXI_RDATA = axi_rdata;
 assign S_AXI_RRESP = axi_rresp;
 
+reg [5]delay_test;
+
 always @(posedge clk) begin
         if (rst) begin
             axi_arready <= 0;
             axi_rvalid <= 0;
         end else begin
-            if (S_AXI_ARVALID && !S_AXI_ARREADY) begin
-                axi_arready <= 1;
-            end
+						/***Delay-Test***/
+            //if (S_AXI_ARVALID && !S_AXI_ARREADY) begin
+               //axi_arready <= 1;
+            //end
+						if(S_AXI_ARVALID && !S_AXI_ARREADY)
+							delay_test[0] <= 1;
+						if(delay_test[0] <= 1) delay_test[1] <= 1;
+						if(delay_test[1] <= 1) delay_test[2] <= 1;
+						if(delay_test[2] <= 1) delay_test[3] <= 1;
+						if(delay_test[3] <= 1) delay_test[4] <= 1;
+						if(delay_test[4] <= 1) delay_test[5] <= 1;
+						if(delay_test[5] <= 1) axi_arready <= 1;
             if (axi_arready & S_AXI_ARVALID) begin
                 axi_rvalid <= 1;//判断条件
                 axi_arready <= 0;
