@@ -50,7 +50,7 @@ assign S_AXI_RVALID = axi_rvalid;
 assign S_AXI_RDATA = axi_rdata;
 assign S_AXI_RRESP = axi_rresp;
 
-reg [5]delay_test;
+reg [5:0]delay_test;
 
 always @(posedge clk) begin
         if (rst) begin
