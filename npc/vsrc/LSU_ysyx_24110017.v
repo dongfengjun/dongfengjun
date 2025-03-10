@@ -125,7 +125,6 @@ always @(posedge clk or posedge rst) begin
 	          delay_counter <= delay_counter;
           end
           else if(delay_counter == 1) begin
-            state <= SRAM_FETCH;
             axi_arvalid <= 1;
             delay_counter <= 0;
           end
@@ -152,7 +151,6 @@ always @(posedge clk or posedge rst) begin
             delay_counter <= delay_counter;
           end
           else if(delay_counter == 1) begin
-            state <= SRAM_FETCH;
             axi_awvalid <= 1;
             delay_counter <= 0;
           end
