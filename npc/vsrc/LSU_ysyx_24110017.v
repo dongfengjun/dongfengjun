@@ -61,6 +61,11 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 ***E*N*D***/
 
 /***多周期***/
+/***DELAY_TEST_RAND***/
+wire [7:0]rand_delay;
+reg [7:0]delay_counter;
+lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
+/***END***/
 reg [31:0]axi_awaddr_reg,axi_wdata_reg;
 reg [7:0]axi_wstrb_reg;
 wire [31:0] M_AXI_AWADDR,M_AXI_WDATA,M_AXI_ARADDR,M_AXI_RDATA;
@@ -104,7 +109,6 @@ always @(posedge clk or posedge rst) begin
       case (state)
         IDLE: begin
 				  if(sram_lsu_read) begin
-            axi_arvalid <= 1'b1;
             state <= READ;
 					end
 					if(sram_lsu_write) begin
@@ -116,9 +120,10 @@ always @(posedge clk or posedge rst) begin
 	        end
 				end
 				READ: begin
+					axi_arvalid <= 1'b1;
           if(M_AXI_ARREADY) begin
-						axi_arvalid <= 0;
-            axi_rready <= 1;//加判断条件
+						axi_arvalid <= 1'b0;
+            axi_rready <= 1'b1;//加判断条件
 						axi_araddr <= raddr;
           end
 	        if(M_AXI_RVALID) begin
