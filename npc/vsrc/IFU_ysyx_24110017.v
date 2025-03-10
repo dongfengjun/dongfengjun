@@ -170,7 +170,6 @@ reg sram_ifu_done;
 /***DELAY_TEST_RAND***/
 wire [7:0]rand_delay;
 reg [7:0]delay_counter;
-reg [7:0]current_delay;
 lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
 /***END***/
 
@@ -183,7 +182,6 @@ always @(posedge clk) begin
 						sram_ifu_done <= 1'b0;
 
 						delay_counter <= 8'b0; //delay_test_rand
-            current_delay <= 8'b0; 
         end 
 				else begin
             case (state)
@@ -195,11 +193,11 @@ always @(posedge clk) begin
                     //end
 								/***DELAY_TEST_RAND***M_AXI_ARVALID***/
 										if(sram_start) begin
-								        current_delay <= rand_delay;
+								        delay_counter <= rand_delay;
 										end
 										else begin
 											if(delay_counter == 0) begin
-												delay_counter <= current_delay;
+												delay_counter <= delay_counter;
 											end
 											else if(delay_counter == 1) begin
 												state <= SRAM_FETCH;
