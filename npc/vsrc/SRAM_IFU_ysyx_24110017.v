@@ -70,7 +70,7 @@ always @(posedge clk) begin
 						if(delay_test[4] <= 1) delay_test[5] <= 1;
 						if(delay_test[5] <= 1) begin
 							axi_arready <= 1;
-							delay_test[5:0] <= 5'b0;
+							delay_test[5:0] <= 6'b0;
 						end
 
             if (axi_arready & S_AXI_ARVALID) begin
