@@ -1,11 +1,12 @@
 module WBU_ysyx_24110017(clk,rst,
 			EXU_VALID,WBU_READY,wbu_done,difftest,
-			xrd_reg,res,ls_rdata,
-			lb_w,lh_w,lw_w,lbu_w,lhu_w,
-			rd_reg,rd,l_rd,
-			wen_reg,gpr_wen,l_wen,
+			xrd_reg,res,
+			rd_reg,rd,
+			wen_reg,gpr_wen,
 			o_mepc,o_mstatus,o_mcause,o_mtvec,
-			w_mepc,w_mstatus,w_mcause,w_mtvec
+			w_mepc_reg,w_mstatus_reg,w_mcause_reg,w_mtvec_reg,
+			mepc_wen,mstatus_wen,mcause_wen,mtvec_wen,
+			mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg
 );
 input clk;
 input rst;
@@ -14,14 +15,15 @@ output WBU_READY;
 output wbu_done;
 output difftest;
 output [31:0]xrd_reg;
-input [31:0]res,ls_rdata;
-input lb_w,lh_w,lw_w,lbu_w,lhu_w;
+input [31:0]res;
 output [4:0]rd_reg;
-input [4:0]rd,l_rd;
+input [4:0]rd;
 output wen_reg;
-input gpr_wen,l_wen;
+input gpr_wen;
 input [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
-output [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
+output [31:0]w_mepc_reg,w_mstatus_reg,w_mcause_reg,w_mtvec_reg;
+input mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
+output mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg;
 
 
 wire [31:0]xrd;
@@ -29,14 +31,9 @@ wire [4:0]o_rf_raddr;
 wire o_rf_wen;
 wire [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
 
-assign xrd = res |
-	({32{lb_w}} & {{24{ls_rdata[7]}},(ls_rdata[7:0])}) | //I_lb
-	({32{lh_w}} & {{16{ls_rdata[15]}},(ls_rdata[15:0])}) | //I_lh
-	({32{lw_w}} & (ls_rdata)) | //I_lw
-	({32{lbu_w}} & {24'b0,(ls_rdata[7:0])}) | //I_lbu
-	({32{lhu_w}} & {16'b0,(ls_rdata[15:0])}); //I_lhu
-assign o_rf_raddr = (rd | l_rd);
-assign o_rf_wen = gpr_wen || l_wen;
+assign xrd = res;
+assign o_rf_raddr = rd;
+assign o_rf_wen = gpr_wen;
 
 assign w_mepc = o_mepc;
 assign w_mstatus = o_mstatus;
@@ -51,6 +48,8 @@ reg difftest;
 reg [31:0]xrd_reg;
 reg [4:0]rd_reg;
 reg wen_reg;
+reg [31:0]w_mepc_reg,w_mstatus_reg,w_mcause_reg,w_mtvec_reg;
+reg mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg;
 
 parameter IDLE = 2'b00,WRITE = 2'b01,DIFF = 2'b10,NULL = 2'b11;
 reg [1:0]state,next_state;
@@ -95,6 +94,16 @@ always @(posedge clk) begin
 		xrd_reg <= 32'h0;
 		rd_reg <= 5'b0;
 		wen_reg <= 1'b0;
+		
+		w_mepc_reg <= 32'h0;
+		w_mstatus_reg <= 32'h0;
+		w_mcause_reg <= 32'h0;
+		w_mtvec_reg <= 32'h0;
+		mepc_wen_reg <= 1'b0;
+		mstatus_wen_reg <= 1'b0;
+		mcause_wen_reg <= 1'b0;
+		mtvec_wen_reg <= 1'b0;
+		
 		wbu_done <= 1'b0;
 		difftest <= 1'b0;
 	end
@@ -113,7 +122,17 @@ always @(posedge clk) begin
 	      xrd_reg <= xrd;
         rd_reg <= o_rf_raddr;
         wen_reg <= o_rf_wen;
-        wbu_done <= 1'b1;
+
+				w_mepc_reg <= w_mepc;
+				w_mstatus_reg <= w_mstatus;
+				w_mcause_reg <= w_mcause;
+				w_mtvec_reg <= w_mtvec;
+				mepc_wen_reg <= mepc_wen;
+	      mstatus_wen_reg <= mstatus_wen;
+				mcause_wen_reg <= mcause_wen;
+		    mtvec_wen_reg <= mtvec_wen;
+        
+				wbu_done <= 1'b1;
 			end
 			DIFF: begin
 				wbu_done <= 1'b0;

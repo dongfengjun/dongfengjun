@@ -1,16 +1,18 @@
-module EXU_ysyx_24110017(clk,rst,
+module EXU_ysyx_24110017(clk,rst,sram_lsu_read,sram_lsu_write,LSU_DONE,
 			IDU_VALID,EXU_READY,EXU_VALID,WBU_READY,
 			op,funct3,imm,funct7,shamt,r1,r2, //i_IDU
 			res_reg, //o_WBU
 			ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask, //o_LSU
-			lbdone,lhdone,lwdone,lbudone,lhudone,
+			ls_rdata, //i_LSU
 			pc,dnpc,	//PCU
 			mepc,mstatus,mcause,mtvec, //i_csr
-			o_mepc,o_mstatus,o_mcause,o_mtvec, //o_csr
-			gpr_wen_reg,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen	//reg_wen
+			o_mepc_reg,o_mstatus_reg,o_mcause_reg,o_mtvec_reg, //o_csr
+			gpr_wen_reg,mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg
 );
 input clk;
 input rst;
+output sram_lsu_read,sram_lsu_write;
+input LSU_DONE;
 input IDU_VALID;
 output EXU_READY;
 output EXU_VALID;
@@ -26,14 +28,14 @@ output [31:0]res_reg;
 output ls_valid,ls_wen;
 output [31:0]ls_waddr,ls_wdata,ls_raddr;
 output [7:0]ls_wmask;
-output lbdone,lhdone,lwdone,lbudone,lhudone;
+input [31:0]ls_rdata;
 
 input [31:0]pc;
 output [31:0]dnpc;
 
 input [31:0]mepc,mstatus,mcause,mtvec;
-output [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
-output gpr_wen_reg,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
+output [31:0]o_mepc_reg,o_mstatus_reg,o_mcause_reg,o_mtvec_reg;
+output gpr_wen_reg,mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg;
 
 /***分布式控制***/
 wire IDU_VALID,EXU_READY = exu_ready;
@@ -41,11 +43,14 @@ reg exu_ready;
 wire EXU_VALID = exu_valid,WBU_READY;
 reg exu_valid;
 
+reg sram_lsu_read,sram_lsu_write;
 reg [31:0]res_reg;
 reg gpr_wen_reg;
+reg [31:0]o_mepc_reg,o_mstatus_reg,o_mcause_reg,o_mtvec_reg;
+reg mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg;
 
-parameter IDLE = 1'b0,WAIT_READY = 1'b1;
-reg state,next_state;
+parameter IDLE = 2'b00,WAIT_SRAM = 2'b01,WAIT_READY = 2'b10,DONE_EXU=2'b11;
+reg [1:0]state,next_state;
 
 always @(posedge clk) begin
   if (rst) begin
@@ -65,13 +70,24 @@ always @(*) begin
 		case (state)
 			IDLE: begin
 				if(IDU_VALID && EXU_READY) begin
+					next_state = WAIT_SRAM;
+				end
+			end
+			WAIT_SRAM: begin
+				if((!ls_valid)) begin
+					next_state = WAIT_READY;
+				end
+				if(LSU_DONE) begin
 					next_state = WAIT_READY;
 				end
 			end
 			WAIT_READY: begin
 				if(EXU_VALID && WBU_READY) begin
-					next_state = IDLE;
+					next_state = DONE_EXU;
 				end
+			end
+			DONE_EXU: begin
+				next_state = IDLE;
 			end
 			default: begin
 				next_state = IDLE; // 默认回到初始状态
@@ -86,6 +102,16 @@ always @(posedge clk) begin
 		exu_ready <= 1'b0;
 		res_reg <= 32'h80000000;
 		gpr_wen_reg <= 1'b0;
+		o_mepc_reg <= 32'h0;
+    o_mstatus_reg <= 32'h0;
+    o_mcause_reg <= 32'h0;
+    o_mtvec_reg <= 32'h0;
+    mepc_wen_reg <= 1'b0;
+    mstatus_wen_reg <= 1'b0;
+    mcause_wen_reg <= 1'b0;
+    mtvec_wen_reg <= 1'b0;
+		sram_lsu_read <= 1'b0;
+		sram_lsu_write <= 1'b0;
 	end
 	else begin
 		case (state)
@@ -95,21 +121,45 @@ always @(posedge clk) begin
 				end
 				if(IDU_VALID && EXU_READY) begin
 					exu_ready <= 1'b0;
-					exu_valid <= 1'b1;
+				end
+			end
+			WAIT_SRAM: begin
+				if(ls_valid && (!ls_wen)) begin
+					res_reg <= 32'h0;
+					sram_lsu_read <= 1'b1;
+				end
+				if(ls_wen) begin
+					sram_lsu_write <= 1'b1;
+				end
+				if(LSU_DONE) begin
+					sram_lsu_read <= 1'b0;
+					sram_lsu_write <= 1'b0;
 				end
 			end
 			WAIT_READY: begin
+				exu_valid <= 1'b1;
 				if(EXU_VALID && WBU_READY) begin
 					exu_valid <= 1'b0;
 					res_reg <= res;
 					gpr_wen_reg <= gpr_wen;
+
+					o_mepc_reg <= o_mepc;
+					o_mstatus_reg <= o_mstatus;
+					o_mcause_reg <= o_mcause;
+					o_mtvec_reg <= o_mtvec;
+					mepc_wen_reg <= mepc_wen;
+					mstatus_wen_reg <= mstatus_wen;
+					mcause_wen_reg <= mcause_wen;
+					mtvec_wen_reg <= mtvec_wen;
 				end
+			end
+			DONE_EXU: begin
 			end
 		endcase
 	end
 end
 
-wire [31:0]a,b,res;
+wire [31:0]a,b,res,ls_rdata;
 assign b = (op == 7'b0110011 || op == 7'b0100011) ? r2 : imm;
 assign a = (op == 7'b0010011 || op == 7'b0000011 || op == 7'b0100011 || op == 7'b0110011/*R*/ || (op == 7'b1110011 && (funct3 == 3'b001 || funct3 == 3'b010 || funct3 == 3'b011))/*csr*/) ? r1 : pc;
 /***ALU I*addi~srai***/
@@ -163,6 +213,17 @@ assign res =
       ({32{(funct3 == 3'b111) && (funct7 == 7'b0000001)}}
           & (a % b)) //R_remui			
 																										))
+			| //I_lb~lhu
+      ({32{(op == 7'b0000011) && (funct3 == 3'b000)}}
+          & {{24{ls_rdata[7]}},ls_rdata[7:0]}) | //I_lb
+			({32{(op == 7'b0000011) && (funct3 == 3'b001)}}
+          & {{16{ls_rdata[15]}},ls_rdata[15:0]}) | //I_lh 
+			({32{(op == 7'b0000011) && (funct3 == 3'b010)}}
+          & ls_rdata) | //I_lw
+			({32{(op == 7'b0000011) && (funct3 == 3'b100)}}
+          & {{24{1'b0}},ls_rdata[7:0]}) | //I_lbu
+			({32{(op == 7'b0000011) && (funct3 == 3'b101)}}
+          & {{16{1'b0}},ls_rdata[15:0]}) //I_lhu
 /***I_csrrw~csrrc***/
 			|
 			({32{(op == 7'b1110011) && (funct3 == 3'b001)}}
@@ -183,6 +244,7 @@ assign res =
 
 /***csrrw~csrrc***/
 wire [31:0]csr,w_csrs;
+wire [31:0]o_mepc,o_mstatus,o_mcause,o_mtvec;
 assign csr = (op == 7'b1110011 && imm == 32'd833) ? mepc
  : (op == 7'b1110011 && imm == 32'd768) ? mstatus
  : (op == 7'b1110011 && imm == 32'd834) ? mcause
@@ -201,7 +263,7 @@ assign w_csrs =
       ({32{(op == 7'b1110011) && (funct3 == 3'b000)}}
           & (csr &~r1)) ; //I_csrrc
 
-/***load*store*LSU**/
+/***load*store*LSU***/
 wire ls_valid,ls_wen;
 wire [31:0]ls_waddr,ls_wdata,ls_raddr;
 wire [7:0]ls_wmask;
@@ -214,11 +276,6 @@ assign ls_wmask = (op == 7'b0100011 && funct3 == 3'b000) ? 8'b00000001
  : (op == 7'b0100011 && funct3 == 3'b010) ? 8'b00001111
  : 8'b0;
 assign ls_raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
-assign lbdone = (op == 7'b0000011) && (funct3 == 3'b000);           
-assign lhdone = (op == 7'b0000011) && (funct3 == 3'b001);
-assign lwdone = (op == 7'b0000011) && (funct3 == 3'b010);
-assign lbudone = (op == 7'b0000011) && (funct3 == 3'b100);
-assign lhudone = (op == 7'b0000011) && (funct3 == 3'b101);
 /***J_B_dnpc***/
 wire [31:0]pc;
 wire [31:0]dnpc;
@@ -249,7 +306,7 @@ assign dnpc = (jalen) ? (pc + offset)	//jal
 
 /***riscv32e_regs_controller***/
 wire gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
-assign gpr_wen = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 || op == 7'b1100111 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011 || op == 7'b0110011) ? 1'b1 : 1'b0;
+assign gpr_wen = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 || op == 7'b1100111 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011 || op == 7'b0110011 || op == 7'b0000011) ? 1'b1 : 1'b0;
 assign mepc_wen = ((op == 7'b1110011 && imm == 32'd833) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
 assign mstatus_wen = (op == 7'b1110011 && imm == 32'd768) ? 1'b1 : 1'b0;
 assign mcause_wen = (op == 7'b1110011 && imm == 32'd834 || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
