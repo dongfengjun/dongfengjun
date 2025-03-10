@@ -9,7 +9,7 @@ module lfsr_ysyx_24110017 (
 
     always @(posedge clk or posedge rst) begin
         if (rst) begin
-            rand_out <= 8'b00000010;
+            rand_out <= 8'b00000001;
         end else begin
             rand_out <= {rand_out[6:0], feedback};
         end
