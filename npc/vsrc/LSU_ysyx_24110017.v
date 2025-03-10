@@ -112,9 +112,28 @@ always @(posedge clk or posedge rst) begin
 					if(sram_lsu_write) begin
 		        state <= WRITE;
 	        end
+			/***DELAY_TEST_AR*AWVALID***/
+					if(sram_lsu_read || sram_lsu_write) begin
+						delay_counter <= rand_delay;
+					end
+			/***END***/
 				end
 				READ: begin
-					axi_arvalid <= 1'b1;
+					//axi_arvalid <= 1'b1;
+			/***DELAY_TEST_AR*AWVALID***/
+		      if(delay_counter == 0) begin
+	          delay_counter <= delay_counter;
+          end
+          else if(delay_counter == 1) begin
+            state <= SRAM_FETCH;
+            axi_arvalid <= 1;
+            delay_counter <= 0;
+          end
+          else begin
+            delay_counter <= delay_counter - 1;
+          end
+			/***END***/
+
           if(M_AXI_ARREADY) begin
 						axi_arvalid <= 1'b0;
             axi_rready <= 1'b1;//加判断条件
@@ -127,7 +146,20 @@ always @(posedge clk or posedge rst) begin
           end
         end
 				WRITE: begin
-					axi_awvalid <= 1'b1;
+					//axi_awvalid <= 1'b1;
+		/***DELAY_TEST_AR*AWVALID***/
+          if(delay_counter == 0) begin
+            delay_counter <= delay_counter;
+          end
+          else if(delay_counter == 1) begin
+            state <= SRAM_FETCH;
+            axi_awvalid <= 1;
+            delay_counter <= 0;
+          end
+          else begin
+            delay_counter <= delay_counter - 1;
+          end
+      /***END***/
 					if(M_AXI_AWREADY) begin
 						axi_awvalid <= 0;
 						axi_wvalid <= 1;
