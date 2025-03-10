@@ -50,7 +50,37 @@ assign S_AXI_RVALID = axi_rvalid;
 assign S_AXI_RDATA = axi_rdata;
 assign S_AXI_RRESP = axi_rresp;
 
+/***DELAY_TEST_RAND***/
 reg [5:0]delay_test;
+wire [7:0]rand_delay;
+reg [7:0] delay_counter;
+reg [7:0] current_delay;
+lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
+always @(posedge clk or posedge rst) begin
+  if (rst) begin
+    axi_arready <= 0;
+    delay_counter <= 8'b0;
+    current_delay <= 8'b0;
+  end 
+	else begin
+    if (S_AXI_ARVALID && !S_AXI_ARREADY) begin
+      if (delay_counter == 0) begin
+        current_delay <= rand_delay;
+        delay_counter <= current_delay;
+      end
+			else if (delay_counter == 1) begin
+				axi_arready <= 1;
+        delay_counter <= 0;
+      end
+			else begin
+				delay_counter <= delay_counter - 1;
+      end
+    end
+		else begin
+      axi_arready <= 0;
+		end
+  end
+end
 
 always @(posedge clk) begin
         if (rst) begin
@@ -61,7 +91,7 @@ always @(posedge clk) begin
             //if (S_AXI_ARVALID && !S_AXI_ARREADY) begin
               //axi_arready <= 1;
             //end
-						/***DELAY_TEST***/
+						/***DELAY_TEST_6c***
 						if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
 							delay_test[0] <= 1;
 						end
@@ -84,7 +114,7 @@ always @(posedge clk) begin
 							axi_arready <= 1;
 							delay_test[5:0] <= 6'b0;
 						end
-						/***END***/
+						***END***/
 
             if (axi_arready & S_AXI_ARVALID) begin
                 axi_rvalid <= 1;//判断条件
