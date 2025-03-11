@@ -159,7 +159,8 @@ always @(*) begin
 end
 ***END***/
 /***yosys-sta***/
-reg [31:0] sta_rf[7:0];
+reg [31:0]sta_rf[7:0];
+wire [31:0]s_rdata;
 wire [3:0]waddr = S_AXI_AWADDR[3:0];
 wire [3:0]raddr = S_AXI_ARADDR[3:0];
 
