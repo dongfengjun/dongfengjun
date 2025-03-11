@@ -159,10 +159,10 @@ always @(*) begin
 end
 ***END***/
 /***yosys-sta***/
-reg [31:0]sta_rf[4294967295:0];
+reg [31:0]sta_rf[1048575:0];
 wire [31:0]s_rdata;
-wire [31:0]waddr = S_AXI_AWADDR;
-wire [31:0]raddr = S_AXI_ARADDR;
+wire [19:0]waddr = S_AXI_AWADDR[19:0];
+wire [19:0]raddr = S_AXI_ARADDR[19:0];
 
 always @(posedge clk) begin
   if (s_wen) sta_rf[waddr] <= S_AXI_WDATA;
