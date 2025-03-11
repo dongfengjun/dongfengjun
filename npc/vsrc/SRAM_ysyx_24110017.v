@@ -1,9 +1,10 @@
-module SRAM_LSU_ysyx_24110017(clk,rst,
+module SRAM_ysyx_24110017(clk,rst,
 				S_AXI_AWADDR,S_AXI_AWVALID,S_AXI_AWREADY,
         S_AXI_WDATA,S_AXI_WSTRB,S_AXI_WVALID,S_AXI_WREADY,
         S_AXI_BRESP,S_AXI_BVALID,S_AXI_BREADY,
         S_AXI_ARADDR,S_AXI_ARVALID,S_AXI_ARREADY,
-        S_AXI_RDATA,S_AXI_RRESP,S_AXI_RVALID,S_AXI_RREADY);
+        S_AXI_RDATA,S_AXI_RRESP,S_AXI_RVALID,S_AXI_RREADY
+);
 input clk;
 input rst;
 input [31:0] S_AXI_AWADDR;
@@ -81,7 +82,7 @@ always @(posedge clk) begin
 			axi_arready <= 0;
 			axi_rresp  <= 2'b11;
 		end
-		if(S_AXI_RREADY) begin
+		if(S_AXI_RVALID && S_AXI_RREADY) begin
 			axi_rvalid <= 0;
 			axi_rdata <= s_rdata;
 		end
@@ -125,6 +126,10 @@ always @(posedge clk) begin
 		if(S_AXI_WVALID && S_AXI_WREADY) begin
 			axi_wready <= 0;
 			axi_bvalid <= 1;
+			s_wen <= 1;
+		end
+		if(s_wen == 1) begin
+			s_wen <= 0;
 		end
 		if(S_AXI_BVALID && S_AXI_BREADY) begin
 			axi_bvalid <= 0;
@@ -146,7 +151,7 @@ always @(*) begin
   end
 end
 always @(*) begin
-  if(S_AXI_BVALID && S_AXI_BREADY) begin // 有写请求时
+  if(s_wen) begin // 有写请求时
     pmem_write(S_AXI_AWADDR,S_AXI_WDATA,S_AXI_WSTRB);
   end
 end
