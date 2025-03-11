@@ -161,8 +161,8 @@ end
 /***yosys-sta***/
 reg [31:0]sta_rf[4294967295:0];
 wire [31:0]s_rdata;
-wire waddr = S_AXI_AWADDR;
-wire raddr = S_AXI_ARADDR;
+wire [31:0]waddr = S_AXI_AWADDR;
+wire [31:0]raddr = S_AXI_ARADDR;
 
 always @(posedge clk) begin
   if (s_wen) sta_rf[waddr] <= S_AXI_WDATA;
