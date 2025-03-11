@@ -1262,8 +1262,8 @@ VL_INLINE_OPT void Vtop_ysyx_24110017___024root___nba_sequent__TOP__2(Vtop_ysyx_
         if (((IData)(vlSelf->top_ysyx_24110017__DOT__SRAM_ysyx_24110017__DOT__axi_rvalid) 
              & (IData)(vlSelf->top_ysyx_24110017__DOT__S_AXI_RREADY))) {
             vlSelf->top_ysyx_24110017__DOT__SRAM_ysyx_24110017__DOT__axi_rdata 
-                = ((0U != (0xfU & vlSelf->top_ysyx_24110017__DOT__S_AXI_ARADDR)) 
-                   & vlSelf->top_ysyx_24110017__DOT__SRAM_ysyx_24110017__DOT__sta_rf
+                = ((0U == (0xfU & vlSelf->top_ysyx_24110017__DOT__S_AXI_ARADDR))
+                    ? 0U : vlSelf->top_ysyx_24110017__DOT__SRAM_ysyx_24110017__DOT__sta_rf
                    [(7U & vlSelf->top_ysyx_24110017__DOT__S_AXI_ARADDR)]);
         }
     }

@@ -464,10 +464,10 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root__trace_init_sub__TOP__0(Vtop_ysyx
     tracep->declBus(c+28,"axi_bresp", false,-1, 1,0);
     tracep->declBus(c+137,"axi_rdata", false,-1, 31,0);
     tracep->declBit(c+83,"s_wen", false,-1);
-    tracep->declBit(c+204,"s_rdata", false,-1);
     for (int i = 0; i < 8; ++i) {
         tracep->declBus(c+161+i*1,"sta_rf", true,(i+0), 31,0);
     }
+    tracep->declBus(c+204,"s_rdata", false,-1, 31,0);
     tracep->declBus(c+205,"waddr", false,-1, 3,0);
     tracep->declBus(c+175,"raddr", false,-1, 3,0);
     tracep->popNamePrefix(1);
@@ -956,9 +956,9 @@ VL_ATTR_COLD void Vtop_ysyx_24110017___024root__trace_full_sub_0(Vtop_ysyx_24110
     bufp->fullBit(oldp+201,(vlSelf->top_ysyx_24110017__DOT__IDU__DOT__next_state));
     bufp->fullCData(oldp+202,(vlSelf->top_ysyx_24110017__DOT__IFU__DOT__next_state),2);
     bufp->fullBit(oldp+203,(vlSelf->top_ysyx_24110017__DOT__PCU__DOT__next_state));
-    bufp->fullBit(oldp+204,(((0U != (0xfU & vlSelf->top_ysyx_24110017__DOT__S_AXI_ARADDR)) 
-                             & vlSelf->top_ysyx_24110017__DOT__SRAM_ysyx_24110017__DOT__sta_rf
-                             [(7U & vlSelf->top_ysyx_24110017__DOT__S_AXI_ARADDR)])));
+    bufp->fullIData(oldp+204,(((0U == (0xfU & vlSelf->top_ysyx_24110017__DOT__S_AXI_ARADDR))
+                                ? 0U : vlSelf->top_ysyx_24110017__DOT__SRAM_ysyx_24110017__DOT__sta_rf
+                               [(7U & vlSelf->top_ysyx_24110017__DOT__S_AXI_ARADDR)])),32);
     bufp->fullCData(oldp+205,((0xfU & ((1U == (IData)(vlSelf->top_ysyx_24110017__DOT__Arbiter_ysyx_24110017__DOT__state))
                                         ? vlSelf->top_ysyx_24110017__DOT__LSU__DOT__axi_awaddr
                                         : ((2U == (IData)(vlSelf->top_ysyx_24110017__DOT__Arbiter_ysyx_24110017__DOT__state))

@@ -397,9 +397,9 @@ void Vtop_ysyx_24110017___024root__trace_chg_sub_0(Vtop_ysyx_24110017___024root*
     bufp->chgBit(oldp+200,(vlSelf->top_ysyx_24110017__DOT__IDU__DOT__next_state));
     bufp->chgCData(oldp+201,(vlSelf->top_ysyx_24110017__DOT__IFU__DOT__next_state),2);
     bufp->chgBit(oldp+202,(vlSelf->top_ysyx_24110017__DOT__PCU__DOT__next_state));
-    bufp->chgBit(oldp+203,(((0U != (0xfU & vlSelf->top_ysyx_24110017__DOT__S_AXI_ARADDR)) 
-                            & vlSelf->top_ysyx_24110017__DOT__SRAM_ysyx_24110017__DOT__sta_rf
-                            [(7U & vlSelf->top_ysyx_24110017__DOT__S_AXI_ARADDR)])));
+    bufp->chgIData(oldp+203,(((0U == (0xfU & vlSelf->top_ysyx_24110017__DOT__S_AXI_ARADDR))
+                               ? 0U : vlSelf->top_ysyx_24110017__DOT__SRAM_ysyx_24110017__DOT__sta_rf
+                              [(7U & vlSelf->top_ysyx_24110017__DOT__S_AXI_ARADDR)])),32);
     bufp->chgCData(oldp+204,((0xfU & ((1U == (IData)(vlSelf->top_ysyx_24110017__DOT__Arbiter_ysyx_24110017__DOT__state))
                                        ? vlSelf->top_ysyx_24110017__DOT__LSU__DOT__axi_awaddr
                                        : ((2U == (IData)(vlSelf->top_ysyx_24110017__DOT__Arbiter_ysyx_24110017__DOT__state))
