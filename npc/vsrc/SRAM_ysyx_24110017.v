@@ -168,6 +168,6 @@ always @(posedge clk) begin
 end
 
 assign s_rdata = (raddr == 0) ? 32'b0 : sta_rf[raddr];
-***END***/
+/***END***/
 
 endmodule
