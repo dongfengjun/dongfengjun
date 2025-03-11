@@ -1,9 +1,10 @@
-module SRAM_LSU_ysyx_24110017(clk,rst,
+module SRAM_ysyx_24110017(clk,rst,
 				S_AXI_AWADDR,S_AXI_AWVALID,S_AXI_AWREADY,
         S_AXI_WDATA,S_AXI_WSTRB,S_AXI_WVALID,S_AXI_WREADY,
         S_AXI_BRESP,S_AXI_BVALID,S_AXI_BREADY,
         S_AXI_ARADDR,S_AXI_ARVALID,S_AXI_ARREADY,
-        S_AXI_RDATA,S_AXI_RRESP,S_AXI_RVALID,S_AXI_RREADY);
+        S_AXI_RDATA,S_AXI_RRESP,S_AXI_RVALID,S_AXI_RREADY
+);
 input clk;
 input rst;
 input [31:0] S_AXI_AWADDR;
@@ -41,8 +42,15 @@ assign S_AXI_BVALID = axi_bvalid;
 assign S_AXI_RDATA = axi_rdata;
 
 reg s_wen;
+
+/***DELAY_TEST_RAND***/
+wire [7:0]rand_delay;
+reg [7:0]delay_counter;
+lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
+
 always @(posedge clk) begin
   if(rst) begin
+		delay_counter <= 8'b0; //delay_test_rand
 	  axi_arready <= 0;
     axi_rvalid <= 0;
 		axi_awready <= 0;
@@ -52,36 +60,82 @@ always @(posedge clk) begin
 		s_wen <= 0;
   end 
 	else begin
-	  if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
-			axi_arready <= 1;//判断条件
-    end
-    if(S_AXI_ARVALID && S_AXI_ARREADY) begin
-      axi_rvalid <= 1;//判断条件
-      axi_arready <= 0;
-      axi_rresp  <= 2'b11;
-    end
-    if(S_AXI_RREADY) begin
-      axi_rvalid <= 0;
-      axi_rdata <= s_rdata;
-    end
-		if(S_AXI_AWVALID && !S_AXI_AWREADY) begin
-			axi_awready <= 1;//判断条件
+	  //if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
+			//axi_arready <= 1;//判断条件
+    //end
+/***DELAY_TEST_RAND***/
+    if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
+      if(delay_counter == 0) begin
+        delay_counter <= rand_delay;
+      end
+			else if(delay_counter == 1) begin
+				axi_arready <= 1;
+				delay_counter <= 0;
+			end
+			else begin
+				delay_counter <= delay_counter - 1;
+			end
 		end
+/***END***/
+		if(S_AXI_ARVALID && S_AXI_ARREADY) begin
+			axi_rvalid <= 1;//判断条件
+			axi_arready <= 0;
+			axi_rresp  <= 2'b11;
+		end
+		if(S_AXI_RVALID && S_AXI_RREADY) begin
+			axi_rvalid <= 0;
+			axi_rdata <= s_rdata;
+		end
+		//if(S_AXI_AWVALID && !S_AXI_AWREADY) begin
+			//axi_awready <= 1;//判断条件
+		//end
+/***DELAY_TEST_RAND*AWREADY***/
+    if(S_AXI_AWVALID && !S_AXI_AWREADY) begin
+      if(delay_counter == 0) begin
+        delay_counter <= rand_delay;
+      end
+      else if(delay_counter == 1) begin
+        axi_awready <= 1;
+        delay_counter <= 0;
+      end
+      else begin
+        delay_counter <= delay_counter - 1;
+      end
+    end
+/***END***/
 		if(S_AXI_AWVALID && S_AXI_AWREADY) begin
 			axi_awready <= 0;
-			axi_wready <= 1;
 		end
+		//if(S_AXI_WVALID && !S_AXI_WREADY) begin
+			//axi_wready <= 1;
+		//end
+/***DELAY_TEST_RAND*AWREADY***/
+    if(S_AXI_WVALID && !S_AXI_WREADY) begin
+      if(delay_counter == 0) begin
+        delay_counter <= rand_delay;
+      end
+      else if(delay_counter == 1) begin
+        axi_wready <= 1;
+        delay_counter <= 0;
+      end
+      else begin
+        delay_counter <= delay_counter - 1;
+      end
+		end
+/***END***/
 		if(S_AXI_WVALID && S_AXI_WREADY) begin
 			axi_wready <= 0;
 			axi_bvalid <= 1;
 			s_wen <= 1;
 		end
-		if(S_AXI_BVALID && S_AXI_BREADY) begin
-			axi_bvalid <= 0;
-			axi_bresp <= 2'b11;
+		if(s_wen == 1) begin
 			s_wen <= 0;
 		end
-  end
+		if(S_AXI_BVALID && S_AXI_BREADY) begin
+			axi_bvalid <= 0;
+			axi_bresp <= 2'b00;
+		end
+	end
 end
 
 import "DPI-C" function int pmem_read(input int raddr);

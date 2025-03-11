@@ -61,8 +61,11 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 ***E*N*D***/
 
 /***多周期***/
-reg [31:0]axi_awaddr_reg,axi_wdata_reg;
-reg [7:0]axi_wstrb_reg;
+/***DELAY_TEST_RAND***/
+wire [7:0]rand_delay;
+reg [7:0]delay_counter,avalid_delay_counter,wvalid_delay_counter;
+lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
+/***END***/
 wire [31:0] M_AXI_AWADDR,M_AXI_WDATA,M_AXI_ARADDR,M_AXI_RDATA;
 wire [7:0] M_AXI_WSTRB;
 wire [1:0] M_AXI_BRESP,M_AXI_RRESP;
@@ -99,47 +102,125 @@ always @(posedge clk or posedge rst) begin
 		  axi_wvalid <= 0;
       axi_bready <= 0;
 			LSU_DONE <= 0;
+			delay_counter <= 0;
+			avalid_delay_counter <= 0;
+			wvalid_delay_counter <= 0;
     end 
 		else begin
       case (state)
         IDLE: begin
 				  if(sram_lsu_read) begin
-            axi_arvalid <= 1'b1;
             state <= READ;
 					end
 					if(sram_lsu_write) begin
-						axi_awvalid <= 1'b1;
 		        state <= WRITE;
-						axi_awaddr_reg <= waddr;
-						axi_wdata_reg <= wdata;
-						axi_wstrb_reg <= wmask;
 	        end
+/***DELAY_TEST_AR*AWVALID***/
+					if(sram_lsu_read || sram_lsu_write) begin
+						avalid_delay_counter <= rand_delay;
+					end
+/***END***/
 				end
 				READ: begin
-          if(M_AXI_ARREADY) begin
-						axi_arvalid <= 0;
-            axi_rready <= 1;//加判断条件
+					//axi_arvalid <= 1'b1;
+/***DELAY_TEST_AR*ARVALID***/
+		      if(avalid_delay_counter == 0) begin
+	          avalid_delay_counter <= avalid_delay_counter;
+          end
+          else if(avalid_delay_counter == 1) begin
+            axi_arvalid <= 1;
+            avalid_delay_counter <= 0;
+          end
+          else begin
+            avalid_delay_counter <= avalid_delay_counter - 1;
+          end
+/***END***/
+          if(M_AXI_ARVALID && M_AXI_ARREADY) begin
+						axi_arvalid <= 1'b0;
 						axi_araddr <= raddr;
           end
-	        if(M_AXI_RVALID) begin
+					//if(M_AXI_RVALID && !M_AXI_RREADY) begin
+						//axi_rready <= 1'b1;
+					//end
+/***DELAY_TEST_RAND*RREADY***/
+          if(M_AXI_RVALID && !M_AXI_RREADY) begin
+            if(delay_counter == 0) begin
+              delay_counter <= rand_delay;
+            end
+            else if(delay_counter == 1) begin
+              axi_rready <= 1;
+              delay_counter <= 0;
+            end
+            else begin
+              delay_counter <= delay_counter - 1;
+            end
+          end
+/***END***/
+	        if(M_AXI_RVALID && M_AXI_RREADY) begin
             axi_rready <= 0;
             state <= DONE;
 						LSU_DONE <= 1'b1;
           end
         end
 				WRITE: begin
-					if(M_AXI_AWREADY) begin
+					//axi_awvalid <= 1'b1;
+/***DELAY_TEST_AR*AWVALID***/
+          if(avalid_delay_counter == 0) begin
+            avalid_delay_counter <= avalid_delay_counter;
+          end
+          else if(avalid_delay_counter == 1) begin
+            axi_awvalid <= 1;
+            avalid_delay_counter <= 0;
+          end
+          else begin
+            avalid_delay_counter <= avalid_delay_counter - 1;
+          end
+/***END***/
+					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
 						axi_awvalid <= 0;
-						axi_wvalid <= 1;
-						axi_awaddr <= axi_awaddr_reg;
+						//axi_wvalid <= 1;
+						axi_awaddr <= waddr;
 					end
-					if(M_AXI_WREADY) begin
+/***DELAY_TEST_WVALID***/
+					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
+            wvalid_delay_counter <= rand_delay;
+          end
+					else begin
+						if(wvalid_delay_counter == 0) begin
+              wvalid_delay_counter <= wvalid_delay_counter;
+            end
+						else if(wvalid_delay_counter == 1) begin
+							axi_wvalid <= 1;
+							wvalid_delay_counter <= 0;
+						end
+						else begin
+							wvalid_delay_counter <= wvalid_delay_counter - 1;
+						end
+					end
+/***END***/
+					if(M_AXI_WVALID && M_AXI_WREADY) begin
 						axi_wvalid <= 0;
-						axi_wdata <= axi_wdata_reg;//加判断条件
-						axi_wstrb <= axi_wstrb_reg;
-						axi_bready <= 1;
+						axi_wdata <= wdata;//加判断条件
+						axi_wstrb <= wmask;
 					end
-					if(M_AXI_BVALID) begin
+					//if(M_AXI_BVALID && !M_AXI_BREADY) begin
+						//axi_bready <= 1;
+					//end
+/***DELAY_TEST_RAND*BREADY***/
+					if(M_AXI_BVALID && !M_AXI_BREADY) begin
+			      if(delay_counter == 0) begin
+			        delay_counter <= rand_delay;
+			      end
+						else if(delay_counter == 1) begin
+							axi_bready <= 1;
+							delay_counter <= 0;
+						end
+						else begin
+							delay_counter <= delay_counter - 1;
+						end
+					end
+/***END***/
+					if(M_AXI_BVALID && M_AXI_BREADY) begin
 						axi_bready <= 0;
 						state <= DONE;
 						LSU_DONE <= 1'b1;
