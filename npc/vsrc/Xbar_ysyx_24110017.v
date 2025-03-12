@@ -1,4 +1,4 @@
-module Arbiter_ysyx_24110017(
+module Xbar_ysyx_24110017(
 	input wire clk,
 	input wire rst,
 /***AXI_IFU***/
@@ -57,7 +57,26 @@ module Arbiter_ysyx_24110017(
   input wire [31:0]S_AXI_RDATA,
   input wire [1:0]S_AXI_RRESP,
   input wire S_AXI_RVALID,
-  output wire S_AXI_RREADY
+  output wire S_AXI_RREADY,
+/***AXI_SRAM***/
+  output wire [31:0]U_AXI_AWADDR,
+  output wire U_AXI_AWVALID,
+  input wire U_AXI_AWREADY,
+  output wire [31:0]U_AXI_WDATA,
+  output wire [7:0]U_AXI_WSTRB,
+  output wire U_AXI_WVALID,
+  input wire U_AXI_WREADY,
+  input wire [1:0]U_AXI_BRESP,
+  input wire U_AXI_BVALID,
+  output wire U_AXI_BREADY,
+
+	output wire [31: 0]U_AXI_ARADDR,
+  output wire U_AXI_ARVALID,
+  input wire U_AXI_ARREADY,
+  input wire [31:0]U_AXI_RDATA,
+  input wire [1:0]U_AXI_RRESP,
+  input wire U_AXI_RVALID,
+  output wire U_AXI_RREADY
 );
 
 parameter [1:0]IDLE = 2'b00,GRANT_LSU = 2'b01,GRANT_IFU = 2'b10;

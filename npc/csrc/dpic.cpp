@@ -52,7 +52,7 @@ void pmem_write(int waddr, int wdata, char wmask) {
 		mtrace_p += sprintf(mtrace_p, "waddr:%08x write:%08x\n", waddr, wdata);
 #endif
 #ifdef CONFIG_DEVICE
-	if(waddr == 0xa00003F8) {
+	if(waddr == 0xa00003f8) {
 		#ifdef CONFIG_DIFFTEST
 			difftest_skip_ref();
 		#endif
