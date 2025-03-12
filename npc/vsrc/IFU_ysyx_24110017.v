@@ -152,7 +152,7 @@ end
 /***多周期sram***AXI4_LITE***/
 wire [31:0]pc;
 wire [31:0] M_AXI_AWADDR,M_AXI_WDATA,M_AXI_ARADDR,M_AXI_RDATA;
-wire [3:0] M_AXI_WSTRB;
+wire [7:0] M_AXI_WSTRB;
 wire [1:0] M_AXI_BRESP,M_AXI_RRESP;
 wire M_AXI_AWVALID,M_AXI_AWREADY,M_AXI_WVALID,M_AXI_WREADY,M_AXI_BVALID,M_AXI_BREADY,M_AXI_ARVALID,M_AXI_ARREADY,M_AXI_RVALID,M_AXI_RREADY;
 reg [31:0]axi_araddr;
@@ -167,10 +167,10 @@ reg [1:0]state;
 reg sram_start;
 reg sram_ifu_done;
 
-/***DELAY_TEST_RAND***/
+/***DELAY_TEST_RAND***
 wire [7:0]rand_delay;
 reg [7:0]delay_counter;
-lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
+LFSR_ysyx_24110017 LFSR_ysyx_20110017(clk,rst,rand_delay);
 /***END***/
 
 always @(posedge clk) begin
@@ -181,17 +181,17 @@ always @(posedge clk) begin
             axi_rready <= 1'b0;
 						sram_ifu_done <= 1'b0;
 
-						delay_counter <= 8'b0; //delay_test_rand
+						//delay_counter <= 8'b0; //delay_test_rand
         end 
 				else begin
             case (state)
                 SRAM_IDLE: begin
 										sram_ifu_done <= 1'b0;
-                    //if (sram_start) begin
-                        //state <= SRAM_FETCH;
-												//axi_arvalid <= 1'b1;
-                    //end
-								/***DELAY_TEST_RAND***M_AXI_ARVALID***/
+                    if (sram_start) begin
+                        state <= SRAM_FETCH;
+												axi_arvalid <= 1'b1;
+                    end
+								/***DELAY_TEST_RAND***M_AXI_ARVALID***
 										if(sram_start) begin
 								        delay_counter <= rand_delay;
 										end
@@ -215,10 +215,10 @@ always @(posedge clk) begin
                         axi_arvalid <= 1'b0;
 												axi_araddr <= pc;
 										end
-										//if(M_AXI_RVALID && !M_AXI_RREADY) begin
-											//axi_arready <= 1'b1;
-										//end
-/***DELAY_TEST_RAND***M_AXI_RREADY***/
+										if(M_AXI_RVALID && !M_AXI_RREADY) begin
+											axi_rready <= 1'b1;
+										end
+/***DELAY_TEST_RAND***M_AXI_RREADY***
 										if (M_AXI_RVALID && !M_AXI_RREADY) begin
 											if(delay_counter == 0) begin
 												delay_counter <= rand_delay;

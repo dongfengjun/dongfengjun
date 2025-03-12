@@ -43,14 +43,15 @@ assign S_AXI_RDATA = axi_rdata;
 
 reg s_wen;
 
-/***DELAY_TEST_RAND***/
+/***DELAY_TEST_RAND***
 wire [7:0]rand_delay;
 reg [7:0]delay_counter;
 lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
+***END***/
 
 always @(posedge clk) begin
   if(rst) begin
-		delay_counter <= 8'b0; //delay_test_rand
+		//delay_counter <= 8'b0; //delay_test_rand
 	  axi_arready <= 0;
     axi_rvalid <= 0;
 		axi_awready <= 0;
@@ -60,10 +61,10 @@ always @(posedge clk) begin
 		s_wen <= 0;
   end 
 	else begin
-	  //if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
-			//axi_arready <= 1;//判断条件
-    //end
-/***DELAY_TEST_RAND***/
+	  if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
+			axi_arready <= 1;//判断条件
+    end
+/***DELAY_TEST_RAND***
     if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
       if(delay_counter == 0) begin
         delay_counter <= rand_delay;
@@ -76,7 +77,7 @@ always @(posedge clk) begin
 				delay_counter <= delay_counter - 1;
 			end
 		end
-/***END***/
+***END***/
 		if(S_AXI_ARVALID && S_AXI_ARREADY) begin
 			axi_rvalid <= 1;//判断条件
 			axi_arready <= 0;
@@ -86,10 +87,10 @@ always @(posedge clk) begin
 			axi_rvalid <= 0;
 			axi_rdata <= s_rdata;
 		end
-		//if(S_AXI_AWVALID && !S_AXI_AWREADY) begin
-			//axi_awready <= 1;//判断条件
-		//end
-/***DELAY_TEST_RAND*AWREADY***/
+		if(S_AXI_AWVALID && !S_AXI_AWREADY) begin
+			axi_awready <= 1;//判断条件
+		end
+/***DELAY_TEST_RAND*AWREADY***
     if(S_AXI_AWVALID && !S_AXI_AWREADY) begin
       if(delay_counter == 0) begin
         delay_counter <= rand_delay;
@@ -102,14 +103,14 @@ always @(posedge clk) begin
         delay_counter <= delay_counter - 1;
       end
     end
-/***END***/
+***END***/
 		if(S_AXI_AWVALID && S_AXI_AWREADY) begin
 			axi_awready <= 0;
 		end
-		//if(S_AXI_WVALID && !S_AXI_WREADY) begin
-			//axi_wready <= 1;
-		//end
-/***DELAY_TEST_RAND*AWREADY***/
+		if(S_AXI_WVALID && !S_AXI_WREADY) begin
+			axi_wready <= 1;
+		end
+/***DELAY_TEST_RAND*AWREADY***
     if(S_AXI_WVALID && !S_AXI_WREADY) begin
       if(delay_counter == 0) begin
         delay_counter <= rand_delay;
@@ -122,7 +123,7 @@ always @(posedge clk) begin
         delay_counter <= delay_counter - 1;
       end
 		end
-/***END***/
+***END***/
 		if(S_AXI_WVALID && S_AXI_WREADY) begin
 			axi_wready <= 0;
 			axi_bvalid <= 1;
@@ -138,12 +139,13 @@ always @(posedge clk) begin
 	end
 end
 
+/***DPIC***
 import "DPI-C" function int pmem_read(input int raddr);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
  
 reg [31:0]s_rdata;
 always @(*) begin
-  if(S_AXI_RVALID && S_AXI_RREADY) begin // 有读写请求时
+  if(S_AXI_RVALID && S_AXI_RREADY) begin
     s_rdata = pmem_read(S_AXI_ARADDR);
 	end
 	else begin
@@ -151,11 +153,22 @@ always @(*) begin
   end
 end
 always @(*) begin
-  if(s_wen) begin // 有写请求时
+  if(s_wen) begin
     pmem_write(S_AXI_AWADDR,S_AXI_WDATA,S_AXI_WSTRB);
   end
 end
+***END***/
+/***yosys-sta***/
+reg [31:0]sta_rf[1024:0];
+wire [31:0]s_rdata;
+wire [9:0]waddr = S_AXI_AWADDR[9:0];
+wire [9:0]raddr = S_AXI_ARADDR[9:0];
 
+always @(posedge clk) begin
+  if (s_wen) sta_rf[waddr] <= S_AXI_WDATA;
+end
 
+assign s_rdata = (raddr == 0) ? 32'b0 : sta_rf[raddr];
+/***END***/
 
 endmodule
