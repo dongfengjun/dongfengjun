@@ -143,7 +143,7 @@ Reg_ysyx_24110017 #(32, 32'b0) mcause_ysyx_24110017 (clk,rst,w_mcause,mcause,mca
 Reg_ysyx_24110017 #(32, 32'b0) mtvec_ysyx_24110017 (clk,rst,w_mtvec,mtvec,mtvec_en);
 
 
-/***DPI-C*CSR***/
+/***DPI-C*CSR***
 export "DPI-C" function csr_display;                                    
 function int csr_display(int i);
   begin
