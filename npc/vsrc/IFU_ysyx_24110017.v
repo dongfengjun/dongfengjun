@@ -170,7 +170,7 @@ reg sram_ifu_done;
 /***DELAY_TEST_RAND***/
 wire [7:0]rand_delay;
 reg [7:0]delay_counter;
-lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
+LFSR_ysyx_24110017 LFSR_ysyx_20110017(clk,rst,rand_delay);
 /***END***/
 
 always @(posedge clk) begin

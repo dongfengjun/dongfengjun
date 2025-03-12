@@ -1,4 +1,4 @@
-module lfsr_ysyx_24110017 (
+module LFSR_ysyx_24110017 (
     input wire clk,
     input wire rst,
     output reg [7:0] rand_out
