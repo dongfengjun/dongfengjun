@@ -115,13 +115,13 @@ always @(*) begin
 				end
 			end
 			GRANT_LSU: begin
-				if((S_AXI_RVALID && LSU_AXI_RREADY) 
-												 || (S_AXI_BVALID && LSU_AXI_BREADY)) begin
+				if((LSU_AXI_RVALID && LSU_AXI_RREADY) 
+												 || (LSU_AXI_BVALID && LSU_AXI_BREADY)) begin
 					next_state = IDLE;
 				end
 			end
 			GRANT_IFU: begin
-				if(S_AXI_RVALID && IFU_AXI_RREADY) begin
+				if(IFU_AXI_RVALID && IFU_AXI_RREADY) begin
 					next_state = IDLE;
 				end
 			end
