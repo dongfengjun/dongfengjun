@@ -34,6 +34,7 @@ assign U_AXI_RDATA = axi_rdata;
 
 localparam DEVICE_UART_ADDR = 32'ha00003f8;
 reg [31:0] device_uart_reg;
+reg ureg_wen;
 
 always @(posedge clk) begin
   if(rst) begin
@@ -68,11 +69,15 @@ always @(posedge clk) begin
 		end
 		if(U_AXI_WVALID && U_AXI_WREADY) begin
 			axi_wready <= 0;
-			if(U_AXI_AWADDR == DEVICE_UART_ADDR) begin
-			  device_uart_reg <= U_AXI_WDATA;
-			  $write("%c",U_AXI_WDATA[7:0]);
-			end
 			axi_bvalid <= 1;
+			wen <= 1;
+		end
+		if(ureg_wen) begin
+			if(U_AXI_AWADDR == DEVICE_UART_ADDR) begin
+        device_uart_reg <= U_AXI_WDATA;
+        $write("%c",U_AXI_WDATA[7:0]);
+      end
+			ureg_wen <= 0;
 		end
 		if(U_AXI_BVALID && U_AXI_BREADY) begin
 			axi_bvalid <= 0;
