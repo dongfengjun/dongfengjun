@@ -162,6 +162,6 @@ always@(*) begin
 		npc_trap();
 	end
 end
-***DPIC*END***/
+/***DPIC*END***/
 
 endmodule
