@@ -111,9 +111,11 @@ always @(posedge clk or posedge rst) begin
         IDLE: begin
 				  if(sram_lsu_read) begin
             state <= READ;
+					  axi_arvalid <= 1'b1;//非DELAY_TEST
 					end
 					if(sram_lsu_write) begin
 		        state <= WRITE;
+						axi_awvalid <= 1'b1;//非DELAY_TEST
 	        end
 /***DELAY_TEST_AR*AWVALID***
 					if(sram_lsu_read || sram_lsu_write) begin
@@ -122,7 +124,6 @@ always @(posedge clk or posedge rst) begin
 /***END***/
 				end
 				READ: begin
-					axi_arvalid <= 1'b1;
 /***DELAY_TEST_AR*ARVALID***
 		      if(avalid_delay_counter == 0) begin
 	          avalid_delay_counter <= avalid_delay_counter;
@@ -163,7 +164,6 @@ always @(posedge clk or posedge rst) begin
           end
         end
 				WRITE: begin
-					axi_awvalid <= 1'b1;
 /***DELAY_TEST_AR*AWVALID***
           if(avalid_delay_counter == 0) begin
             avalid_delay_counter <= avalid_delay_counter;

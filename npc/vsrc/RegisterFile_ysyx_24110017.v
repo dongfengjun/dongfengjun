@@ -17,7 +17,7 @@ module RegisterFile_ysyx_24110017 #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
 	assign r1 = (raddr1 == 0) ? 32'b0 : rf[raddr1];
 	assign r2 = (raddr2 == 0) ? 32'b0 : rf[raddr2];	
 
-/***DPI-C***
+/***DPI-C***/
 export "DPI-C" function gpr_reg_display;
 function int gpr_reg_display(int addr);
 	begin

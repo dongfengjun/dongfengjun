@@ -139,7 +139,7 @@ always @(posedge clk) begin
 	end
 end
 
-/***DPIC***
+/***DPIC***/
 import "DPI-C" function int pmem_read(input int raddr);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
  
@@ -157,8 +157,8 @@ always @(*) begin
     pmem_write(S_AXI_AWADDR,S_AXI_WDATA,S_AXI_WSTRB);
   end
 end
-***END***/
-/***yosys-sta***/
+/***END***/
+/***yosys-sta***
 reg [31:0]sta_rf[1024:0];
 wire [31:0]s_rdata;
 wire [9:0]waddr = S_AXI_AWADDR[9:0];
