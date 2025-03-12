@@ -161,7 +161,7 @@ assign IFU_AXI_RRESP = (state == GRANT_IFU) ? X_AXI_RRESP : 2'b0;
 assign IFU_AXI_RVALID = (state == GRANT_IFU) ? X_AXI_RVALID : 1'b0;
 
 
-localparam DEVICE_UART_ADDR = 32'ha00003f8;
+localparam DEVICE_UART_ADDR = 32'hb00003f8;
 wire sel_uart;
 assign sel_uart = (X_AXI_AWADDR == DEVICE_UART_ADDR) || (X_AXI_ARADDR == DEVICE_UART_ADDR);
 
