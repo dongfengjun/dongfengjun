@@ -70,7 +70,7 @@ always @(posedge clk) begin
 		if(U_AXI_WVALID && U_AXI_WREADY) begin
 			axi_wready <= 0;
 			axi_bvalid <= 1;
-			wen <= 1;
+			ureg_wen <= 1;
 		end
 		if(ureg_wen) begin
 			if(U_AXI_AWADDR == DEVICE_UART_ADDR) begin
