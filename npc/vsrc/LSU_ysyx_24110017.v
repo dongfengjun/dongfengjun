@@ -113,6 +113,7 @@ always @(posedge clk or posedge rst) begin
             state <= READ;
 					end
 					if(sram_lsu_write) begin
+						axi_awvalid <= 1'b1;//
 		        state <= WRITE;
 	        end
 /***DELAY_TEST_AR*AWVALID***
