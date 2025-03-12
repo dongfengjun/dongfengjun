@@ -10,9 +10,9 @@ module lfsr_ysyx_24110017 (
         if(rst) begin
           rand_out <= 8'b00000001;
         end 
-				//else begin
-          //rand_out <= {rand_out[6:0], feedback};
-        //end
+				else begin
+          rand_out <= {rand_out[6:0], feedback};
+        end
     end
 
 endmodule
