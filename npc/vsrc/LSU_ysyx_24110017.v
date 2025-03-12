@@ -61,11 +61,11 @@ Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
 ***E*N*D***/
 
 /***多周期***/
-/***DELAY_TEST_RAND***/
+/***DELAY_TEST_RAND***
 wire [7:0]rand_delay;
 reg [7:0]delay_counter,avalid_delay_counter,wvalid_delay_counter;
-lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
-/***END***/
+LFSR_ysyx_24110017 LFSR_ysyx_20110017(clk,rst,rand_delay);
+***END***/
 wire [31:0] M_AXI_AWADDR,M_AXI_WDATA,M_AXI_ARADDR,M_AXI_RDATA;
 wire [7:0] M_AXI_WSTRB;
 wire [1:0] M_AXI_BRESP,M_AXI_RRESP;
@@ -102,9 +102,9 @@ always @(posedge clk or posedge rst) begin
 		  axi_wvalid <= 0;
       axi_bready <= 0;
 			LSU_DONE <= 0;
-			delay_counter <= 0;
-			avalid_delay_counter <= 0;
-			wvalid_delay_counter <= 0;
+//			delay_counter <= 0;
+//			avalid_delay_counter <= 0;
+//			wvalid_delay_counter <= 0;
     end 
 		else begin
       case (state)
@@ -115,15 +115,15 @@ always @(posedge clk or posedge rst) begin
 					if(sram_lsu_write) begin
 		        state <= WRITE;
 	        end
-/***DELAY_TEST_AR*AWVALID***/
+/***DELAY_TEST_AR*AWVALID***
 					if(sram_lsu_read || sram_lsu_write) begin
 						avalid_delay_counter <= rand_delay;
 					end
 /***END***/
 				end
 				READ: begin
-					//axi_arvalid <= 1'b1;
-/***DELAY_TEST_AR*ARVALID***/
+					axi_arvalid <= 1'b1;
+/***DELAY_TEST_AR*ARVALID***
 		      if(avalid_delay_counter == 0) begin
 	          avalid_delay_counter <= avalid_delay_counter;
           end
@@ -139,10 +139,10 @@ always @(posedge clk or posedge rst) begin
 						axi_arvalid <= 1'b0;
 						axi_araddr <= raddr;
           end
-					//if(M_AXI_RVALID && !M_AXI_RREADY) begin
-						//axi_rready <= 1'b1;
-					//end
-/***DELAY_TEST_RAND*RREADY***/
+					if(M_AXI_RVALID && !M_AXI_RREADY) begin
+						axi_rready <= 1'b1;
+					end
+/***DELAY_TEST_RAND*RREADY***
           if(M_AXI_RVALID && !M_AXI_RREADY) begin
             if(delay_counter == 0) begin
               delay_counter <= rand_delay;
@@ -163,8 +163,8 @@ always @(posedge clk or posedge rst) begin
           end
         end
 				WRITE: begin
-					//axi_awvalid <= 1'b1;
-/***DELAY_TEST_AR*AWVALID***/
+					axi_awvalid <= 1'b1;
+/***DELAY_TEST_AR*AWVALID***
           if(avalid_delay_counter == 0) begin
             avalid_delay_counter <= avalid_delay_counter;
           end
@@ -178,10 +178,10 @@ always @(posedge clk or posedge rst) begin
 /***END***/
 					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
 						axi_awvalid <= 0;
-						//axi_wvalid <= 1;
+						axi_wvalid <= 1;
 						axi_awaddr <= waddr;
 					end
-/***DELAY_TEST_WVALID***/
+/***DELAY_TEST_WVALID***
 					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
             wvalid_delay_counter <= rand_delay;
           end
@@ -203,10 +203,10 @@ always @(posedge clk or posedge rst) begin
 						axi_wdata <= wdata;//加判断条件
 						axi_wstrb <= wmask;
 					end
-					//if(M_AXI_BVALID && !M_AXI_BREADY) begin
-						//axi_bready <= 1;
-					//end
-/***DELAY_TEST_RAND*BREADY***/
+					if(M_AXI_BVALID && !M_AXI_BREADY) begin
+						axi_bready <= 1;
+					end
+/***DELAY_TEST_RAND*BREADY***
 					if(M_AXI_BVALID && !M_AXI_BREADY) begin
 			      if(delay_counter == 0) begin
 			        delay_counter <= rand_delay;
