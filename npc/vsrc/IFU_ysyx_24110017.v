@@ -216,7 +216,7 @@ always @(posedge clk) begin
 												axi_araddr <= pc;
 										end
 										if(M_AXI_RVALID && !M_AXI_RREADY) begin
-											axi_arready <= 1'b1;
+											axi_rready <= 1'b1;
 										end
 /***DELAY_TEST_RAND***M_AXI_RREADY***
 										if (M_AXI_RVALID && !M_AXI_RREADY) begin
