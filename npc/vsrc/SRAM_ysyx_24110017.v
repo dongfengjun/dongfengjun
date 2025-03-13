@@ -41,6 +41,7 @@ assign S_AXI_BRESP = axi_bresp;
 assign S_AXI_BVALID = axi_bvalid;
 assign S_AXI_RDATA = axi_rdata;
 
+reg [31:0]axi_araddr;
 reg s_wen;
 
 /***DELAY_TEST_RAND***
@@ -79,6 +80,7 @@ always @(posedge clk) begin
 		end
 ***END***/
 		if(S_AXI_ARVALID && S_AXI_ARREADY) begin
+			axi_araddr <= S_AXI_ARADDR;
 			axi_rvalid <= 1;//判断条件
 			axi_arready <= 0;
 			axi_rresp  <= 2'b11;
