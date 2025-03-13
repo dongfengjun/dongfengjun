@@ -2,7 +2,7 @@
 #include "./../riscv.h"
 #include <stdio.h>
 
-#define k 10 //系数
+#define k 1 //系数
 
 void __am_timer_init() {
 }
