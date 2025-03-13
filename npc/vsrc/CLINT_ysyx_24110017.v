@@ -84,7 +84,7 @@ always @(posedge clk) begin
 			axi_wready <= 0; //无写权限
 			axi_bvalid <= 1;
 		end
-		if(U_AXI_BVALID && U_AXI_BREADY) begin
+		if(C_AXI_BVALID && C_AXI_BREADY) begin
 			axi_bvalid <= 0;
 			axi_bresp <= 2'b11; //无写权限
 		end
