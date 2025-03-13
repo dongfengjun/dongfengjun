@@ -2,7 +2,7 @@
 #include "./../riscv.h"
 #include <stdio.h>
 
-#define k 1 //系数
+#define k 8 //系数 仿真速率实验值
 
 void __am_timer_init() {
 }
