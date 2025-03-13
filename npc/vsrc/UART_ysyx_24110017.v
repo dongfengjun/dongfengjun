@@ -24,6 +24,7 @@ module UART_ysyx_24110017(
 reg axi_arready,axi_rvalid,axi_awready,axi_wready,axi_bvalid;
 reg [1:0]axi_rresp,axi_bresp;
 reg [31:0]axi_rdata;
+reg [31:0]axi_araddr;
 assign U_AXI_ARREADY = axi_arready;
 assign U_AXI_RVALID = axi_rvalid;
 assign U_AXI_AWREADY = axi_awready;
@@ -50,6 +51,7 @@ always @(posedge clk) begin
 			axi_arready <= 1;//判断条件
     end
 		if(U_AXI_ARVALID && U_AXI_ARREADY) begin
+			axi_araddr <= U_AXI_ARADDR;
 			axi_rvalid <= 1;//判断条件
 			axi_arready <= 0;
 			axi_rresp  <= 2'b11; //无读权限

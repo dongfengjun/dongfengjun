@@ -24,6 +24,7 @@ module CLINT_ysyx_24110017(
 reg axi_arready,axi_rvalid,axi_awready,axi_wready,axi_bvalid;
 reg [1:0]axi_rresp,axi_bresp;
 reg [31:0]axi_rdata;
+reg [31:0]axi_araddr;
 assign C_AXI_ARREADY = axi_arready;
 assign C_AXI_RVALID = axi_rvalid;
 assign C_AXI_AWREADY = axi_awready;
@@ -58,16 +59,17 @@ always @(posedge clk) begin
 			axi_arready <= 1; //判断条件
     end
 		if(C_AXI_ARVALID && C_AXI_ARREADY) begin
+			axi_araddr <= C_AXI_ARADDR;
 			axi_rvalid <= 1; //判断条件
 			axi_arready <= 0;
 			axi_rresp  <= 2'b00;
 		end
 		if(C_AXI_RVALID && C_AXI_RREADY) begin
 			axi_rvalid <= 0;
-			if(C_AXI_ARADDR == DEVICE_CLINT_LOW_ADDR) begin
+			if(axi_araddr == DEVICE_CLINT_LOW_ADDR) begin
 				axi_rdata <= mtime[31:0];
 			end
-			if(C_AXI_ARADDR == DEVICE_CLINT_HIGH_ADDR) begin
+			if(axi_araddr == DEVICE_CLINT_HIGH_ADDR) begin
 				axi_rdata <= mtime[63:32];
 			end
 		end
