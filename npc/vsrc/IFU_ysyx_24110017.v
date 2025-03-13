@@ -190,6 +190,7 @@ always @(posedge clk) begin
                     if (sram_start) begin
                         state <= SRAM_FETCH;
 												axi_arvalid <= 1'b1;
+												axi_araddr <= pc;
                     end
 								/***DELAY_TEST_RAND***M_AXI_ARVALID***
 										if(sram_start) begin
@@ -213,7 +214,7 @@ always @(posedge clk) begin
                 SRAM_FETCH: begin
                     if(M_AXI_ARVALID && M_AXI_ARREADY) begin
                         axi_arvalid <= 1'b0;
-												axi_araddr <= pc;
+												//axi_araddr <= pc;
 										end
 										if(M_AXI_RVALID && !M_AXI_RREADY) begin
 											axi_rready <= 1'b1;

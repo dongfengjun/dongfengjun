@@ -21,11 +21,11 @@ typedef uint16_t ioaddr_t;
 
 //Config
 //#define CONFIG_TARGET_AM 0//AM
-#define CONFIG_DEVICE 1//DEVICE
+//#define CONFIG_DEVICE 1//DEVICE Software
 #define ITRACE_COND 1
 #define CONFIG_TARGET_NATIVE_ELF 1
 
-#define CONFIG_DUMP_WAVE 1//是否保存波形（内存不足）
+//#define CONFIG_DUMP_WAVE 1//是否保存波形（内存不足）
 
 #define CONFIG_TRACE 1
 //	#ifdef CONFIG_TRACE
