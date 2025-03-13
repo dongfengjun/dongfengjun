@@ -102,7 +102,7 @@ wire [7:0] X_AXI_WSTRB;
 wire [1:0] X_AXI_BRESP,X_AXI_RRESP;
 wire X_AXI_AWVALID,X_AXI_AWREADY,X_AXI_WVALID,X_AXI_WREADY,X_AXI_BVALID,X_AXI_BREADY,X_AXI_ARVALID,X_AXI_ARREADY,X_AXI_RVALID,X_AXI_RREADY;
 
-parameter [1:0]IDLE = 2'b00,GRANT_LSU = 2'b01,GRANT_IFU = 2'b10;
+parameter [1:0]IDLE = 2'b00,GRANT_LSU = 2'b01,GRANT_IFU = 2'b10,WAIT_CLINT = 2'b11;
 reg [1:0]state,next_state;
 
 always @(posedge clk) begin
@@ -132,10 +132,25 @@ always @(*) begin
 					next_state = IDLE;
 				end
 			end
+			WAIT_CLINT: begin
+        if(LSU_AXI_ARVALID || LSU_AXI_AWVALID) begin
+          next_state = GRANT_LSU;
+        end
+        else if(IFU_AXI_ARVALID) begin
+          next_state = GRANT_IFU;
+        end
+        else begin
+          next_state = WAIT_CLINT;
+        end
+      end
 			GRANT_LSU: begin
-				if((LSU_AXI_RVALID && LSU_AXI_RREADY) 
-												 || (LSU_AXI_BVALID && LSU_AXI_BREADY)) begin
+				if((!sel_clint) && ((LSU_AXI_RVALID && LSU_AXI_RREADY) ||
+					 (LSU_AXI_BVALID && LSU_AXI_BREADY))) begin
 					next_state = IDLE;
+				end
+				else if(sel_clint && ((LSU_AXI_RVALID && LSU_AXI_RREADY) ||
+           (LSU_AXI_BVALID && LSU_AXI_BREADY))) begin
+					next_state = WAIT_CLINT;
 				end
 			end
 			GRANT_IFU: begin
@@ -202,7 +217,7 @@ assign {U_AXI_BREADY,C_AXI_BREADY,S_AXI_BREADY} = (sel_uart) ? {X_AXI_BREADY,1'b
 assign {U_AXI_ARADDR,C_AXI_ARADDR,S_AXI_ARADDR} = (sel_uart) ? {X_AXI_ARADDR,32'b0,32'b0} : (sel_clint) ? {32'b0,X_AXI_ARADDR,32'b0} : {32'b0,32'b0,X_AXI_ARADDR};
 assign {U_AXI_ARVALID,C_AXI_ARVALID,S_AXI_ARVALID} = (sel_uart) ? {X_AXI_ARVALID,1'b0,1'b0} : (sel_clint) ? {1'b0,X_AXI_ARVALID,1'b0} : {1'b0,1'b0,X_AXI_ARVALID};
 assign X_AXI_ARREADY = (sel_uart) ? U_AXI_ARREADY : (sel_clint) ? C_AXI_ARREADY : S_AXI_ARREADY;
-assign X_AXI_RDATA = (sel_uart) ? U_AXI_RDATA : (sel_clint) ? C_AXI_RDATA : S_AXI_RDATA;
+assign X_AXI_RDATA = (sel_uart) ? U_AXI_RDATA : (sel_clint || state == WAIT_CLINT) ? C_AXI_RDATA : S_AXI_RDATA;
 assign X_AXI_RRESP = (sel_uart) ? U_AXI_RRESP : (sel_clint) ? C_AXI_RRESP : S_AXI_RRESP;
 assign X_AXI_RVALID = (sel_uart) ? U_AXI_RVALID : (sel_clint) ? C_AXI_RVALID : S_AXI_RVALID;
 assign {U_AXI_RREADY,C_AXI_RREADY,S_AXI_RREADY} = (sel_uart) ? {X_AXI_RREADY,1'b0,1'b0} : (sel_clint) ? {1'b0,X_AXI_RREADY,1'b0} : {1'b0,1'b0,X_AXI_RREADY};
