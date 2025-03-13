@@ -185,7 +185,7 @@ localparam DEVICE_CLINT_LOW_ADDR = 32'hb0000048;
 localparam DEVICE_CLINT_HIGH_ADDR = 32'hb000004c;
 wire sel_uart,sel_clint;
 assign sel_uart = (X_AXI_AWADDR == DEVICE_UART_ADDR) || (X_AXI_ARADDR == DEVICE_UART_ADDR);
-assign sel_clint = (X_AXI_AWADDR == DEVICE_CLINT_LOW_ADDR) || (X_AXI_AWADDR == DEVICE_CLINT_HIGH_ADDR) || (X_AXI_ARADDR == DEVICE_CLINT_LOW_ADDR) || (X_AXI_ADDR == DEVICE_CLINT_HIGH_ADDR);
+assign sel_clint = (X_AXI_AWADDR == DEVICE_CLINT_LOW_ADDR) || (X_AXI_AWADDR == DEVICE_CLINT_HIGH_ADDR) || (X_AXI_ARADDR == DEVICE_CLINT_LOW_ADDR) || (X_AXI_ARADDR == DEVICE_CLINT_HIGH_ADDR);
 
 
 assign {U_AXI_AWADDR,C_AXI_AWADDR,S_AXI_AWADDR} = (sel_uart) ? {X_AXI_AWADDR,32'b0,32'b0} : (sel_clint) ? {32'b0,X_AXI_AWADDR,32'b0} : {32'b0,32'b0,X_AXI_AWADDR};
@@ -200,7 +200,7 @@ assign X_AXI_BVALID = (sel_uart) ? U_AXI_BVALID : (sel_clint) ? C_AXI_BVALID : S
 assign {U_AXI_BREADY,C_AXI_BREADY,S_AXI_BREADY} = (sel_uart) ? {X_AXI_BREADY,1'b0,1'b0} : (sel_clint) ? {1'b0,X_AXI_BREADY,1'b0} : {1'b0,1'b0,X_AXI_BREADY};
 
 assign {U_AXI_ARADDR,C_AXI_ARADDR,S_AXI_ARADDR} = (sel_uart) ? {X_AXI_ARADDR,32'b0,32'b0} : (sel_clint) ? {32'b0,X_AXI_ARADDR,32'b0} : {32'b0,32'b0,X_AXI_ARADDR};
-assign {U_AXI_ARVALID,C_AXI_ADVALID,S_AXI_ARVALID} = (sel_uart) ? {X_AXI_ARVALID,1'b0,1'b0} : (sel_clint) ? {1'b0,X_AXI_ARVALID,1'b0} : {1'b0,1'b0,X_AXI_ARVALID};
+assign {U_AXI_ARVALID,C_AXI_ARVALID,S_AXI_ARVALID} = (sel_uart) ? {X_AXI_ARVALID,1'b0,1'b0} : (sel_clint) ? {1'b0,X_AXI_ARVALID,1'b0} : {1'b0,1'b0,X_AXI_ARVALID};
 assign X_AXI_ARREADY = (sel_uart) ? U_AXI_ARREADY : (sel_clint) ? C_AXI_ARREADY : S_AXI_ARREADY;
 assign X_AXI_RDATA = (sel_uart) ? U_AXI_RDATA : (sel_clint) ? C_AXI_RDATA : S_AXI_RDATA;
 assign X_AXI_RRESP = (sel_uart) ? U_AXI_RRESP : (sel_clint) ? C_AXI_RRESP : S_AXI_RRESP;
