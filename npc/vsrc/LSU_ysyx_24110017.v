@@ -112,6 +112,7 @@ always @(posedge clk or posedge rst) begin
 				  if(sram_lsu_read) begin
             state <= READ;
 					  axi_arvalid <= 1'b1;//非DELAY_TEST
+						axi_araddr <= raddr;
 					end
 					if(sram_lsu_write) begin
 		        state <= WRITE;
@@ -138,7 +139,7 @@ always @(posedge clk or posedge rst) begin
 /***END***/
           if(M_AXI_ARVALID && M_AXI_ARREADY) begin
 						axi_arvalid <= 1'b0;
-						axi_araddr <= raddr;
+						//axi_araddr <= raddr;
           end
 					if(M_AXI_RVALID && !M_AXI_RREADY) begin
 						axi_rready <= 1'b1;
