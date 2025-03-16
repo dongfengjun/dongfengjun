@@ -1,4 +1,4 @@
-module IFU_ysyx_24110017(clk,rst,
+module ysyx_24110017_IFU(clk,rst,
 				pc,inst,PCU_VALID,IFU_READY,IFU_VALID,IDU_READY,wbu_done,
 				M_AXI_AWADDR,M_AXI_AWVALID,M_AXI_AWREADY,
         M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WVALID,M_AXI_WREADY,
