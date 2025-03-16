@@ -1,4 +1,4 @@
-module WBU_ysyx_24110017(clk,rst,
+module ysyx_24110017_WBU(clk,rst,
 			EXU_VALID,WBU_READY,wbu_done,difftest,
 			xrd_reg,res,
 			rd_reg,rd,

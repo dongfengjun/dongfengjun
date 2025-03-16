@@ -1,4 +1,4 @@
-module Xbar_ysyx_24110017(
+module ysyx_24110017_Xbar(
 	input wire clk,
 	input wire rst,
 /***AXI_IFU***/

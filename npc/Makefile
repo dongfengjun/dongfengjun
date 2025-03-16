@@ -1,6 +1,7 @@
 BUILD = ./build
 OBJ_DIR = $(BUILD)/obj_dir
-VSRCS = $(shell find ./vsrc -name "*.v")
+VSRCS = ./vsrc/ysyx_24110017.v
+VSRCS += $(shell find ./vsrc -name "*.v")
 CSRCS = $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 INC_PATH = ./csrc/include
 
@@ -27,7 +28,7 @@ ARGS += --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
 
 run: sim
-	$(OBJ_DIR)/Vtop_ysyx_24110017 $(ARGS)
+	$(OBJ_DIR)/Vysyx_24110017 $(ARGS)
 
 sim: $(CSRCS) $(VSRCS)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!

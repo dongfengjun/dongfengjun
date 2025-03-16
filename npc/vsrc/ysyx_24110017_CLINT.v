@@ -1,4 +1,4 @@
-module CLINT_ysyx_24110017(
+module ysyx_24110017_CLINT(
     input wire clk,
     input wire rst,
     input wire [31:0]C_AXI_AWADDR,
