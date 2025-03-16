@@ -284,7 +284,7 @@ void cpu_exec(int n) {
 int main(int argc, char *argv[]) {
 /***inst***/
 	contextp = new VerilatedContext;  //verilator指针
-  top = new Vysyx_24110017{contextp};  //实例化top块
+  top = new VReg_ysyx_24110017{contextp};  //实例化top块
 	tfp= new VerilatedVcdC;   //初始化VCD对象指针
   contextp->traceEverOn(true); //打开追踪
   top->trace(tfp,0);
