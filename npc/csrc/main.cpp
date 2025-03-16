@@ -10,7 +10,7 @@
 #include "./include/common.h"
 
 VerilatedContext* contextp = NULL;	//verilator指针
-Vysyx_24110017* top = NULL;	//实例化指针
+VReg_ysyx_24110017* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 /***DPI-C***/
 word_t gpr_regs_display(int raddr) {
