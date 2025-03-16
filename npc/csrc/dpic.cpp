@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <iostream>
-#include "VReg_ysyx_24110017.h"
+#include "Vysyx_24110017.h"
 #include "verilated.h"
 #include "svdpi.h"
-#include "VReg_ysyx_24110017__Dpi.h"
+#include "Vysyx_24110017__Dpi.h"
 #include "./include/common.h"
 
 #ifdef CONFIG_MTRACE

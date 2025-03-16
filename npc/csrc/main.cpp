@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "VReg_ysyx_24110017.h"  //.v被verilator编译成V.h
+#include "Vysyx_24110017.h"  //.v被verilator编译成V.h
 #include "verilated.h"  //verialtor官方库
 #include "verilated_vcd_c.h"	//生成.vcd文件
 #include <iostream>
 #include "svdpi.h"
-#include "VReg_ysyx_24110017__Dpi.h"
+#include "Vysyx_24110017__Dpi.h"
 #include "./include/common.h"
 
 VerilatedContext* contextp = NULL;	//verilator指针
-VReg_ysyx_24110017* top = NULL;	//实例化指针
+Vysyx_24110017* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 /***DPI-C***/
 word_t gpr_regs_display(int raddr) {
@@ -284,7 +284,7 @@ void cpu_exec(int n) {
 int main(int argc, char *argv[]) {
 /***inst***/
 	contextp = new VerilatedContext;  //verilator指针
-  top = new VReg_ysyx_24110017{contextp};  //实例化top块
+  top = new Vysyx_24110017{contextp};  //实例化top块
 	tfp= new VerilatedVcdC;   //初始化VCD对象指针
   contextp->traceEverOn(true); //打开追踪
   top->trace(tfp,0);
