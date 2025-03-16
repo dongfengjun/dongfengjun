@@ -1,6 +1,7 @@
 BUILD = ./build
 OBJ_DIR = $(BUILD)/obj_dir
-VSRCS = $(shell find ./vsrc -name "*.v")
+VSRCS = ./vsrc/ysyx_24110017.v
+VSRCS += $(shell find ./vsrc -name "*.v")
 CSRCS = $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 INC_PATH = ./csrc/include
 
