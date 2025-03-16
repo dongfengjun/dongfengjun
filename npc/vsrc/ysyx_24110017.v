@@ -1,10 +1,7 @@
-module ysyx_24110017(clk,rst,pc,dnpc,inst,DIFFTEST);
+module ysyx_24110017(clk,rst,io_interrupt);
 input clk;
 input rst;
-output [31:0]pc;//if
-output [31:0]dnpc;
-output [31:0]inst;
-output DIFFTEST;
+input io_interrupt;
 
 wire DIFFTEST = difftest;
 /***PCU***/
