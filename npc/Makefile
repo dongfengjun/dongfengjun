@@ -27,7 +27,7 @@ ARGS += --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
 
 run: sim
-	$(OBJ_DIR)/Vysyx_24110017 $(ARGS)
+	$(OBJ_DIR)/Vtop_ysyx_24110017 $(ARGS)
 
 sim: $(CSRCS) $(VSRCS)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!

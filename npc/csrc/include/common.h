@@ -1,7 +1,7 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-#include "Vysyx_24110017.h"
+#include "Vtop_ysyx_24110017.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>

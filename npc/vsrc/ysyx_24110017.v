@@ -1,4 +1,4 @@
-module ysyx_24110017(clk,rst,pc,dnpc,inst,DIFFTEST);
+module top_ysyx_24110017(clk,rst,pc,dnpc,inst,DIFFTEST);
 input clk;
 input rst;
 output [31:0]pc;//if
