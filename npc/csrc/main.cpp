@@ -1,26 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "Vtop_ysyx_24110017.h"  //.v被verilator编译成V.h
+#include "Vysyx_24110017.h"  //.v被verilator编译成V.h
 #include "verilated.h"  //verialtor官方库
 #include "verilated_vcd_c.h"	//生成.vcd文件
 #include <iostream>
 #include "svdpi.h"
-#include "Vtop_ysyx_24110017__Dpi.h"
+#include "Vysyx_24110017__Dpi.h"
 #include "./include/common.h"
 
 VerilatedContext* contextp = NULL;	//verilator指针
-Vtop_ysyx_24110017* top = NULL;	//实例化指针
+Vysyx_24110017* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 /***DPI-C***/
 word_t gpr_regs_display(int raddr) {
   extern int gpr_reg_display(int addr);
-  svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017.RFU"));
+  svSetScope(svGetScopeFromName("TOP.ysyx_24110017.RFU"));
   return gpr_reg_display(raddr);
 }
 word_t csrs_display(int i) {
   extern int csr_display(int i);
-  svSetScope(svGetScopeFromName("TOP.top_ysyx_24110017"));
+  svSetScope(svGetScopeFromName("TOP.ysyx_24110017"));
   return csr_display(i);
 }
 
