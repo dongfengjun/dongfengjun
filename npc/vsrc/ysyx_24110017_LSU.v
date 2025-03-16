@@ -1,4 +1,4 @@
-module LSU_ysyx_24110017(clk,rst,sram_lsu_read,sram_lsu_write,LSU_DONE,
+module ysyx_24110017_LSU(clk,rst,sram_lsu_read,sram_lsu_write,LSU_DONE,
 			ls_rdata,
 			valid,wen,waddr,wdata,raddr,wmask,
 			M_AXI_AWADDR,M_AXI_AWVALID,M_AXI_AWREADY,

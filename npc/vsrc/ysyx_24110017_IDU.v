@@ -1,4 +1,4 @@
-module IDU_ysyx_24110017(clk,rst,
+module ysyx_24110017_IDU(clk,rst,
 			inst,IFU_VALID,IDU_READY,IDU_VALID,EXU_READY,
 			op_reg,rd_reg,funct3_reg,rs1_reg,rs2_reg,imm_reg,funct7_reg,shamt_reg
 );

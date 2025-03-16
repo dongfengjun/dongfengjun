@@ -1,4 +1,4 @@
-module PCU_ysyx_24110017(clk,rst,pc,dnpc,
+module ysyx_24110017_PCU(clk,rst,pc,dnpc,
 			PCU_VALID,IFU_READY
 );
 input	clk;

@@ -1,4 +1,4 @@
-module UART_ysyx_24110017(
+module ysyx_24110017_UART(
     input wire clk,
     input wire rst,
     input wire [31:0]U_AXI_AWADDR,

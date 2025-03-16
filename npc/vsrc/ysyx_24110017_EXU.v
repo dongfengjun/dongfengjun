@@ -1,4 +1,4 @@
-module EXU_ysyx_24110017(clk,rst,sram_lsu_read,sram_lsu_write,LSU_DONE,
+module ysyx_24110017_EXU(clk,rst,sram_lsu_read,sram_lsu_write,LSU_DONE,
 			IDU_VALID,EXU_READY,EXU_VALID,WBU_READY,
 			op,funct3,imm,funct7,shamt,r1,r2, //i_IDU
 			res_reg, //o_WBU
