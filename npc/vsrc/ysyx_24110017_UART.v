@@ -50,8 +50,9 @@ assign U_AXI_BID = axi_bid;
 assign U_AXI_RID = axi_rid;
 assign U_AXI_RDATA = axi_rdata;
 
+reg [31:0]axi_araddr;
 localparam DEVICE_UART_ADDR = 32'ha00003f8;
-reg [31:0] device_uart_reg;
+reg [31:0]device_uart_reg;
 reg ureg_wen;
 
 always @(posedge clk) begin
