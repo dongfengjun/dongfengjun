@@ -27,7 +27,7 @@ output [31:0]res_reg;
 
 output ls_valid,ls_wen;
 output [31:0]ls_waddr,ls_wdata,ls_raddr;
-output [7:0]ls_wmask;
+output [3:0]ls_wmask;
 input [31:0]ls_rdata;
 
 input [31:0]pc;
@@ -271,10 +271,10 @@ assign ls_valid = (op == 7'b0000011 || op == 7'b0100011) ? 1'b1 : 1'b0;
 assign ls_wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
 assign ls_waddr = (op == 7'b0100011) ? (r1 + offset) : 32'h80000000;
 assign ls_wdata = (op == 7'b0100011) ? r2 : 32'b0;
-assign ls_wmask = (op == 7'b0100011 && funct3 == 3'b000) ? 8'b00000001
- : (op == 7'b0100011 && funct3 == 3'b001) ? 8'b00000011
- : (op == 7'b0100011 && funct3 == 3'b010) ? 8'b00001111
- : 8'b0;
+assign ls_wmask = (op == 7'b0100011 && funct3 == 3'b000) ? 4'b0001
+ : (op == 7'b0100011 && funct3 == 3'b001) ? 4'b0011
+ : (op == 7'b0100011 && funct3 == 3'b010) ? 4'b1111
+ : 4'b0;
 assign ls_raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
 /***J_B_dnpc***/
 wire [31:0]pc;

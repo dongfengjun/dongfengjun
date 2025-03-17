@@ -2,10 +2,13 @@ module ysyx_24110017_LSU(clk,rst,sram_lsu_read,sram_lsu_write,LSU_DONE,
 			ls_rdata,
 			valid,wen,waddr,wdata,raddr,wmask,
 			M_AXI_AWADDR,M_AXI_AWVALID,M_AXI_AWREADY,
-			M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WVALID,M_AXI_WREADY,
-			M_AXI_BRESP,M_AXI_BVALID,M_AXI_BREADY,
-			M_AXI_ARADDR,M_AXI_ARVALID,M_AXI_ARREADY,
-			M_AXI_RDATA,M_AXI_RRESP,M_AXI_RVALID,M_AXI_RREADY
+      M_AXI_AWID,M_AXI_AWLEN,M_AXI_AWSIZE,M_AXI_AWBURST,M_AXI_WLAST,
+      M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WVALID,M_AXI_WREADY,
+      M_AXI_BRESP,M_AXI_BVALID,M_AXI_BREADY,M_AXI_BID,
+      M_AXI_ARADDR,M_AXI_ARVALID,M_AXI_ARREADY,
+      M_AXI_ARID,M_AXI_ARLEN,M_AXI_ARSIZE,M_AXI_ARBURST,
+      M_AXI_RDATA,M_AXI_RRESP,M_AXI_RVALID,M_AXI_RREADY,
+      M_AXI_RID,M_AXI_RLAST
 );
 input clk;
 input rst;
@@ -15,26 +18,39 @@ output [31:0]ls_rdata;
 
 input valid,wen;
 input [31:0]waddr,wdata,raddr;
-input [7:0]wmask;
+input [3:0]wmask;
 
-output [31:0] M_AXI_AWADDR;
+input M_AXI_AWREADY;
 output M_AXI_AWVALID;
-input  M_AXI_AWREADY;
-output [31:0] M_AXI_WDATA;
-output [7:0] M_AXI_WSTRB;
+output [3:0]M_AXI_AWID;
+output [31:0]M_AXI_AWADDR;
+output [7:0]M_AXI_AWLEN;
+output [2:0]M_AXI_AWSIZE;
+output [1:0]M_AXI_AWBURST;
+input M_AXI_WREADY;
 output M_AXI_WVALID;
-input  M_AXI_WREADY;
-input [1:0] M_AXI_BRESP;
-input M_AXI_BVALID;
+output [31:0]M_AXI_WDATA;
+output [3:0]M_AXI_WSTRB;
+output M_AXI_WLAST;
 output M_AXI_BREADY;
+input M_AXI_BVALID;
+input [3:0]M_AXI_BID;
+input [1:0]M_AXI_BRESP;
 
-output [31:0] M_AXI_ARADDR;
-output M_AXI_ARVALID;
 input M_AXI_ARREADY;
-input [31:0] M_AXI_RDATA;
-input [1:0] M_AXI_RRESP;
-input M_AXI_RVALID;
+output M_AXI_ARVALID;
+output [3:0]M_AXI_ARID;
+output [31:0]M_AXI_ARADDR;
+output [7:0]M_AXI_ARLEN;
+output [2:0]M_AXI_ARSIZE;
+output [1:0]M_AXI_ARBURST;
 output M_AXI_RREADY;
+input M_AXI_RVALID;
+input [3:0]M_AXI_RID;
+input [31:0]M_AXI_RDATA;
+input [1:0]M_AXI_RRESP;
+input M_AXI_RLAST;
+
 
 reg LSU_DONE;
 wire [31:0]ls_rdata = M_AXI_RDATA;
@@ -66,28 +82,50 @@ wire [7:0]rand_delay;
 reg [7:0]delay_counter,avalid_delay_counter,wvalid_delay_counter;
 LFSR_ysyx_24110017 LFSR_ysyx_20110017(clk,rst,rand_delay);
 ***END***/
-wire [31:0] M_AXI_AWADDR,M_AXI_WDATA,M_AXI_ARADDR,M_AXI_RDATA;
-wire [7:0] M_AXI_WSTRB;
-wire [1:0] M_AXI_BRESP,M_AXI_RRESP;
-wire M_AXI_AWVALID,M_AXI_AWREADY,M_AXI_WVALID,M_AXI_WREADY,M_AXI_BVALID,M_AXI_BREADY,M_AXI_ARVALID,M_AXI_ARREADY,M_AXI_RVALID,M_AXI_RREADY;
+wire [31:0]M_AXI_AWADDR,M_AXI_WDATA,M_AXI_ARADDR,M_AXI_RDATA;             
+wire [3:0]M_AXI_WSTRB;
+wire [7:0]M_AXI_AWLEN,M_AXI_ARLEN;
+wire [3:0]M_AXI_AWID,M_AXI_BID,M_AXI_ARID;
+wire [3:0]M_AXI_AWSIZE,M_AXI_ARSIZE;
+wire [2:0]M_AXI_AWBURST,M_AXI_ARBURST;
+wire [1:0]M_AXI_BRESP,M_AXI_RRESP;
+wire M_AXI_AWVALID,M_AXI_AWREADY,M_AXI_WVALID,M_AXI_WREADY,M_AXI_BVALID,M_AXI_BREADY,M_AXI_ARVALID,M_AXI_ARREADY,M_AXI_RVALID,M_AXI_RREADY,M_AXI_WLAST,M_AXI_RLAST;
 
 parameter IDLE=2'b0,READ=2'b01,WRITE=2'b10,DONE=2'b11;
 reg [1:0]state;
-reg axi_arvalid,axi_rready;
-reg [31:0]axi_araddr;
-assign M_AXI_ARVALID = axi_arvalid;
-assign M_AXI_RREADY = axi_rready;
-assign M_AXI_ARADDR = axi_araddr;
+
 reg axi_awvalid,axi_wvalid;
+reg [3:0]axi_awid;
 reg [31:0]axi_awaddr,axi_wdata;
-reg [7:0]axi_wstrb;
+reg [7:0]axi_awlen;
+reg [2:0]axi_awsize;
+reg [1:0]axi_awburst;
+reg [3:0]axi_wstrb;
 reg axi_bready;
 assign M_AXI_AWVALID = axi_awvalid;
 assign M_AXI_WVALID = axi_wvalid;
+assign M_AXI_AWID = axi_awid;
 assign M_AXI_AWADDR = axi_awaddr;
 assign M_AXI_WDATA = axi_wdata;
+assign M_AXI_AWLEN = axi_awlen;
+assign M_AXI_AWSIZE = axi_awsize;
+assign M_AXI_AWBURST = axi_awburst;
 assign M_AXI_WSTRB = axi_wstrb;
 assign M_AXI_BREADY = axi_bready;
+
+reg axi_arvalid,axi_rready;
+reg [3:0]axi_arid;
+reg [31:0]axi_araddr;
+reg [7:0]axi_arlen;
+reg [2:0]axi_arsize;
+reg [1:0]axi_arburst;
+assign M_AXI_ARVALID = axi_arvalid;
+assign M_AXI_RREADY = axi_rready;
+assign M_AXI_ARID = axi_arid;
+assign M_AXI_ARADDR = axi_araddr;
+assign M_AXI_ARLEN = axi_arlen;
+assign M_AXI_ARSIZE = axi_arsize;
+assign M_AXI_ARBURST = axi_arburst;
 
 always @(posedge clk or posedge rst) begin
 		if (rst) begin
@@ -98,7 +136,7 @@ always @(posedge clk or posedge rst) begin
       axi_awvalid <= 0;
       axi_awaddr <= 32'h0;
       axi_wdata <= 32'h0;
-      axi_wstrb <= 8'b0;
+      axi_wstrb <= 4'b0;
 		  axi_wvalid <= 0;
       axi_bready <= 0;
 			LSU_DONE <= 0;
