@@ -50,6 +50,7 @@ assign C_AXI_BID = axi_bid;
 assign C_AXI_RID = axi_rid;
 assign C_AXI_RDATA = axi_rdata;
 
+reg [31:0]axi_araddr;
 localparam DEVICE_CLINT_LOW_ADDR = 32'ha0000048;
 localparam DEVICE_CLINT_HIGH_ADDR = 32'ha000004c;
 reg [63:0] mtime;
