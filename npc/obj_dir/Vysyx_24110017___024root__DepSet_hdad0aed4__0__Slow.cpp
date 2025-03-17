@@ -372,7 +372,7 @@ VL_ATTR_COLD void Vysyx_24110017___024root___stl_sequent__TOP__0(Vysyx_24110017_
         vlSelf->ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_ARVALID 
             = vlSelf->ysyx_24110017__DOT__LSU__DOT__axi_arvalid;
         vlSelf->ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_WSTRB 
-            = (0xfU & (IData)(vlSelf->ysyx_24110017__DOT__LSU__DOT__axi_wstrb));
+            = vlSelf->ysyx_24110017__DOT__LSU__DOT__axi_wstrb;
         vlSelf->ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_AWADDR 
             = vlSelf->ysyx_24110017__DOT__LSU__DOT__axi_awaddr;
         vlSelf->ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_ARADDR 
