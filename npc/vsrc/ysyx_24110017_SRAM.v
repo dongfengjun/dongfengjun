@@ -1,44 +1,69 @@
 module ysyx_24110017_SRAM(clk,rst,
-				S_AXI_AWADDR,S_AXI_AWVALID,S_AXI_AWREADY,
-        S_AXI_WDATA,S_AXI_WSTRB,S_AXI_WVALID,S_AXI_WREADY,
-        S_AXI_BRESP,S_AXI_BVALID,S_AXI_BREADY,
-        S_AXI_ARADDR,S_AXI_ARVALID,S_AXI_ARREADY,
-        S_AXI_RDATA,S_AXI_RRESP,S_AXI_RVALID,S_AXI_RREADY
+		S_AXI_AWREADY,S_AXI_AWVALID,S_AXI_AWID,S_AXI_AWADDR,
+		S_AXI_AWLEN,S_AXI_AWSIZE,S_AXI_AWBURST,
+		S_AXI_WREADY,S_AXI_WVALID,S_AXI_WDATA,S_AXI_WSTRB,S_AXI_WLAST,          
+		S_AXI_BREADY,S_AXI_BVALID,S_AXI_BID,S_AXI_BRESP,
+		S_AXI_ARREADY,S_AXI_ARVALID,S_AXI_ARID,S_AXI_ARADDR,
+		S_AXI_ARLEN,S_AXI_ARSIZE,S_AXI_ARBURST,
+		S_AXI_RREADY,S_AXI_RVALID,S_AXI_RID,S_AXI_RDATA,S_AXI_RRESP,S_AXI_RLAST
 );
 input clk;
 input rst;
-input [31:0] S_AXI_AWADDR;
-input S_AXI_AWVALID;
 output S_AXI_AWREADY;
-input [31:0] S_AXI_WDATA;
-input [7:0] S_AXI_WSTRB;
-input S_AXI_WVALID;
+input S_AXI_AWVALID;
+input [3:0]S_AXI_AWID;
+input [31:0] S_AXI_AWADDR; 
+input [7:0]S_AXI_AWLEN;
+input [2:0]S_AXI_AWSIZE;
+input [1:0]S_AXI_AWBURST;
 output S_AXI_WREADY;
-output [1:0] S_AXI_BRESP;
-output S_AXI_BVALID;
+input S_AXI_WVALID;
+input [31:0]S_AXI_WDATA;
+input [3:0]S_AXI_WSTRB;
+input S_AXI_WLAST;
 input S_AXI_BREADY;
+output S_AXI_BVALID;
+output [3:0]S_AXI_BID;
+output [1:0]S_AXI_BRESP;
 
-input [31:0]S_AXI_ARADDR;
-input S_AXI_ARVALID;
 output S_AXI_ARREADY;
+input S_AXI_ARVALID;
+input [3:0]S_AXI_ARID;
+input [31:0]S_AXI_ARADDR;
+input [7:0]S_AXI_ARLEN;
+input [2:0]S_AXI_ARSIZE;
+input [1:0]S_AXI_ARBURST;
+input S_AXI_RREADY;
+output S_AXI_RVALID;
+output [3:0]S_AXI_RID;
 output [31:0] S_AXI_RDATA;
 output [1:0] S_AXI_RRESP;
-output S_AXI_RVALID;
-input S_AXI_RREADY;
+output S_AXI_RLAST;
 
-wire [31:0] S_AXI_AWADDR,S_AXI_WDATA,S_AXI_ARADDR,S_AXI_RDATA;
-wire [7:0] S_AXI_WSTRB;
-wire [1:0] S_AXI_BRESP,S_AXI_RRESP;
-wire S_AXI_AWVALID,S_AXI_AWREADY,S_AXI_WVALID,S_AXI_WREADY,S_AXI_BVALID,S_AXI_BREADY,S_AXI_ARVALID,S_AXI_ARREADY,S_AXI_RVALID,S_AXI_RREADY;
-reg axi_arready,axi_rvalid,axi_awready,axi_wready,axi_bvalid;
-reg [1:0]axi_rresp,axi_bresp;
+
+wire [31:0]S_AXI_AWADDR,S_AXI_WDATA,S_AXI_ARADDR,S_AXI_RDATA;
+wire [7:0]S_AXI_WSTRB;
+wire [7:0]S_AXI_AWLEN,S_AXI_ARLEN;
+wire [3:0]S_AXI_AWID,S_AXI_BID,S_AXI_ARID,S_AXI_RID;
+wire [3:0]S_AXI_AWSIZE,S_AXI_ARSIZE;
+wire [2:0]S_AXI_AWBURST,S_AXI_ARBURST;
+wire [1:0]S_AXI_BRESP,S_AXI_RRESP;
+wire S_AXI_AWVALID,S_AXI_AWREADY,S_AXI_WVALID,S_AXI_WREADY,S_AXI_BVALID,S_AXI_BREADY,S_AXI_ARVALID,S_AXI_ARREADY,S_AXI_RVALID,S_AXI_RREADY,S_AXI_RLAST;
+reg axi_awready,axi_wready,axi_bvalid,axi_arready,axi_rvalid;
+reg axi_rlast;
+reg [1:0]axi_bresp,axi_rresp;
+reg [3:0]axi_bid,axi_rid;
 reg [31:0]axi_rdata;
-assign S_AXI_ARREADY = axi_arready;
-assign S_AXI_RVALID = axi_rvalid;
 assign S_AXI_AWREADY = axi_awready;
 assign S_AXI_WREADY = axi_wready;
-assign S_AXI_BRESP = axi_bresp;
 assign S_AXI_BVALID = axi_bvalid;
+assign S_AXI_ARREADY = axi_arready;
+assign S_AXI_RVALID = axi_rvalid;
+assign S_AXI_RLAST = axi_rlast;
+assign S_AXI_BRESP = axi_bresp;
+assign S_AXI_RRESP = axi_rresp;
+assign S_AXI_BID = axi_bid;
+assign S_AXI_RID = axi_rid;
 assign S_AXI_RDATA = axi_rdata;
 
 reg [31:0]axi_araddr;
@@ -53,13 +78,17 @@ lfsr_ysyx_24110017 lfsr_ysyx_20110017(clk,rst,rand_delay);
 always @(posedge clk) begin
   if(rst) begin
 		//delay_counter <= 8'b0; //delay_test_rand
-	  axi_arready <= 0;
-    axi_rvalid <= 0;
 		axi_awready <= 0;
 		axi_wready <= 0;
-		axi_bresp <= 2'b00;
 		axi_bvalid <= 0;
-		s_wen <= 0;
+		axi_arready <= 0;
+		axi_rvalid <= 0;
+		axi_rlast <= 0;
+		axi_bresp <= 2'b0;
+		axi_rresp <= 2'b0;
+		axi_bid <= 4'b0;
+		axi_rid <= 4'b0;
+		axi_rdata <= 32'b0;
   end 
 	else begin
 	  if(S_AXI_ARVALID && !S_AXI_ARREADY) begin
@@ -156,7 +185,7 @@ always @(*) begin
 end
 always @(*) begin
   if(s_wen) begin
-    pmem_write(S_AXI_AWADDR,S_AXI_WDATA,S_AXI_WSTRB);
+    pmem_write(S_AXI_AWADDR,S_AXI_WDATA,{4'b0,S_AXI_WSTRB});
   end
 end
 /***END***/
