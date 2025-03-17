@@ -66,11 +66,11 @@ class Vysyx_24110017___024root final : public VerilatedModule {
         CData/*2:0*/ ysyx_24110017__DOT__S_AXI_ARSIZE;
         CData/*1:0*/ ysyx_24110017__DOT__S_AXI_AWBURST;
         CData/*1:0*/ ysyx_24110017__DOT__S_AXI_ARBURST;
-        CData/*1:0*/ ysyx_24110017__DOT__S_AXI_BRESP;
         CData/*0:0*/ ysyx_24110017__DOT__S_AXI_AWREADY;
         CData/*0:0*/ ysyx_24110017__DOT__S_AXI_WREADY;
         CData/*0:0*/ ysyx_24110017__DOT__S_AXI_BVALID;
         CData/*0:0*/ ysyx_24110017__DOT__S_AXI_ARREADY;
+        CData/*0:0*/ ysyx_24110017__DOT__S_AXI_RVALID;
         CData/*0:0*/ ysyx_24110017__DOT__S_AXI_WLAST;
         CData/*7:0*/ ysyx_24110017__DOT__U_AXI_AWLEN;
         CData/*7:0*/ ysyx_24110017__DOT__U_AXI_ARLEN;
@@ -82,11 +82,11 @@ class Vysyx_24110017___024root final : public VerilatedModule {
     };
     struct {
         CData/*1:0*/ ysyx_24110017__DOT__U_AXI_ARBURST;
-        CData/*1:0*/ ysyx_24110017__DOT__U_AXI_BRESP;
         CData/*0:0*/ ysyx_24110017__DOT__U_AXI_AWREADY;
         CData/*0:0*/ ysyx_24110017__DOT__U_AXI_WREADY;
         CData/*0:0*/ ysyx_24110017__DOT__U_AXI_BVALID;
         CData/*0:0*/ ysyx_24110017__DOT__U_AXI_ARREADY;
+        CData/*0:0*/ ysyx_24110017__DOT__U_AXI_RVALID;
         CData/*0:0*/ ysyx_24110017__DOT__U_AXI_WLAST;
         CData/*3:0*/ ysyx_24110017__DOT__C_AXI_WSTRB;
         CData/*7:0*/ ysyx_24110017__DOT__C_AXI_AWLEN;
@@ -97,14 +97,16 @@ class Vysyx_24110017___024root final : public VerilatedModule {
         CData/*2:0*/ ysyx_24110017__DOT__C_AXI_ARSIZE;
         CData/*1:0*/ ysyx_24110017__DOT__C_AXI_AWBURST;
         CData/*1:0*/ ysyx_24110017__DOT__C_AXI_ARBURST;
-        CData/*1:0*/ ysyx_24110017__DOT__C_AXI_BRESP;
         CData/*0:0*/ ysyx_24110017__DOT__C_AXI_AWVALID;
         CData/*0:0*/ ysyx_24110017__DOT__C_AXI_AWREADY;
         CData/*0:0*/ ysyx_24110017__DOT__C_AXI_WVALID;
         CData/*0:0*/ ysyx_24110017__DOT__C_AXI_WREADY;
         CData/*0:0*/ ysyx_24110017__DOT__C_AXI_BVALID;
+        CData/*0:0*/ ysyx_24110017__DOT__C_AXI_BREADY;
         CData/*0:0*/ ysyx_24110017__DOT__C_AXI_ARVALID;
         CData/*0:0*/ ysyx_24110017__DOT__C_AXI_ARREADY;
+        CData/*0:0*/ ysyx_24110017__DOT__C_AXI_RVALID;
+        CData/*0:0*/ ysyx_24110017__DOT__C_AXI_RREADY;
         CData/*0:0*/ ysyx_24110017__DOT__C_AXI_WLAST;
         CData/*0:0*/ ysyx_24110017__DOT__wbu_done;
         CData/*0:0*/ ysyx_24110017__DOT__difftest;
@@ -114,15 +116,6 @@ class Vysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ ysyx_24110017__DOT__mstatus_en;
         CData/*0:0*/ ysyx_24110017__DOT__mcause_en;
         CData/*0:0*/ ysyx_24110017__DOT__mtvec_en;
-        CData/*0:0*/ ysyx_24110017__DOT____Vcellout__ysyx_24110017_SRAM____pinNumber27;
-        CData/*0:0*/ ysyx_24110017__DOT____Vcellout__ysyx_24110017_SRAM____pinNumber19;
-        CData/*0:0*/ ysyx_24110017__DOT____Vcellout__ysyx_24110017_SRAM____pinNumber3;
-        CData/*0:0*/ ysyx_24110017__DOT____Vcellout__ysyx_24110017_UART____pinNumber27;
-        CData/*0:0*/ ysyx_24110017__DOT____Vcellout__ysyx_24110017_UART____pinNumber19;
-        CData/*0:0*/ ysyx_24110017__DOT____Vcellout__ysyx_24110017_UART____pinNumber3;
-        CData/*0:0*/ ysyx_24110017__DOT____Vcellout__ysyx_24110017_CLINT____pinNumber27;
-        CData/*0:0*/ ysyx_24110017__DOT____Vcellout__ysyx_24110017_CLINT____pinNumber19;
-        CData/*0:0*/ ysyx_24110017__DOT____Vcellout__ysyx_24110017_CLINT____pinNumber3;
         CData/*0:0*/ ysyx_24110017__DOT__PCU__DOT__pcu_valid;
         CData/*0:0*/ ysyx_24110017__DOT__PCU__DOT__state;
         CData/*0:0*/ ysyx_24110017__DOT__PCU__DOT__next_state;
@@ -145,8 +138,6 @@ class Vysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ ysyx_24110017__DOT__IDU__DOT__next_state;
         CData/*0:0*/ ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hcabf9b88__0;
         CData/*0:0*/ ysyx_24110017__DOT__IDU__DOT____VdfgTmp_he7af239d__0;
-    };
-    struct {
         CData/*0:0*/ ysyx_24110017__DOT__IDU__DOT____VdfgTmp_hcbeae6d0__0;
         CData/*0:0*/ ysyx_24110017__DOT__EXU__DOT__exu_ready;
         CData/*0:0*/ ysyx_24110017__DOT__EXU__DOT__exu_valid;
@@ -154,6 +145,8 @@ class Vysyx_24110017___024root final : public VerilatedModule {
         CData/*1:0*/ ysyx_24110017__DOT__EXU__DOT__next_state;
         CData/*0:0*/ ysyx_24110017__DOT__EXU__DOT__ecall_en;
         CData/*0:0*/ ysyx_24110017__DOT__EXU__DOT__mstatus_wen;
+    };
+    struct {
         CData/*0:0*/ ysyx_24110017__DOT__EXU__DOT__mtvec_wen;
         CData/*7:0*/ ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h71bb4a93__0;
         CData/*0:0*/ ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h4e2b38c4__0;
@@ -173,7 +166,6 @@ class Vysyx_24110017___024root final : public VerilatedModule {
         CData/*7:0*/ ysyx_24110017__DOT__LSU__DOT__axi_arlen;
         CData/*2:0*/ ysyx_24110017__DOT__LSU__DOT__axi_arsize;
         CData/*1:0*/ ysyx_24110017__DOT__LSU__DOT__axi_arburst;
-        CData/*3:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_WSTRB;
         CData/*7:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_AWLEN;
         CData/*7:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_ARLEN;
         CData/*3:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_AWID;
@@ -186,9 +178,12 @@ class Vysyx_24110017___024root final : public VerilatedModule {
         CData/*2:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_ARBURST;
         CData/*0:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_AWVALID;
         CData/*0:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_AWREADY;
+        CData/*0:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_WVALID;
+        CData/*0:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_BREADY;
         CData/*0:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_ARVALID;
         CData/*0:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_ARREADY;
         CData/*0:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_RVALID;
+        CData/*0:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_RREADY;
         CData/*0:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_WLAST;
         CData/*0:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_RLAST;
         CData/*1:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__state;
@@ -196,7 +191,10 @@ class Vysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__sel_uart;
         CData/*0:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__sel_clint;
         CData/*2:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT____VdfgTmp_h45f5e0cd__0;
+        CData/*2:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT____VdfgTmp_h532913bf__0;
+        CData/*2:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT____VdfgTmp_hc4546201__0;
         CData/*2:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT____VdfgTmp_h1cca5099__0;
+        CData/*2:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT____VdfgTmp_h92f2a7ff__0;
         CData/*0:0*/ ysyx_24110017__DOT__ysyx_24110017_SRAM__DOT__axi_awready;
         CData/*0:0*/ ysyx_24110017__DOT__ysyx_24110017_SRAM__DOT__axi_wready;
         CData/*0:0*/ ysyx_24110017__DOT__ysyx_24110017_SRAM__DOT__axi_bvalid;
@@ -211,10 +209,10 @@ class Vysyx_24110017___024root final : public VerilatedModule {
         CData/*0:0*/ ysyx_24110017__DOT__ysyx_24110017_UART__DOT__axi_awready;
         CData/*0:0*/ ysyx_24110017__DOT__ysyx_24110017_UART__DOT__axi_wready;
         CData/*0:0*/ ysyx_24110017__DOT__ysyx_24110017_UART__DOT__axi_bvalid;
-    };
-    struct {
         CData/*0:0*/ ysyx_24110017__DOT__ysyx_24110017_UART__DOT__axi_arready;
         CData/*0:0*/ ysyx_24110017__DOT__ysyx_24110017_UART__DOT__axi_rvalid;
+    };
+    struct {
         CData/*0:0*/ ysyx_24110017__DOT__ysyx_24110017_UART__DOT__axi_rlast;
         CData/*1:0*/ ysyx_24110017__DOT__ysyx_24110017_UART__DOT__axi_bresp;
         CData/*1:0*/ ysyx_24110017__DOT__ysyx_24110017_UART__DOT__axi_rresp;
@@ -238,6 +236,7 @@ class Vysyx_24110017___024root final : public VerilatedModule {
         CData/*6:0*/ __Vtableidx1;
         CData/*0:0*/ __Vdly__ysyx_24110017__DOT__IFU__DOT__ifu_valid;
         CData/*0:0*/ __Vdly__ysyx_24110017__DOT__IDU__DOT__idu_valid;
+        CData/*0:0*/ __Vdly__ysyx_24110017__DOT__ysyx_24110017_UART__DOT__ureg_wen;
         CData/*0:0*/ __Vdly__ysyx_24110017__DOT__LSU_DONE;
         CData/*0:0*/ __Vtrigrprev__TOP__clk;
         CData/*0:0*/ __Vtrigrprev__TOP__rst;
@@ -257,10 +256,9 @@ class Vysyx_24110017___024root final : public VerilatedModule {
         IData/*31:0*/ ysyx_24110017__DOT__o_mcause;
         IData/*31:0*/ ysyx_24110017__DOT__mtvec;
         IData/*31:0*/ ysyx_24110017__DOT__o_mtvec;
-        IData/*31:0*/ ysyx_24110017__DOT__S_AXI_RDATA;
-        IData/*31:0*/ ysyx_24110017__DOT__U_AXI_RDATA;
+        IData/*31:0*/ ysyx_24110017__DOT__C_AXI_AWADDR;
         IData/*31:0*/ ysyx_24110017__DOT__C_AXI_WDATA;
-        IData/*31:0*/ ysyx_24110017__DOT__C_AXI_RDATA;
+        IData/*31:0*/ ysyx_24110017__DOT__C_AXI_ARADDR;
         IData/*31:0*/ ysyx_24110017__DOT__xrd;
         IData/*31:0*/ ysyx_24110017__DOT__w_mepc;
         IData/*31:0*/ ysyx_24110017__DOT__w_mstatus;
@@ -277,10 +275,10 @@ class Vysyx_24110017___024root final : public VerilatedModule {
         IData/*31:0*/ ysyx_24110017__DOT__EXU__DOT__w_csrs;
         IData/*31:0*/ ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h7a84a28f__0;
         IData/*31:0*/ ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h8a6dd475__0;
-    };
-    struct {
         IData/*31:0*/ ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h07f18ffe__0;
         IData/*31:0*/ ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h5b9fb43d__0;
+    };
+    struct {
         IData/*31:0*/ ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h5b938a5d__0;
         IData/*31:0*/ ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h0221fda6__0;
         IData/*31:0*/ ysyx_24110017__DOT__EXU__DOT____VdfgTmp_h40793b73__0;
@@ -297,7 +295,7 @@ class Vysyx_24110017___024root final : public VerilatedModule {
         IData/*31:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_WDATA;
         IData/*31:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_ARADDR;
         IData/*31:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_RDATA;
-        VlWide<3>/*95:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT____VdfgTmp_h7e9dd1a3__0;
+        VlWide<3>/*95:0*/ ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT____VdfgTmp_had8d0b36__0;
         IData/*31:0*/ ysyx_24110017__DOT__ysyx_24110017_SRAM__DOT__axi_rdata;
         IData/*31:0*/ ysyx_24110017__DOT__ysyx_24110017_SRAM__DOT__axi_araddr;
         IData/*31:0*/ ysyx_24110017__DOT__ysyx_24110017_SRAM__DOT__s_rdata;
