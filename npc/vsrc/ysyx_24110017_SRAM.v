@@ -185,7 +185,7 @@ always @(*) begin
 end
 always @(*) begin
   if(s_wen) begin
-    pmem_write(S_AXI_AWADDR,S_AXI_WDATA,S_AXI_WSTRB);
+    pmem_write(S_AXI_AWADDR,S_AXI_WDATA,{4'b0,S_AXI_WSTRB});
   end
 end
 /***END***/
