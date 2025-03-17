@@ -232,7 +232,7 @@ assign X_AXI_AWADDR = (state == GRANT_LSU) ? LSU_AXI_AWADDR : (state == GRANT_IF
 assign X_AXI_AWVALID = (state == GRANT_LSU) ? LSU_AXI_AWVALID : (state == GRANT_IFU) ? IFU_AXI_AWREADY : 1'b0;
 assign LSU_AXI_AWREADY = (state == GRANT_LSU) ? X_AXI_AWREADY : 1'b0;
 assign X_AXI_WDATA = (state == GRANT_LSU) ? LSU_AXI_WDATA : (state == GRANT_IFU) ? IFU_AXI_WDATA : 32'h0;
-assign X_AXI_WSTRB = (state == GRANT_LSU) ? LSU_AXI_WSTRB : (state == GRANT_IFU) ? IFU_AXI_WSTRB : 8'b0;
+assign X_AXI_WSTRB = (state == GRANT_LSU) ? LSU_AXI_WSTRB : (state == GRANT_IFU) ? IFU_AXI_WSTRB : 4'b0;
 assign X_AXI_WVALID = (state == GRANT_LSU) ? LSU_AXI_WVALID : (state == GRANT_IFU) ? IFU_AXI_WVALID : 1'b0;
 assign LSU_AXI_WREADY = (state == GRANT_LSU) ? X_AXI_WREADY : 1'b0;
 assign LSU_AXI_BRESP = (state == GRANT_LSU) ? X_AXI_BRESP : 2'b0;
