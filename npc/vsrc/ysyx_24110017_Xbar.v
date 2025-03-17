@@ -31,7 +31,7 @@ module ysyx_24110017_Xbar(
 	output wire [3:0]IFU_AXI_RID,
 	output wire [31:0]IFU_AXI_RDATA,
 	output wire [1:0]IFU_AXI_RRESP,
-	output wire IFU_AXI_RLAST
+	output wire IFU_AXI_RLAST,
 /***AXI_LSU***/
 	output wire LSU_AXI_AWREADY,
 	input wire LSU_AXI_AWVALID,
@@ -62,7 +62,7 @@ module ysyx_24110017_Xbar(
 	output wire [3:0]LSU_AXI_RID,
 	output wire [31:0]LSU_AXI_RDATA,
 	output wire [1:0]LSU_AXI_RRESP,
-	output wire LSU_AXI_RLAST
+	output wire LSU_AXI_RLAST,
 /***AXI_SRAM***/
 	input wire S_AXI_AWREADY,
 	output wire S_AXI_AWVALID,
