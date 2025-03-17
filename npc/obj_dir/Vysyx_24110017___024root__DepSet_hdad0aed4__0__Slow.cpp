@@ -486,12 +486,12 @@ VL_ATTR_COLD void Vysyx_24110017___024root___stl_sequent__TOP__0(Vysyx_24110017_
                                                                                 & ((IData)(vlSelf->ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__sel_uart)
                                                                                  ? 
                                                                                 ((IData)(vlSelf->ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_WSTRB) 
-                                                                                << 0x10U)
+                                                                                << 8U)
                                                                                  : 
                                                                                 ((IData)(vlSelf->ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__sel_clint)
                                                                                  ? 
                                                                                 ((IData)(vlSelf->ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_WSTRB) 
-                                                                                << 8U)
+                                                                                << 4U)
                                                                                  : (IData)(vlSelf->ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__X_AXI_WSTRB)))), 
                                                                                 (1U 
                                                                                 & ((IData)(vlSelf->ysyx_24110017__DOT__Xbar_ysyx_24110017__DOT__sel_uart)
