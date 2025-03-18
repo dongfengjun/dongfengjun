@@ -31,8 +31,8 @@ bool RUNNING;
 void npc_trap() {
   int a0 = gpr_regs_display(10);//抓取a0
   char str[15];
-  Log("npc: %s at pc = " FMT_WORD, (a0 == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED)), top->pc);
-  RUNNING = false;
+  //Log("npc: %s at pc = " FMT_WORD, (a0 == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED)), top->pc);
+	RUNNING = false;
 }
 
 /***main***/
@@ -237,20 +237,20 @@ void dump_wave() {
 }
 
 void single_cycle() {
-	top->clk=1;top->eval();
+	top->clock=1;top->eval();
 #ifdef CONFIG_DUMP_WAVE
 	dump_wave();
 #endif
-	top->clk=0;top->eval();
+	top->clock=0;top->eval();
 #ifdef CONFIG_DUMP_WAVE
 	dump_wave();
 #endif
 }
 static void reset(int n) {
-	top->rst=1;top->eval();
+	top->reset=1;top->eval();
 	while(n-->0) single_cycle();
 //restart 默认的pc,reg,im,等在这实现
-	top->rst=0;
+	top->reset=0;
 }
 
 void cpu_exec(int n) {
@@ -261,7 +261,9 @@ void cpu_exec(int n) {
 	uint64_t timer_start = get_time();	
 	while(RUNNING && n != 0) {
 		single_cycle();
-		cpu.pc = top->dnpc;//DIFFTEST
+#ifdef CONFIG_DIFFTEST
+		cpu.pc = top->dnpc;
+#endif
 		isa_gpr_push();
 		g_nr_guest_inst++;
 #ifdef CONFIG_ITRACE
