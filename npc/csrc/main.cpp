@@ -13,7 +13,7 @@ extern "C" void flash_read(int32_t addr, int32_t *data) {assert(0);}
 extern "C" void mrom_read(int32_t addr, int32_t *data) {assert(0);}
 
 VerilatedContext* contextp = NULL;	//verilator指针
-Vysyx_24110017* top = NULL;	//实例化指针
+VysyxSoCTop* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 /***DPI-C***/
 word_t gpr_regs_display(int raddr) {
