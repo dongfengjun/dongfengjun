@@ -9,6 +9,9 @@
 #include "Vysyx_24110017__Dpi.h"
 #include "./include/common.h"
 
+extern "C" void flash_read(int32_t addr, int32_t *data) {assert(0);}
+extern "C" void mrom_read(int32_t addr, int32_t *data) {assert(0);}
+
 VerilatedContext* contextp = NULL;	//verilator指针
 Vysyx_24110017* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
@@ -283,6 +286,7 @@ void cpu_exec(int n) {
 
 int main(int argc, char *argv[]) {
 /***inst***/
+	Verilated::commandArgs(argc,argv);
 	contextp = new VerilatedContext;  //verilator指针
   top = new Vysyx_24110017{contextp};  //实例化top块
 	tfp= new VerilatedVcdC;   //初始化VCD对象指针
