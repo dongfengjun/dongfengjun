@@ -266,7 +266,7 @@ assign X_AXI_AWLEN = (state == GRANT_LSU) ? LSU_AXI_AWLEN : (state == GRANT_IFU)
 assign X_AXI_AWSIZE = (state == GRANT_LSU) ? LSU_AXI_AWSIZE : (state == GRANT_IFU) ? IFU_AXI_AWSIZE : 3'b0;
 assign X_AXI_AWBURST = (state == GRANT_LSU) ? LSU_AXI_AWBURST : (state == GRANT_IFU) ? IFU_AXI_AWBURST : 2'b0;
 assign X_AXI_WLAST = (state == GRANT_LSU) ? LSU_AXI_WLAST : (state == GRANT_IFU) ? IFU_AXI_WLAST : 1'b0;
-assign LSU_AXI_BID : (state == GRANT_LSU) ? X_AXI_BID : 4'b0;
+assign LSU_AXI_BID = (state == GRANT_LSU) ? X_AXI_BID : 4'b0;
 assign X_AXI_AWADDR = (state == GRANT_LSU) ? LSU_AXI_AWADDR : (state == GRANT_IFU) ? IFU_AXI_AWADDR : 32'h0;
 assign X_AXI_AWVALID = (state == GRANT_LSU) ? LSU_AXI_AWVALID : (state == GRANT_IFU) ? IFU_AXI_AWREADY : 1'b0;
 assign LSU_AXI_AWREADY = (state == GRANT_LSU) ? X_AXI_AWREADY : 1'b0;
@@ -289,20 +289,20 @@ assign LSU_AXI_RDATA = (state == GRANT_LSU || state == IDLE || state == WAIT_CLI
 assign LSU_AXI_RRESP = (state == GRANT_LSU) ? X_AXI_RRESP : 2'b0;
 assign LSU_AXI_RVALID = (state == GRANT_LSU) ? X_AXI_RVALID : 1'b0;
 assign X_AXI_RREADY = (state == GRANT_LSU) ? LSU_AXI_RREADY : (state == GRANT_IFU) ? IFU_AXI_RREADY : 1'b0;
-assign LSU_AXI_RID : (state == GRANT_LSU) ? X_AXI_RID : 4'b0;
-assign LSU_AXI_RLAST : (state == GRANT_LSU) ? X_AXI_RLAST : 1'b0;
+assign LSU_AXI_RID = (state == GRANT_LSU) ? X_AXI_RID : 4'b0;
+assign LSU_AXI_RLAST = (state == GRANT_LSU) ? X_AXI_RLAST : 1'b0;
 
 assign IFU_AXI_AWREADY = (state == GRANT_IFU) ? X_AXI_AWREADY : 1'b0;
 assign IFU_AXI_WREADY = (state == GRANT_IFU) ? X_AXI_WREADY : 1'b0;
 assign IFU_AXI_BRESP = (state == GRANT_IFU) ? X_AXI_BRESP : 2'b0;
 assign IFU_AXI_BVALID = (state == GRANT_IFU) ? X_AXI_BVALID : 1'b0;
-assign IFU_AXI_BID : (state == GRANT_IFU) ? X_AXI_BID : 4'b0;
+assign IFU_AXI_BID = (state == GRANT_IFU) ? X_AXI_BID : 4'b0;
 assign IFU_AXI_ARREADY = (state == GRANT_IFU) ? X_AXI_ARREADY : 1'b0;
 assign IFU_AXI_RDATA = (state == GRANT_IFU || state == IDLE) ? X_AXI_RDATA : 32'h0;
 assign IFU_AXI_RRESP = (state == GRANT_IFU) ? X_AXI_RRESP : 2'b0;
 assign IFU_AXI_RVALID = (state == GRANT_IFU) ? X_AXI_RVALID : 1'b0;
-assign IFU_AXI_RID : (state == GRANT_IFU) ? X_AXI_RID : 4'b0;
-assign IFU_AXI_RLAST : (state == GRANT_IFU) ? X_AXI_RLAST : 1'b0;
+assign IFU_AXI_RID = (state == GRANT_IFU) ? X_AXI_RID : 4'b0;
+assign IFU_AXI_RLAST = (state == GRANT_IFU) ? X_AXI_RLAST : 1'b0;
 
 
 /***SoC***/
