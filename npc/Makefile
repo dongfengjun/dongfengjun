@@ -1,6 +1,6 @@
 BUILD = ./build
 OBJ_DIR = $(BUILD)/obj_dir
-TOP = ./../ysyxSoC/build/ysyxSoCFull.v
+TOP = ./../ysyxSoC/build/ysyxSoCTop
 VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
 VSRCS += $(shell find ./vsrc -name "*.v")
 VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
