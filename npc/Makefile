@@ -34,7 +34,7 @@ ARGS += --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
 
 run: sim
-	$(OBJ_DIR)/VysyxSoCTop $(ARGS)
+	$(OBJ_DIR)/VysyxSoCFull $(ARGS)
 
 sim: $(CSRCS) $(VSRCS)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
