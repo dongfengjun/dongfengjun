@@ -18,12 +18,12 @@ VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 /***DPI-C***/
 word_t gpr_regs_display(int raddr) {
   extern int gpr_reg_display(int addr);
-  svSetScope(svGetScopeFromName("TOP.ysyx_24110017.RFU"));
+  svSetScope(svGetScopeFromName("TOP.ysyxSoCTop.RFU"));
   return gpr_reg_display(raddr);
 }
 word_t csrs_display(int i) {
   extern int csr_display(int i);
-  svSetScope(svGetScopeFromName("TOP.ysyx_24110017"));
+  svSetScope(svGetScopeFromName("TOP.ysyxSoCTop"));
   return csr_display(i);
 }
 
