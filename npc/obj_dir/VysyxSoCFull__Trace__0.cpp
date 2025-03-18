@@ -626,12 +626,12 @@ void VysyxSoCFull___024root__trace_chg_sub_0(VysyxSoCFull___024root* vlSelf, Ver
                                    ? (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__LSU__DOT__axi_arsize)
                                    : ((2U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar_ysyx_24110017__DOT__state))
                                        ? (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__IFU__DOT__axi_arsize)
-                                       : 0U))),4);
+                                       : 0U))),3);
         bufp->chgCData(oldp+506,(((1U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar_ysyx_24110017__DOT__state))
                                    ? (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__LSU__DOT__axi_arburst)
                                    : ((2U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar_ysyx_24110017__DOT__state))
                                        ? (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__IFU__DOT__axi_arburst)
-                                       : 0U))),3);
+                                       : 0U))),2);
     }
     if (VL_UNLIKELY((vlSelf->__Vm_traceActivity[3U] 
                      | vlSelf->__Vm_traceActivity[8U]))) {
@@ -1527,10 +1527,10 @@ void VysyxSoCFull___024root__trace_chg_sub_0(VysyxSoCFull___024root* vlSelf, Ver
                                    : 0U)),4);
         bufp->chgCData(oldp+863,(((1U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar_ysyx_24110017__DOT__state))
                                    ? (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__LSU__DOT__axi_awsize)
-                                   : 0U)),4);
+                                   : 0U)),3);
         bufp->chgCData(oldp+864,(((1U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar_ysyx_24110017__DOT__state))
                                    ? (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__LSU__DOT__axi_awburst)
-                                   : 0U)),3);
+                                   : 0U)),2);
         bufp->chgBit(oldp+865,(((1U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar_ysyx_24110017__DOT__state))
                                  ? (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__LSU_AXI_WLAST)
                                  : ((2U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar_ysyx_24110017__DOT__state)) 

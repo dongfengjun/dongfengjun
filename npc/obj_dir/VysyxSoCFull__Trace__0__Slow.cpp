@@ -2459,10 +2459,10 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBus(c+1364,"X_AXI_BID", false,-1, 3,0);
     tracep->declBus(c+505,"X_AXI_ARID", false,-1, 3,0);
     tracep->declBus(c+1365,"X_AXI_RID", false,-1, 3,0);
-    tracep->declBus(c+864,"X_AXI_AWSIZE", false,-1, 3,0);
-    tracep->declBus(c+506,"X_AXI_ARSIZE", false,-1, 3,0);
-    tracep->declBus(c+865,"X_AXI_AWBURST", false,-1, 2,0);
-    tracep->declBus(c+507,"X_AXI_ARBURST", false,-1, 2,0);
+    tracep->declBus(c+864,"X_AXI_AWSIZE", false,-1, 2,0);
+    tracep->declBus(c+506,"X_AXI_ARSIZE", false,-1, 2,0);
+    tracep->declBus(c+865,"X_AXI_AWBURST", false,-1, 1,0);
+    tracep->declBus(c+507,"X_AXI_ARBURST", false,-1, 1,0);
     tracep->declBus(c+1247,"X_AXI_BRESP", false,-1, 1,0);
     tracep->declBus(c+1248,"X_AXI_RRESP", false,-1, 1,0);
     tracep->declBit(c+971,"X_AXI_AWVALID", false,-1);
@@ -4138,12 +4138,12 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_full_sub_0(VysyxSoCFull___024roo
                                 ? (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__LSU__DOT__axi_arsize)
                                 : ((2U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar_ysyx_24110017__DOT__state))
                                     ? (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__IFU__DOT__axi_arsize)
-                                    : 0U))),4);
+                                    : 0U))),3);
     bufp->fullCData(oldp+507,(((1U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar_ysyx_24110017__DOT__state))
                                 ? (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__LSU__DOT__axi_arburst)
                                 : ((2U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar_ysyx_24110017__DOT__state))
                                     ? (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__IFU__DOT__axi_arburst)
-                                    : 0U))),3);
+                                    : 0U))),2);
     bufp->fullBit(oldp+508,(((IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__apbxbar__DOT__sel_6) 
                              & (1U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__axi42apb__DOT__state)))));
     bufp->fullBit(oldp+509,(((IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__apbxbar__DOT__sel_5) 
@@ -5011,10 +5011,10 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_full_sub_0(VysyxSoCFull___024roo
                                 : 0U)),4);
     bufp->fullCData(oldp+864,(((1U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar_ysyx_24110017__DOT__state))
                                 ? (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__LSU__DOT__axi_awsize)
-                                : 0U)),4);
+                                : 0U)),3);
     bufp->fullCData(oldp+865,(((1U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar_ysyx_24110017__DOT__state))
                                 ? (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__LSU__DOT__axi_awburst)
-                                : 0U)),3);
+                                : 0U)),2);
     bufp->fullBit(oldp+866,(((1U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar_ysyx_24110017__DOT__state))
                               ? (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__LSU_AXI_WLAST)
                               : ((2U == (IData)(vlSelf->ysyxSoCTop__DOT__dut__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar_ysyx_24110017__DOT__state)) 

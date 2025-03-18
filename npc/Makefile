@@ -1,6 +1,6 @@
 BUILD = ./build
 OBJ_DIR = $(BUILD)/obj_dir
-VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
+TOP = ./../ysyxSoC/build/ysyxSoCFull.v
 VSRCS += $(shell find ./vsrc -name "*.v")
 VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
 CSRCS = $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
@@ -19,6 +19,7 @@ VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
 VERILATOR_FLAGS += -CFLAGS -g
 VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
 VERILATOR_FLAGS += -LDFLAGS -lreadline
+VERILATOR_FLAGS += --top-module $(TOP)
 VERILATOR_FLAGS += --timescale "1ns/1ns" --no-timing
 
 LOG ?= $(BUILD)/npc-log.txt
