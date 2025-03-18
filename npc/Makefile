@@ -5,8 +5,8 @@ VSRCS += $(shell find ./vsrc -name "*.v")
 VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
 CSRCS = $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 INC_PATH = ./csrc/include
-INC_PATH += ./../ysyxSoC/perip/uart16550/rtl
-INC_PATH += ./../ysyxSoC/perip/spi/rtl
+INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
+INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
 
 LDFLAGS += $(shell llvm-config --ldflags) -fPIE
 LIBS += $(shell llvm-config --libs)
@@ -15,7 +15,7 @@ LDLIBS := -lasan $(LDLIBS)
 
 VERILATOR = verilator
 VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build
-VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH)
+VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
 VERILATOR_FLAGS += -CFLAGS -g
 VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
 VERILATOR_FLAGS += -LDFLAGS -lreadline
