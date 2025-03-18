@@ -1,29 +1,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "VysyxSoCTop.h"  //.v被verilator编译成V.h
+#include "VysyxSoCFull.h"  //.v被verilator编译成V.h
 #include "verilated.h"  //verialtor官方库
 #include "verilated_vcd_c.h"	//生成.vcd文件
 #include <iostream>
 #include "svdpi.h"
-#include "VysyxSoCTop__Dpi.h"
+#include "VysyxSoCFull__Dpi.h"
 #include "./include/common.h"
 
 extern "C" void flash_read(int32_t addr, int32_t *data) {assert(0);}
 extern "C" void mrom_read(int32_t addr, int32_t *data) {assert(0);}
 
 VerilatedContext* contextp = NULL;	//verilator指针
-VysyxSoCTop* top = NULL;	//实例化指针
+VysyxSoCFull* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 /***DPI-C***/
 word_t gpr_regs_display(int raddr) {
   extern int gpr_reg_display(int addr);
-  svSetScope(svGetScopeFromName("TOP.ysyxSoCTop.cpu.RFU"));
+  svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.cpu.RFU"));
   return gpr_reg_display(raddr);
 }
 word_t csrs_display(int i) {
   extern int csr_display(int i);
-  svSetScope(svGetScopeFromName("TOP.ysyxSoCTop"));
+  svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.cpu"));
   return csr_display(i);
 }
 
@@ -290,7 +290,7 @@ int main(int argc, char *argv[]) {
 /***inst***/
 	Verilated::commandArgs(argc,argv);
 	contextp = new VerilatedContext;  //verilator指针
-  top = new VysyxSoCTop{contextp};  //实例化top块
+  top = new VysyxSoCFull{contextp};  //实例化top块
 	tfp= new VerilatedVcdC;   //初始化VCD对象指针
   contextp->traceEverOn(true); //打开追踪
   top->trace(tfp,0);

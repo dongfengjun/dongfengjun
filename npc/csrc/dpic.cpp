@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <iostream>
-#include "VysyxSoCTop.h"
+#include "VysyxSoCFull.h"
 #include "verilated.h"
 #include "svdpi.h"
-#include "VysyxSoCTop__Dpi.h"
+#include "VysyxSoCFull__Dpi.h"
 #include "./include/common.h"
 
 #ifdef CONFIG_MTRACE
