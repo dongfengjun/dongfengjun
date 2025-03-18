@@ -22,9 +22,9 @@ word_t gpr_regs_display(int raddr) {
   //return gpr_reg_display(raddr);
 }
 word_t csrs_display(int i) {
-  //extern int csr_display(int i);
-  //svSetScope(svGetScopeFromName("TOP.ysyxSoCFull"));
-  //return csr_display(i);
+  extern int csr_display(int i);
+  svSetScope(svGetScopeFromName("TOP.ysyxSoCFull"));
+  return csr_display(i);
 }
 
 bool RUNNING;
