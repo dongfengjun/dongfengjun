@@ -17,14 +17,14 @@ VysyxSoCFull* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 /***DPI-C***/
 word_t gpr_regs_display(int raddr) {
-  extern int gpr_reg_display(int addr);
-  svSetScope(svGetScopeFromName("TOP.ysyxSoCFull"));
-  return gpr_reg_display(raddr);
+  //extern int gpr_reg_display(int addr);
+  //svSetScope(svGetScopeFromName("TOP.ysyxSoCFull"));
+  //return gpr_reg_display(raddr);
 }
 word_t csrs_display(int i) {
-  extern int csr_display(int i);
-  svSetScope(svGetScopeFromName("TOP.ysyxSoCFull"));
-  return csr_display(i);
+  //extern int csr_display(int i);
+  //svSetScope(svGetScopeFromName("TOP.ysyxSoCFull"));
+  //return csr_display(i);
 }
 
 bool RUNNING;
