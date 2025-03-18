@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "Vysyx_24110017.h"  //.v被verilator编译成V.h
+#include "VysyxSoCTop.h"  //.v被verilator编译成V.h
 #include "verilated.h"  //verialtor官方库
 #include "verilated_vcd_c.h"	//生成.vcd文件
 #include <iostream>
 #include "svdpi.h"
-#include "Vysyx_24110017__Dpi.h"
+#include "VysyxSoCTop__Dpi.h"
 #include "./include/common.h"
 
 extern "C" void flash_read(int32_t addr, int32_t *data) {assert(0);}
@@ -288,7 +288,7 @@ int main(int argc, char *argv[]) {
 /***inst***/
 	Verilated::commandArgs(argc,argv);
 	contextp = new VerilatedContext;  //verilator指针
-  top = new Vysyx_24110017{contextp};  //实例化top块
+  top = new VysyxSoCTop{contextp};  //实例化top块
 	tfp= new VerilatedVcdC;   //初始化VCD对象指针
   contextp->traceEverOn(true); //打开追踪
   top->trace(tfp,0);
