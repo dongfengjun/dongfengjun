@@ -200,8 +200,8 @@ assign M_AXI_ARSIZE = axi_arsize;
 assign M_AXI_ARBURST = axi_arburst;
 
 
-parameter [1:0] SRAM_IDLE=2'b00,SRAM_FETCH=2'b01,SRAM_DONE=2'b10,SRAM_NULL=2'b11;
-reg [1:0]state;
+parameter SRAM_IDLE=1'b0,SRAM_FETCH=1'b1;
+reg state;
 reg sram_start;
 reg [31:0]inst_reg;
 
@@ -227,7 +227,6 @@ always @(posedge clk) begin
 				else begin
             case (state)
                 SRAM_IDLE: begin
-										sram_ifu_done <= 1'b0;
                     if (sram_start) begin
                         state <= SRAM_FETCH;
 												axi_arvalid <= 1'b1;
@@ -281,17 +280,6 @@ always @(posedge clk) begin
 												inst_reg <= M_AXI_RDATA;
                     end
                 end
-              /***
-								SRAM_DONE: begin
-                  state <= SRAM_IDLE;
-									sram_ifu_done <= 1'b1;
-                end
-								SRAM_NULL: begin
-									state <= SRAM_IDLE;
-								end
-							***/
-								default: begin
-								end
             endcase
         end
     end
