@@ -144,7 +144,7 @@ always @(posedge clk) begin
 			end
 			WAIT_SRAM: begin
 				sram_start <= 1'b0;
-				if(sram_ifu_done) begin
+				if(M_AXI_RVALID && M_AXI_RREADY) begin
 					ifu_valid <= 1'b1;
 				end
 			end
@@ -277,17 +277,19 @@ always @(posedge clk) begin
                     end
 /***END***/
                     if (M_AXI_RVALID && M_AXI_RREADY) begin
-												state <= SRAM_DONE; 
+												state <= SRAM_IDLE; 
                         axi_rready <= 1'b0;
                     end
                 end
-                SRAM_DONE: begin
+              /***
+								SRAM_DONE: begin
                   state <= SRAM_IDLE;
 									sram_ifu_done <= 1'b1;
                 end
 								SRAM_NULL: begin
 									state <= SRAM_IDLE;
-								end 
+								end
+							***/
             endcase
         end
     end
