@@ -290,6 +290,8 @@ always @(posedge clk) begin
 									state <= SRAM_IDLE;
 								end
 							***/
+								default: begin
+								end
             endcase
         end
     end
