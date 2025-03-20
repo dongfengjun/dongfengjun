@@ -24,8 +24,8 @@ VERILATOR_FLAGS += --top-module $(TOP)
 VERILATOR_FLAGS += --timescale "1ns/1ns" --no-timing
 
 LOG ?= $(BUILD)/npc-log.txt
-IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin 
-#/home/xi/Templates/rt-thread-am/bsp/abstract-machine/build/rtthread-riscv32-nemu.bin
+#IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
+IMG ?= ./char-test/char-test.bin
 ELF ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
 REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
 ARGS += --log=$(LOG)
