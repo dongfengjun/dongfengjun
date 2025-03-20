@@ -221,7 +221,6 @@ always @(posedge clk) begin
 					axi_arlen <= 8'b0;
 					axi_arsize <= 3'b0;
 					axi_arburst <= 2'b0;
-					sram_ifu_done <= 1'b0;
 
 					//delay_counter <= 8'b0; //delay_test_rand
         end 
