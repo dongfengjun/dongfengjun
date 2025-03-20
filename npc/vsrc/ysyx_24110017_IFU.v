@@ -151,7 +151,7 @@ always @(posedge clk) begin
 			WAIT_IDU_READY: begin
 				if(IFU_VALID && IDU_READY) begin
 					ifu_valid <= 1'b0;
-					inst <= M_AXI_RDATA;
+					inst <= inst_reg;
 				end
 			end
 			DONE_IFU: begin
@@ -203,7 +203,7 @@ assign M_AXI_ARBURST = axi_arburst;
 parameter [1:0] SRAM_IDLE=2'b00,SRAM_FETCH=2'b01,SRAM_DONE=2'b10,SRAM_NULL=2'b11;
 reg [1:0]state;
 reg sram_start;
-reg sram_ifu_done;
+reg [31:0]inst_reg;
 
 /***DELAY_TEST_RAND***
 wire [7:0]rand_delay;
@@ -279,6 +279,7 @@ always @(posedge clk) begin
                     if (M_AXI_RVALID && M_AXI_RREADY) begin
 												state <= SRAM_IDLE; 
                         axi_rready <= 1'b0;
+												inst_reg <= M_AXI_RDATA;
                     end
                 end
               /***
