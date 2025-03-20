@@ -15,7 +15,6 @@ extern "C" void flash_read(int32_t addr, int32_t *data) {
 }
 extern "C" void mrom_read(int32_t addr, int32_t *data) {
 	*data = 0b00000000000100000000000001110011;
-	printf("rdata = %d", *data);
 }
 
 VerilatedContext* contextp = NULL;	//verilator指针
