@@ -306,7 +306,6 @@ int main(int argc, char *argv[]) {
 
 /***code***/
 	init_monitor(argc, argv);//load inst
-//测试inst  std::cout<<std::hex<<pmem_read(0x80000000)<<"\n";	
 	reset(2);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
