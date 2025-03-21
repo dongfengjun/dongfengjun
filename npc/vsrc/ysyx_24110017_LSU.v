@@ -154,6 +154,7 @@ always @(posedge clk or posedge rst) begin
 					if(sram_lsu_write) begin
 		        state <= WRITE;
 						axi_awvalid <= 1'b1;//非DELAY_TEST
+						axi_awaddr <= waddr;
 	        end
 /***DELAY_TEST_AR*AWVALID***
 					if(sram_lsu_read || sram_lsu_write) begin
@@ -217,7 +218,7 @@ always @(posedge clk or posedge rst) begin
 					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
 						axi_awvalid <= 0;
 						axi_wvalid <= 1;
-						axi_awaddr <= waddr;
+						//axi_awaddr <= waddr;
 					end
 /***DELAY_TEST_WVALID***
 					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
