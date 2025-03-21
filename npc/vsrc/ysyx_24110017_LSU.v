@@ -105,11 +105,11 @@ assign M_AXI_AWVALID = axi_awvalid;
 assign M_AXI_WVALID = axi_wvalid;
 assign M_AXI_AWID = axi_awid;
 assign M_AXI_AWADDR = axi_awaddr;
-assign M_AXI_WDATA = axi_wdata;
+assign M_AXI_WDATA = (M_AXI_WVALID && M_AXI_WREADY) ? wdata : 32'h0;//axi_wdata;
 assign M_AXI_AWLEN = axi_awlen;
 assign M_AXI_AWSIZE = axi_awsize;
 assign M_AXI_AWBURST = axi_awburst;
-assign M_AXI_WSTRB = axi_wstrb;
+assign M_AXI_WSTRB = (M_AXI_WVALID && M_AXI_WREADY) ? wstrb : 4'b0;//axi_wstrb;
 assign M_AXI_BREADY = axi_bready;
 
 reg axi_arvalid,axi_rready;
@@ -239,8 +239,8 @@ always @(posedge clk or posedge rst) begin
 /***END***/
 					if(M_AXI_WVALID && M_AXI_WREADY) begin
 						axi_wvalid <= 0;
-						axi_wdata <= wdata;//加判断条件
-						axi_wstrb <= wmask;
+						//axi_wdata <= wdata;//加判断条件
+						//axi_wstrb <= wmask;
 					end
 					if(M_AXI_BVALID && !M_AXI_BREADY) begin
 						axi_bready <= 1;
