@@ -101,6 +101,7 @@ reg [2:0]axi_awsize;
 reg [1:0]axi_awburst;
 reg [3:0]axi_wstrb;
 reg axi_bready;
+reg axi_wlast;
 assign M_AXI_AWVALID = axi_awvalid;
 assign M_AXI_WVALID = axi_wvalid;
 assign M_AXI_AWID = axi_awid;
@@ -111,6 +112,7 @@ assign M_AXI_AWSIZE = axi_awsize;
 assign M_AXI_AWBURST = axi_awburst;
 assign M_AXI_WSTRB = (M_AXI_WVALID && M_AXI_WREADY) ? wmask : 4'b0;//axi_wstrb;
 assign M_AXI_BREADY = axi_bready;
+assign M_AXI_WLAST = axi_wlast;
 
 reg axi_arvalid,axi_rready;
 reg [3:0]axi_arid;
@@ -138,6 +140,7 @@ always @(posedge clk or posedge rst) begin
       axi_wstrb <= 4'b0;
 		  axi_wvalid <= 0;
 			axi_awburst <= 2'b01;
+			axi_wlast <= 0;
       axi_bready <= 0;
 			LSU_DONE <= 0;
 //			delay_counter <= 0;
@@ -219,6 +222,7 @@ always @(posedge clk or posedge rst) begin
 					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
 						axi_awvalid <= 0;
 						axi_wvalid <= 1;
+						axi_wlast <= 1;
 						//axi_awaddr <= waddr;
 					end
 /***DELAY_TEST_WVALID***
