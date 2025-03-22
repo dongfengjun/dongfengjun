@@ -137,6 +137,7 @@ always @(posedge clk or posedge rst) begin
       axi_wdata <= 32'h0;
       axi_wstrb <= 4'b0;
 		  axi_wvalid <= 0;
+			axi_awburst <= 2'b01;
       axi_bready <= 0;
 			LSU_DONE <= 0;
 //			delay_counter <= 0;
