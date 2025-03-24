@@ -13,10 +13,10 @@ Area heap = RANGE(&_heap_start, PMEM_END);
 #ifndef MAINARGS
 #define MAINARGS ""
 #endif
-static const char mainargs[] MAINARGS;
+static const char mainargs[] = MAINARGS;
 
 void putch(char ch) {
-	out(0x10000000, ch);
+	outl(0x10000000, ch);
 }
 
 void halt(int code) {
