@@ -32,13 +32,13 @@ word_t csrs_display(int i) {
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
   return csr_display(i);
 }
-extern int diff_pc;
+extern int diff_pc();
 svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-extern int diff_dnpc;
+extern int diff_dnpc();
 svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-extern int diff_inst;
+extern int diff_inst();
 svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-extern int diff_flag;
+extern int diff_flag();
 svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
 #endif
 /***END***/
