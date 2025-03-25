@@ -274,6 +274,7 @@ static void reset(int n) {
 
 void cpu_exec(int n) {
 	g_print_step = (n > 0 && n < MAX_INST_TO_PRINT);
+	printf("pc = %08x\n", diff_pc());
 #ifdef CONFIG_MTRACE
 		mtracelog = fopen("build/npc-mtrace-log.txt", "w");  //Mtrace
 #endif
@@ -316,7 +317,7 @@ int main(int argc, char *argv[]) {
   tfp->open("build/wave.vcd");//设置输出的文件wave.vcd
 	RUNNING = true;
 
-#ifdef CONFIG_DIFFTEST
+//#ifdef CONFIG_DIFFTEST
 	extern int diff_pc();
 	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
 	extern int diff_dnpc();
@@ -325,7 +326,7 @@ int main(int argc, char *argv[]) {
 	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
 	extern int diff_flag();
 	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-#endif
+//#endif
 /***code***/
 	init_monitor(argc, argv);//load inst
 	reset(2);
