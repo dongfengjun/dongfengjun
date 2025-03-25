@@ -306,7 +306,7 @@ endfunction
 export "DPI-C" function diff_flag;
 function int diff_flag;
   begin
-    assign diff_flag = DIFFTEST;
+    assign diff_flag = {31'b0,DIFFTEST};
   end
 endfunction
 /***E*N*D***/

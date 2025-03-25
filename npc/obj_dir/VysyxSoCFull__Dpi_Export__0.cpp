@@ -1,0 +1,109 @@
+// Verilated -*- C++ -*-
+// DESCRIPTION: Verilator output: Implementation of DPI export functions.
+//
+#include "VysyxSoCFull.h"
+#include "VysyxSoCFull__Syms.h"
+#include "verilated_dpi.h"
+
+
+int VysyxSoCFull::csr_display(int i) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root::csr_display\n"); );
+    // Init
+    IData/*31:0*/ i__Vcvt;
+    i__Vcvt = 0;
+    IData/*31:0*/ csr_display__Vfuncrtn__Vcvt;
+    csr_display__Vfuncrtn__Vcvt = 0;
+    // Body
+    static int __Vfuncnum = -1;
+    if (VL_UNLIKELY(__Vfuncnum == -1)) __Vfuncnum = Verilated::exportFuncNum("csr_display");
+    const VerilatedScope* __Vscopep = Verilated::dpiScope();
+    VysyxSoCFull__Vcb_csr_display_t __Vcb = (VysyxSoCFull__Vcb_csr_display_t)(VerilatedScope::exportFind(__Vscopep, __Vfuncnum));
+    i__Vcvt = i;
+    (*__Vcb)((VysyxSoCFull__Syms*)(__Vscopep->symsp()), i__Vcvt, csr_display__Vfuncrtn__Vcvt);
+    int csr_display__Vfuncrtn;
+    for (size_t csr_display__Vfuncrtn__Vidx = 0; csr_display__Vfuncrtn__Vidx < 1; ++csr_display__Vfuncrtn__Vidx) csr_display__Vfuncrtn = csr_display__Vfuncrtn__Vcvt;
+    return csr_display__Vfuncrtn;
+}
+
+int VysyxSoCFull::diff_pc() {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root::diff_pc\n"); );
+    // Init
+    IData/*31:0*/ diff_pc__Vfuncrtn__Vcvt;
+    diff_pc__Vfuncrtn__Vcvt = 0;
+    // Body
+    static int __Vfuncnum = -1;
+    if (VL_UNLIKELY(__Vfuncnum == -1)) __Vfuncnum = Verilated::exportFuncNum("diff_pc");
+    const VerilatedScope* __Vscopep = Verilated::dpiScope();
+    VysyxSoCFull__Vcb_diff_pc_t __Vcb = (VysyxSoCFull__Vcb_diff_pc_t)(VerilatedScope::exportFind(__Vscopep, __Vfuncnum));
+    (*__Vcb)((VysyxSoCFull__Syms*)(__Vscopep->symsp()), diff_pc__Vfuncrtn__Vcvt);
+    int diff_pc__Vfuncrtn;
+    for (size_t diff_pc__Vfuncrtn__Vidx = 0; diff_pc__Vfuncrtn__Vidx < 1; ++diff_pc__Vfuncrtn__Vidx) diff_pc__Vfuncrtn = diff_pc__Vfuncrtn__Vcvt;
+    return diff_pc__Vfuncrtn;
+}
+
+int VysyxSoCFull::diff_dnpc() {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root::diff_dnpc\n"); );
+    // Init
+    IData/*31:0*/ diff_dnpc__Vfuncrtn__Vcvt;
+    diff_dnpc__Vfuncrtn__Vcvt = 0;
+    // Body
+    static int __Vfuncnum = -1;
+    if (VL_UNLIKELY(__Vfuncnum == -1)) __Vfuncnum = Verilated::exportFuncNum("diff_dnpc");
+    const VerilatedScope* __Vscopep = Verilated::dpiScope();
+    VysyxSoCFull__Vcb_diff_dnpc_t __Vcb = (VysyxSoCFull__Vcb_diff_dnpc_t)(VerilatedScope::exportFind(__Vscopep, __Vfuncnum));
+    (*__Vcb)((VysyxSoCFull__Syms*)(__Vscopep->symsp()), diff_dnpc__Vfuncrtn__Vcvt);
+    int diff_dnpc__Vfuncrtn;
+    for (size_t diff_dnpc__Vfuncrtn__Vidx = 0; diff_dnpc__Vfuncrtn__Vidx < 1; ++diff_dnpc__Vfuncrtn__Vidx) diff_dnpc__Vfuncrtn = diff_dnpc__Vfuncrtn__Vcvt;
+    return diff_dnpc__Vfuncrtn;
+}
+
+int VysyxSoCFull::diff_inst() {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root::diff_inst\n"); );
+    // Init
+    IData/*31:0*/ diff_inst__Vfuncrtn__Vcvt;
+    diff_inst__Vfuncrtn__Vcvt = 0;
+    // Body
+    static int __Vfuncnum = -1;
+    if (VL_UNLIKELY(__Vfuncnum == -1)) __Vfuncnum = Verilated::exportFuncNum("diff_inst");
+    const VerilatedScope* __Vscopep = Verilated::dpiScope();
+    VysyxSoCFull__Vcb_diff_inst_t __Vcb = (VysyxSoCFull__Vcb_diff_inst_t)(VerilatedScope::exportFind(__Vscopep, __Vfuncnum));
+    (*__Vcb)((VysyxSoCFull__Syms*)(__Vscopep->symsp()), diff_inst__Vfuncrtn__Vcvt);
+    int diff_inst__Vfuncrtn;
+    for (size_t diff_inst__Vfuncrtn__Vidx = 0; diff_inst__Vfuncrtn__Vidx < 1; ++diff_inst__Vfuncrtn__Vidx) diff_inst__Vfuncrtn = diff_inst__Vfuncrtn__Vcvt;
+    return diff_inst__Vfuncrtn;
+}
+
+int VysyxSoCFull::diff_flag() {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root::diff_flag\n"); );
+    // Init
+    IData/*31:0*/ diff_flag__Vfuncrtn__Vcvt;
+    diff_flag__Vfuncrtn__Vcvt = 0;
+    // Body
+    static int __Vfuncnum = -1;
+    if (VL_UNLIKELY(__Vfuncnum == -1)) __Vfuncnum = Verilated::exportFuncNum("diff_flag");
+    const VerilatedScope* __Vscopep = Verilated::dpiScope();
+    VysyxSoCFull__Vcb_diff_flag_t __Vcb = (VysyxSoCFull__Vcb_diff_flag_t)(VerilatedScope::exportFind(__Vscopep, __Vfuncnum));
+    (*__Vcb)((VysyxSoCFull__Syms*)(__Vscopep->symsp()), diff_flag__Vfuncrtn__Vcvt);
+    int diff_flag__Vfuncrtn;
+    for (size_t diff_flag__Vfuncrtn__Vidx = 0; diff_flag__Vfuncrtn__Vidx < 1; ++diff_flag__Vfuncrtn__Vidx) diff_flag__Vfuncrtn = diff_flag__Vfuncrtn__Vcvt;
+    return diff_flag__Vfuncrtn;
+}
+
+int VysyxSoCFull::gpr_reg_display(int addr) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root::gpr_reg_display\n"); );
+    // Init
+    IData/*31:0*/ addr__Vcvt;
+    addr__Vcvt = 0;
+    IData/*31:0*/ gpr_reg_display__Vfuncrtn__Vcvt;
+    gpr_reg_display__Vfuncrtn__Vcvt = 0;
+    // Body
+    static int __Vfuncnum = -1;
+    if (VL_UNLIKELY(__Vfuncnum == -1)) __Vfuncnum = Verilated::exportFuncNum("gpr_reg_display");
+    const VerilatedScope* __Vscopep = Verilated::dpiScope();
+    VysyxSoCFull__Vcb_gpr_reg_display_t __Vcb = (VysyxSoCFull__Vcb_gpr_reg_display_t)(VerilatedScope::exportFind(__Vscopep, __Vfuncnum));
+    addr__Vcvt = addr;
+    (*__Vcb)((VysyxSoCFull__Syms*)(__Vscopep->symsp()), addr__Vcvt, gpr_reg_display__Vfuncrtn__Vcvt);
+    int gpr_reg_display__Vfuncrtn;
+    for (size_t gpr_reg_display__Vfuncrtn__Vidx = 0; gpr_reg_display__Vfuncrtn__Vidx < 1; ++gpr_reg_display__Vfuncrtn__Vidx) gpr_reg_display__Vfuncrtn = gpr_reg_display__Vfuncrtn__Vcvt;
+    return gpr_reg_display__Vfuncrtn;
+}
