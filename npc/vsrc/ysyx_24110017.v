@@ -284,6 +284,31 @@ function int csr_display(int i);
     assign csr_display = (i == 0) ? mepc : (i == 1) ? mstatus : (i == 2) ? mcause : (i == 3) ? mtvec : 32'b0;
   end
 endfunction
+/***DPI-C*DIFFTEST***/
+export "DPI-C" function diff_pc;                                    
+function int diff_pc;
+  begin
+		assign diff_pc = pc;
+  end
+endfunction
+export "DPI-C" function diff_dnpc;
+function int diff_dnpc;
+  begin
+    assign diff_dnpc = dnpc;
+  end
+endfunction
+export "DPI-C" function diff_inst;
+function int diff_inst;
+  begin
+    assign diff_inst = inst;
+  end
+endfunction
+export "DPI-C" function diff_flag;
+function int diff_flag;
+  begin
+    assign diff_flag = DIFFTEST;
+  end
+endfunction
 /***E*N*D***/
 
 

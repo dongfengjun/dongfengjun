@@ -21,6 +21,7 @@ VerilatedContext* contextp = NULL;	//verilator指针
 VysyxSoCFull* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 /***DPI-C***/
+#ifdef CONFIG_DIFFTEST
 word_t gpr_regs_display(int raddr) {
   extern int gpr_reg_display(int addr);
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.RFU"));
@@ -31,6 +32,16 @@ word_t csrs_display(int i) {
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
   return csr_display(i);
 }
+extern int diff_pc;
+svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
+extern int diff_dnpc;
+svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
+extern int diff_inst;
+svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
+extern int diff_flag;
+svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
+#endif
+/***END***/
 
 bool RUNNING;
 void npc_trap() {
@@ -43,7 +54,7 @@ void npc_trap() {
 
 /***main***/
 #define MAX_INST_TO_PRINT 10//puts inst
-CPU_state cpu = {.gpr = {0}, .pc = 0x80000000};
+CPU_state cpu = {.gpr = {0}, .pc = 0x20000000};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
