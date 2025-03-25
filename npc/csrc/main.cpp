@@ -21,7 +21,6 @@ VerilatedContext* contextp = NULL;	//verilator指针
 VysyxSoCFull* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 /***DPI-C***/
-#ifdef CONFIG_DIFFTEST
 word_t gpr_regs_display(int raddr) {
   extern int gpr_reg_display(int addr);
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.RFU"));
@@ -42,7 +41,6 @@ svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
 extern int diff_flag();
 svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
 ***/
-#endif
 /***END***/
 
 bool RUNNING;
