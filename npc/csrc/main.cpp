@@ -245,7 +245,7 @@ static void trace_and_difftest() {
   if (ITRACE_COND) { log_write("%s\n", logbuf); }
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(logbuf)); }
-		IFDEF(CONFIG_DIFFTEST, if(top->DIFFTEST){difftest_step(top->pc, top->dnpc);});
+		IFDEF(CONFIG_DIFFTEST, if(diff_flag()){difftest_step(diff_pc(), diff_dnpc());});
 		IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
 
@@ -281,7 +281,7 @@ void cpu_exec(int n) {
 	while(RUNNING && n != 0) {
 		single_cycle();
 #ifdef CONFIG_DIFFTEST
-		cpu.pc = top->dnpc;
+		cpu.pc = diff_dnpc();
 #endif
 		isa_gpr_push();
 		g_nr_guest_inst++;
@@ -316,6 +316,7 @@ int main(int argc, char *argv[]) {
   tfp->open("build/wave.vcd");//设置输出的文件wave.vcd
 	RUNNING = true;
 
+#ifdef CONFIG_DIFFTEST
 	extern int diff_pc();
 	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
 	extern int diff_dnpc();
@@ -324,6 +325,7 @@ int main(int argc, char *argv[]) {
 	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
 	extern int diff_flag();
 	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
+#endif
 /***code***/
 	init_monitor(argc, argv);//load inst
 	reset(2);
