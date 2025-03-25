@@ -157,6 +157,7 @@ always @(posedge clk) begin
 				end
 			end
 			DONE_EXU: begin
+				ls_rdata_reg <= 32'h0;
 			end
 		endcase
 	end
