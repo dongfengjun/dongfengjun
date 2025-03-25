@@ -52,7 +52,7 @@ input M_AXI_RLAST;
 
 
 reg LSU_DONE;
-wire [31:0]ls_rdata = M_AXI_RDATA;
+reg [31:0]ls_rdata;
 
 /***单周期*DPIC***
 import "DPI-C" function int pmem_read(input int raddr);
@@ -143,6 +143,7 @@ always @(posedge clk or posedge rst) begin
 			axi_wlast <= 0;
       axi_bready <= 0;
 			LSU_DONE <= 0;
+			ls_rdata <= 32'h0;
 //			delay_counter <= 0;
 //			avalid_delay_counter <= 0;
 //			wvalid_delay_counter <= 0;
@@ -185,6 +186,7 @@ always @(posedge clk or posedge rst) begin
           end
 					if(M_AXI_RVALID && !M_AXI_RREADY) begin
 						axi_rready <= 1'b1;
+						ls_rdata <= M_AXI_RDATA;
 					end
 /***DELAY_TEST_RAND*RREADY***
           if(M_AXI_RVALID && !M_AXI_RREADY) begin
@@ -281,6 +283,7 @@ always @(posedge clk or posedge rst) begin
 					axi_wvalid <= 0;
 					axi_bready <= 0;
 					LSU_DONE <= 0;
+					ls_rdata <= 32'h0;
           state <= IDLE;
         end
       endcase
