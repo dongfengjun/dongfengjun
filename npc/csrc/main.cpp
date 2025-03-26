@@ -22,19 +22,19 @@ VysyxSoCFull* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 /***DPI-C***/
 word_t gpr_regs_display(int raddr) {
-  extern int gpr_reg_display(int addr);
+  extern int gpr_reg_grab(int addr);
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.RFU"));
-  return gpr_reg_display(raddr);
+  return gpr_reg_disgrab(raddr);
 }
 word_t csrs_display(int i) {
-  extern int csr_display(int i);
+  extern int csr_grab(int i);
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-  return csr_display(i);
+  return csr_grab(i);
 }
 word_t dpic_display(int i) {
-  extern int dpic_diff(int i);
+  extern int dpic_grab(int i);
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-  return dpic_diff(i);
+  return dpic_grab(i);
 }
 /***END***/
 

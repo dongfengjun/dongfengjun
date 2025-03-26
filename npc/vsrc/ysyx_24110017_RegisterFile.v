@@ -18,10 +18,10 @@ module ysyx_24110017_RegisterFile #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
 	assign r2 = (raddr2 == 0) ? 32'b0 : rf[raddr2];	
 
 /***DPI-C***/
-export "DPI-C" function gpr_reg_display;
-function int gpr_reg_display(int addr);
+export "DPI-C" function gpr_reg_grab;
+function int gpr_reg_grab(int addr);
 	begin
-		assign gpr_reg_display = (addr == 0) ? 32'b0 : rf[addr];
+		assign gpr_reg_grab = (addr == 0) ? 32'b0 : rf[addr];
 	end
 endfunction
 /***E*N*D***/

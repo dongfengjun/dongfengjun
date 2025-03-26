@@ -278,17 +278,17 @@ ysyx_24110017_Reg #(32, 32'b0) mtvec_ysyx_24110017 (clock,reset,w_mtvec,mtvec,mt
 
 
 /***DPI-C*CSR***/
-export "DPI-C" function csr_display;                                    
-function int csr_display(int i);
+export "DPI-C" function csr_grab;                                    
+function int csr_grab(int i);
   begin
-    assign csr_display = (i == 0) ? mepc : (i == 1) ? mstatus : (i == 2) ? mcause : (i == 3) ? mtvec : 32'b0;
+    assign csr_grab = (i == 0) ? mepc : (i == 1) ? mstatus : (i == 2) ? mcause : (i == 3) ? mtvec : 32'b0;
   end
 endfunction
 /***DPI-C*DIFFTEST***/
-export "DPI-C" function dpic_diff;                                    
-function int dpic_diff(int i);
+export "DPI-C" function dpic_grab;                                    
+function int dpic_grab(int i);
   begin
-		assign dpic_diff = (i == 0) ? pc : (i == 1) ? dnpc : (i == 2) ? inst : (i == 3) ? {31'b0,DIFFTEST} : 32'b0;
+		assign dpic_grab = (i == 0) ? pc : (i == 1) ? dnpc : (i == 2) ? inst : (i == 3) ? {31'b0,DIFFTEST} : 32'b0;
   end
 endfunction
 /***E*N*D***/
