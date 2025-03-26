@@ -62,7 +62,7 @@ module ysyx_24110017(
 	output io_slave_rlast
 );
 
-wire DIFFTEST = wbu_done;
+wire DIFFTEST = difftest;
 /***PCU***/
 wire [31:0]pc;
 wire [31:0]dnpc;
