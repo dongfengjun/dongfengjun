@@ -31,6 +31,11 @@ word_t csrs_display(int i) {
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
   return csr_display(i);
 }
+word_t dpic_dnpc() {
+	extern int diff_dnpc();
+  svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
+	retrun diff_dnpc();
+}
 /***END***/
 
 bool RUNNING;
@@ -267,7 +272,7 @@ void cpu_exec(int n) {
 	uint64_t timer_start = get_time();	
 	while(RUNNING && n != 0) {
 		single_cycle();
-		cpu.pc = diff_dnpc();
+		cpu.pc = dpic_dnpc();
 		isa_gpr_push();
 		g_nr_guest_inst++;
 #ifdef CONFIG_ITRACE
@@ -302,8 +307,6 @@ int main(int argc, char *argv[]) {
 	RUNNING = true;
 /***DPIC-DIFFTEST***/
 	extern int diff_pc();
-	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-	extern int diff_dnpc();
 	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
 	extern int diff_inst();
 	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
