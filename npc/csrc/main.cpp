@@ -34,7 +34,7 @@ word_t csrs_display(int i) {
 word_t dpic_dnpc() {
 	extern int diff_dnpc();
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-	retrun diff_dnpc();
+	return diff_dnpc();
 }
 /***END***/
 
