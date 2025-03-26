@@ -281,7 +281,7 @@ ysyx_24110017_Reg #(32, 32'b0) mtvec_ysyx_24110017 (clock,reset,w_mtvec,mtvec,mt
 export "DPI-C" function csr_display;                                    
 function int csr_display(int i);
   begin
-    assign csr_display = (i == 0) ? mepc : (i == 1) ? mstatus : (i == 2) ? mcause : (i == 3) ? mtvec : 32'b0;
+    assign csr_display = (i == 0) ? mepc : (i == 1) ? mstatus : (i == 2) ? mcause : (i == 3) ? mtvec : (i == 4) ? dnpc : 32'b0;
   end
 endfunction
 /***DPI-C*DIFFTEST***/
