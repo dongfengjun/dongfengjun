@@ -286,7 +286,7 @@ function int csr_display(int i);
 endfunction
 /***DPI-C*DIFFTEST***/
 export "DPI-C" function dpic_diff;                                    
-function int dpic_diff;
+function int dpic_diff(int i);
   begin
 		assign diff_diff = (i == 0) ? pc : (i == 1) ? dnpc : (i == 2) ? inst : (i == 3) ? {31'b0,DIFFTEST} : 32'b0;
   end
