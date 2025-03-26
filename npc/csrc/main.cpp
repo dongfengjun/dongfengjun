@@ -272,7 +272,6 @@ static void reset(int n) {
 
 void cpu_exec(int n) {
 	g_print_step = (n > 0 && n < MAX_INST_TO_PRINT);
-	printf("pc = %08x\n", diff_pc());
 #ifdef CONFIG_MTRACE
 		mtracelog = fopen("build/npc-mtrace-log.txt", "w");  //Mtrace
 #endif
