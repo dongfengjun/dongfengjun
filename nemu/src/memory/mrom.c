@@ -1,7 +1,7 @@
 #include <memory/host.h>
 #include <memory/paddr.h>
 
-static uint8_t mrom[0x1000] = {};
+static uint8_t mrom[0x1000] PG_ALIGN = {};
 
 static uint8_t* guest_to_host_mrom(paddr_t paddr) { return mrom + paddr - 0x20000000;}
 
