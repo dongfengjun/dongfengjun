@@ -3,7 +3,8 @@ PHDRS { text PT_LOAD; data PT_LOAD; }
 
 SECTIONS {
   /* _pmem_start and _entry_offset are defined in LDFLAGS /0x20000000/*/
-  . = _pmem_start + _entry_offset;
+  /*. = _pmem_start + _entry_offset;*/
+	. = 0x80000000;
   .text : {
     *(entry)
     *(.text*)
@@ -24,7 +25,7 @@ SECTIONS {
     *(.sbss*)
     *(.scommon)
   }
-  _stack_top = ALIGN(0x1000, 0xf0000000);
+  _stack_top = ALIGN(0x1000, 0x0f000000);
   . = _stack_top + 0x2000;
   _stack_pointer = .;
   end = .;
