@@ -48,7 +48,8 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
   s->snpc = pc;
-	printf("pc = %08x\n inst = %08x", pc, s->isa.inst.val);
+	uint32_t *inst = &s->isa.inst.val;
+	printf("pc = %08x inst = %08x\n", pc, inst);
   isa_exec_once(s);
   cpu.pc = s->dnpc;
 #ifdef CONFIG_ITRACE
