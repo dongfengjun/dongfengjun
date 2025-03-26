@@ -24,7 +24,7 @@ VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 word_t gpr_regs_display(int raddr) {
   extern int gpr_reg_grab(int addr);
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.RFU"));
-  return gpr_reg_disgrab(raddr);
+  return gpr_reg_grab(raddr);
 }
 word_t csrs_display(int i) {
   extern int csr_grab(int i);
