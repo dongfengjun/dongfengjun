@@ -272,7 +272,7 @@ void cpu_exec(int n) {
 	uint64_t timer_start = get_time();	
 	while(RUNNING && n != 0) {
 		single_cycle();
-		cpu.pc = dpic_dispaly(1);
+		cpu.pc = dpic_display(1);
 		isa_gpr_push();
 		g_nr_guest_inst++;
 #ifdef CONFIG_ITRACE
