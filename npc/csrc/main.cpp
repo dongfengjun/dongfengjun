@@ -237,7 +237,7 @@ static void trace_and_difftest() {
   if (ITRACE_COND) { log_write("%s\n", logbuf); }
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(logbuf)); }
-		IFDEF(CONFIG_DIFFTEST, if(diff_flag()){difftest_step(diff_pc(), diff_dnpc());});
+		IFDEF(CONFIG_DIFFTEST, if(dpic_display(3)){difftest_step(diff_pc(), diff_dnpc());});
 		IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
 
