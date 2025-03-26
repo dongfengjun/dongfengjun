@@ -281,32 +281,14 @@ ysyx_24110017_Reg #(32, 32'b0) mtvec_ysyx_24110017 (clock,reset,w_mtvec,mtvec,mt
 export "DPI-C" function csr_display;                                    
 function int csr_display(int i);
   begin
-    assign csr_display = (i == 0) ? mepc : (i == 1) ? mstatus : (i == 2) ? mcause : (i == 3) ? mtvec : (i == 4) ? dnpc : 32'b0;
+    assign csr_display = (i == 0) ? mepc : (i == 1) ? mstatus : (i == 2) ? mcause : (i == 3) ? mtvec : 32'b0;
   end
 endfunction
 /***DPI-C*DIFFTEST***/
-export "DPI-C" function diff_pc;                                    
-function int diff_pc;
+export "DPI-C" function dpic_diff;                                    
+function int dpic_diff;
   begin
-		assign diff_pc = pc;
-  end
-endfunction
-export "DPI-C" function diff_dnpc;
-function int diff_dnpc;
-  begin
-    assign diff_dnpc = dnpc;
-  end
-endfunction
-export "DPI-C" function diff_inst;
-function int diff_inst;
-  begin
-    assign diff_inst = inst;
-  end
-endfunction
-export "DPI-C" function diff_flag;
-function int diff_flag;
-  begin
-    assign diff_flag = {31'b0,DIFFTEST};
+		assign diff_diff = (i == 0) ? pc : (i == 1) ? dnpc : (i == 2) ? inst : (i == 3) ? {31'b0,DIFFTEST} : 32'b0;
   end
 endfunction
 /***E*N*D***/

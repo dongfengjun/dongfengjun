@@ -31,6 +31,11 @@ word_t csrs_display(int i) {
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
   return csr_display(i);
 }
+word_t dpic_display(int i) {
+  extern int dpic_diff(int i);
+  svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
+  return dpic_diff(i);
+}
 /***END***/
 
 bool RUNNING;
@@ -267,7 +272,7 @@ void cpu_exec(int n) {
 	uint64_t timer_start = get_time();	
 	while(RUNNING && n != 0) {
 		single_cycle();
-		cpu.pc = csrs_display(4);
+		cpu.pc = dpic_dispaly(1);
 		isa_gpr_push();
 		g_nr_guest_inst++;
 #ifdef CONFIG_ITRACE
@@ -300,16 +305,6 @@ int main(int argc, char *argv[]) {
   top->trace(tfp,0);
   tfp->open("build/wave.vcd");//设置输出的文件wave.vcd
 	RUNNING = true;
-/***DPIC-DIFFTEST***/
-	extern int diff_pc();
-	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-	extern int difddf_dnpc();
-	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-	extern int diff_inst();
-	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-	extern int diff_flag();
-	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-/***E*N*D***/
 /***code***/
 	init_monitor(argc, argv);//load inst
 	reset(2);
