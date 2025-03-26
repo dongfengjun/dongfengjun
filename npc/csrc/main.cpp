@@ -31,24 +31,13 @@ word_t csrs_display(int i) {
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
   return csr_display(i);
 }
-/***
-extern int diff_pc();
-svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-extern int diff_dnpc();
-svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-extern int diff_inst();
-svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-extern int diff_flag();
-svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-***/
 /***END***/
 
 bool RUNNING;
 void npc_trap() {
   int a0 = gpr_regs_display(10);//抓取a0
   char str[15];
-  //Log("npc: %s at pc = " FMT_WORD, (a0 == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED)), top->pc);
-	Log("npc: %s", (a0 == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED)));
+  Log("npc: %s at pc = " FMT_WORD, (a0 == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED)), diff_pc());
 	RUNNING = false;
 }
 
@@ -313,8 +302,7 @@ int main(int argc, char *argv[]) {
   top->trace(tfp,0);
   tfp->open("build/wave.vcd");//设置输出的文件wave.vcd
 	RUNNING = true;
-
-//#ifdef CONFIG_DIFFTEST
+/***DPIC-DIFFTEST***/
 	extern int diff_pc();
 	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
 	extern int diff_dnpc();
@@ -323,7 +311,7 @@ int main(int argc, char *argv[]) {
 	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
 	extern int diff_flag();
 	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
-//#endif
+/***E*N*D***/
 /***code***/
 	init_monitor(argc, argv);//load inst
 	reset(2);
