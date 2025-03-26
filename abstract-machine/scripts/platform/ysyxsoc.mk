@@ -13,6 +13,7 @@ LDFLAGS   += -T $(AM_HOME)/scripts/linker-ysyxsoc.ld \
 						 --defsym=_pmem_start=0x20000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
+ARGS += -b  #批处理
 .PHONY: $(AM_HOME)/am/src/riscv/ysyxsoc/trm.c
 
 image: $(IMAGE).elf
