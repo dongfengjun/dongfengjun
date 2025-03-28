@@ -4,7 +4,7 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 static unsigned long int next = 1;
-//char *hbrk = NULL;
+char *hbrk = NULL;
 
 int rand(void) {
   // RAND_MAX assumed to be 32767
@@ -41,6 +41,7 @@ void *malloc(size_t size) {
   // On native, malloc() will be called during initializaion of C runtime.
   // Therefore do not call panic() here, else it will yield a dead recursion:
   //   panic() -> putchar() -> (glibc) -> malloc() -> panic()
+/***	
 	if(size == 0) return NULL;
 	size = (size_t)ROUNDUP(size, 8);
 	size_t total_size = sizeof(struct block_header) + size;
@@ -64,7 +65,10 @@ void *malloc(size_t size) {
 		return (void*)prev;
 	}
 	return NULL;
-/***
+***/
+	if(hbrk == NULL) {
+		hbrk = (char*)ROUNDUP(heap.start, 8);
+	}
 	char *old = hbrk;
 	hbrk += size;
 	assert((uintptr_t)heap.start <= (uintptr_t)hbrk && (uintptr_t)hbrk < (uintptr_t)heap.end);
@@ -72,7 +76,6 @@ void *malloc(size_t size) {
 		*p = 0;
 	}
 	return old;
-***/
 }
 #endif
 
