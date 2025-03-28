@@ -27,10 +27,10 @@ SECTIONS {
 	. = 0x0f000000;
 	end = .;
   _end = .;
-	_heap_start = ALIGN(0x1000);
+	_heap_start = .;
 	. = _heap_start + 0x1000;
 	_heap_end = .;
-  _stack_top = ALIGN(0x1000);
+  _stack_top = .;
   . = _stack_top + 0x1000;
   _stack_pointer = .;
 }
