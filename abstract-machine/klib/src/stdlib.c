@@ -41,28 +41,6 @@ void *malloc(size_t size) {
   // On native, malloc() will be called during initializaion of C runtime.
   // Therefore do not call panic() here, else it will yield a dead recursion:
   //   panic() -> putchar() -> (glibc) -> malloc() -> panic()	
-	if(size == 0) return NULL;
-	size = (size_t)ROUNDUP(size, 8);
-	size_t total_size = sizeof(struct block_header) + size;
-
-	struct block_header* current = (struct block_header*)heap.start;
-
-	while ((void*)current < heap.end) {
-		if(current->is_free && (current->size >= size)) {
-			struct block_header* new_block = (struct block_header*)((char*)current + total_size);
-			new_block->size = current->size - total_size;
-			new_block->is_free = 1;
-			new_block->next = current->next;
-
-			current->size = size;
-			current->is_free = 0;
-			current->next = new_block;
-			return (void*)(current + 1);
-		}
-		current = current->next;
-	}
-	return NULL;
-/***
 	if(hbrk == NULL) {
     hbrk = (void *)ROUNDUP(heap.start, 8);
 	}
@@ -75,7 +53,6 @@ void *malloc(size_t size) {
   }
 	//assert((uintptr_t)hbrk - (uintptr_t)heap.start <= MAX_MALLOC);//越界
   return old;
-***/
 }
 #endif
 
