@@ -57,8 +57,9 @@ void *malloc(size_t size) {
 			current->size = size;
 			current->is_free = 0;
 			current->next = new_block;
+			return (void*)(current + 1);
 		}
-		return (void*)(current + 1);
+		current = current->next;
 	}
 	return NULL;
 /***
