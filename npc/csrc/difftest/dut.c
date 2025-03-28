@@ -61,7 +61,8 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
 		printf("pc diff ref\nref_pc= %08x\tcpu.pc = %08x\n", ref_r->pc, cpu.pc);
 		flag = false;
 	}
-/*** risv_e volatile("li a5, -1; ecall") else volatile("li a7, -1; ecall")
+/* risv_e volatile("li a5, -1; ecall") else volatile("li a7, -1; ecall") */
+/***
 	if(ref_r->csr.mepc != cpu.csr.mepc) {
 		printf("mepc diff ref\nref_mepc= %08x\tcpu.mepc = %08x\n", ref_r->csr.mepc, cpu.csr.mepc);
 		return false;

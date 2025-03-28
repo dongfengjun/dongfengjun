@@ -1,40 +1,54 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "Vysyx_24110017.h"  //.v被verilator编译成V.h
+#include "VysyxSoCFull.h"  //.v被verilator编译成V.h
 #include "verilated.h"  //verialtor官方库
 #include "verilated_vcd_c.h"	//生成.vcd文件
 #include <iostream>
 #include "svdpi.h"
-#include "Vysyx_24110017__Dpi.h"
+#include "VysyxSoCFull__Dpi.h"
 #include "./include/common.h"
 
+/***ysyxSoC***/
+extern "C" void flash_read(int32_t addr, int32_t *data) {
+	assert(0);
+}
+extern "C" void mrom_read(int32_t addr, int32_t *data) {
+	*data = paddr_read(addr,4);
+}
+
 VerilatedContext* contextp = NULL;	//verilator指针
-Vysyx_24110017* top = NULL;	//实例化指针
+VysyxSoCFull* top = NULL;	//实例化指针
 VerilatedVcdC *tfp=	NULL;	//VCD对象指针
 /***DPI-C***/
 word_t gpr_regs_display(int raddr) {
-  extern int gpr_reg_display(int addr);
-  svSetScope(svGetScopeFromName("TOP.ysyx_24110017.RFU"));
-  return gpr_reg_display(raddr);
+  extern int gpr_reg_grab(int addr);
+  svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.RFU"));
+  return gpr_reg_grab(raddr);
 }
 word_t csrs_display(int i) {
-  extern int csr_display(int i);
-  svSetScope(svGetScopeFromName("TOP.ysyx_24110017"));
-  return csr_display(i);
+  extern int csr_grab(int i);
+  svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
+  return csr_grab(i);
 }
+word_t dpic_display(int i) {
+  extern int dpic_grab(int i);
+  svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
+  return dpic_grab(i);
+}
+/***END***/
 
 bool RUNNING;
 void npc_trap() {
   int a0 = gpr_regs_display(10);//抓取a0
   char str[15];
-  Log("npc: %s at pc = " FMT_WORD, (a0 == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED)), top->pc);
-  RUNNING = false;
+  Log("npc: %s at pc = " FMT_WORD, (a0 == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED)), dpic_display(0));
+	RUNNING = false;
 }
 
 /***main***/
 #define MAX_INST_TO_PRINT 10//puts inst
-CPU_state cpu = {.gpr = {0}, .pc = 0x80000000};
+CPU_state cpu = {.gpr = {0}, .pc = 0x20000000};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
@@ -223,7 +237,7 @@ static void trace_and_difftest() {
   if (ITRACE_COND) { log_write("%s\n", logbuf); }
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(logbuf)); }
-		IFDEF(CONFIG_DIFFTEST, if(top->DIFFTEST){difftest_step(top->pc, top->dnpc);});
+		IFDEF(CONFIG_DIFFTEST, if(dpic_display(3)){difftest_step(dpic_display(0), dpic_display(1));});
 		IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
 
@@ -234,20 +248,20 @@ void dump_wave() {
 }
 
 void single_cycle() {
-	top->clk=1;top->eval();
+	top->clock=1;top->eval();
 #ifdef CONFIG_DUMP_WAVE
 	dump_wave();
 #endif
-	top->clk=0;top->eval();
+	top->clock=0;top->eval();
 #ifdef CONFIG_DUMP_WAVE
 	dump_wave();
 #endif
 }
 static void reset(int n) {
-	top->rst=1;top->eval();
+	top->reset=1;top->eval();
 	while(n-->0) single_cycle();
 //restart 默认的pc,reg,im,等在这实现
-	top->rst=0;
+	top->reset=0;
 }
 
 void cpu_exec(int n) {
@@ -258,7 +272,7 @@ void cpu_exec(int n) {
 	uint64_t timer_start = get_time();	
 	while(RUNNING && n != 0) {
 		single_cycle();
-		cpu.pc = top->dnpc;//DIFFTEST
+		cpu.pc = dpic_display(1);
 		isa_gpr_push();
 		g_nr_guest_inst++;
 #ifdef CONFIG_ITRACE
@@ -283,17 +297,16 @@ void cpu_exec(int n) {
 
 int main(int argc, char *argv[]) {
 /***inst***/
+	Verilated::commandArgs(argc,argv);
 	contextp = new VerilatedContext;  //verilator指针
-  top = new Vysyx_24110017{contextp};  //实例化top块
+  top = new VysyxSoCFull{contextp};  //实例化top块
 	tfp= new VerilatedVcdC;   //初始化VCD对象指针
   contextp->traceEverOn(true); //打开追踪
   top->trace(tfp,0);
   tfp->open("build/wave.vcd");//设置输出的文件wave.vcd
 	RUNNING = true;
-
 /***code***/
 	init_monitor(argc, argv);//load inst
-//测试inst  std::cout<<std::hex<<pmem_read(0x80000000)<<"\n";	
 	reset(2);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);

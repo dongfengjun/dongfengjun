@@ -144,14 +144,14 @@ always @(posedge clk) begin
 			end
 			WAIT_SRAM: begin
 				sram_start <= 1'b0;
-				if(sram_ifu_done) begin
+				if(M_AXI_RVALID && M_AXI_RREADY) begin
 					ifu_valid <= 1'b1;
 				end
 			end
 			WAIT_IDU_READY: begin
 				if(IFU_VALID && IDU_READY) begin
 					ifu_valid <= 1'b0;
-					inst <= M_AXI_RDATA;
+					inst <= inst_reg;
 				end
 			end
 			DONE_IFU: begin
@@ -200,10 +200,10 @@ assign M_AXI_ARSIZE = axi_arsize;
 assign M_AXI_ARBURST = axi_arburst;
 
 
-parameter [1:0] SRAM_IDLE=2'b00,SRAM_FETCH=2'b01,SRAM_DONE=2'b10,SRAM_NULL=2'b11;
-reg [1:0]state;
+parameter SRAM_IDLE=1'b0,SRAM_FETCH=1'b1;
+reg state;
 reg sram_start;
-reg sram_ifu_done;
+reg [31:0]inst_reg;
 
 /***DELAY_TEST_RAND***
 wire [7:0]rand_delay;
@@ -221,14 +221,12 @@ always @(posedge clk) begin
 					axi_arlen <= 8'b0;
 					axi_arsize <= 3'b0;
 					axi_arburst <= 2'b0;
-					sram_ifu_done <= 1'b0;
 
 					//delay_counter <= 8'b0; //delay_test_rand
         end 
 				else begin
             case (state)
                 SRAM_IDLE: begin
-										sram_ifu_done <= 1'b0;
                     if (sram_start) begin
                         state <= SRAM_FETCH;
 												axi_arvalid <= 1'b1;
@@ -277,17 +275,11 @@ always @(posedge clk) begin
                     end
 /***END***/
                     if (M_AXI_RVALID && M_AXI_RREADY) begin
-												state <= SRAM_DONE; 
+												state <= SRAM_IDLE; 
                         axi_rready <= 1'b0;
+												inst_reg <= M_AXI_RDATA;
                     end
                 end
-                SRAM_DONE: begin
-                  state <= SRAM_IDLE;
-									sram_ifu_done <= 1'b1;
-                end
-								SRAM_NULL: begin
-									state <= SRAM_IDLE;
-								end 
             endcase
         end
     end

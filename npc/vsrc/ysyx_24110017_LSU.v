@@ -52,7 +52,7 @@ input M_AXI_RLAST;
 
 
 reg LSU_DONE;
-wire [31:0]ls_rdata = M_AXI_RDATA;
+reg [31:0]ls_rdata;
 
 /***单周期*DPIC***
 import "DPI-C" function int pmem_read(input int raddr);
@@ -101,16 +101,18 @@ reg [2:0]axi_awsize;
 reg [1:0]axi_awburst;
 reg [3:0]axi_wstrb;
 reg axi_bready;
+reg axi_wlast;
 assign M_AXI_AWVALID = axi_awvalid;
 assign M_AXI_WVALID = axi_wvalid;
 assign M_AXI_AWID = axi_awid;
 assign M_AXI_AWADDR = axi_awaddr;
-assign M_AXI_WDATA = axi_wdata;
+assign M_AXI_WDATA = (M_AXI_WVALID && M_AXI_WREADY) ? wdata : 32'h0;//axi_wdata;
 assign M_AXI_AWLEN = axi_awlen;
 assign M_AXI_AWSIZE = axi_awsize;
 assign M_AXI_AWBURST = axi_awburst;
-assign M_AXI_WSTRB = axi_wstrb;
+assign M_AXI_WSTRB = (M_AXI_WVALID && M_AXI_WREADY) ? wmask : 4'b0;//axi_wstrb;
 assign M_AXI_BREADY = axi_bready;
+assign M_AXI_WLAST = axi_wlast;
 
 reg axi_arvalid,axi_rready;
 reg [3:0]axi_arid;
@@ -137,8 +139,11 @@ always @(posedge clk or posedge rst) begin
       axi_wdata <= 32'h0;
       axi_wstrb <= 4'b0;
 		  axi_wvalid <= 0;
+			axi_awburst <= 2'b01;
+			axi_wlast <= 0;
       axi_bready <= 0;
 			LSU_DONE <= 0;
+			ls_rdata <= 32'h0;
 //			delay_counter <= 0;
 //			avalid_delay_counter <= 0;
 //			wvalid_delay_counter <= 0;
@@ -154,6 +159,7 @@ always @(posedge clk or posedge rst) begin
 					if(sram_lsu_write) begin
 		        state <= WRITE;
 						axi_awvalid <= 1'b1;//非DELAY_TEST
+						axi_awaddr <= waddr;
 	        end
 /***DELAY_TEST_AR*AWVALID***
 					if(sram_lsu_read || sram_lsu_write) begin
@@ -180,6 +186,7 @@ always @(posedge clk or posedge rst) begin
           end
 					if(M_AXI_RVALID && !M_AXI_RREADY) begin
 						axi_rready <= 1'b1;
+						ls_rdata <= M_AXI_RDATA;
 					end
 /***DELAY_TEST_RAND*RREADY***
           if(M_AXI_RVALID && !M_AXI_RREADY) begin
@@ -217,7 +224,8 @@ always @(posedge clk or posedge rst) begin
 					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
 						axi_awvalid <= 0;
 						axi_wvalid <= 1;
-						axi_awaddr <= waddr;
+						axi_wlast <= 1;
+						//axi_awaddr <= waddr;
 					end
 /***DELAY_TEST_WVALID***
 					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
@@ -238,8 +246,8 @@ always @(posedge clk or posedge rst) begin
 /***END***/
 					if(M_AXI_WVALID && M_AXI_WREADY) begin
 						axi_wvalid <= 0;
-						axi_wdata <= wdata;//加判断条件
-						axi_wstrb <= wmask;
+						//axi_wdata <= wdata;//加判断条件
+						//axi_wstrb <= wmask;
 					end
 					if(M_AXI_BVALID && !M_AXI_BREADY) begin
 						axi_bready <= 1;
@@ -275,6 +283,7 @@ always @(posedge clk or posedge rst) begin
 					axi_wvalid <= 0;
 					axi_bready <= 0;
 					LSU_DONE <= 0;
+					ls_rdata <= 32'h0;
           state <= IDLE;
         end
       endcase

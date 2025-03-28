@@ -1,7 +1,7 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-#include "Vysyx_24110017.h"
+#include "VysyxSoCFull.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -25,7 +25,7 @@ typedef uint16_t ioaddr_t;
 #define ITRACE_COND 1
 #define CONFIG_TARGET_NATIVE_ELF 1
 
-//#define CONFIG_DUMP_WAVE 1//是否保存波形（内存不足）
+#define CONFIG_DUMP_WAVE 1//是否保存波形（内存不足）
 
 //#define CONFIG_TRACE 1
 //	#ifdef CONFIG_TRACE
@@ -35,10 +35,10 @@ typedef uint16_t ioaddr_t;
 			//#define CONFIG_MTRACE 1 
 		//#define CONFIG_WATCHPOINT 1
 //	#endif
-//#define CONFIG_DIFFTEST 1
+#define CONFIG_DIFFTEST 1
 
-#define CONFIG_MBASE 0x80000000//IM
-#define CONFIG_MSIZE 0x8000000
+#define CONFIG_MBASE 0x20000000//IM
+#define CONFIG_MSIZE 0x1000
 #define CONFIG_PC_RESET_OFFSET 0 //reset pc offset
 #define PMEM_LEFT  ((paddr_t)CONFIG_MBASE)
 #define PMEM_RIGHT ((paddr_t)CONFIG_MBASE + CONFIG_MSIZE - 1)

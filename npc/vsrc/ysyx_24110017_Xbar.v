@@ -63,7 +63,7 @@ module ysyx_24110017_Xbar(
 	output wire [31:0]LSU_AXI_RDATA,
 	output wire [1:0]LSU_AXI_RRESP,
 	output wire LSU_AXI_RLAST,
-/***AXI_SRAM***/
+/***SoC***
 	input wire S_AXI_AWREADY,
 	output wire S_AXI_AWVALID,
 	output wire [3:0]S_AXI_AWID,
@@ -94,7 +94,7 @@ module ysyx_24110017_Xbar(
 	input wire [31:0]S_AXI_RDATA,
 	input wire [1:0]S_AXI_RRESP,
 	input wire S_AXI_RLAST,
-/***AXI_UART***/
+
 	input wire U_AXI_AWREADY,
 	output wire U_AXI_AWVALID,
 	output wire [3:0]U_AXI_AWID,
@@ -111,6 +111,7 @@ module ysyx_24110017_Xbar(
 	input wire U_AXI_BVALID,
 	input wire [3:0]U_AXI_BID,
 	input wire [1:0]U_AXI_BRESP,
+
 	input wire U_AXI_ARREADY,
 	output wire U_AXI_ARVALID,
 	output wire [3:0]U_AXI_ARID,
@@ -124,6 +125,37 @@ module ysyx_24110017_Xbar(
 	input wire [31:0]U_AXI_RDATA,
 	input wire [1:0]U_AXI_RRESP,
 	input wire U_AXI_RLAST,
+******/
+	input wire io_master_awready,
+	output wire io_master_awvalid,
+  output wire [3:0]io_master_awid,
+  output wire [31:0]io_master_awaddr,
+  output wire [7:0]io_master_awlen,
+  output wire [2:0]io_master_awsize,
+  output wire [1:0]io_master_awburst,
+  input wire io_master_wready,
+  output wire io_master_wvalid,
+  output wire [31:0]io_master_wdata,
+  output wire [3:0]io_master_wstrb,
+  output wire io_master_wlast,
+  output wire io_master_bready,
+  input wire io_master_bvalid,
+  input wire [3:0]io_master_bid,
+  input wire [1:0]io_master_bresp,
+
+  input wire io_master_arready,
+  output wire io_master_arvalid,
+  output wire [3:0]io_master_arid,
+  output wire [31:0]io_master_araddr,
+  output wire [7:0]io_master_arlen,
+  output wire [2:0]io_master_arsize,
+  output wire [1:0]io_master_arburst,
+  output wire io_master_rready,
+  input wire io_master_rvalid,
+  input wire [3:0]io_master_rid,
+  input wire [31:0]io_master_rdata,
+  input wire [1:0]io_master_rresp,
+  input wire io_master_rlast,
 /***AXI_CLINT***/
 	input wire C_AXI_AWREADY,
 	output wire C_AXI_AWVALID,
@@ -141,6 +173,7 @@ module ysyx_24110017_Xbar(
 	input wire C_AXI_BVALID,
 	input wire [3:0]C_AXI_BID,
 	input wire [1:0]C_AXI_BRESP,
+	
 	input wire C_AXI_ARREADY,
 	output wire C_AXI_ARVALID,
 	output wire [3:0]C_AXI_ARID,
@@ -160,8 +193,8 @@ wire [31:0]X_AXI_AWADDR,X_AXI_WDATA,X_AXI_ARADDR,X_AXI_RDATA;
 wire [3:0]X_AXI_WSTRB;
 wire [7:0]X_AXI_AWLEN,X_AXI_ARLEN;
 wire [3:0]X_AXI_AWID,X_AXI_BID,X_AXI_ARID,X_AXI_RID;
-wire [3:0]X_AXI_AWSIZE,X_AXI_ARSIZE;
-wire [2:0]X_AXI_AWBURST,X_AXI_ARBURST;
+wire [2:0]X_AXI_AWSIZE,X_AXI_ARSIZE;
+wire [1:0]X_AXI_AWBURST,X_AXI_ARBURST;
 wire [1:0]X_AXI_BRESP,X_AXI_RRESP;
 wire X_AXI_AWVALID,X_AXI_AWREADY,X_AXI_WVALID,X_AXI_WREADY,X_AXI_BVALID,X_AXI_BREADY,X_AXI_ARVALID,X_AXI_ARREADY,X_AXI_RVALID,X_AXI_RREADY,X_AXI_WLAST,X_AXI_RLAST;
 
@@ -228,8 +261,14 @@ always @(*) begin
 	end
 end
 
+assign X_AXI_AWID = (state == GRANT_LSU) ? LSU_AXI_AWID : (state == GRANT_IFU) ? IFU_AXI_AWID : 4'b0;
+assign X_AXI_AWLEN = (state == GRANT_LSU) ? LSU_AXI_AWLEN : (state == GRANT_IFU) ? IFU_AXI_AWLEN : 8'b0;
+assign X_AXI_AWSIZE = (state == GRANT_LSU) ? LSU_AXI_AWSIZE : (state == GRANT_IFU) ? IFU_AXI_AWSIZE : 3'b0;
+assign X_AXI_AWBURST = (state == GRANT_LSU) ? LSU_AXI_AWBURST : (state == GRANT_IFU) ? IFU_AXI_AWBURST : 2'b0;
+assign X_AXI_WLAST = (state == GRANT_LSU) ? LSU_AXI_WLAST : (state == GRANT_IFU) ? IFU_AXI_WLAST : 1'b0;
+assign LSU_AXI_BID = (state == GRANT_LSU) ? X_AXI_BID : 4'b0;
 assign X_AXI_AWADDR = (state == GRANT_LSU) ? LSU_AXI_AWADDR : (state == GRANT_IFU) ? IFU_AXI_AWADDR : 32'h0;
-assign X_AXI_AWVALID = (state == GRANT_LSU) ? LSU_AXI_AWVALID : (state == GRANT_IFU) ? IFU_AXI_AWREADY : 1'b0;
+assign X_AXI_AWVALID = (state == GRANT_LSU) ? LSU_AXI_AWVALID : (state == GRANT_IFU) ? IFU_AXI_AWVALID : 1'b0;
 assign LSU_AXI_AWREADY = (state == GRANT_LSU) ? X_AXI_AWREADY : 1'b0;
 assign X_AXI_WDATA = (state == GRANT_LSU) ? LSU_AXI_WDATA : (state == GRANT_IFU) ? IFU_AXI_WDATA : 32'h0;
 assign X_AXI_WSTRB = (state == GRANT_LSU) ? LSU_AXI_WSTRB : (state == GRANT_IFU) ? IFU_AXI_WSTRB : 4'b0;
@@ -239,6 +278,10 @@ assign LSU_AXI_BRESP = (state == GRANT_LSU) ? X_AXI_BRESP : 2'b0;
 assign LSU_AXI_BVALID = (state == GRANT_LSU) ? X_AXI_BVALID : 1'b0;
 assign X_AXI_BREADY = (state == GRANT_LSU) ? LSU_AXI_BREADY : (state == GRANT_IFU) ? IFU_AXI_BREADY : 1'b0;
  
+assign X_AXI_ARID = (state == GRANT_LSU) ? LSU_AXI_ARID : (state == GRANT_IFU) ? IFU_AXI_ARID : 4'b0;
+assign X_AXI_ARLEN = (state == GRANT_LSU) ? LSU_AXI_ARLEN : (state == GRANT_IFU) ? IFU_AXI_ARLEN : 8'b0;
+assign X_AXI_ARSIZE = (state == GRANT_LSU) ? LSU_AXI_ARSIZE : (state == GRANT_IFU) ? IFU_AXI_ARSIZE : 3'b0;
+assign X_AXI_ARBURST = (state == GRANT_LSU) ? LSU_AXI_ARBURST : (state == GRANT_IFU) ? IFU_AXI_ARBURST : 2'b0;
 assign X_AXI_ARADDR = (state == GRANT_LSU) ? LSU_AXI_ARADDR : (state == GRANT_IFU) ? IFU_AXI_ARADDR : 32'h0;
 assign X_AXI_ARVALID = (state == GRANT_LSU) ? LSU_AXI_ARVALID : (state == GRANT_IFU) ? IFU_AXI_ARVALID : 1'b0;
 assign LSU_AXI_ARREADY = (state == GRANT_LSU) ? X_AXI_ARREADY : 1'b0;
@@ -246,18 +289,60 @@ assign LSU_AXI_RDATA = (state == GRANT_LSU || state == IDLE || state == WAIT_CLI
 assign LSU_AXI_RRESP = (state == GRANT_LSU) ? X_AXI_RRESP : 2'b0;
 assign LSU_AXI_RVALID = (state == GRANT_LSU) ? X_AXI_RVALID : 1'b0;
 assign X_AXI_RREADY = (state == GRANT_LSU) ? LSU_AXI_RREADY : (state == GRANT_IFU) ? IFU_AXI_RREADY : 1'b0;
+assign LSU_AXI_RID = (state == GRANT_LSU) ? X_AXI_RID : 4'b0;
+assign LSU_AXI_RLAST = (state == GRANT_LSU) ? X_AXI_RLAST : 1'b0;
 
 assign IFU_AXI_AWREADY = (state == GRANT_IFU) ? X_AXI_AWREADY : 1'b0;
 assign IFU_AXI_WREADY = (state == GRANT_IFU) ? X_AXI_WREADY : 1'b0;
 assign IFU_AXI_BRESP = (state == GRANT_IFU) ? X_AXI_BRESP : 2'b0;
 assign IFU_AXI_BVALID = (state == GRANT_IFU) ? X_AXI_BVALID : 1'b0;
+assign IFU_AXI_BID = (state == GRANT_IFU) ? X_AXI_BID : 4'b0;
 assign IFU_AXI_ARREADY = (state == GRANT_IFU) ? X_AXI_ARREADY : 1'b0;
 assign IFU_AXI_RDATA = (state == GRANT_IFU || state == IDLE) ? X_AXI_RDATA : 32'h0;
 assign IFU_AXI_RRESP = (state == GRANT_IFU) ? X_AXI_RRESP : 2'b0;
 assign IFU_AXI_RVALID = (state == GRANT_IFU) ? X_AXI_RVALID : 1'b0;
+assign IFU_AXI_RID = (state == GRANT_IFU) ? X_AXI_RID : 4'b0;
+assign IFU_AXI_RLAST = (state == GRANT_IFU) ? X_AXI_RLAST : 1'b0;
 
 
-/*** Xbar->S\U\C ***/
+/***SoC***/
+localparam DEVICE_CLINT_LOW_ADDR = 32'ha0000048;
+localparam DEVICE_CLINT_HIGH_ADDR = 32'ha000004c;
+wire sel_clint;
+assign sel_clint = (X_AXI_AWADDR == DEVICE_CLINT_LOW_ADDR) || (X_AXI_AWADDR == DEVICE_CLINT_HIGH_ADDR) || (X_AXI_ARADDR == DEVICE_CLINT_LOW_ADDR) || (X_AXI_ARADDR == DEVICE_CLINT_HIGH_ADDR);
+
+assign X_AXI_AWREADY = (sel_clint) ? C_AXI_AWREADY : io_master_awready;
+assign {C_AXI_AWVALID,io_master_awvalid} = (sel_clint) ? {X_AXI_AWVALID,1'b0} : {1'b0,X_AXI_AWVALID};
+assign {C_AXI_AWID,io_master_awid} = (sel_clint) ? {X_AXI_AWID,4'b0} : {4'b0,X_AXI_AWID};
+assign {C_AXI_AWADDR,io_master_awaddr} = (sel_clint) ? {X_AXI_AWADDR,32'b0} : {32'b0,X_AXI_AWADDR};
+assign {C_AXI_AWLEN,io_master_awlen} = (sel_clint) ? {X_AXI_AWLEN,8'b0} : {8'b0,X_AXI_AWLEN};
+assign {C_AXI_AWSIZE,io_master_awsize} = (sel_clint) ? {X_AXI_AWSIZE,3'b0} : {3'b0,X_AXI_AWSIZE};
+assign {C_AXI_AWBURST,io_master_awburst} = (sel_clint) ? {X_AXI_AWBURST,2'b0} : {2'b0,X_AXI_AWBURST};
+assign X_AXI_WREADY = (sel_clint) ? C_AXI_WREADY : io_master_wready;
+assign {C_AXI_WVALID,io_master_wvalid} = (sel_clint) ? {X_AXI_WVALID,1'b0} : {1'b0,X_AXI_WVALID};
+assign {C_AXI_WDATA,io_master_wdata} = (sel_clint) ? {X_AXI_WDATA,32'b0} : {32'b0,X_AXI_WDATA};
+assign {C_AXI_WSTRB,io_master_wstrb} = (sel_clint) ? {X_AXI_WSTRB,4'b0} : {4'b0,X_AXI_WSTRB};
+assign {C_AXI_WLAST,io_master_wlast} = (sel_clint) ? {X_AXI_WLAST,1'b0} : {1'b0,X_AXI_WLAST};
+assign {C_AXI_BREADY,io_master_bready} = (sel_clint) ? {X_AXI_BREADY,1'b0} : {1'b0,X_AXI_BREADY};
+assign X_AXI_BVALID = (sel_clint) ? C_AXI_BVALID : io_master_bvalid;
+assign X_AXI_BID = (sel_clint) ? C_AXI_BID : io_master_bid;
+assign X_AXI_BRESP = (sel_clint) ? C_AXI_BRESP : io_master_bresp;
+
+assign X_AXI_ARREADY = (sel_clint) ? C_AXI_ARREADY : io_master_arready;
+assign {C_AXI_ARVALID,io_master_arvalid} = (sel_clint) ? {X_AXI_ARVALID,1'b0} : {1'b0,X_AXI_ARVALID};
+assign {C_AXI_ARID,io_master_arid} = (sel_clint) ? {X_AXI_ARID,4'b0} : {4'b0,X_AXI_ARID};
+assign {C_AXI_ARADDR,io_master_araddr} = (sel_clint) ? {X_AXI_ARADDR,32'b0} : {32'b0,X_AXI_ARADDR};
+assign {C_AXI_ARLEN,io_master_arlen} = (sel_clint) ? {X_AXI_ARLEN,8'b0} : {8'b0,X_AXI_ARLEN};
+assign {C_AXI_ARSIZE,io_master_arsize} = (sel_clint) ? {X_AXI_ARSIZE,3'b0} : {3'b0,X_AXI_ARSIZE};
+assign {C_AXI_ARBURST,io_master_arburst} = (sel_clint) ? {X_AXI_ARBURST,2'b0} : {2'b0,X_AXI_ARBURST};
+assign {C_AXI_RREADY,io_master_rready} = (sel_clint) ? {X_AXI_RREADY,1'b0} : {1'b0,X_AXI_RREADY};
+assign X_AXI_RVALID = (sel_clint) ? C_AXI_RVALID : io_master_rvalid;
+assign X_AXI_RID = (sel_clint) ? C_AXI_RID : io_master_rid;
+assign X_AXI_RDATA = (sel_clint || state == WAIT_CLINT) ? C_AXI_RDATA : io_master_rdata;
+assign X_AXI_RRESP = (sel_clint) ? C_AXI_RRESP : io_master_rresp;
+assign X_AXI_RLAST = (sel_clint) ? C_AXI_RLAST : io_master_rlast;
+
+/*** Xbar->S\U\C ***
 localparam DEVICE_UART_ADDR = 32'ha00003f8;
 localparam DEVICE_CLINT_LOW_ADDR = 32'ha0000048;
 localparam DEVICE_CLINT_HIGH_ADDR = 32'ha000004c;
@@ -284,5 +369,6 @@ assign X_AXI_RDATA = (sel_uart) ? U_AXI_RDATA : (sel_clint || state == WAIT_CLIN
 assign X_AXI_RRESP = (sel_uart) ? U_AXI_RRESP : (sel_clint) ? C_AXI_RRESP : S_AXI_RRESP;
 assign X_AXI_RVALID = (sel_uart) ? U_AXI_RVALID : (sel_clint) ? C_AXI_RVALID : S_AXI_RVALID;
 assign {U_AXI_RREADY,C_AXI_RREADY,S_AXI_RREADY} = (sel_uart) ? {X_AXI_RREADY,1'b0,1'b0} : (sel_clint) ? {1'b0,X_AXI_RREADY,1'b0} : {1'b0,1'b0,X_AXI_RREADY};
+***E*N*D***/
 
 endmodule
