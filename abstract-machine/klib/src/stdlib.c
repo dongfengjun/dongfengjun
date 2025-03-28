@@ -61,7 +61,7 @@ void *malloc(size_t size) {
 		}
 		prev = current;
 		current = current->next;
-		return (void*)prev;
+		return (void*)(prev + 1);
 	}
 	return NULL;
 /***
