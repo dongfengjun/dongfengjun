@@ -46,7 +46,6 @@ void *malloc(size_t size) {
 	size_t total_size = sizeof(struct block_header) + size;
 
 	struct block_header* current = (struct block_header*)heap.start;
-	struct block_header* prev = NULL;
 
 	while ((void*)current < heap.end) {
 		if(current->is_free && (current->size >= size)) {
@@ -59,9 +58,7 @@ void *malloc(size_t size) {
 			current->is_free = 0;
 			current->next = new_block;
 		}
-		prev = current;
-		current = current->next;
-		return (void*)(prev + 1);
+		return (void*)(current + 1);
 	}
 	return NULL;
 /***
