@@ -46,20 +46,23 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
 	ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);//reg from myreg to ref
 }
 
+static bool flag;
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   int reg_num = ARRLEN(cpu.gpr);
+	flag = true;
 	for(int i = 0; i < reg_num; i ++) {
 		if(ref_r->gpr[i] != cpu.gpr[i]) {
 			Log("npc: %s at pc = " FMT_WORD, (ANSI_FMT("REG DIFF", ANSI_FG_RED)), pc);
 			printf("gpr_x[%d]:%08x   diff with   ref_x[%d]:%08x\n", i, cpu.gpr[i], i, ref_r->gpr[i]);
-			return false;
+			flag = false;
 		}
 	}
 	if(ref_r->pc != cpu.pc) {
 		printf("pc diff ref\nref_pc= %08x\tcpu.pc = %08x\n", ref_r->pc, cpu.pc);
-		return false;
+		flag = false;
 	}
-/*** risv_e volatile("li a5, -1; ecall") else volatile("li a7, -1; ecall")
+/* risv_e volatile("li a5, -1; ecall") else volatile("li a7, -1; ecall") */
+/***
 	if(ref_r->csr.mepc != cpu.csr.mepc) {
 		printf("mepc diff ref\nref_mepc= %08x\tcpu.mepc = %08x\n", ref_r->csr.mepc, cpu.csr.mepc);
 		return false;
@@ -80,7 +83,7 @@ if(ref_r->csr.mstatus != cpu.csr.mstatus) {
     return false;
   }
 ***/
-	return true;
+	return flag;
 }
 
 void isa_difftest_attach() {

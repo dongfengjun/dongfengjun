@@ -1,8 +1,13 @@
 BUILD = ./build
 OBJ_DIR = $(BUILD)/obj_dir
-VSRCS = $(shell find ./vsrc -name "*.v")
+TOP = ysyxSoCFull
+VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
+VSRCS += $(shell find ./vsrc -name "*.v")
+VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
 CSRCS = $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 INC_PATH = ./csrc/include
+INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
+INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
 
 LDFLAGS += $(shell llvm-config --ldflags) -fPIE
 LIBS += $(shell llvm-config --libs)
@@ -11,23 +16,27 @@ LDLIBS := -lasan $(LDLIBS)
 
 VERILATOR = verilator
 VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build
-VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH)
+VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
 VERILATOR_FLAGS += -CFLAGS -g
 VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
 VERILATOR_FLAGS += -LDFLAGS -lreadline
+VERILATOR_FLAGS += --top-module $(TOP)
+VERILATOR_FLAGS += --timescale "1ns/1ns" --no-timing
+VERILATOR_FLAGS += --autoflush
 
 LOG ?= $(BUILD)/npc-log.txt
-IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin 
-#/home/xi/Templates/rt-thread-am/bsp/abstract-machine/build/rtthread-riscv32-nemu.bin
+IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
+#IMG ?= ./../char-test/char-test.bin
 ELF ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
 REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
 ARGS += --log=$(LOG)
 ARGS += --img=$(IMG)
 ARGS += --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
+#ARGS += -b
 
 run: sim
-	$(OBJ_DIR)/Vtop_ysyx_24110017 $(ARGS)
+	$(OBJ_DIR)/VysyxSoCFull $(ARGS)
 
 sim: $(CSRCS) $(VSRCS)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
