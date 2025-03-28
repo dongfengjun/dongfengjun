@@ -67,15 +67,17 @@ void *malloc(size_t size) {
 	return NULL;
 ***/
 	if(hbrk == NULL) {
-		hbrk = (char*)ROUNDUP(heap.start, 8);
-	}
-	char *old = hbrk;
-	hbrk += size;
-	assert((uintptr_t)heap.start <= (uintptr_t)hbrk && (uintptr_t)hbrk < (uintptr_t)heap.end);
-	for(uint64_t *p = (uint64_t *)old; p != (uint64_t *)hbrk; p ++) {
-		*p = 0;
-	}
-	return old;
+    hbrk = (void *)ROUNDUP(heap.start, 8);
+  }
+  size = (size_t)ROUNDUP(size, 8);
+  char *old = hbrk;
+  hbrk += size;
+  assert((uintptr_t)heap.start <= (uintptr_t)hbrk && (uintptr_t)hbrk < (uintptr_t)heap.end);
+  for(uint64_t *p = (uint64_t *)old; p != (uint64_t *)hbrk; p ++) {
+    *p = 0;
+  }
+	//assert((uintptr_t)hbrk - (uintptr_t)heap.start <= MAX_MALLOC);//越界
+  return old;
 }
 #endif
 
