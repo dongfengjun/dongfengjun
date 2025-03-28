@@ -1,4 +1,4 @@
-module ysyx_24110017_Reg #(WIDTH = 1, RESET_VAL = 0) (
+module Reg_ysyx_24110017 #(WIDTH = 1, RESET_VAL = 0) (
   input clk,
   input rst,
   input [WIDTH-1:0] din,

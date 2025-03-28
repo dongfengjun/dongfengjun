@@ -52,8 +52,6 @@ void init_mem() {
 
 word_t paddr_read(paddr_t addr, int len) {
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
-	if (addr - 0x20000000 < 0x1000) return mrom_read(addr, len);//ysyxsoc-mrom
-	if (addr - 0x0f000000 < 0x2000) return sram_read(addr, len);//ysyxsoc-sram
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
   out_of_bound(addr);
   return 0;
@@ -61,8 +59,6 @@ word_t paddr_read(paddr_t addr, int len) {
 
 void paddr_write(paddr_t addr, int len, word_t data) {
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
-	if (addr - 0x20000000 < 0x1000) return init_mrom(addr, len, data);
-	if (addr - 0x0f000000 < 0x2000) return sram_write(addr, len, data);
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
 }

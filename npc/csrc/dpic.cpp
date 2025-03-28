@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <iostream>
-#include "VysyxSoCFull.h"
+#include "Vtop_ysyx_24110017.h"
 #include "verilated.h"
 #include "svdpi.h"
-#include "VysyxSoCFull__Dpi.h"
+#include "Vtop_ysyx_24110017__Dpi.h"
 #include "./include/common.h"
 
 #ifdef CONFIG_MTRACE
@@ -52,7 +52,7 @@ void pmem_write(int waddr, int wdata, char wmask) {
 		mtrace_p += sprintf(mtrace_p, "waddr:%08x write:%08x\n", waddr, wdata);
 #endif
 #ifdef CONFIG_DEVICE
-	if(waddr == 0xa00003f8) {
+	if(waddr == 0xa00003F8) {
 		#ifdef CONFIG_DIFFTEST
 			difftest_skip_ref();
 		#endif
