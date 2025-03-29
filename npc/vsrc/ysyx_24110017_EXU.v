@@ -51,7 +51,7 @@ reg mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg;
 
 parameter IDLE = 2'b00,WAIT_SRAM = 2'b01,WAIT_READY = 2'b10,DONE_EXU=2'b11;
 reg [1:0]state,next_state;
-reg [31:0]ls_rdata_reg;
+reg [31:0]s_rdata_reg;
 
 always @(posedge clk) begin
   if (rst) begin
@@ -113,7 +113,7 @@ always @(posedge clk) begin
     mtvec_wen_reg <= 1'b0;
 		sram_lsu_read <= 1'b0;
 		sram_lsu_write <= 1'b0;
-		ls_rdata_reg <= 32'h0;
+		s_rdata_reg <= 32'h0;
 	end
 	else begin
 		case (state)
@@ -136,7 +136,7 @@ always @(posedge clk) begin
 				if(LSU_DONE) begin
 					sram_lsu_read <= 1'b0;
 					sram_lsu_write <= 1'b0;
-					ls_rdata_reg <= s_rdata;
+					s_rdata_reg <= s_rdata;
 				end
 			end
 			WAIT_READY: begin
@@ -157,7 +157,7 @@ always @(posedge clk) begin
 				end
 			end
 			DONE_EXU: begin
-				ls_rdata_reg <= 32'h0;
+				s_rdata_reg <= 32'h0;
 			end
 		endcase
 	end
@@ -219,15 +219,15 @@ assign res =
 																										))
 			| //I_lb~lhu
       ({32{(op == 7'b0000011) && (funct3 == 3'b000)}}
-          & {{24{ls_rdata_reg[7]}},ls_rdata_reg[7:0]}) | //I_lb
+          & {{24{s_rdata_reg[7]}},s_rdata_reg[7:0]}) | //I_lb
 			({32{(op == 7'b0000011) && (funct3 == 3'b001)}}
-          & {{16{ls_rdata_reg[15]}},ls_rdata_reg[15:0]}) | //I_lh 
+          & {{16{s_rdata_reg[15]}},s_rdata_reg[15:0]}) | //I_lh 
 			({32{(op == 7'b0000011) && (funct3 == 3'b010)}}
-          & ls_rdata_reg) | //I_lw
+          & s_rdata_reg) | //I_lw
 			({32{(op == 7'b0000011) && (funct3 == 3'b100)}}
-          & {{24{1'b0}},ls_rdata_reg[7:0]}) | //I_lbu
+          & {{24{1'b0}},s_rdata_reg[7:0]}) | //I_lbu
 			({32{(op == 7'b0000011) && (funct3 == 3'b101)}}
-          & {{16{1'b0}},ls_rdata_reg[15:0]}) //I_lhu
+          & {{16{1'b0}},s_rdata_reg[15:0]}) //I_lhu
 /***I_csrrw~csrrc***/
 			|
 			({32{(op == 7'b1110011) && (funct3 == 3'b001)}}
