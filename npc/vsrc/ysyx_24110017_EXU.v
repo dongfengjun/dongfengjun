@@ -289,7 +289,7 @@ assign ls_wmask =
  ((ls_waddr%4 == 3) && op == 7'b0100011 && funct3 == 3'b000) ? 4'b1000 : ((ls_waddr%4 == 3) && op == 7'b0100011 && funct3 == 3'b001) ? 4'b1000 : ((ls_waddr%4 == 3) && op == 7'b0100011 && funct3 == 3'b010) ? 4'b1000 //单次非对齐
  : 4'b0;
 assign ls_raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
-assign s_rdata = ((ls_waddr%4 == 0) && op == 7'b0000011) ? ls_rdata //对齐
+assign s_rdata = ((ls_raddr%4 == 0) && op == 7'b0000011) ? ls_rdata //对齐
  : ((ls_raddr%4 == 1) && op == 7'b0000011) ? {8'b0,ls_rdata[31:8]}
  : ((ls_raddr%4 == 2) && op == 7'b0000011) ? {16'b0,ls_rdata[31:16]}
  : ((ls_raddr%4 == 3) && op == 7'b0000011) ? {24'b0,ls_rdata[31:24]}
