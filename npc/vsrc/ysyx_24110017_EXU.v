@@ -269,7 +269,7 @@ assign w_csrs =
 
 /***load*store*LSU***/
 wire ls_valid,ls_wen;
-wire [31:0]ls_waddr,ls_wdata,ls_raddr;
+wire [31:0]ls_waddr,ls_wdata,ls_raddr,s_rdata;
 wire [7:0]ls_wmask;
 assign ls_valid = (op == 7'b0000011 || op == 7'b0100011) ? 1'b1 : 1'b0;
 assign ls_wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
