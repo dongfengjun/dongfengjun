@@ -275,9 +275,14 @@ assign ls_valid = (op == 7'b0000011 || op == 7'b0100011) ? 1'b1 : 1'b0;
 assign ls_wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
 assign ls_waddr = (op == 7'b0100011) ? (r1 + offset) : 32'h80000000;
 assign ls_wdata = (op == 7'b0100011) ? r2 : 32'b0;
-assign ls_wmask = (op == 7'b0100011 && funct3 == 3'b000) ? 4'b0001
- : (op == 7'b0100011 && funct3 == 3'b001) ? 4'b0011
- : (op == 7'b0100011 && funct3 == 3'b010) ? 4'b1111
+assign ls_wmask = 
+((ls_waddr%4 == 0) && op == 7'b0100011 && funct3 == 3'b000) ? 4'b0001 : ((ls_waddr%4 == 0) && op == 7'b0100011 && funct3 == 3'b001) ? 4'b0011 : ((ls_waddr%4 == 0) && op == 7'b0100011 && funct3 == 3'b010) ? 4'b1111 //对齐访问
+ : 
+((ls_waddr%4 == 1) && op == 7'b0100011 && funct3 == 3'b000) ? 4'b0010 : ((ls_waddr%4 == 1) && op == 7'b0100011 && funct3 == 3'b001) ? 4'b0110 : ((ls_waddr%4 == 1) && op == 7'b0100011 && funct3 == 3'b010) ? 4'b1110 //单次非对齐
+ :
+((ls_waddr%4 == 2) && op == 7'b0100011 && funct3 == 3'b000) ? 4'b0100 : ((ls_waddr%4 == 2) && op == 7'b0100011 && funct3 == 3'b001) ? 4'b1100 : ((ls_waddr%4 == 2) && op == 7'b0100011 && funct3 == 3'b010) ? 4'b1100 //单次非对齐
+ :
+ ((ls_waddr%4 == 3) && op == 7'b0100011 && funct3 == 3'b000) ? 4'b1000 : ((ls_waddr%4 == 3) && op == 7'b0100011 && funct3 == 3'b001) ? 4'b1000 : ((ls_waddr%4 == 3) && op == 7'b0100011 && funct3 == 3'b010) ? 4'b1000 //单次非对齐
  : 4'b0;
 assign ls_raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
 /***J_B_dnpc***/
