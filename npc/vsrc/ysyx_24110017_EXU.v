@@ -290,9 +290,9 @@ assign ls_wmask =
  : 4'b0;
 assign ls_raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
 assign s_rdata = ((ls_waddr%4 == 0) && op == 7'b0000011) ? ls_rdata //对齐
- : ((ls_waddr%4 == 1) && op == 7'b0000011) ? {8'b0,ls_rdata[31:8]}
- : ((ls_waddr%4 == 2) && op == 7'b0000011) ? {16'b0,ls_rdata[31:16]}
- : ((ls_waddr%4 == 3) && op == 7'b0000011) ? {24'b0,ls_rdata[31:24]}
+ : ((ls_raddr%4 == 1) && op == 7'b0000011) ? {8'b0,ls_rdata[31:8]}
+ : ((ls_raddr%4 == 2) && op == 7'b0000011) ? {16'b0,ls_rdata[31:16]}
+ : ((ls_raddr%4 == 3) && op == 7'b0000011) ? {24'b0,ls_rdata[31:24]}
  : 32'b0;
 /***J_B_dnpc***/
 wire [31:0]pc;
