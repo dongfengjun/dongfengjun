@@ -51,7 +51,7 @@ reg mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg;
 
 parameter IDLE = 2'b00,WAIT_SRAM = 2'b01,WAIT_READY = 2'b10,DONE_EXU=2'b11;
 reg [1:0]state,next_state;
-reg [31:0]ls_rdata_reg;
+reg [31:0]s_rdata_reg;
 
 always @(posedge clk) begin
   if (rst) begin
@@ -113,7 +113,7 @@ always @(posedge clk) begin
     mtvec_wen_reg <= 1'b0;
 		sram_lsu_read <= 1'b0;
 		sram_lsu_write <= 1'b0;
-		ls_rdata_reg <= 32'h0;
+		s_rdata_reg <= 32'h0;
 	end
 	else begin
 		case (state)
@@ -136,7 +136,7 @@ always @(posedge clk) begin
 				if(LSU_DONE) begin
 					sram_lsu_read <= 1'b0;
 					sram_lsu_write <= 1'b0;
-					ls_rdata_reg <= ls_rdata;
+					s_rdata_reg <= s_rdata;
 				end
 			end
 			WAIT_READY: begin
@@ -157,7 +157,7 @@ always @(posedge clk) begin
 				end
 			end
 			DONE_EXU: begin
-				ls_rdata_reg <= 32'h0;
+				s_rdata_reg <= 32'h0;
 			end
 		endcase
 	end
@@ -219,15 +219,15 @@ assign res =
 																										))
 			| //I_lb~lhu
       ({32{(op == 7'b0000011) && (funct3 == 3'b000)}}
-          & {{24{ls_rdata_reg[7]}},ls_rdata_reg[7:0]}) | //I_lb
+          & {{24{s_rdata_reg[7]}},s_rdata_reg[7:0]}) | //I_lb
 			({32{(op == 7'b0000011) && (funct3 == 3'b001)}}
-          & {{16{ls_rdata_reg[15]}},ls_rdata_reg[15:0]}) | //I_lh 
+          & {{16{s_rdata_reg[15]}},s_rdata_reg[15:0]}) | //I_lh 
 			({32{(op == 7'b0000011) && (funct3 == 3'b010)}}
-          & ls_rdata_reg) | //I_lw
+          & s_rdata_reg) | //I_lw
 			({32{(op == 7'b0000011) && (funct3 == 3'b100)}}
-          & {{24{1'b0}},ls_rdata_reg[7:0]}) | //I_lbu
+          & {{24{1'b0}},s_rdata_reg[7:0]}) | //I_lbu
 			({32{(op == 7'b0000011) && (funct3 == 3'b101)}}
-          & {{16{1'b0}},ls_rdata_reg[15:0]}) //I_lhu
+          & {{16{1'b0}},s_rdata_reg[15:0]}) //I_lhu
 /***I_csrrw~csrrc***/
 			|
 			({32{(op == 7'b1110011) && (funct3 == 3'b001)}}
@@ -269,17 +269,31 @@ assign w_csrs =
 
 /***load*store*LSU***/
 wire ls_valid,ls_wen;
-wire [31:0]ls_waddr,ls_wdata,ls_raddr;
+wire [31:0]ls_waddr,ls_wdata,ls_raddr,s_rdata;
 wire [7:0]ls_wmask;
 assign ls_valid = (op == 7'b0000011 || op == 7'b0100011) ? 1'b1 : 1'b0;
 assign ls_wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
 assign ls_waddr = (op == 7'b0100011) ? (r1 + offset) : 32'h80000000;
-assign ls_wdata = (op == 7'b0100011) ? r2 : 32'b0;
-assign ls_wmask = (op == 7'b0100011 && funct3 == 3'b000) ? 4'b0001
- : (op == 7'b0100011 && funct3 == 3'b001) ? 4'b0011
- : (op == 7'b0100011 && funct3 == 3'b010) ? 4'b1111
+assign ls_wdata = ((ls_waddr%4 == 0) && op == 7'b0100011) ? r2 //对齐
+ : ((ls_waddr%4 == 1) && op == 7'b0100011) ? {r2[23:0],8'b0} //0x1
+ : ((ls_waddr%4 == 2) && op == 7'b0100011) ? {r2[15:0],16'b0} //0x2
+ : ((ls_waddr%4 == 3) && op == 7'b0100011) ? {r2[7:0],24'b0} //0x3
+ : 32'b0;
+assign ls_wmask = 
+((ls_waddr%4 == 0) && op == 7'b0100011 && funct3 == 3'b000) ? 4'b0001 : ((ls_waddr%4 == 0) && op == 7'b0100011 && funct3 == 3'b001) ? 4'b0011 : ((ls_waddr%4 == 0) && op == 7'b0100011 && funct3 == 3'b010) ? 4'b1111 //对齐访问
+ : 
+((ls_waddr%4 == 1) && op == 7'b0100011 && funct3 == 3'b000) ? 4'b0010 : ((ls_waddr%4 == 1) && op == 7'b0100011 && funct3 == 3'b001) ? 4'b0110 : ((ls_waddr%4 == 1) && op == 7'b0100011 && funct3 == 3'b010) ? 4'b1110 //单次非对齐
+ :
+((ls_waddr%4 == 2) && op == 7'b0100011 && funct3 == 3'b000) ? 4'b0100 : ((ls_waddr%4 == 2) && op == 7'b0100011 && funct3 == 3'b001) ? 4'b1100 : ((ls_waddr%4 == 2) && op == 7'b0100011 && funct3 == 3'b010) ? 4'b1100 //单次非对齐
+ :
+ ((ls_waddr%4 == 3) && op == 7'b0100011 && funct3 == 3'b000) ? 4'b1000 : ((ls_waddr%4 == 3) && op == 7'b0100011 && funct3 == 3'b001) ? 4'b1000 : ((ls_waddr%4 == 3) && op == 7'b0100011 && funct3 == 3'b010) ? 4'b1000 //单次非对齐
  : 4'b0;
 assign ls_raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
+assign s_rdata = ((ls_raddr%4 == 0) && op == 7'b0000011) ? ls_rdata //对齐
+ : ((ls_raddr%4 == 1) && op == 7'b0000011) ? {8'b0,ls_rdata[31:8]}
+ : ((ls_raddr%4 == 2) && op == 7'b0000011) ? {16'b0,ls_rdata[31:16]}
+ : ((ls_raddr%4 == 3) && op == 7'b0000011) ? {24'b0,ls_rdata[31:24]}
+ : 32'b0;
 /***J_B_dnpc***/
 wire [31:0]pc;
 wire [31:0]dnpc;
