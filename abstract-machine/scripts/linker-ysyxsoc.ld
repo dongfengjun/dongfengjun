@@ -20,7 +20,6 @@ SECTIONS {
 		*(.srodata*)
   }
 
-	. = ALIGN(8);
 	_data_lma_start = .;
 	.data : {
     _data_vma_start = .;
