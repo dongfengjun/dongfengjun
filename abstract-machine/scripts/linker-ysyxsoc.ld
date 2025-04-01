@@ -18,7 +18,7 @@ SECTIONS {
 	.rodata : {
     *(.rodata*)
 		*(.srodata*)
-  } > mrom AT > mrom : rodata
+  } > mrom AT > mrom : text
 
 	_data_lma_start = .;
 	.data : {
