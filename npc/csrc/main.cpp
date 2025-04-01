@@ -301,7 +301,7 @@ extern void *_data_lma_start;
 extern void *_bss_start;
 extern void *_bss_end;
 void bootloader(void) {
-	size_t data_len = _data - edata;
+	size_t data_len = _data - _edata;
 	memcpy((void*)_data, (void*)_data_lma_start, data_len);
 	size_t bss_len = _bss_end - _bss_start;
 	memset((void*)_bss_start, 0, bss_len);
