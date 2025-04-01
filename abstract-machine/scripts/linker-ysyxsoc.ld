@@ -27,8 +27,6 @@ SECTIONS {
 		*(.sdata)
 		_data_vma_end = .;
   } > sram AT > mrom : data
-	edata = .;
-	_data = .;
   .bss : {
 		_bss_start = .;
     *(.bss*)
