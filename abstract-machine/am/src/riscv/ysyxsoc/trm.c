@@ -26,6 +26,8 @@ void halt(int code) {
 }
 
 extern char _data_lma_start[];
+extern char _rodata[];
+extern char _erodata[];
 extern char _data_vma_start[];
 extern char _data_vma_end[];
 extern char _bss_start[];

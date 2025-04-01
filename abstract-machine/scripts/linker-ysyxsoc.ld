@@ -15,12 +15,16 @@ SECTIONS {
   } > mrom AT > mrom : text
   etext = .;
   _etext = .;
+	
+	_data_lma_start = .;
+
 	.rodata : {
+		_rodata = .;
     *(.rodata*)
 		*(.srodata*)
-  } > mrom AT > mrom : text
+		_erodata = .;
+  } > sram AT > mrom
 
-	_data_lma_start = .;
 	.data : {
     _data_vma_start = .;
 		*(.data)
@@ -33,7 +37,7 @@ SECTIONS {
     *(.sbss*)
     *(.scommon)
 		_bss_end = .;
-  } > sram
+  } > sram AT > mrom
 
 	. = 0x0f000000;
 	end = .;
