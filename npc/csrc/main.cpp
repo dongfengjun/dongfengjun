@@ -318,8 +318,8 @@ int main(int argc, char *argv[]) {
   tfp->open("build/wave.vcd");//设置输出的文件wave.vcd
 	RUNNING = true;
 /***code***/
-	bootloader();//MROM -> SRAM
 	init_monitor(argc, argv);//load inst
+	bootloader();//MROM -> SRAM
 	reset(2);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
