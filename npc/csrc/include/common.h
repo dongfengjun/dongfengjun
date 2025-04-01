@@ -9,7 +9,7 @@
 #include "debug.h"//Assert\Log
 #include "utils.h"//Log
 #include "elf.h"//Ftrace
-#include "am.h"
+#include "./../../abstract-machine/am/include/am.h"
 
 //Macro definition
 typedef MUXDEF(CONFIG_ISA64, uint64_t, uint32_t) word_t;
