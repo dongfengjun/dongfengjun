@@ -37,7 +37,7 @@ SECTIONS {
 		_bss_end = .;
   } > sram
 
-	. = 0x0f000000;
+/*	. = 0x0f000000;	*/
 	end = .;
   _end = .;
 	_heap_start = .;
