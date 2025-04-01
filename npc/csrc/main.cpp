@@ -308,16 +308,10 @@ void bootloader(void) {
 	memset(&_bss_start, 0, bss_len);
 }
 ***/
-int main(int argc, char *argv[]);
-void start(int argc, char *argv[]) {
-	extern int TEST;
-  int *test = &TEST;
-  printf("%n\n", test);
-	main();
-	while(1);
-}
-
 int main(int argc, char *argv[]) {
+	extern int TEST;
+	int *p = &TEST;
+	printf("%n\n", p);
 /***inst***/
 	Verilated::commandArgs(argc,argv);
 	contextp = new VerilatedContext;  //verilator指针
