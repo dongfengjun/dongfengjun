@@ -310,7 +310,7 @@ void bootloader(void) {
 ***/
 extern char _heap_start;
 void bootloader(){
-	printf("heap=%d\n", &_heap_start);
+	printf("heap=%s\n", &_heap_start);
 }
 
 int main(int argc, char *argv[]) {
