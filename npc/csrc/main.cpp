@@ -295,11 +295,11 @@ void cpu_exec(int n) {
 #endif
 }
 
-extern void* _data;
-extern void* edata;
-extern void* _data_lma_start;
-extern void* _bss_start;
-extern void* _bss_end;
+extern void *_data;
+extern void *edata;
+extern void *_data_lma_start;
+extern void *_bss_start;
+extern void *_bss_end;
 void bootloader(void) {
 	size_t data_len = _data - edata;
 	memcpy((void*)_data, (void*)_data_lma_start, data_len);
