@@ -37,13 +37,13 @@ SECTIONS {
 		_bss_end = .;
   } > sram AT > mrom
 
-	. = 0x0f000000;
+	. = 0x0f001000;
 	end = .;
   _end = .;
 	_heap_start = .;
-	. = _heap_start + 0x1000;
+	. = _heap_start + 0x400;
 	_heap_end = .;
   _stack_top = .;
-  . = _stack_top + 0x1000;
+  . = _stack_top + 0x400;
   _stack_pointer = .;
 }
