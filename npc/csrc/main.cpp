@@ -325,7 +325,7 @@ int main(int argc, char *argv[]) {
 	reset(2);
 	extern int TEST;
 	int *test = &TEST;
-	printf("%d\n", test);
+	printf("%n\n", test);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
 #else
