@@ -295,6 +295,9 @@ void cpu_exec(int n) {
 #endif
 }
 
+extern uint8_t _data_lma_start;
+extern uint8_t _data_vma_start;
+extern uint8_t _data_vma_end;
 #define _MA (void*)&_data_lma_start;
 #define _DATA (void*)&_data_vma_start;
 #define _eDATA (void*)&_data_vma_end;
