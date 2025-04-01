@@ -308,10 +308,7 @@ void bootloader(void) {
 	memset(&_bss_start, 0, bss_len);
 }
 ***/
-typedef struct {
-  void *start, *end;
-} Area;
-
+extern void bootloader();
 int main(int argc, char *argv[]) {
 /***inst***/
 	Verilated::commandArgs(argc,argv);
