@@ -1,5 +1,5 @@
 ENTRY(_start)
-PHDRS { text PT_LOAD; rodata PT_LOAD; data PT_LOAD; }
+PHDRS { text PT_LOAD; data PT_LOAD; }
 
 MEMORY {
   mrom : ORIGIN = 0x20000000, LENGTH = 4K
