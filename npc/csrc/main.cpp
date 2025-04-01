@@ -302,7 +302,7 @@ extern uint8_t _bss_start;
 extern uint8_t _bss_end;
 void bootloader(void) {
 	size_t data_len = _data_vma_end - _data_lma_start;
-	memcpy((void*)&_data_vma_start, (void*)&data_lma_start, data_len);
+	memcpy((void*)&_data_vma_start, (void*)&_data_lma_start, data_len);
 	size_t bss_len = _bss_end - _bss_start;
 	memset((void*)&_bss_start, 0, bss_len);
 }
