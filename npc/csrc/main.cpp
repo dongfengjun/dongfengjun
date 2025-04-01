@@ -308,7 +308,6 @@ void bootloader(void) {
 	memset(&_bss_start, 0, bss_len);
 }
 ***/
-extern void bootloader();
 int main(int argc, char *argv[]) {
 /***inst***/
 	Verilated::commandArgs(argc,argv);
@@ -321,7 +320,6 @@ int main(int argc, char *argv[]) {
 	RUNNING = true;
 /***code***/
 	init_monitor(argc, argv);//load inst
-	bootloader();//MROM -> SRAM
 	reset(2);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);

@@ -1,6 +1,7 @@
 #include <am.h>
 #include <klib-macros.h>
 #include "./../riscv.h"
+#include <stdio.h>
 
 extern char _heap_start;
 int main(const char *args);
@@ -24,7 +25,13 @@ void halt(int code) {
 	while (1);
 }
 
+void bootloader() {
+  char *p = &_heap_start;
+  printf("p=%n\n",p);
+}
+
 void _trm_init() {
+	bootloader();
 	int ret = main(mainargs);
 	halt(ret);
 }
