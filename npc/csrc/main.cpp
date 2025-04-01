@@ -309,9 +309,6 @@ void bootloader(void) {
 }
 ***/
 extern char _heap_start;
-void bootloader(){
-	printf("heap=%s\n", &_heap_start);
-}
 
 int main(int argc, char *argv[]) {
 /***inst***/
@@ -325,8 +322,10 @@ int main(int argc, char *argv[]) {
 	RUNNING = true;
 /***code***/
 	init_monitor(argc, argv);//load inst
-	bootloader();//MROM -> SRAM
+	//bootloader();//MROM -> SRAM
 	reset(2);
+	char v = _heap_start;
+	printf("%s\n", v);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
 #else
