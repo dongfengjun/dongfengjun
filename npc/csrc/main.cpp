@@ -308,11 +308,8 @@ void bootloader(void) {
 	memset(&_bss_start, 0, bss_len);
 }
 ***/
-#include "./../../abstract-machine/am/include/am.h"
-#include "./../../abstract-machine/klib/include/klib.h"
-#include "./../../abstract-machine/klib/include/klib-macros.h"
-
 int main(int argc, char *argv[]) {
+	extern int heap;
 	int *p = (uintptr_t)heap.start;
 	printf("%n\n", p);
 /***inst***/
