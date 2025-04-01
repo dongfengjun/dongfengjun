@@ -15,11 +15,10 @@ SECTIONS {
   } > mrom AT > mrom : text
   etext = .;
   _etext = .;
-
 	.rodata : {
     *(.rodata*)
 		*(.srodata*)
-  } > mrom AT > mrom : text
+  }
 
 	. = ALIGN(8);
 	_data_lma_start = .;
@@ -31,7 +30,6 @@ SECTIONS {
   } > sram AT > mrom : data
 	edata = .;
 	_data = .;
-
   .bss : {
 		_bss_start = .;
     *(.bss*)
