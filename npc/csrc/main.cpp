@@ -308,6 +308,10 @@ void bootloader(void) {
 	memset(&_bss_start, 0, bss_len);
 }
 ***/
+typedef struct {
+  void *start, *end;
+} Area;
+
 int main(int argc, char *argv[]) {
 	extern Area heap;
 	int *p = (uintptr_t)heap.start;
