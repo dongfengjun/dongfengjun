@@ -8,7 +8,6 @@
 #include "svdpi.h"
 #include "VysyxSoCFull__Dpi.h"
 #include "./include/common.h"
-#include "symbols.h"
 
 /***ysyxSoC***/
 extern "C" void flash_read(int32_t addr, int32_t *data) {
