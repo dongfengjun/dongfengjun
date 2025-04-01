@@ -3,7 +3,7 @@ PHDRS { text PT_LOAD; rodata PT_LOAD; data PT_LOAD; }
 
 MEMORY {
   mrom : ORIGIN = 0x20000000, LENGTH = 4K
-  sram : ORIGIN = 0x0f000000, LENGTH = 8K
+  sram : ORIGIN = 0x0f001000, LENGTH = 8K
 }
 
 SECTIONS {
@@ -37,7 +37,7 @@ SECTIONS {
 		_bss_end = .;
   } > sram
 
-/*	. = 0x0f000000;	*/
+	. = 0x0f000000;
 	end = .;
   _end = .;
 	_heap_start = .;
