@@ -299,7 +299,7 @@ extern char _MA;
 extern char eMA;
 extern char _data;
 void bootloader() {
-	char* MA = (char*)_MA;
+	uintptr_t* MA = (uintptr_t *)_MA;
 	printf("MA addr:%d\n", MA);
 }
 
