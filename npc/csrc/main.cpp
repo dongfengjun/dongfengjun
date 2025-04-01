@@ -295,6 +295,7 @@ void cpu_exec(int n) {
 #endif
 }
 
+/***
 extern char _data_lma_start;
 extern char _data_vma_start;
 extern char _data_vma_end;
@@ -305,6 +306,11 @@ void bootloader(void) {
 	memcpy(&_data_vma_start, &_data_lma_start, data_len);
 	size_t bss_len = _bss_end - _bss_start;
 	memset(&_bss_start, 0, bss_len);
+}
+***/
+extern char _heap_start;
+void bootloader(){
+	printf("heap=%d\n", &_heap_start);
 }
 
 int main(int argc, char *argv[]) {
