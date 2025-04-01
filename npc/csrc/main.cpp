@@ -325,7 +325,7 @@ int main(int argc, char *argv[]) {
 	//bootloader();//MROM -> SRAM
 	reset(2);
 	char v = _heap_start;
-	printf("%s\n", v);
+	printf("%c\n", v);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
 #else
