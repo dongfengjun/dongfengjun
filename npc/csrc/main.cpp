@@ -295,14 +295,14 @@ void cpu_exec(int n) {
 #endif
 }
 
-extern uint8_t _data;
-extern uint8_t _edata;
-extern uint8_t _data_lma_start;
-extern uint8_t _bss_start;
-extern uint8_t _bss_end;
+extern uint8_t _data_lma_start[];
+extern uint8_t _data_vma_start[];
+extern uint8_t _data_vma_end[];
+extern uint8_t _bss_start[];
+extern uint8_t _bss_end[];
 void bootloader(void) {
-	size_t data_len = _data - _edata;
-	memcpy((void*)_data, (void*)_data_lma_start, data_len);
+	size_t data_len = _data_vma_end - _data_vma_start;
+	memcpy((void*)_data_vma_start, (void*)_data_lma_start, data_len);
 	size_t bss_len = _bss_end - _bss_start;
 	memset((void*)_bss_start, 0, bss_len);
 }
