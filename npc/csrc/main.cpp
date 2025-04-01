@@ -309,7 +309,7 @@ void bootloader(void) {
 }
 ***/
 int main(int argc, char *argv[]) {
-	extern int heap;
+	extern struct heap;
 	int *p = (uintptr_t)heap.start;
 	printf("%n\n", p);
 /***inst***/
