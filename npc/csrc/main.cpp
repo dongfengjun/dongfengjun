@@ -296,10 +296,10 @@ void cpu_exec(int n) {
 }
 
 extern (void*)&_data_lma_start;
-extern (void*) _data_vma_start;
-extern (void*) _data_vma_end;
-extern (void*) _bss_start;
-extern (void*) _bss_end;
+extern (void*)&_data_vma_start;
+extern (void*)&_data_vma_end;
+extern (void*)&_bss_start;
+extern (void*)&_bss_end;
 void bootloader(void) {
 	size_t data_len = _data_vma_end - _data_vma_start;
 	memcpy(_data_vma_start, _data_lma_start, data_len);
