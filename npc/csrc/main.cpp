@@ -313,9 +313,6 @@ typedef struct {
 } Area;
 
 int main(int argc, char *argv[]) {
-	extern Area heap;
-	long unsigned int p = (uintptr_t)heap.start;
-	printf("%ld\n", p);
 /***inst***/
 	Verilated::commandArgs(argc,argv);
 	contextp = new VerilatedContext;  //verilator指针
@@ -327,7 +324,7 @@ int main(int argc, char *argv[]) {
 	RUNNING = true;
 /***code***/
 	init_monitor(argc, argv);//load inst
-	//bootloader();//MROM -> SRAM
+	bootloader();//MROM -> SRAM
 	reset(2);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
