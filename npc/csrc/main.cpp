@@ -299,8 +299,8 @@ extern char _MA;
 extern char eMA;
 extern char _data;
 void bootloader() {
-	uintptr_t MA = (char *)_MA;
-	printf("MA addr:%p\n", MA);
+	uintptr_t MA = (char*)_MA;
+	printf("MA addr:%ld\n", MA);
 }
 
 int main(int argc, char *argv[]) {
