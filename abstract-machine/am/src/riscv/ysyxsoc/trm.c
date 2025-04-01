@@ -1,7 +1,7 @@
 #include <am.h>
 #include <klib-macros.h>
 #include "./../riscv.h"
-#include <stdio.h>
+#include <string.h>
 
 extern char _heap_start;
 int main(const char *args);
@@ -25,9 +25,16 @@ void halt(int code) {
 	while (1);
 }
 
+extern char _data_lma_start[];
+extern char _data_vma_start[];
+extern char _data_vma_end[];
+extern char _bss_start[];
+extern char _bss_end[];
 void bootloader() {
-  char *p = &_heap_start;
-  printf("p=%n\n",p);
+  size_t data_len = _data_vma_end - _data_vma_start;
+	memcpy(_data_vma_start, _data_lma_start, data_len);
+	size_t bss_len = _bss_end - _bss_start;
+	memset(_bss_start, 0, bss_len);
 }
 
 void _trm_init() {

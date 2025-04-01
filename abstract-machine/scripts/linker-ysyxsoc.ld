@@ -1,5 +1,5 @@
 ENTRY(_start)
-PHDRS { text PT_LOAD; rodata PT_LOAD; data PT_LOAD; }
+PHDRS { text PT_LOAD; data PT_LOAD; }
 
 MEMORY {
   mrom : ORIGIN = 0x20000000, LENGTH = 4K
@@ -19,7 +19,7 @@ SECTIONS {
 	.rodata : {
     *(.rodata*)
 		*(.srodata*)
-  } > mrom AT > mrom : rodata
+  } > mrom AT > mrom : text
 
 	. = ALIGN(8);
 	_data_lma_start = .;
@@ -49,5 +49,4 @@ SECTIONS {
   _stack_top = .;
   . = _stack_top + 0x1000;
   _stack_pointer = .;
-	TEST = 0x20000000;
 }
