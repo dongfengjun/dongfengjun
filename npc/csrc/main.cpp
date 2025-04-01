@@ -295,6 +295,15 @@ void cpu_exec(int n) {
 #endif
 }
 
+extern char _MA;
+extern char eMA;
+extern char _data;
+void bootloader() {
+	uint32_t MA = _MA;
+	size_t LEN = eMA - _MA;
+	memcpy(_MA, _data, LEN);
+}
+
 int main(int argc, char *argv[]) {
 /***inst***/
 	Verilated::commandArgs(argc,argv);
@@ -306,6 +315,7 @@ int main(int argc, char *argv[]) {
   tfp->open("build/wave.vcd");//设置输出的文件wave.vcd
 	RUNNING = true;
 /***code***/
+	bootloader();//MROM -> SRAM
 	init_monitor(argc, argv);//load inst
 	reset(2);
 #ifdef CONFIG_TARGET_AM
