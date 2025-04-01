@@ -308,6 +308,14 @@ void bootloader(void) {
 	memset(&_bss_start, 0, bss_len);
 }
 ***/
+int main(int argc, char *argv[]);
+void start(int argc, char *argv[]) {
+	extern int TEST;
+  int *test = &TEST;
+  printf("%n\n", test);
+	main();
+	while(1);
+}
 
 int main(int argc, char *argv[]) {
 /***inst***/
@@ -323,9 +331,6 @@ int main(int argc, char *argv[]) {
 	init_monitor(argc, argv);//load inst
 	//bootloader();//MROM -> SRAM
 	reset(2);
-	extern int TEST;
-	int *test = &TEST;
-	printf("%n\n", test);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
 #else
