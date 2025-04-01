@@ -309,8 +309,7 @@ void bootloader(void) {
 }
 ***/
 int main(int argc, char *argv[]) {
-	extern int heap.start;
-	int *p = &heap.start;
+	int *p = (uintptr_t)heap.start;
 	printf("%n\n", p);
 /***inst***/
 	Verilated::commandArgs(argc,argv);
