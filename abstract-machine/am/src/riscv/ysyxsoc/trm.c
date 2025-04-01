@@ -35,7 +35,6 @@ void bootloader() {
 	memcpy(_data_vma_start, _data_lma_start, data_len);
 	size_t bss_len = _bss_end - _bss_start;
 	memset(_bss_start, 0, bss_len);
-	putch('a');
 }
 
 void _trm_init() {
