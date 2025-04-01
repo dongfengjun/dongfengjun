@@ -308,7 +308,7 @@ void bootloader(void) {
 	memset(&_bss_start, 0, bss_len);
 }
 ***/
-extern char _heap_start;
+extern uint32_t TEST[];
 
 int main(int argc, char *argv[]) {
 /***inst***/
@@ -324,8 +324,8 @@ int main(int argc, char *argv[]) {
 	init_monitor(argc, argv);//load inst
 	//bootloader();//MROM -> SRAM
 	reset(2);
-	char v = _heap_start;
-	printf("%c\n", v);
+	uint32_t test = TEST;
+	printf("%d\n", test);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
 #else
