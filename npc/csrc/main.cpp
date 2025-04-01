@@ -295,11 +295,9 @@ void cpu_exec(int n) {
 #endif
 }
 
-extern char _MA;
-extern char eMA;
 extern char _data;
 void bootloader() {
-	uintptr_t* MA = (uintptr_t *)_MA;
+	uintptr_t* MA = (uintptr_t *)_data;
 	printf("MA addr:%ln\n", MA);
 }
 
