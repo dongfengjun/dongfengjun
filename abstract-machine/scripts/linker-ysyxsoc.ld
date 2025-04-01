@@ -22,7 +22,7 @@ SECTIONS {
 	.data : {
     _data = .;
 		*(.data)
-		edata = .;
+		_edata = .;
   } > sram AT > mrom : data
 	_data_lma_start = LOADADDR(.data);
   .bss : {

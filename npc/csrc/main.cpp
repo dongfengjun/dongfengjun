@@ -296,7 +296,7 @@ void cpu_exec(int n) {
 }
 
 extern void *_data;
-extern void *edata;
+extern void *_edata;
 extern void *_data_lma_start;
 extern void *_bss_start;
 extern void *_bss_end;
