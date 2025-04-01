@@ -314,7 +314,7 @@ typedef struct {
 
 int main(int argc, char *argv[]) {
 	extern Area heap;
-	int *p = (uintptr_t)heap.start;
+	long unsigned int p = (uintptr_t)heap.start;
 	printf("%n\n", p);
 /***inst***/
 	Verilated::commandArgs(argc,argv);
