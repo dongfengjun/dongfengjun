@@ -6,7 +6,6 @@ MEMORY {
   sram : ORIGIN = 0x0f000000, LENGTH = 8K
 }
 
-TEST = 0x20000000;
 SECTIONS {
   /* _pmem_start and _entry_offset are defined in LDFLAGS /0x20000000/*/
   . = ORIGIN(mrom);
@@ -50,4 +49,5 @@ SECTIONS {
   _stack_top = .;
   . = _stack_top + 0x1000;
   _stack_pointer = .;
+	TEST = 0x20000000;
 }
