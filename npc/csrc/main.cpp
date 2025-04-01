@@ -325,7 +325,7 @@ int main(int argc, char *argv[]) {
 	//bootloader();//MROM -> SRAM
 	reset(2);
 	uint32_t *test = &TEST;
-	printf("%d\n", test);
+	printf("%n\n", test);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
 #else
