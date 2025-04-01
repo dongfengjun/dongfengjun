@@ -308,7 +308,7 @@ void bootloader(void) {
 	memset(&_bss_start, 0, bss_len);
 }
 ***/
-extern unsigned int TEST;
+extern uint32_t TEST;
 
 int main(int argc, char *argv[]) {
 /***inst***/
