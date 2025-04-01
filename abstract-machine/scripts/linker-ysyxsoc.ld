@@ -12,27 +12,26 @@ SECTIONS {
   .text : {
     *(entry)
     *(.text*)
-  } : text
+  } > mrom AT > mrom : text
   etext = .;
   _etext = .;
-	.rodata : {
+/*	.rodata : {
     *(.rodata*)
   }
-
-	_MA = .;	
+	*/
 	.data : {
     _data = .;
 		*(.data)
 		edata = .;
-  }
+  } > sram AT > mrom : data
+	_data_lma_start = LOADADDR(.data);
   .bss : {
 		_bss_start = .;
     *(.bss*)
     *(.sbss*)
     *(.scommon)
 		_bss_end = .;
-  }
-	eMA = .;
+  } > sram
 
 	. = 0x0f000000;
 	end = .;
