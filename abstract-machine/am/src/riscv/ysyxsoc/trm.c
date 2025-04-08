@@ -33,7 +33,9 @@ extern char _bss_start[];
 extern char _bss_end[];
 void bootloader() {
 	size_t data_len = _data_vma_end - _data_vma_start;
-	putch(data_len);
+	if(data_len == 0) {
+		halt(1);
+	}
 	memcpy(_data_vma_start, _data_lma_start, data_len);
 	size_t bss_len = _bss_end - _bss_start;
 	printf("%d\n", (int)bss_len);
