@@ -38,7 +38,9 @@ void bootloader() {
 	}
 	memcpy(_data_vma_start, _data_lma_start, data_len);
 	size_t bss_len = _bss_end - _bss_start;
-	printf("%d\n", (int)bss_len);
+	if(bss_len == 0) {                                                       
+    halt(1);
+  }
 	memset(_bss_start, 1, bss_len);
 }
 
