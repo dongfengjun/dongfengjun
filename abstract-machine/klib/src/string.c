@@ -85,6 +85,7 @@ void *memset(void *s, int c, size_t n) {
 		*p ++ = (char)c;
 		i ++;
 	}
+	putch('b');
 	return s;
 }
 
@@ -116,6 +117,7 @@ void *memcpy(void *out, const void *in, size_t n) {
 		*o ++ = *i ++;
 		j ++;
 	}
+	putch('a');
 	return out;
 }
 
