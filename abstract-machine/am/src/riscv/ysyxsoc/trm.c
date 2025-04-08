@@ -32,10 +32,10 @@ extern char _data_vma_end[];
 extern char _bss_start[];
 extern char _bss_end[];
 void bootloader() {
-	size_t data_len = _data_vma_end - _data_vma_start;
+	int data_len = _data_vma_end - _data_vma_start;
 	printf("data_len = %d\n", data_len);
 	memcpy(_data_vma_start, _data_lma_start, data_len);
-	size_t bss_len = _bss_end - _bss_start;
+	int bss_len = _bss_end - _bss_start;
 	printf("bss_len = %d\n", bss_len);
 	memset(_bss_start, 1, bss_len);
 }
