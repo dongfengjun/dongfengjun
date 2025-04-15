@@ -31,10 +31,15 @@ extern char data_lma_start[];
 extern char data_size[];
 void bootloader(void) {
 	if(&data_vma_start != &data_lma_start) {
-		memcpy(data_vma_start, data_lma_start, (size_t)data_size);
+		if((size_t)data_size == 0) {
+			putch('a');
+		}
+		else {
+			memcpy(data_vma_start, data_lma_start, (size_t)data_size);
+		}
 	}
 	else {
-		putch('a');
+		putch('b');
 	}
 }
 
