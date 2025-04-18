@@ -36,7 +36,7 @@ void bootloader(void) {
 			assert(0);
 		}
 		else {
-			printf("si");
+			printf("abcdefghijklmn");
 			memcpy(data_vma_start, data_lma_start, (size_t)data_size);
 		}
 	}
