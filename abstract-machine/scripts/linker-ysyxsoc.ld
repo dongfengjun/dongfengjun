@@ -17,6 +17,7 @@ SECTIONS {
   _etext = .;
 	.rodata : {
     *(.rodata*)
+		*(.srodata*)
 		rodata_end = .;
   } > mrom AT > mrom
 
