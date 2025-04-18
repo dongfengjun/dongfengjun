@@ -3,6 +3,7 @@
 #include "./../riscv.h"
 #include <string.h>
 #include <stdio.h>
+#include <assert.h>
 
 extern char _heap_start;
 int main(const char *args);
@@ -32,7 +33,7 @@ extern char data_size[];
 void bootloader(void) {
 	if(&data_vma_start != &data_lma_start) {
 		if((size_t)data_size == 0) {
-			putch('a');
+			assert(0);
 		}
 		else {
 			memcpy(data_vma_start, data_lma_start, (size_t)data_size);
