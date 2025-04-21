@@ -3,7 +3,6 @@
 #include "./../riscv.h"
 #include <string.h>
 #include <stdio.h>
-#include <assert.h>
 
 extern char _heap_start;
 int main(const char *args);
