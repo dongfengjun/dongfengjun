@@ -30,17 +30,15 @@ void halt(int code) {
 extern char data_vma_start[];
 extern char data_lma_start[];
 extern char data_size[];
+extern char bss_vma_start[];
+extern char bss_lma_start[];
+extern char bss_size[];
 void bootloader(void) {
 	if(&data_vma_start != &data_lma_start) {
-		if((size_t)data_size == 0) {
-			assert(0);
-		}
-		else {
-			memcpy(data_vma_start, data_lma_start, (size_t)data_size);
-		}
+		memcpy(data_vma_start, data_lma_start, (size_t)data_size);
 	}
-	else {
-		putch('b');
+	if(&bss_vma_start != &bss_lma_start) {
+		memset(bss_vma_start, 0, (size_t)data_size);
 	}
 }
 

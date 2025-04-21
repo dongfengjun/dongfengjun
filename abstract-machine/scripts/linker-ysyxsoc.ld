@@ -29,10 +29,13 @@ SECTIONS {
 	data_size = SIZEOF(.data);
 	data_lma_start = LOADADDR(.data);
   .bss : {
+		bss_vma_start = .;
     *(.bss*)
     *(.sbss*)
     *(.scommon)
   } > sram AT > mrom
+	bss_size = SIZEOF(.bss);
+  bss_lma_start = LOADADDR(.bss);
 
 	. = 0x0f000000;
 	end = .;
