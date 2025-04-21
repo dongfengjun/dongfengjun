@@ -34,10 +34,14 @@ extern char bss_lma_start[];
 extern char bss_size[];
 void bootloader(void) {
 	if(&data_vma_start != &data_lma_start) {
-		memcpy(data_vma_start, data_lma_start, (size_t)data_size);
+		if((size_t)data_size != 0) {
+			memcpy(data_vma_start, data_lma_start, (size_t)data_size);
+		}
 	}
 	if(&bss_vma_start != &bss_lma_start) {
-		memset(bss_vma_start, 0, (size_t)data_size);
+		if((size_t)bss_size != 0) {
+			memset(bss_vma_start, 0, (size_t)data_size);
+		}
 	}
 }
 
