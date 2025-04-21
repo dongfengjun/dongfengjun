@@ -46,7 +46,7 @@ void bootloader(void) {
 }
 
 void _trm_init() {
-	//bootloader();
+	bootloader();
 	int ret = main(mainargs);
 	halt(ret);
 }
