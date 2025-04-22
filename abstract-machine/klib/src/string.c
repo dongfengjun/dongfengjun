@@ -110,8 +110,8 @@ void *memmove(void *dst, const void *src, size_t n) {
 
 void *memcpy(void *out, const void *in, size_t n) {
   int j = 0;
-	char *o = (char *)out;
-	char *i = (char *)in;
+	uint32_t *o = (uint32_t *)out;
+	uint32_t *i = (uint32_t *)in;
 	while(j < n) {
 		*o ++ = *i ++;
 		j ++;
