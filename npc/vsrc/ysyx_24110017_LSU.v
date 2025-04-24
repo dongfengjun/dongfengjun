@@ -158,7 +158,7 @@ always @(posedge clk or posedge rst) begin
             state <= READ;
 					  axi_arvalid <= 1'b1;//非DELAY_TEST
 						axi_araddr <= raddr;
-						axi_arsize <= arzize;
+						axi_arsize <= arsize;
 					end
 					if(sram_lsu_write) begin
 		        state <= WRITE;
