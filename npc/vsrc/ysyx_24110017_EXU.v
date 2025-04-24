@@ -296,11 +296,11 @@ assign s_rdata = ((ls_raddr%4 == 0) && op == 7'b0000011 && funct3 == 3'b010) ? l
  : ((ls_raddr%4 == 2) && op == 7'b0000011 && funct3 == 3'b010) ? {16'b0,ls_rdata[31:16]}
  : ((ls_raddr%4 == 3) && op == 7'b0000011 && funct3 == 3'b010) ? {24'b0,ls_rdata[31:24]} //
  : ((ls_raddr%4 == 0) && op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? {24'b0,ls_rdata[7:0]}
- : ((ls_raddr%4 == 1) && op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? {8'b0,ls_rdata[31:24],16'b0}
- : ((ls_raddr%4 == 2) && op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? {16'b0,ls_rdata[31:24],8'b0}
+ : ((ls_raddr%4 == 1) && op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? {24'b0,ls_rdata[15:8]}
+ : ((ls_raddr%4 == 2) && op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? {24'b0,ls_rdata[23:16]}
  : ((ls_raddr%4 == 3) && op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? {24'b0,ls_rdata[31:24]} //
  : ((ls_raddr%4 == 0) && op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? {16'b0,ls_rdata[15:0]}
- : ((ls_raddr%4 == 1) && op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? {8'b0,ls_rdata[31:16],8'b0}
+ : ((ls_raddr%4 == 1) && op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? {16'b0,ls_rdata[23:8]}
  : ((ls_raddr%4 == 2) && op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? {16'b0,ls_rdata[31:16]}
  : ((ls_raddr%4 == 3) && op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? {24'b0,ls_rdata[31:24]} //
  : 32'b0;
