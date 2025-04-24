@@ -28,7 +28,7 @@ SECTIONS {
   } > sram AT > mrom : data
 	data_size = SIZEOF(.data);
 	data_lma_start = LOADADDR(.data);
-  .bss : {
+  .bss : ALIGN(4) {
 		bss_vma_start = .;
     *(.bss*)
     *(.sbss*)
