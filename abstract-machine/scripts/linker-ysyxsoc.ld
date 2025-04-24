@@ -20,9 +20,9 @@ SECTIONS {
 		*(.srodata*)
 		rodata_end = .;
   } > mrom AT > mrom
-
-	.data : {
-    data_vma_start = .;
+	
+	.data : ALIGN(4) {
+		data_vma_start = .;
 		*(.data*)
 		*(.sdata*)
   } > sram AT > mrom : data
