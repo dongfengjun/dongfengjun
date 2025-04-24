@@ -94,7 +94,7 @@ wire [31:0]res;
 wire ls_valid,ls_wen;
 wire [31:0]ls_waddr,ls_wdata,ls_raddr;
 wire [3:0]ls_wmask;
-wire [2:0]ls_awsize,ls_arsize,
+wire [2:0]ls_awsize,ls_arsize;
 wire [31:0]mepc,o_mepc,mstatus,o_mstatus,mcause,o_mcause,mtvec,o_mtvec;
 wire gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 /***LSU***/
