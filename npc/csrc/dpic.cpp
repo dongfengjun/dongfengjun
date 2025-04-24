@@ -15,9 +15,7 @@
 static uint64_t us = 0;
 int pmem_read(int raddr) {
   // 总是读取地址为`raddr & ~0x3u`的4字节返回
-	printf("raddr = %08x\n", raddr);
 	raddr = raddr & 0xfffffffc;
-	printf("raddr2 = %08x\n", raddr);
 	uint32_t result;
 #ifdef CONFIG_DEVICE
 	if (raddr == 0xa000004c) {
