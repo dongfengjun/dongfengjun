@@ -88,8 +88,8 @@ void init_monitor(int argc, char *argv[]) {
 	/* Initialize devices. */
   //IFDEF(CONFIG_DEVICE, init_device());
 	
-	/* Perform ISA dependent initialization. TODO:Restart default im reg pc
-  init_isa();*/
+	/* Perform ISA dependent initialization. */
+  init_isa();
 
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();

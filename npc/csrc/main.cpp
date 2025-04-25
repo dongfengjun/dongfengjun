@@ -16,6 +16,9 @@ extern "C" void flash_read(int32_t addr, int32_t *data) {
 extern "C" void mrom_read(int32_t addr, int32_t *data) {
 	*data = pmem_read(addr);
 }
+extern "C" void flash_read(int addr, int data) {
+	data = pmem_read(addr);
+}
 
 VerilatedContext* contextp = NULL;	//verilator指针
 VysyxSoCFull* top = NULL;	//实例化指针
