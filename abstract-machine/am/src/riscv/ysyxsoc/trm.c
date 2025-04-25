@@ -17,8 +17,9 @@ Area heap = RANGE(&_heap_start, PMEM_END);
 #endif
 static const char mainargs[] = MAINARGS;
 
+#define UART_BASE 0X10000000
 void putch(char ch) {
-	outl(0x10000000, ch);
+	outl(UART_BASE, ch);
 }
 
 void halt(int code) {
@@ -45,8 +46,16 @@ void bootloader(void) {
 	}
 }
 
+void uart_init(void) {
+	outb(UART_BASE + 0X3, 0b10000000);
+	outb(UART_BASE + 0X1, 0b0);
+	outb(UART_BASE, 0b1);
+	outb(UART_BASE + 0X3, 0b11);
+}
+
 void _trm_init() {
-	bootloader();
+	bootloader(); //mrom->sram
+	uart_init(); //uart16500 init
 	int ret = main(mainargs);
 	halt(ret);
 }
