@@ -1,5 +1,5 @@
 #include <string.h>
-#include "../../../include/common.h"
+#include "./../../include/common.h"
 
 static const uint32_t img [] = {
   0x00000297,  // auipc t0,0
