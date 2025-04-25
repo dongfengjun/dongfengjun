@@ -80,6 +80,7 @@ void isa_gpr_push();
 word_t csrs_display(int i);
 //flash init_isa dpic
 void init_isa();
+uint8_t* flash_to_host(paddr_t paddr);
 int c_flash_read(int addr);
 
 //monitor
