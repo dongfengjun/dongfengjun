@@ -4,7 +4,7 @@ static uint8_t flash[0x10000000] PG_ALIGN = {};
 
 uint8_t* flash_to_host(paddr_t paddr) { return flash + paddr - 0x30000000; }
 
-static inline word_t host_read(void *addr, int len) {
+static inline word_t flash_host_read(void *addr, int len) {
   switch (len) {
     case 1: return *(uint8_t  *)addr;
     case 2: return *(uint16_t *)addr;
@@ -15,6 +15,6 @@ static inline word_t host_read(void *addr, int len) {
 
 int c_flash_read(int addr) {
   addr = addr & ~0x3u; //4字节对齐
-	return host_read(flash_to_host(addr), 4);
+	return flash_host_read(flash_to_host(addr), 4);
 }
 
