@@ -14,6 +14,7 @@ static inline word_t host_read(void *addr, int len) {
 }
 
 int c_flash_read(int addr) {
-  return host_read(flash_to_host(addr), 4);
+  addr = addr & ~0x3u; //4字节对齐
+	return host_read(flash_to_host(addr), 4);
 }
 
