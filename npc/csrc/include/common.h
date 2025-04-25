@@ -78,6 +78,9 @@ void isa_regs_display();
 word_t isa_reg_str2val(const char *s, bool *success);
 void isa_gpr_push();
 word_t csrs_display(int i);
+//flash init_isa dpic
+void init_isa();
+int c_flash_read(int raddr);
 
 //monitor
 void init_monitor(int argc, char *argv[]);
