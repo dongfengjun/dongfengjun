@@ -1,6 +1,9 @@
 #include "../include/common.h"
+#include <stdint.h>
+#include <iostream>
+#include <cassert>
 
-uint8_t flash[0x10000000] = {};
+uint8_t flash[0x10000000] PG_ALIGN = {};
 
 uint8_t* flash_to_host(paddr_t paddr) { return flash + paddr - 0x30000000; }
 
