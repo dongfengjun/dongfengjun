@@ -11,13 +11,10 @@
 
 /***ysyxSoC***/
 extern "C" void flash_read(int32_t addr, int32_t *data) {
-	assert(0);
+	*data = c_flash_read(addr);
 }
 extern "C" void mrom_read(int32_t addr, int32_t *data) {
 	*data = pmem_read(addr);
-}
-extern "C" void flash_read(int addr, int data) {
-	data = pmem_read(addr);
 }
 
 VerilatedContext* contextp = NULL;	//verilator指针
@@ -51,7 +48,7 @@ void npc_trap() {
 
 /***main***/
 #define MAX_INST_TO_PRINT 10//puts inst
-CPU_state cpu = {.gpr = {0}, .pc = 0x20000000};
+extern CPU_state cpu;
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0;
 static bool g_print_step = false;

@@ -1,6 +1,7 @@
 #include <string.h>
 #include "./../../include/common.h"
 
+CPU_state cpu;
 static const uint32_t img [] = {
   0x00000297,  // auipc t0,0
   0x00028823,  // sb  zero,16(t0)
