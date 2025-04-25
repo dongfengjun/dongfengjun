@@ -47,10 +47,10 @@ void bootloader(void) {
 }
 
 void uart_init(void) {
-	outb(UART_BASE + 0X3, 0b10000000);
-	outb(UART_BASE + 0X1, 0b0);
-	outb(UART_BASE, 0b1);
-	outb(UART_BASE + 0X3, 0b11);
+	outb(UART_BASE + 0X3, 0x80);
+	outb(UART_BASE + 0X1, 0x0);
+	outb(UART_BASE, 0x1);
+	outb(UART_BASE + 0X3, 0x3);
 }
 
 void _trm_init() {
