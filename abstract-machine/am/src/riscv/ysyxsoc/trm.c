@@ -49,7 +49,7 @@ void bootloader(void) {
 void uart_init(void) {
 	outb(UART_BASE + 0X3, 0x80);
 	outb(UART_BASE + 0X1, 0x0);
-	outb(UART_BASE, 0x10);
+	outb(UART_BASE, 0x8);
 	outb(UART_BASE + 0X3, 0x3);
 }
 
