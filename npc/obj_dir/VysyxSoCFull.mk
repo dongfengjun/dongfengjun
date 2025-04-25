@@ -50,6 +50,7 @@ VM_USER_CLASSES = \
 	init \
 	reg \
 	main \
+	flash \
 	memory \
 	monitor \
 	expr \
@@ -89,6 +90,8 @@ init.o: csrc/isa/riscv32/init.c
 reg.o: csrc/isa/riscv32/reg.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 main.o: csrc/main.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+flash.o: csrc/memory/flash.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 memory.o: csrc/memory/memory.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<

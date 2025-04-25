@@ -13,7 +13,7 @@ static inline word_t host_read(void *addr, int len) {
   }
 }
 
-int c_flash_read(paddr_t addr) {
+int c_flash_read(int addr) {
   return host_read(flash_to_host(addr), 4);
 }
 
