@@ -2,9 +2,9 @@
 
 static uint8_t flash[0x10000000] PG_ALIGN = {};
 
-uint32_t* flash_to_host(paddr_t paddr) { return flash + paddr - 0x30000000; }
+uint8_t* flash_to_host(paddr_t paddr) { return flash + paddr - 0x30000000; }
 
-static inline word_t flash_host_read(void *addr, int len) {
+static inline uint32_t flash_host_read(void *addr, int len) {
   switch (len) {
     case 1: return *(uint8_t  *)addr;
     case 2: return *(uint16_t *)addr;
