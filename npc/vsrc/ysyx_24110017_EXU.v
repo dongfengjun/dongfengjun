@@ -304,9 +304,8 @@ assign s_rdata = ((ls_raddr%4 == 0) && op == 7'b0000011 && funct3 == 3'b010) ? l
  : ((ls_raddr%4 == 2) && op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? {16'b0,ls_rdata[31:16]}
  : ((ls_raddr%4 == 3) && op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? {24'b0,ls_rdata[31:24]} //
  : 32'b0;
-assign ls_awsize = 3'b0;
-//= (op == 7'b0100011 && funct3 == 3'b000) ? 3'b000 : (op == 7'b0100011 && funct3 == 3'b001) ? 3'b001 : (op == 7'b0100011 && funct3 == 3'b010) ? 3'b101 : 3'b101;
-assign ls_arsize = (op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? 3'b000 : (op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? 3'b001 : (op == 7'b0000011 && funct3 == 3'b010) ? 3'b101 : 3'b101;
+assign ls_awsize = (op == 7'b0100011 && funct3 == 3'b000) ? 3'b000 : (op == 7'b0100011 && funct3 == 3'b001) ? 3'b001 : (op == 7'b0100011 && funct3 == 3'b010) ? 3'b010 : 3'b010;
+assign ls_arsize = (op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? 3'b000 : (op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? 3'b001 : (op == 7'b0000011 && funct3 == 3'b010) ? 3'b010 : 3'b010;
 /***J_B_dnpc***/
 wire [31:0]pc;
 wire [31:0]dnpc;
