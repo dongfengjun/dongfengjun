@@ -2,6 +2,7 @@
 
 #if defined(CONFIG_PMEM_MALLOC)
 static uint8_t *flash = NULL;
+Log(0);
 #else // CONFIG_PMEM_GARRAY
 static uint8_t flash[1000] PG_ALIGN = {};
 #endif
