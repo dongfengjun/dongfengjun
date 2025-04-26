@@ -14,7 +14,6 @@ uint32_t flash_host_read(void *addr, int len) {
 }
 
 int c_flash_read(int addr) {
-	printf("addr = %08x\n", addr);
   addr = addr & ~0x3u; //4字节对齐
 	return flash_host_read(flash_to_host(addr), 4);
 }
