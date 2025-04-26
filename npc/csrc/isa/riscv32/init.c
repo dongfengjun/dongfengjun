@@ -20,7 +20,7 @@ static void restart() {
 
 void init_isa() {
   /* Load built-in image. */
-  memcpy(flash_to_host(0x30000000), img, sizeof(img));
+  memcpy(flash_to_host(0x0), img, sizeof(img));
 
   /* Initialize this virtual computer system. */
   restart();
