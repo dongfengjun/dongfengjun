@@ -1,6 +1,6 @@
 #include "../include/common.h"
 
-uint8_t flash[0x10000000] PG_ALIGN = {};
+uint8_t flash[10000];
 
 uint8_t* flash_to_host(paddr_t paddr) { return flash + paddr - 0x30000000; }
 
