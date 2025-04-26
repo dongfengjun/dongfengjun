@@ -1,7 +1,4 @@
 #include "../include/common.h"
-#include <stdint.h>
-#include <iostream>
-#include <cassert>
 
 uint8_t flash[0x10000000] PG_ALIGN = {};
 
