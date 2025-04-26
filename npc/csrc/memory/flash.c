@@ -1,11 +1,6 @@
 #include "../include/common.h"
 
-#if defined(CONFIG_PMEM_MALLOC)
-static uint8_t *flash = NULL;
-Log(0);
-#else // CONFIG_PMEM_GARRAY
 static uint8_t flash[1000] PG_ALIGN = {};
-#endif
 
 uint8_t* flash_to_host(paddr_t paddr) { return flash + paddr - 0x30000000; }
 
