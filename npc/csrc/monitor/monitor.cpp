@@ -93,6 +93,7 @@ void init_monitor(int argc, char *argv[]) {
 	for(int i = 0; i <= 20; i += 4) {
 		printf("%08x ",c_flash_read(0x30000000 + i));
 	}
+	printf("\n");
 
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
