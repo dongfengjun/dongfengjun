@@ -90,7 +90,7 @@ void init_monitor(int argc, char *argv[]) {
 	
 	/* Perform ISA dependent initialization. */
   init_isa();
-	for(int i = 0; i <= 16; i += 4) {
+	for(int i = 0; i <= 20; i += 4) {
 		printf("%08x ",c_flash_read(0x30000000 + i));
 	}
 
