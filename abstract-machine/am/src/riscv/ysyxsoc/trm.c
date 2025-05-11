@@ -57,20 +57,20 @@ void uart_init(void) {
 #define SPI_BASE 0X10001000
 uint32_t flash_read(uint32_t addr) {
   uint64_t *Tx = (uint64_t *)SPI_BASE;                                      
-	Tx[0] = 0x0300000000000000 + ((addr & 0xffffff) << 8); //全双工通信
+	Tx[0] = 0x03000000 + (addr & 0xffffff);
 	uint32_t *SS = (uint32_t *)(SPI_BASE + 0x18);
   SS[0] = 0b00000001;
   uint32_t *DIVIDER = (uint32_t *)(SPI_BASE + 0x14);
   DIVIDER[0] = 0x1;
   uint32_t *CTRL = (uint32_t *)(SPI_BASE + 0x10);
-  CTRL[0] = 0b01101000000; //32+32=64 lsb=? 配合sleve
+  CTRL[0] = 0b11101000000; //LEN32+32=64 lsb=1 Mode3: Rx_NEG=1 Tx_NEG=0
   while(1) {
     volatile uint32_t *COMPLETE = (uint32_t *)(SPI_BASE + 0x10);
     int GO_BSY = COMPLETE[0] & 0x100;
     if(GO_BSY == 0) break;
   }
   uint32_t *Rx = (uint32_t *)SPI_BASE;
-  return Rx[0];
+  return Rx[1];
 }
 
 void _trm_init() {
