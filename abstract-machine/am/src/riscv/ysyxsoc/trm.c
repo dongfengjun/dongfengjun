@@ -57,7 +57,7 @@ void uart_init(void) {
 #define SPI_BASE 0X10001000
 uint32_t flash_read(uint32_t addr) {
   uint32_t *Tx = (uint32_t *)SPI_BASE;                                      
-	Tx[0] = 0x03ff0001;
+	Tx[0] = 0x00000300;
 	uint32_t *SS = (uint32_t *)(SPI_BASE + 0x18);
   SS[0] = 0b00000001;
   uint32_t *DIVIDER = (uint32_t *)(SPI_BASE + 0x14);
