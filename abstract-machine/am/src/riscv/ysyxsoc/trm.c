@@ -71,7 +71,7 @@ uint32_t flash_read(uint32_t addr) {
     if(GO_BSY == 0) break;
   }
   uint32_t *Rx = (uint32_t *)SPI_BASE;
-  return Rx[0];
+  return (Rx[0] << 24) | ((Rx[0] << 8) & 0x00FF0000) | ((Rx[0] >> 8) & 0x0000FF00) | (Rx[0] >> 24);
 }
 
 void _trm_init() {
