@@ -3,11 +3,17 @@
 
 CPU_state cpu;
 static const uint32_t img [] = {
-  0x00000297,  // auipc t0,0
+/***dummy***
+	0x00000297,  // auipc t0,0
   0x00028823,  // sb  zero,16(t0)
   0x0102c503,  // lbu a0,16(t0)
   0x00100073,  // ebreak (used as nemu_trap)
-  0xdeadbeef,  // some data
+  0xdeadbeef  // some data
+***/
+	0x100007b7,		//lui	a5,0x10000
+	0x04100713,		//li	a4,65
+	0x00e78023,		//sb	a4,0(a5)
+	0x0000006f		//j	2000000c
 };
 
 static void restart() {
