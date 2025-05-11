@@ -60,7 +60,7 @@ always @(posedge clk) begin
 	else begin
 		case (state)
 			IDLE: begin
-				if(dnpc > 32'h20000000) begin //判断条件
+				if((dnpc > 32'h20000000) ||(dnpc > 32'h0f0000000)) begin //判断条件
 					pcu_valid <= 1'b1;
 				end
 			end
