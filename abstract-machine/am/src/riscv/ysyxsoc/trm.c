@@ -67,7 +67,10 @@ uint32_t flash_read(uint32_t addr) {
   while(1) {
     volatile uint32_t *COMPLETE = (uint32_t *)(SPI_BASE + 0x10);
     int GO_BSY = COMPLETE[0] & 0x100;
-    if(GO_BSY == 0) break;
+    if(GO_BSY == 0) {
+			SS[0] = 0b00000000;
+			break;
+		}
   }
   uint32_t *Rx = (uint32_t *)SPI_BASE;
   return Rx[0];
