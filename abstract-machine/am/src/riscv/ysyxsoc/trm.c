@@ -70,6 +70,7 @@ uint32_t flash_read(uint32_t addr) {
     if(GO_BSY == 0) break;
   }
   uint32_t *Rx = (uint32_t *)SPI_BASE;
+	SS[0] = 0b00000000;
   return Rx[0];
 }
 
