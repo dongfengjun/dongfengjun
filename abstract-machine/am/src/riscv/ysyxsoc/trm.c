@@ -64,7 +64,7 @@ uint32_t flash_read(uint32_t addr) {
   uint32_t *DIVIDER = (uint32_t *)(SPI_BASE + 0x14);
   DIVIDER[0] = 0x1;
   uint32_t *CTRL = (uint32_t *)(SPI_BASE + 0x10);
-  CTRL[0] = 0b001101000000; //LEN=32+32=64 lsb=0 Mode3: Rx_NEG=1 Tx_NEG=0
+  CTRL[0] = 0b010101000000; //LEN=32+32=64 lsb=0 Mode3: Rx_NEG=1 Tx_NEG=0
   while(1) {
     volatile uint32_t *COMPLETE = (uint32_t *)(SPI_BASE + 0x10);
     int GO_BSY = COMPLETE[0] & 0x100;
