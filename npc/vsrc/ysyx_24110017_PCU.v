@@ -55,8 +55,8 @@ end
 always @(posedge clk) begin
 	if(rst) begin
 		pcu_valid <= 1'b0;
-		pc <= 32'h20000000; //sram
-		//pc <= 32'h30000000; //flash
+		//pc <= 32'h10000000; //mrom
+		pc <= 32'h30000000; //flash
 	end
 	else begin
 		case (state)
