@@ -15,6 +15,7 @@ static const uint32_t img [] = {
 	0x00e78023,		//sb	a4,0(a5)
 	0x0000006f		//j
 ******/
+/***coremark***
 0x00000413						,
 0x0000d117						,
 0xffc10113						,
@@ -1723,7 +1724,7 @@ static const uint32_t img [] = {
 0x00856433          	,
 0x02f31c23          	,
 0x08046413          	,
-0x00849023          	,
+0x00849023			    	,
 0x01012083          	,
 0x00c12403          	,
 0x00812483          	,
@@ -3071,6 +3072,7 @@ static const uint32_t img [] = {
 0xfcf67ee3          	,
 0x00008067          	,
 0x00008067
+******/
 };
 
 static void restart() {
