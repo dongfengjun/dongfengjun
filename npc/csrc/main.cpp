@@ -320,7 +320,7 @@ int main(int argc, char *argv[]) {
 	RUNNING = true;
 /***code***/
 	init_monitor(argc, argv);//load inst
-	reset(2);
+	reset(50);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
 #else

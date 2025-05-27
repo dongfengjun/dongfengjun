@@ -53,14 +53,14 @@ always @(*) begin
 end
 
 always @(posedge clk) begin
-	if(rst && (pc == 32'h0)) begin
+	if(rst) begin
 		pcu_valid <= 1'b0;
 		pc <= 32'h30000000; //flash
 	end
 	else begin
 		case (state)
 			IDLE: begin
-				if(rst && ((dnpc > 32'h30000000) ||(dnpc < 32'h40000000))) begin //判断条件
+				if((dnpc > 32'h30000000) ||(dnpc < 32'h40000000)) begin //判断条件
 					pcu_valid <= 1'b1;
 				end
 			end
