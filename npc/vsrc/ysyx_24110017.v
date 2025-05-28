@@ -145,6 +145,7 @@ wire [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
 wire mepc_en,mstatus_en,mcause_en,mtvec_en;
 /***RFU***/
 wire [31:0]r1,r2;
+wire [31:0]mvendorid,marchid; //ID
 
 
 ysyx_24110017_PCU PCU(clock,reset,
@@ -272,12 +273,12 @@ ysyx_24110017_WBU WBU(clock,reset,
 		mepc_en,mstatus_en,mcause_en,mtvec_en
 );
 ysyx_24110017_RegisterFile #(5,32) RFU (clock,xrd,rf_addr,rf_wen,rs1,r1,rs2,r2);
-ysyx_24110017_Reg #(32, 32'b0) mepc (clock,reset,w_mepc,mepc,mepc_en);
-ysyx_24110017_Reg #(32, 32'h1800) mstatus (clock,reset,w_mstatus,mstatus,mstatus_en);
-ysyx_24110017_Reg #(32, 32'b0) mcause (clock,reset,w_mcause,mcause,mcause_en);
-ysyx_24110017_Reg #(32, 32'b0) mtvec (clock,reset,w_mtvec,mtvec,mtvec_en);
-ysyx_24110017_Reg #(32, 32'h79737978) mvendorid (clock,reset,32'b0,mvendorid,1'b0);
-ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid (clock,reset,32'b0,marchid,1'b0);
+ysyx_24110017_Reg #(32, 32'b0) mepc_reg (clock,reset,w_mepc,mepc,mepc_en);
+ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,w_mstatus,mstatus,mstatus_en);
+ysyx_24110017_Reg #(32, 32'b0) mcause_reg (clock,reset,w_mcause,mcause,mcause_en);
+ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,w_mtvec,mtvec,mtvec_en);
+ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid,1'b0);
+ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
 
 
 /***DPI-C*CSR***/
