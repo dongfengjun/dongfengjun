@@ -37,8 +37,8 @@ typedef uint16_t ioaddr_t;
 	//#endif
 //#define CONFIG_DIFFTEST 1
 
-#define CONFIG_MBASE 0x20000000//IM
-#define CONFIG_MSIZE 0x1000
+#define CONFIG_MBASE 0x30000000//IM
+#define CONFIG_MSIZE 0x10000000
 #define CONFIG_PC_RESET_OFFSET 0 //reset pc offset
 #define PMEM_LEFT  ((paddr_t)CONFIG_MBASE)
 #define PMEM_RIGHT ((paddr_t)CONFIG_MBASE + CONFIG_MSIZE - 1)

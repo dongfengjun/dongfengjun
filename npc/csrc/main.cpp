@@ -11,7 +11,7 @@
 
 /***ysyxSoC***/
 extern "C" void flash_read(int32_t addr, int32_t *data) {
-	*data = c_flash_read(addr);
+	*data = pmem_read(addr);
 }
 extern "C" void mrom_read(int32_t addr, int32_t *data) {
 	*data = pmem_read(addr);
