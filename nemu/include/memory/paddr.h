@@ -34,8 +34,8 @@ static inline bool in_pmem(paddr_t addr) {
 word_t paddr_read(paddr_t addr, int len);
 void paddr_write(paddr_t addr, int len, word_t data);
 
-word_t mrom_read(paddr_t addr, int len);
-void init_mrom(paddr_t addr, int len, word_t data);
+word_t flash_read(paddr_t addr, int len);
+void init_flash(paddr_t addr, int len, word_t data);
 
 word_t sram_read(paddr_t addr, int len);
 void sram_write(paddr_t addr, int len, word_t data);
