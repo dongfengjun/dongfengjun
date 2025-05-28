@@ -272,17 +272,19 @@ ysyx_24110017_WBU WBU(clock,reset,
 		mepc_en,mstatus_en,mcause_en,mtvec_en
 );
 ysyx_24110017_RegisterFile #(5,32) RFU (clock,xrd,rf_addr,rf_wen,rs1,r1,rs2,r2);
-ysyx_24110017_Reg #(32, 32'b0) mepc_ysyx_24110017 (clock,reset,w_mepc,mepc,mepc_en);
-ysyx_24110017_Reg #(32, 32'h1800) mstatus_ysyx_24110017 (clock,reset,w_mstatus,mstatus,mstatus_en);
-ysyx_24110017_Reg #(32, 32'b0) mcause_ysyx_24110017 (clock,reset,w_mcause,mcause,mcause_en);
-ysyx_24110017_Reg #(32, 32'b0) mtvec_ysyx_24110017 (clock,reset,w_mtvec,mtvec,mtvec_en);
+ysyx_24110017_Reg #(32, 32'b0) mepc (clock,reset,w_mepc,mepc,mepc_en);
+ysyx_24110017_Reg #(32, 32'h1800) mstatus (clock,reset,w_mstatus,mstatus,mstatus_en);
+ysyx_24110017_Reg #(32, 32'b0) mcause (clock,reset,w_mcause,mcause,mcause_en);
+ysyx_24110017_Reg #(32, 32'b0) mtvec (clock,reset,w_mtvec,mtvec,mtvec_en);
+ysyx_24110017_Reg #(32, 32'h79737978) mvendorid (clock,reset,32'b0,mvendorid,1'b0);
+ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid (clock,reset,32'b0,marchid,1'b0);
 
 
 /***DPI-C*CSR***/
 export "DPI-C" function csr_grab;                                    
 function int csr_grab(int i);
   begin
-    assign csr_grab = (i == 0) ? mepc : (i == 1) ? mstatus : (i == 2) ? mcause : (i == 3) ? mtvec : 32'b0;
+    assign csr_grab = (i == 0) ? mepc : (i == 1) ? mstatus : (i == 2) ? mcause : (i == 3) ? mtvec : (i == 4) ? mvendorid : (i == 5) ? marchid : 32'b0;
   end
 endfunction
 /***DPI-C*DIFFTEST***/
