@@ -7,7 +7,7 @@ static inline bool in_psram(paddr_t addr) {
   return addr - 0x80000000 < 0x80000;
 }
 
-static inline word_t host_read(void *addr, int len) {
+static inline word_t psram_host_read(void *addr, int len) {
   switch (len) {
     case 1: return *(uint8_t  *)addr;
     case 2: return *(uint16_t *)addr;
@@ -17,7 +17,7 @@ static inline word_t host_read(void *addr, int len) {
   }
 }
 
-static inline void host_write(void *addr, int len, word_t data) {
+static inline void psram_host_write(void *addr, int len, word_t data) {
   switch (len) {
     case 1: *(uint8_t  *)addr = data; return;
     case 2: *(uint16_t *)addr = data; return;
@@ -31,7 +31,7 @@ static uint8_t* guest_to_psram(paddr_t paddr) { return psram + paddr; }
 static paddr_t psram_to_guest(uint8_t *haddr) { return haddr - psram; }
 
 int c_psram_read(int addr) {
-  if (likely(in_psram(addr))) return host_read(guest_to_psram(addr), 4);
+  if (likely(in_psram(addr))) return psram_host_read(guest_to_psram(addr), 4);
 	for(int i = 0; i < 3; i ++){
 		printf("%08x ", psram[i * 4]);
 	}
@@ -40,7 +40,7 @@ int c_psram_read(int addr) {
 
 void c_psram_write(int addr, int data) {
   if (likely(in_psram(addr))) { 
-		host_write(guest_to_psram(addr), 4, data);
+		psram_host_write(guest_to_psram(addr), 4, data);
 		for(int i = 0; i < 3; i ++){
 			printf("%08x ", psram[i * 4]);
 		}
