@@ -82,6 +82,9 @@ word_t csrs_display(int i);
 void init_isa();
 uint8_t* flash_to_host(paddr_t paddr);
 int c_flash_read(int addr);
+//psram dpic
+int c_psram_read(int addr);
+void c_psram_write(int addr, int data);
 
 //monitor
 void init_monitor(int argc, char *argv[]);
