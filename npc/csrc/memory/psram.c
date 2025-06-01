@@ -29,12 +29,12 @@ static inline word_t host_read(void *addr, int len) {
 uint8_t* guest_to_host(paddr_t paddr) { return psram + paddr; }
 paddr_t host_to_guest(uint8_t *haddr) { return haddr - psram; }
 
-word_t c_psram_read(paddr_t addr) {
-  if (likely(in_pmem(addr))) return host_read(guest_to_host(addr), 4);
+int c_psram_read(int addr) {
+  if (likely(in_psram(addr))) return host_read(guest_to_host(addr), 4);
 	return 0;
 }
 
-void c_psram_write(paddr_t addr, word_t data) {
-  if (likely(in_pmem(addr))) { host_write(guest_to_host(addr), 4, data); return; }
+void c_psram_write(int addr, int data) {
+  if (likely(in_psram(addr))) { host_write(guest_to_host(addr), 4, data); return; }
 }
 
