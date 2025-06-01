@@ -42,9 +42,9 @@ void c_psram_write(int addr, int data) {
   printf("addr = %08x wdata = %08x\n",addr,data);
 	if (likely(in_psram(addr))) { 
 		host_write(guest_to_psram(addr), 4, data);
-		//for(int i = 0; i < 3; i ++){
-			//printf("%08x ", psram[i * 4]);
-		//}
+		for(int i = 0; i < 3; i ++){
+			printf("%08x ", psram[i * 4]);
+		}
 		return;
 	}
 }
