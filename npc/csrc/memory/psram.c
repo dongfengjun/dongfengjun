@@ -27,8 +27,8 @@ static inline void host_write(void *addr, int len, word_t data) {
   }
 }
 
-static uint8_t* guest_to_host(paddr_t paddr) { return psram + paddr; }
-static paddr_t host_to_guest(uint8_t *haddr) { return haddr - psram; }
+static inline uint8_t* guest_to_host(paddr_t paddr) { return psram + paddr; }
+static inline paddr_t host_to_guest(uint8_t *haddr) { return haddr - psram; }
 
 int c_psram_read(int addr) {
   if (likely(in_psram(addr))) return host_read(guest_to_host(addr), 4);
