@@ -85,8 +85,6 @@ int c_flash_read(int addr);
 //psram dpic
 int c_psram_read(int addr);
 void c_psram_write(int addr, int data);
-void psram_read(int32_t addr, int32_t *data);
-void psram_write(int32_t addr, int32_t data);
 
 //monitor
 void init_monitor(int argc, char *argv[]);
