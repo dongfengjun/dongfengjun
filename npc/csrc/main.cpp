@@ -19,10 +19,10 @@ extern "C" void mrom_read(int32_t addr, int32_t *data) {
 extern "C" void psram_read(int32_t addr, int32_t *data) {
 	*data = c_psram_read(addr);
 }
-extern "C" void psram_write(int32_t addr, int32_t data) {
-	printf("a\n");
-	c_psram_write(addr,data);
-}
+//extern "C" void psram_write(int32_t addr, int32_t data) {
+//	printf("a\n");
+//	c_psram_write(addr,data);
+//}
 
 VerilatedContext* contextp = NULL;	//verilator指针
 VysyxSoCFull* top = NULL;	//实例化指针
