@@ -76,7 +76,7 @@ uint32_t flash_read(uint32_t addr) {
 
 void _trm_init() {
 	bootloader(); //mrom->sram
-	uart_init(); //uart16500 init
+//	uart_init(); //uart16500 init
 	int ret = main(mainargs);
 	halt(ret);
 }
