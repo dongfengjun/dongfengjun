@@ -80,7 +80,7 @@ int strncmp(const char *s1, const char *s2, size_t n) {
 
 void *memset(void *s, int c, size_t n) {
 	int i = 0;
-	char *p = (char *)s;
+	volatile char *p = (char *)s;
 	while(i < n) {
 		*p ++ = (char)c;
 		i ++;
@@ -89,7 +89,7 @@ void *memset(void *s, int c, size_t n) {
 }
 
 void *memmove(void *dst, const void *src, size_t n) {
-  char *d = (char *)dst;
+  volatile char *d = (char *)dst;
   char *s = (char *)src;
 	if(d < s) {
 		int i = 0;

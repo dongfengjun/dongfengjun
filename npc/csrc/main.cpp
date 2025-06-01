@@ -11,10 +11,11 @@
 
 /***ysyxSoC***/
 extern "C" void flash_read(int32_t addr, int32_t *data) {
-	assert(0);
+	addr = addr + 0x30000000;
+	*data = pmem_read(addr);
 }
 extern "C" void mrom_read(int32_t addr, int32_t *data) {
-	*data = paddr_read(addr,4);
+	*data = pmem_read(addr);
 }
 
 VerilatedContext* contextp = NULL;	//verilator指针
@@ -48,7 +49,7 @@ void npc_trap() {
 
 /***main***/
 #define MAX_INST_TO_PRINT 10//puts inst
-CPU_state cpu = {.gpr = {0}, .pc = 0x20000000};
+extern CPU_state cpu;
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
@@ -295,6 +296,19 @@ void cpu_exec(int n) {
 #endif
 }
 
+/***
+extern char _data_lma_start;
+extern char _data_vma_start;
+extern char _data_vma_end;
+extern char _bss_start;
+extern char _bss_end;
+void bootloader(void) {
+	size_t data_len = _data_vma_end - _data_lma_start;
+	memcpy(&_data_vma_start, &_data_lma_start, data_len);
+	size_t bss_len = _bss_end - _bss_start;
+	memset(&_bss_start, 0, bss_len);
+}
+***/
 int main(int argc, char *argv[]) {
 /***inst***/
 	Verilated::commandArgs(argc,argv);
@@ -307,7 +321,7 @@ int main(int argc, char *argv[]) {
 	RUNNING = true;
 /***code***/
 	init_monitor(argc, argv);//load inst
-	reset(2);
+	reset(50);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
 #else

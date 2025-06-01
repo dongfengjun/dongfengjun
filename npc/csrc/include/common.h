@@ -25,20 +25,20 @@ typedef uint16_t ioaddr_t;
 #define ITRACE_COND 1
 #define CONFIG_TARGET_NATIVE_ELF 1
 
-#define CONFIG_DUMP_WAVE 1//是否保存波形（内存不足）
+//#define CONFIG_DUMP_WAVE 1//是否保存波形（内存不足）
 
 //#define CONFIG_TRACE 1
-//	#ifdef CONFIG_TRACE
+	//#ifdef CONFIG_TRACE
 		//#define CONFIG_ITRACE 1
 			//#define CONFIG_ITRACE_COND 1
 			//#define CONFIG_FTRACE 1
 			//#define CONFIG_MTRACE 1 
 		//#define CONFIG_WATCHPOINT 1
-//	#endif
-#define CONFIG_DIFFTEST 1
+	//#endif
+//#define CONFIG_DIFFTEST 1
 
-#define CONFIG_MBASE 0x20000000//IM
-#define CONFIG_MSIZE 0x1000
+#define CONFIG_MBASE 0x30000000//IM
+#define CONFIG_MSIZE 0x10000000
 #define CONFIG_PC_RESET_OFFSET 0 //reset pc offset
 #define PMEM_LEFT  ((paddr_t)CONFIG_MBASE)
 #define PMEM_RIGHT ((paddr_t)CONFIG_MBASE + CONFIG_MSIZE - 1)
@@ -68,6 +68,8 @@ typedef struct {
 uint8_t* guest_to_host(paddr_t paddr);
 paddr_t host_to_guest(uint8_t *haddr);
 void init_mem();
+int pmem_read(int raddr);
+void pmem_write(int waddr, int wdata, char wmask);
 word_t paddr_read(paddr_t addr, int len);
 void paddr_write(paddr_t addr, int len, word_t data);
 //reg DPI-C
@@ -76,6 +78,10 @@ void isa_regs_display();
 word_t isa_reg_str2val(const char *s, bool *success);
 void isa_gpr_push();
 word_t csrs_display(int i);
+//flash init_isa dpic
+void init_isa();
+uint8_t* flash_to_host(paddr_t paddr);
+int c_flash_read(int addr);
 
 //monitor
 void init_monitor(int argc, char *argv[]);

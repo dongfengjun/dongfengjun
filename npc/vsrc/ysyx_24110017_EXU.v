@@ -2,7 +2,7 @@ module ysyx_24110017_EXU(clk,rst,sram_lsu_read,sram_lsu_write,LSU_DONE,
 			IDU_VALID,EXU_READY,EXU_VALID,WBU_READY,
 			op,funct3,imm,funct7,shamt,r1,r2, //i_IDU
 			res_reg, //o_WBU
-			ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask, //o_LSU
+			ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,ls_awsize,ls_arsize,//o_LSU
 			ls_rdata, //i_LSU
 			pc,dnpc,	//PCU
 			mepc,mstatus,mcause,mtvec, //i_csr
@@ -28,6 +28,7 @@ output [31:0]res_reg;
 output ls_valid,ls_wen;
 output [31:0]ls_waddr,ls_wdata,ls_raddr;
 output [3:0]ls_wmask;
+output [2:0]ls_awsize,ls_arsize;
 input [31:0]ls_rdata;
 
 input [31:0]pc;
@@ -271,6 +272,7 @@ assign w_csrs =
 wire ls_valid,ls_wen;
 wire [31:0]ls_waddr,ls_wdata,ls_raddr,s_rdata;
 wire [7:0]ls_wmask;
+wire [2:0]ls_wsize,ls_rsize;
 assign ls_valid = (op == 7'b0000011 || op == 7'b0100011) ? 1'b1 : 1'b0;
 assign ls_wen = (op == 7'b0100011) ? 1'b1 : 1'b0;
 assign ls_waddr = (op == 7'b0100011) ? (r1 + offset) : 32'h80000000;
@@ -288,12 +290,22 @@ assign ls_wmask =
  :
  ((ls_waddr%4 == 3) && op == 7'b0100011 && funct3 == 3'b000) ? 4'b1000 : ((ls_waddr%4 == 3) && op == 7'b0100011 && funct3 == 3'b001) ? 4'b1000 : ((ls_waddr%4 == 3) && op == 7'b0100011 && funct3 == 3'b010) ? 4'b1000 //单次非对齐
  : 4'b0;
-assign ls_raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h80000000;
-assign s_rdata = ((ls_raddr%4 == 0) && op == 7'b0000011) ? ls_rdata //对齐
- : ((ls_raddr%4 == 1) && op == 7'b0000011) ? {8'b0,ls_rdata[31:8]}
- : ((ls_raddr%4 == 2) && op == 7'b0000011) ? {16'b0,ls_rdata[31:16]}
- : ((ls_raddr%4 == 3) && op == 7'b0000011) ? {24'b0,ls_rdata[31:24]}
+assign ls_raddr = (op == 7'b0000011) ? (r1 + offset) : 32'h0;
+assign s_rdata = ((ls_raddr%4 == 0) && op == 7'b0000011 && funct3 == 3'b010) ? ls_rdata
+ : ((ls_raddr%4 == 1) && op == 7'b0000011 && funct3 == 3'b010) ? {8'b0,ls_rdata[31:8]}
+ : ((ls_raddr%4 == 2) && op == 7'b0000011 && funct3 == 3'b010) ? {16'b0,ls_rdata[31:16]}
+ : ((ls_raddr%4 == 3) && op == 7'b0000011 && funct3 == 3'b010) ? {24'b0,ls_rdata[31:24]} //
+ : ((ls_raddr%4 == 0) && op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? {24'b0,ls_rdata[7:0]}
+ : ((ls_raddr%4 == 1) && op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? {24'b0,ls_rdata[15:8]}
+ : ((ls_raddr%4 == 2) && op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? {24'b0,ls_rdata[23:16]}
+ : ((ls_raddr%4 == 3) && op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? {24'b0,ls_rdata[31:24]} //
+ : ((ls_raddr%4 == 0) && op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? {16'b0,ls_rdata[15:0]}
+ : ((ls_raddr%4 == 1) && op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? {16'b0,ls_rdata[23:8]}
+ : ((ls_raddr%4 == 2) && op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? {16'b0,ls_rdata[31:16]}
+ : ((ls_raddr%4 == 3) && op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? {24'b0,ls_rdata[31:24]} //
  : 32'b0;
+assign ls_awsize = (op == 7'b0100011 && funct3 == 3'b000) ? 3'b000 : (op == 7'b0100011 && funct3 == 3'b001) ? 3'b001 : (op == 7'b0100011 && funct3 == 3'b010) ? 3'b010 : 3'b010;
+assign ls_arsize = (op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? 3'b000 : (op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? 3'b001 : (op == 7'b0000011 && funct3 == 3'b010) ? 3'b010 : 3'b010;
 /***J_B_dnpc***/
 wire [31:0]pc;
 wire [31:0]dnpc;
