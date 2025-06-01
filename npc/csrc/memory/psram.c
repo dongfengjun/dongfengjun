@@ -3,10 +3,6 @@
 
 uint8_t psram[0x80000] PG_ALIGN = {};
 
-static inline bool in_psram(paddr_t addr) {
-  return addr - 0x80000000 < 0x80000;
-}
-
 static inline word_t host_read(void *addr, int len) {
   switch (len) {
     case 1: return *(uint8_t  *)addr;
@@ -31,21 +27,15 @@ static uint8_t* guest_to_psram(paddr_t paddr) { return psram + paddr; }
 static paddr_t psram_to_guest(uint8_t *haddr) { return haddr - psram; }
 
 int c_psram_read(int addr) {
-  if (likely(in_psram(addr))) return host_read(guest_to_psram(addr), 4);
-	for(int i = 0; i < 3; i ++){
-		printf("%08x ", psram[i * 4]);
-	}
-	return 0;
+  return host_read(guest_to_psram(addr), 4);
 }
 
 void c_psram_write(int addr, int data) {
   printf("addr = %08x wdata = %08x\n",addr,data);
-	if (likely(in_psram(addr))) { 
-		host_write(guest_to_psram(addr), 4, data);
-		for(int i = 0; i < 3; i ++){
-			printf("%08x ", psram[i * 4]);
-		}
-		return;
+	host_write(guest_to_psram(addr), 4, data);
+	for(int i = 0; i < 3; i ++){
+		printf("%08x ", psram[i * 4]);
 	}
+	return;
 }
 
