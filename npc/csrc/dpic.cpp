@@ -63,6 +63,9 @@ void pmem_write(int waddr, int wdata, char wmask) {
 		return;
 	}
 #endif
+	if(waddr >= 0x10000000 && waddr <= 0x10000fff) { //ysyxsoc uart_init
+		difftest_skip_ref();
+	}
 	switch(wmask) {
 		case 1:	paddr_write(waddr, 1, wdata); break;
 		case 3: paddr_write(waddr, 2, wdata); break;
