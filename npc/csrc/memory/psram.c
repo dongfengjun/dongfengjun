@@ -27,15 +27,15 @@ static inline void host_write(void *addr, int len, word_t data) {
   }
 }
 
-static inline uint8_t* guest_to_host(paddr_t paddr) { return psram + paddr; }
-static inline paddr_t host_to_guest(uint8_t *haddr) { return haddr - psram; }
+static uint8_t* guest_to_psram(paddr_t paddr) { return psram + paddr; }
+static paddr_t psram_to_guest(uint8_t *haddr) { return haddr - psram; }
 
 int c_psram_read(int addr) {
-  if (likely(in_psram(addr))) return host_read(guest_to_host(addr), 4);
+  if (likely(in_psram(addr))) return host_read(guest_to_psram(addr), 4);
 	return 0;
 }
 
 void c_psram_write(int addr, int data) {
-  if (likely(in_psram(addr))) { host_write(guest_to_host(addr), 4, data); return; }
+  if (likely(in_psram(addr))) { host_write(guest_to_psram(addr), 4, data); return; }
 }
 
