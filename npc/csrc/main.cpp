@@ -21,7 +21,7 @@ extern "C" void psram_read(int32_t addr, int32_t *data) {
 }
 extern "C" void psram_write(int32_t addr, int32_t data) {
 	assert(0);
-	c_psram_write(addr,data);
+	//c_psram_write(addr,data);
 }
 
 VerilatedContext* contextp = NULL;	//verilator指针
