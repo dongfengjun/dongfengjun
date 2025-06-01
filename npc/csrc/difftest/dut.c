@@ -42,10 +42,9 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
 		"If it is not necessary, you can turn it off in menuconfig.", ref_so_file);
 	
 	ref_difftest_init(port);//调用ref_init
-	ref_difftest_memcpy(/RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);//from mymem to ref IM
+	ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);//from mymem to ref IM
 	for(int i = 0; i < img_size; i ++) {
-    paddr_read(addr, 1);
-    addr ++;
+    printf("%08x ",paddr_read(0x30000000 + i, 1));
   }
 	ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);//reg from myreg to ref
 }
