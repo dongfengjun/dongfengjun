@@ -7,7 +7,7 @@ static inline bool in_psram(paddr_t addr) {
   return addr - 0x80000000 < 0x80000;
 }
 
-static inline word_t psram_host_read(void *addr, int len) {
+static inline word_t host_read(void *addr, int len) {
   switch (len) {
     case 1: return *(uint8_t  *)addr;
     case 2: return *(uint16_t *)addr;
@@ -17,7 +17,7 @@ static inline word_t psram_host_read(void *addr, int len) {
   }
 }
 
-static inline void psram_host_write(void *addr, int len, word_t data) {
+static inline void host_write(void *addr, int len, word_t data) {
   switch (len) {
     case 1: *(uint8_t  *)addr = data; return;
     case 2: *(uint16_t *)addr = data; return;
