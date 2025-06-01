@@ -16,7 +16,8 @@ static inline word_t host_read(void *addr, int len) {
     default: MUXDEF(CONFIG_RT_CHECK, assert(0), return 0);
   }
 }
-	static inline void host_write(void *addr, int len, word_t data) {
+
+static inline void host_write(void *addr, int len, word_t data) {
   switch (len) {
     case 1: *(uint8_t  *)addr = data; return;
     case 2: *(uint16_t *)addr = data; return;
@@ -26,8 +27,8 @@ static inline word_t host_read(void *addr, int len) {
   }
 }
 
-uint8_t* guest_to_host(paddr_t paddr) { return psram + paddr; }
-paddr_t host_to_guest(uint8_t *haddr) { return haddr - psram; }
+static uint8_t* guest_to_host(paddr_t paddr) { return psram + paddr; }
+static paddr_t host_to_guest(uint8_t *haddr) { return haddr - psram; }
 
 int c_psram_read(int addr) {
   if (likely(in_psram(addr))) return host_read(guest_to_host(addr), 4);
