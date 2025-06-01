@@ -66,7 +66,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 #ifdef CONFIG_TARGET_SHARE
 	if (addr - 0x30000000 < 0x10000000) return init_flash(addr, len, data);
 	if (addr - 0x0f000000 < 0x2000) return sram_write(addr, len, data);
-	if (addr - 0x10000000 < 0x1000) return; 
+	if (addr - 0x10000000 < 0x1000) return;	//ysyxsoc-uart 
 #endif
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
