@@ -35,7 +35,7 @@ typedef uint16_t ioaddr_t;
 			//#define CONFIG_MTRACE 1 
 		//#define CONFIG_WATCHPOINT 1
 	//#endif
-#define CONFIG_DIFFTEST 1
+//#define CONFIG_DIFFTEST 1
 
 #define CONFIG_MBASE 0x30000000//IM
 #define CONFIG_MSIZE 0x10000000
@@ -82,6 +82,9 @@ word_t csrs_display(int i);
 void init_isa();
 uint8_t* flash_to_host(paddr_t paddr);
 int c_flash_read(int addr);
+//psram dpic
+int c_psram_read(int addr);
+void c_psram_write(int addr, int data);
 
 //monitor
 void init_monitor(int argc, char *argv[]);
