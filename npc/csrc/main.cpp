@@ -22,6 +22,9 @@ extern "C" void psram_read(int32_t addr, int32_t *data) {
 extern "C" void psram_write(int32_t addr, int32_t data) {
 	c_psram_write(addr,data);
 }
+extern "C" void diff_skip_ref() {
+	difftest_skip_ref();
+}
 
 VerilatedContext* contextp = NULL;	//verilator指针
 VysyxSoCFull* top = NULL;	//实例化指针
