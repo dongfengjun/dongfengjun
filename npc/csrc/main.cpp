@@ -19,8 +19,8 @@ extern "C" void mrom_read(int32_t addr, int32_t *data) {
 extern "C" void psram_read(int32_t addr, int32_t *data) {
 	*data = c_psram_read(addr);
 }
-extern "C" void psram_write(int32_t addr, int32_t data) {
-	c_psram_write(addr,data);
+extern "C" void psram_write(int32_t addr, int32_t data, int8_t len) {
+	c_psram_write(addr,data,len);
 }
 extern "C" void diff_skip_ref() {
 	difftest_skip_ref();

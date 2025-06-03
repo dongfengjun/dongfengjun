@@ -84,7 +84,7 @@ uint8_t* flash_to_host(paddr_t paddr);
 int c_flash_read(int addr);
 //psram dpic
 int c_psram_read(int addr);
-void c_psram_write(int addr, int data);
+void c_psram_write(int addr, int data, int8_t len);
 
 //monitor
 void init_monitor(int argc, char *argv[]);
