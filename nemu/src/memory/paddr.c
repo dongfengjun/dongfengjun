@@ -51,13 +51,13 @@ void init_mem() {
 }
 
 word_t paddr_read(paddr_t addr, int len) {
-  if (likely(in_pmem(addr))) return pmem_read(addr, len);
 #ifdef CONFIG_TARGET_SHARE
 	if (addr - 0x30000000 < 0x10000000) return flash_read(addr, len);//ysyxsoc-flash
 	if (addr - 0x0f000000 < 0x2000) return sram_read(addr, len);//ysyxsoc-sram
 	if (addr - 0x80000000 < 0x4000000) return psram_read(addr, len);//ysyxsoc-psram
 #endif
-  IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
+  if (likely(in_pmem(addr))) return pmem_read(addr, len);
+	IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
   out_of_bound(addr);
   return 0;
 }
