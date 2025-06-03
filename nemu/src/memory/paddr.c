@@ -63,13 +63,13 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-  if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
 #ifdef CONFIG_TARGET_SHARE
 	if (addr - 0x30000000 < 0x10000000) return init_flash(addr, len, data);
 	if (addr - 0x0f000000 < 0x2000) return sram_write(addr, len, data);
 	if (addr - 0x80000000 < 0x4000000) return psram_write(addr, len, data);
 	if (addr - 0x10000000 < 0x1000) return;	//ysyxsoc-uart 
 #endif
-  IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
+  if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
+	IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
 }
