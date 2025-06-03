@@ -32,6 +32,9 @@ int c_psram_read(int addr) {
 
 void c_psram_write(int addr, int data) {
 	//printf("psram:%08x %08x %08x %08x %08x %08x\n",psram[0],psram[4],psram[8],psram[0xc],psram[0x10],psram[0x14]);
+	if(addr = 0x6cc) {
+		printf("addr:08x\n data:%08x\n",addr,data);
+	}
 	host_write(guest_to_psram(addr), 4, data);
 	return;
 }
