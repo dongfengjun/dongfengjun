@@ -37,7 +37,7 @@ SECTIONS {
 	bss_size = SIZEOF(.bss);
   bss_lma_start = LOADADDR(.bss);
 
-	. = 0x0f000000;
+	. = ORIGIN(sram);
 	end = .;
   _end = .;
 	_heap_start = .;
