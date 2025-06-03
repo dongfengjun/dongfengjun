@@ -3,7 +3,7 @@ PHDRS { text PT_LOAD; data PT_LOAD; }
 
 MEMORY {
   flash : ORIGIN = 0x30000000, LENGTH = 1M
-  sram : ORIGIN = 0x80000000, LENGTH = 4M
+  sram : ORIGIN = 0x80000000, LENGTH = 2M
 }
 
 SECTIONS {
@@ -41,9 +41,9 @@ SECTIONS {
 	end = .;
   _end = .;
 	_heap_start = .;
-	. = _heap_start + 0x1000;
+	. = _heap_start + 0x10000000;
 	_heap_end = .;
   _stack_top = .;
-  . = _stack_top + 0x1000;
+  . = _stack_top + 0x10000000;
   _stack_pointer = .;
 }
