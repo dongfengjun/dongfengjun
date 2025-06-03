@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "../include/common.h"
 
-uint8_t psram[0x20000000] PG_ALIGN = {};
+uint8_t psram[0x4000000] PG_ALIGN = {};
 
 static inline word_t host_read(void *addr, int len) {
   switch (len) {
