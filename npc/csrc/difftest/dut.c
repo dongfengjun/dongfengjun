@@ -113,4 +113,6 @@ void difftest_step(vaddr_t pc, vaddr_t npc) {//执行一步差异测试
 #else
 void init_difftest(char *ref_so_file, long img_size, int port) {
 }
+void difftest_skip_ref() {
+}
 #endif
