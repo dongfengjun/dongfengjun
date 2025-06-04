@@ -41,9 +41,9 @@ SECTIONS {
 	end = .;
   _end = .;
 	_heap_start = .;
-	. = _heap_start + 0x8000000;
+	. = _heap_start + 0x800000;
 	_heap_end = .;
   _stack_top = .;
-  . = _stack_top + 0x8000000;
+  . = _stack_top + 0x800000;
   _stack_pointer = .;
 }
