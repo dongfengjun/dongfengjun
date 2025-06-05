@@ -37,6 +37,7 @@ SECTIONS {
 	bss_size = SIZEOF(.bss);
   bss_lma_start = LOADADDR(.bss);
 
+/***
 	. = ORIGIN(psram) + 0x100000;
 	_stack_top = ALIGN(0x10);
   . = _stack_top + 0x100000;
@@ -45,7 +46,7 @@ SECTIONS {
   _end = .;
   _heap_start = ALIGN(0x10);
   _heap_end = _heap_start + 0x100000;
-/***
+***/
 	end = .;
   _end = .;
 	_heap_start = .;
@@ -54,5 +55,4 @@ SECTIONS {
   _stack_top = .;
   . = _stack_top + 0x100000;
   _stack_pointer = .;
-***/
 }
