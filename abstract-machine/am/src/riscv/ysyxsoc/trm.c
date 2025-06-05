@@ -53,6 +53,7 @@ void uart_init(void) {
 	outb(UART_BASE + 0X1, 0x0);
 	outb(UART_BASE, 0x1);
 	outb(UART_BASE + 0X3, 0x3);
+	outb(UART_BASE + 0X1, 0x11);
 }
 
 //am flash_read
