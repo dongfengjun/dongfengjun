@@ -12,6 +12,7 @@ void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
 	printf("rtc high :%d ",high);
 	uint32_t low = inl(0xa0000048);
 	printf("rtc low :%d\n",low);
+	while(1);
 	uptime->us = (((uint64_t)high << 32) + low) * k;
 }
 
