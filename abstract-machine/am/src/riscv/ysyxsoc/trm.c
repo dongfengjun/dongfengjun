@@ -20,6 +20,7 @@ static const char mainargs[] = MAINARGS;
 
 #define UART_BASE 0X10000000
 void putch(char ch) {
+	while(!(inl(UART_BASE + 0X14) & 0b00100000));
 	outl(UART_BASE, ch);
 }
 
