@@ -8,8 +8,8 @@ void __am_timer_init() {
 }
 
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
-  uint32_t high = inl(0xa000004c);
-	uint32_t low = inl(0xa0000048);
+  uint32_t high = inl(0xa0000048);
+	uint32_t low = inl(0xa000004c);
 	printf("rtc high:%d low:%d\n", high,low);
 	uptime->us = (((uint64_t)high << 32) + low) * k;
 }
