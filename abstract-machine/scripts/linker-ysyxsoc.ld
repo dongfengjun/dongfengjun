@@ -37,7 +37,7 @@ SECTIONS {
 	bss_size = SIZEOF(.bss);
   bss_lma_start = LOADADDR(.bss);
 
-	. = ORIGIN(sram) + 0x10000;
+	. = ORIGIN(sram) + 0x100000;
 	_stack_top = ALIGN(0x10);
   . = _stack_top + 0x100000;
   _stack_pointer = .;
