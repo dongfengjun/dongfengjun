@@ -87,6 +87,7 @@ always @(posedge clk) begin
 	else begin
 	  if(C_AXI_ARVALID && !C_AXI_ARREADY) begin
 			axi_arready <= 1; //判断条件
+			axi_rdata <= 32'h0;
     end
 		if(C_AXI_ARVALID && C_AXI_ARREADY) begin
 			axi_araddr <= C_AXI_ARADDR;
@@ -100,9 +101,9 @@ always @(posedge clk) begin
 			axi_rvalid <= 0;
 			diff_skip_ref();
 		end
-		if(!C_AXI_RVALID) begin
-			axi_rdata <= 32'h0;
-		end
+		//if(!C_AXI_RVALID) begin
+			//axi_rdata <= 32'h0;
+		//end
 		if(C_AXI_AWVALID && !C_AXI_AWREADY) begin
 			axi_awready <= 1; //判断条件
 		end
