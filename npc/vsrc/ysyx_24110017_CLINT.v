@@ -64,9 +64,11 @@ always @(posedge clk) begin
 end
 
 wire [31:0]c_rdata;
-assign c_rdata = {32{(C_AXI_RVALID && C_AXI_RREADY)}} &
- {32{(axi_araddr == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | 
- {32{(axi_araddr == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
+assign c_rdata = {32{(C_AXI_ARVALID && C_AXI_ARREADY)}} &
+ {32{(C_AXI_ARADDR == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | 
+ {32{(C_AXI_ARADDR == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
+
+import "DPI-C" function void diff_skip_ref();
 
 always @(posedge clk) begin
   if(rst) begin
@@ -90,12 +92,14 @@ always @(posedge clk) begin
 			axi_araddr <= C_AXI_ARADDR;
 			axi_rvalid <= 1; //判断条件
 			axi_arready <= 0;
+			axi_rdata <= c_rdata;
 			axi_rresp  <= 2'b00;
 		end
 		if(C_AXI_RVALID && C_AXI_RREADY) begin
 			axi_araddr <= 32'b0;
-			axi_rdata <= c_rdata;
 			axi_rvalid <= 0;
+			axi_rdata <= 32'h0;
+			diff_skip_ref();
 		end
 		if(C_AXI_AWVALID && !C_AXI_AWREADY) begin
 			axi_awready <= 1; //判断条件

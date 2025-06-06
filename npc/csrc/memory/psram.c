@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "../include/common.h"
 
-uint8_t psram[0x80000] PG_ALIGN = {};
+uint8_t psram[0x4000000] PG_ALIGN = {};
 
 static inline word_t host_read(void *addr, int len) {
   switch (len) {
@@ -30,8 +30,9 @@ int c_psram_read(int addr) {
   return host_read(guest_to_psram(addr), 4);
 }
 
-void c_psram_write(int addr, int data) {
-	host_write(guest_to_psram(addr), 4, data);
+void c_psram_write(int addr, int data, int8_t len) {
+	//printf("psram:%08x %08x %08x %08x %08x %08x\n",psram[0],psram[4],psram[8],psram[0xc],psram[0x10],psram[0x14]);
+	host_write(guest_to_psram(addr), len, data);
 	return;
 }
 

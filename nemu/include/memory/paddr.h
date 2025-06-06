@@ -40,4 +40,7 @@ void init_flash(paddr_t addr, int len, word_t data);
 word_t sram_read(paddr_t addr, int len);
 void sram_write(paddr_t addr, int len, word_t data);
 
+word_t psram_read(paddr_t addr, int len);
+void psram_write(paddr_t addr, int len, word_t data);
+
 #endif

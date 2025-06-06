@@ -5,13 +5,14 @@
 #include <stdio.h>
 
 extern char _heap_start;
+extern char _heap_end;
 int main(const char *args);
 
 extern char _pmem_start;
 #define PMEM_SIZE (1 * 1024)
 #define PMEM_END ((uintptr_t)&_pmem_start + PMEM_SIZE)
 
-Area heap = RANGE(&_heap_start, PMEM_END);
+Area heap = RANGE(&_heap_start, &_heap_end);
 #ifndef MAINARGS
 #define MAINARGS ""
 #endif
@@ -19,6 +20,7 @@ static const char mainargs[] = MAINARGS;
 
 #define UART_BASE 0X10000000
 void putch(char ch) {
+	while(!(inb(UART_BASE + 0X5) & 0x20));
 	outl(UART_BASE, ch);
 }
 
@@ -51,6 +53,7 @@ void uart_init(void) {
 	outb(UART_BASE + 0X1, 0x0);
 	outb(UART_BASE, 0x1);
 	outb(UART_BASE + 0X3, 0x3);
+	outb(UART_BASE + 0X1, 0x11);
 }
 
 //am flash_read

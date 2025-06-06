@@ -25,7 +25,7 @@ typedef uint16_t ioaddr_t;
 #define ITRACE_COND 1
 #define CONFIG_TARGET_NATIVE_ELF 1
 
-#define CONFIG_DUMP_WAVE 1//是否保存波形（内存不足）
+//#define CONFIG_DUMP_WAVE 1//是否保存波形（内存不足）
 
 //#define CONFIG_TRACE 1
 	//#ifdef CONFIG_TRACE
@@ -84,7 +84,7 @@ uint8_t* flash_to_host(paddr_t paddr);
 int c_flash_read(int addr);
 //psram dpic
 int c_psram_read(int addr);
-void c_psram_write(int addr, int data);
+void c_psram_write(int addr, int data, int8_t len);
 
 //monitor
 void init_monitor(int argc, char *argv[]);
