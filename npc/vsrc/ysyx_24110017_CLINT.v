@@ -65,8 +65,8 @@ end
 
 wire [31:0]c_rdata;
 assign c_rdata = {32{(C_AXI_ARVALID && C_AXI_ARREADY)}} &
- {32{(axi_araddr == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | 
- {32{(axi_araddr == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
+ {32{(C_AXI_ARADDR == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | 
+ {32{(C_AXI_ARADDR == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
 
 import "DPI-C" function void diff_skip_ref();
 
