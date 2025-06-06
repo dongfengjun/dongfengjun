@@ -21,7 +21,7 @@ SECTIONS {
 		*(.srodata*)
 		rodata_end = .;
   } > flash AT > flash
-	txtrod_size = rodata_end - text;
+	txtrod_size = etext - text;
 
 	.data : ALIGN(4) {
 		data_vma_start = .;
