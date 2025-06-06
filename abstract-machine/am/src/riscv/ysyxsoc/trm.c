@@ -29,6 +29,7 @@ void halt(int code) {
 	while (1);
 }
 
+extern char text[];
 extern char txtrod_size[];
 extern char data_vma_start[];
 extern char data_lma_start[];
@@ -48,7 +49,7 @@ void bootloader(void) {
 		}
 	}
 	if((size_t)txtrod_size != 0 && (size_t)txtrod_size < 0x2000) {
-		memcpy((void *)0x0f000000,(void *)0x30000000,(size_t)txtrod_size);
+		memcpy((void *)0x0f000000, text, (size_t)txtrod_size);
 	}
 	else {
 		printf("txtsize err.\n");

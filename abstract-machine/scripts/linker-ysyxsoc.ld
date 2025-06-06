@@ -11,6 +11,7 @@ SECTIONS {
   . = ORIGIN(flash);
   .text : {
     *(entry)
+		text = .;
     *(.text*)
   } > flash AT > flash : text
   etext = .;
@@ -20,7 +21,7 @@ SECTIONS {
 		*(.srodata*)
 		rodata_end = .;
   } > flash AT > flash
-	txtrod_size = SIZEOF(.text) + SIZEOF(.rodata);
+	txtrod_size = rodata_end - text;
 
 	.data : ALIGN(4) {
 		data_vma_start = .;
