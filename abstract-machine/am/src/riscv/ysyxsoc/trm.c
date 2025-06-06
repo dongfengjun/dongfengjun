@@ -50,7 +50,7 @@ void bootloader(void) {
 	}
 	if((size_t)txtrod_size != 0 && (size_t)txtrod_size < 0x2000) {
 		memcpy((void *)0x0f000000, text, (size_t)txtrod_size/4);
-		asm volatile ("jr %0" : : "r" (0x0f000000));
+		//asm volatile ("jr %0" : : "r" (0x0f000000));
 	}
 	else {
 		printf("txtsize err.\n");
