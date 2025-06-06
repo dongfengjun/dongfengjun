@@ -64,7 +64,7 @@ always @(posedge clk) begin
 end
 
 wire [31:0]c_rdata;
-assign c_rdata = {32{(C_AXI_ARVALID && C_AXI_ARREADY)}} &
+assign c_rdata = {32{(C_AXI_RVALID && C_AXI_RREADY)}} &
  {32{(axi_araddr == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | 
  {32{(axi_araddr == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
 
