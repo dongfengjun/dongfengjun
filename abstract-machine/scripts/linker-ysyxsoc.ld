@@ -10,8 +10,8 @@ SECTIONS {
   /* _pmem_start and _entry_offset are defined in LDFLAGS /0x20000000/*/
   . = ORIGIN(flash);
   .text : {
-		text = .;
     *(entry)
+		text = .;
     *(.text*)
   } > flash AT > flash : text
   etext = .;
