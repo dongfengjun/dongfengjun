@@ -48,12 +48,14 @@ void bootloader(void) {
 			memset(bss_vma_start, 0, (size_t)data_size);
 		}
 	}
+	/***
 	if((size_t)txtrod_size != 0 && (size_t)txtrod_size < 0x2000) {
 		memcpy((void *)0x0f000000, text, (size_t)txtrod_size);
 	}
 	else {
 		printf("txtsize err.\n");
 	}
+	***/
 }
 
 void uart_init(void) {
