@@ -19,7 +19,7 @@ SECTIONS {
   _etext = .;
 	.rodata : {
     *(.rodata*)
-		*(.srodata*)
+/*		*(.srodata*)	*/
 		rodata_end = .;
   } > sram AT > flash
 	txtrod_size = rodata_end - text;
