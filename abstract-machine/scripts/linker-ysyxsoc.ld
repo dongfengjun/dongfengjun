@@ -17,12 +17,15 @@ SECTIONS {
   } > flash AT > flash : text
   etext = .;
   _etext = .;
+	text_size = etext - text;
+
 	.rodata : {
+		rodata_vma_start = .;
     *(.rodata*)
 		*(.srodata*)
-		rodata_end = .;
   } > sram AT > flash
-	txtrod_size = rodata_end - text;
+	rodata_size = SIZEOF(.rodata);
+	rodata_lma_start = LOADADDR(.rodata);
 
 	.data : ALIGN(4) {
 		data_vma_start = .;
