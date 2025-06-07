@@ -22,7 +22,7 @@ SECTIONS {
 		*(.srodata*)
 		rodata_end = .;
   } > psram AT > flash
-	txtrod_size = etext - text;
+	txtrod_size = rodata_end - text;
 
 	.data : ALIGN(4) {
 		data_vma_start = .;
