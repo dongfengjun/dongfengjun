@@ -23,7 +23,7 @@ SECTIONS {
 		rodata_vma_start = .;
     *(.rodata*)
 		*(.srodata*)
-  } > sram AT > flash
+  } > sram AT > flash : rodata
 	rodata_size = SIZEOF(.rodata);
 	rodata_lma_start = LOADADDR(.rodata);
 
