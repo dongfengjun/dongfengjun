@@ -31,8 +31,8 @@ void halt(int code) {
 
 extern char text[];
 extern char text_size[];
-extern uintptr_t rodata_vma_start[];
-extern uintptr_t rodata_lma_start[];
+extern char rodata_vma_start[];
+extern char rodata_lma_start[];
 extern char rodata_size[];
 extern char data_vma_start[];
 extern char data_lma_start[];
@@ -52,15 +52,15 @@ void bootloader(void) {
 		}
 	}
 	printf("%d\n", (uint32_t)main);
-	uint32_t main_saddr = (uint32_t)main - 0x30000010 + (uint32_t)rodata_vma_start;
+	//uint32_t main_saddr = (uint32_t)main - 0x30000010 + (uint32_t)rodata_vma_start;
 	if((size_t)text_size != 0 && ((size_t)text_size < 0x2000)) {
-		memcpy(&main_saddr, text, (size_t)text_size);
+		//memcpy(&main_saddr, text, (size_t)text_size);
 		if((size_t)rodata_size != 0 && ((size_t)rodata_size < 0x2000)) {
 			if(&rodata_vma_start != &rodata_lma_start) {
-				memcpy(rodata_vma_start, rodata_lma_start, (size_t)rodata_size);
+			//	memcpy(rodata_vma_start, rodata_lma_start, (size_t)rodata_size);
 			}
 		}
-		asm volatile ("jalr %0" : : "r" (main_saddr));
+		//asm volatile ("jalr %0" : : "r" (main_saddr));
 	}
 }
 
