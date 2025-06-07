@@ -41,7 +41,6 @@ extern char bss_vma_start[];
 extern char bss_lma_start[];
 extern char bss_size[];
 void bootloader(void) {
-	printf("addr %d\n", 0x30000000);
 	if(&data_vma_start != &data_lma_start) {
 		if((size_t)data_size != 0) {
 			memcpy(data_vma_start, data_lma_start, (size_t)data_size);
@@ -52,15 +51,15 @@ void bootloader(void) {
 			memset(bss_vma_start, 0, (size_t)data_size);
 		}
 	}
-	//uint32_t main_saddr = (uint32_t)main - 0x30000010 + (uint32_t)rodata_vma_start;
+	uint32_t main_saddr = (uint32_t)&main - 0x30000010 + 0x0f000000;
 	if((size_t)text_size != 0 && ((size_t)text_size < 0x2000)) {
-		//memcpy(&main_saddr, text, (size_t)text_size);
+		memcpy(&main_saddr, text, (size_t)text_size);
 		if((size_t)rodata_size != 0 && ((size_t)rodata_size < 0x2000)) {
 			if(&rodata_vma_start != &rodata_lma_start) {
-			//	memcpy(rodata_vma_start, rodata_lma_start, (size_t)rodata_size);
+				memcpy(rodata_vma_start, rodata_lma_start, (size_t)rodata_size);
 			}
 		}
-		//asm volatile ("jalr %0" : : "r" (main_saddr));
+		asm volatile ("jalr %0" : : "r" (main_saddr));
 	}
 }
 
