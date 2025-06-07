@@ -53,7 +53,7 @@ void bootloader(void) {
 	}
 	uint32_t main_saddr = (uint32_t)&main - 0x30000010 + 0x0f000000;
 	if((size_t)text_size != 0 && ((size_t)text_size < 0x2000)) {
-		memcpy(&main_saddr, text, (size_t)text_size);
+		memcpy((void *)main_saddr, text, (size_t)text_size);
 		if((size_t)rodata_size != 0 && ((size_t)rodata_size < 0x2000)) {
 			if(&rodata_vma_start != &rodata_lma_start) {
 				memcpy(rodata_vma_start, rodata_lma_start, (size_t)rodata_size);
