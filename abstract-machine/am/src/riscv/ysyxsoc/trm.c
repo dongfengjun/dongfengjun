@@ -54,7 +54,9 @@ void bootloader(void) {
 	if((size_t)text_size != 0 && ((size_t)text_size < 0x2000)) {
 		memcpy((void *)0x0f000000, text, (size_t)text_size);
 		if((size_t)rodata_size != 0 && ((size_t)rodata_size < 0x2000)) {
-			memcpy(rodata_vma_start, rodata_lma_start, (size_t)rodata_size);
+			if(&rodata_vma_start != &rodata_lma_start) {
+				memcpy(rodata_vma_start, rodata_lma_start, (size_t)rodata_size);
+			}
 		}
 		asm volatile ("jalr %0" : : "r" (0x0f000000));
 	}
