@@ -31,8 +31,8 @@ void halt(int code) {
 
 extern char text[];
 extern char text_size[];
-extern char rodata_vma_start[];
-extern char rodata_lma_start[];
+extern uintptr_t rodata_vma_start[];
+extern uintptr_t rodata_lma_start[];
 extern char rodata_size[];
 extern char data_vma_start[];
 extern char data_lma_start[];
