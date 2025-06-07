@@ -4,6 +4,7 @@ PHDRS { text PT_LOAD; data PT_LOAD; }
 MEMORY {
   flash : ORIGIN = 0x30000000, LENGTH = 1M
   psram : ORIGIN = 0x80000000, LENGTH = 4M
+	sram : ORIGIN = 0x0f000000, LENGTH = 2k
 }
 
 SECTIONS {
@@ -20,7 +21,7 @@ SECTIONS {
     *(.rodata*)
 		*(.srodata*)
 		rodata_end = .;
-  } > flash AT > flash
+  } > sram AT > flash
 	txtrod_size = etext - text;
 
 	.data : ALIGN(4) {
