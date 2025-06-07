@@ -13,7 +13,6 @@ SECTIONS {
   .text : {
 		*(entry)
 		text = .;
-		*(main)
     *(.text*)
   } > flash AT > flash : text
   etext = .;
