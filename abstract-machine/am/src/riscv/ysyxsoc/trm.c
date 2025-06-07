@@ -55,6 +55,7 @@ void bootloader(void) {
 		memcpy((void *)0x0f000000, text, (size_t)text_size);
 		if((size_t)rodata_size != 0 && ((size_t)rodata_size < 0x2000)) {
 			if(&rodata_vma_start != &rodata_lma_start) {
+				putch('a');
 				memcpy(rodata_vma_start, rodata_lma_start, (size_t)rodata_size);
 			}
 		}
