@@ -87,8 +87,8 @@ uint32_t flash_read(uint32_t addr) {
 }
 
 void _trm_init() {
-	//uart_init(); //uart16500 init + difftest_skip_ref
-	//bootloader(); //mrom->sram
+	uart_init(); //uart16500 init + difftest_skip_ref
+	bootloader(); //mrom->sram
 	int ret = main(mainargs);
 	halt(ret);
 }
