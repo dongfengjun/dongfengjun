@@ -21,7 +21,7 @@ SECTIONS {
     *(.rodata*)
 		*(.srodata*)
 		rodata_end = .;
-  } > sram AT > sram
+  } > sram AT > flash
 	txtrod_size = etext - text;
 
 	.data : ALIGN(4) {
