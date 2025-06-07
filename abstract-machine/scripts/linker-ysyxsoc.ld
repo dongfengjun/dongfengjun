@@ -17,7 +17,7 @@ SECTIONS {
   } > flash AT > flash : text
   etext = .;
   _etext = .;
-	.rodata : {
+	.rodata : ALIGN(4) {
     *(.rodata*)
 		*(.srodata*)
 		rodata_end = .;
