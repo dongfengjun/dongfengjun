@@ -41,7 +41,7 @@ extern char bss_vma_start[];
 extern char bss_lma_start[];
 extern char bss_size[];
 void bootloader(void) {
-	printf("addr %d\n", (uint32_t)&rodata_vma_start);
+	printf("addr %d\n", (int)&rodata_vma_start);
 	if(&data_vma_start != &data_lma_start) {
 		if((size_t)data_size != 0) {
 			memcpy(data_vma_start, data_lma_start, (size_t)data_size);
