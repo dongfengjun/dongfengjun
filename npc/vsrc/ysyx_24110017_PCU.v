@@ -61,8 +61,12 @@ always @(posedge clk) begin
 	else begin
 		case (state)
 			IDLE: begin
-				if((dnpc > 32'h30000000) ||(dnpc < 32'h40000000)) begin //判断条件
+				if((dnpc >= 32'h30000000) && (dnpc < 32'h40000000)) begin //判断条件
 					pcu_valid <= 1'b1;
+				end
+				else begin
+					$fwrite(32'h80000002, "Assertion failed: Invalid dnPC `%xh`\n",dnpc);
+          $fatal;
 				end
 			end
 			WAIT_READY: begin
