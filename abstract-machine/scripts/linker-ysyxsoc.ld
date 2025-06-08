@@ -1,5 +1,5 @@
 ENTRY(_start)
-PHDRS { text PT_LOAD; rodata PT_LOAD; data PT_LOAD; }
+PHDRS { text PT_LOAD; data PT_LOAD; }
 
 MEMORY {
 	flash : ORIGIN = 0x30000000, LENGTH = 1M
@@ -23,7 +23,7 @@ SECTIONS {
 		rodata_vma_start = .;
     *(.rodata*)
 		*(.srodata*)
-  } > sram AT > flash : rodata
+  } > sram AT > flash
 	rodata_size = SIZEOF(.rodata);
 	rodata_lma_start = LOADADDR(.rodata);
 
