@@ -14,13 +14,17 @@ SECTIONS {
 		*(entry)
 		*(.text._trm_init)
 		*(.text.bootloader)
+		*(.text.memcpy)
+		*(.text.memset)
 	} > flash AT > flash : entry
+
 	.text : {
 		text = .;
     *(.text*)
   } > sram AT > flash : text
   etext = .;
   _etext = .;
+	text_lma_start = LOADADDR(.text);
 	text_size = SIZEOF(.text);
 
 	.rodata : {
