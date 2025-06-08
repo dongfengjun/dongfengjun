@@ -32,6 +32,9 @@ void halt(int code) {
 extern char text[];
 extern char text_lma_start[];
 extern char text_size[];
+extern char ssbl_vma_start[];
+extern char ssbl_lma_start[];
+extern char ssbl_size[];
 extern char rodata_vma_start[];
 extern char rodata_lma_start[];
 extern char rodata_size[];
@@ -41,7 +44,7 @@ extern char data_size[];
 extern char bss_vma_start[];
 extern char bss_lma_start[];
 extern char bss_size[];
-void bootloader(void) {
+void bootloader_ssbl(void) {
 	if(&data_vma_start != &data_lma_start) {
 		if((size_t)data_size != 0) {
 			memcpy(data_vma_start, data_lma_start, (size_t)data_size);
@@ -52,14 +55,22 @@ void bootloader(void) {
 			memset(bss_vma_start, 0, (size_t)data_size);
 		}
 	}
-	if((size_t)text_size != 0 && ((size_t)text_size < 0x2000)) {
-		memcpy((void *)0x0f000000, text_lma_start, (size_t)text_size);
-		if((size_t)rodata_size != 0 && ((size_t)rodata_size < 0x2000)) {
+	if((size_t)text_size != 0) {
+		memcpy((void *)0x80000000, text_lma_start, (size_t)text_size);
+		if((size_t)rodata_size != 0) {
 			if(&rodata_vma_start != &rodata_lma_start) {
 				memcpy(rodata_vma_start, rodata_lma_start, (size_t)rodata_size);
 			}
 		}
 	}
+}
+void bootloader_fsbl(void) {
+	if(&ssbl_vma_start != &ssbl_lma_start) {
+    if((size_t)ssbl_size != 0) {
+      memcpy(ssbl_vma_start, ssbl_lma_start, (size_t)ssbl_size);
+    }
+  }	
+	bootloader_ssbl();
 }
 
 void uart_init(void) {
@@ -93,7 +104,7 @@ uint32_t flash_read(uint32_t addr) {
 
 void _trm_init() {
 	uart_init(); //uart16500 init + difftest_skip_ref
-	bootloader(); //mrom->sram
+	bootloader_fsbl(); //mrom->sram
 	int ret = main(mainargs);
 	halt(ret);
 }
