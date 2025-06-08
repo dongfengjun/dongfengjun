@@ -15,7 +15,6 @@ SECTIONS {
 		*(.text._trm_init)
 		*(.text.uart_init)
 		*(.text.bootloader_fsbl)
-		*(.text.memcpy)
 	} > flash AT > flash : entry
 	
 	.ssbl : {

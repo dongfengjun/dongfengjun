@@ -67,9 +67,13 @@ void bootloader_ssbl(void) {
 void bootloader_fsbl(void) {
 	if(&ssbl_vma_start != &ssbl_lma_start) {
     if((size_t)ssbl_size != 0) {
-      memcpy(ssbl_vma_start, ssbl_lma_start, (size_t)ssbl_size);
-    }
-  }	
+			char *o = (char *)ssbl_vma_start;
+			char *i = (char *)ssbl_lma_start;
+		  for(int j = 0;j < (size_t)ssbl_size; j ++) {
+			  *o ++ = *i ++;
+			}
+		}
+	}
 	bootloader_ssbl();
 }
 
