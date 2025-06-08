@@ -13,6 +13,7 @@ SECTIONS {
   .entry : {
 		*(entry)
 		*(.text._trm_init)
+		*(.text.uart_init)
 		*(.text.bootloader)
 		*(.text.memcpy)
 		*(.text.memset)
