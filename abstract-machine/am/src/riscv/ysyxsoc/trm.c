@@ -29,6 +29,12 @@ void halt(int code) {
 	while (1);
 }
 
+extern char text[];
+extern char text_lma_start[];
+extern char text_size[];
+extern char rodata_vma_start[];
+extern char rodata_lma_start[];
+extern char rodata_size[];
 extern char data_vma_start[];
 extern char data_lma_start[];
 extern char data_size[];
@@ -44,6 +50,14 @@ void bootloader(void) {
 	if(&bss_vma_start != &bss_lma_start) {
 		if((size_t)bss_size != 0) {
 			memset(bss_vma_start, 0, (size_t)data_size);
+		}
+	}
+	if((size_t)text_size != 0) {
+		memcpy((void *)0x0f000000, text_lma_start, (size_t)text_size);
+		if((size_t)rodata_size != 0) {
+			if(&rodata_vma_start != &rodata_lma_start) {
+				memcpy(rodata_vma_start, rodata_lma_start, (size_t)rodata_size);
+			}
 		}
 	}
 }
@@ -78,8 +92,8 @@ uint32_t flash_read(uint32_t addr) {
 }
 
 void _trm_init() {
-	bootloader(); //mrom->sram
 	uart_init(); //uart16500 init + difftest_skip_ref
+	bootloader(); //mrom->sram
 	int ret = main(mainargs);
 	halt(ret);
 }
