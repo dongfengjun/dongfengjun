@@ -15,7 +15,7 @@ LDFLAGS += -fsanitize=address#ASan
 LDLIBS := -lasan $(LDLIBS)
 
 VERILATOR = verilator
-VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build --Os
+VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build --Fs
 VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
 VERILATOR_FLAGS += -CFLAGS -g
 VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
