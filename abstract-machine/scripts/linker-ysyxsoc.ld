@@ -11,13 +11,13 @@ SECTIONS {
   /* _pmem_start and _entry_offset are defined in LDFLAGS /0x20000000/*/
   . = ORIGIN(flash);
   .text : {
-		*(entry)
 		text = .;
+		*(entry)
     *(.text*)
-  } > flash AT > flash : text
+  } > sram AT > flash : text
   etext = .;
   _etext = .;
-	text_size = etext - text;
+	text_size = SIZEOF(.text);
 
 	.rodata : {
 		rodata_vma_start = .;
