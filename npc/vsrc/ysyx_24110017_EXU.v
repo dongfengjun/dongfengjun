@@ -4,7 +4,7 @@ module ysyx_24110017_EXU(clk,rst,sram_lsu_read,sram_lsu_write,LSU_DONE,
 			res_reg, //o_WBU
 			ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,ls_awsize,ls_arsize,//o_LSU
 			ls_rdata, //i_LSU
-			pc,dnpc,	//PCU
+			pc,dnpc_reg,	//PCU
 			mepc,mstatus,mcause,mtvec, //i_csr
 			o_mepc_reg,o_mstatus_reg,o_mcause_reg,o_mtvec_reg, //o_csr
 			gpr_wen_reg,mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg
