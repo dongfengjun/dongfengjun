@@ -32,7 +32,7 @@ output [2:0]ls_awsize,ls_arsize;
 input [31:0]ls_rdata;
 
 input [31:0]pc;
-output [31:0]dnpc;
+output [31:0]dnpc_reg;
 
 input [31:0]mepc,mstatus,mcause,mtvec;
 output [31:0]o_mepc_reg,o_mstatus_reg,o_mcause_reg,o_mtvec_reg;
@@ -46,6 +46,7 @@ reg exu_valid;
 
 reg sram_lsu_read,sram_lsu_write;
 reg [31:0]res_reg;
+reg [31:0]dnpc_reg;
 reg gpr_wen_reg;
 reg [31:0]o_mepc_reg,o_mstatus_reg,o_mcause_reg,o_mtvec_reg;
 reg mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg;
@@ -103,6 +104,7 @@ always @(posedge clk) begin
 		exu_valid <= 1'b0;
 		exu_ready <= 1'b0;
 		res_reg <= 32'h0;
+		dnpc_reg <= 32'h0;
 		gpr_wen_reg <= 1'b0;
 		o_mepc_reg <= 32'h0;
     o_mstatus_reg <= 32'h0;
@@ -158,6 +160,7 @@ always @(posedge clk) begin
 				end
 			end
 			DONE_EXU: begin
+				dnpc_reg <= dnpc;
 				s_rdata_reg <= 32'h0;
 			end
 		endcase
