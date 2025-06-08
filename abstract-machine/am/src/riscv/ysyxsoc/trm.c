@@ -59,7 +59,7 @@ void bootloader(void) {
 				memcpy(rodata_vma_start, rodata_lma_start, (size_t)rodata_size);
 			}
 		}
-		asm volatile ("jalr %0" : : "r" (0x0f000000));
+	//	asm volatile ("jalr %0" : : "r" (0x0f000000));
 	}
 }
 
