@@ -1,5 +1,5 @@
 ENTRY(_start)
-PHDRS { text PT_LOAD; data PT_LOAD; }
+PHDRS { entry PT_LOAD; text PT_LOAD; data PT_LOAD; }
 
 MEMORY {
 	flash : ORIGIN = 0x30000000, LENGTH = 1M
@@ -10,9 +10,13 @@ MEMORY {
 SECTIONS {
   /* _pmem_start and _entry_offset are defined in LDFLAGS /0x20000000/*/
   . = ORIGIN(flash);
-  .text : {
-		text = .;
+  .entry : {
 		*(entry)
+		*(.text._trm_init)
+		*(.text.bootloader)
+	} > flash AT > flash : entry
+	.text : {
+		text = .;
     *(.text*)
   } > sram AT > flash : text
   etext = .;
