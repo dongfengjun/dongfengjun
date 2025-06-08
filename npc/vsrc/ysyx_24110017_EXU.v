@@ -104,7 +104,7 @@ always @(posedge clk) begin
 		exu_valid <= 1'b0;
 		exu_ready <= 1'b0;
 		res_reg <= 32'h0;
-		dnpc_reg <= 32'h0;
+		dnpc_reg <= pc + 4;
 		gpr_wen_reg <= 1'b0;
 		o_mepc_reg <= 32'h0;
     o_mstatus_reg <= 32'h0;
