@@ -55,6 +55,7 @@ word_t paddr_read(paddr_t addr, int len) {
 	if (addr - 0x30000000 < 0x10000000) return flash_read(addr, len);//ysyxsoc-flash
 	if (addr - 0x0f000000 < 0x2000) return sram_read(addr, len);//ysyxsoc-sram
 	if (addr - 0x80000000 < 0x4000000) return psram_read(addr, len);//ysyxsoc-psram
+	if (addr - 0x10000000 < 0x1000) return 0; //ysyxsoc-uart
 #endif
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
 	IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
@@ -67,7 +68,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 	if (addr - 0x30000000 < 0x10000000) return init_flash(addr, len, data);
 	if (addr - 0x0f000000 < 0x2000) return sram_write(addr, len, data);
 	if (addr - 0x80000000 < 0x4000000) return psram_write(addr, len, data);
-	if (addr - 0x10000000 < 0x1000) return;	//ysyxsoc-uart 
+	if (addr - 0x10000000 < 0x1000) return; 
 #endif
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
 	IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
