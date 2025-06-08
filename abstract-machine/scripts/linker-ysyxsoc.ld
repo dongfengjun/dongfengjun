@@ -22,7 +22,7 @@ SECTIONS {
 		*(.text.bootloader_ssbl)
 		*(.text.memcpy)                                                         
 		*(.text.memset)
-	} > sram AT > flash : ssbl
+	} > sram AT > flash
 	ssbl_size = SIZEOF(.ssbl);
 	ssbl_lma_start = LOADADDR(.ssbl);
 	
