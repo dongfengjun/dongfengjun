@@ -39,7 +39,7 @@ SECTIONS {
 		rodata_vma_start = .;
     *(.rodata*)
 		*(.srodata*)
-  } > psram AT > flash
+  } > psram AT > flash : text
 	rodata_size = SIZEOF(.rodata);
 	rodata_lma_start = LOADADDR(.rodata);
 
