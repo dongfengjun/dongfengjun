@@ -71,7 +71,7 @@ SECTIONS {
     *(__am_apps.sdata*)
     __am_apps_data_end = .;
     . = ALIGN(8);
-  } > psram AT > flash
+  } > psram AT > flash : data
 
 	.data : ALIGN(4) {
 		data_vma_start = .;
