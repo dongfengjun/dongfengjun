@@ -51,10 +51,6 @@ SECTIONS {
 	data_size = SIZEOF(.data);
 	data_lma_start = LOADADDR(.data);
 
-	.data.extra : {
-		*(.data.extra*)
-	} > psram AT > flash
-	
   .bss : ALIGN(4) {
 		bss_vma_start = .;
     *(.bss*)
