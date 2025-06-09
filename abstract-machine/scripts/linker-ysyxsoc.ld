@@ -43,6 +43,31 @@ SECTIONS {
 	rodata_size = SIZEOF(.rodata);
 	rodata_lma_start = LOADADDR(.rodata);
 
+  .data.extra : {
+	  __fsymtab_start = .;
+    KEEP(*(FSymTab))
+    __fsymtab_end = .;
+    . = ALIGN(8);
+    __vsymtab_start = .;
+    KEEP(*(VSymTab))
+    __vsymtab_end = .;
+    . = ALIGN(8);
+    . = ALIGN(8);
+    __rt_init_start = .;
+    KEEP(*(SORT(.rti_fn*)))
+    __rt_init_end = .;
+    . = ALIGN(8);
+    __rt_utest_tc_tab_start = .;
+    KEEP(*(UtestTcTab))
+    __rt_utest_tc_tab_end = .;
+    . = ALIGN(8);
+    __am_apps_data_start = .;
+    *(__am_apps.data*)
+    *(__am_apps.sdata*)
+    __am_apps_data_end = .;
+    . = ALIGN(8);
+  } > psram AT > flash
+
 	.data : ALIGN(4) {
 		data_vma_start = .;
 		*(.data*)
@@ -50,38 +75,6 @@ SECTIONS {
   } > psram AT > flash : data
 	data_size = SIZEOF(.data);
 	data_lma_start = LOADADDR(.data);
-
-	OVERLAY : {
-    .data.extra {
-      *(.data.extra*)
-    }
-  } > psram AT > flash
-/***
-	.data.extra : {
-	  __fsymtab_start = .;
-		KEEP(*(FSymTab))
-		__fsymtab_end = .;
-		. = ALIGN(8);
-		__vsymtab_start = .;
-		KEEP(*(VSymTab))
-		__vsymtab_end = .;
-		. = ALIGN(8);
-		. = ALIGN(8);
-		__rt_init_start = .;
-		KEEP(*(SORT(.rti_fn*)))
-		__rt_init_end = .;
-		. = ALIGN(8);
-		__rt_utest_tc_tab_start = .;
-		KEEP(*(UtestTcTab))
-		__rt_utest_tc_tab_end = .;
-		. = ALIGN(8);
-		__am_apps_data_start = .;
-		*(__am_apps.data*)
-		*(__am_apps.sdata*)
-		__am_apps_data_end = .;
-		. = ALIGN(8);
-	} > psram AT > flash
-***/
 
   .bss : ALIGN(4) {
 		bss_vma_start = .;
