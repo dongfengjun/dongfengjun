@@ -1,5 +1,5 @@
 ENTRY(_start)
-PHDRS { entry PT_LOAD; ssbl PT_LOAD; text PT_LOAD; data PT_LOAD; }
+PHDRS { entry PT_LOAD; ssbl PT_LOAD; text PT_LOAD; data.extra PT_LOAD; data PT_LOAD; }
 
 MEMORY {
 	flash (rx): ORIGIN = 0x30000000, LENGTH = 1M
@@ -81,36 +81,3 @@ SECTIONS {
   . = _stack_top + 0x1000;
   _stack_pointer = .;
 }
-
-SECTIONS {
-  .data.extra : {
-    /* section information for finsh shell */
-    __fsymtab_start = .;
-    KEEP(*(FSymTab))
-    __fsymtab_end = .;
-    . = ALIGN(8);
-    __vsymtab_start = .;
-    KEEP(*(VSymTab))
-    __vsymtab_end = .;
-    . = ALIGN(8);
-
-    /* section information for initial. */
-    . = ALIGN(8);
-    __rt_init_start = .;
-    KEEP(*(SORT(.rti_fn*)))
-    __rt_init_end = .;
-    . = ALIGN(8);
-
-    __rt_utest_tc_tab_start = .;
-    KEEP(*(UtestTcTab))
-    __rt_utest_tc_tab_end = .;
-
-    . = ALIGN(8);
-    __am_apps_data_start = .;
-    *(__am_apps.data*)
-    *(__am_apps.sdata*)
-    __am_apps_data_end = .;
-    . = ALIGN(8);
-  } > psram AT > flash
-}
-INSERT BEFORE .data;
