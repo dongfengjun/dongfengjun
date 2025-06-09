@@ -82,7 +82,8 @@ SECTIONS {
 	data_lma_start = LOADADDR(.data.extra);
 
   .bss.extra : {
-    . = ALIGN(8);
+		. = ALIGN(8);
+		bss_vma_start = .;
     __am_apps_bss_start = .;
     *(__am_apps.bss*)
     *(__am_apps.sbss*)
@@ -92,13 +93,12 @@ SECTIONS {
   } > psram AT > flash
 
 	.bss : ALIGN(4) {
-		bss_vma_start = .;
     *(.bss*)
     *(.sbss*)
     *(.scommon)
   } > psram AT > flash
-	bss_size = SIZEOF(.bss);
-  bss_lma_start = LOADADDR(.bss);
+	bss_size = SIZEOF(.bss) + SIZEOF(.bss.extra);
+  bss_lma_start = LOADADDR(.bss.extra);
 
 /***
 	. = ORIGIN(psram) + 0x100000;
