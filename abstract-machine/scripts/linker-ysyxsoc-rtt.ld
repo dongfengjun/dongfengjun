@@ -27,7 +27,7 @@ SECTIONS {
     *(__am_apps.sdata*)
     __am_apps_data_end = .;
     . = ALIGN(8);
-  } > flash
+  }
 }
 INSERT BEFORE .data;
 

@@ -40,7 +40,7 @@ VM_USER_CFLAGS = \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
-	-L/usr/lib/llvm-18/lib  -fPIE -fsanitize=address =/home/xi/ysyx-workbench/abstract-machine/scripts/linker-ysyxsoc-rtt.ld -lLLVM-18 \
+	-L/usr/lib/llvm-18/lib  -fPIE -fsanitize=address -T /home/xi/ysyx-workbench/abstract-machine/scripts/linker-ysyxsoc-rtt.ld -lLLVM-18 \
 	-lreadline \
 
 # User .cpp files (from .cpp's on Verilator command line)
