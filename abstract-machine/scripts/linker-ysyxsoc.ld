@@ -47,47 +47,16 @@ SECTIONS {
 		data_vma_start = .;
 		*(.data*)
 		*(.sdata*)
+
   } > psram AT > flash : data
 	data_size = SIZEOF(.data);
 	data_lma_start = LOADADDR(.data);
-
-  .bss : ALIGN(4) {
-		bss_vma_start = .;
-    *(.bss*)
-    *(.sbss*)
-    *(.scommon)
-  } > psram AT > flash
-	bss_size = SIZEOF(.bss);
-  bss_lma_start = LOADADDR(.bss);
-
-/***
-	. = ORIGIN(psram) + 0x100000;
-	_stack_top = ALIGN(0x10);
-  . = _stack_top + 0x100000;
-  _stack_pointer = .;
-  end = .;
-  _end = .;
-  _heap_start = ALIGN(0x10);
-  _heap_end = _heap_start + 0x100000;
-***/
-	end = .;
-  _end = .;
-	_heap_start = 0x83000000;
-	. = _heap_start + 0x1000000;
-	_heap_end = .;
-
-	. = ORIGIN(sram) + 0x1000;
-  _stack_top = ALIGN(0X10);
-  . = _stack_top + 0x1000;
-  _stack_pointer = .;
-}
-
-SECTIONS {
-  .data.extra : {
-    /* section information for finsh shell */
-    __fsymtab_start = .;
-    KEEP(*(FSymTab))
-    __fsymtab_end = .;
+	 
+	.data.extra : {
+  /* section information for finsh shell */
+		__fsymtab_start = .;
+		KEEP(*(FSymTab))
+		__fsymtab_end = .;
     . = ALIGN(8);
     __vsymtab_start = .;
     KEEP(*(VSymTab))
@@ -112,11 +81,17 @@ SECTIONS {
     __am_apps_data_end = .;
     . = ALIGN(8);
   } > psram AT > flash
-}
-INSERT BEFORE .data;
 
-SECTIONS {
-  .bss.extra : {
+  .bss : ALIGN(4) {
+		bss_vma_start = .;
+    *(.bss*)
+    *(.sbss*)
+    *(.scommon)
+  } > psram AT > flash
+	bss_size = SIZEOF(.bss);
+  bss_lma_start = LOADADDR(.bss);
+
+	.bss.extra : {
     . = ALIGN(8);
     __am_apps_bss_start = .;
     *(__am_apps.bss*)
@@ -125,5 +100,24 @@ SECTIONS {
     __am_apps_bss_end = .;
     . = ALIGN(8);
   } > psram AT > flash
+/***
+	. = ORIGIN(psram) + 0x100000;
+	_stack_top = ALIGN(0x10);
+  . = _stack_top + 0x100000;
+  _stack_pointer = .;
+  end = .;
+  _end = .;
+  _heap_start = ALIGN(0x10);
+  _heap_end = _heap_start + 0x100000;
+***/
+	end = .;
+  _end = .;
+	_heap_start = 0x83000000;
+	. = _heap_start + 0x1000000;
+	_heap_end = .;
+
+	. = ORIGIN(sram) + 0x1000;
+  _stack_top = ALIGN(0X10);
+  . = _stack_top + 0x1000;
+  _stack_pointer = .;
 }
-INSERT BEFORE .bss;
