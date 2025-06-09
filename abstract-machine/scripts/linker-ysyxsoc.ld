@@ -43,20 +43,11 @@ SECTIONS {
 	rodata_size = SIZEOF(.rodata);
 	rodata_lma_start = LOADADDR(.rodata);
 
-	.data : ALIGN(4) {
-		data_vma_start = .;
-		*(.data*)
-		*(.sdata*)
-
-  } > psram AT > flash : data
-	data_size = SIZEOF(.data);
-	data_lma_start = LOADADDR(.data);
-	 
 	.data.extra : {
-  /* section information for finsh shell */
-		__fsymtab_start = .;
-		KEEP(*(FSymTab))
-		__fsymtab_end = .;
+    /* section information for finsh shell */
+    __fsymtab_start = .;
+    KEEP(*(FSymTab))
+    __fsymtab_end = .;
     . = ALIGN(8);
     __vsymtab_start = .;
     KEEP(*(VSymTab))
@@ -81,6 +72,15 @@ SECTIONS {
     __am_apps_data_end = .;
     . = ALIGN(8);
   } > flash
+
+	.data : ALIGN(4) {
+		data_vma_start = .;
+		*(.data*)
+		*(.sdata*)
+
+  } > psram AT > flash : data
+	data_size = SIZEOF(.data);
+	data_lma_start = LOADADDR(.data);
 
   .bss : ALIGN(4) {
 		bss_vma_start = .;
