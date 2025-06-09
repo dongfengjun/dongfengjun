@@ -44,7 +44,7 @@ SECTIONS {
 	rodata_lma_start = LOADADDR(.rodata);
 
 	.data.extra : {
-		*(.data.extra)
+		*(.data.extra*)
 	} > psram AT > flash
 
 	.data : ALIGN(4) {
