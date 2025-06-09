@@ -43,7 +43,8 @@ SECTIONS {
 	rodata_size = SIZEOF(.rodata);
 	rodata_lma_start = LOADADDR(.rodata);
 
-	.data.extra : ALIGN(4) {
+	. = ALIGN(4);
+	.data.extra : {
 		*(.data.extra*)
 	} > psram AT > flash
 
