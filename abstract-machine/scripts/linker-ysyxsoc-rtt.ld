@@ -1,9 +1,3 @@
-MEMORY {
-  flash (rx): ORIGIN = 0x30000000, LENGTH = 1M
-  psram (wrx): ORIGIN = 0x80000000, LENGTH = 4M
-  sram (wrx): ORIGIN = 0x0f000000, LENGTH = 2K
-}
-
 SECTIONS {
   .data.extra : {
     /* section information for finsh shell */
