@@ -1,7 +1,7 @@
 SECTIONS {
   .data.extra : {
 		*(.data.extra)
-	} > flash
+	} > psram AT > flash
 }
 INSERT BEFORE .data;
 
