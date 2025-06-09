@@ -80,7 +80,7 @@ SECTIONS {
     *(__am_apps.sdata*)
     __am_apps_data_end = .;
     . = ALIGN(8);
-  } > psram AT > flash
+  } > flash
 
   .bss : ALIGN(4) {
 		bss_vma_start = .;
