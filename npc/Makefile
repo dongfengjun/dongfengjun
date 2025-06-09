@@ -13,6 +13,7 @@ LDFLAGS += $(shell llvm-config --ldflags) -fPIE
 LIBS += $(shell llvm-config --libs)
 LDFLAGS += -fsanitize=address#ASan
 LDLIBS := -lasan $(LDLIBS)
+LDFLAGS += =$(AM_HOME)/scripts/linker-ysyxsoc-rtt.ld
 
 VERILATOR = verilator
 VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build
