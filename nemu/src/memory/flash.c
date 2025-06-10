@@ -7,7 +7,7 @@ static uint8_t* guest_to_host_flash(paddr_t paddr) { return flash + paddr - 0x30
 
 word_t flash_read(paddr_t addr, int len) {
 	if(addr == 0x300001E1) {
-		printf("300001E1:%08x\n",flash[0x0]);
+		printf("300001E1:%08x\n",flash[0]);
 	}
 	word_t ret = host_read(guest_to_host_flash(addr), len);
   return ret;
