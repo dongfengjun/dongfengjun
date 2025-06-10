@@ -12,6 +12,5 @@ word_t flash_read(paddr_t addr, int len) {
 }
 
 void init_flash(paddr_t addr, int len, word_t data) {
-	addr = addr & ~0x3u;
   host_write(guest_to_host_flash(addr), len, data);
 }
