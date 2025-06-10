@@ -43,17 +43,9 @@ SECTIONS {
 	rodata_size = SIZEOF(.rodata);
 	rodata_lma_start = LOADADDR(.rodata);
 
-	.data : ALIGN(4) {
-		data_vma_start = .;
-		*(.data*)
-		*(.sdata*)
-  } > psram AT > flash : data
-	data_size = SIZEOF(.data);
-	data_lma_start = LOADADDR(.data);
-	
-/***
 	.data.extra : {
-    __fsymtab_start = .;
+    data_vma_start = .;
+		__fsymtab_start = .;
     KEEP(*(FSymTab))
     __fsymtab_end = .;
     . = ALIGN(8);
@@ -79,20 +71,17 @@ SECTIONS {
     __am_apps_data_end = .;
     . = ALIGN(8);
   } > psram AT > flash : data
-***/
 
-	.bss : ALIGN(4) {
-		bss_vma_start = .;
-    *(.bss*)
-    *(.sbss*)
-    *(.scommon)
-  } > psram AT > flash
-	bss_size = SIZEOF(.bss);
-  bss_lma_start = LOADADDR(.bss);
+	.data : ALIGN(4) {
+		*(.data*)
+		*(.sdata*)
+  } > psram AT > flash : data
+	data_size = SIZEOF(.data) + SIZEOF(.data.extra);
+	data_lma_start = LOADADDR(.data);
 
-/***
 	.bss.extra : {
     . = ALIGN(8);
+		bss_vma_start = .;
     __am_apps_bss_start = .;
     *(__am_apps.bss*)
     *(__am_apps.sbss*)
@@ -100,7 +89,15 @@ SECTIONS {
     __am_apps_bss_end = .;
     . = ALIGN(8);
   } > psram AT > flash
-***/
+
+	.bss : ALIGN(4) {
+    *(.bss*)
+    *(.sbss*)
+    *(.scommon)
+  } > psram AT > flash
+	bss_size = SIZEOF(.bss) + SIZEOF(.bss.extra);
+  bss_lma_start = LOADADDR(.bss);
+
 /***
 	. = ORIGIN(psram) + 0x100000;
 	_stack_top = ALIGN(0x10);
