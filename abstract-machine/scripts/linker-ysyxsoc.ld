@@ -48,11 +48,11 @@ SECTIONS {
 		*(.data*)
 		*(.sdata*)
   } > psram AT > flash : data
-	data_size = SIZEOF(.data) + SIZEOF(.data.extra);
+	data_size = SIZEOF(.data);
 	data_lma_start = LOADADDR(.data);
 	
+/***
 	.data.extra : {
-    /* section information for finsh shell */
     __fsymtab_start = .;
     KEEP(*(FSymTab))
     __fsymtab_end = .;
@@ -62,7 +62,6 @@ SECTIONS {
     __vsymtab_end = .;
     . = ALIGN(8);
 
-    /* section information for initial. */
     . = ALIGN(8);
     __rt_init_start = .;
     KEEP(*(SORT(.rti_fn*)))
@@ -80,6 +79,7 @@ SECTIONS {
     __am_apps_data_end = .;
     . = ALIGN(8);
   } > psram AT > flash : data
+***/
 
 	.bss : ALIGN(4) {
 		bss_vma_start = .;
@@ -87,10 +87,11 @@ SECTIONS {
     *(.sbss*)
     *(.scommon)
   } > psram AT > flash
-	bss_size = SIZEOF(.bss) + SIZEOF(.bss.extra);
+	bss_size = SIZEOF(.bss);
   bss_lma_start = LOADADDR(.bss);
 
-  .bss.extra : {
+/***
+	.bss.extra : {
     . = ALIGN(8);
     __am_apps_bss_start = .;
     *(__am_apps.bss*)
@@ -99,6 +100,7 @@ SECTIONS {
     __am_apps_bss_end = .;
     . = ALIGN(8);
   } > psram AT > flash
+***/
 /***
 	. = ORIGIN(psram) + 0x100000;
 	_stack_top = ALIGN(0x10);
