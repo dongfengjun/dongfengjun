@@ -6,7 +6,7 @@
 #if   defined(CONFIG_PMEM_MALLOC)
 	uint8_t *mem = NULL;
 #else // CONFIG_PMEM_GARRAY
-	uint8_t mem[CONFIG_MSIZE] PG_ALIGN = {};
+	uint8_t mem[CONFIG_MSIZE] PG_ALIGN = {0};
 #endif
 
 static inline bool in_pmem(paddr_t addr) {

@@ -35,7 +35,7 @@ typedef uint16_t ioaddr_t;
 			//#define CONFIG_MTRACE 1 
 		//#define CONFIG_WATCHPOINT 1
 	//#endif
-//#define CONFIG_DIFFTEST 1
+#define CONFIG_DIFFTEST 1
 
 #define CONFIG_MBASE 0x30000000//IM
 #define CONFIG_MSIZE 0x10000000
@@ -43,7 +43,7 @@ typedef uint16_t ioaddr_t;
 #define PMEM_LEFT  ((paddr_t)CONFIG_MBASE)
 #define PMEM_RIGHT ((paddr_t)CONFIG_MBASE + CONFIG_MSIZE - 1)
 #define RESET_VECTOR (PMEM_LEFT + CONFIG_PC_RESET_OFFSET)
-#define CONFIG_MEM_RANDOM 1
+//#define CONFIG_MEM_RANDOM 1
 #define CONFIG_TRACE_START 0
 #define CONFIG_TRACE_END 10000
 
