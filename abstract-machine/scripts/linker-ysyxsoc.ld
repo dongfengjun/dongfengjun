@@ -77,7 +77,7 @@ SECTIONS {
 		*(.sdata*)
   } > psram AT > flash : data
 	data_size = SIZEOF(.data) + SIZEOF(.data.extra);
-	data_lma_start = LOADADDR(.data);
+	data_lma_start = LOADADDR(.data.extra);
 
 	.bss.extra : {
     . = ALIGN(8);
@@ -96,7 +96,7 @@ SECTIONS {
     *(.scommon)
   } > psram AT > flash
 	bss_size = SIZEOF(.bss) + SIZEOF(.bss.extra);
-  bss_lma_start = LOADADDR(.bss);
+  bss_lma_start = LOADADDR(.bss.extra);
 
 /***
 	. = ORIGIN(psram) + 0x100000;
