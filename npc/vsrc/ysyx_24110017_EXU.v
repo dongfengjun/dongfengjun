@@ -312,8 +312,8 @@ assign s_rdata = ((ls_raddr%4 == 0) && op == 7'b0000011 && funct3 == 3'b010) ? l
  : 32'b0;
 assign ls_awsize = (op == 7'b0100011) ? 3'b000 : 3'b000;
 assign ls_arsize = (op == 7'b0000011) ? 3'b000 : 3'b000;
-assign ls_awlen = (op == 7'b0100011 && funct3 == 3'b000) ? 7'b0000 : (op ==  7'b0100011 && funct3 == 3'b001) ? 7'b1 : (op == 7'b0100011 && funct3 == 3'b010) ? 7'b11 : 7'b0;
-assign ls_arlen = (op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? 7'b0 : (op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? 7'b1 : (op == 7'b0000011 && funct3 == 3'b010) ? 7'b11 : 7'b0;
+assign ls_awlen = (op == 7'b0100011 && funct3 == 3'b000) ? 8'b0 : (op ==  7'b0100011 && funct3 == 3'b001) ? 8'b1 : (op == 7'b0100011 && funct3 == 3'b010) ? 8'b11 : 8'b0;
+assign ls_arlen = (op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? 8'b0 : (op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? 8'b1 : (op == 7'b0000011 && funct3 == 3'b010) ? 8'b11 : 8'b0;
 assign ls_awburst = (op == 7'b0100011) ? 2'b01 : 2'b01;
 assign ls_arburst = (op == 7'b0000011) ? 2'b01 : 2'b01;
 /***J_B_dnpc***/

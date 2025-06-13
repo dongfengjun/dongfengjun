@@ -140,13 +140,13 @@ always @(posedge clk or posedge rst) begin
       axi_awvalid <= 0;
       axi_awaddr <= 32'h0;
 			axi_arsize <= 3'b0;
-			axi_arlen <= 7'b0;
+			axi_arlen <= 8'b0;
 			axi_arburst <= 2'b01;
 			axi_awsize <= 3'b0; 
       axi_wdata <= 32'h0;
       axi_wstrb <= 4'b0;
 		  axi_wvalid <= 0;
-			axi_awlen <= 7'b0;
+			axi_awlen <= 8'b0;
 			axi_awburst <= 2'b01;
 			axi_wlast <= 0;
       axi_bready <= 0;
@@ -298,6 +298,8 @@ always @(posedge clk or posedge rst) begin
 					axi_awsize <= 3'b0;
 					axi_awburst <= 2'b0;
 					axi_arburst <= 2'b0;
+					axi_awlen <= 8'b0;
+					axi_arlen <= 8'b0;
 					axi_wvalid <= 0;
 					axi_bready <= 0;
 					LSU_DONE <= 0;
