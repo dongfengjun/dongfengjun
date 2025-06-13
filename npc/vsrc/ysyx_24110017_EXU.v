@@ -30,7 +30,7 @@ output [31:0]ls_waddr,ls_wdata,ls_raddr;
 output [3:0]ls_wmask;
 output [2:0]ls_awsize,ls_arsize;
 output [7:0]ls_awlen,ls_arlen;
-output [1:0]ls_awburst,ls_arburst,
+output [1:0]ls_awburst,ls_arburst;
 input [31:0]ls_rdata;
 
 input [31:0]pc;
