@@ -181,7 +181,7 @@ ysyx_24110017_EXU EXU(clock,reset,sram_lsu_read,sram_lsu_write,LSU_DONE,
 );
 ysyx_24110017_LSU LSU(clock,reset,sram_lsu_read,sram_lsu_write,LSU_DONE,
 		ls_rdata,
-		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,ls_awsize,ls_arsize,,ls_awlen,ls_arlen,ls_awburst,ls_arburst,
+		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,ls_awsize,ls_arsize,ls_awlen,ls_arlen,ls_awburst,ls_arburst,
 		LSU_AXI_AWREADY,LSU_AXI_AWVALID,LSU_AXI_AWID,LSU_AXI_AWADDR,
 		LSU_AXI_AWLEN,LSU_AXI_AWSIZE,LSU_AXI_AWBURST,
 		LSU_AXI_WREADY,LSU_AXI_WVALID,LSU_AXI_WDATA,LSU_AXI_WSTRB,LSU_AXI_WLAST,
