@@ -1,6 +1,6 @@
 module ysyx_24110017_LSU(clk,rst,sram_lsu_read,sram_lsu_write,LSU_DONE,
 		ls_rdata,
-		valid,wen,waddr,wdata,raddr,wmask,awsize,arsize,
+		valid,wen,waddr,wdata,raddr,wmask,awsize,arsize,awlen,arlen,awburst,arburst,
 		M_AXI_AWREADY,M_AXI_AWVALID,M_AXI_AWID,M_AXI_AWADDR,
 		M_AXI_AWLEN,M_AXI_AWSIZE,M_AXI_AWBURST,
 		M_AXI_WREADY,M_AXI_WVALID,M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WLAST,          
@@ -19,6 +19,8 @@ input valid,wen;
 input [31:0]waddr,wdata,raddr;
 input [3:0]wmask;
 input [2:0]awsize,arsize;
+input [7:0]awlen,arlen;
+input [1:0]awburst,arburst;
 
 input M_AXI_AWREADY;
 output M_AXI_AWVALID;
@@ -138,10 +140,13 @@ always @(posedge clk or posedge rst) begin
       axi_awvalid <= 0;
       axi_awaddr <= 32'h0;
 			axi_arsize <= 3'b0;
+			axi_arlen <= 8'b0;
+			axi_arburst <= 2'b01;
 			axi_awsize <= 3'b0; 
       axi_wdata <= 32'h0;
       axi_wstrb <= 4'b0;
 		  axi_wvalid <= 0;
+			axi_awlen <= 8'b0;
 			axi_awburst <= 2'b01;
 			axi_wlast <= 0;
       axi_bready <= 0;
@@ -159,12 +164,16 @@ always @(posedge clk or posedge rst) begin
 					  axi_arvalid <= 1'b1;//非DELAY_TEST
 						axi_araddr <= raddr;
 						axi_arsize <= arsize;
+						axi_arlen <= arlen;
+						axi_arburst <= arburst;
 					end
 					if(sram_lsu_write) begin
 		        state <= WRITE;
 						axi_awvalid <= 1'b1;//非DELAY_TEST
 						axi_awaddr <= waddr;
 						axi_awsize <= awsize;
+						axi_awlen <= awlen;
+						axi_awburst <= awburst;
 	        end
 /***DELAY_TEST_AR*AWVALID***
 					if(sram_lsu_read || sram_lsu_write) begin
@@ -287,6 +296,10 @@ always @(posedge clk or posedge rst) begin
 					axi_wstrb <= 4'b0;
 					axi_arsize <= 3'b0;
 					axi_awsize <= 3'b0;
+					axi_awburst <= 2'b0;
+					axi_arburst <= 2'b0;
+					axi_awlen <= 8'b0;
+					axi_arlen <= 8'b0;
 					axi_wvalid <= 0;
 					axi_bready <= 0;
 					LSU_DONE <= 0;
