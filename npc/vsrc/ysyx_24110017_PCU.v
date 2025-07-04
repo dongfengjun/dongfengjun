@@ -70,7 +70,7 @@ always @(posedge clk) begin
 				if(((pc < 32'h30000000) || (pc >= 32'h40000000)) 
 					&& ((pc < 32'h0f000000) || (pc >= 32'h0f002000))
 					&& ((pc < 32'h80000000) || (pc >= 32'h84000000))
-					|| ((pc < 32'ha0000000) || (pc >= 32'hc0000000))) begin
+					&& ((pc < 32'ha0000000) || (pc >= 32'hc0000000))) begin
 					$fwrite(32'h80000002, "Assertion failed: Invalid PC `%xh`\n",pc);
           $fatal;
 				end
