@@ -63,12 +63,14 @@ always @(posedge clk) begin
 			IDLE: begin
 				if(((dnpc >= 32'h30000000) && (dnpc < 32'h40000000))
 					 || ((dnpc >= 32'h0f000000) && (dnpc < 32'h0f002000))
-					 || ((dnpc >= 32'h80000000) && (dnpc < 32'h84000000))) begin 
+					 || ((dnpc >= 32'h80000000) && (dnpc < 32'h84000000))
+					 || ((dnpc >= 32'ha0000000) && (dnpc < 32'hc0000000))) begin 
 					pcu_valid <= 1'b1;
 				end
 				if(((pc < 32'h30000000) || (pc >= 32'h40000000)) 
 					&& ((pc < 32'h0f000000) || (pc >= 32'h0f002000))
-					&& ((pc < 32'h80000000) || (pc >= 32'h84000000))) begin
+					&& ((pc < 32'h80000000) || (pc >= 32'h84000000))
+					|| ((pc < 32'ha0000000) || (pc >= 32'hc0000000))) begin
 					$fwrite(32'h80000002, "Assertion failed: Invalid PC `%xh`\n",pc);
           $fatal;
 				end
