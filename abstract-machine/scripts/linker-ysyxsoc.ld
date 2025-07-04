@@ -26,7 +26,7 @@ SECTIONS {
 	ssbl_size = SIZEOF(.ssbl);
 	ssbl_lma_start = LOADADDR(.ssbl);
 	
-	.text : {
+	.text : ALIGN(4) {
 		text = .;
     *(.text*)
   } > sdram AT > flash : text
@@ -35,7 +35,7 @@ SECTIONS {
 	text_lma_start = LOADADDR(.text);
 	text_size = SIZEOF(.text);
 
-	.rodata : {
+	.rodata : ALIGN(4) {
 		rodata_vma_start = .;
     *(.rodata*)
 		*(.srodata*)
