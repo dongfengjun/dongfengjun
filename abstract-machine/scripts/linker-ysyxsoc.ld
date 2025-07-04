@@ -43,7 +43,7 @@ SECTIONS {
 	rodata_size = SIZEOF(.rodata);
 	rodata_lma_start = LOADADDR(.rodata);
 
-	.data.extra : {
+	.data.extra : ALIGN(4) {
     data_vma_start = .;
 		__fsymtab_start = .;
     KEEP(*(FSymTab))
