@@ -56,7 +56,7 @@ void bootloader_ssbl(void) {
 		}
 	}
 	if((size_t)text_size != 0) {
-		memcpy((void *)0x80000000, text_lma_start, (size_t)text_size);
+		memcpy((void *)0xa0000000, text_lma_start, (size_t)text_size);
 		if((size_t)rodata_size != 0) {
 			if(&rodata_vma_start != &rodata_lma_start) {
 				memcpy(rodata_vma_start, rodata_lma_start, (size_t)rodata_size);
