@@ -68,7 +68,6 @@ void bootloader_ssbl(void) {
     for(int j = 0;j < (size_t)text_size / 4; j ++) {
 			*o3 ++ = *i3 ++;
 		}
-/***
 		if((size_t)rodata_size != 0) {
 			if(&rodata_vma_start != &rodata_lma_start) {
 				uint32_t *o4 = (uint32_t *)rodata_vma_start;
@@ -78,7 +77,6 @@ void bootloader_ssbl(void) {
 				}
 			}
 		}
-***/
 	}
 }
 
