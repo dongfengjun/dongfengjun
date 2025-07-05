@@ -43,4 +43,7 @@ void sram_write(paddr_t addr, int len, word_t data);
 word_t psram_read(paddr_t addr, int len);
 void psram_write(paddr_t addr, int len, word_t data);
 
+word_t sdram_read(paddr_t addr, int len);
+void sdram_write(paddr_t addr, int len, word_t data);
+
 #endif
