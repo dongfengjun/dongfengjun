@@ -79,7 +79,6 @@ SECTIONS {
 /***/
 
 	.data : ALIGN(4) {
-		/***data_vma_start = .;***/
 		*(.data*)
 		*(.sdata*)
 		. = ALIGN(4);
@@ -101,7 +100,6 @@ SECTIONS {
   } > sdram AT > flash
 
 	.bss : ALIGN(4) {
-		/***bss_vma_start = .;***/
 		*(.bss*)
     *(.sbss*)
     *(.scommon)
