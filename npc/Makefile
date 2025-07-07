@@ -33,7 +33,7 @@ ARGS += --log=$(LOG)
 ARGS += --img=$(IMG)
 ARGS += --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
-ARGS += -b
+#ARGS += -b
 
 run: sim
 	$(OBJ_DIR)/VysyxSoCFull $(ARGS)
