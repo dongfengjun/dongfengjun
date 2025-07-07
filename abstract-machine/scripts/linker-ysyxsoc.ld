@@ -29,6 +29,7 @@ SECTIONS {
 	. = ALIGN(4);
 	.text : ALIGN(4) {
     *(.text*)
+		. = ALIGN(4);
   } > sdram AT > flash : text
   etext = .;
   _etext = .;
@@ -40,6 +41,7 @@ SECTIONS {
 		rodata_vma_start = .;
     *(.rodata*)
 		*(.srodata*)
+		. = ALIGN(4);
   } > sdram AT > flash : rodata
 	rodata_size = ALIGN(4,SIZEOF(.rodata));
 	rodata_lma_start = LOADADDR(.rodata);
@@ -80,6 +82,7 @@ SECTIONS {
 		data_vma_start = .;
 		*(.data*)
 		*(.sdata*)
+		. = ALIGN(4);
   } > sdram AT > flash : data
 	data_size = ALIGN(4,SIZEOF(.data));/*** + SIZEOF(.data.extra);***/
 	data_lma_start = LOADADDR(.data);
@@ -103,6 +106,7 @@ SECTIONS {
 		*(.bss*)
     *(.sbss*)
     *(.scommon)
+		. = ALIGN(4);
   } > sdram AT > flash
 	bss_size = ALIGN(4,SIZEOF(.bss));/*** + SIZEOF(.bss.extra);	***/
   bss_lma_start = LOADADDR(.bss);
