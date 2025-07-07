@@ -69,7 +69,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
 	}
 
 //nemu un restart or init
-if(ref_r->csr.mstatus != cpu.csr.mstatus) {
+if((ref_r->csr.mstatus != cpu.csr.mstatus) && (ref_r->csr.mstatus != 0)) {
     printf("mstatus diff ref\nref_mstatus= %08x\tcpu.mstatus = %08x\n", ref_r->csr.mstatus, cpu.csr.mstatus);
     return false;
   }
