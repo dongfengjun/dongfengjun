@@ -46,7 +46,7 @@ extern char bss_lma_start[];
 extern char bss_size[];
 void bootloader_ssbl(void) {
 	if(&data_vma_start != &data_lma_start) {
-		if((size_t)data_size == 0x1e) {
+		if((size_t)data_size != 0) {
 			uint32_t *o1 = (uint32_t *)data_vma_start;
       uint32_t *i1 = (uint32_t *)data_lma_start;
       for(int j = 0;j < (size_t)data_size / 4; j ++) {
@@ -68,7 +68,7 @@ void bootloader_ssbl(void) {
     for(int j = 0;j < (size_t)text_size / 4; j ++) {
 			*o3 ++ = *i3 ++;
 		}
-		if((size_t)rodata_size != 0) {
+		if((size_t)rodata_size == 0x79) {
 			if(&rodata_vma_start != &rodata_lma_start) {
 				uint32_t *o4 = (uint32_t *)rodata_vma_start;
 	      uint32_t *i4 = (uint32_t *)rodata_lma_start;
