@@ -47,6 +47,7 @@ SECTIONS {
 	rodata_lma_start = LOADADDR(.rodata);
 
 	. = ALIGN(4);
+/***
 	.data.extra : ALIGN(4) {
     data_vma_start = .;
 		__fsymtab_start = .;
@@ -75,6 +76,7 @@ SECTIONS {
     __am_apps_data_end = .;
     . = ALIGN(8);
   } > sdram AT > flash : data
+***/
 
 	.data : ALIGN(4) {
 		data_vma_start = .;
@@ -82,10 +84,11 @@ SECTIONS {
 		*(.sdata*)
 		. = ALIGN(4);
   } > sdram AT > flash : data
-	data_size = SIZEOF(.data) + SIZEOF(.data.extra);
-	data_lma_start = LOADADDR(.data.extra);
+	data_size = SIZEOF(.data);/*** + SIZEOF(.data.extra);	***/
+	data_lma_start = LOADADDR(.data);
 
 	. = ALIGN(4);
+	/***
 	.bss.extra : {
     . = ALIGN(8);
 		bss_vma_start = .;
@@ -96,7 +99,8 @@ SECTIONS {
     __am_apps_bss_end = .;
     . = ALIGN(8);
   } > sdram AT > flash
-	
+	***/
+
 	.bss : ALIGN(4) {
 		bss_vma_start = .;
 		*(.bss*)
@@ -104,8 +108,8 @@ SECTIONS {
     *(.scommon)
 		. = ALIGN(4);
   } > sdram AT > flash
-	bss_size = SIZEOF(.bss) + SIZEOF(.bss.extra);
-  bss_lma_start = LOADADDR(.bss.extra);
+	bss_size = SIZEOF(.bss);/*** + SIZEOF(.bss.extra);***/
+  bss_lma_start = LOADADDR(.bss);
 
 /***
 	. = ORIGIN(psram) + 0x100000;
