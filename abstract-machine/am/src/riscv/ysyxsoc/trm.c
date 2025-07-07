@@ -47,6 +47,7 @@ extern char bss_size[];
 void bootloader_ssbl(void) {
 	if(&data_vma_start != &data_lma_start) {
 		if((size_t)data_size != 0) {
+			printf("datasize=%d\n", (size_t)data_size);
 			uint32_t *o1 = (uint32_t *)data_vma_start;
       uint32_t *i1 = (uint32_t *)data_lma_start;
       for(int j = 0;j < (size_t)data_size / 4; j ++) {
