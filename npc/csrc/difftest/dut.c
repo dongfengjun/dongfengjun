@@ -43,7 +43,6 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
 	
 	ref_difftest_init(port);//调用ref_init
 	ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);//from mymem to ref IM
-	printf("mstatus = %08x\n", cpu.csr.mstatus);
 	ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);//reg from myreg to ref
 }
 
@@ -71,7 +70,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
 	}
 
 //nemu un restart or init
-if((ref_r->csr.mstatus != cpu.csr.mstatus) && (ref_r->csr.mstatus != 0 && cpu.csr.mstatus != 0x1800)) {
+if(ref_r->csr.mstatus != cpu.csr.mstatus) {
     Log("npc: %s at pc = " FMT_WORD, (ANSI_FMT("MSTATUS DIFF", ANSI_FG_RED)), pc);
 		printf("mstatus diff ref\nref_mstatus= %08x\tcpu.mstatus = %08x\n", ref_r->csr.mstatus, cpu.csr.mstatus);
     return false;
