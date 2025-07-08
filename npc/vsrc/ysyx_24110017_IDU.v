@@ -137,7 +137,7 @@ assign rs1 = (op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 
 assign rs2 = (op == 7'b1100011  //B
  || op == 7'b0100011  //S
  || op == 7'b0110011) ? inst[24:20] //R
- : (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? 5'd15 //ecall
+ : (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? 5'd17//5'd15 //ecall
  : 5'b0;
 assign funct7 = (op == 7'b0110011 || op == 7'b0010011) ? inst[31:25] : 7'b0;
 assign immI = {{20{inst[31]}},inst[31:20]};	//SEXTIimmediate
