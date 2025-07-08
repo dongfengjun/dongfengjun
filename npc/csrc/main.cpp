@@ -259,13 +259,13 @@ void dump_wave() {
 void single_cycle() {
 	top->clock=1;top->eval();
 #ifdef CONFIG_DUMP_WAVE
-	if(top->DIFFTEST) {
+	if(dpic_display(3)) {
 		dump_wave();
 	}
 #endif
 	top->clock=0;top->eval();
 #ifdef CONFIG_DUMP_WAVE
-	if(top->DIFFTEST) {
+	if(dpic_display(3)) {
 		dump_wave();
 	}
 #endif
