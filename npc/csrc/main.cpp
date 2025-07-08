@@ -259,11 +259,15 @@ void dump_wave() {
 void single_cycle() {
 	top->clock=1;top->eval();
 #ifdef CONFIG_DUMP_WAVE
-	dump_wave();
+	if(top->DIFFTEST) {
+		dump_wave();
+	}
 #endif
 	top->clock=0;top->eval();
 #ifdef CONFIG_DUMP_WAVE
-	dump_wave();
+	if(top->DIFFTEST) {
+		dump_wave();
+	}
 #endif
 }
 static void reset(int n) {
