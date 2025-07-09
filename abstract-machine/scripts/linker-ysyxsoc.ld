@@ -20,8 +20,6 @@ SECTIONS {
 	.ssbl : {
 		ssbl_vma_start = .;
 		*(.text.bootloader_ssbl)
-	/***	*(.text.memcpy)                                         
-		*(.text.memset)  ***/
 	} > sram AT > flash : ssbl
 	ssbl_size = SIZEOF(.ssbl);
 	ssbl_lma_start = LOADADDR(.ssbl);
@@ -40,14 +38,24 @@ SECTIONS {
 	.rodata : ALIGN(4) {
 		rodata_vma_start = .;
     *(.rodata*)
-/***		*(.srodata*)	***/
+		. = ALIGN(4);
+		*(.srodata.cst8)
+		. = ALIGN(4);
+		*(.srodata.waveform)
+		. = ALIGN(4);
+		*(.srodata._ZZL5CSyncvE4midx)
+		. = ALIGN(4);
+		*(.srodata._ZL9prot_data)
+		. = ALIGN(4);
+		*(.srodata._ZL3lut)
+		. = ALIGN(4);
+		*(.srodata.mainargs)
 		. = ALIGN(4);
   } > sdram AT > flash : rodata
 	rodata_size = SIZEOF(.rodata);
 	rodata_lma_start = LOADADDR(.rodata);
 
 	. = ALIGN(4);
-/***
 	.data.extra : ALIGN(4) {
     data_vma_start = .;
 		__fsymtab_start = .;
@@ -76,19 +84,32 @@ SECTIONS {
     __am_apps_data_end = .;
     . = ALIGN(8);
   } > sdram AT > flash : data
-***/
-
-	.data : ALIGN(4) {
-		data_vma_start = .;
-		*(.data*)
-/***		*(.sdata*)		***/
-		. = ALIGN(4);
-  } > sdram AT > flash : data
-	data_size = SIZEOF(.data); /***+ SIZEOF(.data.extra);***/
-	data_lma_start = LOADADDR(.data);
 
 	. = ALIGN(4);
-/***
+	.data : ALIGN(4) {
+		*(.sdata.p.0)
+		. = ALIGN(4);
+		*(.data.working_directory)
+		. = ALIGN(4);
+		*(.sdata._current_timezone)
+		. = ALIGN(4);
+		*(.sdata._rt_thread_defunct)
+		. = ALIGN(4);
+		*(.data._object_container)
+		. = ALIGN(4);
+		*(.sdata._soft_timer_status)
+		. = ALIGN(4);
+		*(.sdata.heap)
+		. = ALIGN(4);
+		*(.data.lut)
+		. = ALIGN(4);
+		*(.sdata.next)
+		. = ALIGN(4);
+  } > sdram AT > flash : data
+	data_size = SIZEOF(.data) + SIZEOF(.data.extra);
+	data_lma_start = LOADADDR(.data.extra);
+
+	. = ALIGN(4);
 	.bss.extra : {
     . = ALIGN(8);
 		bss_vma_start = .;
@@ -99,28 +120,17 @@ SECTIONS {
     __am_apps_bss_end = .;
     . = ALIGN(8);
   } > sdram AT > flash
-***/
 
+	. = ALIGN(4);
 	.bss : ALIGN(4) {
-		bss_vma_start = .;
 		*(.bss*)
     *(.sbss*)
     *(.scommon)
 		. = ALIGN(4);
   } > sdram AT > flash
-	bss_size = SIZEOF(.bss);/*** + SIZEOF(.bss.extra);***/
-  bss_lma_start = LOADADDR(.bss);
+	bss_size = SIZEOF(.bss) + SIZEOF(.bss.extra);
+  bss_lma_start = LOADADDR(.bss.extra);
 
-/***
-	. = ORIGIN(psram) + 0x100000;
-	_stack_top = ALIGN(0x10);
-  . = _stack_top + 0x100000;
-  _stack_pointer = .;
-  end = .;
-  _end = .;
-  _heap_start = ALIGN(0x10);
-  _heap_end = _heap_start + 0x100000;
-***/
 	end = .;
   _end = .;
 	_heap_start = 0xa0f00000;
