@@ -140,8 +140,8 @@ SECTIONS {
 
 	end = .;
   _end = .;
-	_heap_start = 0xa0f00000;
-	. = _heap_start + 0x100000;
+	_heap_start = 0xa00aa000;
+	. = _heap_start + 0xf00000;
 	_heap_end = .;
 
 	. = ORIGIN(sram) + 0x1000;
