@@ -40,7 +40,7 @@ SECTIONS {
 	.rodata : ALIGN(4) {
 		rodata_vma_start = .;
     *(.rodata*)
-		*(.srodata*)
+/***		*(.srodata*)	***/
 		. = ALIGN(4);
   } > sdram AT > flash : rodata
 	rodata_size = SIZEOF(.rodata);
@@ -80,7 +80,7 @@ SECTIONS {
 
 	.data : ALIGN(4) {
 		*(.data*)
-		*(.sdata*)
+/***		*(.sdata*)		***/
 		. = ALIGN(4);
   } > sdram AT > flash : data
 	data_size = SIZEOF(.data) + SIZEOF(.data.extra);
