@@ -87,6 +87,7 @@ SECTIONS {
 
 	. = ALIGN(4);
 	.data : ALIGN(4) {
+		. = ALIGN(4);
 		*(.sdata.p.0)
 		. = ALIGN(4);
 		*(.data.working_directory)
@@ -123,8 +124,11 @@ SECTIONS {
 
 	. = ALIGN(4);
 	.bss : ALIGN(4) {
+		. = ALIGN(4);
 		*(.bss*)
+		. = ALIGN(4);
     *(.sbss*)
+		. = ALIGN(4);
     *(.scommon)
 		. = ALIGN(4);
   } > sdram AT > flash
