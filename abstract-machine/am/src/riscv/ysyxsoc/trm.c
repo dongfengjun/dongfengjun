@@ -9,8 +9,8 @@ extern char _heap_end;
 int main(const char *args);
 
 extern char _pmem_start;
-//#define PMEM_SIZE (1 * 1024)
-//#define PMEM_END ((uintptr_t)&_pmem_start + PMEM_SIZE)
+#define PMEM_SIZE (1 * 1024)
+#define PMEM_END ((uintptr_t)&_pmem_start + PMEM_SIZE)
 
 Area heap = RANGE(&_heap_start, &_heap_end);
 #ifndef MAINARGS
