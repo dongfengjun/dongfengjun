@@ -126,12 +126,9 @@ SECTIONS {
 
 	. = ALIGN(4);
 	.bss : ALIGN(4) {
-		. = ALIGN(4);
 		_bss_start = .;
 		*(.bss*)
-		. = ALIGN(4);
     *(.sbss*)
-		. = ALIGN(4);
     *(.scommon)
 		. = ALIGN(4);
   } > sdram AT > flash
