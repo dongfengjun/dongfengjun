@@ -9,7 +9,7 @@ extern char _heap_end;
 int main(const char *args);
 
 extern char _pmem_start;
-#define PMEM_SIZE (1 * 1024)
+#define PMEM_SIZE (4 * 1024 * 1024)
 #define PMEM_END ((uintptr_t)&_pmem_start + PMEM_SIZE)
 
 Area heap = RANGE(&_heap_start, &_heap_end);
@@ -47,23 +47,39 @@ extern char bss_size[];
 void bootloader_ssbl(void) {
 	if(&data_vma_start != &data_lma_start) {
 		if((size_t)data_size != 0) {
-			memcpy(data_vma_start, data_lma_start, (size_t)data_size);
+			uint32_t *o1 = (uint32_t *)data_vma_start;
+      uint32_t *i1 = (uint32_t *)data_lma_start;
+      for(int j = 0;j < (size_t)data_size / 4; j ++) {
+        *o1 ++ = *i1 ++;
+			}
 		}
 	}
 	if(&bss_vma_start != &bss_lma_start) {
 		if((size_t)bss_size != 0) {
-			memset(bss_vma_start, 0, (size_t)data_size);
+			uint32_t *o2 = (uint32_t *)bss_vma_start;
+      for(int j = 0;j < (size_t)bss_size / 4; j ++) {
+	      *o2 ++ = 0;
+			}
 		}
 	}
 	if((size_t)text_size != 0) {
-		memcpy((void *)0x80000000, text_lma_start, (size_t)text_size);
+		uint32_t *o3 = (uint32_t *)0xa0000000;
+    uint32_t *i3 = (uint32_t *)text_lma_start;
+    for(int j = 0;j < (size_t)text_size / 4; j ++) {
+			*o3 ++ = *i3 ++;
+		}
 		if((size_t)rodata_size != 0) {
 			if(&rodata_vma_start != &rodata_lma_start) {
-				memcpy(rodata_vma_start, rodata_lma_start, (size_t)rodata_size);
+				uint32_t *o4 = (uint32_t *)rodata_vma_start;
+	      uint32_t *i4 = (uint32_t *)rodata_lma_start;
+	      for(int j = 0;j < (size_t)rodata_size / 4; j ++) {
+	        *o4 ++ = *i4 ++;
+				}
 			}
 		}
 	}
 }
+
 void bootloader_fsbl(void) {
 	if(&ssbl_vma_start != &ssbl_lma_start) {
     if((size_t)ssbl_size != 0) {

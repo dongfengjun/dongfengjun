@@ -3,7 +3,7 @@ PHDRS { entry PT_LOAD; ssbl PT_LOAD; text PT_LOAD; rodata PT_LOAD; data PT_LOAD;
 
 MEMORY {
 	flash (rx): ORIGIN = 0x30000000, LENGTH = 1M
-  psram (wrx): ORIGIN = 0x80000000, LENGTH = 4M
+  sdram (wrx): ORIGIN = 0xa0000000, LENGTH = 32M
 	sram (wrx): ORIGIN = 0x0f000000, LENGTH = 2K
 }
 
@@ -20,30 +20,32 @@ SECTIONS {
 	.ssbl : {
 		ssbl_vma_start = .;
 		*(.text.bootloader_ssbl)
-		*(.text.memcpy)                                                         
-		*(.text.memset)
 	} > sram AT > flash : ssbl
 	ssbl_size = SIZEOF(.ssbl);
 	ssbl_lma_start = LOADADDR(.ssbl);
 	
-	.text : {
-		text = .;
+	. = ALIGN(4);
+	.text : ALIGN(4) {
     *(.text*)
-  } > psram AT > flash : text
+		. = ALIGN(4);
+  } > sdram AT > flash : text
   etext = .;
   _etext = .;
 	text_lma_start = LOADADDR(.text);
 	text_size = SIZEOF(.text);
 
-	.rodata : {
+	. = ALIGN(4);
+	.rodata : ALIGN(4) {
 		rodata_vma_start = .;
     *(.rodata*)
 		*(.srodata*)
-  } > psram AT > flash : rodata
+		. = ALIGN(4);
+  } > sdram AT > flash : rodata
 	rodata_size = SIZEOF(.rodata);
 	rodata_lma_start = LOADADDR(.rodata);
 
-	.data.extra : {
+	. = ALIGN(4);
+	.data.extra : ALIGN(4) {
     data_vma_start = .;
 		__fsymtab_start = .;
     KEEP(*(FSymTab))
@@ -70,15 +72,17 @@ SECTIONS {
     *(__am_apps.sdata*)
     __am_apps_data_end = .;
     . = ALIGN(8);
-  } > psram AT > flash : data
+  } > sdram AT > flash : data
 
 	.data : ALIGN(4) {
 		*(.data*)
 		*(.sdata*)
-  } > psram AT > flash : data
+		. = ALIGN(4);
+  } > sdram AT > flash : data
 	data_size = SIZEOF(.data) + SIZEOF(.data.extra);
 	data_lma_start = LOADADDR(.data.extra);
 
+	. = ALIGN(4);
 	.bss.extra : {
     . = ALIGN(8);
 		bss_vma_start = .;
@@ -88,13 +92,14 @@ SECTIONS {
     *(__am_apps.scommon*)
     __am_apps_bss_end = .;
     . = ALIGN(8);
-  } > psram AT > flash
+  } > sdram AT > flash
 
 	.bss : ALIGN(4) {
-    *(.bss*)
+		*(.bss*)
     *(.sbss*)
     *(.scommon)
-  } > psram AT > flash
+		. = ALIGN(4);
+  } > sdram AT > flash
 	bss_size = SIZEOF(.bss) + SIZEOF(.bss.extra);
   bss_lma_start = LOADADDR(.bss.extra);
 
@@ -110,8 +115,8 @@ SECTIONS {
 ***/
 	end = .;
   _end = .;
-	_heap_start = 0x83000000;
-	. = _heap_start + 0x1000000;
+	_heap_start = 0xa0f00000;
+	. = _heap_start + 0x100000;
 	_heap_end = .;
 
 	. = ORIGIN(sram) + 0x1000;
