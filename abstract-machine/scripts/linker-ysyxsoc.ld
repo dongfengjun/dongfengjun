@@ -38,18 +38,7 @@ SECTIONS {
 	.rodata : ALIGN(4) {
 		rodata_vma_start = .;
     *(.rodata*)
-		. = ALIGN(4);
-		*(.srodata.cst8)
-		. = ALIGN(4);
-		*(.srodata.waveform)
-		. = ALIGN(4);
-		*(.srodata._ZZL5CSyncvE4midx)
-		. = ALIGN(4);
-		*(.srodata._ZL9prot_data)
-		. = ALIGN(4);
-		*(.srodata._ZL3lut)
-		. = ALIGN(4);
-		*(.srodata.mainargs)
+		*(.srodata*)
 		. = ALIGN(4);
   } > sdram AT > flash : rodata
 	rodata_size = SIZEOF(.rodata);
@@ -85,30 +74,11 @@ SECTIONS {
     . = ALIGN(8);
   } > sdram AT > flash : data
 
-	. = ALIGN(4);
 	.data : ALIGN(4) {
-		. = ALIGN(4);
-		*(.sdata.p.0)
-		. = ALIGN(4);
-		*(.data.working_directory)
-		. = ALIGN(4);
-		*(.sdata._current_timezone)
-		. = ALIGN(4);
-		*(.sdata._rt_thread_defunct)
-		. = ALIGN(4);
-		*(.data._object_container)
-		. = ALIGN(4);
-		*(.sdata._soft_timer_status)
-		. = ALIGN(4);
-		*(.sdata.heap)
-		. = ALIGN(4);
-		*(.data.lut)
-		. = ALIGN(4);
-		*(.sdata.next)
+		*(.data*)
+		*(.sdata*)
 		. = ALIGN(4);
   } > sdram AT > flash : data
-	edata = .;
-  _data = .;
 	data_size = SIZEOF(.data) + SIZEOF(.data.extra);
 	data_lma_start = LOADADDR(.data.extra);
 
@@ -124,9 +94,7 @@ SECTIONS {
     . = ALIGN(8);
   } > sdram AT > flash
 
-	. = ALIGN(4);
 	.bss : ALIGN(4) {
-		_bss_start = .;
 		*(.bss*)
     *(.sbss*)
     *(.scommon)
@@ -135,10 +103,20 @@ SECTIONS {
 	bss_size = SIZEOF(.bss) + SIZEOF(.bss.extra);
   bss_lma_start = LOADADDR(.bss.extra);
 
+/***
+	. = ORIGIN(psram) + 0x100000;
+	_stack_top = ALIGN(0x10);
+  . = _stack_top + 0x100000;
+  _stack_pointer = .;
+  end = .;
+  _end = .;
+  _heap_start = ALIGN(0x10);
+  _heap_end = _heap_start + 0x100000;
+***/
 	end = .;
   _end = .;
-	_heap_start = 0xa00aa000;
-	. = _heap_start + 0xf00000;
+	_heap_start = 0xa0f00000;
+	. = _heap_start + 0x100000;
 	_heap_end = .;
 
 	. = ORIGIN(sram) + 0x1000;
