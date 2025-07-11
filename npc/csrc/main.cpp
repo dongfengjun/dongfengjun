@@ -314,7 +314,7 @@ void cpu_exec(int n) {
 #endif
 }
 
-static VysyxSoCFull dut;
+static TOP_NAME dut;
 void nvboard_bind_all_pins(VysyxSoCFull* top);
 int main(int argc, char *argv[]) {
 /***inst***/
