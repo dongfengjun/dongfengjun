@@ -3,9 +3,11 @@ NXDC_FILES = constr/top.nxdc
 INC_PATH += ./csrc/include
 INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
 INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
+INC_NVBOARD_PATH = ./../nvboard/usr/include
 
 VERILATOR = verilator
 VERILATOR_CFLAGS += -MMD -x-assign fast --trace --cc --build
+VERILATOR_CFLAGS += -CFLAGS -I$(INC_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH) -I$(INC_NVBOARD_PATH)
 VERILATOR_CFLAGS += -CFLAGS -g
 VERILATOR_CFLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
 VERILATOR_CFLAGS += -LDFLAGS -lreadline
@@ -33,10 +35,6 @@ CSRCS += $(SRC_AUTO_BIND)
 
 # rules for NVBoard
 include $(NVBOARD_HOME)/scripts/nvboard.mk
-
-# rules for verilator
-VERILATOR_CFLAGS += -CFLAGS -I$(INC_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
-VERILATOR_CFLAGS += -CFLAGS -g
 
 LOG ?= $(BUILD)/npc-log.txt
 #IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
