@@ -325,7 +325,7 @@ int main(int argc, char *argv[]) {
   top->trace(tfp,0);
   tfp->open("build/wave.vcd");//设置输出的文件wave.vcd
 	RUNNING = true;
-	nvboard_bind_all_pins(&top); //引脚绑定
+	nvboard_bind_all_pins(top); //引脚绑定
 	nvboard_init(); //初始化NVBoard
 /***code***/
 	init_monitor(argc, argv);//load inst
