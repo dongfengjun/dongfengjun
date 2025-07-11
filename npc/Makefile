@@ -3,7 +3,7 @@ NXDC_FILES = constr/top.nxdc
 INC_PATH += ./csrc/include
 INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
 INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
-INC_NVBOARD_PATH = ./../nvboard/usr/include
+#INC_NVBOARD_PATH = ./../nvboard/usr/include
 
 VERILATOR = verilator
 VERILATOR_CFLAGS += -MMD -x-assign fast --trace --cc --build
@@ -23,16 +23,16 @@ default: $(BIN)
 $(shell mkdir -p $(BUILD_DIR))
 
 # constraint file
-SRC_AUTO_BIND = $(abspath $(BUILD_DIR)/auto_bind.cpp)
-$(SRC_AUTO_BIND): $(NXDC_FILES)
-	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
+#SRC_AUTO_BIND = $(abspath $(BUILD_DIR)/auto_bind.cpp)
+#$(SRC_AUTO_BIND): $(NXDC_FILES)
+#	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
 
 # project source
 VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
 VSRCS += $(shell find $(abspath ./vsrc) -name "*.v")
 VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
 CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
-CSRCS += $(SRC_AUTO_BIND)
+#CSRCS += $(SRC_AUTO_BIND)
 
 # rules for NVBoard
 #include $(NVBOARD_HOME)/scripts/nvboard.mk
