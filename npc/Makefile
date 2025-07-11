@@ -35,10 +35,9 @@ CSRCS += $(SRC_AUTO_BIND)
 include $(NVBOARD_HOME)/scripts/nvboard.mk
 
 # rules for verilator
-INCFLAGS += $(addprefix -I, $(INC_PATH))
-INCFLAGS += $(addprefix -I, $(INC_UART_PATH))
-INCFLAGS += $(addprefix -I, $(INC_SPI_PATH))
-VERILATOR_FLAGS += -CFLAGS $(INC_PATH) $(INC_UART_PATH) $(INC_SPI_PATH)
+VERILATOR_FLAGS += $(addprefix -I, $(INC_PATH))
+VERILATOR_FLAGS += $(addprefix -I, $(INC_UART_PATH))
+VERILATOR_FLAGS += $(addprefix -I, $(INC_SPI_PATH))
 VERILATOR_FLAGS += -CFLAGS -g
 
 LOG ?= $(BUILD)/npc-log.txt
