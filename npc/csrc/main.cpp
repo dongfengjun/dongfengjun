@@ -341,6 +341,7 @@ int main(int argc, char *argv[]) {
 /***close**/
 	statistic();
 	tfp->close();
+	nvboard_quit();
 	delete contextp;
 	return 0;
 }
