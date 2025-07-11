@@ -8,13 +8,6 @@ CSRCS = $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 INC_PATH = ./csrc/include
 INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
 INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
-#nvboard
-NXDC_FILES = constr/top.nxdc
-SRC_AUTO_BIND = $(abspath $(BUILD)/auto_bind.cpp)
-$(SRC_AUTO_BIND): $(NXDC_FILES)
-	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
-CSRCS += $(SRC_AUTO_BIND)
-#include $(NVBOARD_HOME)/scripts/nvboard.mk
 
 LDFLAGS += $(shell llvm-config --ldflags) -fPIE
 LIBS += $(shell llvm-config --libs)
@@ -45,7 +38,7 @@ ARGS += -b
 run: sim
 	$(OBJ_DIR)/VysyxSoCFull $(ARGS)
 
-sim: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
+sim: $(CSRCS) $(VSRCS)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
 	@rm -rf ./build/obj_dir
