@@ -12,9 +12,9 @@ INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
 NXDC_FILES = constr/top.nxdc
 SRC_AUTO_BIND = $(abspath $(BUILD)/auto_bind.cpp)
 $(SRC_AUTO_BIND): $(NXDC_FILES)
-#	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
-#CSRCS += $(SRC_AUTO_BIND)
-#include $(NVBOARD_HOME)/scripts/nvboard.mk
+	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
+CSRCS += $(SRC_AUTO_BIND)
+include $(NVBOARD_HOME)/scripts/nvboard.mk
 
 LDFLAGS += $(shell llvm-config --ldflags) -fPIE
 LIBS += $(shell llvm-config --libs)
