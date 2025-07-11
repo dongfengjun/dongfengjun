@@ -5,11 +5,10 @@ VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
 VSRCS += $(shell find ./vsrc -name "*.v")
 VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
 CSRCS += $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
-#INC_PATH += ./csrc/include
+INC_PATH += ./csrc/include
 INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
 INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
 #nvboard
-INC_PATH += $(NVBOARD_HOME)/usr/include
 NXDC_FILES = constr/top.nxdc
 SRC_AUTO_BIND = $(abspath $(BUILD)/auto_bind.cpp)
 $(SRC_AUTO_BIND): $(NXDC_FILES)
