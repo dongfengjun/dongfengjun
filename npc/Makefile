@@ -13,7 +13,6 @@ VERILATOR_CFLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
 VERILATOR_CFLAGS += -LDFLAGS -lreadline
 VERILATOR_CFLAGS += --timescale "1ns/1ns" --no-timing
 VERILATOR_CFLAGS += --autoflush
-CXXFLAGS += -I $(INC_NVBOARD_PATH) -DTOP_NAME="\"V$(TOPNAME)\""
 
 BUILD_DIR = ./build
 OBJ_DIR = $(BUILD_DIR)/obj_dir
@@ -55,7 +54,6 @@ $(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
 	@rm -rf $(OBJ_DIR)
 	$(VERILATOR) $(VERILATOR_CFLAGS) \
 		--top-module $(TOPNAME) $^ \
-		-CFLAGS $(CXXFLAGS) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
 all: default
