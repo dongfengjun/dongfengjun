@@ -9,7 +9,7 @@ INC_PATH += ./csrc/include
 INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
 INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
 #nvboard
-#NXDC_FILES = constr/top.nxdc
+NXDC_FILES = constr/top.nxdc
 #SRC_AUTO_BIND = $(abspath $(BUILD)/auto_bind.cpp)
 #$(SRC_AUTO_BIND): $(NXDC_FILES)
 #	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
