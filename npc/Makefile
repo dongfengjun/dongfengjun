@@ -35,7 +35,7 @@ CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*
 CSRCS += $(SRC_AUTO_BIND)
 
 # rules for NVBoard
-include $(NVBOARD_HOME)/scripts/nvboard.mk
+#include $(NVBOARD_HOME)/scripts/nvboard.mk
 
 LOG ?= $(BUILD)/npc-log.txt
 #IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
