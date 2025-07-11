@@ -314,20 +314,7 @@ void cpu_exec(int n) {
 #endif
 }
 
-/***
-extern char _data_lma_start;
-extern char _data_vma_start;
-extern char _data_vma_end;
-extern char _bss_start;
-extern char _bss_end;
-void bootloader(void) {
-	size_t data_len = _data_vma_end - _data_lma_start;
-	memcpy(&_data_vma_start, &_data_lma_start, data_len);
-	size_t bss_len = _bss_end - _bss_start;
-	memset(&_bss_start, 0, bss_len);
-}
-***/
-void nvboard_bind_all_pins(TOP_NAME* top);
+void nvboard_bind_all_pins(VysyxSoCFull* top);
 int main(int argc, char *argv[]) {
 /***inst***/
 	Verilated::commandArgs(argc,argv);
@@ -338,7 +325,7 @@ int main(int argc, char *argv[]) {
   top->trace(tfp,0);
   tfp->open("build/wave.vcd");//设置输出的文件wave.vcd
 	RUNNING = true;
-	nvboard_bind_all_pins(&dut); //引脚绑定
+	nvboard_bind_all_pins(&top); //引脚绑定
 	nvboard_init(); //初始化NVBoard
 /***code***/
 	init_monitor(argc, argv);//load inst
