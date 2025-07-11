@@ -15,6 +15,8 @@ $(SRC_AUTO_BIND): $(NXDC_FILES)
 	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
 CSRCS += $(SRC_AUTO_BIND)
 include $(NVBOARD_HOME)/scripts/nvboard.mk
+INCFLAGS = $(addprefix -I, $(INC_PATH))
+CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
 
 LDFLAGS += $(shell llvm-config --ldflags) -fPIE
 LIBS += $(shell llvm-config --libs)
@@ -50,7 +52,9 @@ sim: $(CSRCS) $(VSRCS) #$(NVBOARD_ARCHIVE)
 	@echo "Write this Makefile by your self."
 	@rm -rf ./build/obj_dir
 	mkdir -p build
-	@$(VERILATOR)  $(VERILATOR_FLAGS) --Mdir ./obj_dir --exe $^
+	@$(VERILATOR)  $(VERILATOR_FLAGS) \
+	$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
+	--Mdir ./obj_dir --exe $^
 	mv obj_dir $(BUILD)
 
 wave:
