@@ -45,7 +45,7 @@ ARGS += -b
 run: sim
 	$(OBJ_DIR)/VysyxSoCFull $(ARGS)
 
-sim: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
+sim: $(CSRCS) $(VSRCS) #$(NVBOARD_ARCHIVE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
 	@rm -rf ./build/obj_dir
