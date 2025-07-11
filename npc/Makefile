@@ -38,7 +38,9 @@ include $(NVBOARD_HOME)/scripts/nvboard.mk
 INCFLAGS += $(addprefix -I, $(INC_PATH))
 INCFLAGS += $(addprefix -I, $(INC_UART_PATH))
 INCFLAGS += $(addprefix -I, $(INC_SPI_PATH))
-CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
+VERILATOR_FLAGS += -CFLAGS $(INC_PATH) $(INC_UART_PATH) $(INC_SPI_PATH)
+VERILATOR_FLAGS += -CFLAGS -g
+
 LOG ?= $(BUILD)/npc-log.txt
 #IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 IMG ?= ./../char-test/char-test.bin
@@ -56,7 +58,6 @@ $(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
 	@rm -rf $(OBJ_DIR)
 	$(VERILATOR) $(VERILATOR_CFLAGS) \
 		--top-module $(TOPNAME) $^ \
-		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
 all: default
