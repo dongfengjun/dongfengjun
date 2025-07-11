@@ -36,12 +36,14 @@ VM_MODPREFIX = VysyxSoCFull
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
 	-I./csrc/include \
+	-MMD \
 	-g \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
-	-L/usr/lib/llvm-18/lib  -fPIE -fsanitize=address -lLLVM-18 \
+	-lSDL2 -lSDL2_image -lSDL2_ttf -L/usr/lib/llvm-18/lib  -fPIE -fsanitize=address -lLLVM-18 \
 	-lreadline \
+	/home/xi/ysyx-workbench/nvboard/build/nvboard.a \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
