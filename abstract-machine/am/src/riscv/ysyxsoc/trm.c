@@ -109,14 +109,22 @@ void idcsrs_init(void) {
 	putch((mvendorid[0] >> 8) & 0xFF);
 	putch(mvendorid[0] & 0xFF);
 	volatile int32_t *marchid = (int32_t *)(IDCSR_BASE + 0x4);
-  putch(((marchid[0] >> 24) & 0xFF) / 10 + 48);
-	putch(((marchid[0] >> 24) & 0xFF) % 10 + 48);
-  putch(((marchid[0] >> 16) & 0xFF) / 10 + 48);
-	putch(((marchid[0] >> 16) & 0xFF) % 10 + 48);
-  putch(((marchid[0] >> 8) & 0xFF) / 10 + 48);
-	putch(((marchid[0] >> 8) & 0xFF) % 10 + 48);
-  putch((marchid[0] & 0xFF) / 10 + 48);
-	putch((marchid[0] & 0xFF) % 10 + 48);
+  char a = ((marchid[0] >> 24) & 0xFF) / 10;
+	char b = ((marchid[0] >> 24) & 0xFF) % 10;
+  char c = ((marchid[0] >> 16) & 0xFF) / 10;
+	char d = ((marchid[0] >> 16) & 0xFF) % 10;
+  char e = ((marchid[0] >> 8) & 0xFF) / 10;
+	char f = ((marchid[0] >> 8) & 0xFF) % 10;
+  char g = (marchid[0] & 0xFF) / 10;
+	char h = (marchid[0] & 0xFF) % 10;
+	putch(a);
+	putch(b);
+	putch(c);
+  putch(d); 
+	putch(e);
+  putch(f);
+	putch(g);
+  putch(h);
 }
 
 //am flash_read
