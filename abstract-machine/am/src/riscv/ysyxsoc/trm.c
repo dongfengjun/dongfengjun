@@ -103,12 +103,12 @@ void uart_init(void) {
 
 #define IDCSR_BASE 0x01000000
 void idcsrs_init(void) {
-	uint32_t *mvendorid = (uint32_t *)(IDCSR_BASE);
+	volatile uint32_t *mvendorid = (uint32_t *)(IDCSR_BASE);
 	putch((mvendorid[0] >> 24) & 0xFF);
 	putch((mvendorid[0] >> 16) & 0xFF);
 	putch((mvendorid[0] >> 8) & 0xFF);
 	putch(mvendorid[0] & 0xFF);
-	uint32_t *marchid = (uint32_t *)(IDCSR_BASE + 0x4);
+	volatile uint32_t *marchid = (uint32_t *)(IDCSR_BASE + 0x4);
   putch((marchid[0] >> 24) & 0xFF);
   putch((marchid[0] >> 16) & 0xFF);
   putch((marchid[0] >> 8) & 0xFF);
