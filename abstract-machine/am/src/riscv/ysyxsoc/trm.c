@@ -104,12 +104,9 @@ void uart_init(void) {
 #define IDCSR_BASE 0x01000000
 void idcsrs_init(void) {
 	volatile uint32_t *mvendorid = (uint32_t *)(IDCSR_BASE);
-	putch((mvendorid[0] >> 24) & 0xFF);
-	putch((mvendorid[0] >> 16) & 0xFF);
-	putch((mvendorid[0] >> 8) & 0xFF);
-	putch(mvendorid[0] & 0xFF);
+	printf("%s", mvendorid[0]);
 	volatile uint32_t *marchid = (uint32_t *)(IDCSR_BASE + 0x4);
-	printf("%d",marchid[0]);
+	printf("%d", marchid[0]);
 }
 
 //am flash_read
