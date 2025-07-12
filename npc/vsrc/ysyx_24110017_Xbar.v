@@ -347,10 +347,9 @@ assign X_AXI_RLAST = (sel_clint) ? C_AXI_RLAST : io_master_rlast;
 /***IDCSR***/
 localparam MVENDORID_ADDR = 32'h01000000;
 localparam MARCHID_ADDR = 32'h01000004;
-wire sel_mvendorid,sel_marchid;
-assign sel_mvendorid = (X_AXI_ARADDR == MVENDORID_ADDR);
-assign sel_marchid = (X_AXI_ARADDR == MARCHID_ADDR);
-assign sel_id = sel_mvendord || sel_marchid;
+wire sel_mvendorid = (X_AXI_ARADDR == MVENDORID_ADDR);
+wire sel_marchid = (X_AXI_ARADDR == MARCHID_ADDR);
+wire sel_id = sel_mvendorid || sel_marchid;
 
 wire [31:0]I_AXI_AWADDR,I_AXI_WDATA,I_AXI_ARADDR,I_AXI_RDATA;
 wire [3:0]I_AXI_WSTRB;
