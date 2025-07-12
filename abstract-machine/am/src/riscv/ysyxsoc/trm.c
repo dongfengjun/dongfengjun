@@ -103,18 +103,16 @@ void uart_init(void) {
 
 #define IDCSR_BASE 0x01000000
 void idcsrs_init(void) {
-  uint32_t mvendorid = inw(IDCSR_BASE);
-	uint8_t *bytes0 = (uint8_t *)&mvendorid;
-	putch(bytes0[3]);
-	putch(bytes0[2]);
-	putch(bytes0[1]);
-	putch(bytes0[0]);
-  uint32_t marchid = inw(UART_BASE + 0X4);
-	uint8_t *bytes1 = (uint8_t *)&marchid;
-  putch(bytes1[3]);
-  putch(bytes1[2]);
-  putch(bytes1[1]);
-  putch(bytes1[0]);
+	uint8_t *mvendorid = (uint8_t *)(IDCSR_BASE);
+	putch(mvendorid[3]);
+	putch(mvendorid[2]);
+	putch(mvendorid[1]);
+	putch(mvendorid[0]);
+	uint8_t *marchid = (uint8_t *)(IDCSR_BASE);
+  putch(marchid[3]);
+  putch(marchid[2]);
+  putch(marchid[1]);
+  putch(marchid[0]);
 }
 
 //am flash_read
