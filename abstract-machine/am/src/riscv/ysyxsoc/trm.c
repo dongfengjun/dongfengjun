@@ -103,8 +103,8 @@ void uart_init(void) {
 
 #define IDCSR_BASE 0x01000000
 void idcsrs_init(void) {
-	volatile uint32_t *mvendorid = (uint32_t *)(IDCSR_BASE);
-	printf("%s", mvendorid[0]);
+	volatile char *mvendorid = (char *)(IDCSR_BASE);
+	printf("%c%c%c%c",mvendorid[3],mvendorid[2],mvendorid[1],mvendorid[0]);
 	volatile uint32_t *marchid = (uint32_t *)(IDCSR_BASE + 0x4);
 	printf("%d", marchid[0]);
 }
