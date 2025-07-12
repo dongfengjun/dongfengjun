@@ -14,6 +14,7 @@ SECTIONS {
 		*(entry)
 		*(.text._trm_init)
 		*(.text.uart_init)
+		*(.text.idcsrs_init)
 		*(.text.bootloader_fsbl)
 	} > flash AT > flash : entry
 	
