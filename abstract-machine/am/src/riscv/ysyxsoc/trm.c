@@ -109,7 +109,7 @@ void idcsrs_init(void) {
 	putch((mvendorid[0] >> 8) & 0xFF);
 	putch(mvendorid[0] & 0xFF);
 	volatile uint32_t *marchid = (uint32_t *)(IDCSR_BASE + 0x4);
-  int data = (int)marchid;
+  int data = marchid[0];
 	char str[8];
 	for(int i = 0; i < 8; i ++) {
 		str[7-i] = data % 10 + '0';
