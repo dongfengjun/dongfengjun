@@ -101,6 +101,14 @@ void uart_init(void) {
 	outb(UART_BASE + 0X1, 0x11);
 }
 
+#define IDCSR_BASE 0x01000000
+void idcsrs_init(void) {
+  uint32_t mvendorid = inw(IDCSR_BASE);
+  uint32_t marchid = inw(UART_BASE + 0X4);
+	outw(UART_BASE,mvendorid);
+  outw(UART_BASE,marchid);
+}
+
 //am flash_read
 #define SPI_BASE 0X10001000
 uint32_t flash_read(uint32_t addr) {
@@ -124,6 +132,7 @@ uint32_t flash_read(uint32_t addr) {
 
 void _trm_init() {
 	uart_init(); //uart16500 init + difftest_skip_ref
+	idcsrs_init();
 	bootloader_fsbl(); //mrom->sram
 	int ret = main(mainargs);
 	halt(ret);
