@@ -109,10 +109,7 @@ void idcsrs_init(void) {
 	putch((mvendorid[0] >> 8) & 0xFF);
 	putch(mvendorid[0] & 0xFF);
 	volatile uint32_t *marchid = (uint32_t *)(IDCSR_BASE + 0x4);
-	for(int i = 0; i < 8; i ++) {
-		putch(marchid[0] % 10 + '0');
-		marchid[0] = marchid[0] / 10;
-	}
+	printf("%d",marchid[0]);
 }
 
 //am flash_read
@@ -138,8 +135,8 @@ uint32_t flash_read(uint32_t addr) {
 
 void _trm_init() {
 	uart_init(); //uart16500 init + difftest_skip_ref
-	idcsrs_init();
 	bootloader_fsbl(); //mrom->sram
+	idcsrs_init();
 	int ret = main(mainargs);
 	halt(ret);
 }
