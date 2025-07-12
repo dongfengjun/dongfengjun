@@ -110,6 +110,11 @@ void idcsrs_init(void) {
 	putch(bytes[2]);
 	putch(bytes[3]);
   uint32_t marchid = inw(UART_BASE + 0X4);
+	*bytes = (uint8_t *)&marchid;
+  putch(bytes[0]);
+  putch(bytes[1]);
+  putch(bytes[2]);
+  putch(bytes[3]);
 }
 
 //am flash_read
