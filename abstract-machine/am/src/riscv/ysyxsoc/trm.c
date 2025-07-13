@@ -109,7 +109,7 @@ void idcsrs_init(void) {
 	putch((mvendorid[0] >> 8) & 0xFF);
 	putch(mvendorid[0] & 0xFF);
 	volatile uint32_t *marchid = (uint32_t *)(IDCSR_BASE + 0x4);
-	printf("%d",marchid[0]);
+	printf("%d\n",marchid[0]);
 }
 
 //am flash_read
