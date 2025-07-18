@@ -3228,9 +3228,6 @@ VL_ATTR_COLD void VysyxSoCFull___024root___dump_triggers__act(VysyxSoCFull___024
     if (vlSelf->__VactTriggered.at(0xbU)) {
         VL_DBG_MSGF("         'act' region trigger index 11 is active: @(negedge clock or posedge ysyxSoCFull.sdram1.reset)\n");
     }
-    if (vlSelf->__VactTriggered.at(0xcU)) {
-        VL_DBG_MSGF("         'act' region trigger index 12 is active: @(posedge clock or negedge externalPins_ps2_clk or posedge reset)\n");
-    }
 }
 #endif  // VL_DEBUG
 
@@ -3278,9 +3275,6 @@ VL_ATTR_COLD void VysyxSoCFull___024root___dump_triggers__nba(VysyxSoCFull___024
     }
     if (vlSelf->__VnbaTriggered.at(0xbU)) {
         VL_DBG_MSGF("         'nba' region trigger index 11 is active: @(negedge clock or posedge ysyxSoCFull.sdram1.reset)\n");
-    }
-    if (vlSelf->__VnbaTriggered.at(0xcU)) {
-        VL_DBG_MSGF("         'nba' region trigger index 12 is active: @(posedge clock or negedge externalPins_ps2_clk or posedge reset)\n");
     }
 }
 #endif  // VL_DEBUG
@@ -4354,7 +4348,6 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->__Vdly__ysyxSoCFull__DOT__asic__DOT__lkeyboard__DOT__mps2__DOT__state = VL_RAND_RESET_I(1);
     vlSelf->__Vdly__ysyxSoCFull__DOT___asic_spi_mosi = VL_RAND_RESET_I(1);
     vlSelf->__Vdly__ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__refresh_timer_q = VL_RAND_RESET_I(17);
-    vlSelf->__Vdly__ysyxSoCFull__DOT__asic__DOT__lkeyboard__DOT__mps2__DOT__buffer = VL_RAND_RESET_I(8);
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__state = VL_RAND_RESET_I(3);
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__counter = VL_RAND_RESET_I(8);
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd = VL_RAND_RESET_I(8);

@@ -164,12 +164,6 @@ void VysyxSoCFull___024root___eval_triggers__act(VysyxSoCFull___024root* vlSelf)
                                          & (IData)(vlSelf->__Vtrigrprev__TOP__clock)) 
                                         | ((IData)(vlSelf->ysyxSoCFull__DOT__sdram1__DOT__reset) 
                                            & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__sdram1__DOT__reset))));
-    vlSelf->__VactTriggered.at(0xcU) = ((((IData)(vlSelf->clock) 
-                                          & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clock))) 
-                                         | ((~ (IData)(vlSelf->externalPins_ps2_clk)) 
-                                            & (IData)(vlSelf->__Vtrigrprev__TOP__externalPins_ps2_clk))) 
-                                        | ((IData)(vlSelf->reset) 
-                                           & (~ (IData)(vlSelf->__Vtrigrprev__TOP__reset))));
     vlSelf->__Vtrigrprev__TOP__clock = vlSelf->clock;
     vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset 
         = vlSelf->ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset;
@@ -4280,10 +4274,10 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__14(VysyxSoCFull___
 
 extern const VlUnpacked<CData/*1:0*/, 128> VysyxSoCFull__ConstPool__TABLE_h09dcacfa_0;
 
-VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__20(VysyxSoCFull___024root* vlSelf) {
+VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__19(VysyxSoCFull___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     VysyxSoCFull__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root___nba_sequent__TOP__20\n"); );
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root___nba_sequent__TOP__19\n"); );
     // Body
     vlSelf->ysyxSoCFull__DOT__asic__DOT__axi4frag__DOT__deq_q_1__DOT__full 
         = vlSelf->__Vdly__ysyxSoCFull__DOT__asic__DOT__axi4frag__DOT__deq_q_1__DOT__full;
