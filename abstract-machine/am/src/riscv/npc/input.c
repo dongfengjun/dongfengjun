@@ -1,4 +1,5 @@
 #include <am.h>
+#include "../riscv.h"
 
 #define KBD_ADDR 0x10011000
 #define KEYDOWN_MASK 0x80
