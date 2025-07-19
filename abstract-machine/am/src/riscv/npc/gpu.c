@@ -1,5 +1,5 @@
 #include <am.h>
-#include <nemu.h>
+#include "../riscv.h"
 
 #define VGACTL_ADDR 0x21000000
 #define SIZE 0x200000
