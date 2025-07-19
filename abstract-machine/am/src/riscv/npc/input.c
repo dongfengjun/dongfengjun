@@ -5,7 +5,7 @@
 #define KEYDOWN_MASK 0x8000
 void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
   uint32_t k = inw(KBD_ADDR);
-  if(k & KEYDOWN_MASK) kbd->keydown = true;
-  else kbd->keydown = false;
+  if(k & KEYDOWN_MASK) kbd->keydown = false;
+  else kbd->keydown = true;
   kbd->keycode = k & ~KEYDOWN_MASK;
 }
