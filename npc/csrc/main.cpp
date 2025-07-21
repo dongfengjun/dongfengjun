@@ -317,7 +317,7 @@ void cpu_exec(int n) {
 void nvboard_bind_all_pins(VysyxSoCFull* top);
 int main(int argc, char *argv[]) {
 /***inst***/
-	Verilated::commandArgs(argc, argv);
+	Verilated::commandArgs(argc,argv);
 	contextp = new VerilatedContext;  //verilator指针
   top = new VysyxSoCFull{contextp};  //实例化top块
 	tfp= new VerilatedVcdC;   //初始化VCD对象指针
