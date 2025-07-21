@@ -44,6 +44,7 @@ ARGS += --img=$(IMG)
 ARGS += --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
 ARGS += -b
+ARGS += +tilelink_timeout=0
 
 run: sim
 	$(OBJ_DIR)/VysyxSoCFull $(ARGS)
