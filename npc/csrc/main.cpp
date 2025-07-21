@@ -290,7 +290,7 @@ void cpu_exec(int n) {
 	uint64_t timer_start = get_time();	
 	while(RUNNING && n != 0) {
 		single_cycle();
-		nvboard_update();
+//		nvboard_update();
 		cpu.pc = dpic_display(1);
 		isa_gpr_push();
 		g_nr_guest_inst++;
@@ -314,7 +314,7 @@ void cpu_exec(int n) {
 #endif
 }
 
-void nvboard_bind_all_pins(VysyxSoCFull* top);
+//void nvboard_bind_all_pins(VysyxSoCFull* top);
 int main(int argc, char *argv[]) {
 /***inst***/
 	Verilated::commandArgs(argc,argv);
@@ -325,8 +325,8 @@ int main(int argc, char *argv[]) {
   top->trace(tfp,0);
   tfp->open("build/wave.vcd");//设置输出的文件wave.vcd
 	RUNNING = true;
-	nvboard_bind_all_pins(top); //引脚绑定
-	nvboard_init(); //初始化NVBoard
+//	nvboard_bind_all_pins(top); //引脚绑定
+//	nvboard_init(); //初始化NVBoard
 /***code***/
 	init_monitor(argc, argv);//load inst
 	reset(50);
@@ -340,7 +340,7 @@ int main(int argc, char *argv[]) {
 /***close**/
 	statistic();
 	tfp->close();
-	nvboard_quit();
+//	nvboard_quit();
 	delete contextp;
 	return 0;
 }
