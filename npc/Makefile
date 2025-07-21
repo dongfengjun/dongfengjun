@@ -10,13 +10,13 @@ INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
 INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
 
 #nvboard
-#NXDC_FILES = ./constr/top.nxdc
-#INC_NVBOARD_PATH = ./../nvboard/usr/include
-#SRC_AUTO_BIND = $(BUILD)/auto_bind.cpp
-#$(SRC_AUTO_BIND): $(NXDC_FILES)
-#	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
-#CSRCS += $(SRC_AUTO_BIND)
-#include $(NVBOARD_HOME)/scripts/nvboard.mk
+NXDC_FILES = ./constr/top.nxdc
+INC_NVBOARD_PATH = ./../nvboard/usr/include
+SRC_AUTO_BIND = $(BUILD)/auto_bind.cpp
+$(SRC_AUTO_BIND): $(NXDC_FILES)
+	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
+CSRCS += $(SRC_AUTO_BIND)
+include $(NVBOARD_HOME)/scripts/nvboard.mk
 
 LDFLAGS += $(shell llvm-config --ldflags) -fPIE
 LIBS += $(shell llvm-config --libs)
@@ -25,9 +25,9 @@ LDLIBS := -lasan $(LDLIBS)
 
 VERILATOR = verilator
 VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build
-VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH) -I$(INC_COM_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
+VERILATOR_FLAGS += -CFLAGS -I$(INC_PATHa)	-I$(INC_COM_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
 VERILATOR_FLAGS += -CFLAGS $(CXXFLAGS)
-#VERILATOR_FLAGS += -CFLAGS -g
+VERILATOR_FLAGS += -CFLAGS -g
 VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
 VERILATOR_FLAGS += -LDFLAGS -lreadline
 VERILATOR_FLAGS += --top-module $(TOP)
