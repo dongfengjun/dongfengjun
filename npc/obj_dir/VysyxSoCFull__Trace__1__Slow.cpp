@@ -11,6 +11,16 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__2(VysyxSoCFull___
     // Init
     const int c = vlSymsp->__Vm_baseCode;
     // Body
+    tracep->declBit(c+8324,"sync_2", false,-1);
+    tracep->pushNamePrefix("unnamedblk1 ");
+    tracep->popNamePrefix(4);
+    tracep->pushNamePrefix("unnamedblk1 ");
+    tracep->popNamePrefix(1);
+    tracep->pushNamePrefix("widx_widx_gray ");
+    tracep->declBit(c+10437,"clock", false,-1);
+    tracep->declBit(c+10438,"reset", false,-1);
+    tracep->declBus(c+8549,"io_d", false,-1, 3,0);
+    tracep->declBus(c+8325,"io_q", false,-1, 3,0);
     tracep->pushNamePrefix("output_chain ");
     tracep->declBit(c+10437,"clock", false,-1);
     tracep->declBit(c+10438,"reset", false,-1);
@@ -86,6 +96,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__2(VysyxSoCFull___
     tracep->declBit(c+9472,"valid", false,-1);
     tracep->declBit(c+8339,"valid_reg", false,-1);
     tracep->declBus(c+9144,"ridx_gray", false,-1, 3,0);
+    tracep->declBit(c+10895,"b0", false,-1);
     tracep->pushNamePrefix("io_deq_bits_deq_bits_reg ");
     tracep->declBit(c+10437,"clock", false,-1);
     tracep->declBus(c+7726,"io_d", false,-1, 31,0);
@@ -492,7 +503,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__2(VysyxSoCFull___
     tracep->declBit(c+10512,"io_enq_valid", false,-1);
     tracep->declBus(c+10537,"io_enq_bits_data", false,-1, 31,0);
     tracep->declBit(c+10512,"io_enq_bits_last", false,-1);
-    tracep->declBus(c+10540,"io_enq_bits_beats", false,-1, 6,0);
+    tracep->declBus(c+10545,"io_enq_bits_beats", false,-1, 6,0);
     tracep->declBit(c+6189,"io_deq_ready", false,-1);
     tracep->declBit(c+6307,"io_deq_valid", false,-1);
     tracep->declBus(c+6247,"io_deq_bits_data", false,-1, 31,0);
@@ -517,7 +528,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__2(VysyxSoCFull___
     tracep->declBit(c+10512,"io_enq_valid", false,-1);
     tracep->declBus(c+10538,"io_enq_bits_data", false,-1, 31,0);
     tracep->declBit(c+10512,"io_enq_bits_last", false,-1);
-    tracep->declBus(c+10540,"io_enq_bits_beats", false,-1, 6,0);
+    tracep->declBus(c+10545,"io_enq_bits_beats", false,-1, 6,0);
     tracep->declBit(c+6193,"io_deq_ready", false,-1);
     tracep->declBit(c+6313,"io_deq_valid", false,-1);
     tracep->declBus(c+6261,"io_deq_bits_data", false,-1, 31,0);
@@ -567,7 +578,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__2(VysyxSoCFull___
     tracep->declBit(c+10512,"io_enq_valid", false,-1);
     tracep->declBus(c+7809,"io_enq_bits_data", false,-1, 31,0);
     tracep->declBit(c+10518,"io_enq_bits_last", false,-1);
-    tracep->declBus(c+10541,"io_enq_bits_beats", false,-1, 6,0);
+    tracep->declBus(c+10546,"io_enq_bits_beats", false,-1, 6,0);
     tracep->declBit(c+6201,"io_deq_ready", false,-1);
     tracep->declBit(c+6324,"io_deq_valid", false,-1);
     tracep->declBus(c+6289,"io_deq_bits_data", false,-1, 31,0);
@@ -723,7 +734,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__2(VysyxSoCFull___
     tracep->declBit(c+10518,"io_enq_valid", false,-1);
     tracep->declBus(c+6343,"io_enq_bits_data", false,-1, 31,0);
     tracep->declBit(c+10518,"io_enq_bits_last", false,-1);
-    tracep->declBus(c+10541,"io_enq_bits_beats", false,-1, 6,0);
+    tracep->declBus(c+10546,"io_enq_bits_beats", false,-1, 6,0);
     tracep->declBit(c+6344,"io_deq_ready", false,-1);
     tracep->declBit(c+6345,"io_deq_valid", false,-1);
     tracep->declBus(c+6346,"io_deq_bits_data", false,-1, 31,0);
@@ -1161,7 +1172,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__2(VysyxSoCFull___
     tracep->declBit(c+9709,"io_in_d_ready", false,-1);
     tracep->declBit(c+6529,"io_in_d_valid", false,-1);
     tracep->declBus(c+6530,"io_in_d_bits_opcode", false,-1, 2,0);
-    tracep->declBus(c+10542,"io_in_d_bits_param", false,-1, 1,0);
+    tracep->declBus(c+10547,"io_in_d_bits_param", false,-1, 1,0);
     tracep->declBus(c+6531,"io_in_d_bits_size", false,-1, 2,0);
     tracep->declBus(c+6532,"io_in_d_bits_source", false,-1, 3,0);
     tracep->declBit(c+6533,"io_in_d_bits_denied", false,-1);
@@ -2191,7 +2202,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__2(VysyxSoCFull___
     tracep->declBit(c+3656,"auto_out_bready", false,-1);
     tracep->declBit(c+3657,"auto_out_bvalid", false,-1);
     tracep->declBus(c+4073,"auto_out_bid", false,-1, 4,0);
-    tracep->declBus(c+10542,"auto_out_bresp", false,-1, 1,0);
+    tracep->declBus(c+10547,"auto_out_bresp", false,-1, 1,0);
     tracep->declBus(c+3685,"auto_out_becho_tl_state_size", false,-1, 3,0);
     tracep->declBus(c+3686,"auto_out_becho_tl_state_source", false,-1, 6,0);
     tracep->declBit(c+7790,"auto_out_arready", false,-1);
@@ -2690,7 +2701,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__2(VysyxSoCFull___
     tracep->declBit(c+9709,"auto_anon_out_1_d_ready", false,-1);
     tracep->declBit(c+6529,"auto_anon_out_1_d_valid", false,-1);
     tracep->declBus(c+6530,"auto_anon_out_1_d_bits_opcode", false,-1, 2,0);
-    tracep->declBus(c+10542,"auto_anon_out_1_d_bits_param", false,-1, 1,0);
+    tracep->declBus(c+10547,"auto_anon_out_1_d_bits_param", false,-1, 1,0);
     tracep->declBus(c+6531,"auto_anon_out_1_d_bits_size", false,-1, 2,0);
     tracep->declBus(c+6532,"auto_anon_out_1_d_bits_source", false,-1, 3,0);
     tracep->declBit(c+6533,"auto_anon_out_1_d_bits_denied", false,-1);
@@ -3431,7 +3442,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__2(VysyxSoCFull___
     tracep->declBus(c+8698,"state", false,-1, 2,0);
     tracep->declBus(c+8699,"counter", false,-1, 7,0);
     tracep->declBus(c+8700,"mode_reg", false,-1, 12,0);
-    tracep->declBus(c+10886,"addr_reg", false,-1, 14,0);
+    tracep->declBus(c+10896,"addr_reg", false,-1, 14,0);
     tracep->declBus(c+8701,"data_o_reg", false,-1, 15,0);
     tracep->declBus(c+8702,"data_i_reg", false,-1, 15,0);
     tracep->declBit(c+9174,"nop", false,-1);
@@ -3471,7 +3482,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__2(VysyxSoCFull___
     tracep->declBus(c+8716,"state", false,-1, 2,0);
     tracep->declBus(c+8717,"counter", false,-1, 7,0);
     tracep->declBus(c+8718,"mode_reg", false,-1, 12,0);
-    tracep->declBus(c+10887,"addr_reg", false,-1, 14,0);
+    tracep->declBus(c+10897,"addr_reg", false,-1, 14,0);
     tracep->declBus(c+8719,"data_o_reg", false,-1, 15,0);
     tracep->declBus(c+8720,"data_i_reg", false,-1, 15,0);
     tracep->declBit(c+9174,"nop", false,-1);
@@ -3511,7 +3522,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__2(VysyxSoCFull___
     tracep->declBus(c+8734,"state", false,-1, 2,0);
     tracep->declBus(c+8735,"counter", false,-1, 7,0);
     tracep->declBus(c+8736,"mode_reg", false,-1, 12,0);
-    tracep->declBus(c+10888,"addr_reg", false,-1, 14,0);
+    tracep->declBus(c+10898,"addr_reg", false,-1, 14,0);
     tracep->declBus(c+8737,"data_o_reg", false,-1, 15,0);
     tracep->declBus(c+8738,"data_i_reg", false,-1, 15,0);
     tracep->declBit(c+9174,"nop", false,-1);
@@ -3551,7 +3562,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__2(VysyxSoCFull___
     tracep->declBus(c+8752,"state", false,-1, 2,0);
     tracep->declBus(c+8753,"counter", false,-1, 7,0);
     tracep->declBus(c+8754,"mode_reg", false,-1, 12,0);
-    tracep->declBus(c+10889,"addr_reg", false,-1, 14,0);
+    tracep->declBus(c+10899,"addr_reg", false,-1, 14,0);
     tracep->declBus(c+8755,"data_o_reg", false,-1, 15,0);
     tracep->declBus(c+8756,"data_i_reg", false,-1, 15,0);
     tracep->declBit(c+9174,"nop", false,-1);
@@ -15253,4 +15264,43 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_full_sub_0(VysyxSoCFull___024roo
     bufp->fullBit(oldp+7969,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__io_deq_valid_0));
     bufp->fullCData(oldp+7970,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__ridx_ridx_bin),4);
     bufp->fullBit(oldp+7971,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__valid_reg));
+    bufp->fullBit(oldp+7972,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__source_valid__DOT__io_out_source_valid_0__DOT__output_chain__DOT__sync_0));
+    bufp->fullBit(oldp+7973,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__source_valid__DOT__io_out_source_valid_0__DOT__output_chain__DOT__sync_1));
+    bufp->fullBit(oldp+7974,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__source_valid__DOT__io_out_source_valid_0__DOT__output_chain__DOT__sync_2));
+    bufp->fullCData(oldp+7975,((((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_3__DOT__sync_0) 
+                                 << 3U) | (((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_2__DOT__sync_0) 
+                                            << 2U) 
+                                           | (((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_1__DOT__sync_0) 
+                                               << 1U) 
+                                              | (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain__DOT__sync_0))))),4);
+    bufp->fullBit(oldp+7976,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain__DOT__sync_0));
+    bufp->fullBit(oldp+7977,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain__DOT__sync_1));
+    bufp->fullBit(oldp+7978,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain__DOT__sync_2));
+    bufp->fullBit(oldp+7979,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_1__DOT__sync_0));
+    bufp->fullBit(oldp+7980,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_1__DOT__sync_1));
+    bufp->fullBit(oldp+7981,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_1__DOT__sync_2));
+    bufp->fullBit(oldp+7982,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_2__DOT__sync_0));
+    bufp->fullBit(oldp+7983,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_2__DOT__sync_1));
+    bufp->fullBit(oldp+7984,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_2__DOT__sync_2));
+    bufp->fullBit(oldp+7985,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_3__DOT__sync_0));
+    bufp->fullBit(oldp+7986,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_3__DOT__sync_1));
+    bufp->fullBit(oldp+7987,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceD_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_3__DOT__sync_2));
+    bufp->fullCData(oldp+7988,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__ridx_ridx_bin),4);
+    bufp->fullBit(oldp+7989,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__valid_reg));
+    bufp->fullBit(oldp+7990,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__source_valid__DOT__io_out_source_valid_0__DOT__output_chain__DOT__sync_0));
+    bufp->fullBit(oldp+7991,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__source_valid__DOT__io_out_source_valid_0__DOT__output_chain__DOT__sync_1));
+    bufp->fullBit(oldp+7992,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__source_valid__DOT__io_out_source_valid_0__DOT__output_chain__DOT__sync_2));
+    bufp->fullCData(oldp+7993,((((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_3__DOT__sync_0) 
+                                 << 3U) | (((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_2__DOT__sync_0) 
+                                            << 2U) 
+                                           | (((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_1__DOT__sync_0) 
+                                               << 1U) 
+                                              | (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__widx_widx_gray__DOT__output_chain__DOT__sync_0))))),4);
+    bufp->fullBit(oldp+7994,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__widx_widx_gray__DOT__output_chain__DOT__sync_0));
+    bufp->fullBit(oldp+7995,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__widx_widx_gray__DOT__output_chain__DOT__sync_1));
+    bufp->fullBit(oldp+7996,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__widx_widx_gray__DOT__output_chain__DOT__sync_2));
+    bufp->fullBit(oldp+7997,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_1__DOT__sync_0));
+    bufp->fullBit(oldp+7998,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_1__DOT__sync_1));
+    bufp->fullBit(oldp+7999,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_1__DOT__sync_2));
+    bufp->fullBit(oldp+8000,(vlSelf->ysyxSoCFull__DOT__asic__DOT__chipMaster__DOT__chiplink__DOT__sourceE_io_q_sink__DOT__widx_widx_gray__DOT__output_chain_2__DOT__sync_0));
 }
