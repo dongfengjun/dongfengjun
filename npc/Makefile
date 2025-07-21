@@ -46,7 +46,7 @@ ARGS += --diff=$(REF_SO)
 ARGS += -b
 
 run: sim
-	$(OBJ_DIR)/VysyxSoCFull +tilelink_timeout=0 $(ARGS)
+	$(OBJ_DIR)/VysyxSoCFull $(ARGS)
 
 sim: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
