@@ -4,10 +4,19 @@ TOP = ysyxSoCFull
 VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
 VSRCS += $(shell find ./vsrc -name "*.v")
 VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
-CSRCS = $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
-INC_PATH = ./csrc/include
+CSRCS += $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+INC_COM_PATH = ./csrc/include
 INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
 INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
+
+#nvboard
+NXDC_FILES = ./constr/top.nxdc
+INC_NVBOARD_PATH = ./../nvboard/usr/include
+SRC_AUTO_BIND = $(BUILD)/auto_bind.cpp
+$(SRC_AUTO_BIND): $(NXDC_FILES)
+	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
+CSRCS += $(SRC_AUTO_BIND)
+include $(NVBOARD_HOME)/scripts/nvboard.mk
 
 LDFLAGS += $(shell llvm-config --ldflags) -fPIE
 LIBS += $(shell llvm-config --libs)
@@ -16,7 +25,8 @@ LDLIBS := -lasan $(LDLIBS)
 
 VERILATOR = verilator
 VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build
-VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
+VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH)	-I$(INC_COM_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
+VERILATOR_FLAGS += -CFLAGS $(CXXFLAGS)
 VERILATOR_FLAGS += -CFLAGS -g
 VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
 VERILATOR_FLAGS += -LDFLAGS -lreadline
@@ -38,7 +48,7 @@ ARGS += -b
 run: sim
 	$(OBJ_DIR)/VysyxSoCFull $(ARGS)
 
-sim: $(CSRCS) $(VSRCS)
+sim: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
 	@rm -rf ./build/obj_dir

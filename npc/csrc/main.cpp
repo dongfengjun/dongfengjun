@@ -8,6 +8,7 @@
 #include "svdpi.h"
 #include "VysyxSoCFull__Dpi.h"
 #include "./include/common.h"
+#include "nvboard.h"
 
 /***ysyxSoC***/
 extern "C" void flash_read(int32_t addr, int32_t *data) {
@@ -289,6 +290,7 @@ void cpu_exec(int n) {
 	uint64_t timer_start = get_time();	
 	while(RUNNING && n != 0) {
 		single_cycle();
+		nvboard_update();
 		cpu.pc = dpic_display(1);
 		isa_gpr_push();
 		g_nr_guest_inst++;
@@ -312,19 +314,7 @@ void cpu_exec(int n) {
 #endif
 }
 
-/***
-extern char _data_lma_start;
-extern char _data_vma_start;
-extern char _data_vma_end;
-extern char _bss_start;
-extern char _bss_end;
-void bootloader(void) {
-	size_t data_len = _data_vma_end - _data_lma_start;
-	memcpy(&_data_vma_start, &_data_lma_start, data_len);
-	size_t bss_len = _bss_end - _bss_start;
-	memset(&_bss_start, 0, bss_len);
-}
-***/
+void nvboard_bind_all_pins(VysyxSoCFull* top);
 int main(int argc, char *argv[]) {
 /***inst***/
 	Verilated::commandArgs(argc,argv);
@@ -335,6 +325,8 @@ int main(int argc, char *argv[]) {
   top->trace(tfp,0);
   tfp->open("build/wave.vcd");//设置输出的文件wave.vcd
 	RUNNING = true;
+	nvboard_bind_all_pins(top); //引脚绑定
+	nvboard_init(); //初始化NVBoard
 /***code***/
 	init_monitor(argc, argv);//load inst
 	reset(50);
@@ -348,6 +340,7 @@ int main(int argc, char *argv[]) {
 /***close**/
 	statistic();
 	tfp->close();
+	nvboard_quit();
 	delete contextp;
 	return 0;
 }
