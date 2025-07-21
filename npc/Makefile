@@ -46,14 +46,14 @@ ARGS += --diff=$(REF_SO)
 ARGS += -b
 
 run: sim
-	$(OBJ_DIR)/VysyxSoCFull $(ARGS)
+	$(OBJ_DIR)/VysyxSoCFull +tilelink_timeout=0 $(ARGS)
 
 sim: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
 	@rm -rf ./build/obj_dir
 	mkdir -p build
-	@$(VERILATOR)  $(VERILATOR_FLAGS) --Mdir ./obj_dir +tilelink_timeout=0 --exe $^
+	@$(VERILATOR)  $(VERILATOR_FLAGS) --Mdir ./obj_dir --exe $^
 	mv obj_dir $(BUILD)
 
 wave:
