@@ -57,6 +57,8 @@ word_t paddr_read(paddr_t addr, int len) {
 	if (addr - 0x80000000 < 0x4000000) return psram_read(addr, len);//ysyxsoc-psram
 	if (addr - 0xa0000000 < 0x20000000) return sdram_read(addr, len);//ysyxsoc-sdram
 	if (addr - 0x10000000 < 0x1000) return 0x61; //ysyxsoc-uart
+	if (addr == 0x01000000) addr = 0xa0000048; //ysyxsoc-clint
+	if (addr == 0x01000004) addr = 0xa000004c;
 #endif
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
 	IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
