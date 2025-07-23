@@ -20,7 +20,7 @@ static const char mainargs[] = MAINARGS;
 
 #define UART_BASE 0X10000000
 void putch(char ch) {
-	//while(!(inb(UART_BASE + 0X5) & 0x20));
+	while(!(inb(UART_BASE + 0X5) & 0x20));
 	outl(UART_BASE, ch);
 }
 
@@ -136,7 +136,9 @@ uint32_t flash_read(uint32_t addr) {
 void _trm_init() {
 	uart_init(); //uart16500 init + difftest_skip_ref
 	bootloader_fsbl(); //mrom->sram
-//	idcsrs_init();
+#ifndef CONFIG_DIFFTEST
+	idcsrs_init();
+#endif
 	int ret = main(mainargs);
 	halt(ret);
 }
