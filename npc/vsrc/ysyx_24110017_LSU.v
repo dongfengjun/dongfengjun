@@ -221,7 +221,7 @@ always @(posedge clk or posedge rst) begin
 	        if(M_AXI_RVALID && M_AXI_RREADY) begin
             axi_rready <= 0;
             state <= DONE;
-						if(M_AXI_ARADDR - 32'h10000000 < 32'h1000) begin
+						if((M_AXI_ARADDR - 32'h10000000 < 32'h1000) || (M_AXI_ARADDR == 32'h02000000) || (M_AXI_ARADDR == 32'h02000004)) begin
 							diff_skip_ref();
 						end
 						LSU_DONE <= 1'b1;

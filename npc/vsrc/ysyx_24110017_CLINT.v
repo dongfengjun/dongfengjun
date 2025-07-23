@@ -99,7 +99,7 @@ always @(posedge clk) begin
 			axi_araddr <= 32'b0;
 			axi_rvalid <= 0;
 			axi_rdata <= 32'h0;
-			diff_skip_ref();
+//			diff_skip_ref();
 		end
 		if(C_AXI_AWVALID && !C_AXI_AWREADY) begin
 			axi_awready <= 1; //判断条件
