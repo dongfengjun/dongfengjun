@@ -84,6 +84,8 @@ wire [7:0]rand_delay;
 reg [7:0]delay_counter,avalid_delay_counter,wvalid_delay_counter;
 LFSR_ysyx_24110017 LFSR_ysyx_20110017(clk,rst,rand_delay);
 ***END***/
+import "DPI-C" function void diff_skip_ref();
+
 wire [31:0]M_AXI_AWADDR,M_AXI_WDATA,M_AXI_ARADDR,M_AXI_RDATA;             
 wire [3:0]M_AXI_WSTRB;
 wire [7:0]M_AXI_AWLEN,M_AXI_ARLEN;
