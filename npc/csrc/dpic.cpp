@@ -18,14 +18,14 @@ int pmem_read(int raddr) {
 	raddr = raddr & ~0x3u;
 	uint32_t result;
 #ifdef CONFIG_DEVICE
-	if (raddr == 0x01000004) {
+	if (raddr == 0xa000004c) {
 		#ifdef CONFIG_DIFFTEST
 			difftest_skip_ref();
 		#endif
 		us = get_time();
 		result = us >> 32;
 	}
-	else if(raddr == 0x01000000) {
+	else if(raddr == 0xa0000048) {
 		#ifdef CONFIG_DIFFTEST
 			difftest_skip_ref();
 		#endif

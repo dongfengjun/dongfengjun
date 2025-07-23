@@ -220,6 +220,11 @@ always @(posedge clk or posedge rst) begin
             axi_rready <= 0;
             state <= DONE;
 						LSU_DONE <= 1'b1;
+`ifdef CONFIG_DIFFTEST
+						if(M_AXI_ARADDR = 32'h01000000 || M_AXI_ARADDR = 32'h01000004) begin
+							diff_skip_ref();
+						end
+`endif
           end
         end
 				WRITE: begin
