@@ -84,7 +84,6 @@ wire [7:0]rand_delay;
 reg [7:0]delay_counter,avalid_delay_counter,wvalid_delay_counter;
 LFSR_ysyx_24110017 LFSR_ysyx_20110017(clk,rst,rand_delay);
 ***END***/
-import "DPI-C" function void diff_skip_ref();
 
 wire [31:0]M_AXI_AWADDR,M_AXI_WDATA,M_AXI_ARADDR,M_AXI_RDATA;             
 wire [3:0]M_AXI_WSTRB;
@@ -222,9 +221,6 @@ always @(posedge clk or posedge rst) begin
             axi_rready <= 0;
             state <= DONE;
 						LSU_DONE <= 1'b1;
-						if(M_AXI_ARADDR == 32'h01000000 || M_AXI_ARADDR == 32'h01000004) begin
-							diff_skip_ref();
-						end
           end
         end
 				WRITE: begin
