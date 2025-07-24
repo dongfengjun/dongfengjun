@@ -38,7 +38,7 @@ module ysyx_24110017_IFU(
 	input [3:0]if_axi_rid_i,
 	input [31:0]if_axi_rdata_i,
 	input [1:0]if_axi_rresp_i,
-	input if_axi_rlast_i,
+	input if_axi_rlast_i
 };
 
 reg if_ready_reg;
