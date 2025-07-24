@@ -102,7 +102,7 @@ always @(posedge clk) begin
 		case (state)
 			IDLE: begin
 				if(if_valid_i) begin //判断条件
-					id_ready_o <= 1'b1;
+					id_ready_reg <= 1'b1;
 				end
 				if(if_valid_i && id_ready_o) begin
 					id_ready_reg <= 1'b0;
