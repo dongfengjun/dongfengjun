@@ -10,6 +10,7 @@
 #include "./include/common.h"
 #include "nvboard.h"
 
+extern char *mtrace_p;
 /***ysyxSoC***/
 extern "C" void flash_read(int32_t addr, int32_t *data) {
 	*data = pmem_read(addr + CONFIG_MBASE);
