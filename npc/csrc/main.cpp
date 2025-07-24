@@ -84,15 +84,15 @@ void assert_fail_msg() {
 #ifdef CONFIG_ITRACE
 static void itrace_push(){
 	uint8_t insts[4];
-  insts[0] = top->inst & 0xFF;
-  insts[1] = (top->inst >>  8) & 0xFF;
-  insts[2] = (top->inst >> 16) & 0xFF;
-  insts[3] = (top->inst >> 24) & 0xFF;
+  insts[0] = dpic_display(2) & 0xFF;
+  insts[1] = (dpic_display(2) >>  8) & 0xFF;
+  insts[2] = (dpic_display(2) >> 16) & 0xFF;
+  insts[3] = (dpic_display(2) >> 24) & 0xFF;
 
   char *p = logbuf;
 	char *irp = iringbuf;
-  p += snprintf(p, sizeof(logbuf), FMT_WORD ":", top->pc);
-	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", top->pc);
+  p += snprintf(p, sizeof(logbuf), FMT_WORD ":", dpic_display(0));
+	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", dpic_display(0));
   int ilen = 4;
   int i;
   for (i = ilen - 1; i >= 0; i --) {
@@ -103,8 +103,8 @@ static void itrace_push(){
 	memset(irp, ' ', 1);
 	p += 1;
 	irp += 1;
-	disassemble(p, logbuf + sizeof(logbuf) - p, top->pc, (uint8_t *)&insts, 4);
-	disassemble(irp, logbuf + sizeof(logbuf) - irp, top->pc, (uint8_t *)&insts, 4);
+	disassemble(p, logbuf + sizeof(logbuf) - p, dpic_display(0), (uint8_t *)&insts, 4);
+	disassemble(irp, logbuf + sizeof(logbuf) - irp, dpic_display(0), (uint8_t *)&insts, 4);
 	strncat(iringbuf, " \n", 3);
 	iringbuf_push(iringbuf);
 }
