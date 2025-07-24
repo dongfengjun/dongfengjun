@@ -83,31 +83,37 @@ always @(posedge clk or posedge rst) begin
 end
 
 always @(*) begin
-	case (state)
-		IDLE_IFU: begin
-			if(pc_valid_i) begin
-				next_state = WAIT_SRAM;
+	next_state = state;
+	if(rst) begin
+		next_state = IDLE_IFU;
+	end
+  else begin
+		case (state)
+			IDLE_IFU: begin
+				if(pc_valid_i) begin
+					next_state = WAIT_SRAM;
+				end
 			end
-		end
-		WAIT_SRAM: begin
-			if(if_valid_o) begin
-				next_state = WAIT_IDU_READY;
+			WAIT_SRAM: begin
+				if(if_valid_o) begin
+					next_state = WAIT_IDU_READY;
+				end
 			end
-		end
-		WAIT_IDU_READY: begin
-			if(id_ready_i) begin
-				next_state = DONE_IFU;
+			WAIT_IDU_READY: begin
+				if(id_ready_i) begin
+					next_state = DONE_IFU;
+				end
 			end
-		end
-		DONE_IFU: begin
-			if(wb_done_i) begin
+			DONE_IFU: begin
+				if(wb_done_i) begin
+					next_state = IDLE_IFU;
+				end
+			end
+			default: begin
 				next_state = IDLE_IFU;
 			end
-		end
-		default: begin
-			next_state = IDLE_IFU;
-		end
-	endcase
+		endcase
+	end
 end
 
 always @(posedge clk or posedge rst) begin
