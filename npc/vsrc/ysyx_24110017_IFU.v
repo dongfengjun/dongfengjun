@@ -73,7 +73,7 @@ assign inst_o = inst_reg;
 parameter IDLE_IFU = 2'b00,WAIT_SRAM = 2'b01,WAIT_IDU_READY = 2'b10,DONE_IFU = 2'b11;
 reg [1:0]state,next_state;
 
-always @(posedge clk) begin
+always @(posedge clk or posedge rst) begin
   if (rst) begin
     state <= IDLE_IFU;
   end
@@ -83,36 +83,31 @@ always @(posedge clk) begin
 end
 
 always @(*) begin
-	if(rst) begin
-		state = IDLE_IFU;
-	end
-  else begin
-		case (state)
-			IDLE_IFU: begin
-				if(pc_valid_i) begin
-					next_state = WAIT_SRAM;
-				end
+	case (state)
+		IDLE_IFU: begin
+			if(pc_valid_i) begin
+				next_state = WAIT_SRAM;
 			end
-			WAIT_SRAM: begin
-				if(if_valid_o) begin
-					next_state = WAIT_IDU_READY;
-				end
+		end
+		WAIT_SRAM: begin
+			if(if_valid_o) begin
+				next_state = WAIT_IDU_READY;
 			end
-			WAIT_IDU_READY: begin
-				if(id_ready_i) begin
-					next_state = DONE_IFU;
-				end
+		end
+		WAIT_IDU_READY: begin
+			if(id_ready_i) begin
+				next_state = DONE_IFU;
 			end
-			DONE_IFU: begin
-				if(wb_done_i) begin
-					next_state = IDLE_IFU;
-				end
-			end
-			default: begin
+		end
+		DONE_IFU: begin
+			if(wb_done_i) begin
 				next_state = IDLE_IFU;
 			end
-		endcase
-	end
+		end
+		default: begin
+			next_state = IDLE_IFU;
+		end
+	endcase
 end
 
 always @(posedge clk or posedge rst) begin
