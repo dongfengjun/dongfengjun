@@ -8,9 +8,9 @@ module ysyx_24110017_PCU(
 );
 
 reg pc_valid_reg;
-wire pc_valid_o = pc_valid_reg;
+assign pc_valid_o = pc_valid_reg;
 reg [31:0]pc_reg;
-wire [31:0]pc_o = pc_reg;
+assign pc_o = pc_reg;
 
 parameter IDLE = 1'b0,WAIT_READY = 1'b1;
 reg state,next_state;
