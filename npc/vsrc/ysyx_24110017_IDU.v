@@ -6,15 +6,24 @@ module ysyx_24110017_IDU(
 	output id_ready_o,
 	output id_valid_o,
 	input ex_ready_i,
-	output [6:0]op_reg,
-	output [4:0]rd_reg,
-	output [2:0]funct3_reg,
-	output [4:0]rs1_reg,
-	output [4:0]rs2_reg,
-	output [31:0]imm_reg,
-	output [6:0]funct7_reg,
-	output [4:0]shamt_reg
+	output [6:0]op_o,
+	output [4:0]rd_o,
+	output [2:0]funct3_o,
+	output [4:0]rs1_o,
+	output [4:0]rs2_o,
+	output [31:0]imm_o,
+	output [6:0]funct7_o,
+	output [4:0]shamt_o
 );
+
+assign op_o = op_reg;
+assign rd_o = rd_reg;
+assign funct3_o = funct3_reg;
+assign rs1_o = rs1_reg;
+assign rs2_o = rs2_reg;
+assign imm_o = imm_reg;
+assign funct7_o = funct7_reg;
+assign shamt_o = shamt_reg;
 
 /***TPYE***/
 wire [6:0]op;
