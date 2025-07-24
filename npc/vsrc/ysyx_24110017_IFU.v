@@ -251,7 +251,7 @@ always @(posedge clk) begin
                       end
                     end
 /***END***/
-                    if (if_axi_rvalid_o && if_axi_rready_i) begin
+                    if (if_axi_rvalid_i && if_axi_rready_o) begin
 												axi_state <= IDLE; 
                         axi_rready <= 1'b0;
 												axi_rdata <= if_axi_rdata_i;
