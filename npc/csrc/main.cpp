@@ -77,7 +77,7 @@ static void statistic() {
 
 void assert_fail_msg() {
   isa_regs_display();
-	IFDEF(CONFIG_ITRACE, iringbuf_push(iringbuf));
+	IFDEF(CONFIG_ITRACE, iringbuf_display());
   statistic();
 }
 
