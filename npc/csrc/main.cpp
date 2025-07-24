@@ -145,9 +145,9 @@ static word_t fpc;
 static word_t fnpc;
 static word_t finst;
 void ftrace_push() {
-	fnpc = top->dnpc;
-	fpc = top->pc;
-  finst = top->inst;
+	fnpc = dpic_display(2);
+	fpc = dpic_display(1);
+  finst = dpic_display(3);
   fopcode = finst & 0x7F;
 	if(fopcode == 0b1100111 || fopcode == 0b1101111) {
 		ftracebuf[ftracehead].npc = fnpc;
