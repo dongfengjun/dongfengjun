@@ -15,7 +15,7 @@ extern char *mtrace_p;
 extern "C" void flash_read(int32_t addr, int32_t *data) {
 	*data = pmem_read(addr + CONFIG_MBASE);
 #ifdef CONFIG_MTRACE
-	mtrace_p += sprintf(mtrace_p, "flash addr:%u read:%u\n", addr, data);
+	mtrace_p += sprintf(mtrace_p, "flash addr:%u read:%u\n", addr, *data);
 #endif
 }
 extern "C" void mrom_read(int32_t addr, int32_t *data) {
@@ -24,7 +24,7 @@ extern "C" void mrom_read(int32_t addr, int32_t *data) {
 extern "C" void psram_read(int32_t addr, int32_t *data) {
 	*data = c_psram_read(addr);
 #ifdef CONFIG_MTRACE
-	mtrace_p += sprintf(mtrace_p, "psram addr:%u read:%u\n", addr, data);
+	mtrace_p += sprintf(mtrace_p, "psram addr:%u read:%u\n", addr, *data);
 #endif
 }
 extern "C" void psram_write(int32_t addr, int32_t data, char len) {
