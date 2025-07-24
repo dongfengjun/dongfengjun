@@ -83,7 +83,7 @@ always @(posedge clk or posedge rst) begin
 end
 
 always @(*) begin
-	//next_state = state;
+	next_state = state;
 	if(rst) begin
 		next_state = IDLE_IFU;
 	end
