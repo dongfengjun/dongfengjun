@@ -87,8 +87,8 @@ end
 
 always @(posedge clk) begin
 	if(rst) begin
-		idu_valid_reg <= 1'b0;
-		idu_ready_reg <= 1'b0;
+		id_valid_reg <= 1'b0;
+		id_ready_reg <= 1'b0;
     op_reg <= 7'b0;
     rd_reg <= 5'b0;
     funct3_reg <= 3'b0;
