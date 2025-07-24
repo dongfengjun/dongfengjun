@@ -127,12 +127,12 @@ always @(posedge clk or posedge rst) begin
 			IDLE_IFU: begin
 				if_valid_reg <= 1'b0;
 				if(pc_valid_i) begin
-					sram_start <= 1'b1;
+					fetch_start <= 1'b1;
 				end
 				if_ready_reg <= 1'b0;
 			end
 			WAIT_SRAM: begin
-				sram_start <= 1'b0;
+				fetch_start <= 1'b0;
 				if(if_axi_rvalid_i && if_axi_rready_o) begin
 					if_valid_reg <= 1'b1;
 				end
