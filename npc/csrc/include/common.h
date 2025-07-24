@@ -28,14 +28,14 @@ typedef uint16_t ioaddr_t;
 #define CONFIG_DUMP_WAVE 1//是否保存波形（内存不足）
 //#define CONFIG_DUMP_WAVE_SIM 1//只保存状态
 
-#define CONFIG_TRACE 1
-	#ifdef CONFIG_TRACE
-		#define CONFIG_ITRACE 1
-			#define CONFIG_ITRACE_COND 1
-			#define CONFIG_FTRACE 1
-			#define CONFIG_MTRACE 1 
-		#define CONFIG_WATCHPOINT 1
-	#endif
+//#define CONFIG_TRACE 1
+	//#ifdef CONFIG_TRACE
+		//#define CONFIG_ITRACE 1
+			//#define CONFIG_ITRACE_COND 1
+			//#define CONFIG_FTRACE 1
+			//#define CONFIG_MTRACE 1 
+		//#define CONFIG_WATCHPOINT 1
+	//#endif
 //#define CONFIG_DIFFTEST 1
 
 #define CONFIG_MBASE 0x30000000//IM
