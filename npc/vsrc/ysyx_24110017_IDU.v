@@ -1,4 +1,4 @@
-module ysyx_24110017_IDU(clk,rst,
+module ysyx_24110017_IDU(
 	input clk,
 	input rst,
 	input [31:0]inst_i,
@@ -13,7 +13,7 @@ module ysyx_24110017_IDU(clk,rst,
 	output [4:0]rs2_reg,
 	output [31:0]imm_reg,
 	output [6:0]funct7_reg,
-	output [4:0]shamt_reg,
+	output [4:0]shamt_reg
 );
 
 /***TPYE***/
