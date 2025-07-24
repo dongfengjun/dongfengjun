@@ -42,9 +42,9 @@ module ysyx_24110017_IFU(
 );
 
 reg if_ready_reg;
-assign if_ready = if_ready_reg;
+assign if_ready_o = if_ready_reg;
 reg if_valid_reg;
-assign if_valid = if_valid_reg;
+assign if_valid_o = if_valid_reg;
 
 /***单周期***
 import "DPI-C" function int pmem_read(input int raddr);
