@@ -293,7 +293,7 @@ void cpu_exec(int n) {
 		nvboard_update();
 		cpu.pc = dpic_display(1);
 		isa_gpr_push();
-		g_nr_guest_inst++;
+		if(dpic_display(3)) { g_nr_guest_inst ++; }
 #ifdef CONFIG_ITRACE
 		itrace_push();
 #endif
