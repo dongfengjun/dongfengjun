@@ -37,8 +37,8 @@ wire [4:0]shamt;	//I shamt
 /***分布式控制***/
 reg id_ready_reg;
 reg id_valid_reg;
-wire id_ready_o = id_ready_reg;
-wire id_valid_o = id_valid_reg;
+assign id_ready_o = id_ready_reg;
+assign id_valid_o = id_valid_reg;
 
 reg [6:0]op_reg;
 reg [4:0]rd_reg;
