@@ -119,7 +119,7 @@ always @(posedge clk or posedge rst) begin
 	if(rst) begin
 		if_valid_reg <= 1'b0;
 		if_ready_reg <= 1'b0;
-		sram_start <= 1'b0;
+		fetch_start <= 1'b0;
 		inst_reg <= 32'h0;
 	end
 	else begin
@@ -144,7 +144,7 @@ always @(posedge clk or posedge rst) begin
 				end
 			end
 			DONE_IFU: begin
-				if(wb_done) begin
+				if(wb_done_i) begin
           if_ready_reg <= 1'b1;
         end
 			end
@@ -170,13 +170,13 @@ reg [31:0]axi_araddr;
 reg [7:0]axi_arlen;
 reg [2:0]axi_arsize;
 reg [1:0]axi_arburst;
-assign M_AXI_ARVALID = axi_arvalid;
-assign M_AXI_RREADY = axi_rready;
-assign M_AXI_ARID = axi_arid;
-assign M_AXI_ARADDR = axi_araddr;
-assign M_AXI_ARLEN = axi_arlen;
-assign M_AXI_ARSIZE = axi_arsize;
-assign M_AXI_ARBURST = axi_arburst;
+assign if_axi_arvalid_o = axi_arvalid;
+assign if_axi_rready_o = axi_rready;
+assign if_axi_arid_o = axi_arid;
+assign if_axi_araddr_o = axi_araddr;
+assign if_axi_arlen_o = axi_arlen;
+assign if_axi_arsize_o = axi_arsize;
+assign if_axi_arburst_o = axi_arburst;
 
 parameter IDLE=1'b0,FETCH=1'b1;
 reg axi_state;
