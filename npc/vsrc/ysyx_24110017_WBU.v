@@ -109,7 +109,7 @@ always @(posedge clk) begin
 				end
 			end
 			WRITE: begin
-	      xrd_reg <= xrd_i;
+	      xrd_reg <= ex_i;
         rd_reg <= rd_i;
         gpr_wen_reg <= gpr_wen_i;
 
