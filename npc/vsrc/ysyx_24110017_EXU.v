@@ -303,7 +303,7 @@ assign bgeuen = (op_i == 7'b1100011 && funct3_i == 3'b111 && (r1_i >= r2_i));
 assign ecall_en = (op_i == 7'b1110011 && offset == 32'd0 && funct3_i == 3'b000);
 assign mret_en = (op_i == 7'b1110011 && offset == 32'b1100000010 && funct3_i == 3'b000);
 
-wire dnpc = (jalen) ? (pc_i + offset)	//jal
+wire [31:0]dnpc = (jalen) ? (pc_i + offset)	//jal
 	: (jalren) ? ((r1_i + offset) & ~1) //jalr
 	: (beqen) ? (pc_i + offset)	//beq
 	: (bneen) ? (pc_i + offset)	//bne
