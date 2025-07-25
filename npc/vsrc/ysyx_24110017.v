@@ -170,10 +170,10 @@ ysyx_24110017_IDU IDU(clock,reset,
 		inst,if_valid,id_ready,id_valid,ex_ready,
 		op,rd,funct3,rs1,rs2,imm,funct7,shamt
 );
-ysyx_24110017_EXU EXU(clock,reset,sram_lsu_read,sram_lsu_write,ls_done,
+ysyx_24110017_EXU EXU(clock,reset,res,
 		id_valid,ex_ready,ex_valid,wb_ready, //分布式控制
 		op,funct3,imm,funct7,shamt,r1,r2,
-		res,
+		sram_lsu_read,sram_lsu_write,ls_done,
 		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,ls_awsize,ls_arsize,ls_awlen,ls_arlen,ls_awburst,ls_arburst,
 		ls_rdata,
 		pc,dnpc,
