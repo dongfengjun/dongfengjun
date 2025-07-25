@@ -99,7 +99,7 @@ always @(*) begin
 			DONE_EXU: begin
 				next_state = IDLE;
 			end
-			default: begifn
+			default: begin
 				next_state = IDLE; // 默认回到初始状态
 			end
 		endcase
