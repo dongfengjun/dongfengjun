@@ -148,18 +148,18 @@ always @(posedge clk or posedge rst) begin
 				  if(ls_read_i) begin
             state <= READ;
 					  axi_arvalid <= 1'b1;//非DELAY_TEST
-						axi_araddr <= raddr;
-						axi_arsize <= arsize;
-						axi_arlen <= arlen;
-						axi_arburst <= arburst;
+						axi_araddr <= raddr_i;
+						axi_arsize <= arsize_i;
+						axi_arlen <= arlen_i;
+						axi_arburst <= arburst_i;
 					end
 					if(ls_write_i) begin
 		        state <= WRITE;
 						axi_awvalid <= 1'b1;//非DELAY_TEST
-						axi_awaddr <= waddr;
-						axi_awsize <= awsize;
-						axi_awlen <= awlen;
-						axi_awburst <= awburst;
+						axi_awaddr <= waddr_i;
+						axi_awsize <= awsize_i;
+						axi_awlen <= awlen_i;
+						axi_awburst <= awburst_i;
 	        end
 /***DELAY_TEST_AR*AWVALID***
 					if(sram_lsu_read || sram_lsu_write) begin
