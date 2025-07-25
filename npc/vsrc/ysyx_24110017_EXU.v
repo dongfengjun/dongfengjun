@@ -79,7 +79,7 @@ always @(*) begin
   else begin
 		case (state)
 			IDLE: begin
-				if(IDU_VALID && EXU_READY) begin
+				if(id_valid_i && ex_ready_o) begin
 					next_state = WAIT_SRAM;
 				end
 			end
@@ -87,12 +87,12 @@ always @(*) begin
 				if((!ls_valid)) begin
 					next_state = WAIT_READY;
 				end
-				if(LSU_DONE) begin
+				if(ls_done_i) begin
 					next_state = WAIT_READY;
 				end
 			end
 			WAIT_READY: begin
-				if(EXU_VALID && WBU_READY) begin
+				if(ex_valid_o && wb_ready_i) begin
 					next_state = DONE_EXU;
 				end
 			end
