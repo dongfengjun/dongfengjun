@@ -94,11 +94,11 @@ assign ls_axi_awvalid = axi_awvalid;
 assign ls_axi_wvalid = axi_wvalid;
 assign ls_axi_awid = axi_awid;
 assign ls_axi_awaddr = axi_awaddr;
-assign ls_axi_wdata = (ls_axi_wvalid && ls_axi_wready) ? wdata : 32'h0;//axi_wdata;
+assign ls_axi_wdata = (ls_axi_wvalid && ls_axi_wready) ? wdata_i : 32'h0;//axi_wdata;
 assign ls_axi_awlen = axi_awlen;
 assign ls_axi_awsize = axi_awsize;
 assign ls_axi_awburst = axi_awburst;
-assign ls_axi_wstrb = (ls_axi_wvalid && ls_axi_wready) ? wmask : 4'b0;//axi_wstrb;
+assign ls_axi_wstrb = (ls_axi_wvalid && ls_axi_wready) ? wmask_i : 4'b0;//axi_wstrb;
 assign ls_axi_bready = axi_bready;
 assign ls_axi_wlast = axi_wlast;
 
