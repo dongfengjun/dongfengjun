@@ -251,11 +251,6 @@ assign mcause_wen = (op_i == 7'b1110011 && imm_i == 32'd834 || (op_i == 7'b11100
 assign mtvec_wen = (op_i == 7'b1110011 && imm_i == 32'd773) ? 1'b1 : 1'b0;
 
 /***LSU***/
-wire ls_valid_o,ls_wen_o;
-wire [31:0]ls_waddr_o,ls_wdata_o,ls_raddr_o,ls_rdata_o;
-wire [7:0]ls_wmask_o;
-wire [2:0]ls_wsize_o,ls_rsize_o;
-wire [1:0]ls_awburst_o,ls_arburst_o;
 assign ls_valid_o = (op_i == 7'b0000011 || op_i == 7'b0100011) ? 1'b1 : 1'b0;
 assign ls_wen_o = (op_i == 7'b0100011) ? 1'b1 : 1'b0;
 assign ls_waddr_o = (op_i == 7'b0100011) ? (r1_i + offset_i) : 32'h80000000;
