@@ -186,7 +186,7 @@ always @(posedge clk or posedge rst) begin
           end
 					if(ls_axi_rvalid && !ls_axi_rready) begin
 						axi_rready <= 1'b1;
-						ls_rdata <= ls_axi_rdata;
+						ls_rdata_reg <= ls_axi_rdata;
 					end
 /***DELAY_TEST_RAND*RREADY***
           if(M_AXI_RVALID && !M_AXI_RREADY) begin
