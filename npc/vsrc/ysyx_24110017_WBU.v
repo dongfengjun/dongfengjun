@@ -17,8 +17,8 @@ module ysyx_24110017_WBU(
 	output mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o
 );
 
-reg wb_ready;
-assign wb_ready_o = wb_ready;
+reg wb_ready_reg;
+assign wb_ready_o = wb_ready_reg;
 
 reg wb_done_reg;
 reg difftest_reg;
@@ -66,7 +66,7 @@ always @(*) begin
 				end
 			end
 			WRITE: begin
-					next_state = DIFF;
+				next_state = DIFF;
 			end
 			DIFF: begin
 				next_state = IDLE;
@@ -80,7 +80,7 @@ end
 
 always @(posedge clk) begin
 	if(rst) begin
-		wb_ready <= 1'b0;
+		wb_ready_reg <= 1'b0;
 		xrd_reg <= 32'h0;
 		rd_reg <= 5'b0;
 		gpr_wen_reg <= 1'b0;
@@ -102,10 +102,10 @@ always @(posedge clk) begin
 			IDLE: begin
 				difftest_reg <= 1'b0;
 				if(ex_valid_i) begin //判断条件
-					wb_ready <= 1'b1;
+					wb_ready_reg <= 1'b1;
 				end
 				if(ex_valid_i && wb_ready_o) begin
-					wb_ready <= 1'b0;
+					wb_ready_reg <= 1'b0;
 				end
 			end
 			WRITE: begin
