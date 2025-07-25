@@ -1,35 +1,35 @@
 module ysyx_24110017_EXU(
-	input clk;
-	input rst;
-	output [31:0]ex_o;
-	input id_valid_i;
-	output ex_ready_o;
-	output ex_valid_o;
-	input wb_ready_i;
-	input [6:0]op_i;
-	input [2:0]funct3_i;
-	input [31:0]imm_i;
-	input [6:0]funct7_i;
-	input [4:0]shamt_i;
-	input [31:0]r1_i,r2_i;
+	input clk,
+	input rst,
+	output [31:0]ex_o,
+	input id_valid_i,
+	output ex_ready_o,
+	output ex_valid_o,
+	input wb_ready_i,
+	input [6:0]op_i,
+	input [2:0]funct3_i,
+	input [31:0]imm_i,
+	input [6:0]funct7_i,
+	input [4:0]shamt_i,
+	input [31:0]r1_i,r2_i,
 /***ALU***/
 /***LSU_o***/
-	output ls_read_o,ls_write_o;
-	input ls_done_i;
-	output ls_valid_o,ls_wen_o;
-	output [31:0]ls_waddr_o,ls_wdata_o,ls_raddr_o;
-	output [3:0]ls_wmask_o;
-	output [2:0]ls_awsize_o,ls_arsize_o;
-	output [7:0]ls_awlen_o,ls_arlen_o;
-	output [1:0]ls_awburst_o,ls_arburst_o;
-	input [31:0]ls_rdata_i;
+	output ls_read_o,ls_write_o,
+	input ls_done_i,
+	output ls_valid_o,ls_wen_o,
+	output [31:0]ls_waddr_o,ls_wdata_o,ls_raddr_o,
+	output [3:0]ls_wmask_o,
+	output [2:0]ls_awsize_o,ls_arsize_o,
+	output [7:0]ls_awlen_o,ls_arlen_o,
+	output [1:0]ls_awburst_o,ls_arburst_o,
+	input [31:0]ls_rdata_i,
 /***BU***/
-	input [31:0]pc_i;
-	output [31:0]dnpc_o;
+	input [31:0]pc_i,
+	output [31:0]dnpc_o,
 /***CSRU***/
-	input [31:0]mepc_i,mstatus_i,mcause_i,mtvec_i;
-	output [31:0]mepc_o,mstatuso,mcause_o,mtvec_o;
-	output gpr_wen_o,mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o;
+	input [31:0]mepc_i,mstatus_i,mcause_i,mtvec_i,
+	output [31:0]mepc_o,mstatuso,mcause_o,mtvec_o,
+	output gpr_wen_o,mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o
 );
 
 /***分布式控制***/
