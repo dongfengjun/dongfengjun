@@ -14,7 +14,7 @@ module ysyx_24110017_WBU(
 	input [31:0]mepc_i,mstatus_i,mcause_i,mtvec_i,
 	output [31:0]mepc_o,mstatus_o,mcause_o,mtvec_o,
 	input mepc_wen_i,mstatus_wen_i,mcause_wen_i,mtvec_wen_i,
-	output mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o;
+	output mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o
 );
 
 reg wb_ready_reg;
