@@ -28,7 +28,7 @@ module ysyx_24110017_EXU(
 	output [31:0]dnpc_o,
 /***CSRU***/
 	input [31:0]mepc_i,mstatus_i,mcause_i,mtvec_i,
-	output [31:0]mepc_o,mstatuso,mcause_o,mtvec_o,
+	output [31:0]mepc_o,mstatus_o,mcause_o,mtvec_o,
 	output gpr_wen_o,mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o
 );
 
