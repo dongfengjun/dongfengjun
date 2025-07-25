@@ -315,7 +315,6 @@ assign dnpc_o = (jalen) ? (pc_i + offset)	//jal
 	: pc_i + 4;
 
 /***riscv32e_regs_controller***/
-wire gpr_wen_o;
 assign gpr_wen_o = (op_i == 7'b0110111 || op_i == 7'b0010111 || op_i == 7'b1101111 || op_i == 7'b1100111 || op_i == 7'b0010011 || op_i == 7'b0001111 || op_i == 7'b1110011 || op_i == 7'b0110011 || op_i == 7'b0000011) ? 1'b1 : 1'b0;
 
 endmodule
