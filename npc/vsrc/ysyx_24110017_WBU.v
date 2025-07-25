@@ -9,7 +9,7 @@ module ysyx_24110017_WBU(
 	input [31:0]ex_i,
 	output [4:0]rd_o,
 	input [4:0]rd_i,
-	output wen_o,
+	output gpr_wen_o,
 	input gpr_wen_i,
 	input [31:0]mepc_i,mstatus_i,mcause_i,mtvec_i,
 	output [31:0]mepc_o,mstatus_o,mcause_o,mtvec_o,
@@ -17,8 +17,8 @@ module ysyx_24110017_WBU(
 	output mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o
 );
 
-reg wb_ready_reg;
-assign wb_ready_o = wb_ready_reg;
+reg wb_ready;
+assign wb_ready_o = wb_ready;
 
 reg wb_done_reg;
 reg difftest_reg;
@@ -61,7 +61,7 @@ always @(*) begin
   else begin
 		case (state)
 			IDLE: begin
-				if(EXU_VALID && WBU_READY) begin
+				if(ex_valid_i && wb_ready_o) begin
 					next_state = WRITE;
 				end
 			end
