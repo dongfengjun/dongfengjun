@@ -84,7 +84,7 @@ always @(*) begin
 				end
 			end
 			WAIT_SRAM: begin
-				if((!ls_valid)) begin
+				if((!ls_valid_o)) begin
 					next_state = WAIT_READY;
 				end
 				if(ls_done_i) begin
@@ -111,7 +111,7 @@ always @(posedge clk) begin
 		ex_valid <= 1'b0;
 		ex_ready <= 1'b0;
 		ex_reg <= 32'h0;
-		dnpc_reg <= pc + 4;
+		dnpc_reg <= pc_i + 4;
 		gpr_wen_reg <= 1'b0;
 		mepc_reg <= 32'h0;
     mstatus_reg <= 32'h0;
@@ -143,7 +143,7 @@ always @(posedge clk) begin
 				if(ls_wen_o) begin
 					ls_write_reg <= 1'b1;
 				end
-				if(ls_done) begin
+				if(ls_done_i) begin
 					ls_read_reg <= 1'b0;
 					ls_write_reg <= 1'b0;
 					ram_rdata_reg <= ls_rdata;
@@ -168,7 +168,7 @@ always @(posedge clk) begin
 			end
 			DONE_EXU: begin
 				dnpc_reg <= dnpc;
-				sram_rdata_reg <= 32'h0;
+				ram_rdata_reg <= 32'h0;
 			end
 		endcase
 	end
@@ -245,15 +245,16 @@ wire[31:0] csrs_w =
 			({32{(op_i == 7'b1110011) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
 			({32{(op_i == 7'b1110011) && (funct3_i == 3'b010)}} & (csr |  r1_i)) | //I_csrrs
       ({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & (csr & ~r1_i)) ; //I_csrrc
-assign mepc_wen = ((op_i == 7'b1110011 && imm_i == 32'd833) || (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000)) ? 1'b1 : 1'b0;
-assign mstatus_wen = (op_i == 7'b1110011 && imm_i == 32'd768) ? 1'b1 : 1'b0;
-assign mcause_wen = (op_i == 7'b1110011 && imm_i == 32'd834 || (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000)) ? 1'b1 : 1'b0;
-assign mtvec_wen = (op_i == 7'b1110011 && imm_i == 32'd773) ? 1'b1 : 1'b0;
+wire mepc_wen = ((op_i == 7'b1110011 && imm_i == 32'd833) || (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000)) ? 1'b1 : 1'b0;
+wire mstatus_wen = (op_i == 7'b1110011 && imm_i == 32'd768) ? 1'b1 : 1'b0;
+wire mcause_wen = (op_i == 7'b1110011 && imm_i == 32'd834 || (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000)) ? 1'b1 : 1'b0;
+wire mtvec_wen = (op_i == 7'b1110011 && imm_i == 32'd773) ? 1'b1 : 1'b0;
 
 /***LSU***/
+wire [31:0]ls_rdata;
 assign ls_valid_o = (op_i == 7'b0000011 || op_i == 7'b0100011) ? 1'b1 : 1'b0;
 assign ls_wen_o = (op_i == 7'b0100011) ? 1'b1 : 1'b0;
-assign ls_waddr_o = (op_i == 7'b0100011) ? (r1_i + offset_i) : 32'h80000000;
+assign ls_waddr_o = (op_i == 7'b0100011) ? (r1_i + offset) : 32'h80000000;
 assign ls_wdata_o = ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011) ? r2 //对齐
  : ((ls_waddr_o % 4 == 1) && op_i == 7'b0100011) ? {r2_i[23:0],8'b0} //0x1
  : ((ls_waddr_o % 4 == 2) && op_i == 7'b0100011) ? {r2_i[15:0],16'b0} //0x2
@@ -302,7 +303,7 @@ assign bgeuen = (op_i == 7'b1100011 && funct3_i == 3'b111 && (r1_i >= r2_i));
 assign ecall_en = (op_i == 7'b1110011 && offset == 32'd0 && funct3_i == 3'b000);
 assign mret_en = (op_i == 7'b1110011 && offset == 32'b1100000010 && funct3_i == 3'b000);
 
-assign dnpc_o = (jalen) ? (pc_i + offset)	//jal
+wire dnpc = (jalen) ? (pc_i + offset)	//jal
 	: (jalren) ? ((r1_i + offset) & ~1) //jalr
 	: (beqen) ? (pc_i + offset)	//beq
 	: (bneen) ? (pc_i + offset)	//bne
@@ -315,6 +316,6 @@ assign dnpc_o = (jalen) ? (pc_i + offset)	//jal
 	: pc_i + 4;
 
 /***riscv32e_regs_controller***/
-assign gpr_wen_o = (op_i == 7'b0110111 || op_i == 7'b0010111 || op_i == 7'b1101111 || op_i == 7'b1100111 || op_i == 7'b0010011 || op_i == 7'b0001111 || op_i == 7'b1110011 || op_i == 7'b0110011 || op_i == 7'b0000011) ? 1'b1 : 1'b0;
+wire gpr_wen = (op_i == 7'b0110111 || op_i == 7'b0010111 || op_i == 7'b1101111 || op_i == 7'b1100111 || op_i == 7'b0010011 || op_i == 7'b0001111 || op_i == 7'b1110011 || op_i == 7'b0110011 || op_i == 7'b0000011) ? 1'b1 : 1'b0;
 
 endmodule
