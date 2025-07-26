@@ -330,7 +330,7 @@ bool Load_flag = false;
 bool Store_flag = false;
 bool Immediate_flag = false;
 bool System_flag = false;
-void performance evaluation() {
+void performance_evaluation() {
 	g_nr_guest_cycle ++;
 	if(dpic_display(3)) g_nr_guest_inst ++;
 	if(performance_counters(0)) { if_performance_cnt ++; }
