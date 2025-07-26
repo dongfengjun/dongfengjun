@@ -1,3 +1,4 @@
+`include "common.vh"
 module ysyx_24110017_LSU(
 	input clk,
 	input rst,
@@ -205,9 +206,11 @@ always @(posedge clk or posedge rst) begin
 	        if(ls_axi_rvalid && ls_axi_rready) begin
             axi_rready <= 0;
             state <= DONE;
+`ifndef YOSYS_STA						
 						if((ls_axi_araddr - 32'h10000000 < 32'h1000) || (ls_axi_araddr == 32'h02000000) || (ls_axi_araddr == 32'h02000004)) begin //DEVICE DIFFTEST
 							diff_skip_ref();
 						end
+`endif
 						ls_done_reg <= 1'b1;
           end
         end

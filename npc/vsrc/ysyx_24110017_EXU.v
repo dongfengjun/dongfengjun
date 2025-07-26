@@ -1,3 +1,4 @@
+`include "common.vh"
 module ysyx_24110017_EXU(
 	input clk,
 	input rst,
@@ -188,7 +189,9 @@ assign ex =
 						({32{funct3_i == 3'b011}} & {31'b0, (a < b)}) |	//sltiu
 						({32{funct3_i == 3'b100}} & (a ^ b)) |	//xori
 						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0000000)}} & (a >> shamt_i)) |	//srli
+`ifndef YOSYS_STA
 						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & ({{{32{a[31]}}, $signed(a)} >> shamt_i}[31:0])) |	//srai
+`endif
 						({32{funct3_i == 3'b110}} & (a | b)) |	//ori
 						({32{funct3_i == 3'b111}} & (a & b)) 	//andi
 					)
@@ -202,11 +205,15 @@ assign ex =
 						({32{(funct3_i == 3'b011) && (funct7_i == 7'b0000000)}} & {31'b0,(a < $unsigned(b))}) |  //sltu
 						({32{(funct3_i == 3'b100) && (funct7_i == 7'b0000000)}} & (a ^ b)) | //xor
 						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0000000)}} & (a >> b[4:0])) | //srl
-						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & {{{32{a[31]}},a} >> b}[31:0] ) | //sra
+`ifndef YOSYS_STA
+						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & {{{32{a[31]}},a} >> b}[31:0] ) | //srai
+`endif	
 						({32{(funct3_i == 3'b110) && (funct7_i == 7'b0000000)}} & (a | b)) | //or
 						({32{(funct3_i == 3'b111) && (funct7_i == 7'b0000000)}} & (a & b)) | //and
 						({32{(funct3_i == 3'b000) && (funct7_i == 7'b0000001)}} & (a * b)) | //mul
+`ifndef YOSYS_STA
 						({32{(funct3_i == 3'b001) && (funct7_i == 7'b0000001)}} & {{{32{a[31]}},$signed(a)} * {{32{b[31]}},$signed(b)}}[63:32]) | //mulh
+`endif
 						({32{(funct3_i == 3'b100) && (funct7_i == 7'b0000001)}} & ($signed($signed(a) / $signed(b)))) |  //div
 						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0000001)}} & (a / b)) | //divu
 						({32{(funct3_i == 3'b110) && (funct7_i == 7'b0000001)}} & ($signed(a) % $signed(b))) |  //R_rem

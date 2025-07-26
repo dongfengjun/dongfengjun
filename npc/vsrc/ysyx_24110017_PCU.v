@@ -1,3 +1,4 @@
+`include "common.vh"
 module ysyx_24110017_PCU(
 	input clk,
 	input rst,
@@ -67,8 +68,10 @@ always @(posedge clk) begin
 					&& ((pc_o < 32'h0f000000) || (pc_o >= 32'h0f002000))
 					&& ((pc_o < 32'h80000000) || (pc_o >= 32'h84000000))
 					&& ((pc_o < 32'ha0000000) || (pc_o >= 32'hc0000000))) begin
+`ifndef YOSYS_STA
 					$fwrite(32'h80000002, "Assertion failed: Invalid PC `%xh`\n",pc_o);
           $fatal;
+`endif
 				end
 			end
 			WAIT_READY: begin
