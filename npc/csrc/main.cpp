@@ -70,6 +70,7 @@ void npc_trap() {
 #define MAX_INST_TO_PRINT 10//puts inst
 extern CPU_state cpu;
 uint64_t g_nr_guest_inst = 0;
+uint64_t g_nr_guest_cycle = 0;
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
@@ -80,7 +81,10 @@ static void statistic() {
   IFNDEF(CONFIG_TARGET_AM, setlocale(LC_NUMERIC, ""));
 #define NUMBERIC_FMT MUXDEF(CONFIG_TARGET_AM, "%", "%'") PRIu64
   Log("host time spent = " NUMBERIC_FMT " us", g_timer);
-  Log("total guest instructions = " NUMBERIC_FMT, g_nr_guest_inst);
+  Log("total guest cycles = " NUMBERIC_FMT, g_nr_guest_cycle);
+	Log("total guest instructions = " NUMBERIC_FMT, g_nr_guest_inst);
+	Log("IPC = " NUMBERIC_FMT, g_nr_guest_inst/g_nr_guest_cycle);
+	Log("CPI = " NUMBERIC_FMT, g_nr_guest_cycle/g_nr_guest_inst);
   if (g_timer > 0) Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
   else Log("Finish running in less than 1 us and can not calculate the simulation frequency");
 }
@@ -303,6 +307,7 @@ void cpu_exec(int n) {
 		nvboard_update();
 		cpu.pc = dpic_display(1);
 		isa_gpr_push();
+		g_nr_guest_cycle ++;
 		if(dpic_display(3)) { g_nr_guest_inst ++; }
 #ifdef CONFIG_ITRACE
 		itrace_push();
