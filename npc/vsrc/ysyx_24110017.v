@@ -307,10 +307,17 @@ endfunction
 export "DPI-C" function performance_counter;
 function int performance_counter(int i);
   begin
-    assign performance_counter = (i == 0) ? {31'b0,if_axi_rvalid && if_axi_rready}
+    assign performance_counter = (i == 0) ? {31'b0,if_valid && id_ready}
 															 : (i == 1) ? {31'b0,id_valid && ex_ready}
 															 : (i == 2) ? {31'b0,ex_valid && wb_ready}
-															 : (i == 3) ? {31'b0,ls_axi_rvalid && ls_axi_rready}
+															 : (i == 3) ? {31'b0,ls_done}
+															 : (i == 4) ? {25'b0,op}
+															 : (i == 5) ? {31'b0,wb_done}
+															 : (i == 6) ? {31'b0,if_axi_arvalid && if_axi_arready}
+															 : (i == 7) ? {31'b0,if_axi_rvalid && if_axi_rready}
+															 : (i == 8) ? {31'b0,ls_axi_awvalid && ls_axi_awready}
+															 : (i == 9) ? {31'b0,ls_axi_arvalid && ls_axi_rready}
+															 : (i == 10) ? {31'b0,ls_done}
 															 : 32'b0;
   end
 endfunction
