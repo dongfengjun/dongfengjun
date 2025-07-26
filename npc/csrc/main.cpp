@@ -333,7 +333,7 @@ bool System_flag = false;
 void performance_evaluation() {
 	g_nr_guest_cycle ++;
 	if(dpic_display(3)) g_nr_guest_inst ++;
-	if(performance_counters(0)) { if_performance_cnt ++; }
+	if(performance_counters(0)) { if_fin_cnt ++; }
 	else {if_wait ++; }
 	if(performance_counters(1)) id_fin_cnt ++;
 	if(performance_counters(2)) ex_fin_cnt ++;
