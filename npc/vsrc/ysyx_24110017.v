@@ -304,7 +304,7 @@ function int dpic_grab(int i);
   end
 endfunction
 /***DPI-C*PERFORMANCE_COUNTER***/
-export "DPI-C" function performance counter;
+export "DPI-C" function performance_counter;
 function int performance_counter(int i);
   begin
     assign performance_counter = (i == 0) ? {31'b0,if_axi_rvalid && if_axi_rready}
