@@ -115,7 +115,7 @@ static void statistic() {
 	if (g_timer > 0) Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
   else Log("Finish running in less than 1 us and can not calculate the simulation frequency");
 	
-	Log("****************************Performance Evaluation*****************************");
+	printf("******************Performance Evaluation*******************");
 	printf("IPC = %.6f", (double)g_nr_guest_inst/(double)g_nr_guest_cycle);
 	printf("CPI = %.6f", (double)g_nr_guest_cycle/(double)g_nr_guest_inst);
 	printf("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt);
