@@ -119,8 +119,8 @@ static void statistic() {
 	Log("CPI = %.6f", (double)g_nr_guest_cycle/(double)g_nr_guest_inst);
 	Log("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt);
 	Log("Integer\tTransfer\tLoad\tStore\tImmediate\tSystem");
-	printf("%.6f\t%.6f\t%.6f\t%.6f\t%.6f\t%.6f (Proportion)",(double)Integer_Computational_wait/(double)ex_total_wait,(double)Transfer_wait/(double)ex_total_wait,(double)Load_wait/(double)ex_total_wait,(double)Store_wait/(double)ex_total_wait,(double)Immediate_wait/(double)ex_total_wait,(double)System_wait/(double)ex_total_wait);
-	printf("%ld\t%ld\t%ld\t%ld\t%ld\t%ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Transfer_wait/Transfer_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, System_wait/System_cnt);
+	Log("%.6f\t%.6f\t%.6f\t%.6f\t%.6f\t%.6f (Proportion)",(double)Integer_Computational_wait/(double)ex_total_wait,(double)Transfer_wait/(double)ex_total_wait,(double)Load_wait/(double)ex_total_wait,(double)Store_wait/(double)ex_total_wait,(double)Immediate_wait/(double)ex_total_wait,(double)System_wait/(double)ex_total_wait);
+	Log("%ld\t%ld\t%ld\t%ld\t%ld\t%ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Transfer_wait/Transfer_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, System_wait/System_cnt);
 	Log("The proportion of IF MEM access:%.6f", (double)if_mem_wait/(double)if_wait);
 	Log("LS LOAD:%ld (Average)", ls_load_wait/ls_load_cnt);
 	Log("LS STORE:%ld (Average)", ls_store_wait/ls_store_cnt);
@@ -440,6 +440,16 @@ int main(int argc, char *argv[]) {
 	sdb_mainloop();
 #endif
 	dump_wave();
+	Log("***********Performance Evaluation**************");
+  Log("IPC = %.6f", (double)g_nr_guest_inst/(double)g_nr_guest_cycle);
+  Log("CPI = %.6f", (double)g_nr_guest_cycle/(double)g_nr_guest_inst);
+  Log("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt);
+  Log("Integer\tTransfer\tLoad\tStore\tImmediate\tSystem");
+  Log("%.6f\t%.6f\t%.6f\t%.6f\t%.6f\t%.6f (Proportion)",(double)Integer_Computational_wait/(double)ex_total_wait,(double)Transfer_wait/(double)ex_total_wait,(double)Load_wait/(double)ex_total_wait,(double)Store_wait/(double)ex_total_wait,(double)Immediate_wait/(double)ex_total_wait,(double)System_wait/(double)ex_total_wait);
+  Log("%ld\t%ld\t%ld\t%ld\t%ld\t%ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Transfer_wait/Transfer_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, System_wait/System_cnt);
+  Log("The proportion of IF MEM access:%.6f", (double)if_mem_wait/(double)if_wait);
+	Log("LS LOAD:%ld (Average)", ls_load_wait/ls_load_cnt);
+  Log("LS STORE:%ld (Average)", ls_store_wait/ls_store_cnt);
 /***close**/
 	statistic();
 	tfp->close();
