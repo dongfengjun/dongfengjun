@@ -445,6 +445,7 @@ int main(int argc, char *argv[]) {
 	statistic();
 	tfp->close();
 	nvboard_quit();
+	statistic();
 	delete contextp;
 	return 0;
 }
