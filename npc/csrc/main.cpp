@@ -108,7 +108,7 @@ static void statistic() {
 	Log("total guest instructions = " NUMBERIC_FMT, g_nr_guest_inst);
 	Log("IPC = %.6f", (double)g_nr_guest_inst/(double)g_nr_guest_cycle);
 	Log("CPI = %.6f", (double)g_nr_guest_cycle/(double)g_nr_guest_inst);
-  Log("IF FIN:%ld\tID FIN:%ld\tEX FIN cnt:%ld\tLS FIN:%ld",if_performance_cnt,id_performance_cnt,ex_performance_cnt,ls_performance_cnt);
+  Log("IF FIN:%ld\tID FIN:%ld\tEX FIN cnt:%ld\tLS FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt);
 	if (g_timer > 0) Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
   else Log("Finish running in less than 1 us and can not calculate the simulation frequency");
 }
