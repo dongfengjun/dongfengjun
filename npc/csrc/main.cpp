@@ -83,6 +83,12 @@ uint64_t ls_fin_cnt = 0;
 uint64_t if_wait = 0;
 uint64_t if_mem_wait = 0;
 uint64_t ex_total_wait = 0;
+uint64_t Integer_Computational_cnt = 0;
+uint64_t Transfer_cnt = 0;
+uint64_t Load_cnt = 0;
+uint64_t Store_cnt = 0;
+uint64_t Immediate_cnt = 0;
+uint64_t System_cnt = 0;
 uint64_t Integer_Computational_wait = 0;
 uint64_t Transfer_wait = 0;
 uint64_t Load_wait = 0;
@@ -111,6 +117,8 @@ static void statistic() {
   Log("IF FIN:%ld\tID FIN:%ld\tEX FIN cnt:%ld\tLS FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt);
 	if (g_timer > 0) Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
   else Log("Finish running in less than 1 us and can not calculate the simulation frequency");
+	
+	Log(":%.6f", (double)g_nr_guest_inst/(double)g_nr_guest_cycle);
 }
 
 void assert_fail_msg() {
@@ -344,12 +352,12 @@ void performance_evaluation() {
 	if(performance_counters(1)) ex_total_flag = true;
 	if(performance_counters(5)) ex_total_flag = false;
 	if(ex_total_flag) ex_total_wait ++;
-	if(performance_counters(1) && performance_counters(4) == 0b0110011) Integer_Computational_flag = true;
-	if(performance_counters(1) && performance_counters(4) == 0b0110011) Transfer_flag = true;
-	if(performance_counters(1) && performance_counters(4) == 0b0110011) Load_flag = true;
-	if(performance_counters(1) && performance_counters(4) == 0b0110011) Store_flag = true;
-	if(performance_counters(1) && performance_counters(4) == 0b0110011) Immediate_flag = true;
-	if(performance_counters(1) && performance_counters(4) == 0b0110011) System_flag = true;
+	if(performance_counters(1) && performance_counters(4) == 0b0110011) { Integer_Computational_flag = true; Integer_Computational_cnt ++; }
+	if(performance_counters(1) && (performance_counters(4) == 0b1100011 || performance_counters(4) == 0b1101111)) { Transfer_flag = true; Transfer_cnt ++; }
+	if(performance_counters(1) && performance_counters(4) == 0b0000011) { Load_flag = true; Load_cnt ++; }
+	if(performance_counters(1) && performance_counters(4) == 0b0100011) { Store_flag = true; Store_cnt ++; }
+	if(performance_counters(1) && performance_counters(4) == 0b0010011) { Immediate_flag = true; Immediate_cnt ++; }
+	if(performance_counters(1) && performance_counters(4) == 0b1110011) { System_flag = true; System_cnt ++; }
 	if(performance_counters(5)) {
 		Integer_Computational_flag = false;
 		Transfer_flag = false;
