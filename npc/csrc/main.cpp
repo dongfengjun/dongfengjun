@@ -119,9 +119,9 @@ static void statistic() {
 	Log("CPI = %.6f", (double)g_nr_guest_cycle/(double)g_nr_guest_inst);
 	Log("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt);
 	Log("Integer   Transfer  Load      Store     Immediate System");
+	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld",Integer_Computational_cnt,Transfer_cnt,Load_cnt,Store_cnt,Immediate_cnt,System_cnt);
 	Log("%-10.6f%-10.6f%-10.6f%-10.6f%-10.6f%-10.6f (Proportion)",(double)Integer_Computational_wait/(double)ex_total_wait,(double)Transfer_wait/(double)ex_total_wait,(double)Load_wait/(double)ex_total_wait,(double)Store_wait/(double)ex_total_wait,(double)Immediate_wait/(double)ex_total_wait,(double)System_wait/(double)ex_total_wait);
-	if(System_cnt == 0) { System_wait = 1; System_cnt = 1; }
-	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Transfer_wait/Transfer_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, System_wait/System_cnt);
+	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Transfer_wait/Transfer_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, (System_cnt == 0) ? 0 : System_wait/System_cnt);
 	Log("The proportion of IF MEM access:%.6f", (double)if_mem_wait/(double)if_wait);
 	Log("LS LOAD:%ld (Average)", ls_load_wait/ls_load_cnt);
 	Log("LS STORE:%ld (Average)", ls_store_wait/ls_store_cnt);
@@ -359,7 +359,7 @@ void performance_evaluation() {
 	if(performance_counters(5)) ex_total_flag = false;
 	if(ex_total_flag) ex_total_wait ++;
 	if(performance_counters(1) && performance_counters(4) == 0b0110011) { Integer_Computational_flag = true; Integer_Computational_cnt ++; }
-	if(performance_counters(1) && (performance_counters(4) == 0b1100011 || performance_counters(4) == 0b1101111)) { Transfer_flag = true; Transfer_cnt ++; }
+	if(performance_counters(1) && (performance_counters(4) == 0b1100011 || performance_counters(4) == 0b1101111 || performance_counters(4) == 0b1100111)) { Transfer_flag = true; Transfer_cnt ++; }
 	if(performance_counters(1) && performance_counters(4) == 0b0000011) { Load_flag = true; Load_cnt ++; }
 	if(performance_counters(1) && performance_counters(4) == 0b0100011) { Store_flag = true; Store_cnt ++; }
 	if(performance_counters(1) && performance_counters(4) == 0b0010011) { Immediate_flag = true; Immediate_cnt ++; }
