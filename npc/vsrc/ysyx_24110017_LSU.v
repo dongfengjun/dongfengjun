@@ -1,4 +1,4 @@
-`include "common.vh"
+`include "defines.v"
 module ysyx_24110017_LSU(
 	input clk,
 	input rst,

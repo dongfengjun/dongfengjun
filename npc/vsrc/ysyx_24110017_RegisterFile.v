@@ -1,4 +1,4 @@
-`include "defines.vh"
+`include "defines.v"
 module ysyx_24110017_RegisterFile #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
   input clk,
   input [DATA_WIDTH-1:0] wdata,

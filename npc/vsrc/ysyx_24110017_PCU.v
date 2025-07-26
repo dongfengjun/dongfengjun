@@ -1,4 +1,4 @@
-`include "defines.vh"
+`include "defines.v"
 module ysyx_24110017_PCU(
 	input clk,
 	input rst,
