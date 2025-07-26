@@ -311,7 +311,7 @@ function int performance_counter(int i);
 															 : (i == 1) ? {31'b0,id_valid && ex_ready}
 															 : (i == 2) ? {31'b0,ex_valid && wb_ready}
 															 : (i == 3) ? {31'b0,ls_done}
-															 : (i == 4) ? {25'b0,op}
+															 : (i == 4) ? {25'b0,inst[6:0]}
 															 : (i == 5) ? {31'b0,wb_done}
 															 : (i == 6) ? {31'b0,if_axi_arvalid && if_axi_arready}
 															 : (i == 7) ? {31'b0,if_axi_rvalid && if_axi_rready}
