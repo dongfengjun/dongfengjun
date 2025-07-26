@@ -335,9 +335,9 @@ void performance_evaluation() {
 	if(dpic_display(3)) g_nr_guest_inst ++;
 	if(performance_counters(0)) { if_performance_cnt ++; }
 	else {if_wait ++; }
-	if(performance_counters(1)) id_performance_cnt ++;
-	if(performance_counters(2)) ex_performance_cnt ++;
-	if(performance_counters(3)) ls_performance_cnt ++;
+	if(performance_counters(1)) id_fin_cnt ++;
+	if(performance_counters(2)) ex_fin_cnt ++;
+	if(performance_counters(3)) ls_fin_cnt ++;
 	if(performance_counters(6)) if_mem_flag = true;
 	if(performance_counters(7)) if_mem_flag = false;
 	if(if_mem_flag) if_mem_wait ++;
@@ -368,7 +368,7 @@ void performance_evaluation() {
 	if(performance_counters(3)) ls_store_flag = false;
 	if(performance_counters(9)) { ls_load_flag = true; ls_load_cnt ++; }
 	if(performance_counters(3)) ls_load_flag = false;
-	if(ls_write_flag) ls_store_wait ++;
+	if(ls_store_flag) ls_store_wait ++;
 	if(ls_load_flag) ls_load_wait ++;
 }
 
