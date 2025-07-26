@@ -1,4 +1,4 @@
-`include "defines.vh"
+`define YOSYS_STA
 module ysyx_24110017(
 	input clock,
 	input reset,
