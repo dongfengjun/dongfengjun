@@ -95,10 +95,10 @@ uint64_t Load_wait = 0;
 uint64_t Store_wait = 0;
 uint64_t Immediate_wait = 0;
 uint64_t System_wait = 0;
-uint64_t ls_store_cnt = 0;
-uint64_t ls_load_cnt = 0;
-uint64_t ls_store_wait = 0;
-uint64_t ls_load_wait = 0;
+int ls_store_cnt = 0;
+int ls_load_cnt = 0;
+int ls_store_wait = 0;
+int ls_load_wait = 0;
 
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
@@ -447,9 +447,9 @@ int main(int argc, char *argv[]) {
   Log("Integer\tTransfer\tLoad\tStore\tImmediate\tSystem");
   //printf("%.6f  %.6f  %.6f  %.6f  %.6f  %.6f (Proportion)",(double)Integer_Computational_wait/(double)ex_total_wait,(double)Transfer_wait/(double)ex_total_wait,(double)Load_wait/(double)ex_total_wait,(double)Store_wait/(double)ex_total_wait,(double)Immediate_wait/(double)ex_total_wait,(double)System_wait/(double)ex_total_wait);
   //printf("%ld\t%ld\t%ld\t%ld\t%ld\t%ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Transfer_wait/Transfer_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, System_wait/System_cnt);
-  Log("The proportion of IF MEM access:%.6f", (double)if_mem_wait/(double)if_wait);
-	Log("LS LOAD:%d (Average)", (int)ls_load_wait/(int)ls_load_cnt);
-  Log("LS STORE:%d (Average)", ls_store_wait/ls_store_cnt);
+  printf("The proportion of IF MEM access:%.6f\n", (double)if_mem_wait/(double)if_wait);
+	printf("LS LOAD:%d (Average)", ls_load_wait/ls_load_cnt);
+  printf("LS STORE:%d (Average)", ls_store_wait/ls_store_cnt);
 /***close**/
 	statistic();
 	tfp->close();
