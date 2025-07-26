@@ -358,7 +358,7 @@ void performance_evaluation() {
 	if(performance_counters(7)) if_mem_flag = false;
 	if(if_mem_flag) if_mem_wait ++;
 	if(performance_counters(8)) if_flag = true;
-	if(performance_counters(0)) if_mem_flag = false;
+	if(performance_counters(0)) if_flag = false;
 	if(if_flag) if_wait ++;
 	if(performance_counters(1)) ex_total_flag = true;
 	if(performance_counters(5)) ex_total_flag = false;
