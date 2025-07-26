@@ -115,16 +115,15 @@ static void statistic() {
 	if (g_timer > 0) Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
   else Log("Finish running in less than 1 us and can not calculate the simulation frequency");	
 	Log("***********Performance Evaluation**************");
-	printf("ls_load_cnt=%ld\n", ls_load_cnt);
-	printf("System_cnt=%ld\n", System_wait);
 	Log("IPC = %.6f", (double)g_nr_guest_inst/(double)g_nr_guest_cycle);
 	Log("CPI = %.6f", (double)g_nr_guest_cycle/(double)g_nr_guest_inst);
 	Log("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt);
 	Log("Integer\tTransfer\tLoad\tStore\tImmediate\tSystem");
-	//Log("%.6f\t%.6f\t%.6f\t%.6f\t%.6f\t%.6f (Proportion)",(double)Integer_Computational_wait/(double)ex_total_wait,(double)Transfer_wait/(double)ex_total_wait,(double)Load_wait/(double)ex_total_wait,(double)Store_wait/(double)ex_total_wait,(double)Immediate_wait/(double)ex_total_wait,(double)System_wait/(double)ex_total_wait);
-	//Log("%ld\t%ld\t%ld\t%ld\t%ld\t%ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Transfer_wait/Transfer_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, System_wait/System_cnt);
+	Log("%.6f\t%.6f\t%.6f\t%.6f\t%.6f\t%.6f (Proportion)",(double)Integer_Computational_wait/(double)ex_total_wait,(double)Transfer_wait/(double)ex_total_wait,(double)Load_wait/(double)ex_total_wait,(double)Store_wait/(double)ex_total_wait,(double)Immediate_wait/(double)ex_total_wait,(double)System_wait/(double)ex_total_wait);
+	if(System_cnt == 0) { System_wait = 1; System_cnt = 1; }
+	Log("%ld\t%ld\t%ld\t%ld\t%ld\t%ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Transfer_wait/Transfer_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, System_wait/System_cnt);
 	Log("The proportion of IF MEM access:%.6f", (double)if_mem_wait/(double)if_wait);
-	//Log("LS LOAD:%ld (Average)", ls_load_wait/ls_load_cnt);
+	Log("LS LOAD:%ld (Average)", ls_load_wait/ls_load_cnt);
 	Log("LS STORE:%ld (Average)", ls_store_wait/ls_store_cnt);
 }
 
