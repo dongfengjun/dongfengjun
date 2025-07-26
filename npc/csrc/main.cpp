@@ -56,7 +56,12 @@ word_t dpic_display(int i) {
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
   return dpic_grab(i);
 }
-/***END***/
+word_t performance_counters(int i) {
+  extern int performance_counter(int i);
+  svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
+  return performance_counter(i);
+}
+/******/
 
 bool RUNNING;
 void npc_trap() {
@@ -71,6 +76,10 @@ void npc_trap() {
 extern CPU_state cpu;
 uint64_t g_nr_guest_inst = 0;
 uint64_t g_nr_guest_cycle = 0;
+uint64_t if_performance_cnt = 0;
+uint64_t id_performance_cnt = 0;
+uint64_t ex_performance_cnt = 0;
+uint64_t ls_performance_cnt = 0;
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
@@ -309,6 +318,10 @@ void cpu_exec(int n) {
 		isa_gpr_push();
 		g_nr_guest_cycle ++;
 		if(dpic_display(3)) { g_nr_guest_inst ++; }
+		if(performance_counters(0)) if_performance_cnt ++;
+		if(performance_counters(1)) id_performance_cnt ++;
+		if(performance_counters(2)) ex_performance_cnt ++;
+		if(performance_counters(3)) ls_performance_cnt ++;
 #ifdef CONFIG_ITRACE
 		itrace_push();
 #endif

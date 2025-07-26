@@ -303,6 +303,17 @@ function int dpic_grab(int i);
 		assign dpic_grab = (i == 0) ? pc : (i == 1) ? dnpc : (i == 2) ? inst : (i == 3) ? {31'b0,DIFFTEST} : 32'b0;
   end
 endfunction
+/***DPI-C*PERFORMANCE_COUNTER***/
+export "DPI-C" function performance counter;
+function int performance_counter(int i);
+  begin
+    assign performance_counter = (i == 0) ? {31'b0,if_axi_rvalid && if_axi_rready}
+															 : (i == 1) ? {31'b0,id_valid}
+															 : (i == 2) ? {31'b0,ex_valid}
+															 : (i == 3) ? {31'b0,ls_axi_rvalid && ls_axi_rready}
+															 : 32'b0;
+  end
+endfunction
 /***E*N*D***/
 
 
