@@ -448,8 +448,8 @@ int main(int argc, char *argv[]) {
   //printf("%.6f  %.6f  %.6f  %.6f  %.6f  %.6f (Proportion)",(double)Integer_Computational_wait/(double)ex_total_wait,(double)Transfer_wait/(double)ex_total_wait,(double)Load_wait/(double)ex_total_wait,(double)Store_wait/(double)ex_total_wait,(double)Immediate_wait/(double)ex_total_wait,(double)System_wait/(double)ex_total_wait);
   //printf("%ld\t%ld\t%ld\t%ld\t%ld\t%ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Transfer_wait/Transfer_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, System_wait/System_cnt);
   Log("The proportion of IF MEM access:%.6f", (double)if_mem_wait/(double)if_wait);
-	Log("LS LOAD:%ld (Average)", ls_load_wait/ls_load_cnt);
-  Log("LS STORE:%ld (Average)", ls_store_wait/ls_store_cnt);
+	Log("LS LOAD:%d (Average)", ls_load_wait/ls_load_cnt);
+  Log("LS STORE:%d (Average)", ls_store_wait/ls_store_cnt);
 /***close**/
 	statistic();
 	tfp->close();
