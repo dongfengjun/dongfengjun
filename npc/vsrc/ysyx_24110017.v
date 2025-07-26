@@ -308,8 +308,8 @@ export "DPI-C" function performance_counter;
 function int performance_counter(int i);
   begin
     assign performance_counter = (i == 0) ? {31'b0,if_axi_rvalid && if_axi_rready}
-															 : (i == 1) ? {31'b0,id_valid}
-															 : (i == 2) ? {31'b0,ex_valid}
+															 : (i == 1) ? {31'b0,id_valid && ex_ready}
+															 : (i == 2) ? {31'b0,ex_valid && wb_ready}
 															 : (i == 3) ? {31'b0,ls_axi_rvalid && ls_axi_rready}
 															 : 32'b0;
   end
