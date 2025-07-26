@@ -83,8 +83,8 @@ static void statistic() {
   Log("host time spent = " NUMBERIC_FMT " us", g_timer);
   Log("total guest cycles = " NUMBERIC_FMT, g_nr_guest_cycle);
 	Log("total guest instructions = " NUMBERIC_FMT, g_nr_guest_inst);
-	Log("IPC = %.6f", g_nr_guest_inst/g_nr_guest_cycle);
-	Log("CPI = %.6f", g_nr_guest_cycle/g_nr_guest_inst);
+	Log("IPC = %.6f", (double)g_nr_guest_inst/(double)g_nr_guest_cycle);
+	Log("CPI = %.6f", (double)g_nr_guest_cycle/(double)g_nr_guest_inst);
   if (g_timer > 0) Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
   else Log("Finish running in less than 1 us and can not calculate the simulation frequency");
 }
