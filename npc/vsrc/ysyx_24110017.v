@@ -1,4 +1,4 @@
-`include "common.vh"
+`include "defines.vh"
 module ysyx_24110017(
 	input clock,
 	input reset,
