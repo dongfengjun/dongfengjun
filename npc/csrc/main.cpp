@@ -123,7 +123,7 @@ static void statistic() {
 	Log("%ld\t%ld\t%ld\t%ld\t%ld\t%ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Transfer_wait/Transfer_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, System_wait/System_cnt);
 	Log("The proportion of IF MEM access:%.6f", (double)if_mem_wait/(double)if_wait);
 	Log("LS LOAD:%ld (Average)", ls_load_wait/ls_load_cnt);
-	LOg("LS STORE:%ld (Average)", ls_store_wait/ls_store_cnt);
+	Log("LS STORE:%ld (Average)", ls_store_wait/ls_store_cnt);
 }
 
 void assert_fail_msg() {
