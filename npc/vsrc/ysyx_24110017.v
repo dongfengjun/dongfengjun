@@ -100,7 +100,7 @@ wire [1:0]ls_awburst,ls_arburst;
 wire [31:0]mepc,o_mepc,mstatus,o_mstatus,mcause,o_mcause,mtvec,o_mtvec;
 wire gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 /***LSU***/
-wire [31:0]ls_rdata; //LSU_AXI4-LITE
+wire [31:0]ls_rdata;
 wire [31:0]ls_axi_awaddr,ls_axi_wdata,ls_axi_araddr,ls_axi_rdata;
 wire [3:0]ls_axi_wstrb;
 wire [7:0]ls_axi_awlen,ls_axi_arlen;
