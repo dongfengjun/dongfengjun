@@ -1,61 +1,53 @@
-module ysyx_24110017_LSU(clk,rst,sram_lsu_read,sram_lsu_write,LSU_DONE,
-		ls_rdata,
-		valid,wen,waddr,wdata,raddr,wmask,awsize,arsize,awlen,arlen,awburst,arburst,
-		M_AXI_AWREADY,M_AXI_AWVALID,M_AXI_AWID,M_AXI_AWADDR,
-		M_AXI_AWLEN,M_AXI_AWSIZE,M_AXI_AWBURST,
-		M_AXI_WREADY,M_AXI_WVALID,M_AXI_WDATA,M_AXI_WSTRB,M_AXI_WLAST,          
-		M_AXI_BREADY,M_AXI_BVALID,M_AXI_BID,M_AXI_BRESP,
-		M_AXI_ARREADY,M_AXI_ARVALID,M_AXI_ARID,M_AXI_ARADDR,
-		M_AXI_ARLEN,M_AXI_ARSIZE,M_AXI_ARBURST,
-		M_AXI_RREADY,M_AXI_RVALID,M_AXI_RID,M_AXI_RDATA,M_AXI_RRESP,M_AXI_RLAST
+module ysyx_24110017_LSU(
+	input clk,
+	input rst,
+	input ls_read_i,ls_write_i,
+	output ls_done_o,
+	output [31:0]ls_rdata_o,
+
+	input valid_i,wen_i,
+	input [31:0]waddr_i,wdata_i,raddr_i,
+	input [3:0]wmask_i,
+	input [2:0]awsize_i,arsize_i,
+	input [7:0]awlen_i,arlen_i,
+	input [1:0]awburst_i,arburst_i,
+
+	input ls_axi_awready,
+	output ls_axi_awvalid,
+	output [3:0]ls_axi_awid,
+	output [31:0]ls_axi_awaddr,
+	output [7:0]ls_axi_awlen,
+	output [2:0]ls_axi_awsize,
+	output [1:0]ls_axi_awburst,
+	input ls_axi_wready,
+	output ls_axi_wvalid,
+	output [31:0]ls_axi_wdata,
+	output [3:0]ls_axi_wstrb,
+	output ls_axi_wlast,
+	output ls_axi_bready,
+	input ls_axi_bvalid,
+	input [3:0]ls_axi_bid,
+	input [1:0]ls_axi_bresp,
+
+	input ls_axi_arready,
+	output ls_axi_arvalid,
+	output [3:0]ls_axi_arid,
+	output [31:0]ls_axi_araddr,
+	output [7:0]ls_axi_arlen,
+	output [2:0]ls_axi_arsize,
+	output [1:0]ls_axi_arburst,
+	output ls_axi_rready,
+	input ls_axi_rvalid,
+	input [3:0]ls_axi_rid,
+	input [31:0]ls_axi_rdata,
+	input [1:0]ls_axi_rresp,
+	input ls_axi_rlast
 );
-input clk;
-input rst;
-input sram_lsu_read,sram_lsu_write;
-output LSU_DONE;
-output [31:0]ls_rdata;
 
-input valid,wen;
-input [31:0]waddr,wdata,raddr;
-input [3:0]wmask;
-input [2:0]awsize,arsize;
-input [7:0]awlen,arlen;
-input [1:0]awburst,arburst;
-
-input M_AXI_AWREADY;
-output M_AXI_AWVALID;
-output [3:0]M_AXI_AWID;
-output [31:0]M_AXI_AWADDR;
-output [7:0]M_AXI_AWLEN;
-output [2:0]M_AXI_AWSIZE;
-output [1:0]M_AXI_AWBURST;
-input M_AXI_WREADY;
-output M_AXI_WVALID;
-output [31:0]M_AXI_WDATA;
-output [3:0]M_AXI_WSTRB;
-output M_AXI_WLAST;
-output M_AXI_BREADY;
-input M_AXI_BVALID;
-input [3:0]M_AXI_BID;
-input [1:0]M_AXI_BRESP;
-
-input M_AXI_ARREADY;
-output M_AXI_ARVALID;
-output [3:0]M_AXI_ARID;
-output [31:0]M_AXI_ARADDR;
-output [7:0]M_AXI_ARLEN;
-output [2:0]M_AXI_ARSIZE;
-output [1:0]M_AXI_ARBURST;
-output M_AXI_RREADY;
-input M_AXI_RVALID;
-input [3:0]M_AXI_RID;
-input [31:0]M_AXI_RDATA;
-input [1:0]M_AXI_RRESP;
-input M_AXI_RLAST;
-
-
-reg LSU_DONE;
-reg [31:0]ls_rdata;
+reg ls_done_reg;
+assign ls_done_o = ls_done_reg;
+reg [31:0]ls_rdata_reg;
+assign ls_rdata_o = ls_rdata_reg;
 
 /***单周期*DPIC***
 import "DPI-C" function int pmem_read(input int raddr);
@@ -84,14 +76,7 @@ wire [7:0]rand_delay;
 reg [7:0]delay_counter,avalid_delay_counter,wvalid_delay_counter;
 LFSR_ysyx_24110017 LFSR_ysyx_20110017(clk,rst,rand_delay);
 ***END***/
-wire [31:0]M_AXI_AWADDR,M_AXI_WDATA,M_AXI_ARADDR,M_AXI_RDATA;             
-wire [3:0]M_AXI_WSTRB;
-wire [7:0]M_AXI_AWLEN,M_AXI_ARLEN;
-wire [3:0]M_AXI_AWID,M_AXI_BID,M_AXI_ARID;
-wire [3:0]M_AXI_AWSIZE,M_AXI_ARSIZE;
-wire [2:0]M_AXI_AWBURST,M_AXI_ARBURST;
-wire [1:0]M_AXI_BRESP,M_AXI_RRESP;
-wire M_AXI_AWVALID,M_AXI_AWREADY,M_AXI_WVALID,M_AXI_WREADY,M_AXI_BVALID,M_AXI_BREADY,M_AXI_ARVALID,M_AXI_ARREADY,M_AXI_RVALID,M_AXI_RREADY,M_AXI_WLAST,M_AXI_RLAST;
+import "DPI-C" function void diff_skip_ref();
 
 parameter IDLE=2'b0,READ=2'b01,WRITE=2'b10,DONE=2'b11;
 reg [1:0]state;
@@ -105,17 +90,17 @@ reg [1:0]axi_awburst;
 reg [3:0]axi_wstrb;
 reg axi_bready;
 reg axi_wlast;
-assign M_AXI_AWVALID = axi_awvalid;
-assign M_AXI_WVALID = axi_wvalid;
-assign M_AXI_AWID = axi_awid;
-assign M_AXI_AWADDR = axi_awaddr;
-assign M_AXI_WDATA = (M_AXI_WVALID && M_AXI_WREADY) ? wdata : 32'h0;//axi_wdata;
-assign M_AXI_AWLEN = axi_awlen;
-assign M_AXI_AWSIZE = axi_awsize;
-assign M_AXI_AWBURST = axi_awburst;
-assign M_AXI_WSTRB = (M_AXI_WVALID && M_AXI_WREADY) ? wmask : 4'b0;//axi_wstrb;
-assign M_AXI_BREADY = axi_bready;
-assign M_AXI_WLAST = axi_wlast;
+assign ls_axi_awvalid = axi_awvalid;
+assign ls_axi_wvalid = axi_wvalid;
+assign ls_axi_awid = axi_awid;
+assign ls_axi_awaddr = axi_awaddr;
+assign ls_axi_wdata = (ls_axi_wvalid && ls_axi_wready) ? wdata_i : 32'h0;//axi_wdata;
+assign ls_axi_awlen = axi_awlen;
+assign ls_axi_awsize = axi_awsize;
+assign ls_axi_awburst = axi_awburst;
+assign ls_axi_wstrb = (ls_axi_wvalid && ls_axi_wready) ? wmask_i : 4'b0;//axi_wstrb;
+assign ls_axi_bready = axi_bready;
+assign ls_axi_wlast = axi_wlast;
 
 reg axi_arvalid,axi_rready;
 reg [3:0]axi_arid;
@@ -123,13 +108,13 @@ reg [31:0]axi_araddr;
 reg [7:0]axi_arlen;
 reg [2:0]axi_arsize;
 reg [1:0]axi_arburst;
-assign M_AXI_ARVALID = axi_arvalid;
-assign M_AXI_RREADY = axi_rready;
-assign M_AXI_ARID = axi_arid;
-assign M_AXI_ARADDR = axi_araddr;
-assign M_AXI_ARLEN = axi_arlen;
-assign M_AXI_ARSIZE = axi_arsize;
-assign M_AXI_ARBURST = axi_arburst;
+assign ls_axi_arvalid = axi_arvalid;
+assign ls_axi_rready = axi_rready;
+assign ls_axi_arid = axi_arid;
+assign ls_axi_araddr = axi_araddr;
+assign ls_axi_arlen = axi_arlen;
+assign ls_axi_arsize = axi_arsize;
+assign ls_axi_arburst = axi_arburst;
 
 always @(posedge clk or posedge rst) begin
 		if (rst) begin
@@ -150,8 +135,9 @@ always @(posedge clk or posedge rst) begin
 			axi_awburst <= 2'b01;
 			axi_wlast <= 0;
       axi_bready <= 0;
-			LSU_DONE <= 0;
-			ls_rdata <= 32'h0;
+
+			ls_done_reg <= 0;
+			ls_rdata_reg <= 32'h0;
 //			delay_counter <= 0;
 //			avalid_delay_counter <= 0;
 //			wvalid_delay_counter <= 0;
@@ -159,21 +145,21 @@ always @(posedge clk or posedge rst) begin
 		else begin
       case (state)
         IDLE: begin
-				  if(sram_lsu_read) begin
+				  if(ls_read_i) begin
             state <= READ;
 					  axi_arvalid <= 1'b1;//非DELAY_TEST
-						axi_araddr <= raddr;
-						axi_arsize <= arsize;
-						axi_arlen <= arlen;
-						axi_arburst <= arburst;
+						axi_araddr <= raddr_i;
+						axi_arsize <= arsize_i;
+						axi_arlen <= arlen_i;
+						axi_arburst <= arburst_i;
 					end
-					if(sram_lsu_write) begin
+					if(ls_write_i) begin
 		        state <= WRITE;
 						axi_awvalid <= 1'b1;//非DELAY_TEST
-						axi_awaddr <= waddr;
-						axi_awsize <= awsize;
-						axi_awlen <= awlen;
-						axi_awburst <= awburst;
+						axi_awaddr <= waddr_i;
+						axi_awsize <= awsize_i;
+						axi_awlen <= awlen_i;
+						axi_awburst <= awburst_i;
 	        end
 /***DELAY_TEST_AR*AWVALID***
 					if(sram_lsu_read || sram_lsu_write) begin
@@ -194,13 +180,13 @@ always @(posedge clk or posedge rst) begin
             avalid_delay_counter <= avalid_delay_counter - 1;
           end
 /***END***/
-          if(M_AXI_ARVALID && M_AXI_ARREADY) begin
+          if(ls_axi_arvalid && ls_axi_arready) begin
 						axi_arvalid <= 1'b0;
 						//axi_araddr <= raddr;
           end
-					if(M_AXI_RVALID && !M_AXI_RREADY) begin
+					if(ls_axi_rvalid && !ls_axi_rready) begin
 						axi_rready <= 1'b1;
-						ls_rdata <= M_AXI_RDATA;
+						ls_rdata_reg <= ls_axi_rdata;
 					end
 /***DELAY_TEST_RAND*RREADY***
           if(M_AXI_RVALID && !M_AXI_RREADY) begin
@@ -216,10 +202,13 @@ always @(posedge clk or posedge rst) begin
             end
           end
 /***END***/
-	        if(M_AXI_RVALID && M_AXI_RREADY) begin
+	        if(ls_axi_rvalid && ls_axi_rready) begin
             axi_rready <= 0;
             state <= DONE;
-						LSU_DONE <= 1'b1;
+						if((ls_axi_araddr - 32'h10000000 < 32'h1000) || (ls_axi_araddr == 32'h02000000) || (ls_axi_araddr == 32'h02000004)) begin //DEVICE DIFFTEST
+							diff_skip_ref();
+						end
+						ls_done_reg <= 1'b1;
           end
         end
 				WRITE: begin
@@ -235,7 +224,7 @@ always @(posedge clk or posedge rst) begin
             avalid_delay_counter <= avalid_delay_counter - 1;
           end
 /***END***/
-					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
+					if(ls_axi_awvalid && ls_axi_awready) begin
 						axi_awvalid <= 0;
 						axi_wvalid <= 1;
 						axi_wlast <= 1;
@@ -258,12 +247,12 @@ always @(posedge clk or posedge rst) begin
 						end
 					end
 /***END***/
-					if(M_AXI_WVALID && M_AXI_WREADY) begin
+					if(ls_axi_wvalid && ls_axi_wready) begin
 						axi_wvalid <= 0;
 						//axi_wdata <= wdata;//加判断条件
 						//axi_wstrb <= wmask;
 					end
-					if(M_AXI_BVALID && !M_AXI_BREADY) begin
+					if(ls_axi_bvalid && !ls_axi_bready) begin
 						axi_bready <= 1;
 					end
 /***DELAY_TEST_RAND*BREADY***
@@ -280,10 +269,10 @@ always @(posedge clk or posedge rst) begin
 						end
 					end
 /***END***/
-					if(M_AXI_BVALID && M_AXI_BREADY) begin
+					if(ls_axi_bvalid && ls_axi_bready) begin
 						axi_bready <= 0;
 						state <= DONE;
-						LSU_DONE <= 1'b1;
+						ls_done_reg <= 1'b1;
 					end
 				end
         DONE: begin
@@ -302,13 +291,12 @@ always @(posedge clk or posedge rst) begin
 					axi_arlen <= 8'b0;
 					axi_wvalid <= 0;
 					axi_bready <= 0;
-					LSU_DONE <= 0;
-					ls_rdata <= 32'h0;
+					ls_done_reg <= 0;
+					ls_rdata_reg <= 32'h0;
           state <= IDLE;
         end
       endcase
 		end
 end
-
-/***E*N*D***/
+/***END***/
 endmodule

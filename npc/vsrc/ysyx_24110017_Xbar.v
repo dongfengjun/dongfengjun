@@ -63,7 +63,7 @@ module ysyx_24110017_Xbar(
 	output wire [31:0]LSU_AXI_RDATA,
 	output wire [1:0]LSU_AXI_RRESP,
 	output wire LSU_AXI_RLAST,
-/***SoC***
+/***My_Sram***
 	input wire S_AXI_AWREADY,
 	output wire S_AXI_AWVALID,
 	output wire [3:0]S_AXI_AWID,
@@ -94,7 +94,8 @@ module ysyx_24110017_Xbar(
 	input wire [31:0]S_AXI_RDATA,
 	input wire [1:0]S_AXI_RRESP,
 	input wire S_AXI_RLAST,
-
+******/
+/***My_Uart***
 	input wire U_AXI_AWREADY,
 	output wire U_AXI_AWVALID,
 	output wire [3:0]U_AXI_AWID,
@@ -156,7 +157,7 @@ module ysyx_24110017_Xbar(
   input wire [31:0]io_master_rdata,
   input wire [1:0]io_master_rresp,
   input wire io_master_rlast,
-/***AXI_CLINT***/
+/***MY_CLINT***/
 	input wire C_AXI_AWREADY,
 	output wire C_AXI_AWVALID,
 	output wire [3:0]C_AXI_AWID,
@@ -199,6 +200,7 @@ wire [2:0]X_AXI_AWSIZE,X_AXI_ARSIZE;
 wire [1:0]X_AXI_AWBURST,X_AXI_ARBURST;
 wire [1:0]X_AXI_BRESP,X_AXI_RRESP;
 wire X_AXI_AWVALID,X_AXI_AWREADY,X_AXI_WVALID,X_AXI_WREADY,X_AXI_BVALID,X_AXI_BREADY,X_AXI_ARVALID,X_AXI_ARREADY,X_AXI_RVALID,X_AXI_RREADY,X_AXI_WLAST,X_AXI_RLAST;
+
 
 parameter [1:0]IDLE = 2'b00,GRANT_LSU = 2'b01,GRANT_IFU = 2'b10,WAIT_CLINT = 2'b11;
 reg [1:0]state,next_state;

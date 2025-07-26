@@ -10,18 +10,28 @@
 #include "./include/common.h"
 #include "nvboard.h"
 
+extern char *mtrace_p;
 /***ysyxSoC***/
 extern "C" void flash_read(int32_t addr, int32_t *data) {
 	*data = pmem_read(addr + CONFIG_MBASE);
+#ifdef CONFIG_MTRACE
+	mtrace_p += sprintf(mtrace_p, "flash addr:%08x read:%08x\n", addr, *data);
+#endif
 }
 extern "C" void mrom_read(int32_t addr, int32_t *data) {
 	*data = pmem_read(addr);
 }
 extern "C" void psram_read(int32_t addr, int32_t *data) {
 	*data = c_psram_read(addr);
+#ifdef CONFIG_MTRACE
+	mtrace_p += sprintf(mtrace_p, "psram addr:%08x read:%08x\n", addr, *data);
+#endif
 }
 extern "C" void psram_write(int32_t addr, int32_t data, char len) {
 	c_psram_write(addr,data,len);
+#ifdef CONFIG_MTRACE
+  mtrace_p += sprintf(mtrace_p, "psram addr:%08x write:%08x\n", addr, data);
+#endif
 }
 extern "C" void diff_skip_ref() {
 	difftest_skip_ref();
@@ -77,22 +87,22 @@ static void statistic() {
 
 void assert_fail_msg() {
   isa_regs_display();
-	IFDEF(CONFIG_ITRACE, iringbuf_push(iringbuf));
+	IFDEF(CONFIG_ITRACE, iringbuf_display());
   statistic();
 }
 
 #ifdef CONFIG_ITRACE
 static void itrace_push(){
 	uint8_t insts[4];
-  insts[0] = top->inst & 0xFF;
-  insts[1] = (top->inst >>  8) & 0xFF;
-  insts[2] = (top->inst >> 16) & 0xFF;
-  insts[3] = (top->inst >> 24) & 0xFF;
+  insts[0] = dpic_display(2) & 0xFF;
+  insts[1] = (dpic_display(2) >>  8) & 0xFF;
+  insts[2] = (dpic_display(2) >> 16) & 0xFF;
+  insts[3] = (dpic_display(2) >> 24) & 0xFF;
 
   char *p = logbuf;
 	char *irp = iringbuf;
-  p += snprintf(p, sizeof(logbuf), FMT_WORD ":", top->pc);
-	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", top->pc);
+  p += snprintf(p, sizeof(logbuf), FMT_WORD ":", dpic_display(0));
+	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", dpic_display(0));
   int ilen = 4;
   int i;
   for (i = ilen - 1; i >= 0; i --) {
@@ -103,8 +113,8 @@ static void itrace_push(){
 	memset(irp, ' ', 1);
 	p += 1;
 	irp += 1;
-	disassemble(p, logbuf + sizeof(logbuf) - p, top->pc, (uint8_t *)&insts, 4);
-	disassemble(irp, logbuf + sizeof(logbuf) - irp, top->pc, (uint8_t *)&insts, 4);
+	disassemble(p, logbuf + sizeof(logbuf) - p, dpic_display(0), (uint8_t *)&insts, 4);
+	disassemble(irp, logbuf + sizeof(logbuf) - irp, dpic_display(0), (uint8_t *)&insts, 4);
 	strncat(iringbuf, " \n", 3);
 	iringbuf_push(iringbuf);
 }
@@ -135,9 +145,9 @@ static word_t fpc;
 static word_t fnpc;
 static word_t finst;
 void ftrace_push() {
-	fnpc = top->dnpc;
-	fpc = top->pc;
-  finst = top->inst;
+	fnpc = dpic_display(2);
+	fpc = dpic_display(1);
+  finst = (dpic_display(2) & 0xFF << 24) | ((dpic_display(2) >>  8) & 0xFF << 16) | ((dpic_display(2) >> 16) & 0xFF << 8) | (dpic_display(2) >> 24) & 0xFF;
   fopcode = finst & 0x7F;
 	if(fopcode == 0b1100111 || fopcode == 0b1101111) {
 		ftracebuf[ftracehead].npc = fnpc;
@@ -293,7 +303,7 @@ void cpu_exec(int n) {
 		nvboard_update();
 		cpu.pc = dpic_display(1);
 		isa_gpr_push();
-		g_nr_guest_inst++;
+		if(dpic_display(3)) { g_nr_guest_inst ++; }
 #ifdef CONFIG_ITRACE
 		itrace_push();
 #endif

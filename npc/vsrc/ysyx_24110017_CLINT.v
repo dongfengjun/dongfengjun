@@ -1,36 +1,36 @@
 module ysyx_24110017_CLINT(
     input wire clk,
     input wire rst,
-		output wire C_AXI_AWREADY,
-		input wire C_AXI_AWVALID,
-		input wire [3:0]C_AXI_AWID,
-		input wire [31:0]C_AXI_AWADDR,
-		input wire [7:0]C_AXI_AWLEN,
-		input wire [2:0]C_AXI_AWSIZE,
-		input wire [1:0]C_AXI_AWBURST,
-		output wire C_AXI_WREADY,
-		input wire C_AXI_WVALID,
-		input wire [31:0]C_AXI_WDATA,
-		input wire [3:0]C_AXI_WSTRB,
-		input wire C_AXI_WLAST,
-		input wire C_AXI_BREADY,
-		output wire C_AXI_BVALID,
-		output wire [3:0]C_AXI_BID,
-		output wire [1:0]C_AXI_BRESP,
+		    output wire c_axi_awready,
+    input wire c_axi_awvalid,
+    input wire [3:0]c_axi_awid,
+    input wire [31:0]c_axi_awaddr,
+    input wire [7:0]c_axi_awlen,
+    input wire [2:0]c_axi_awsize,
+    input wire [1:0]c_axi_awburst,
+    output wire c_axi_wready,
+    input wire c_axi_wvalid,
+    input wire [31:0]c_axi_wdata,
+    input wire [3:0]c_axi_wstrb,
+    input wire c_axi_wlast,
+    input wire c_axi_bready,
+    output wire c_axi_bvalid,
+    output wire [3:0]c_axi_bid,
+    output wire [1:0]c_axi_bresp,
 
-		output wire C_AXI_ARREADY,
-		input wire C_AXI_ARVALID,
-		input wire [3:0]C_AXI_ARID,
-		input wire [31:0]C_AXI_ARADDR,
-		input wire [7:0]C_AXI_ARLEN,
-		input wire [2:0]C_AXI_ARSIZE,
-		input wire [1:0]C_AXI_ARBURST,
-		input wire C_AXI_RREADY,
-		output wire C_AXI_RVALID,
-		output wire [3:0]C_AXI_RID,
-		output wire [31:0]C_AXI_RDATA,
-		output wire [1:0]C_AXI_RRESP,
-		output wire C_AXI_RLAST
+    output wire c_axi_arready,
+    input wire c_axi_arvalid,
+    input wire [3:0]c_axi_arid,
+    input wire [31:0]c_axi_araddr,
+    input wire [7:0]c_axi_arlen,
+    input wire [2:0]c_axi_arsize,
+    input wire [1:0]c_axi_arburst,
+    input wire c_axi_rready,
+    output wire c_axi_rvalid,
+    output wire [3:0]c_axi_rid,
+    output wire [31:0]c_axi_rdata,
+    output wire [1:0]c_axi_rresp,
+    output wire c_axi_rlast
 );
 
 reg axi_awready,axi_wready,axi_bvalid,axi_arready,axi_rvalid;
@@ -38,17 +38,17 @@ reg axi_rlast;
 reg [1:0]axi_bresp,axi_rresp;
 reg [3:0]axi_bid,axi_rid;
 reg [31:0]axi_rdata;
-assign C_AXI_AWREADY = axi_awready;
-assign C_AXI_WREADY = axi_wready;
-assign C_AXI_BVALID = axi_bvalid;
-assign C_AXI_ARREADY = axi_arready;
-assign C_AXI_RVALID = axi_rvalid;
-assign C_AXI_RLAST = axi_rlast;
-assign C_AXI_BRESP = axi_bresp;
-assign C_AXI_RRESP = axi_rresp;
-assign C_AXI_BID = axi_bid;
-assign C_AXI_RID = axi_rid;
-assign C_AXI_RDATA = axi_rdata;
+assign c_axi_awready = axi_awready;
+assign c_axi_wready = axi_wready;
+assign c_axi_bvalid = axi_bvalid;
+assign c_axi_arready = axi_arready;
+assign c_axi_rvalid = axi_rvalid;
+assign c_axi_rlast = axi_rlast;
+assign c_axi_bresp = axi_bresp;
+assign c_axi_rresp = axi_rresp;
+assign c_axi_bid = axi_bid;
+assign c_axi_rid = axi_rid;
+assign c_axi_rdata = axi_rdata;
 
 reg [31:0]axi_araddr;
 localparam DEVICE_CLINT_LOW_ADDR = 32'h02000000;
@@ -64,11 +64,9 @@ always @(posedge clk) begin
 end
 
 wire [31:0]c_rdata;
-assign c_rdata = {32{(C_AXI_ARVALID && C_AXI_ARREADY)}} &
- {32{(C_AXI_ARADDR == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | 
- {32{(C_AXI_ARADDR == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
-
-import "DPI-C" function void diff_skip_ref();
+assign c_rdata = {32{(c_axi_arvalid && c_axi_arready)}} &
+ {32{(c_axi_araddr == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | 
+ {32{(c_axi_araddr == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
 
 always @(posedge clk) begin
   if(rst) begin
@@ -85,36 +83,35 @@ always @(posedge clk) begin
     axi_rdata <= 32'b0;
 	end 
 	else begin
-	  if(C_AXI_ARVALID && !C_AXI_ARREADY) begin
+	  if(c_axi_arvalid && !c_axi_arready) begin
 			axi_arready <= 1; //判断条件
     end
-		if(C_AXI_ARVALID && C_AXI_ARREADY) begin
-			axi_araddr <= C_AXI_ARADDR;
-			axi_rvalid <= 1; //判断条件
+		if(c_axi_arvalid && c_axi_arready) begin
+			axi_araddr <= c_axi_araddr;
+			axi_rvalid <= 1;
 			axi_arready <= 0;
 			axi_rdata <= c_rdata;
 			axi_rresp  <= 2'b00;
 		end
-		if(C_AXI_RVALID && C_AXI_RREADY) begin
+		if(c_axi_rvalid && c_axi_rready) begin
 			axi_araddr <= 32'b0;
 			axi_rvalid <= 0;
 			axi_rdata <= 32'h0;
-			diff_skip_ref();
 		end
-		if(C_AXI_AWVALID && !C_AXI_AWREADY) begin
+		if(c_axi_awvalid && !c_axi_awready) begin
 			axi_awready <= 1; //判断条件
 		end
-		if(C_AXI_AWVALID && C_AXI_AWREADY) begin
+		if(c_axi_awvalid && c_axi_awready) begin
 			axi_awready <= 0;
 		end
-		if(C_AXI_WVALID && !C_AXI_WREADY) begin
+		if(c_axi_wvalid && !c_axi_wready) begin
 			axi_wready <= 1;
 		end
-		if(C_AXI_WVALID && C_AXI_WREADY) begin
+		if(c_axi_wvalid && c_axi_wready) begin
 			axi_wready <= 0; //无写权限
 			axi_bvalid <= 1;
 		end
-		if(C_AXI_BVALID && C_AXI_BREADY) begin
+		if(c_axi_bvalid && c_axi_bready) begin
 			axi_bvalid <= 0;
 			axi_bresp <= 2'b11; //无写权限
 		end
