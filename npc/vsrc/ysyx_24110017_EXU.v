@@ -206,7 +206,7 @@ assign y = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 ||
 	: ((op_i == 7'b0010011) && (funct3_i == 3'b010)) ? $signed(imm_i) 
 	: ((op_i == 7'b0010011) && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {27'b0,shamt_i} 
 	: ((op_i == 7'b0110011) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r2_i
-	: ((op_i == 7'b0110011 && ((funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000)))) ? r2_i[4:0]
+	: ((op_i == 7'b0110011 && ((funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000)))) ? {27'b0,r2_i[4:0]}
 	: ((op_i == 7'b0110011) && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b001 && funct7_i == 7'b0000001) || (funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b110 && funct7_i == 7'b0000001))) ? $signed(r2_i)
 	: 32'b0;
 localparam ADD  = 4'b0000;
