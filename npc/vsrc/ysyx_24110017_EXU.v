@@ -178,7 +178,7 @@ end
 /***FU***/
 wire [31:0]a,b,ex;
 assign b = (op_i == 7'b0110011 || op_i == 7'b0100011) ? r2_i : imm_i;
-assign a = (op_i == 7'b0010011 || op_i == 7'b0000011 || op_i == 7'b0100011 || op_i == 7'b0110011/*R*/ || (op_i == 7'b1110011 && (funct3_i == 3'b001 || funct3_i == 3'b010 || funct3_i == 3'b011))/*csr*/) ? r1_i : pc_i;
+assign a = (op_i == 7'b0010011 || op_i == 7'b0000011 || op_i == 7'b0100011 || op_i == 7'b0110011/*R*/ || (op_i == 7'b1110011 && (funct3_i == 3'b001 || funct3_i == 3'b010 || funct3_i == 3'b011))/*csr*/) ? r1_i : 31'h0;
 /***ALU***/
 assign ex = 
 				({32{op_i == 7'b0010011}}/***I*addi~srai***/
@@ -209,18 +209,20 @@ assign ex =
 						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & {{{32{a[31]}},a} >> b}[31:0] ) | //srai
 `endif	
 						({32{(funct3_i == 3'b110) && (funct7_i == 7'b0000000)}} & (a | b)) | //or
-						({32{(funct3_i == 3'b111) && (funct7_i == 7'b0000000)}} & (a & b)) | //and
-						({32{(funct3_i == 3'b000) && (funct7_i == 7'b0000001)}} & (a * b)) | //mul
+						({32{(funct3_i == 3'b111) && (funct7_i == 7'b0000000)}} & (a & b)) //| //and
+/*					({32{(funct3_i == 3'b000) && (funct7_i == 7'b0000001)}} & (a * b)) | //mul
 `ifndef YOSYS_STA
 						({32{(funct3_i == 3'b001) && (funct7_i == 7'b0000001)}} & {{{32{a[31]}},$signed(a)} * {{32{b[31]}},$signed(b)}}[63:32]) | //mulh
 `endif
 						({32{(funct3_i == 3'b100) && (funct7_i == 7'b0000001)}} & ($signed($signed(a) / $signed(b)))) |  //div
 						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0000001)}} & (a / b)) | //divu
 						({32{(funct3_i == 3'b110) && (funct7_i == 7'b0000001)}} & ($signed(a) % $signed(b))) |  //R_rem
-						({32{(funct3_i == 3'b111) && (funct7_i == 7'b0000001)}} & (a % b)) //R_remui			
+						({32{(funct3_i == 3'b111) && (funct7_i == 7'b0000001)}} & (a % b)) //R_remui
+*/
 					)
 				)
 			|
+/***BU***/
 				({32{(op_i == 7'b1101111)}} & (pc_i + 4)) | //I_jal
 				({32{(op_i == 7'b1100111)}} & (pc_i + 4)) | //I_jalr
 				({32{(op_i == 7'b0110111)}} & imm_i) | //U_lui
