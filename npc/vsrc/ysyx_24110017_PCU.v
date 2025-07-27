@@ -1,4 +1,4 @@
-`define YOSYS_STA 0
+//`define YOSYS_STA
 module ysyx_24110017_PCU(
 	input clk,
 	input rst,
