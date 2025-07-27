@@ -148,6 +148,7 @@ always @(posedge clk) begin
 					al_start <= 1'b1;
 				end
 				if(al_done) begin
+					al_start <= 1'b0;
 					al_res <= res;
 				end
 				if(ls_valid_o && (!ls_wen_o)) begin
