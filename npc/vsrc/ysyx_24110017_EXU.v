@@ -39,6 +39,8 @@ assign ex_ready_o = ex_ready;
 reg ex_valid;
 assign ex_valid_o = ex_valid;
 
+reg al_start;
+wire al_done;
 reg ls_read_reg,ls_write_reg;
 assign ls_read_o = ls_read_reg;
 assign ls_write_o = ls_write_reg;
@@ -60,7 +62,7 @@ assign mcause_wen_o = mcause_wen_reg;
 assign mtvec_wen_o = mtvec_wen_reg;
 reg [31:0]ram_rdata_reg;
 
-parameter IDLE = 2'b00,WAIT_LSU = 2'b01,WAIT_READY = 2'b10,DONE_EXU=2'b11;
+parameter IDLE = 2'b00,WAIT = 2'b01,READY = 2'b10,DONE=2'b11;
 reg [1:0]state,next_state;
 
 always @(posedge clk) begin
@@ -81,23 +83,23 @@ always @(*) begin
 		case (state)
 			IDLE: begin
 				if(id_valid_i && ex_ready_o) begin
-					next_state = WAIT_LSU;
+					next_state = WAIT;
 				end
 			end
-			WAIT_LSU: begin
-				if((!ls_valid_o)) begin
-					next_state = WAIT_READY;
+			WAIT: begin
+				if(al_done) begin
+					next_state = READY;
 				end
-				if(ls_done_i) begin
-					next_state = WAIT_READY;
+				else if(ls_done_i) begin
+					next_state = READY;
 				end
 			end
-			WAIT_READY: begin
+			READY: begin
 				if(ex_valid_o && wb_ready_i) begin
-					next_state = DONE_EXU;
+					next_state = DONE;
 				end
 			end
-			DONE_EXU: begin
+			DONE: begin
 				next_state = IDLE;
 			end
 			default: begin
@@ -112,6 +114,8 @@ always @(posedge clk) begin
 		ex_valid <= 1'b0;
 		ex_ready <= 1'b0;
 		ex_reg <= 32'h0;
+		al_start <= 1'b0;
+		al_res <= 32'b0;
 		dnpc_reg <= pc_i + 4;
 		gpr_wen_reg <= 1'b0;
 		mepc_reg <= 32'h0;
@@ -136,7 +140,14 @@ always @(posedge clk) begin
 					ex_ready <= 1'b0;
 				end
 			end
-			WAIT_LSU: begin
+			WAIT: begin
+				if(al_valid) begin
+					al_start <= 1'b1;
+				end
+				if(al_done) begin
+					al_start <= 1'b0;
+					al_res <= res;
+				end
 				if(ls_valid_o && (!ls_wen_o)) begin
 					ex_reg <= 32'h0;
 					ls_read_reg <= 1'b1;
@@ -150,7 +161,7 @@ always @(posedge clk) begin
 					ram_rdata_reg <= ls_rdata;
 				end
 			end
-			WAIT_READY: begin
+			READY: begin
 				ex_valid <= 1'b1;
 				if(ex_valid_o && wb_ready_i) begin
 					ex_valid <= 1'b0;
@@ -169,6 +180,7 @@ always @(posedge clk) begin
 			end
 			DONE_EXU: begin
 				dnpc_reg <= dnpc;
+				al_res <= 32'h0;
 				ram_rdata_reg <= 32'h0;
 			end
 		endcase
@@ -176,26 +188,43 @@ always @(posedge clk) begin
 end
 
 /***FU***/
-wire [31:0]a,b,ex;
 assign b = (op_i == 7'b0110011 || op_i == 7'b0100011) ? r2_i : imm_i;
-assign a = (op_i == 7'b0010011 || op_i == 7'b0000011 || op_i == 7'b0100011 || op_i == 7'b0110011/*R*/ || (op_i == 7'b1110011 && (funct3_i == 3'b001 || funct3_i == 3'b010 || funct3_i == 3'b011))/*csr*/) ? r1_i : 32'h0;
+assign a = (op_i == 7'b0010011 || op_i == 7'b0000011 || op_i == 7'b0100011 || op_i == 7'b0110011/*R*/ || (op_i == 7'b1110011 && (funct3_i == 3'b001 || funct3_i == 3'b010 || funct3_i == 3'b011))/*csr*/) ? r1_i : 32'b0;
 /***ALU***/
-wire [31:0]x,y,res;
-assign x = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? r1_i : 32'b0;
-assign y = 32'b0;
+wire al_valid = (op_i == 7'b0010011);
+reg [31:0]al_res;
+wire [31:0]a,b,ex;
+wire [31:0]x,y,sel,res;
+assign x = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funt3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? r1_i : ((op_i == 7'b0010011) && funct3_i == 3'b010) ? $signed(r1_i) : 32'b0;
+assign y = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? imm_i : ((op_i == 7'b0010011) && (funct3_i == 3'b010) ? $signed(imm_i) : ((op_i == 7'b0010011) && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? shamt_i : 32'b0;
+localparam ADD  = 4'b0000;
+localparam SUB  = 4'b0001;
+localparam SLL  = 4'b0010;
+localparam SRL  = 4'b0011;
+localparam SRA  = 4'b0100;
+localparam SLT  = 4'b0101;
+localparam AND  = 4'b0110;
+localparam OR   = 4'b0111;
+localparam XOR  = 4'b1000;
+localparam MUL  = 4'b1001;
+localparam MUIH = 4'b1010;
+localparam DIV  = 4'b1011;
+localparam REM  = 4'b1100;
+assign sel =  (op_i == 7'b0010011 && funct3_i == 3'b000) ? ADD : 
+						  (op_i == 7'b0010011 && funct3_i == 3'b001) ? SLL :
+							(op_i == 7'b0010011 &&(funct3_i == 3'b010 || funct3_i == 3'b011)) ? SLT :
+							(op_i == 7'b0010011 && funct3_i == 3'b100) ? XOR :
+							(op_i == 7'b0010011 && funct3_i == 3'b101 && funct7_i == 7'b0000000) ? SRL :
+							(op_i == 7'b0010011 && funct3_i == 3'b101 && funct7_i == 7'b0100000) ? SRA :
+							(op_i == 7'b0010011 && funct3_i == 3'b110) ?  OR : 
+							(op_i == 7'b0010011 && funct3_i == 3'b111) ? AND : 4'b1111;
+
+ysyx_24110017_ALU ALU(clk,rst,x,y,sel,al_start,res,al_done);
 
 assign ex = 
 				({32{op_i == 7'b0010011}}/***I*addi~srai***/
 				& (
-						({32{funct3_i == 3'b000}} & (a + b)) |	//addi
-						({32{funct3_i == 3'b001}} & (a << shamt_i)) |	//slli
-						({32{funct3_i == 3'b010}} & {31'b0, ($signed(a) < $signed(b))}) |	//slti
-						({32{funct3_i == 3'b011}} & {31'b0, (a < b)}) |	//sltiu
-						({32{funct3_i == 3'b100}} & (a ^ b)) |	//xori
-						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0000000)}} & (a >> shamt_i)) |	//srli
-						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & (({32{a[31]}} << (32 - shamt_i)) | (a >> shamt_i))) | //srai
-						({32{funct3_i == 3'b110}} & (a | b)) |	//ori
-						({32{funct3_i == 3'b111}} & (a & b)) 	//andi
+						al_res
 					)
 				)				
 			| ({32{op_i == 7'b0110011}}/***R_add~R_remu***/
@@ -342,16 +371,17 @@ module ysyx_24110017_ALU(
 
 	localparam OP_ADD  = 4'b0000;
   localparam OP_SUB  = 4'b0001;
-  localparam OP_SHL  = 4'b0010;
-  localparam OP_SHR  = 4'b0011;
-  localparam OP_AND  = 4'b0100;
-	localparam OP_LT   = 4'b0101;
-  localparam OP_OR   = 4'b0110;
-  localparam OP_XOR  = 4'b0111;
-  localparam OP_MUL  = 4'b1000;
-	localparam OP_MUIH = 4'b1001;
-  localparam OP_DIV  = 4'b1010;
-	localparam OP_REM  = 4'b1011;
+  localparam OP_SLL  = 4'b0010;
+  localparam OP_SRL  = 4'b0011;
+	localparam OP_SRA  = 4'b0100;
+  localparam OP_SLT  = 4'b0101;
+	localparam OP_AND  = 4'b0110;
+  localparam OP_OR   = 4'b0111;
+  localparam OP_XOR  = 4'b1000;
+  localparam OP_MUL  = 4'b1001;
+	localparam OP_MUIH = 4'b1010;
+  localparam OP_DIV  = 4'b1011;
+	localparam OP_REM  = 4'b1100;
 
 	localparam IDLE		 = 2'b00;
 	localparam EXECUTE = 2'b01;
@@ -407,12 +437,16 @@ module ysyx_24110017_ALU(
 							res <= a_reg - b_reg;
 							state <= FINISH;
 						end
-						OP_SHL: begin
+						OP_SLL: begin
 							res <= a_reg << b_reg;
 							state <= FINISH;
 						end
-						OP_SHR: begin
+						OP_SRL: begin
 							res <= a_reg >> b_reg;
+							state <= FINISH;
+						end
+						OP_SRA: begin
+							res <= ({32{a_reg[31]}} << (32 - b_reg)) | (a_reg >> b_reg);
 							state <= FINISH;
 						end
 						OP_AND: begin
