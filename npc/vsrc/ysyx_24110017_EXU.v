@@ -88,7 +88,7 @@ always @(*) begin
 			end
 			WAIT: begin
 				if((!al_valid) && (!ls_valid_o)) begin
-					next_state = WAIT_READY;
+					next_state = READY;
 				end
 				if(al_done) begin
 					next_state = READY;
