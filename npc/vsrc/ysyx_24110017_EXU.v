@@ -219,7 +219,7 @@ localparam AND  = 4'b0110;
 localparam OR   = 4'b0111;
 localparam XOR  = 4'b1000;
 localparam MUL  = 4'b1001;
-localparam MUIH = 4'b1010;
+localparam MULH = 4'b1010;
 localparam DIV  = 4'b1011;
 localparam REM  = 4'b1100;
 assign sel =  ((op_i == 7'b0010011 && funct3_i == 3'b000) || (op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0000000)) ? ADD : 
