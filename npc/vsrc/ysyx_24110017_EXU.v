@@ -193,10 +193,7 @@ assign ex =
 						({32{funct3_i == 3'b011}} & {31'b0, (a < b)}) |	//sltiu
 						({32{funct3_i == 3'b100}} & (a ^ b)) |	//xori
 						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0000000)}} & (a >> shamt_i)) |	//srli
-`ifndef YOSYS_STA
-						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & (a >>> shamt_i)) | //srai
-//						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & ({{{32{a[31]}}, $signed(a)} >> shamt_i}[31:0])) |	//srai
-`endif
+						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & (({32{a[31]}} << shamt_i) | (a >> shamt_i))) | //srai
 						({32{funct3_i == 3'b110}} & (a | b)) |	//ori
 						({32{funct3_i == 3'b111}} & (a & b)) 	//andi
 					)
