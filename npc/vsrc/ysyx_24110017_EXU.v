@@ -517,7 +517,7 @@ module ysyx_24110017_ALU(
 	              div_counter <= div_counter + 1;
               end
               else begin
-                res <= remiander;
+                res <= remainder;
                 state <= FINISH;
               end
             end
