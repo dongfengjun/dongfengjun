@@ -194,9 +194,10 @@ assign a = (op_i == 7'b0010011 || op_i == 7'b0000011 || op_i == 7'b0100011 || op
 wire al_valid = (op_i == 7'b0010011);
 reg [31:0]al_res;
 wire [31:0]a,b,ex;
-wire [31:0]x,y,sel,res;
+wire [3:0]sel;
+wire [31:0]x,y,res;
 assign x = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? r1_i : ((op_i == 7'b0010011) && funct3_i == 3'b010) ? $signed(r1_i) : 32'b0;
-assign y = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? imm_i : ((op_i == 7'b0010011) && (funct3_i == 3'b010)) ? $signed(imm_i) : ((op_i == 7'b0010011) && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? shamt_i : 32'b0;
+assign y = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? imm_i : ((op_i == 7'b0010011) && (funct3_i == 3'b010)) ? $signed(imm_i) : ((op_i == 7'b0010011) && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {25'b0,shamt_i} : 32'b0;
 localparam ADD  = 4'b0000;
 localparam SUB  = 4'b0001;
 localparam SLL  = 4'b0010;
