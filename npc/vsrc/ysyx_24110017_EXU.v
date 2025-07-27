@@ -454,6 +454,10 @@ module ysyx_24110017_ALU(
 							res <= ({32{a_reg[31]}} << (32 - b_reg)) | (a_reg >> b_reg);
 							state <= FINISH;
 						end
+						OP_SLT: begin
+							res <= {31'b0,a < b};
+							state <= FINISH;
+						end
 						OP_AND: begin
 							res <= a_reg & b_reg;
 							state <= FINISH;
