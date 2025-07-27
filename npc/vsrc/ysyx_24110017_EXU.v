@@ -209,7 +209,7 @@ assign ex =
 						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & {{{32{a[31]}},a} >> b}[31:0] ) | //srai
 `endif	
 						({32{(funct3_i == 3'b110) && (funct7_i == 7'b0000000)}} & (a | b)) | //or
-						({32{(funct3_i == 3'b111) && (funct7_i == 7'b0000000)}} & (a & b)) //| //and
+						({32{(funct3_i == 3'b111) && (funct7_i == 7'b0000000)}} & (a & b)) | //and
 						({32{(funct3_i == 3'b000) && (funct7_i == 7'b0000001)}} & (a * b)) | //mul
 `ifndef YOSYS_STA
 						({32{(funct3_i == 3'b001) && (funct7_i == 7'b0000001)}} & {{{32{a[31]}},$signed(a)} * {{32{b[31]}},$signed(b)}}[63:32]) | //mulh
@@ -345,7 +345,7 @@ module ysyx_24110017_ALU(
   localparam OP_SHL  = 4'b0010;
   localparam OP_SHR  = 4'b0011;
   localparam OP_AND  = 4'b0100;
-	localparam OP_LT   = 4'b0101
+	localparam OP_LT   = 4'b0101;
   localparam OP_OR   = 4'b0110;
   localparam OP_XOR  = 4'b0111;
   localparam OP_MUL  = 4'b1000;
