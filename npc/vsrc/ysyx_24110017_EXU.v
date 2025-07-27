@@ -60,7 +60,7 @@ assign mcause_wen_o = mcause_wen_reg;
 assign mtvec_wen_o = mtvec_wen_reg;
 reg [31:0]ram_rdata_reg;
 
-parameter IDLE = 2'b00,WAIT_SRAM = 2'b01,WAIT_READY = 2'b10,DONE_EXU=2'b11;
+parameter IDLE = 2'b00,WAIT_LSU = 2'b01,WAIT_READY = 2'b10,DONE_EXU=2'b11;
 reg [1:0]state,next_state;
 
 always @(posedge clk) begin
@@ -81,10 +81,10 @@ always @(*) begin
 		case (state)
 			IDLE: begin
 				if(id_valid_i && ex_ready_o) begin
-					next_state = WAIT_SRAM;
+					next_state = WAIT_LSU;
 				end
 			end
-			WAIT_SRAM: begin
+			WAIT_LSU: begin
 				if((!ls_valid_o)) begin
 					next_state = WAIT_READY;
 				end
@@ -136,7 +136,7 @@ always @(posedge clk) begin
 					ex_ready <= 1'b0;
 				end
 			end
-			WAIT_SRAM: begin
+			WAIT_LSU: begin
 				if(ls_valid_o && (!ls_wen_o)) begin
 					ex_reg <= 32'h0;
 					ls_read_reg <= 1'b1;
@@ -210,7 +210,7 @@ assign ex =
 `endif	
 						({32{(funct3_i == 3'b110) && (funct7_i == 7'b0000000)}} & (a | b)) | //or
 						({32{(funct3_i == 3'b111) && (funct7_i == 7'b0000000)}} & (a & b)) //| //and
-/*					({32{(funct3_i == 3'b000) && (funct7_i == 7'b0000001)}} & (a * b)) | //mul
+						({32{(funct3_i == 3'b000) && (funct7_i == 7'b0000001)}} & (a * b)) | //mul
 `ifndef YOSYS_STA
 						({32{(funct3_i == 3'b001) && (funct7_i == 7'b0000001)}} & {{{32{a[31]}},$signed(a)} * {{32{b[31]}},$signed(b)}}[63:32]) | //mulh
 `endif
@@ -218,7 +218,6 @@ assign ex =
 						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0000001)}} & (a / b)) | //divu
 						({32{(funct3_i == 3'b110) && (funct7_i == 7'b0000001)}} & ($signed(a) % $signed(b))) |  //R_rem
 						({32{(funct3_i == 3'b111) && (funct7_i == 7'b0000001)}} & (a % b)) //R_remui
-*/
 					)
 				)
 			|
@@ -329,12 +328,13 @@ wire gpr_wen = (op_i == 7'b0110111 || op_i == 7'b0010111 || op_i == 7'b1101111 |
 
 endmodule
 
+
 module ysyx_24110017_ALU(
 	input wire clk,
 	input wire rst,
 	input wire [31:0] a,
 	input wire [31:0] b,
-	input wire [3:0] opcode,
+	input wire [3:0] al_opcode,
 	input wire al_start,
 	output reg [31:0] res,
 	output reg al_done
@@ -345,10 +345,12 @@ module ysyx_24110017_ALU(
   localparam OP_SHL  = 4'b0010;
   localparam OP_SHR  = 4'b0011;
   localparam OP_AND  = 4'b0100;
-  localparam OP_OR   = 4'b0101;
-  localparam OP_XOR  = 4'b0110;
-  localparam OP_MUL  = 4'b0111;
-  localparam OP_DIV  = 4'b1000;
+	localparam OP_LT   = 4'b0101
+  localparam OP_OR   = 4'b0110;
+  localparam OP_XOR  = 4'b0111;
+  localparam OP_MUL  = 4'b1000;
+  localparam OP_DIV  = 4'b1001;
+	localparam OP_REM  = 4'b1010;
 
 	localparam IDLE		 = 2'b00;
 	localparam EXECUTE = 2'b01;
@@ -377,7 +379,7 @@ module ysyx_24110017_ALU(
 					if(start) begin
 						a_reg <= a;
 						b_reg <= b;
-						opcode_reg <= opcode;
+						opcode_reg <= al_opcode;
 						state <= EXECUTE;
 
 						if(opcode == OP_MUL) begin
@@ -454,6 +456,23 @@ module ysyx_24110017_ALU(
 								state <= FINISH;
 							end
 						end
+						OP_REM: begin
+              if(div_counter < 32) begin
+                remainder = {remainder[30:0],dividend[31-div_counter]};
+                if(remainder >= divisor) begin
+                  remiander <= remiander - divisor;
+                  quotient[31-div_counter] <= 1'b1;
+                end
+	              else begin
+		              quotient[31-div_counter] <= 1'b0;
+	              end
+	              div_counter <= div_counter + 1;
+              end
+              else begin
+                res <= remiander;
+                state <= FINISH;
+              end
+            end
 						default: begin
 							res <= 32'b0;
 							state <= FINISH;
