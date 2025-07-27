@@ -363,10 +363,10 @@ module ysyx_24110017_ALU(
 	input wire rst,
 	input wire [31:0] a,
 	input wire [31:0] b,
-	input wire [3:0] al_opcode,
-	input wire al_start,
+	input wire [3:0] opcode,
+	input wire start,
 	output reg [31:0] res,
-	output reg al_done
+	output reg done
 );
 
 	localparam OP_ADD  = 4'b0000;
@@ -401,7 +401,7 @@ module ysyx_24110017_ALU(
 		if(rst) begin
 			state <= IDLE;
 			res <= 32'h0;
-			al_done <= 1'b0;
+			done <= 1'b0;
 		end
 		else begin
 			case(state)
@@ -410,7 +410,7 @@ module ysyx_24110017_ALU(
 					if(start) begin
 						a_reg <= a;
 						b_reg <= b;
-						opcode_reg <= al_opcode;
+						opcode_reg <= opcode;
 						state <= EXECUTE;
 
 						if(opcode == OP_MUL || opcode == OP_MULH) begin
@@ -489,13 +489,13 @@ module ysyx_24110017_ALU(
             end
 						OP_DIV: begin
 							if(div_counter < 32) begin
-								remainder = {remainder[30:0],dividend[31-div_counter]};
+								remainder = {remainder[30:0],dividend[31 - div_counter]};
 								if(remainder >= divisor) begin
 									remiander <= remiander - divisor;
-									quotient[31-div_counter] <= 1'b1;
+									quotient[31 - div_counter] <= 1'b1;
 								end
 								else begin
-									quotient[31-div_counter] <= 1'b0;
+									quotient[31 - div_counter] <= 1'b0;
 								end
 								div_counter <= div_counter + 1;
 							end
@@ -506,13 +506,13 @@ module ysyx_24110017_ALU(
 						end
 						OP_REM: begin
               if(div_counter < 32) begin
-                remainder = {remainder[30:0],dividend[31-div_counter]};
+                remainder = {remainder[30:0],dividend[31 - div_counter]};
                 if(remainder >= divisor) begin
                   remiander <= remiander - divisor;
-                  quotient[31-div_counter] <= 1'b1;
+                  quotient[31 - div_counter] <= 1'b1;
                 end
 	              else begin
-		              quotient[31-div_counter] <= 1'b0;
+		              quotient[31 - div_counter] <= 1'b0;
 	              end
 	              div_counter <= div_counter + 1;
               end
