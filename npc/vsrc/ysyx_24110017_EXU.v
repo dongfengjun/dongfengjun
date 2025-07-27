@@ -349,7 +349,7 @@ module ysyx_24110017_ALU(
   localparam OP_OR   = 4'b0110;
   localparam OP_XOR  = 4'b0111;
   localparam OP_MUL  = 4'b1000;
-	localparam OP_MUIH = 4'b1001
+	localparam OP_MUIH = 4'b1001;
   localparam OP_DIV  = 4'b1010;
 	localparam OP_REM  = 4'b1011;
 
