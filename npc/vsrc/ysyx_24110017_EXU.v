@@ -180,6 +180,10 @@ wire [31:0]a,b,ex;
 assign b = (op_i == 7'b0110011 || op_i == 7'b0100011) ? r2_i : imm_i;
 assign a = (op_i == 7'b0010011 || op_i == 7'b0000011 || op_i == 7'b0100011 || op_i == 7'b0110011/*R*/ || (op_i == 7'b1110011 && (funct3_i == 3'b001 || funct3_i == 3'b010 || funct3_i == 3'b011))/*csr*/) ? r1_i : 32'h0;
 /***ALU***/
+wire [31:0]x,y,res;
+assign x = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) r1_i : 32'b0
+assign y = 32'b0;
+
 assign ex = 
 				({32{op_i == 7'b0010011}}/***I*addi~srai***/
 				& (
@@ -190,7 +194,8 @@ assign ex =
 						({32{funct3_i == 3'b100}} & (a ^ b)) |	//xori
 						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0000000)}} & (a >> shamt_i)) |	//srli
 `ifndef YOSYS_STA
-						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & ({{{32{a[31]}}, $signed(a)} >> shamt_i}[31:0])) |	//srai
+						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & (a >>> shamt_i)) | //srai
+//						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & ({{{32{a[31]}}, $signed(a)} >> shamt_i}[31:0])) |	//srai
 `endif
 						({32{funct3_i == 3'b110}} & (a | b)) |	//ori
 						({32{funct3_i == 3'b111}} & (a & b)) 	//andi
@@ -206,7 +211,8 @@ assign ex =
 						({32{(funct3_i == 3'b100) && (funct7_i == 7'b0000000)}} & (a ^ b)) | //xor
 						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0000000)}} & (a >> b[4:0])) | //srl
 `ifndef YOSYS_STA
-						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & {{{32{a[31]}},a} >> b}[31:0] ) | //srai
+						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & {a >>> b) | //sra
+//						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & {{{32{a[31]}},a} >> b}[31:0] ) | //sra
 `endif	
 						({32{(funct3_i == 3'b110) && (funct7_i == 7'b0000000)}} & (a | b)) | //or
 						({32{(funct3_i == 3'b111) && (funct7_i == 7'b0000000)}} & (a & b)) | //and
