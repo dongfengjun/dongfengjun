@@ -16,14 +16,8 @@ extern "C" {
 
 
     // DPI EXPORTS
-    // DPI export at vsrc/ysyx_24110017.v:296:14
-    extern int csr_grab(int i);
-    // DPI export at vsrc/ysyx_24110017.v:303:14
-    extern int dpic_grab(int i);
     // DPI export at vsrc/ysyx_24110017_RegisterFile.v:24:14
     extern int gpr_reg_grab(int addr);
-    // DPI export at vsrc/ysyx_24110017.v:310:14
-    extern int performance_counter(int i);
 
     // DPI IMPORTS
     // DPI import at vsrc/ysyx_24110017_LSU.v:80:30
@@ -32,8 +26,6 @@ extern "C" {
     extern void flash_read(int addr, int* data);
     // DPI import at ../ysyxSoC/build/ysyxSoCFull.v:4655:30
     extern void mrom_read(int raddr, int* rdata);
-    // DPI import at vsrc/ysyx_24110017_IDU.v:164:30
-    extern void npc_trap();
     // DPI import at ../ysyxSoC/perip/psram/psram.v:122:30
     extern void psram_read(int addr, int* data);
     // DPI import at ../ysyxSoC/perip/psram/psram.v:121:30

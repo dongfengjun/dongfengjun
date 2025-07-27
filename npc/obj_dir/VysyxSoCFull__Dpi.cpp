@@ -14,35 +14,11 @@
 #include "VysyxSoCFull__Dpi.h"
 #include "VysyxSoCFull.h"
 
-#ifndef VL_DPIDECL_csr_grab_
-#define VL_DPIDECL_csr_grab_
-int csr_grab(int i) {
-    // DPI export at vsrc/ysyx_24110017.v:296:14
-    return VysyxSoCFull::csr_grab(i);
-}
-#endif
-
-#ifndef VL_DPIDECL_dpic_grab_
-#define VL_DPIDECL_dpic_grab_
-int dpic_grab(int i) {
-    // DPI export at vsrc/ysyx_24110017.v:303:14
-    return VysyxSoCFull::dpic_grab(i);
-}
-#endif
-
 #ifndef VL_DPIDECL_gpr_reg_grab_
 #define VL_DPIDECL_gpr_reg_grab_
 int gpr_reg_grab(int addr) {
     // DPI export at vsrc/ysyx_24110017_RegisterFile.v:24:14
     return VysyxSoCFull::gpr_reg_grab(addr);
-}
-#endif
-
-#ifndef VL_DPIDECL_performance_counter_
-#define VL_DPIDECL_performance_counter_
-int performance_counter(int i) {
-    // DPI export at vsrc/ysyx_24110017.v:310:14
-    return VysyxSoCFull::performance_counter(i);
 }
 #endif
 
