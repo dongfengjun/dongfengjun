@@ -178,7 +178,7 @@ always @(posedge clk) begin
 					mtvec_wen_reg <= mtvec_wen;
 				end
 			end
-			DONE_EXU: begin
+			DONE: begin
 				dnpc_reg <= dnpc;
 				al_res <= 32'h0;
 				ram_rdata_reg <= 32'h0;
@@ -195,7 +195,7 @@ wire al_valid = (op_i == 7'b0010011);
 reg [31:0]al_res;
 wire [31:0]a,b,ex;
 wire [31:0]x,y,sel,res;
-assign x = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funt3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? r1_i : ((op_i == 7'b0010011) && funct3_i == 3'b010) ? $signed(r1_i) : 32'b0;
+assign x = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? r1_i : ((op_i == 7'b0010011) && funct3_i == 3'b010) ? $signed(r1_i) : 32'b0;
 assign y = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? imm_i : ((op_i == 7'b0010011) && (funct3_i == 3'b010)) ? $signed(imm_i) : ((op_i == 7'b0010011) && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? shamt_i : 32'b0;
 localparam ADD  = 4'b0000;
 localparam SUB  = 4'b0001;
@@ -379,7 +379,7 @@ module ysyx_24110017_ALU(
   localparam OP_OR   = 4'b0111;
   localparam OP_XOR  = 4'b1000;
   localparam OP_MUL  = 4'b1001;
-	localparam OP_MUIH = 4'b1010;
+	localparam OP_MULH = 4'b1010;
   localparam OP_DIV  = 4'b1011;
 	localparam OP_REM  = 4'b1100;
 
@@ -417,10 +417,10 @@ module ysyx_24110017_ALU(
 							mul_result <= {32'b0, a};
 							mul_counter <= 6'd0;
 						end
-						else if(opcode == OP_DIV || opcode == OP_RAM) begin
+						else if(opcode == OP_DIV || opcode == OP_REM) begin
 							dividend <= a;
 							divisor <= b;
-							quotiend <= 32'b0;
+							quotient <= 32'b0;
 							remainder <= 32'b0;
 							div_counter <= 6'd0;
 						end
@@ -459,7 +459,7 @@ module ysyx_24110017_ALU(
 						end
 						OP_XOR: begin
 							res <= a_reg ^ b_reg;
-							state <= FINSIH;
+							state <= FINISH;
 						end
 						OP_MUL: begin
 							if(mul_counter < 32) begin
@@ -491,7 +491,7 @@ module ysyx_24110017_ALU(
 							if(div_counter < 32) begin
 								remainder = {remainder[30:0],dividend[31 - div_counter]};
 								if(remainder >= divisor) begin
-									remiander <= remiander - divisor;
+									remainder <= remainder - divisor;
 									quotient[31 - div_counter] <= 1'b1;
 								end
 								else begin
@@ -529,7 +529,7 @@ module ysyx_24110017_ALU(
 				end
 
 				FINISH: begin
-					al_done <= 1'b1;
+					done <= 1'b1;
 					state <= IDLE;
 				end
 			endcase
