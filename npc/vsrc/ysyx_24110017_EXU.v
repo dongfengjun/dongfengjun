@@ -508,7 +508,7 @@ module ysyx_24110017_ALU(
               if(div_counter < 32) begin
                 remainder = {remainder[30:0],dividend[31 - div_counter]};
                 if(remainder >= divisor) begin
-                  remiander <= remiander - divisor;
+                  remainder <= remainder - divisor;
                   quotient[31 - div_counter] <= 1'b1;
                 end
 	              else begin
