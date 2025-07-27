@@ -87,6 +87,9 @@ always @(*) begin
 				end
 			end
 			WAIT: begin
+				if((!al_valid) && (!ls_valid_o)) begin
+					next_state = WAIT_READY;
+				end
 				if(al_done) begin
 					next_state = READY;
 				end
@@ -145,7 +148,6 @@ always @(posedge clk) begin
 					al_start <= 1'b1;
 				end
 				if(al_done) begin
-					al_start <= 1'b0;
 					al_res <= res;
 				end
 				if(ls_valid_o && (!ls_wen_o)) begin
@@ -387,6 +389,7 @@ module ysyx_24110017_ALU(
 	localparam IDLE		 = 2'b00;
 	localparam EXECUTE = 2'b01;
 	localparam FINISH  = 2'b10;
+	localparam NULL    = 2'b11;
 
 	reg [1:0]state;
 	reg [31:0]a_reg,b_reg;
@@ -531,9 +534,10 @@ module ysyx_24110017_ALU(
 
 				FINISH: begin
 					done <= 1'b1;
-					state <= IDLE;
+					state <= NULL;
 				end
-				default: begin
+				NULL: begin
+					done <= 1'b0;
 					state <= IDLE;
 				end
 			endcase
