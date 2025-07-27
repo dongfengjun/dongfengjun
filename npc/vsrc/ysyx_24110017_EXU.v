@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_EXU(
 	input clk,
 	input rst,
@@ -326,5 +326,147 @@ wire [31:0]dnpc = (jalen) ? (pc_i + offset)	//jal
 
 /***riscv32e_regs_controller***/
 wire gpr_wen = (op_i == 7'b0110111 || op_i == 7'b0010111 || op_i == 7'b1101111 || op_i == 7'b1100111 || op_i == 7'b0010011 || op_i == 7'b0001111 || op_i == 7'b1110011 || op_i == 7'b0110011 || op_i == 7'b0000011) ? 1'b1 : 1'b0;
+
+endmodule
+
+module ysyx_24110017_ALU(
+	input wire clk,
+	input wire rst,
+	input wire [31:0] a,
+	input wire [31:0] b,
+	input wire [3:0] opcode,
+	input wire al_start,
+	output reg [31:0] res,
+	output reg al_done
+);
+
+	localparam OP_ADD  = 4'b0000;
+  localparam OP_SUB  = 4'b0001;
+  localparam OP_SHL  = 4'b0010;
+  localparam OP_SHR  = 4'b0011;
+  localparam OP_AND  = 4'b0100;
+  localparam OP_OR   = 4'b0101;
+  localparam OP_XOR  = 4'b0110;
+  localparam OP_MUL  = 4'b0111;
+  localparam OP_DIV  = 4'b1000;
+
+	localparam IDLE		 = 2'b00;
+	localparam EXECUTE = 2'b01;
+	localparam FINISH  = 2'b10;
+
+	reg [1:0]state;
+	reg [31:0]a_reg,b_reg;
+	reg [3:0]opcode_reg;
+
+	reg [63:0]mul_result;
+	reg [5:0]mul_counter;
+	reg [31:0]dividend,divisor;
+	reg [31:0]quotient,remainder;
+	reg [5:0]div_counter;
+
+	always @(posedge clk or posedge rst) begin
+		if(rst) begin
+			state <= IDLE;
+			res <= 32'h0;
+			al_done <= 1'b0;
+		end
+		else begin
+			case(state)
+				IDLE: begin
+					done <= 1'b0;
+					if(start) begin
+						a_reg <= a;
+						b_reg <= b;
+						opcode_reg <= opcode;
+						state <= EXECUTE;
+
+						if(opcode == OP_MUL) begin
+							mul_result <= {32'b0, a};
+							mul_counter <= 6'd0;
+						end
+						else if(opcode == OP_DIV) begin
+							dividend <= a;
+							divisor <= b;
+							quotiend <= 32'b0;
+							remainder <= 32'b0;
+							div_counter <= 6'd0;
+						end
+					end
+				end
+
+				EXECUTE: begin
+					case (opcode_reg)
+						OP_ADD: begin
+							res <= a_reg + b_reg;
+							state <= FINISH;
+						end
+						OP_SUB: begin
+							res <= a_reg - b_reg;
+							state <= FINISH;
+						end
+						OP_SHL: begin
+							res <= a_reg << b_reg;
+							state <= FINISH;
+						end
+						OP_SHR: begin
+							res <= a_reg >> b_reg;
+							state <= FINISH;
+						end
+						OP_AND: begin
+							res <= a_reg & b_reg;
+							state <= FINISH;
+						end
+						OP_OR: begin
+							res <= a_reg | b_reg;
+							state <= FINISH;
+						end
+						OP_XOR: begin
+							res <= a_reg ^ b_reg;
+							state <= FINSIH;
+						end
+						OP_MUL: begin
+							if(mul_counter < 32) begin
+								if(mul_result[0]) begin
+									mul_result[63:32] <= mul_result[63:32] + b_reg;
+								end
+								mul_result <= {1'b0,mul_result[63:1]};
+								mul_counter <= mul_counter + 1;
+							end
+							else begin
+								res <= mul_result[31:0];
+								state <= FINISH;
+							end
+						end
+						OP_DIV: begin
+							if(div_counter < 32) begin
+								remainder = {remainder[30:0],dividend[31-div_counter]};
+								if(remainder >= divisor) begin
+									remiander <= remiander - divisor;
+									quotient[31-div_counter] <= 1'b1;
+								end
+								else begin
+									quotient[31-div_counter] <= 1'b0;
+								end
+								div_counter <= div_counter + 1;
+							end
+							else begin
+								res <= quotient;
+								state <= FINISH;
+							end
+						end
+						default: begin
+							res <= 32'b0;
+							state <= FINISH;
+						end
+					endcase
+				end
+
+				FINISH: begin
+					al_done <= 1'b1;
+					state <= IDLE;
+				end
+			endcase
+		end
+	end
 
 endmodule
