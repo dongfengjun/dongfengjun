@@ -212,7 +212,7 @@ assign ex =
 						({32{(funct3_i == 3'b111) && (funct7_i == 7'b0000000)}} & (a & b)) | //and
 						({32{(funct3_i == 3'b000) && (funct7_i == 7'b0000001)}} & (a * b)) | //mul
 `ifndef YOSYS_STA
-						({32{(funct3_i == 3'b001) && (funct7_i == 7'b0000001)}} & {{{32{a[31]}},$signed(a)} * {{32{b[31]}},$signed(b)}}[63:32]) | //mulh
+						({32{(funct3_i == 3'b001) && (funct7_i == 7'b0000001)}} & {{{32{a[31]}},$signed(a)} * {{32{b[31]}},$signed(b)}} >> 32) | //mulh
 `endif
 						({32{(funct3_i == 3'b100) && (funct7_i == 7'b0000001)}} & ($signed($signed(a) / $signed(b)))) |  //div
 						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0000001)}} & (a / b)) | //divu
@@ -349,8 +349,9 @@ module ysyx_24110017_ALU(
   localparam OP_OR   = 4'b0110;
   localparam OP_XOR  = 4'b0111;
   localparam OP_MUL  = 4'b1000;
-  localparam OP_DIV  = 4'b1001;
-	localparam OP_REM  = 4'b1010;
+	localparam OP_MUIH = 4'b1001
+  localparam OP_DIV  = 4'b1010;
+	localparam OP_REM  = 4'b1011;
 
 	localparam IDLE		 = 2'b00;
 	localparam EXECUTE = 2'b01;
@@ -382,11 +383,11 @@ module ysyx_24110017_ALU(
 						opcode_reg <= al_opcode;
 						state <= EXECUTE;
 
-						if(opcode == OP_MUL) begin
+						if(opcode == OP_MUL || opcode == OP_MULH) begin
 							mul_result <= {32'b0, a};
 							mul_counter <= 6'd0;
 						end
-						else if(opcode == OP_DIV) begin
+						else if(opcode == OP_DIV || opcode == OP_RAM) begin
 							dividend <= a;
 							divisor <= b;
 							quotiend <= 32'b0;
@@ -439,6 +440,19 @@ module ysyx_24110017_ALU(
 								state <= FINISH;
 							end
 						end
+						OP_MULH: begin
+							if(mul_counter < 32) begin
+                if(mul_result[0]) begin
+                  mul_result[63:32] <= mul_result[63:32] + b_reg;
+                end
+                mul_result <= {1'b0,mul_result[63:1]};
+                mul_counter <= mul_counter + 1;
+              end
+              else begin
+                res <= mul_result[63:32];
+                state <= FINISH;
+              end
+            end
 						OP_DIV: begin
 							if(div_counter < 32) begin
 								remainder = {remainder[30:0],dividend[31-div_counter]};
