@@ -490,7 +490,7 @@ module ysyx_24110017_ALU(
             end
 						OP_DIV: begin
 							if(div_counter < 32) begin
-								remainder = {remainder[30:0],dividend[31 - div_counter]};
+								remainder <= {remainder[30:0],dividend[31 - div_counter]};
 								if(remainder >= divisor) begin
 									remainder <= remainder - divisor;
 									quotient[31 - div_counter] <= 1'b1;
@@ -507,7 +507,7 @@ module ysyx_24110017_ALU(
 						end
 						OP_REM: begin
               if(div_counter < 32) begin
-                remainder = {remainder[30:0],dividend[31 - div_counter]};
+                remainder <= {remainder[30:0],dividend[31 - div_counter]};
                 if(remainder >= divisor) begin
                   remainder <= remainder - divisor;
                   quotient[31 - div_counter] <= 1'b1;
