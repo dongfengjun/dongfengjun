@@ -197,7 +197,7 @@ wire [31:0]a,b,ex;
 wire [3:0]sel;
 wire [31:0]x,y,res;
 assign x = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? r1_i : ((op_i == 7'b0010011) && funct3_i == 3'b010) ? $signed(r1_i) : 32'b0;
-assign y = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? imm_i : ((op_i == 7'b0010011) && (funct3_i == 3'b010)) ? $signed(imm_i) : ((op_i == 7'b0010011) && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {25'b0,shamt_i} : 32'b0;
+assign y = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? imm_i : ((op_i == 7'b0010011) && (funct3_i == 3'b010)) ? $signed(imm_i) : ((op_i == 7'b0010011) && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {27'b0,shamt_i} : 32'b0;
 localparam ADD  = 4'b0000;
 localparam SUB  = 4'b0001;
 localparam SLL  = 4'b0010;
@@ -531,6 +531,9 @@ module ysyx_24110017_ALU(
 
 				FINISH: begin
 					done <= 1'b1;
+					state <= IDLE;
+				end
+				default: begin
 					state <= IDLE;
 				end
 			endcase
