@@ -211,7 +211,7 @@ assign ex =
 						({32{(funct3_i == 3'b100) && (funct7_i == 7'b0000000)}} & (a ^ b)) | //xor
 						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0000000)}} & (a >> b[4:0])) | //srl
 `ifndef YOSYS_STA
-						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & ($signed(a) >>> b)) | //sra
+						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & ($signed(a) >> b)) | //sra
 //						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & {{{32{a[31]}},a} >> b}[31:0] ) | //sra
 `endif	
 						({32{(funct3_i == 3'b110) && (funct7_i == 7'b0000000)}} & (a | b)) | //or
