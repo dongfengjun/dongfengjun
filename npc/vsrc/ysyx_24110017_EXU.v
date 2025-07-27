@@ -178,7 +178,7 @@ end
 /***FU***/
 wire [31:0]a,b,ex;
 assign b = (op_i == 7'b0110011 || op_i == 7'b0100011) ? r2_i : imm_i;
-assign a = (op_i == 7'b0010011 || op_i == 7'b0000011 || op_i == 7'b0100011 || op_i == 7'b0110011/*R*/ || (op_i == 7'b1110011 && (funct3_i == 3'b001 || funct3_i == 3'b010 || funct3_i == 3'b011))/*csr*/) ? r1_i : 31'h0;
+assign a = (op_i == 7'b0010011 || op_i == 7'b0000011 || op_i == 7'b0100011 || op_i == 7'b0110011/*R*/ || (op_i == 7'b1110011 && (funct3_i == 3'b001 || funct3_i == 3'b010 || funct3_i == 3'b011))/*csr*/) ? r1_i : 32'h0;
 /***ALU***/
 assign ex = 
 				({32{op_i == 7'b0010011}}/***I*addi~srai***/
