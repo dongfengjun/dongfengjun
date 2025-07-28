@@ -1,3 +1,4 @@
+ifneq ($(ARCH),riscv32e-ysyxsoc)
 BUILD = ./build
 OBJ_DIR = $(BUILD)/obj_dir
 TOP = ysyxSoCFull
@@ -6,7 +7,6 @@ VSRCS += $(shell find ./vsrc -name "*.v")
 VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
 CSRCS += $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 INC_COM_PATH = ./csrc/include
-INC_VCOM_PATH = ./vsrc/include
 INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
 INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
 
@@ -26,7 +26,7 @@ LDLIBS := -lasan $(LDLIBS)
 
 VERILATOR = verilator
 VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build
-VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH)	-I$(INC_COM_PATH) -I$(INC_VCOM_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
+VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH)	-I$(INC_COM_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
 VERILATOR_FLAGS += -CFLAGS $(CXXFLAGS)
 VERILATOR_FLAGS += -CFLAGS -g
 VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
@@ -68,3 +68,54 @@ clean:
 
 .PHONY: clean run sim wave
 include ../Makefile
+
+endif
+ifneq ($(ARCH),riscv32e-npc)
+BUILD = ./build
+OBJ_DIR = $(BUILD)/obj_dir
+VSRCS = $(shell find ./vsrc -name "*.v")
+CSRCS = $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+INC_PATH = ./csrc/include
+
+LDFLAGS += $(shell llvm-config --ldflags) -fPIE
+LIBS += $(shell llvm-config --libs)
+LDFLAGS += -fsanitize=address#ASan
+LDLIBS := -lasan $(LDLIBS)
+
+VERILATOR = verilator
+VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build
+VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH)
+VERILATOR_FLAGS += -CFLAGS -g
+VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
+VERILATOR_FLAGS += -LDFLAGS -lreadline
+
+LOG ?= $(BUILD)/npc-log.txt
+IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin 
+#/home/xi/Templates/rt-thread-am/bsp/abstract-machine/build/rtthread-riscv32-nemu.bin
+ELF ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
+REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
+ARGS += --log=$(LOG)
+ARGS += --img=$(IMG)
+ARGS += --elf=$(ELF)
+ARGS += --diff=$(REF_SO)
+
+run: sim
+	$(OBJ_DIR)/Vtop_ysyx_24110017 $(ARGS)
+
+sim: $(CSRCS) $(VSRCS)
+	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	@echo "Write this Makefile by your self."
+	@rm -rf ./build/obj_dir
+	mkdir -p build
+	@$(VERILATOR)  $(VERILATOR_FLAGS) --Mdir ./obj_dir --exe $^
+	mv obj_dir $(BUILD)
+
+wave:
+	gtkwave $(BUILD)/wave.vcd
+
+clean:
+	rm -rf ./build
+
+.PHONY: clean run sim wave
+include ../Makefile
+endif
