@@ -62,7 +62,6 @@ word_t performance_counters(int i) {
   return performance_counter(i);
 }
 /******/
-
 bool RUNNING;
 void npc_trap() {
   int a0 = gpr_regs_display(10);//抓取a0
