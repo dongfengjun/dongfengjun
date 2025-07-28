@@ -1,5 +1,5 @@
 //`define YOSYS_STA
-`include "include/common.vh"
+`include "include/common.v"
 module ysyx_24110017_EXU(
 	input clk,
 	input rst,
