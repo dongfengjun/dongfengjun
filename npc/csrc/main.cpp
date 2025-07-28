@@ -56,17 +56,12 @@ word_t dpic_display(int i) {
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
   return dpic_grab(i);
 }
-<<<<<<< HEAD
-/***END***/
-=======
 word_t performance_counters(int i) {
   extern int performance_counter(int i);
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
   return performance_counter(i);
 }
 /******/
->>>>>>> tracer-ysyx
-
 bool RUNNING;
 void npc_trap() {
   int a0 = gpr_regs_display(10);//抓取a0
@@ -79,8 +74,6 @@ void npc_trap() {
 #define MAX_INST_TO_PRINT 10//puts inst
 extern CPU_state cpu;
 uint64_t g_nr_guest_inst = 0;
-<<<<<<< HEAD
-=======
 uint64_t g_nr_guest_cycle = 0;
 uint64_t if_fin_cnt = 0;
 uint64_t id_fin_cnt = 0;
@@ -106,7 +99,6 @@ uint64_t ls_load_cnt = 0;
 uint64_t ls_store_wait = 0;
 uint64_t ls_load_wait = 0;
 
->>>>>>> tracer-ysyx
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
@@ -117,11 +109,6 @@ static void statistic() {
   IFNDEF(CONFIG_TARGET_AM, setlocale(LC_NUMERIC, ""));
 #define NUMBERIC_FMT MUXDEF(CONFIG_TARGET_AM, "%", "%'") PRIu64
   Log("host time spent = " NUMBERIC_FMT " us", g_timer);
-<<<<<<< HEAD
-  Log("total guest instructions = " NUMBERIC_FMT, g_nr_guest_inst);
-  if (g_timer > 0) Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
-  else Log("Finish running in less than 1 us and can not calculate the simulation frequency");
-=======
   Log("total guest cycles = " NUMBERIC_FMT, g_nr_guest_cycle);
 	Log("total guest instructions = " NUMBERIC_FMT, g_nr_guest_inst);
 	if (g_timer > 0) Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
@@ -139,7 +126,6 @@ static void statistic() {
 	Log("The proportion of IF MEM access:%.6f", (double)if_mem_wait/(double)if_wait);
 	Log("LS LOAD:%ld (Average Delay)", ls_load_wait/ls_load_cnt);
 	Log("LS STORE:%ld (Average Delay)", ls_store_wait/ls_store_cnt);
->>>>>>> tracer-ysyx
 }
 
 void assert_fail_msg() {
@@ -349,8 +335,6 @@ static void reset(int n) {
 	top->reset=0;
 }
 
-<<<<<<< HEAD
-=======
 bool if_mem_flag = false;
 bool if_flag = false;
 bool ex_total_flag = false;
@@ -406,7 +390,6 @@ void performance_evaluation() {
 	if(ls_load_flag) ls_load_wait ++;
 }
 
->>>>>>> tracer-ysyx
 void cpu_exec(int n) {
 	g_print_step = (n > 0 && n < MAX_INST_TO_PRINT);
 #ifdef CONFIG_MTRACE
