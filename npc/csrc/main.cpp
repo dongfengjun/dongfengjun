@@ -401,11 +401,7 @@ void cpu_exec(int n) {
 		nvboard_update();
 		cpu.pc = dpic_display(1);
 		isa_gpr_push();
-<<<<<<< HEAD
-		if(dpic_display(3)) { g_nr_guest_inst ++; }
-=======
 		performance_evaluation();
->>>>>>> tracer-ysyx
 #ifdef CONFIG_ITRACE
 		itrace_push();
 #endif
