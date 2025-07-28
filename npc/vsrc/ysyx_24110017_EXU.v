@@ -61,8 +61,6 @@ assign mstatus_wen_o = mstatus_wen_reg;
 assign mcause_wen_o = mcause_wen_reg;
 assign mtvec_wen_o = mtvec_wen_reg;
 reg [31:0]ram_rdata_reg;
-
-parameter IDLE = 2'b00,WAIT_SRAM = 2'b01,WAIT_READY = 2'b10,DONE_EXU=2'b11;
 parameter IDLE = 2'b00,WAIT = 2'b01,READY = 2'b10,DONE=2'b11;
 reg [1:0]state,next_state;
 
@@ -84,23 +82,6 @@ always @(*) begin
 		case (state)
 			IDLE: begin
 				if(id_valid_i && ex_ready_o) begin
-					next_state = WAIT_SRAM;
-				end
-			end
-			WAIT_SRAM: begin
-				if((!ls_valid_o)) begin
-					next_state = WAIT_READY;
-				end
-				if(ls_done_i) begin
-					next_state = WAIT_READY;
-				end
-			end
-			WAIT_READY: begin
-				if(ex_valid_o && wb_ready_i) begin
-					next_state = DONE_EXU;
-				end
-			end
-			DONE_EXU: begin
 					next_state = WAIT;
 				end
 			end
@@ -161,7 +142,6 @@ always @(posedge clk) begin
 					ex_ready <= 1'b0;
 				end
 			end
-			WAIT_SRAM: begin
 			WAIT: begin
 				if(al_valid) begin
 					al_start <= 1'b1;
@@ -183,7 +163,6 @@ always @(posedge clk) begin
 					ram_rdata_reg <= ls_rdata;
 				end
 			end
-			WAIT_READY: begin
 			READY: begin
 				ex_valid <= 1'b1;
 				if(ex_valid_o && wb_ready_i) begin
@@ -201,8 +180,6 @@ always @(posedge clk) begin
 					mtvec_wen_reg <= mtvec_wen;
 				end
 			end
-			DONE_EXU: begin
-				dnpc_reg <= dnpc;
 			DONE: begin
 				dnpc_reg <= dnpc;
 				al_res <= 32'h0;
@@ -213,24 +190,6 @@ always @(posedge clk) begin
 end
 
 /***FU***/
-wire [31:0]a,b,ex;
-assign b = (op_i == 7'b0110011 || op_i == 7'b0100011) ? r2_i : imm_i;
-assign a = (op_i == 7'b0010011 || op_i == 7'b0000011 || op_i == 7'b0100011 || op_i == 7'b0110011/*R*/ || (op_i == 7'b1110011 && (funct3_i == 3'b001 || funct3_i == 3'b010 || funct3_i == 3'b011))/*csr*/) ? r1_i : pc_i;
-/***ALU***/
-assign ex = 
-				({32{op_i == 7'b0010011}}/***I*addi~srai***/
-				& (
-						({32{funct3_i == 3'b000}} & (a + b)) |	//addi
-						({32{funct3_i == 3'b001}} & (a << shamt_i)) |	//slli
-						({32{funct3_i == 3'b010}} & {31'b0, ($signed(a) < $signed(b))}) |	//slti
-						({32{funct3_i == 3'b011}} & {31'b0, (a < b)}) |	//sltiu
-						({32{funct3_i == 3'b100}} & (a ^ b)) |	//xori
-						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0000000)}} & (a >> shamt_i)) |	//srli
-						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & ({{{32{a[31]}}, $signed(a)} >> shamt_i}[31:0])) |	//srai
-						({32{funct3_i == 3'b110}} & (a | b)) |	//ori
-						({32{funct3_i == 3'b111}} & (a & b)) 	//andi
-assign b = (op_i == 7'b0110011 || op_i == 7'b0100011) ? r2_i : imm_i;
-assign a = (op_i == 7'b0010011 || op_i == 7'b0000011 || op_i == 7'b0100011 || op_i == 7'b0110011/*R*/ || (op_i == 7'b1110011 && (funct3_i == 3'b001 || funct3_i == 3'b010 || funct3_i == 3'b011))/*csr*/) ? r1_i : 32'b0;
 /***ALU***/
 wire al_valid = (op_i == 7'b0010011) || (op_i == 7'b0110011);
 reg [31:0]al_res;
@@ -285,25 +244,6 @@ assign ex =
 				)				
 			| ({32{op_i == 7'b0110011}}/***R_add~R_remu***/
 				& (
-						({32{(funct3_i == 3'b000) && (funct7_i == 7'b0000000)}} & (a + b)) | //add
-						({32{(funct3_i == 3'b000) && (funct7_i == 7'b0100000)}} & (a + ((~b)+1))) |	//sub
-						({32{(funct3_i == 3'b001) && (funct7_i == 7'b0000000)}} & (a << b[4:0])) |  //sll
-						({32{(funct3_i == 3'b010) && (funct7_i == 7'b0000000)}} & {31'b0, ($signed(a) < $signed(b))}) | //slt
-						({32{(funct3_i == 3'b011) && (funct7_i == 7'b0000000)}} & {31'b0,(a < $unsigned(b))}) |  //sltu
-						({32{(funct3_i == 3'b100) && (funct7_i == 7'b0000000)}} & (a ^ b)) | //xor
-						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0000000)}} & (a >> b[4:0])) | //srl
-						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & {{{32{a[31]}},a} >> b}[31:0] ) | //sra
-						({32{(funct3_i == 3'b110) && (funct7_i == 7'b0000000)}} & (a | b)) | //or
-						({32{(funct3_i == 3'b111) && (funct7_i == 7'b0000000)}} & (a & b)) | //and
-						({32{(funct3_i == 3'b000) && (funct7_i == 7'b0000001)}} & (a * b)) | //mul
-						({32{(funct3_i == 3'b001) && (funct7_i == 7'b0000001)}} & {{{32{a[31]}},$signed(a)} * {{32{b[31]}},$signed(b)}}[63:32]) | //mulh
-						({32{(funct3_i == 3'b100) && (funct7_i == 7'b0000001)}} & ($signed($signed(a) / $signed(b)))) |  //div
-						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0000001)}} & (a / b)) | //divu
-						({32{(funct3_i == 3'b110) && (funct7_i == 7'b0000001)}} & ($signed(a) % $signed(b))) |  //R_rem
-						({32{(funct3_i == 3'b111) && (funct7_i == 7'b0000001)}} & (a % b)) //R_remui			
-					)
-				)
-			|
 						al_res
 					)
 				)
