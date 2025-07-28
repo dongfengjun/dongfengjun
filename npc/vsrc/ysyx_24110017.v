@@ -1,3 +1,4 @@
+//`define YOSYS_STA
 module ysyx_24110017(
 	input clock,
 	input reset,
@@ -191,7 +192,11 @@ ysyx_24110017_LSU LSU(clock,reset,ls_read,ls_write,ls_done,
 		ls_axi_arlen,ls_axi_arsize,ls_axi_arburst,
 		ls_axi_rready,ls_axi_rvalid,ls_axi_rid,ls_axi_rdata,ls_axi_rresp,ls_axi_rlast
 );
+<<<<<<< HEAD
 ysyx_24110017_Xbar Xbar_ysyx_24110017(clock,reset,
+=======
+ysyx_24110017_Xbar Xbar(clock,reset,
+>>>>>>> tracer-ysyx
 		if_axi_awready,if_axi_awvalid,if_axi_awid,if_axi_awaddr,
 		if_axi_awlen,if_axi_awsize,if_axi_awburst,
 		if_axi_wready,if_axi_wvalid,if_axi_wdata,if_axi_wstrb,if_axi_wlast,
@@ -262,7 +267,11 @@ ysyx_24110017_UART ysyx_24110017_UART(clock,reset,
 );
 ******/
 /***My-Clint***/
+<<<<<<< HEAD
 ysyx_24110017_CLINT ysyx_24110017_CLINT(clock,reset,
+=======
+ysyx_24110017_CLINT CLINT(clock,reset,
+>>>>>>> tracer-ysyx
 		c_axi_awready,c_axi_awvalid,c_axi_awid,c_axi_awaddr,
 		c_axi_awlen,c_axi_awsize,c_axi_awburst,
 		c_axi_wready,c_axi_wvalid,c_axi_wdata,c_axi_wstrb,c_axi_wlast,
@@ -289,6 +298,10 @@ ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid
 ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
 
 
+<<<<<<< HEAD
+=======
+`ifndef YOSYS_STA
+>>>>>>> tracer-ysyx
 /***DPI-C*CSR***/
 export "DPI-C" function csr_grab;                                    
 function int csr_grab(int i);
@@ -304,6 +317,27 @@ function int dpic_grab(int i);
   end
 endfunction
 /***E*N*D***/
+
+/***DPI-C*PERFORMANCE_COUNTER***/
+export "DPI-C" function performance_counter;
+function int performance_counter(int i);
+  begin
+    assign performance_counter = (i == 0) ? {31'b0,if_valid && id_ready}
+															 : (i == 1) ? {31'b0,id_valid && ex_ready}
+															 : (i == 2) ? {31'b0,ex_valid && wb_ready}
+															 : (i == 3) ? {31'b0,ls_done}
+															 : (i == 4) ? {25'b0,inst[6:0]}
+															 : (i == 5) ? {31'b0,wb_done}
+															 : (i == 6) ? {31'b0,if_axi_arvalid && if_axi_arready}
+															 : (i == 7) ? {31'b0,if_axi_rvalid && if_axi_rready}
+															 : (i == 8) ? {31'b0,pc_valid && if_ready}
+															 : (i == 9) ? {31'b0,ls_axi_awvalid && ls_axi_awready}
+															 : (i == 10) ? {31'b0,ls_axi_arvalid && ls_axi_arready}
+															 : 32'b0;
+  end
+endfunction
+/***E*N*D***/
+`endif
 
 
 endmodule

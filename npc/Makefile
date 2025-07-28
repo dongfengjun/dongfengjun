@@ -59,6 +59,9 @@ sim: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
 wave:
 	gtkwave $(BUILD)/wave.vcd
 
+perf:
+	make -C ../am-kernels/benchmarks/microbench ARCH=riscv32e-ysyxsoc mainargs=test run
+
 clean:
 	rm -rf ./build
 

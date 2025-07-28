@@ -1,3 +1,4 @@
+//`define YOSYS_STA
 module ysyx_24110017_RegisterFile #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
   input clk,
   input [DATA_WIDTH-1:0] wdata,
@@ -18,12 +19,14 @@ module ysyx_24110017_RegisterFile #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
 	assign r2 = (raddr2 == 0) ? 32'b0 : rf[raddr2];	
 
 /***DPI-C***/
+`ifndef YOSYS_STA
 export "DPI-C" function gpr_reg_grab;
 function int gpr_reg_grab(int addr);
 	begin
 		assign gpr_reg_grab = (addr == 0) ? 32'b0 : rf[addr];
 	end
 endfunction
+`endif
 /***E*N*D***/
 
 endmodule

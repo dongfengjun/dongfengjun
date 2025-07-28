@@ -1,3 +1,4 @@
+//`define YOSYS_STA
 module ysyx_24110017_EXU(
 	input clk,
 	input rst,
@@ -38,6 +39,8 @@ assign ex_ready_o = ex_ready;
 reg ex_valid;
 assign ex_valid_o = ex_valid;
 
+reg al_start;
+wire al_done;
 reg ls_read_reg,ls_write_reg;
 assign ls_read_o = ls_read_reg;
 assign ls_write_o = ls_write_reg;
@@ -60,6 +63,7 @@ assign mtvec_wen_o = mtvec_wen_reg;
 reg [31:0]ram_rdata_reg;
 
 parameter IDLE = 2'b00,WAIT_SRAM = 2'b01,WAIT_READY = 2'b10,DONE_EXU=2'b11;
+parameter IDLE = 2'b00,WAIT = 2'b01,READY = 2'b10,DONE=2'b11;
 reg [1:0]state,next_state;
 
 always @(posedge clk) begin
@@ -97,6 +101,26 @@ always @(*) begin
 				end
 			end
 			DONE_EXU: begin
+					next_state = WAIT;
+				end
+			end
+			WAIT: begin
+				if((!al_valid) && (!ls_valid_o)) begin
+					next_state = READY;
+				end
+				if(al_done) begin
+					next_state = READY;
+				end
+				else if(ls_done_i) begin
+					next_state = READY;
+				end
+			end
+			READY: begin
+				if(ex_valid_o && wb_ready_i) begin
+					next_state = DONE;
+				end
+			end
+			DONE: begin
 				next_state = IDLE;
 			end
 			default: begin
@@ -111,6 +135,8 @@ always @(posedge clk) begin
 		ex_valid <= 1'b0;
 		ex_ready <= 1'b0;
 		ex_reg <= 32'h0;
+		al_start <= 1'b0;
+		al_res <= 32'b0;
 		dnpc_reg <= pc_i + 4;
 		gpr_wen_reg <= 1'b0;
 		mepc_reg <= 32'h0;
@@ -136,6 +162,14 @@ always @(posedge clk) begin
 				end
 			end
 			WAIT_SRAM: begin
+			WAIT: begin
+				if(al_valid) begin
+					al_start <= 1'b1;
+				end
+				if(al_done) begin
+					al_start <= 1'b0;
+					al_res <= res;
+				end
 				if(ls_valid_o && (!ls_wen_o)) begin
 					ex_reg <= 32'h0;
 					ls_read_reg <= 1'b1;
@@ -150,6 +184,7 @@ always @(posedge clk) begin
 				end
 			end
 			WAIT_READY: begin
+			READY: begin
 				ex_valid <= 1'b1;
 				if(ex_valid_o && wb_ready_i) begin
 					ex_valid <= 1'b0;
@@ -168,6 +203,9 @@ always @(posedge clk) begin
 			end
 			DONE_EXU: begin
 				dnpc_reg <= dnpc;
+			DONE: begin
+				dnpc_reg <= dnpc;
+				al_res <= 32'h0;
 				ram_rdata_reg <= 32'h0;
 			end
 		endcase
@@ -191,6 +229,58 @@ assign ex =
 						({32{(funct3_i == 3'b101) && (funct7_i == 7'b0100000)}} & ({{{32{a[31]}}, $signed(a)} >> shamt_i}[31:0])) |	//srai
 						({32{funct3_i == 3'b110}} & (a | b)) |	//ori
 						({32{funct3_i == 3'b111}} & (a & b)) 	//andi
+assign b = (op_i == 7'b0110011 || op_i == 7'b0100011) ? r2_i : imm_i;
+assign a = (op_i == 7'b0010011 || op_i == 7'b0000011 || op_i == 7'b0100011 || op_i == 7'b0110011/*R*/ || (op_i == 7'b1110011 && (funct3_i == 3'b001 || funct3_i == 3'b010 || funct3_i == 3'b011))/*csr*/) ? r1_i : 32'b0;
+/***ALU***/
+wire al_valid = (op_i == 7'b0010011) || (op_i == 7'b0110011);
+reg [31:0]al_res;
+wire [31:0]a,b,ex;
+wire [3:0]sel;
+wire [31:0]x,y,res;
+assign x = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111) || (op_i == 7'b0110011) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r1_i 
+	: ((op_i == 7'b0010011 && funct3_i == 3'b010) || ((op_i == 7'b0110011) && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b001 && funct7_i == 7'b0000001) || (funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b110 && funct7_i == 7'b0000001)))) ? $signed(r1_i) 
+	: 32'b0;
+assign y = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? imm_i 
+	: ((op_i == 7'b0010011) && (funct3_i == 3'b010)) ? $signed(imm_i) 
+	: ((op_i == 7'b0010011) && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {27'b0,shamt_i} 
+	: ((op_i == 7'b0110011) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r2_i
+	: ((op_i == 7'b0110011 && ((funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000)))) ? {27'b0,r2_i[4:0]}
+	: ((op_i == 7'b0110011) && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b001 && funct7_i == 7'b0000001) || (funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b110 && funct7_i == 7'b0000001))) ? $signed(r2_i)
+	: 32'b0;
+localparam ADD  = 4'b0000;
+localparam SUB  = 4'b0001;
+localparam SLL  = 4'b0010;
+localparam SRL  = 4'b0011;
+localparam SRA  = 4'b0100;
+localparam SLT  = 4'b0101;
+localparam AND  = 4'b0110;
+localparam OR   = 4'b0111;
+localparam XOR  = 4'b1000;
+localparam MUL  = 4'b1001;
+localparam MULH = 4'b1010;
+localparam DIV  = 4'b1011;
+localparam REM  = 4'b1100;
+assign sel =  ((op_i == 7'b0010011 && funct3_i == 3'b000) || (op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0000000)) ? ADD : 
+							(op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0100000) ? SUB :
+						  ((op_i == 7'b0010011 && funct3_i == 3'b001) || (op_i == 7'b0110011 && (funct3_i == 3'b001 && funct7_i == 7'b0000000))) ? SLL :
+							((op_i == 7'b0010011 &&(funct3_i == 3'b010 || funct3_i == 3'b011)) || (op_i == 7'b0110011 && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000)))) ? SLT :
+							((op_i == 7'b0010011 && funct3_i == 3'b100) || (op_i == 7'b0110011 && (funct3_i == 3'b100 && funct7_i == 7'b0000000))) ? XOR :
+							((op_i == 7'b0010011 && funct3_i == 3'b101 && funct7_i == 7'b0000000) || (op_i == 7'b0110011 && funct3_i == 3'b101 && funct7_i == 7'b0000000)) ? SRL :
+							((op_i == 7'b0010011 && funct3_i == 3'b101 && funct7_i == 7'b0100000) || (op_i == 7'b0110011 && funct3_i == 3'b101 && funct7_i == 7'b0100000)) ? SRA :
+							((op_i == 7'b0010011 && funct3_i == 3'b110) || (op_i == 7'b0110011 && funct3_i == 3'b110 && funct7_i == 7'b0000000)) ? OR : 
+							((op_i == 7'b0010011 && funct3_i == 3'b111) || (op_i == 7'b0110011 && funct3_i == 3'b111 && funct7_i == 7'b0000000)) ? AND : 
+							(op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0000001) ? MUL :
+							(op_i == 7'b0110011 && funct3_i == 3'b001 && funct7_i == 7'b0000001) ? MULH :
+							(op_i == 7'b0110011 && ((funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001))) ? DIV :
+							(op_i == 7'b0110011 && ((funct3_i == 3'b110 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? REM 
+							: 4'b1111;
+
+ysyx_24110017_ALU ALU(clk,rst,x,y,sel,al_start,res,al_done);
+
+assign ex = 
+				({32{op_i == 7'b0010011}}/***I*addi~srai***/
+				& (
+						al_res
 					)
 				)				
 			| ({32{op_i == 7'b0110011}}/***R_add~R_remu***/
@@ -214,6 +304,11 @@ assign ex =
 					)
 				)
 			|
+						al_res
+					)
+				)
+			|
+/***BU***/
 				({32{(op_i == 7'b1101111)}} & (pc_i + 4)) | //I_jal
 				({32{(op_i == 7'b1100111)}} & (pc_i + 4)) | //I_jalr
 				({32{(op_i == 7'b0110111)}} & imm_i) | //U_lui
@@ -317,5 +412,195 @@ wire [31:0]dnpc = (jalen) ? (pc_i + offset)	//jal
 
 /***riscv32e_regs_controller***/
 wire gpr_wen = (op_i == 7'b0110111 || op_i == 7'b0010111 || op_i == 7'b1101111 || op_i == 7'b1100111 || op_i == 7'b0010011 || op_i == 7'b0001111 || op_i == 7'b1110011 || op_i == 7'b0110011 || op_i == 7'b0000011) ? 1'b1 : 1'b0;
+
+endmodule
+
+
+module ysyx_24110017_ALU(
+	input wire clk,
+	input wire rst,
+	input wire [31:0] a,
+	input wire [31:0] b,
+	input wire [3:0] opcode,
+	input wire start,
+	output reg [31:0] res,
+	output reg done
+);
+
+	localparam OP_ADD  = 4'b0000;
+  localparam OP_SUB  = 4'b0001;
+  localparam OP_SLL  = 4'b0010;
+  localparam OP_SRL  = 4'b0011;
+	localparam OP_SRA  = 4'b0100;
+  localparam OP_SLT  = 4'b0101;
+	localparam OP_AND  = 4'b0110;
+  localparam OP_OR   = 4'b0111;
+  localparam OP_XOR  = 4'b1000;
+  localparam OP_MUL  = 4'b1001;
+	localparam OP_MULH = 4'b1010;
+  localparam OP_DIV  = 4'b1011;
+	localparam OP_REM  = 4'b1100;
+
+	localparam IDLE		 = 2'b00;
+	localparam EXECUTE = 2'b01;
+	localparam FINISH  = 2'b10;
+	localparam NULL    = 2'b11;
+
+	reg [1:0]state;
+	reg [31:0]a_reg,b_reg;
+	reg [3:0]opcode_reg;
+
+	reg [63:0]mul_result;
+	reg [5:0]mul_counter;
+	reg [31:0]dividend,divisor;
+	reg [31:0]quotient,remainder;
+	reg [5:0]div_counter;
+
+	always @(posedge clk or posedge rst) begin
+		if(rst) begin
+			state <= IDLE;
+			res <= 32'h0;
+			done <= 1'b0;
+		end
+		else begin
+			case(state)
+				IDLE: begin
+					done <= 1'b0;
+					if(start) begin
+						a_reg <= a;
+						b_reg <= b;
+						opcode_reg <= opcode;
+						state <= EXECUTE;
+
+						if(opcode == OP_MUL || opcode == OP_MULH) begin
+							mul_result <= {32'b0, a};
+							mul_counter <= 6'd0;
+						end
+						else if(opcode == OP_DIV || opcode == OP_REM) begin
+							dividend <= a;
+							divisor <= b;
+							quotient <= 32'b0;
+							remainder <= 32'b0;
+							div_counter <= 6'd0;
+						end
+					end
+				end
+
+				EXECUTE: begin
+					case (opcode_reg)
+						OP_ADD: begin
+							res <= a_reg + b_reg;
+							state <= FINISH;
+						end
+						OP_SUB: begin
+							res <= a_reg - b_reg;
+							state <= FINISH;
+						end
+						OP_SLL: begin
+							res <= a_reg << b_reg;
+							state <= FINISH;
+						end
+						OP_SRL: begin
+							res <= a_reg >> b_reg;
+							state <= FINISH;
+						end
+						OP_SRA: begin
+							res <= ({32{a_reg[31]}} << (32 - b_reg)) | (a_reg >> b_reg);
+							state <= FINISH;
+						end
+						OP_SLT: begin
+							res <= {31'b0,a < b};
+							state <= FINISH;
+						end
+						OP_AND: begin
+							res <= a_reg & b_reg;
+							state <= FINISH;
+						end
+						OP_OR: begin
+							res <= a_reg | b_reg;
+							state <= FINISH;
+						end
+						OP_XOR: begin
+							res <= a_reg ^ b_reg;
+							state <= FINISH;
+						end
+						OP_MUL: begin
+							if(mul_counter < 32) begin
+								if(mul_result[0]) begin
+									mul_result[63:32] <= mul_result[63:32] + b_reg;
+								end
+								mul_result <= {1'b0,mul_result[63:1]};
+								mul_counter <= mul_counter + 1;
+							end
+							else begin
+								res <= mul_result[31:0];
+								state <= FINISH;
+							end
+						end
+						OP_MULH: begin
+							if(mul_counter < 32) begin
+                if(mul_result[0]) begin
+                  mul_result[63:32] <= mul_result[63:32] + b_reg;
+                end
+                mul_result <= {1'b0,mul_result[63:1]};
+                mul_counter <= mul_counter + 1;
+              end
+              else begin
+                res <= mul_result[63:32];
+                state <= FINISH;
+              end
+            end
+						OP_DIV: begin
+							if(div_counter < 32) begin
+								remainder <= {remainder[30:0],dividend[31 - div_counter]};
+								if(remainder >= divisor) begin
+									remainder <= remainder - divisor;
+									quotient[31 - div_counter] <= 1'b1;
+								end
+								else begin
+									quotient[31 - div_counter] <= 1'b0;
+								end
+								div_counter <= div_counter + 1;
+							end
+							else begin
+								res <= quotient;
+								state <= FINISH;
+							end
+						end
+						OP_REM: begin
+              if(div_counter < 32) begin
+                remainder <= {remainder[30:0],dividend[31 - div_counter]};
+                if(remainder >= divisor) begin
+                  remainder <= remainder - divisor;
+                  quotient[31 - div_counter] <= 1'b1;
+                end
+	              else begin
+		              quotient[31 - div_counter] <= 1'b0;
+	              end
+	              div_counter <= div_counter + 1;
+              end
+              else begin
+                res <= remainder;
+                state <= FINISH;
+              end
+            end
+						default: begin
+							res <= 32'b0;
+							state <= FINISH;
+						end
+					endcase
+				end
+
+				FINISH: begin
+					done <= 1'b1;
+					state <= NULL;
+				end
+				NULL: begin
+					done <= 1'b0;
+					state <= IDLE;
+				end
+			endcase
+		end
+	end
 
 endmodule

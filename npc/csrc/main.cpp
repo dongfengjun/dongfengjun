@@ -56,7 +56,16 @@ word_t dpic_display(int i) {
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
   return dpic_grab(i);
 }
+<<<<<<< HEAD
 /***END***/
+=======
+word_t performance_counters(int i) {
+  extern int performance_counter(int i);
+  svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
+  return performance_counter(i);
+}
+/******/
+>>>>>>> tracer-ysyx
 
 bool RUNNING;
 void npc_trap() {
@@ -70,6 +79,34 @@ void npc_trap() {
 #define MAX_INST_TO_PRINT 10//puts inst
 extern CPU_state cpu;
 uint64_t g_nr_guest_inst = 0;
+<<<<<<< HEAD
+=======
+uint64_t g_nr_guest_cycle = 0;
+uint64_t if_fin_cnt = 0;
+uint64_t id_fin_cnt = 0;
+uint64_t ex_fin_cnt = 0;
+uint64_t ls_fin_cnt = 0;
+uint64_t if_wait = 0;
+uint64_t if_mem_wait = 0;
+uint64_t ex_total_wait = 0;
+uint64_t Integer_Computational_cnt = 0;
+uint64_t Transfer_cnt = 0;
+uint64_t Load_cnt = 0;
+uint64_t Store_cnt = 0;
+uint64_t Immediate_cnt = 0;
+uint64_t System_cnt = 0;
+uint64_t Integer_Computational_wait = 0;
+uint64_t Transfer_wait = 0;
+uint64_t Load_wait = 0;
+uint64_t Store_wait = 0;
+uint64_t Immediate_wait = 0;
+uint64_t System_wait = 0;
+uint64_t ls_store_cnt = 0;
+uint64_t ls_load_cnt = 0;
+uint64_t ls_store_wait = 0;
+uint64_t ls_load_wait = 0;
+
+>>>>>>> tracer-ysyx
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
@@ -80,9 +117,29 @@ static void statistic() {
   IFNDEF(CONFIG_TARGET_AM, setlocale(LC_NUMERIC, ""));
 #define NUMBERIC_FMT MUXDEF(CONFIG_TARGET_AM, "%", "%'") PRIu64
   Log("host time spent = " NUMBERIC_FMT " us", g_timer);
+<<<<<<< HEAD
   Log("total guest instructions = " NUMBERIC_FMT, g_nr_guest_inst);
   if (g_timer > 0) Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
   else Log("Finish running in less than 1 us and can not calculate the simulation frequency");
+=======
+  Log("total guest cycles = " NUMBERIC_FMT, g_nr_guest_cycle);
+	Log("total guest instructions = " NUMBERIC_FMT, g_nr_guest_inst);
+	if (g_timer > 0) Log("simulation frequency = " NUMBERIC_FMT " inst/s", g_nr_guest_inst * 1000000 / g_timer);
+  else Log("Finish running in less than 1 us and can not calculate the simulation frequency");	
+	Log("******************Performance Evaluation*************************");
+	Log("IPC = %.6f", (double)g_nr_guest_inst/(double)g_nr_guest_cycle);
+	Log("CPI = %.6f", (double)g_nr_guest_cycle/(double)g_nr_guest_inst);
+	Log("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt);
+	Log("Integer   Transfer  Load      Store     Immediate System");
+	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Count)",Integer_Computational_cnt,Transfer_cnt,Load_cnt,Store_cnt,Immediate_cnt,System_cnt);
+	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Cycles)",Integer_Computational_wait,Transfer_wait,Load_wait,Store_wait,Immediate_wait,System_wait);
+	Log("%-10.6f%-10.6f%-10.6f%-10.6f%-10.6f%-10.6f (Proportion)",(double)Integer_Computational_wait/(double)ex_total_wait,(double)Transfer_wait/(double)ex_total_wait,(double)Load_wait/(double)ex_total_wait,(double)Store_wait/(double)ex_total_wait,(double)Immediate_wait/(double)ex_total_wait,(double)System_wait/(double)ex_total_wait);
+	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Transfer_wait/Transfer_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, (System_cnt == 0) ? 0 : System_wait/System_cnt);
+	Log("IF->MEM:%ld IF TOTAL:%ld",if_mem_wait,if_wait);
+	Log("The proportion of IF MEM access:%.6f", (double)if_mem_wait/(double)if_wait);
+	Log("LS LOAD:%ld (Average Delay)", ls_load_wait/ls_load_cnt);
+	Log("LS STORE:%ld (Average Delay)", ls_store_wait/ls_store_cnt);
+>>>>>>> tracer-ysyx
 }
 
 void assert_fail_msg() {
@@ -292,6 +349,64 @@ static void reset(int n) {
 	top->reset=0;
 }
 
+<<<<<<< HEAD
+=======
+bool if_mem_flag = false;
+bool if_flag = false;
+bool ex_total_flag = false;
+bool ls_store_flag = false;
+bool ls_load_flag = false;
+bool Integer_Computational_flag = false;
+bool Transfer_flag = false;
+bool Load_flag = false;
+bool Store_flag = false;
+bool Immediate_flag = false;
+bool System_flag = false;
+void performance_evaluation() {
+	g_nr_guest_cycle ++;
+	if(dpic_display(3)) g_nr_guest_inst ++;
+	if(performance_counters(0)) if_fin_cnt ++;
+	if(performance_counters(1)) id_fin_cnt ++;
+	if(performance_counters(2)) ex_fin_cnt ++;
+	if(performance_counters(3)) ls_fin_cnt ++;
+	if(performance_counters(6)) if_mem_flag = true;
+	if(performance_counters(7)) if_mem_flag = false;
+	if(if_mem_flag) if_mem_wait ++;
+	if(performance_counters(8)) if_flag = true;
+	if(performance_counters(0)) if_flag = false;
+	if(if_flag) if_wait ++;
+	if(performance_counters(1)) ex_total_flag = true;
+	if(performance_counters(5)) ex_total_flag = false;
+	if(ex_total_flag) ex_total_wait ++;
+	if(performance_counters(1) && performance_counters(4) == 0b0110011) { Integer_Computational_flag = true; Integer_Computational_cnt ++; }
+	if(performance_counters(1) && (performance_counters(4) == 0b1100011 || performance_counters(4) == 0b1101111 || performance_counters(4) == 0b1100111)) { Transfer_flag = true; Transfer_cnt ++; }
+	if(performance_counters(1) && performance_counters(4) == 0b0000011) { Load_flag = true; Load_cnt ++; }
+	if(performance_counters(1) && performance_counters(4) == 0b0100011) { Store_flag = true; Store_cnt ++; }
+	if(performance_counters(1) && performance_counters(4) == 0b0010011) { Immediate_flag = true; Immediate_cnt ++; }
+	if(performance_counters(1) && performance_counters(4) == 0b1110011) { System_flag = true; System_cnt ++; }
+	if(performance_counters(5)) {
+		Integer_Computational_flag = false;
+		Transfer_flag = false;
+		Load_flag = false;
+		Store_flag = false;
+		Immediate_flag = false;
+		System_flag = false;
+	}
+	if(Integer_Computational_flag) Integer_Computational_wait ++;
+  if(Transfer_flag) Transfer_wait ++;
+  if(Load_flag) Load_wait ++;
+  if(Store_flag) Store_wait ++;
+  if(Immediate_flag) Immediate_wait ++;
+  if(System_flag) System_wait ++;
+	if(performance_counters(9)) { ls_store_flag = true; ls_store_cnt ++; }
+	if(performance_counters(3)) ls_store_flag = false;
+	if(performance_counters(10)) { ls_load_flag = true; ls_load_cnt ++; }
+	if(performance_counters(3)) ls_load_flag = false;
+	if(ls_store_flag) ls_store_wait ++;
+	if(ls_load_flag) ls_load_wait ++;
+}
+
+>>>>>>> tracer-ysyx
 void cpu_exec(int n) {
 	g_print_step = (n > 0 && n < MAX_INST_TO_PRINT);
 #ifdef CONFIG_MTRACE
@@ -303,7 +418,11 @@ void cpu_exec(int n) {
 		nvboard_update();
 		cpu.pc = dpic_display(1);
 		isa_gpr_push();
+<<<<<<< HEAD
 		if(dpic_display(3)) { g_nr_guest_inst ++; }
+=======
+		performance_evaluation();
+>>>>>>> tracer-ysyx
 #ifdef CONFIG_ITRACE
 		itrace_push();
 #endif
