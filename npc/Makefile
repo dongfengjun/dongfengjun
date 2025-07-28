@@ -6,6 +6,7 @@ VSRCS += $(shell find ./vsrc -name "*.v")
 VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
 CSRCS += $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 INC_COM_PATH = ./csrc/include
+INC_COM_PATH += ./vsrc/include
 INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
 INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
 

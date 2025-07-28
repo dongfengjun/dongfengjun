@@ -1,4 +1,5 @@
 //`define YOSYS_STA
+`include "common.vh"
 module ysyx_24110017_IDU(
 	input clk,
 	input rst,
