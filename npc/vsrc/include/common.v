@@ -1,0 +1,1 @@
+`define YOSYS_STA
