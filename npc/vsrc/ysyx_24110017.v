@@ -79,6 +79,15 @@ wire [2:0]if_axi_awsize,if_axi_arsize;
 wire [1:0]if_axi_awburst,if_axi_arburst;
 wire [1:0]if_axi_bresp,if_axi_rresp;
 wire if_axi_awvalid,if_axi_awready,if_axi_wvalid,if_axi_wready,if_axi_bvalid,if_axi_bready,if_axi_arvalid,if_axi_arready,if_axi_rvalid,if_axi_rready,if_axi_wlast,if_axi_rlast;
+/***ICACHE***/
+wire [31:0]icache_axi_awaddr,icache_axi_wdata,icache_axi_araddr,icache_axi_rdata;
+wire [3:0]icache_axi_wstrb;
+wire [7:0]icache_axi_awlen,icache_axi_arlen;
+wire [3:0]icache_axi_awid,icache_axi_bid,icache_axi_arid,icache_axi_rid;
+wire [2:0]icache_axi_awsize,icache_axi_arsize;
+wire [1:0]icache_axi_awburst,icache_axi_arburst;
+wire [1:0]icache_axi_bresp,icache_axi_rresp;
+Wire icache_axi_awvalid,icache_axi_awready,icache_axi_wvalid,icache_axi_wready,icache_axi_bvalid,icache_axi_bready,icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,icache_axi_wlast,icache_axi_rlast;
 /***IDU***/
 wire id_valid,ex_ready; //分布式控制
 wire [6:0]op;
@@ -167,6 +176,22 @@ ysyx_24110017_IFU IFU(clock,reset,
 		if_axi_arlen,if_axi_arsize,if_axi_arburst,
 		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast
 );
+ysyx_24110017_CACHE #(4,2) ICACHE(clock,reset,
+		if_axi_awready,if_axi_awvalid,if_axi_awid,if_axi_awaddr,
+		if_axi_awlen,if_axi_awsize,if_axi_awburst,
+		if_axi_wready,if_axi_wvalid,if_axi_wdata,if_axi_wstrb,if_axi_wlast,
+		if_axi_bready,if_axi_bvalid,if_axi_bid,if_axi_bresp,
+		if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
+		if_axi_arlen,if_axi_arsize,if_axi_arburst,
+		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast,
+		icache_axi_awready,icache_axi_awvalid,icache_axi_awid,icache_axi_awaddr,
+    icache_axi_awlen,icache_axi_awsize,icache_axi_awburst,
+    icache_axi_wready,icache_axi_wvalid,icache_axi_wdata,icache_axi_wstrb,icache_axi_wlast,
+    icache_axi_bready,icache_axi_bvalid,icache_axi_bid,icache_axi_bresp,
+    icache_axi_arready,icache_axi_arvalid,icache_axi_arid,icache_axi_araddr,
+    icache_axi_arlen,icache_axi_arsize,icache_axi_arburst,
+    icache_axi_rready,icache_axi_rvalid,icache_axi_rid,icache_axi_rdata,icache_axi_rresp,icache_axi_rlast
+);
 ysyx_24110017_IDU IDU(clock,reset,
 		inst,if_valid,id_ready,id_valid,ex_ready,
 		op,rd,funct3,rs1,rs2,imm,funct7,shamt
@@ -193,13 +218,13 @@ ysyx_24110017_LSU LSU(clock,reset,ls_read,ls_write,ls_done,
 		ls_axi_rready,ls_axi_rvalid,ls_axi_rid,ls_axi_rdata,ls_axi_rresp,ls_axi_rlast
 );
 ysyx_24110017_Xbar Xbar(clock,reset,
-		if_axi_awready,if_axi_awvalid,if_axi_awid,if_axi_awaddr,
-		if_axi_awlen,if_axi_awsize,if_axi_awburst,
-		if_axi_wready,if_axi_wvalid,if_axi_wdata,if_axi_wstrb,if_axi_wlast,
-		if_axi_bready,if_axi_bvalid,if_axi_bid,if_axi_bresp,
-		if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
-		if_axi_arlen,if_axi_arsize,if_axi_arburst,
-		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast,
+    icache_axi_awready,icache_axi_awvalid,icache_axi_awid,icache_axi_awaddr,
+    icache_axi_awlen,icache_axi_awsize,icache_axi_awburst,
+    icache_axi_wready,icache_axi_wvalid,icache_axi_wdata,icache_axi_wstrb,icache_axi_wlast,
+    icache_axi_bready,icache_axi_bvalid,icache_axi_bid,icache_axi_bresp,
+    icache_axi_arready,icache_axi_arvalid,icache_axi_arid,icache_axi_araddr,
+    icache_axi_arlen,icache_axi_arsize,icache_axi_arburst,
+    icache_axi_rready,icache_axi_rvalid,icache_axi_rid,icache_axi_rdata,icache_axi_rresp,icache_axi_rlast,
 		ls_axi_awready,ls_axi_awvalid,ls_axi_awid,ls_axi_awaddr,
 		ls_axi_awlen,ls_axi_awsize,ls_axi_awburst,
 		ls_axi_wready,ls_axi_wvalid,ls_axi_wdata,ls_axi_wstrb,ls_axi_wlast,
