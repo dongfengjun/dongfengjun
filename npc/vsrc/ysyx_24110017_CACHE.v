@@ -100,6 +100,9 @@ module ysyx_24110017_CACHE #(n = 4, m = 2) (
 						state <= IDLE;
 					end
 				end
+				default: begin
+					state <= state;
+				end
 			endcase
 		end
 	end
