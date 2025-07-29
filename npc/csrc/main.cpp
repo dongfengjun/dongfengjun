@@ -147,6 +147,7 @@ void assert_fail_msg() {
 #ifdef CONFIG_ITRACE
 static void itrace_push(){
 	if(dpic_display(3)) {
+		printf("111");
 		uint8_t insts[4];
 		insts[0] = dpic_display(2) & 0xFF;
 		insts[1] = (dpic_display(2) >>  8) & 0xFF;
