@@ -112,6 +112,11 @@ static uint64_t g_timer = 0;
 static bool g_print_step = false;
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
 IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
+#ifdef CONFIG_ITRACE
+	char itracebuf[0x10000000] = {0};
+	char *itrace_p = itracebuf;
+	FILE *itracelog;
+#endif
 uint8_t fopcode;
 
 static void statistic() {
@@ -146,33 +151,31 @@ void assert_fail_msg() {
 
 #ifdef CONFIG_ITRACE
 static void itrace_push(){
-	if(dpic_display(3)) {
-		printf("111");
-		uint8_t insts[4];
-		insts[0] = dpic_display(2) & 0xFF;
-		insts[1] = (dpic_display(2) >>  8) & 0xFF;
-		insts[2] = (dpic_display(2) >> 16) & 0xFF;
-		insts[3] = (dpic_display(2) >> 24) & 0xFF;
+	uint8_t insts[4];
+	insts[0] = dpic_display(2) & 0xFF;
+	insts[1] = (dpic_display(2) >>  8) & 0xFF;
+	insts[2] = (dpic_display(2) >> 16) & 0xFF;
+	insts[3] = (dpic_display(2) >> 24) & 0xFF;
 
-		char *p = logbuf;
-		char *irp = iringbuf;
-		p += snprintf(p, sizeof(logbuf), FMT_WORD ":", dpic_display(0));
-		irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", dpic_display(0));
-		int ilen = 4;
-		int i;
-		for (i = ilen - 1; i >= 0; i --) {
-		  p += snprintf(p, 4, " %02x", insts[i]);
-			irp += snprintf(irp, 4, " %02x", insts[i]);
-		}
-		memset(p, ' ', 1);
-		memset(irp, ' ', 1);
-		p += 1;
-		irp += 1;
-		disassemble(p, logbuf + sizeof(logbuf) - p, dpic_display(0), (uint8_t *)&insts, 4);
-		disassemble(irp, logbuf + sizeof(logbuf) - irp, dpic_display(0), (uint8_t *)&insts, 4);
-		strncat(iringbuf, " \n", 3);
-		iringbuf_push(iringbuf);
+	char *p = logbuf;
+	char *irp = iringbuf;
+	p += snprintf(p, sizeof(logbuf), FMT_WORD ":", dpic_display(0));
+	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", dpic_display(0));
+	if(dpic_display(3)) itrace_p = (itrace_p, sizeof(itracebuf), FMT_WORD "\n", dpic_display(0));
+	int ilen = 4;
+	int i;
+	for (i = ilen - 1; i >= 0; i --) {
+	  p += snprintf(p, 4, " %02x", insts[i]);
+		irp += snprintf(irp, 4, " %02x", insts[i]);
 	}
+	memset(p, ' ', 1);
+	memset(irp, ' ', 1);
+	p += 1;
+	irp += 1;
+	disassemble(p, logbuf + sizeof(logbuf) - p, dpic_display(0), (uint8_t *)&insts, 4);
+	disassemble(irp, logbuf + sizeof(logbuf) - irp, dpic_display(0), (uint8_t *)&insts, 4);
+	strncat(iringbuf, " \n", 3);
+	iringbuf_push(iringbuf);
 }
 #endif
 
@@ -445,6 +448,10 @@ void cpu_exec(int n) {
   }
 	uint64_t timer_end = get_time();
 	g_timer += timer_end - timer_start;
+#ifdef CONFIG_ITRACE
+    fprintf(itracelog, "%s", itracebuf);
+		fclose(itracelog);
+#endif
 #ifdef CONFIG_FTRACE
 		cpu_show_ftrace();
 #endif
