@@ -61,6 +61,11 @@ word_t performance_counters(int i) {
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
   return performance_counter(i);
 }
+word_t amat_counters(int i) {
+	extern int amat_counter(int i);
+	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.icache"));
+	return amat_counter(i);
+}
 /******/
 bool RUNNING;
 void npc_trap() {
@@ -98,6 +103,10 @@ uint64_t ls_store_cnt = 0;
 uint64_t ls_load_cnt = 0;
 uint64_t ls_store_wait = 0;
 uint64_t ls_load_wait = 0;
+uint64_t icache_accses_cnt = 0;
+uint64_t icache_access_time = 0;
+uint64_t icache_miss_cnt = 0;
+uint64_t icache_miss_penalty = 0;
 
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
@@ -126,6 +135,7 @@ static void statistic() {
 	Log("The proportion of IF MEM access:%.6f", (double)if_mem_wait/(double)if_wait);
 	Log("LS LOAD:%ld (Average Delay)", ls_load_wait/ls_load_cnt);
 	Log("LS STORE:%ld (Average Delay)", ls_store_wait/ls_store_cnt);
+	Log("******ICACHE AMAT******\naccess time:%ld miss penalty:%ld\n p=%.6f amat=%ld",icache_access_time/icache_access_cnt,icache_miss_penalty/icache_miss_cnt,(double)icache_access_cnt/(double)if_fin_cnt,if_mem_wait/if_fin_cnt);
 }
 
 void assert_fail_msg() {
@@ -346,6 +356,8 @@ bool Load_flag = false;
 bool Store_flag = false;
 bool Immediate_flag = false;
 bool System_flag = false;
+bool icache_access_flag = false;
+bool icache_miss_flag = false;
 void performance_evaluation() {
 	g_nr_guest_cycle ++;
 	if(dpic_display(3)) g_nr_guest_inst ++;
@@ -353,9 +365,25 @@ void performance_evaluation() {
 	if(performance_counters(1)) id_fin_cnt ++;
 	if(performance_counters(2)) ex_fin_cnt ++;
 	if(performance_counters(3)) ls_fin_cnt ++;
-	if(performance_counters(6)) if_mem_flag = true;
-	if(performance_counters(7)) if_mem_flag = false;
+	if(performance_counters(6)) {
+		if_mem_flag = true;
+		if(amat_counters(0)) {
+			icache_access_flag = true;
+			icache_access_cnt ++;
+		}
+		else {
+			icahe_miss_flag = true;
+			icache_miss_cnt ++;
+		}
+	}
+	if(performance_counters(7)) {
+		if_mem_flag = false;
+		icache_access_flag = false;
+		icache_miss_flag = false;
+	}
 	if(if_mem_flag) if_mem_wait ++;
+	if(icache_access_flag) icache_access_time ++;
+	if(icache_miss_flag) icache_miss_penalty ++;
 	if(performance_counters(8)) if_flag = true;
 	if(performance_counters(0)) if_flag = false;
 	if(if_flag) if_wait ++;
@@ -388,6 +416,7 @@ void performance_evaluation() {
 	if(performance_counters(3)) ls_load_flag = false;
 	if(ls_store_flag) ls_store_wait ++;
 	if(ls_load_flag) ls_load_wait ++;
+
 }
 
 void cpu_exec(int n) {

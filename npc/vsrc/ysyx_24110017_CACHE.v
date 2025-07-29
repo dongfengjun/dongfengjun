@@ -183,4 +183,12 @@ module ysyx_24110017_CACHE #(n = 4, m = 2) (
 	assign m_axi_rid = (state == TRANS) ? s_axi_rid : (state == RETURN) ? cache_axi_rid : 4'b0;
 	assign m_axi_rlast = (state == TRANS) ? s_axi_rlast : (state == RETURN) ? cache_axi_rlast : 1'b0;
 
+/***DPIC-AMAT***/
+	export "DPI-C" function amat_counter;
+	function int amat_counter(int i);
+	  begin
+			assign amat_counter = (i == 0) ? {31'b0,(tag_reg[index] == tag && valid_reg[index])} : 32'b0;
+		end
+	endfunction
+
 endmodule
