@@ -112,6 +112,11 @@ static uint64_t g_timer = 0;
 static bool g_print_step = false;
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
 IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
+#ifdef CONFIG_ITRACE
+	char itracebuf[0x10000000] = {0};
+	char *itrace_p = itracebuf;
+	FILE *itracelog;
+#endif
 uint8_t fopcode;
 
 static void statistic() {
@@ -135,7 +140,7 @@ static void statistic() {
 	Log("The proportion of IF MEM access:%.6f", (double)if_mem_wait/(double)if_wait);
 	Log("LS LOAD:%ld (Average Delay)", ls_load_wait/ls_load_cnt);
 	Log("LS STORE:%ld (Average Delay)", ls_store_wait/ls_store_cnt);
-	Log("******ICACHE AMAT******\n																access time:%ld miss penalty:%ld  p=%.6f amat=%ld",icache_access_time/icache_access_cnt,icache_miss_penalty/icache_miss_cnt,(double)icache_access_cnt/(double)if_fin_cnt,if_mem_wait/if_fin_cnt);
+	Log("******ICACHE AMAT******\n				access cnt:%ld access time:%ld miss penalty:%ld  p=%.6f amat=%ld",icache_access_cnt,icache_access_time/icache_access_cnt,icache_miss_penalty/icache_miss_cnt,(double)icache_access_cnt/(double)if_fin_cnt,if_mem_wait/if_fin_cnt);
 }
 
 void assert_fail_msg() {
@@ -147,21 +152,22 @@ void assert_fail_msg() {
 #ifdef CONFIG_ITRACE
 static void itrace_push(){
 	uint8_t insts[4];
-  insts[0] = dpic_display(2) & 0xFF;
-  insts[1] = (dpic_display(2) >>  8) & 0xFF;
-  insts[2] = (dpic_display(2) >> 16) & 0xFF;
-  insts[3] = (dpic_display(2) >> 24) & 0xFF;
+	insts[0] = dpic_display(2) & 0xFF;
+	insts[1] = (dpic_display(2) >>  8) & 0xFF;
+	insts[2] = (dpic_display(2) >> 16) & 0xFF;
+	insts[3] = (dpic_display(2) >> 24) & 0xFF;
 
-  char *p = logbuf;
+	char *p = logbuf;
 	char *irp = iringbuf;
-  p += snprintf(p, sizeof(logbuf), FMT_WORD ":", dpic_display(0));
+	p += snprintf(p, sizeof(logbuf), FMT_WORD ":", dpic_display(0));
 	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", dpic_display(0));
-  int ilen = 4;
-  int i;
-  for (i = ilen - 1; i >= 0; i --) {
-    p += snprintf(p, 4, " %02x", insts[i]);
+	if(dpic_display(3)) itrace_p += snprintf(itrace_p, sizeof(itracebuf), FMT_WORD "\n", dpic_display(0));
+	int ilen = 4;
+	int i;
+	for (i = ilen - 1; i >= 0; i --) {
+	  p += snprintf(p, 4, " %02x", insts[i]);
 		irp += snprintf(irp, 4, " %02x", insts[i]);
-  }
+	}
 	memset(p, ' ', 1);
 	memset(irp, ' ', 1);
 	p += 1;
@@ -421,6 +427,9 @@ void performance_evaluation() {
 
 void cpu_exec(int n) {
 	g_print_step = (n > 0 && n < MAX_INST_TO_PRINT);
+#ifdef CONFIG_ITRACE
+    itracelog = fopen("build/npc-itrace-log.txt", "w");  //Mtrace
+#endif
 #ifdef CONFIG_MTRACE
 		mtracelog = fopen("build/npc-mtrace-log.txt", "w");  //Mtrace
 #endif
@@ -442,6 +451,10 @@ void cpu_exec(int n) {
   }
 	uint64_t timer_end = get_time();
 	g_timer += timer_end - timer_start;
+#ifdef CONFIG_ITRACE
+    fprintf(itracelog, "%s", itracebuf);
+		fclose(itracelog);
+#endif
 #ifdef CONFIG_FTRACE
 		cpu_show_ftrace();
 #endif
