@@ -176,7 +176,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2) (
 	assign m_axi_rdata = (state == TRANS) ? s_axi_rdata : (state == RETURN) ? cache_axi_rdata : 32'h0;
 	assign m_axi_rresp = (state == TRANS) ? s_axi_rresp : (state == RETURN) ? cache_axi_rresp : 2'b0;
 	assign m_axi_rvalid = (state == TRANS) ? s_axi_rvalid : (state == RETURN) ? cache_axi_rvalid : 1'b0;
-	assign s_axi_rready = (state == TRANS) ? if_axi_rready : 1'b0;
+	assign s_axi_rready = (state == TRANS) ? m_axi_rready : 1'b0;
 	assign m_axi_rid = (state == TRANS) ? s_axi_rid : (state == RETURN) ? cache_axi_rid : 4'b0;
 	assign m_axi_rlast = (state == TRANS) ? s_axi_rlast : (state == RETURN) ? cache_axi_rlast : 1'b0;
 
