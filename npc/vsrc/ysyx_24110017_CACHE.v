@@ -150,7 +150,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2) (
 	reg [3:0]cache_axi_bid,cache_axi_rid;
 	reg [31:0]cache_axi_rdata;
 	assign s_axi_awid = (state == TRANS) ? m_axi_awid : 4'b0;
-	assign s_axi_awlen = (state == TRANS) ? m_axi_awlen : 4'b0;
+	assign s_axi_awlen = (state == TRANS) ? m_axi_awlen : 8'b0;
 	assign s_axi_awsize = (state == TRANS) ? m_axi_awsize : 3'b0;
 	assign s_axi_awburst = (state == TRANS) ? m_axi_awburst : 2'b0;
 	assign s_axi_wlast = (state == TRANS) ? m_axi_wlast : 1'b0;
@@ -167,7 +167,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2) (
 	assign s_axi_bready = (state == TRANS) ? m_axi_bready : 1'b0;
 
 	assign s_axi_arid = (state == TRANS) ? m_axi_arid : 4'b0;
-	assign s_axi_arlen = (state == TRANS) ? m_axi_arlen : 4'b0;
+	assign s_axi_arlen = (state == TRANS) ? m_axi_arlen : 8'b0;
 	assign s_axi_arsize = (state == TRANS) ? m_axi_arsize : 3'b0;
 	assign s_axi_arburst = (state == TRANS) ? m_axi_arburst : 2'b0;
 	assign s_axi_araddr = (state == TRANS) ? m_axi_araddr : 32'h0;
