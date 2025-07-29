@@ -428,6 +428,9 @@ void performance_evaluation() {
 void cpu_exec(int n) {
 	g_print_step = (n > 0 && n < MAX_INST_TO_PRINT);
 #ifdef CONFIG_MTRACE
+    itracelog = fopen("build/npc-itrace-log.txt", "w");  //Mtrace
+#endif
+#ifdef CONFIG_MTRACE
 		mtracelog = fopen("build/npc-mtrace-log.txt", "w");  //Mtrace
 #endif
 	uint64_t timer_start = get_time();	
