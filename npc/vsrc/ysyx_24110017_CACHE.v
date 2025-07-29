@@ -1,4 +1,4 @@
-mudule ysyx_24110017_CACHE #(n = 4, m = 2) (
+module ysyx_24110017_CACHE #(n = 4, m = 2) (
 	input clk,
 	input rst,
 	output wire m_axi_awready,
