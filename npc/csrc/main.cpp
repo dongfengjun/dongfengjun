@@ -372,7 +372,7 @@ void performance_evaluation() {
 			icache_access_cnt ++;
 		}
 		else {
-			icahe_miss_flag = true;
+			icache_miss_flag = true;
 			icache_miss_cnt ++;
 		}
 	}
