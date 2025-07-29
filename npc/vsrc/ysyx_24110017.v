@@ -87,7 +87,7 @@ wire [3:0]icache_axi_awid,icache_axi_bid,icache_axi_arid,icache_axi_rid;
 wire [2:0]icache_axi_awsize,icache_axi_arsize;
 wire [1:0]icache_axi_awburst,icache_axi_arburst;
 wire [1:0]icache_axi_bresp,icache_axi_rresp;
-Wire icache_axi_awvalid,icache_axi_awready,icache_axi_wvalid,icache_axi_wready,icache_axi_bvalid,icache_axi_bready,icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,icache_axi_wlast,icache_axi_rlast;
+wire icache_axi_awvalid,icache_axi_awready,icache_axi_wvalid,icache_axi_wready,icache_axi_bvalid,icache_axi_bready,icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,icache_axi_wlast,icache_axi_rlast;
 /***IDU***/
 wire id_valid,ex_ready; //分布式控制
 wire [6:0]op;
