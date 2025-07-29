@@ -68,8 +68,6 @@ always @(posedge clk) begin
 					&& ((pc_o < 32'h0f000000) || (pc_o >= 32'h0f002000))
 					&& ((pc_o < 32'h80000000) || (pc_o >= 32'h84000000))
 					&& ((pc_o < 32'ha0000000) || (pc_o >= 32'hc0000000))) begin
-					$fwrite(32'h80000002, "Assertion failed: Invalid PC `%xh`\n",pc_o);
-          $fatal;
 `ifndef YOSYS_STA
 					$fwrite(32'h80000002, "Assertion failed: Invalid PC `%xh`\n",pc_o);
           $fatal;
