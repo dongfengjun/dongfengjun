@@ -63,7 +63,7 @@ word_t performance_counters(int i) {
 }
 word_t amat_counters(int i) {
 	extern int amat_counter(int i);
-	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.icache"));
+	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.ICACHE"));
 	return amat_counter(i);
 }
 /******/
