@@ -135,9 +135,8 @@ uint32_t flash_read(uint32_t addr) {
 
 void _trm_init() {
 	uart_init(); //uart16500 init + difftest_skip_ref
-	bootloader_fsbl(); //mrom->sram
+	bootloader_fsbl();
 	idcsrs_init(); //开DIFFTEST时暂时不用
-//	idcsrs_init(); //开DIFFTEST时暂时不用
 	int ret = main(mainargs);
 	halt(ret);
 }
