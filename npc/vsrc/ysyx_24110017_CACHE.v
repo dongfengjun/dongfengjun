@@ -131,7 +131,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 				TRANS  : begin
 					if(m_axi_rready && s_axi_rvalid) begin
 						integer k;
-						for (k = 1; k < (2 ** w) - 1; k = k + 1) begin : fifo
+						for (k = 1; k < (2 ** w); k = k + 1) begin : fifo
 							cache_reg[index * (2 ** w) + k] <= cache_reg[index * (2 **  w) + k - 1];
 							tag_reg[index * (2 ** w) + k] <= tag_reg[index * (2 ** w) + k - 1];
 							valid_reg[index * (2 ** w) + k] <= valid_reg[index * (2 ** w) + k - 1];
@@ -148,7 +148,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 					if(m_axi_arvalid && cache_axi_arready) begin
 						cache_axi_rvalid <= 1;
 						cache_axi_arready <= 0;
-						cache_axi_rdata <= cache_reg[$clog2(access)];
+						cache_axi_rdata <= cache_reg[index * (2 ** w) + $clog2(access)];
 						cache_axi_rresp  <= 2'b11;
 					end
 					if(cache_axi_rvalid && m_axi_rready) begin
