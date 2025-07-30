@@ -1,3 +1,4 @@
+//`define YOSYS_STA
 module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	input clk,
 	input rst,
@@ -148,7 +149,9 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 					if(m_axi_arvalid && cache_axi_arready) begin
 						cache_axi_rvalid <= 1;
 						cache_axi_arready <= 0;
+`ifndef YOSYS_STA
 						cache_axi_rdata <= cache_reg[index * (2 ** w) + $clog2(access)];
+`endif
 						cache_axi_rresp  <= 2'b11;
 					end
 					if(cache_axi_rvalid && m_axi_rready) begin
@@ -198,11 +201,13 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	assign m_axi_rlast = (state == TRANS) ? s_axi_rlast : (state == RETURN) ? cache_axi_rlast : 1'b0;
 
 /***DPIC-AMAT***/
+`ifndef YOSYS_STA
 	export "DPI-C" function amat_counter;
 	function int amat_counter(int i);
 	  begin
 			assign amat_counter = (i == 0) ? {31'b0,(access != 0)} : 32'b0;
 		end
 	endfunction
+`endif
 
 endmodule
