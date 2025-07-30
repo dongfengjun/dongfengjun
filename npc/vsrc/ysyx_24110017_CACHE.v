@@ -1,4 +1,4 @@
-module ysyx_24110017_CACHE #(n = 4, m = 2) (
+module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	input clk,
 	input rst,
 	output wire m_axi_awready,
@@ -64,27 +64,35 @@ module ysyx_24110017_CACHE #(n = 4, m = 2) (
 	input wire s_axi_rlast
 );
 
-	reg [31:0] cache_reg [2**n-1 : 0];
-  reg [31-m-n : 0] tag_reg [2**n-1 : 0];
-  reg [2**n-1 : 0] valid_reg;
-	wire [31-m-n : 0]tag = m_axi_araddr[31 : m+n];
-  wire [n-1 : 0]index = m_axi_araddr[m+n-1 : m];
+	reg [31:0] cache_reg [(1<<n)-1 : 0];
+  reg [31-m-n+w : 0] tag_reg [(1<<n)-1 : 0];
+  reg [(1<<n)-1 : 0] valid_reg;
+	wire [31-m-n+w : 0]tag = m_axi_araddr[31 : m+n-w];
+  wire [n-1-w: 0]index = m_axi_araddr[m+n-w-1 : m];
   wire [m-1 : 0]offset = m_axi_araddr[m-1 : 0];
 
-  localparam IDLE = 2'b00;
+  wire [(1<<w) - 1 : 0]access;
+	generate 
+    genvar i; 
+      for(i = 0; i < (1<<w); i = i + 1) begin : comparator
+        assign access[i] = (tag == tag_reg[index * (1<<w) + i]) && (valid_reg[index * (2<<w) + i]);
+			end
+	endgenerate
+
+	localparam IDLE = 2'b00;
   localparam TRANS = 2'b01;
   localparam RETURN = 2'b10;
-
   reg [1:0]state;
+
   always @(posedge clk or posedge rst) begin
     if(rst) state <= IDLE;
     else begin
       case(state)
         IDLE   : begin
           if(m_axi_arvalid) begin
-					  if(tag_reg[index] == tag && valid_reg[index]) begin
-              state <= RETURN;
-            end
+						if(access != 0) begin
+							state <= RETURN;
+						end
 						else begin
 							state <= TRANS;
 						end
@@ -109,10 +117,10 @@ module ysyx_24110017_CACHE #(n = 4, m = 2) (
 
 	always @(posedge clk or posedge rst) begin
 		if(rst) begin
-			integer i;
-			for (i = 0; i < 2**n; i = i + 1) begin
-				cache_reg[i]	<= 32'h0;
-				tag_reg[i]		<= 0;
+      integer j;;
+			for (j = 0; j < (1<<n); j = j + 1) begin : init_reg
+				cache_reg[j]	<= 32'h0;
+				tag_reg[j]		<= 0;
 			end
 			valid_reg				<= 0;
 		end
@@ -122,9 +130,15 @@ module ysyx_24110017_CACHE #(n = 4, m = 2) (
 				end
 				TRANS  : begin
 					if(m_axi_rready && s_axi_rvalid) begin
-						cache_reg[index] <= s_axi_rdata;
-						tag_reg[index] <= tag;
-						valid_reg[index] <= 1'b1;
+						integer k;
+						for (k = 1; k < (1<<w); k = k + 1) begin : fifo
+							cache_reg[index * (1<<w) + k] <= cache_reg[index * (1<<w) + k - 1];
+							tag_reg[index * (1<<w) + k] <= tag_reg[index * (1<<w) + k - 1];
+							valid_reg[index * (1<<w) + k] <= valid_reg[index * (1<<w) + k - 1];
+						end
+						cache_reg[index * (1<<w)] <= s_axi_rdata;
+						tag_reg[index * (1<<w)] <= tag;
+						valid_reg[index * (1<<w)] <= 1'b1;
 					end	
 				end
 				RETURN : begin
@@ -134,7 +148,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2) (
 					if(m_axi_arvalid && cache_axi_arready) begin
 						cache_axi_rvalid <= 1;
 						cache_axi_arready <= 0;
-						cache_axi_rdata <= cache_reg[index];
+						cache_axi_rdata <= cache_reg[index * (2 ** w) + $clog2(access)];
 						cache_axi_rresp  <= 2'b11;
 					end
 					if(cache_axi_rvalid && m_axi_rready) begin
@@ -187,7 +201,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2) (
 	export "DPI-C" function amat_counter;
 	function int amat_counter(int i);
 	  begin
-			assign amat_counter = (i == 0) ? {31'b0,(tag_reg[index] == tag && valid_reg[index])} : 32'b0;
+			assign amat_counter = (i == 0) ? {31'b0,(access != 0)} : 32'b0;
 		end
 	endfunction
 
