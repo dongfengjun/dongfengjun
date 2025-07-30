@@ -99,7 +99,8 @@ assign ls_axi_wdata = (ls_axi_wvalid && ls_axi_wready) ? wdata_i : 32'h0;//axi_w
 assign ls_axi_awlen = axi_awlen;
 assign ls_axi_awsize = axi_awsize;
 assign ls_axi_awburst = axi_awburst;
-assign ls_axi_wstrb = (ls_axi_wvalid && ls_axi_wready) ? wmask_i : 4'b0;//axi_wstrb;
+//assign ls_axi_wstrb = (ls_axi_wvalid && ls_axi_wready) ? wmask_i : 4'b0;//axi_wstrb;
+assign ls_axi_wstrb = axi_wstrb;
 assign ls_axi_bready = axi_bready;
 assign ls_axi_wlast = axi_wlast;
 
@@ -158,6 +159,7 @@ always @(posedge clk or posedge rst) begin
 		        state <= WRITE;
 						axi_awvalid <= 1'b1;//非DELAY_TEST
 						axi_wvalid <= 1'b1;
+						axi_wstrb <= wmask
 						axi_awaddr <= waddr_i;
 						axi_awsize <= awsize_i;
 						axi_awlen <= awlen_i;
