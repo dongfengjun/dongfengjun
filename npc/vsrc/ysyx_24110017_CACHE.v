@@ -71,11 +71,12 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
   wire [n-1-w: 0]index = m_axi_araddr[m+n-1 : m + w];
   wire [m-1 : 0]offset = m_axi_araddr[m-1 : 0];
 
+	wire[2 ** w - 1: 0] addr [w-1:0];
   generate 
     genvar i; 
       for(i = 0; i < 2 ** w; i = i + 1) begin : comparator
-        wire access = (tag == tag_reg[index * (2 ** w) + i]) && (valid_reg[index * (2 ** w) + i]);
-      end
+        wire access[i] = (tag == tag_reg[index * (2 ** w) + i]) && (valid_reg[index * (2 ** w) + i]);
+			end
 	endgenerate
 
 	localparam IDLE = 2'b00;
@@ -117,10 +118,10 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	always @(posedge clk or posedge rst) begin
 		if(rst) begin
 			generate
-        genvar i;
-				for (i = 0; i < (2 ** n); i = i + 1) begin : init_reg
-					cache_reg[i]	<= 32'h0;
-					tag_reg[i]		<= 0;
+        genvar j;
+				for (j = 0; j < (2 ** n); j = j + 1) begin : init_reg
+					cache_reg[j]	<= 32'h0;
+					tag_reg[j]		<= 0;
 				end
 			endgenerate
 			valid_reg				<= 0;
@@ -132,10 +133,10 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 				TRANS  : begin
 					if(m_axi_rready && s_axi_rvalid) begin
 						generate
-							genvar i;
-							for (i = 1; i < (2 ** w) - 1; i = i + 1) begin : fifo
-								cache_reg[index * (2 ** w) + i] <= cache_reg[index * (2 **  w) + i - 1];
-								tag_reg[index * (2 ** w) + i] <= tag_reg[index * (2 ** w) + i - 1];
+							genvar k;
+							for (k = 1; k < (2 ** w) - 1; k = k + 1) begin : fifo
+								cache_reg[index * (2 ** w) + k] <= cache_reg[index * (2 **  w) + k - 1];
+								tag_reg[index * (2 ** w) + k] <= tag_reg[index * (2 ** w) + k - 1];
 							end
 						endgenerate
 						valid_reg[(index + 1) * (2 ** w) - 1 : index * (2 ** w)] <= valid_reg[(index + 1) * (2 ** w) - 1 : index * (2 ** w)] >> 1;
@@ -151,7 +152,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 					if(m_axi_arvalid && cache_axi_arready) begin
 						cache_axi_rvalid <= 1;
 						cache_axi_arready <= 0;
-						cache_axi_rdata <= cache_reg[index * (2 ** w)];
+						cache_axi_rdata <= cache_reg[$clog2(access)];
 						cache_axi_rresp  <= 2'b11;
 					end
 					if(cache_axi_rvalid && m_axi_rready) begin
