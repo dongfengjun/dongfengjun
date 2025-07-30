@@ -232,7 +232,6 @@ always @(posedge clk or posedge rst) begin
 						axi_awvalid <= 0;
 						axi_wlast <= 1;
 						//axi_awaddr <= waddr;
-					end
 /***DELAY_TEST_WVALID***
 					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
             wvalid_delay_counter <= rand_delay;
@@ -250,10 +249,11 @@ always @(posedge clk or posedge rst) begin
 						end
 					end
 /***END***/
-					if(ls_axi_wvalid && ls_axi_wready) begin
-						axi_wvalid <= 0;
-						//axi_wdata <= wdata;//加判断条件
-						//axi_wstrb <= wmask;
+						if(ls_axi_wvalid && ls_axi_wready) begin
+							axi_wvalid <= 0;
+							//axi_wdata <= wdata;//加判断条件
+							//axi_wstrb <= wmask;
+						end
 					end
 					if(ls_axi_bvalid && !ls_axi_bready) begin
 						axi_bready <= 1;
