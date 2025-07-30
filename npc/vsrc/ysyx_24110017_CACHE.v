@@ -140,7 +140,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 							end
 						endgenerate
 						valid_reg[(index + 1) * (2 ** w) - 1 : index * (2 ** w)] <= valid_reg[(index + 1) * (2 ** w) - 1 : index * (2 ** w)] >> 1;
-						cache_reg[index * (2 ** w))] <= s_axi_rdata;
+						cache_reg[index * (2 ** w)] <= s_axi_rdata;
 						tag_reg[index * (2 **  w)] <= tag;
 						valid_reg[index * (2 ** w)] <= 1'b1;
 					end	
