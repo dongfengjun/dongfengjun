@@ -71,11 +71,11 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
   wire [n-1-w: 0]index = m_axi_araddr[m+n-1 : m + w];
   wire [m-1 : 0]offset = m_axi_araddr[m-1 : 0];
 
-	wire[2 ** w - 1: 0] addr [w-1:0];
-  generate 
+  wire [2 ** w - 1 : 0]access;
+	generate 
     genvar i; 
       for(i = 0; i < 2 ** w; i = i + 1) begin : comparator
-        wire access[i] = (tag == tag_reg[index * (2 ** w) + i]) && (valid_reg[index * (2 ** w) + i]);
+        assign access[i] = (tag == tag_reg[index * (2 ** w) + i]) && (valid_reg[index * (2 ** w) + i]);
 			end
 	endgenerate
 
