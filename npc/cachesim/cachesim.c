@@ -34,8 +34,8 @@ void free_cache(Cache *cache) {
 }
 
 void process_pc(Cache *cache, uint32_t pc) {
-	uint32_t index = (pc >> cache->m & ((1 << cache->n) - 1)) >> cache->w;
-	uint32_t tag = pc >> (cache->n + cache->m);
+	uint32_t index = (pc >> cache->m & ((1 << (cache->n - cache->w)) - 1));
+	uint32_t tag = pc >> (cache->n - cache->w + cache->m);
 	bool flag = false;
 	for(int i = 0; i < (1 << cache->w); i ++) {
 		if(cache->lines[index * (1 << cache->w) + i].tag == tag && cache->lines[index * (1 << cache->w) + i].valid) {
