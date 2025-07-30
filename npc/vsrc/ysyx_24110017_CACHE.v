@@ -117,13 +117,11 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 
 	always @(posedge clk or posedge rst) begin
 		if(rst) begin
-			generate
-        genvar j;
-				for (j = 0; j < (2 ** n); j = j + 1) begin : init_reg
-					cache_reg[j]	<= 32'h0;
-					tag_reg[j]		<= 0;
-				end
-			endgenerate
+      integer j;;
+			for (j = 0; j < (2 ** n); j = j + 1) begin : init_reg
+				cache_reg[j]	<= 32'h0;
+				tag_reg[j]		<= 0;
+			end
 			valid_reg				<= 0;
 		end
 		else begin
@@ -132,13 +130,11 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 				end
 				TRANS  : begin
 					if(m_axi_rready && s_axi_rvalid) begin
-						generate
-							genvar k;
-							for (k = 1; k < (2 ** w) - 1; k = k + 1) begin : fifo
-								cache_reg[index * (2 ** w) + k] <= cache_reg[index * (2 **  w) + k - 1];
-								tag_reg[index * (2 ** w) + k] <= tag_reg[index * (2 ** w) + k - 1];
-							end
-						endgenerate
+						integer k;
+						for (k = 1; k < (2 ** w) - 1; k = k + 1) begin : fifo
+							cache_reg[index * (2 ** w) + k] <= cache_reg[index * (2 **  w) + k - 1];
+							tag_reg[index * (2 ** w) + k] <= tag_reg[index * (2 ** w) + k - 1];
+						end
 						valid_reg[(index + 1) * (2 ** w) - 1 : index * (2 ** w)] <= valid_reg[(index + 1) * (2 ** w) - 1 : index * (2 ** w)] >> 1;
 						cache_reg[index * (2 ** w)] <= s_axi_rdata;
 						tag_reg[index * (2 **  w)] <= tag;
