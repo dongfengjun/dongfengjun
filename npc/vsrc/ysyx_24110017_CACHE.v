@@ -90,7 +90,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
       case(state)
         IDLE   : begin
           if(m_axi_arvalid) begin
-						if(access) begin
+						if(access != 0) begin
 							state <= RETURN;
 						end
 						else begin
