@@ -159,7 +159,7 @@ always @(posedge clk or posedge rst) begin
 		        state <= WRITE;
 						axi_awvalid <= 1'b1;//非DELAY_TEST
 						axi_wvalid <= 1'b1;
-						axi_wstrb <= wmask;
+						axi_wstrb <= wmask_i;
 						axi_awaddr <= waddr_i;
 						axi_awsize <= awsize_i;
 						axi_awlen <= awlen_i;
