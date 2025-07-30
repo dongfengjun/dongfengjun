@@ -1,4 +1,4 @@
-module ysyx_24110017_CACHE #(n = 4, m = 2) (
+module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	input clk,
 	input rst,
 	output wire m_axi_awready,
@@ -68,23 +68,30 @@ module ysyx_24110017_CACHE #(n = 4, m = 2) (
   reg [31-m-n : 0] tag_reg [2**n-1 : 0];
   reg [2**n-1 : 0] valid_reg;
 	wire [31-m-n : 0]tag = m_axi_araddr[31 : m+n];
-  wire [n-1 : 0]index = m_axi_araddr[m+n-1 : m];
+  wire [n-1-w: 0]index = m_axi_araddr[m+n-1 : m + w];
   wire [m-1 : 0]offset = m_axi_araddr[m-1 : 0];
 
-  localparam IDLE = 2'b00;
+  generate 
+    genvar i; 
+      for(i = 0; i < 2 ** w; i = i + 1) begin : comparator
+        wire access = (tag == tag_reg[index * (2 ** w) + i]) && (valid_reg[index * (2 ** w) + i]);
+      end
+	endgenerate
+
+	localparam IDLE = 2'b00;
   localparam TRANS = 2'b01;
   localparam RETURN = 2'b10;
-
   reg [1:0]state;
+
   always @(posedge clk or posedge rst) begin
     if(rst) state <= IDLE;
     else begin
       case(state)
         IDLE   : begin
           if(m_axi_arvalid) begin
-					  if(tag_reg[index] == tag && valid_reg[index]) begin
-              state <= RETURN;
-            end
+						if(access) begin
+							state <= RETURN;
+						end
 						else begin
 							state <= TRANS;
 						end
@@ -109,11 +116,13 @@ module ysyx_24110017_CACHE #(n = 4, m = 2) (
 
 	always @(posedge clk or posedge rst) begin
 		if(rst) begin
-			integer i;
-			for (i = 0; i < 2**n; i = i + 1) begin
-				cache_reg[i]	<= 32'h0;
-				tag_reg[i]		<= 0;
-			end
+			generate
+        genvar i;
+				for (i = 0; i < (2 ** n); i = i + 1) begin
+					cache_reg[i]	<= 32'h0;
+					tag_reg[i]		<= 0;
+				end
+			endgenerate
 			valid_reg				<= 0;
 		end
 		else begin
@@ -122,9 +131,17 @@ module ysyx_24110017_CACHE #(n = 4, m = 2) (
 				end
 				TRANS  : begin
 					if(m_axi_rready && s_axi_rvalid) begin
-						cache_reg[index] <= s_axi_rdata;
-						tag_reg[index] <= tag;
-						valid_reg[index] <= 1'b1;
+						generate
+							genvar i;
+							for (i = 1; i < (2 ** w) - 1; i = i + 1) begin : fifo
+								cache_reg[index * (2 ** w) + i] <= cache_reg[index * (2 **  w) + i - 1];
+								tag_reg[index * (2 ** w) + i] <= tag_reg[index * (2 ** w) + i - 1];
+							end
+						endgenerate
+						valid_reg[(index + 1) * (2 ** w) - 1 : index * (2 ** w)] <= valid_reg[(index + 1) * (2 ** w) - 1 : index * (2 ** w)] >> 1;
+						cache_reg[index * (2 ** w))] <= s_axi_rdata;
+						tag_reg[index * (2 **  w)] <= tag;
+						valid_reg[index * (2 ** w)] <= 1'b1;
 					end	
 				end
 				RETURN : begin
@@ -134,7 +151,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2) (
 					if(m_axi_arvalid && cache_axi_arready) begin
 						cache_axi_rvalid <= 1;
 						cache_axi_arready <= 0;
-						cache_axi_rdata <= cache_reg[index];
+						cache_axi_rdata <= cache_reg[index * (2 ** w)];
 						cache_axi_rresp  <= 2'b11;
 					end
 					if(cache_axi_rvalid && m_axi_rready) begin

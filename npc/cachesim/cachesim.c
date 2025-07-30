@@ -1,3 +1,86 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <>
+#include <stdint.h>
+#include <stdbool.h>
+
+typedef struct {
+	uint32_t tag;
+	int valid;
+} matedata;
+
+typedef struct {
+	matedata *lines;
+	int n;
+	int m;
+	int w;
+	int access_cnt;
+	int miss_cnt;
+} Cache;
+
+Cache* init_cache(int n, int m, int w) {
+	Cache *cache = (Cache *)malloc(sizeof(Cache));
+	cache->n = n;
+	cache->m = m;
+	cache->w = w;
+	cache->lines = (matedata *)calloc((1<<cache->n), sizeof(matedata));
+	cache->access_cnt = 0;
+	cache->miss_cnt = 0;
+	return cache;
+}
+
+void free_cache(Cache *cache) {
+	free(cache->lines);
+	free(cache);
+}
+
+void process_pc(Cache *cache, uint32_t pc) {
+	uint32_t index = (pc >> cache->m & ((1 << cache->n) - 1)) >> cache->w;
+	uint32_t tag = pc >> (cache->n + cache->m);
+	bool flag = false;
+	for(int i = 0; i < (1 << cache->w); i ++) {
+		if(cache->lines[index * (1 << cache->w) + i].tag == tag && cache->lines[index * (1 << cache->w) + i].valid) {
+			cache->access_cnt ++;
+			flag = true;
+		}
+	}
+	if(!flag) {
+		cache->miss_cnt ++;
+		for(int j = (1 << cache->w) - 1; j > 0; j --) {
+			cache->lines[index * (1 << cache->w) + j].valid = cache->lines[index * (1 << cache->w) + j - 1].valid;
+			cache->lines[index * (1 << cache->w) + j].tag = cache->lines[index * (1 << cache->w) + j - 1].tag;
+		}
+		cache->lines[index * (1 << cache->w)].valid = 1;
+		cache->lines[index * (1 << cache->w)].tag = tag;
+	}
+}
+
+void cachesim(Cache *cache, const char *filename) {
+	FILE *file = fopen(filename, "r");
+	if(!file) {
+		perror("无法打开文件\n");
+	}
+	char line[16];
+	while(fgets(line, 16, file)) {
+		uint32_t pc;
+		if(sscanf(line, "%x", &pc) == 1) {
+			process_pc(cache, pc);
+		}
+	}
+	fclose(file);
+}
+
+int main(int argc, char *argv[]) {
+	int n = atoi(argv[1]);
+	int m = atoi(argv[2]);
+	int w = atoi(argv[3]);
+	Cache *cache = init_cache(n,m,w);
+	cachesim(cache, argv[4]);
+
+	int total_cnt = cache->access_cnt + cache->miss_cnt;
+	double p = (double)cache->access_cnt/(double)total_cnt;
+	printf("************AMAT************\n");	
+	printf("n=%d m=%d w=%d\n",n,m,w);
+	printf("total:%d acess cnt:%d miss cnt:%d p:%.6f\n",total_cnt,cache->access_cnt,cache->miss_cnt,p);
+	free_cache(cache);
+	return 0;
+}
