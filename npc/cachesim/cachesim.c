@@ -65,7 +65,7 @@ void cachesim(Cache *cache, const char *filename) {
 		if(sscanf(line, "%x", &pc) == 1) {
 			process_pc(cache, pc);
 		}
-		printf("tag0:%x tag1:%x tag2:%x tag3:%x tag4:%x tag5:%x tag6:%x tag7:%x\ntag8:%x tag9:%x tag10:%x tag11:%x tag12:%x tag13:%x tag14:%x tag15:%x\n",cache->lines[0].tag,cache->lines[1].tag,che->lines[2].tag,che->lines[3].tag,che->lines[4].tag,che->lines[5].tag,che->lines[5].tag,che->lines[7].tag,che->lines[8].tag,che->lines[9].tag,che->lines[10].tag,che->lines[11].tag,che->lines[12].tag,che->lines[13].tag,che->lines[14].tag,che->lines[15].tag);
+		printf("tag0:%x tag1:%x tag2:%x tag3:%x tag4:%x tag5:%x tag6:%x tag7:%x\ntag8:%x tag9:%x tag10:%x tag11:%x tag12:%x tag13:%x tag14:%x tag15:%x\n",cache->lines[0].tag,cache->lines[1].tag,cache->lines[2].tag,cache->lines[3].tag,cache->lines[4].tag,cache->lines[5].tag,cache->lines[5].tag,cache->lines[7].tag,cache->lines[8].tag,cache->lines[9].tag,cache->lines[10].tag,cache->lines[11].tag,cache->lines[12].tag,cache->lines[13].tag,cache->lines[14].tag,cache->lines[15].tag);
 	}
 	fclose(file);
 }
