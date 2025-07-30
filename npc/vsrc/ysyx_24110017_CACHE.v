@@ -64,18 +64,18 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	input wire s_axi_rlast
 );
 
-	reg [31:0] cache_reg [2**n-1 : 0];
-  reg [31-m-n+w : 0] tag_reg [2**n-1 : 0];
-  reg [2**n-1 : 0] valid_reg;
+	reg [31:0] cache_reg [(1<<n)-1 : 0];
+  reg [31-m-n+w : 0] tag_reg [(1<<n)-1 : 0];
+  reg [(1<<n)-1 : 0] valid_reg;
 	wire [31-m-n+w : 0]tag = m_axi_araddr[31 : m+n-w];
   wire [n-1-w: 0]index = m_axi_araddr[m+n-w-1 : m];
   wire [m-1 : 0]offset = m_axi_araddr[m-1 : 0];
 
-  wire [2 ** w - 1 : 0]access;
+  wire [(1<<w) - 1 : 0]access;
 	generate 
     genvar i; 
-      for(i = 0; i < 2 ** w; i = i + 1) begin : comparator
-        assign access[i] = (tag == tag_reg[index * (2 ** w) + i]) && (valid_reg[index * (2 ** w) + i]);
+      for(i = 0; i < (1<<w); i = i + 1) begin : comparator
+        assign access[i] = (tag == tag_reg[index * (1<<w) + i]) && (valid_reg[index * (2<<w) + i]);
 			end
 	endgenerate
 
@@ -118,7 +118,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	always @(posedge clk or posedge rst) begin
 		if(rst) begin
       integer j;;
-			for (j = 0; j < (2 ** n); j = j + 1) begin : init_reg
+			for (j = 0; j < (1<<n); j = j + 1) begin : init_reg
 				cache_reg[j]	<= 32'h0;
 				tag_reg[j]		<= 0;
 			end
@@ -131,14 +131,14 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 				TRANS  : begin
 					if(m_axi_rready && s_axi_rvalid) begin
 						integer k;
-						for (k = 1; k < (2 ** w); k = k + 1) begin : fifo
-							cache_reg[index * (2 ** w) + k] <= cache_reg[index * (2 **  w) + k - 1];
-							tag_reg[index * (2 ** w) + k] <= tag_reg[index * (2 ** w) + k - 1];
-							valid_reg[index * (2 ** w) + k] <= valid_reg[index * (2 ** w) + k - 1];
+						for (k = 1; k < (1<<w); k = k + 1) begin : fifo
+							cache_reg[index * (1<<w) + k] <= cache_reg[index * (1<<w) + k - 1];
+							tag_reg[index * (1<<w) + k] <= tag_reg[index * (1<<w) + k - 1];
+							valid_reg[index * (1<<w) + k] <= valid_reg[index * (1<<w) + k - 1];
 						end
-						cache_reg[index * (2 ** w)] <= s_axi_rdata;
-						tag_reg[index * (2 **  w)] <= tag;
-						valid_reg[index * (2 ** w)] <= 1'b1;
+						cache_reg[index * (1<<w)] <= s_axi_rdata;
+						tag_reg[index * (1<<w)] <= tag;
+						valid_reg[index * (1<<w)] <= 1'b1;
 					end	
 				end
 				RETURN : begin
