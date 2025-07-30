@@ -118,7 +118,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 		if(rst) begin
 			generate
         genvar i;
-				for (i = 0; i < (2 ** n); i = i + 1) begin
+				for (i = 0; i < (2 ** n); i = i + 1) begin : init_reg
 					cache_reg[i]	<= 32'h0;
 					tag_reg[i]		<= 0;
 				end
