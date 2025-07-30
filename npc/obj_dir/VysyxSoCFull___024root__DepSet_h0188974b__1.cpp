@@ -15741,26 +15741,24 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__11(VysyxSoCFull___
     __Vdlyvdim0__ysyxSoCFull__DOT__sdram__DOT__bank_mem__v511 
         = vlSelf->ysyxSoCFull__DOT__sdram__DOT__bank;
     if (vlSelf->ysyxSoCFull__DOT__sdram1__DOT__reset) {
-        vlSelf->ysyxSoCFull__DOT__sdram2__DOT__rdqm_reg = 3U;
-        vlSelf->ysyxSoCFull__DOT__sdram__DOT__rdqm_reg = 3U;
         vlSelf->ysyxSoCFull__DOT__sdram3__DOT__rdqm_reg = 3U;
+        vlSelf->ysyxSoCFull__DOT__sdram2__DOT__rdqm_reg = 3U;
         vlSelf->ysyxSoCFull__DOT__sdram1__DOT__rdqm_reg = 3U;
+        vlSelf->ysyxSoCFull__DOT__sdram__DOT__rdqm_reg = 3U;
         vlSelf->ysyxSoCFull__DOT__sdram3__DOT__data_o_reg = 0U;
         vlSelf->ysyxSoCFull__DOT__sdram2__DOT__data_o_reg = 0U;
         vlSelf->ysyxSoCFull__DOT__sdram1__DOT__data_o_reg = 0U;
         vlSelf->ysyxSoCFull__DOT__sdram__DOT__data_o_reg = 0U;
     } else {
         if (vlSelf->ysyxSoCFull__DOT__sdram1__DOT__read) {
+            vlSelf->ysyxSoCFull__DOT__sdram3__DOT__rdqm_reg 
+                = vlSelf->ysyxSoCFull__DOT____Vcellinp__sdram3__dqm;
             vlSelf->ysyxSoCFull__DOT__sdram2__DOT__rdqm_reg 
                 = vlSelf->ysyxSoCFull__DOT____Vcellinp__sdram2__dqm;
+            vlSelf->ysyxSoCFull__DOT__sdram1__DOT__rdqm_reg 
+                = vlSelf->ysyxSoCFull__DOT____Vcellinp__sdram1__dqm;
             vlSelf->ysyxSoCFull__DOT__sdram__DOT__rdqm_reg 
                 = vlSelf->ysyxSoCFull__DOT____Vcellinp__sdram__dqm;
-            vlSelf->ysyxSoCFull__DOT__sdram3__DOT__rdqm_reg 
-                = (3U & (- (IData)((1U & (~ ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_axi__DOT__msdram__DOT__u_sdram_axi__DOT__u_core__DOT__bank_q) 
-                                             >> 2U))))));
-            vlSelf->ysyxSoCFull__DOT__sdram1__DOT__rdqm_reg 
-                = (3U & (- (IData)((1U & ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_axi__DOT__msdram__DOT__u_sdram_axi__DOT__u_core__DOT__bank_q) 
-                                          >> 2U)))));
         }
         if ((1U & (~ (IData)(vlSelf->ysyxSoCFull__DOT__sdram1__DOT__read)))) {
             vlSelf->ysyxSoCFull__DOT__sdram3__DOT__data_o_reg 
