@@ -164,7 +164,7 @@ always @(posedge clk or posedge rst) begin
 						axi_awlen <= awlen_i;
 						axi_awburst <= awburst_i;
 						axi_wstrb <= wmask_i;
-						axi_wdata <= wdata;
+						axi_wdata <= wdata_i;
 	        end
 /***DELAY_TEST_AR*AWVALID***
 					if(sram_lsu_read || sram_lsu_write) begin
