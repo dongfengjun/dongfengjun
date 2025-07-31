@@ -95,7 +95,7 @@ assign ls_axi_awvalid = axi_awvalid;
 assign ls_axi_wvalid = axi_wvalid;
 assign ls_axi_awid = axi_awid;
 assign ls_axi_awaddr = axi_awaddr;
-//assign ls_axi_wdata = (ls_axi_wvalid && ls_axi_wready) ? wdata_i : 32'h0;//axi_wdata;
+assign ls_axi_wdata = (ls_axi_wvalid && ls_axi_wready) ? wdata_i : 32'h0;//axi_wdata;
 assign ls_axi_awlen = axi_awlen;
 assign ls_axi_awsize = axi_awsize;
 assign ls_axi_awburst = axi_awburst;
@@ -164,7 +164,7 @@ always @(posedge clk or posedge rst) begin
 						axi_awlen <= awlen_i;
 						axi_awburst <= awburst_i;
 						axi_wstrb <= wmask_i;
-						axi_wdata <= wdata_i;
+						//axi_wdata <= wdata_i;
 	        end
 /***DELAY_TEST_AR*AWVALID***
 					if(sram_lsu_read || sram_lsu_write) begin
