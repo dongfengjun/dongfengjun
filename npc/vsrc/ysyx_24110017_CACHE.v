@@ -66,11 +66,11 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 );
 
 	reg [31:0] cache_reg [(1<<(m-2)) : 0][(1<<n)-1 : 0];
-  reg [31-m-n+w : 0] tag_reg [1<<(m-2) : 0][(1<<n)-1 : 0];
-  reg [(1<<n)-1 : 0] valid_reg[1<<(m-2) : 0];
+  reg [31-m-n+w : 0] tag_reg [1<<(m-2)-1 : 0][(1<<n)-1 : 0];
+  reg [(1<<n)-1 : 0] valid_reg[1<<(m-2)-1 : 0];
 	wire [31-m-n+w : 0]tag = m_axi_araddr[31 : m+n-w];
   wire [n-1-w: 0]index = m_axi_araddr[m+n-w-1 : m];
-  wire [m-1 : 0]offset = m_axi_araddr[m-1 : 0] >> 2;
+  wire [m-3 : 0]offset = m_axi_araddr[m-1 : 2];
 
   wire [(1<<w) - 1 : 0]access;
 	generate 
