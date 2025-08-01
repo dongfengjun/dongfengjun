@@ -65,18 +65,18 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	input wire s_axi_rlast
 );
 
-	reg [31:0] cache_reg [(1<<n)-1 : 0];
-  reg [31-m-n+w : 0] tag_reg [(1<<n)-1 : 0];
-  reg [(1<<n)-1 : 0] valid_reg;
+	reg [31:0] cache_reg [(1<<(m-2)) : 0][(1<<n)-1 : 0];
+  reg [31-m-n+w : 0] tag_reg [1<<(m-2) : 0][(1<<n)-1 : 0];
+  reg [(1<<n)-1 : 0] valid_reg[1<<(m-2) : 0];
 	wire [31-m-n+w : 0]tag = m_axi_araddr[31 : m+n-w];
   wire [n-1-w: 0]index = m_axi_araddr[m+n-w-1 : m];
-  wire [m-1 : 0]offset = m_axi_araddr[m-1 : 0];
+  wire [m-1-2 : 0]offset = m_axi_araddr[m-1 : 2];
 
   wire [(1<<w) - 1 : 0]access;
 	generate 
     genvar i; 
       for(i = 0; i < (1<<w); i = i + 1) begin : comparator
-        assign access[i] = (tag == tag_reg[index * (1<<w) + i]) && (valid_reg[index * (2<<w) + i]);
+        assign access[i] = (tag == tag_reg[offset][index * (1<<w) + i]) && (valid_reg[offset][index * (2<<w) + i]);
 			end
 	endgenerate
 
@@ -137,9 +137,9 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 							tag_reg[index * (1<<w) + k] <= tag_reg[index * (1<<w) + k - 1];
 							valid_reg[index * (1<<w) + k] <= valid_reg[index * (1<<w) + k - 1];
 						end
-						cache_reg[index * (1<<w)] <= s_axi_rdata;
-						tag_reg[index * (1<<w)] <= tag;
-						valid_reg[index * (1<<w)] <= 1'b1;
+						cache_reg[offset][index * (1<<w)] <= s_axi_rdata;
+						tag_reg[offset][index * (1<<w)] <= tag;
+						valid_reg[offset][index * (1<<w)] <= 1'b1;
 					end	
 				end
 				RETURN : begin
@@ -150,7 +150,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 						cache_axi_rvalid <= 1;
 						cache_axi_arready <= 0;
 `ifndef YOSYS_STA
-						cache_axi_rdata <= cache_reg[index * (2 ** w) + $clog2(access)];
+						cache_axi_rdata <= cache_reg[offset][index * (2 ** w) + $clog2(access)];
 `endif
 						cache_axi_rresp  <= 2'b11;
 					end

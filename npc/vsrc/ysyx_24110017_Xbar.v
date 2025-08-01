@@ -364,10 +364,7 @@ wire [1:0]I_AXI_AWBURST,I_AXI_ARBURST;
 wire [1:0]I_AXI_BRESP,I_AXI_RRESP;
 wire I_AXI_AWVALID,I_AXI_AWREADY,I_AXI_WVALID,I_AXI_WREADY,I_AXI_BVALID,I_AXI_BREADY,I_AXI_ARVALID,I_AXI_ARREADY,I_AXI_RVALID,I_AXI_RREADY,I_AXI_WLAST,I_AXI_RLAST;
 assign I_AXI_RDATA = (sel_mvendorid) ? mvendorid : (sel_marchid) ? marchid : 32'h0;
-//assign I_AXI_AWREADY = 1'b1;
 assign I_AXI_ARREADY = 1'b1;
-//assign I_AXI_WREADY = 1'b1;
-//assign I_AXI_BVALID = 1'b1;
 assign I_AXI_RVALID = 1'b1;
 
 /******

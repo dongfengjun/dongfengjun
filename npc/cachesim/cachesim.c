@@ -22,7 +22,7 @@ Cache* init_cache(int n, int m, int w) {
 	cache->n = n;
 	cache->m = m;
 	cache->w = w;
-	cache->lines = (matedata *)calloc((1<<cache->n), sizeof(matedata));
+	cache->lines = (matedata *)calloc((1<<(cache->n) * (1 << (cache->m - 2))), sizeof(matedata));
 	cache->access_cnt = 0;
 	cache->miss_cnt = 0;
 	return cache;
@@ -36,9 +36,10 @@ void free_cache(Cache *cache) {
 void process_pc(Cache *cache, uint32_t pc) {
 	uint32_t index = (pc >> cache->m & ((1 << (cache->n - cache->w)) - 1));
 	uint32_t tag = pc >> (cache->n - cache->w + cache->m);
+	uint32_t offset = pc & (1 << cache->m - 1);
 	bool flag = false;
 	for(int i = 0; i < (1 << cache->w); i ++) {
-		if(cache->lines[index * (1 << cache->w) + i].tag == tag && cache->lines[index * (1 << cache->w) + i].valid) {
+		if(cache->lines[index * (1 << cache->w) + i * offset/4].tag == tag && cache->lines[index * (1 << cache->w) + i * offset/4].valid) {
 			cache->access_cnt ++;
 			flag = true;
 		}
@@ -46,11 +47,13 @@ void process_pc(Cache *cache, uint32_t pc) {
 	if(!flag) {
 		cache->miss_cnt ++;
 		for(int j = (1 << cache->w) - 1; j > 0; j --) {
-			cache->lines[index * (1 << cache->w) + j].valid = cache->lines[index * (1 << cache->w) + j - 1].valid;
-			cache->lines[index * (1 << cache->w) + j].tag = cache->lines[index * (1 << cache->w) + j - 1].tag;
+			for(int k = 0; k < (1 << (cache->m-2)); k ++) {
+				cache->lines[index * (1 << cache->w) + j * (1 << (cache->m-2)) + k].valid = cache->lines[index * (1 << cache->w) + j * (1 << (cache->m-2)) - 1 + k].valid;
+				cache->lines[index * (1 << cache->w) + j * (1 << (cache->m-2)) + k].tag = cache->lines[index * (1 << cache->w) + j * (1 << (cache->m-2)) - 1 + k].tag;
+			}
 		}
-		cache->lines[index * (1 << cache->w)].valid = 1;
-		cache->lines[index * (1 << cache->w)].tag = tag;
+		cache->lines[index * (1 << cache->w) + offset/4].valid = 1;
+		cache->lines[index * (1 << cache->w) + offset/4].tag = tag;
 	}
 }
 
