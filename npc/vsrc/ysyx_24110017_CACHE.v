@@ -65,7 +65,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	input wire s_axi_rlast
 );
 
-	reg [31:0] cache_reg [(1<<(m-2)) : 0][(1<<n)-1 : 0];
+	reg [31:0] cache_reg [1<<(m-2)-1 : 0][(1<<n)-1 : 0];
   reg [31-m-n+w : 0] tag_reg [1<<(m-2)-1 : 0][(1<<n)-1 : 0];
   reg [(1<<n)-1 : 0] valid_reg[1<<(m-2)-1 : 0];
 	wire [31-m-n+w : 0]tag = m_axi_araddr[31 : m+n-w];
