@@ -304,6 +304,8 @@ always @(posedge clk or posedge rst) begin
 					ls_rdata_reg <= 32'h0;
           state <= IDLE;
         end
+			default: begin
+			end
       endcase
 		end
 end
