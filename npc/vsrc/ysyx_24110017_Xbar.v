@@ -266,6 +266,7 @@ always @(*) begin
 		endcase
 	end
 end
+***/
 
 assign X_AXI_AWID = (state == GRANT_LSU) ? LSU_AXI_AWID : (state == GRANT_IFU) ? IFU_AXI_AWID : 4'b0;
 assign X_AXI_AWLEN = (state == GRANT_LSU) ? LSU_AXI_AWLEN : (state == GRANT_IFU) ? IFU_AXI_AWLEN : 8'b0;
@@ -309,7 +310,6 @@ assign IFU_AXI_RRESP = (state == GRANT_IFU) ? X_AXI_RRESP : 2'b0;
 assign IFU_AXI_RVALID = (state == GRANT_IFU) ? X_AXI_RVALID : 1'b0;
 assign IFU_AXI_RID = (state == GRANT_IFU) ? X_AXI_RID : 4'b0;
 assign IFU_AXI_RLAST = (state == GRANT_IFU) ? X_AXI_RLAST : 1'b0;
-***/
 
 /***SoC***/
 localparam DEVICE_CLINT_LOW_ADDR = 32'h2000000;//32'ha0000048;
