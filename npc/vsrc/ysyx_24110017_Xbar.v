@@ -368,7 +368,7 @@ assign I_AXI_RDATA = (sel_mvendorid) ? mvendorid : (sel_marchid) ? marchid : 32'
 assign I_AXI_ARREADY = 1'b1;
 //assign I_AXI_WREADY = 1'b1;
 //assign I_AXI_BVALID = 1'b1;
-//assign I_AXI_RVALID = 1'b1;
+assign I_AXI_RVALID = 1'b1;
 
 /******
 assign {I_AXI_AWADDR,S_AXI_AWADDR} = (sel_id) ? {X_AXI_AWADDR,32'b0} : {32'b0,X_AXI_AWADDR};
