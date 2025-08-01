@@ -156,7 +156,7 @@ always @(posedge clk or posedge rst) begin
 						axi_arburst <= arburst_i;
 					end
 					if(ls_write_i) begin
-		        state <= WRITE;
+		        state <= WRITE1;
 						axi_awvalid <= 1'b1;//非DELAY_TEST
 						axi_wvalid <= 1'b1;
 						axi_awaddr <= waddr_i;
