@@ -254,6 +254,7 @@ always @(posedge clk or posedge rst) begin
 					end
 /***END***/
 					end
+				end
 				WRITE2:begin
 					if(ls_axi_wvalid && ls_axi_wready) begin
 						axi_wvalid <= 0;
