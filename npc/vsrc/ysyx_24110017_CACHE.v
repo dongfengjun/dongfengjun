@@ -120,13 +120,13 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 		if(rst) begin
       integer j;
 			integer k;
-			for (j = 0; j < (1<<n); j = j + 1) begin : init_reg
-				for (k = 0; k < (1 << (m-2)); k = k + 1) begin
-					cache_reg[k][j]	<= 0;
-					tag_reg[k][j]		<= 0;
+			for (j = 0; j < (1<<(m-2)); j = j + 1) begin : init_reg
+				for (k = 0; k < (1 << n); k = k + 1) begin
+					cache_reg[j][k]	<= 0;
+					tag_reg[j][k]		<= 0;
 				end
+				valid_reg[j]       <= 0;
 			end
-			valid_reg				<= 0;
 		end
 		else begin
 			case(state)
@@ -134,11 +134,14 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 				end
 				TRANS  : begin
 					if(m_axi_rready && s_axi_rvalid) begin
-						integer k;
-						for (k = 1; k < (1<<w); k = k + 1) begin : fifo
-							cache_reg[index * (1<<w) + k] <= cache_reg[index * (1<<w) + k - 1];
-							tag_reg[index * (1<<w) + k] <= tag_reg[index * (1<<w) + k - 1];
-							valid_reg[index * (1<<w) + k] <= valid_reg[index * (1<<w) + k - 1];
+						integer a;
+						integer b;
+						for (a = 1; a < (1<<w); a = a + 1) begin : fifo
+							for (b = 0; b < (1<<(m-2)); b = b + 1) begin
+								cache_reg[b][index * (1<<w) + a] <= cache_reg[b][index * (1<<w) + a - 1];
+								tag_reg[b][index * (1<<w) + a] <= tag_reg[b][index * (1<<w) + a - 1];
+								valid_reg[b][index * (1<<w) + a] <= valid_reg[b][index * (1<<w) + a - 1];
+							end
 						end
 						cache_reg[offset][index * (1<<w)] <= s_axi_rdata;
 						tag_reg[offset][index * (1<<w)] <= tag;
