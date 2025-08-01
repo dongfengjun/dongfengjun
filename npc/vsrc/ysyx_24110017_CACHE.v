@@ -137,11 +137,9 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 						integer a;
 						integer b;
 						for (a = 1; a < (1<<w); a = a + 1) begin : fifo
-							for (b = 0; b < (1<<(m-2)); b = b + 1) begin
-								cache_reg[b][index * (1<<w) + a] <= cache_reg[b][index * (1<<w) + a - 1];
-								tag_reg[b][index * (1<<w) + a] <= tag_reg[b][index * (1<<w) + a - 1];
-								valid_reg[b][index * (1<<w) + a] <= valid_reg[b][index * (1<<w) + a - 1];
-							end
+							cache_reg[offset][index * (1<<w) + a] <= cache_reg[offset][index * (1<<w) + a - 1];
+							tag_reg[offset][index * (1<<w) + a] <= tag_reg[offset][index * (1<<w) + a - 1];
+							valid_reg[offset][index * (1<<w) + a] <= valid_reg[offset][index * (1<<w) + a - 1];
 						end
 						cache_reg[offset][index * (1<<w)] <= s_axi_rdata;
 						tag_reg[offset][index * (1<<w)] <= tag;
