@@ -119,8 +119,8 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	always @(posedge clk or posedge rst) begin
 		if(rst) begin
       integer j;
-			integer k;
 			for (j = 0; j < (1<<n); j = j + 1) begin : init_reg
+				integer k;
 				for (k = 0; k < (1 << (m-2)); k = k + 1) begin :
 					cache_reg[k][j]	<= 0;
 					tag_reg[k][j]		<= 0;
