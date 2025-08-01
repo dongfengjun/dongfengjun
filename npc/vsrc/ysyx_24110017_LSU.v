@@ -252,11 +252,11 @@ always @(posedge clk or posedge rst) begin
 						end
 					end
 /***END***/
-						if(ls_axi_wvalid && ls_axi_wready) begin
-							axi_wvalid <= 0;
-							//axi_wdata <= wdata;//加判断条件
-							//axi_wstrb <= wmask;
-						end
+					end
+					if(ls_axi_wvalid && ls_axi_wready) begin
+						axi_wvalid <= 0;
+						//axi_wdata <= wdata;//加判断条件
+						//axi_wstrb <= wmask;
 					end
 					if(ls_axi_bvalid && !ls_axi_bready) begin
 						axi_bready <= 1;
