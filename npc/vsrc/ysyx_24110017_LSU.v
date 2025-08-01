@@ -79,8 +79,8 @@ LFSR_ysyx_24110017 LFSR_ysyx_20110017(clk,rst,rand_delay);
 ***END***/
 import "DPI-C" function void diff_skip_ref();
 
-parameter IDLE=2'b0,READ=2'b01,WRITE=2'b10,DONE=2'b11;
-reg [1:0]state;
+parameter IDLE=3'b0,READ=3'b001,WRITE1=3'b010,WRITE2=3'b011,DONE=3'b100;
+reg [2:0]state;
 
 reg axi_awvalid,axi_wvalid;
 reg [3:0]axi_awid;
@@ -218,7 +218,7 @@ always @(posedge clk or posedge rst) begin
 						ls_done_reg <= 1'b1;
           end
         end
-				WRITE: begin
+				WRITE1: begin
 /***DELAY_TEST_AR*AWVALID***
           if(avalid_delay_counter == 0) begin
             avalid_delay_counter <= avalid_delay_counter;
@@ -234,6 +234,7 @@ always @(posedge clk or posedge rst) begin
 					if(ls_axi_awvalid && ls_axi_awready) begin
 						axi_awvalid <= 0;
 						axi_wlast <= 1;
+						state <= WRITE2;
 						//axi_awaddr <= waddr;
 /***DELAY_TEST_WVALID***
 					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
@@ -253,6 +254,7 @@ always @(posedge clk or posedge rst) begin
 					end
 /***END***/
 					end
+				WRITE2:begin
 					if(ls_axi_wvalid && ls_axi_wready) begin
 						axi_wvalid <= 0;
 						//axi_wdata <= wdata;//加判断条件
