@@ -76,7 +76,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	generate 
     genvar i; 
       for(i = 0; i < (1<<w); i = i + 1) begin : comparator
-        assign access[i] = (tag == tag_reg[offset][index * (1<<w) + i]) && (valid_reg[offset][index * (2<<w) + i]);
+        assign access[i] = (tag == tag_reg[offset][index * (1<<w) + i]) && (valid_reg[offset][index * (1<<w) + i]);
 			end
 	endgenerate
 
