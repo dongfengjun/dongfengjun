@@ -231,6 +231,7 @@ always @(posedge clk or posedge rst) begin
             avalid_delay_counter <= avalid_delay_counter - 1;
           end
 /***END***/
+					axi_wvalid <= 1'b1;
 					if(ls_axi_awvalid && ls_axi_awready) begin
 						axi_awvalid <= 0;
 						axi_wlast <= 1;
