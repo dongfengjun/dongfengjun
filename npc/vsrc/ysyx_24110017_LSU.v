@@ -158,7 +158,7 @@ always @(posedge clk or posedge rst) begin
 					if(ls_write_i) begin
 		        state <= WRITE1;
 						axi_awvalid <= 1'b1;//非DELAY_TEST
-						axi_wvalid <= 1'b1;
+						//axi_wvalid <= 1'b1;
 						axi_awaddr <= waddr_i;
 						axi_awsize <= awsize_i;
 						axi_awlen <= awlen_i;
