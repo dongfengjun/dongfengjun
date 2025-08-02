@@ -162,7 +162,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 						integer a;
             integer b;
 						for (b = 0; b < (1<<(m-2)); b = b + 1) begin : fifo
-							cachecache_reg[b][index * (1<<w)] <= 0;
+							cache_reg[b][index * (1<<w)] <= 0;
               tag_reg[b][index * (1<<w)] <= 0;
 							valid_reg[b][index * (1<<w)] <= 0;
 							for (a = 1; a < (1<<w); a = a + 1) begin
