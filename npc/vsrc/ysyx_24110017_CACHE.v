@@ -150,7 +150,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 						s_axi_araddr <= m_axi_araddr;
 						burst_araddr <= m_axi_araddr;
 						s_axi_arburst <= 2'b01;
-						if(s_axi_araddr - 32'ha0000000 < 32'h20000000) begin
+						if(m_axi_araddr - 32'ha0000000 < 32'h20000000) begin
 							s_axi_arlen <= (1 << (m - 2) - offset) - 1;
 						end
 						else begin
