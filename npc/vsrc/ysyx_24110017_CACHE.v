@@ -106,7 +106,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 					end
 				end
 				TRANS  : begin
-					if(m_axi_rready && s_axi_rvalid) begin
+					if(m_axi_rready && m_axi_rvalid) begin
 						state <= IDLE;
 					end
 				end
