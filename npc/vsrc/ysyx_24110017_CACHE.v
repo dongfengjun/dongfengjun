@@ -168,6 +168,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
                 valid_reg[b][index * (1<<w) + a] <= valid_reg[b][index * (1<<w) + a - 1];
               end
             end
+						s_axi_arvalid <= 1'b0;
 						s_axi_rready <= 1'b1;                                           
             burst_counter <= offset;
 					end
