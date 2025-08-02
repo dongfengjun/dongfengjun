@@ -154,7 +154,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 							s_axi_arlen <= (1 << (m - 2) - offset) - 1;
 						end
 						else begin
-							s_axi_arlen <= 8'h2;
+							s_axi_arlen <= 8'h0;
 						end
 						s_axi_arsize <= 3'h2;
 					end
