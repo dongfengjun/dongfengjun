@@ -440,7 +440,7 @@ void cpu_exec(int n) {
 		cpu.pc = dpic_display(1);
 		isa_gpr_push();
 		performance_evaluation();
-		if(dpic_display(3)) printf("pc:%08x  access:%ld\n",dpic_display(0),icache_access_cnt);
+//		if(dpic_display(3)) printf("pc:%08x  access:%ld\n",dpic_display(0),icache_access_cnt);
 #ifdef CONFIG_ITRACE
 		itrace_push();
 #endif
