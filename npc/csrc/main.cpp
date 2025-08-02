@@ -489,7 +489,6 @@ int main(int argc, char *argv[]) {
 #endif
 	dump_wave();
 /***close**/
-	printf("miss cnt:%ld miss time:%ld\n",icache_miss_cnt,icache_miss_penalty);
 	statistic();
 	tfp->close();
 	nvboard_quit();
