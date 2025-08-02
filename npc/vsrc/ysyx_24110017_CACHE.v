@@ -1,3 +1,4 @@
+//`define YOSYS_STA
 module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	input clk,
 	input rst,
@@ -64,18 +65,24 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	input wire s_axi_rlast
 );
 
-	reg [31:0] cache_reg [(1<<n)-1 : 0];
-  reg [31-m-n+w : 0] tag_reg [(1<<n)-1 : 0];
-  reg [(1<<n)-1 : 0] valid_reg;
+//	wire[127:0]cache_test0,cache_test1,cache_test2,cache_test3;
+//	assign cache_test0 = {cache_reg[0][0],cache_reg[1][0],cache_reg[2][0],cache_reg[3][0]};
+//	assign cache_test1 = {cache_reg[0][1],cache_reg[1][1],cache_reg[2][1],cache_reg[3][1]};
+//	assign cache_test2 = {cache_reg[0][2],cache_reg[1][2],cache_reg[2][2],cache_reg[3][2]};
+//	assign cache_test3 = {cache_reg[0][3],cache_reg[1][3],cache_reg[2][3],cache_reg[3][3]};
+
+	reg [31:0] cache_reg [(1<<(m-2))-1 : 0][(1<<n)-1 : 0];
+  reg [31-m-n+w : 0] tag_reg [(1<<(m-2))-1 : 0][(1<<n)-1 : 0];
+  reg [(1<<n)-1 : 0] valid_reg[(1<<(m-2))-1 : 0];
 	wire [31-m-n+w : 0]tag = m_axi_araddr[31 : m+n-w];
-  wire [n-1-w: 0]index = m_axi_araddr[m+n-w-1 : m];
-  wire [m-1 : 0]offset = m_axi_araddr[m-1 : 0];
+  wire [n-1-w : 0]index = m_axi_araddr[m+n-w-1 : m];
+  wire [m-3 : 0]offset = m_axi_araddr[m-1 : 2];
 
   wire [(1<<w) - 1 : 0]access;
 	generate 
     genvar i; 
       for(i = 0; i < (1<<w); i = i + 1) begin : comparator
-        assign access[i] = (tag == tag_reg[index * (1<<w) + i]) && (valid_reg[index * (2<<w) + i]);
+        assign access[i] = (tag == tag_reg[offset][index * (1<<w) + i]) && (valid_reg[offset][index * (1<<w) + i]);
 			end
 	endgenerate
 
@@ -117,12 +124,15 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 
 	always @(posedge clk or posedge rst) begin
 		if(rst) begin
-      integer j;;
-			for (j = 0; j < (1<<n); j = j + 1) begin : init_reg
-				cache_reg[j]	<= 32'h0;
-				tag_reg[j]		<= 0;
+      integer j;
+			integer k;
+			for (j = 0; j < (1<<(m-2)); j = j + 1) begin : init_reg
+				for (k = 0; k < (1 << n); k = k + 1) begin
+					cache_reg[j][k]	<= 0;
+					tag_reg[j][k]		<= 0;
+				end
+				valid_reg[j]       <= 0;
 			end
-			valid_reg				<= 0;
 		end
 		else begin
 			case(state)
@@ -130,15 +140,15 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 				end
 				TRANS  : begin
 					if(m_axi_rready && s_axi_rvalid) begin
-						integer k;
-						for (k = 1; k < (1<<w); k = k + 1) begin : fifo
-							cache_reg[index * (1<<w) + k] <= cache_reg[index * (1<<w) + k - 1];
-							tag_reg[index * (1<<w) + k] <= tag_reg[index * (1<<w) + k - 1];
-							valid_reg[index * (1<<w) + k] <= valid_reg[index * (1<<w) + k - 1];
+						integer a;
+						for (a = 1; a < (1<<w); a = a + 1) begin : fifo
+							cache_reg[offset][index * (1<<w) + a] <= cache_reg[offset][index * (1<<w) + a - 1];
+							tag_reg[offset][index * (1<<w) + a] <= tag_reg[offset][index * (1<<w) + a - 1];
+							valid_reg[offset][index * (1<<w) + a] <= valid_reg[offset][index * (1<<w) + a - 1];
 						end
-						cache_reg[index * (1<<w)] <= s_axi_rdata;
-						tag_reg[index * (1<<w)] <= tag;
-						valid_reg[index * (1<<w)] <= 1'b1;
+						cache_reg[offset][index * (1<<w)] <= s_axi_rdata;
+						tag_reg[offset][index * (1<<w)] <= tag;
+						valid_reg[offset][index * (1<<w)] <= 1'b1;
 					end	
 				end
 				RETURN : begin
@@ -148,7 +158,9 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 					if(m_axi_arvalid && cache_axi_arready) begin
 						cache_axi_rvalid <= 1;
 						cache_axi_arready <= 0;
-						cache_axi_rdata <= cache_reg[index * (2 ** w) + $clog2(access)];
+`ifndef YOSYS_STA
+						cache_axi_rdata <= cache_reg[offset][index * (2 ** w) + $clog2(access)];
+`endif
 						cache_axi_rresp  <= 2'b11;
 					end
 					if(cache_axi_rvalid && m_axi_rready) begin
@@ -198,11 +210,13 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	assign m_axi_rlast = (state == TRANS) ? s_axi_rlast : (state == RETURN) ? cache_axi_rlast : 1'b0;
 
 /***DPIC-AMAT***/
+`ifndef YOSYS_STA
 	export "DPI-C" function amat_counter;
 	function int amat_counter(int i);
 	  begin
 			assign amat_counter = (i == 0) ? {31'b0,(access != 0)} : 32'b0;
 		end
 	endfunction
+`endif
 
 endmodule

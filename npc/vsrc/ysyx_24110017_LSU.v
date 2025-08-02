@@ -79,8 +79,8 @@ LFSR_ysyx_24110017 LFSR_ysyx_20110017(clk,rst,rand_delay);
 ***END***/
 import "DPI-C" function void diff_skip_ref();
 
-parameter IDLE=2'b0,READ=2'b01,WRITE=2'b10,DONE=2'b11;
-reg [1:0]state;
+parameter IDLE=3'b0,READ=3'b001,WRITE1=3'b010,WRITE2=3'b011,DONE=3'b100;
+reg [2:0]state;
 
 reg axi_awvalid,axi_wvalid;
 reg [3:0]axi_awid;
@@ -95,11 +95,11 @@ assign ls_axi_awvalid = axi_awvalid;
 assign ls_axi_wvalid = axi_wvalid;
 assign ls_axi_awid = axi_awid;
 assign ls_axi_awaddr = axi_awaddr;
-assign ls_axi_wdata = (ls_axi_wvalid && ls_axi_wready) ? wdata_i : 32'h0;//axi_wdata;
+assign ls_axi_wdata = (ls_axi_wvalid) ? wdata_i : 32'h0;//axi_wdata;
 assign ls_axi_awlen = axi_awlen;
 assign ls_axi_awsize = axi_awsize;
 assign ls_axi_awburst = axi_awburst;
-assign ls_axi_wstrb = (ls_axi_wvalid && ls_axi_wready) ? wmask_i : 4'b0;//axi_wstrb;
+assign ls_axi_wstrb = axi_wstrb;
 assign ls_axi_bready = axi_bready;
 assign ls_axi_wlast = axi_wlast;
 
@@ -155,12 +155,14 @@ always @(posedge clk or posedge rst) begin
 						axi_arburst <= arburst_i;
 					end
 					if(ls_write_i) begin
-		        state <= WRITE;
+		        state <= WRITE1;
 						axi_awvalid <= 1'b1;//非DELAY_TEST
 						axi_awaddr <= waddr_i;
 						axi_awsize <= awsize_i;
 						axi_awlen <= awlen_i;
 						axi_awburst <= awburst_i;
+						axi_wstrb <= wmask_i;
+						//axi_wdata <= wdata_i;
 	        end
 /***DELAY_TEST_AR*AWVALID***
 					if(sram_lsu_read || sram_lsu_write) begin
@@ -214,7 +216,7 @@ always @(posedge clk or posedge rst) begin
 						ls_done_reg <= 1'b1;
           end
         end
-				WRITE: begin
+				WRITE1: begin
 /***DELAY_TEST_AR*AWVALID***
           if(avalid_delay_counter == 0) begin
             avalid_delay_counter <= avalid_delay_counter;
@@ -227,12 +229,12 @@ always @(posedge clk or posedge rst) begin
             avalid_delay_counter <= avalid_delay_counter - 1;
           end
 /***END***/
+					axi_wvalid <= 1'b1;
 					if(ls_axi_awvalid && ls_axi_awready) begin
 						axi_awvalid <= 0;
-						axi_wvalid <= 1;
 						axi_wlast <= 1;
+						state <= WRITE2;
 						//axi_awaddr <= waddr;
-					end
 /***DELAY_TEST_WVALID***
 					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
             wvalid_delay_counter <= rand_delay;
@@ -250,6 +252,9 @@ always @(posedge clk or posedge rst) begin
 						end
 					end
 /***END***/
+					end
+				end
+				WRITE2:begin
 					if(ls_axi_wvalid && ls_axi_wready) begin
 						axi_wvalid <= 0;
 						//axi_wdata <= wdata;//加判断条件
@@ -298,6 +303,8 @@ always @(posedge clk or posedge rst) begin
 					ls_rdata_reg <= 32'h0;
           state <= IDLE;
         end
+			default: begin
+			end
       endcase
 		end
 end

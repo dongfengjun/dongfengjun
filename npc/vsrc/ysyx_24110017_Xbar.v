@@ -201,8 +201,10 @@ wire [1:0]X_AXI_AWBURST,X_AXI_ARBURST;
 wire [1:0]X_AXI_BRESP,X_AXI_RRESP;
 wire X_AXI_AWVALID,X_AXI_AWREADY,X_AXI_WVALID,X_AXI_WREADY,X_AXI_BVALID,X_AXI_BREADY,X_AXI_ARVALID,X_AXI_ARREADY,X_AXI_RVALID,X_AXI_RREADY,X_AXI_WLAST,X_AXI_RLAST;
 
+wire [1:0]state = (IFU_AXI_ARADDR != 0) ? GRANT_IFU : GRANT_LSU;
 
 parameter [1:0]IDLE = 2'b00,GRANT_LSU = 2'b01,GRANT_IFU = 2'b10,WAIT_CLINT = 2'b11;
+/***
 reg [1:0]state,next_state;
 
 always @(posedge clk) begin
@@ -264,6 +266,7 @@ always @(*) begin
 		endcase
 	end
 end
+***/
 
 assign X_AXI_AWID = (state == GRANT_LSU) ? LSU_AXI_AWID : (state == GRANT_IFU) ? IFU_AXI_AWID : 4'b0;
 assign X_AXI_AWLEN = (state == GRANT_LSU) ? LSU_AXI_AWLEN : (state == GRANT_IFU) ? IFU_AXI_AWLEN : 8'b0;
@@ -307,7 +310,6 @@ assign IFU_AXI_RRESP = (state == GRANT_IFU) ? X_AXI_RRESP : 2'b0;
 assign IFU_AXI_RVALID = (state == GRANT_IFU) ? X_AXI_RVALID : 1'b0;
 assign IFU_AXI_RID = (state == GRANT_IFU) ? X_AXI_RID : 4'b0;
 assign IFU_AXI_RLAST = (state == GRANT_IFU) ? X_AXI_RLAST : 1'b0;
-
 
 /***SoC***/
 localparam DEVICE_CLINT_LOW_ADDR = 32'h2000000;//32'ha0000048;
@@ -362,10 +364,7 @@ wire [1:0]I_AXI_AWBURST,I_AXI_ARBURST;
 wire [1:0]I_AXI_BRESP,I_AXI_RRESP;
 wire I_AXI_AWVALID,I_AXI_AWREADY,I_AXI_WVALID,I_AXI_WREADY,I_AXI_BVALID,I_AXI_BREADY,I_AXI_ARVALID,I_AXI_ARREADY,I_AXI_RVALID,I_AXI_RREADY,I_AXI_WLAST,I_AXI_RLAST;
 assign I_AXI_RDATA = (sel_mvendorid) ? mvendorid : (sel_marchid) ? marchid : 32'h0;
-assign I_AXI_AWREADY = 1'b1;
 assign I_AXI_ARREADY = 1'b1;
-assign I_AXI_WREADY = 1'b1;
-assign I_AXI_BVALID = 1'b1;
 assign I_AXI_RVALID = 1'b1;
 
 /******
