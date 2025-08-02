@@ -154,17 +154,17 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 						s_axi_arsize <= 3'h2;
 					end
 					if(s_axi_arvalid && s_axi_arready) begin
-						s_axi_rready <= 1'b1;
-						burst_counter <= offset;
 						integer a;
+            integer b;
             for (a = 1; a < (1<<w); a = a + 1) begin : fifo
-              integer b;
-							for (b = 0; b < (1<<(m-2)); b = b + 1) begin
+              for (b = 0; b < (1<<(m-2)); b = b + 1) begin
                 cache_reg[b][index * (1<<w) + a] <= cache_reg[b][index * (1<<w) + a - 1];
                 tag_reg[b][index * (1<<w) + a] <= tag_reg[b][index * (1<<w) + a - 1];
                 valid_reg[b][index * (1<<w) + a] <= valid_reg[b][index * (1<<w) + a - 1];
               end
             end
+						s_axi_rready <= 1'b1;                                           
+            burst_counter <= offset;
 					end
 					if(s_axi_rready && s_axi_rvalid) begin
 						cache_reg[burst_counter][index * (1<<w)] <= s_axi_rdata;
