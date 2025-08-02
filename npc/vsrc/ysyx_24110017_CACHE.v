@@ -65,6 +65,11 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	input wire s_axi_rlast
 );
 
+	wire cache_test0[127:0] = {cache_reg[0][0],cache_reg[1][0],cache_reg[2][0],cache_reg[3][0]};
+	wire cache_test1[127:0] = {cache_reg[0][1],cache_reg[1][1],cache_reg[2][1],cache_reg[3][1]};
+	wire cache_test2[127:0] = {cache_reg[0][2],cache_reg[1][2],cache_reg[2][2],cache_reg[3][2]};
+	wire cache_test3[127:0] = {cache_reg[0][3],cache_reg[1][3],cache_reg[2][3],cache_reg[3][3]};
+
 	reg [31:0] cache_reg [1<<(m-2)-1 : 0][(1<<n)-1 : 0];
   reg [31-m-n+w : 0] tag_reg [1<<(m-2)-1 : 0][(1<<n)-1 : 0];
   reg [(1<<n)-1 : 0] valid_reg[1<<(m-2)-1 : 0];
@@ -135,7 +140,6 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 				TRANS  : begin
 					if(m_axi_rready && s_axi_rvalid) begin
 						integer a;
-						integer b;
 						for (a = 1; a < (1<<w); a = a + 1) begin : fifo
 							cache_reg[offset][index * (1<<w) + a] <= cache_reg[offset][index * (1<<w) + a - 1];
 							tag_reg[offset][index * (1<<w) + a] <= tag_reg[offset][index * (1<<w) + a - 1];
