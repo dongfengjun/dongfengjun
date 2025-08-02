@@ -111,7 +111,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 					end
 				end
 				RETURN : begin
-					if(m_axi_rready && cache_axi_rvalid) begin
+					if(m_axi_rready && m_axi_rvalid) begin
 						state <= IDLE;
 					end
 				end
@@ -123,7 +123,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	end
 
 	reg [m-3 : 0]burst_counter;
-	reg [31:0] burst_raddr;
+	reg [31:0] burst_araddr;
 	always @(posedge clk or posedge rst) begin
 		if(rst) begin
       integer j;
@@ -150,7 +150,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 						s_axi_araddr <= m_axi_araddr;
 						burst_araddr <= m_axi_araddr;
 						s_axi_arburst <= 2'b01;
-						s_axi_alen <= (1 << (m - 2) - offset) - 1;
+						s_axi_arlen <= (1 << (m - 2) - offset) - 1;
 						s_axi_arsize <= 3'h2;
 					end
 					if(s_axi_arvalid && s_axi_arready) begin
@@ -188,19 +188,16 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 					end
 				end
 				RETURN : begin
-					if(m_axi_arvalid && !cache_axi_arready) begin
-						cache_axi_arready <= 1'b1;
-					end
-					if(m_axi_arvalid && cache_axi_arready) begin
-						cache_axi_rvalid <= 1'b1;
-						cache_axi_arready <= 1'b0;
+					if(m_axi_arvalid && m_axi_arready) begin
+						m_axi_rvalid <= 1'b1;
+						m_axi_arready <= 1'b0;
 `ifndef YOSYS_STA
-						cache_axi_rdata <= cache_reg[offset][index * (2 ** w) + $clog2(access)];
+						m_axi_rdata <= cache_reg[offset][index * (2 ** w) + $clog2(access)];
 `endif
-						cache_axi_rresp  <= 2'b11;
+						m_axi_rresp  <= 2'b11;
 					end
-					if(cache_axi_rvalid && m_axi_rready) begin
-						cache_axi_rvalid <= 0;
+					if(m_axi_rvalid && m_axi_rready) begin
+						m_axi_rvalid <= 0;
 					end		
 				end
 				default: begin
