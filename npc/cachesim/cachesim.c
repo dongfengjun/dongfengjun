@@ -31,9 +31,9 @@ int main(int argc, char *argv[]) {
 			uint32_t index = (pc >> m & ((int)pow(2,(n - w)) - 1));
 		  uint32_t tag = pc >> (m + n - w);
 		  uint32_t offset = (pc & ((int)pow(2,m)-1)) / 4;
-		  printf("%x  ",pc);
-			printf("%d,%d,%d  ",n,m,w);
-			printf("index=%x,tag=%x,offset=%x  ",index,tag,offset);
+		//  printf("%x  ",pc);
+		//	printf("%d,%d,%d  ",n,m,w);
+		//	printf("index=%x,tag=%x,offset=%x  ",index,tag,offset);
 			bool flag = false;
 		  for(int i = 0; i < (int)pow(2,w); i ++) {
 		    if(lines[offset][index * (int)pow(2,w) + i].tag == tag && lines[offset][index * (int)pow(2,w) + i].valid) {
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 		    lines[offset][index * (int)pow(2,w)].valid = 1;
 		    lines[offset][index * (int)pow(2,w)].tag = tag;
 			}
-			printf("access:%d\n",access_cnt);	
+		//	printf("access:%d\n",access_cnt);	
 		}
 	}
 	fclose(file);
