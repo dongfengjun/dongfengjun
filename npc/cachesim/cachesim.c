@@ -8,83 +8,50 @@ typedef struct {
 	int valid;
 } matedata;
 
-typedef struct {
-	matedata *lines;
-	int n;
-	int m;
-	int w;
-	int access_cnt;
-	int miss_cnt;
-} Cache;
-
-Cache* init_cache(int n, int m, int w) {
-	Cache *cache = (Cache *)malloc(sizeof(Cache));
-	cache->n = n;
-	cache->m = m;
-	cache->w = w;
-	cache->lines = (matedata *)calloc((1<<(cache->n) * (1 << (cache->m - 2))), sizeof(matedata));
-	cache->access_cnt = 0;
-	cache->miss_cnt = 0;
-	return cache;
-}
-
-void free_cache(Cache *cache) {
-	free(cache->lines);
-	free(cache);
-}
-
-void process_pc(Cache *cache, uint32_t pc) {
-	uint32_t index = (pc >> cache->m & ((1 << (cache->n - cache->w)) - 1));
-	uint32_t tag = pc >> (cache->n - cache->w + cache->m);
-	uint32_t offset = pc & (1 << cache->m - 1);
-	bool flag = false;
-	for(int i = 0; i < (1 << cache->w); i ++) {
-		if(cache->lines[index * (1 << cache->w) + i * offset/4].tag == tag && cache->lines[index * (1 << cache->w) + i * offset/4].valid) {
-			cache->access_cnt ++;
-			flag = true;
-		}
-	}
-	if(!flag) {
-		cache->miss_cnt ++;
-		for(int j = (1 << cache->w) - 1; j > 0; j --) {
-			for(int k = 0; k < (1 << (cache->m-2)); k ++) {
-				cache->lines[index * (1 << cache->w) + j * (1 << (cache->m-2)) + k].valid = cache->lines[index * (1 << cache->w) + j * (1 << (cache->m-2)) - 1 + k].valid;
-				cache->lines[index * (1 << cache->w) + j * (1 << (cache->m-2)) + k].tag = cache->lines[index * (1 << cache->w) + j * (1 << (cache->m-2)) - 1 + k].tag;
-			}
-		}
-		cache->lines[index * (1 << cache->w) + offset/4].valid = 1;
-		cache->lines[index * (1 << cache->w) + offset/4].tag = tag;
-	}
-}
-
-void cachesim(Cache *cache, const char *filename) {
-	FILE *file = fopen(filename, "r");
-	if(!file) {
-		perror("无法打开文件\n");
-	}
-	char line[16];
-	while(fgets(line, 16, file)) {
-		uint32_t pc;
-		if(sscanf(line, "%x", &pc) == 1) {
-			process_pc(cache, pc);
-		}
-		//printf("pc:%x\ntag0:%x tag1:%x tag2:%x tag3:%x tag4:%x tag5:%x tag6:%x tag7:%x\ntag8:%x tag9:%x tag10:%x tag11:%x tag12:%x tag13:%x tag14:%x tag15:%x\n",cache->lines[0].tag,cache->lines[1].tag,cache->lines[2].tag,cache->lines[3].tag,cache->lines[4].tag,cache->lines[5].tag,cache->lines[5].tag,cache->lines[7].tag,cache->lines[8].tag,cache->lines[9].tag,cache->lines[10].tag,cache->lines[11].tag,cache->lines[12].tag,cache->lines[13].tag,cache->lines[14].tag,cache->lines[15].tag);
-	}
-	fclose(file);
-}
-
 int main(int argc, char *argv[]) {
 	int n = atoi(argv[1]);
 	int m = atoi(argv[2]);
 	int w = atoi(argv[3]);
-	Cache *cache = init_cache(n,m,w);
-	cachesim(cache, argv[4]);
+	matedata lines[2^(m - 2)][2^n];
+	int access_cnt = 0;
+	int miss_cnt = 0;
 
-	int total_cnt = cache->access_cnt + cache->miss_cnt;
-	double p = (double)cache->access_cnt/(double)total_cnt;
+	FILE *file = fopen(argv[4], "r");
+	if(!file) {
+    perror("无法打开文件\n");
+  }
+  char line[11];
+  while(fgets(line, 11, file)) {
+		uint32_t pc;
+    if(sscanf(line, "%x", &pc) == 1) {
+			uint32_t index = (pc >> m & ((2 ^ (n - w)) - 1));
+		  uint32_t tag = pc >> (m + n - w);
+		  uint32_t offset = (pc & (2 ^ m - 1)) >> 2;
+		  bool flag = false;
+		  for(int i = 0; i < (2 ^ w); i ++) {
+		    if(lines[offset][index * (2 ^ w) + i].tag == tag && lines[offset][index * (2 ^ w) + i].valid) {
+		      access_cnt ++;
+		      flag = true;
+		    }
+		  }
+			if(!flag) {
+		    miss_cnt ++;
+				for(int j = (2 ^ w) - 1; j > 0; j --) {
+		      lines[offset][index * (2 ^ w) + j].valid = lines[offset][index * (2 ^ w) + j - 1].valid;
+		      lines[offset][index * (2 ^ w) + j].tag = lines[offset][index * (2 ^ w) + j - 1].tag;
+				}
+		    lines[offset][index * (2 ^ w)].valid = 1;
+		    lines[offset][index * (2 ^ w)].tag = tag;
+			}
+			printf("%x  ",pc);
+		}
+	}
+	fclose(file);
+
+	int total_cnt = access_cnt + miss_cnt;
+	double p = (double)access_cnt/(double)total_cnt;
 	printf("************AMAT************\n");	
 	printf("n=%d m=%d w=%d\n",n,m,w);
-	printf("total:%d acess cnt:%d miss cnt:%d p:%.6f\n",total_cnt,cache->access_cnt,cache->miss_cnt,p);
-	free_cache(cache);
+	printf("total:%d acess cnt:%d miss cnt:%d p:%.6f\n",total_cnt,access_cnt,miss_cnt,p);
 	return 0;
 }
