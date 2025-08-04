@@ -83,8 +83,8 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	generate 
     genvar i; 
       for(i = 1; i < (1<<w); i = i + 1) begin : comparator
-        wire [i - 1:0] flag = access[i - 1:0];
-				assign access[i] = (tag == tag_reg[offset][index * (1<<w) + i]) && (valid_reg[offset][index * (1<<w) + i]) && (flag == 0);
+        wire flag = (access[i - 1:0] == 0);
+				assign access[i] = (tag == tag_reg[offset][index * (1<<w) + i]) && (valid_reg[offset][index * (1<<w) + i]) && flag;
 			end
 	endgenerate
 

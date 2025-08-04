@@ -188,56 +188,80 @@ void VysyxSoCFull___024root___eval_triggers__act(VysyxSoCFull___024root* vlSelf)
     VysyxSoCFull__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root___eval_triggers__act\n"); );
     // Body
-    vlSelf->__VactTriggered.at(0U) = ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__access) 
-                                      != (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__access));
-    vlSelf->__VactTriggered.at(1U) = ((IData)(vlSelf->clock) 
+    vlSelf->__VactTriggered.at(0U) = ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__1__KET____DOT__flag) 
+                                      != (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__1__KET____DOT__flag));
+    vlSelf->__VactTriggered.at(1U) = ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__2__KET____DOT__flag) 
+                                      != (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__2__KET____DOT__flag));
+    vlSelf->__VactTriggered.at(2U) = ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__3__KET____DOT__flag) 
+                                      != (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__3__KET____DOT__flag));
+    vlSelf->__VactTriggered.at(3U) = ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__4__KET____DOT__flag) 
+                                      != (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__4__KET____DOT__flag));
+    vlSelf->__VactTriggered.at(4U) = ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__5__KET____DOT__flag) 
+                                      != (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__5__KET____DOT__flag));
+    vlSelf->__VactTriggered.at(5U) = ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__6__KET____DOT__flag) 
+                                      != (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__6__KET____DOT__flag));
+    vlSelf->__VactTriggered.at(6U) = ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__7__KET____DOT__flag) 
+                                      != (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__7__KET____DOT__flag));
+    vlSelf->__VactTriggered.at(7U) = ((IData)(vlSelf->clock) 
                                       & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clock)));
-    vlSelf->__VactTriggered.at(2U) = (((IData)(vlSelf->clock) 
+    vlSelf->__VactTriggered.at(8U) = (((IData)(vlSelf->clock) 
                                        & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clock))) 
                                       | ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset) 
                                          & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset))));
-    vlSelf->__VactTriggered.at(3U) = (((IData)(vlSelf->clock) 
+    vlSelf->__VactTriggered.at(9U) = (((IData)(vlSelf->clock) 
                                        & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clock))) 
                                       | ((IData)(vlSelf->reset) 
                                          & (~ (IData)(vlSelf->__Vtrigrprev__TOP__reset))));
-    vlSelf->__VactTriggered.at(4U) = (((~ (IData)(vlSelf->externalPins_ps2_clk)) 
-                                       & (IData)(vlSelf->__Vtrigrprev__TOP__externalPins_ps2_clk)) 
-                                      | ((IData)(vlSelf->reset) 
-                                         & (~ (IData)(vlSelf->__Vtrigrprev__TOP__reset))));
-    vlSelf->__VactTriggered.at(5U) = (((~ (IData)(vlSelf->externalPins_ps2_clk)) 
-                                       & (IData)(vlSelf->__Vtrigrprev__TOP__externalPins_ps2_clk)) 
-                                      | ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lkeyboard__DOT__mps2__DOT__is_read) 
-                                         & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__lkeyboard__DOT__mps2__DOT__is_read))));
-    vlSelf->__VactTriggered.at(6U) = (((IData)(vlSelf->clock) 
-                                       & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clock))) 
-                                      | ((~ (IData)(vlSelf->reset)) 
-                                         & (IData)(vlSelf->__Vtrigrprev__TOP__reset)));
-    vlSelf->__VactTriggered.at(7U) = (((IData)(vlSelf->ysyxSoCFull__DOT____Vcellinp__flash__ss) 
-                                       & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT____Vcellinp__flash__ss))) 
-                                      | ((IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_sck) 
-                                         & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT___asic_spi_sck))));
-    vlSelf->__VactTriggered.at(8U) = ((IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_sck) 
-                                      & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT___asic_spi_sck)));
-    vlSelf->__VactTriggered.at(9U) = (((IData)(vlSelf->ysyxSoCFull__DOT____Vcellinp__bitrev__ss) 
-                                       & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT____Vcellinp__bitrev__ss))) 
-                                      | ((IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_sck) 
-                                         & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT___asic_spi_sck))));
-    vlSelf->__VactTriggered.at(0xaU) = ((IData)(vlSelf->ysyxSoCFull__DOT___asic_psram_sck) 
-                                        & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT___asic_psram_sck)));
-    vlSelf->__VactTriggered.at(0xbU) = (((IData)(vlSelf->ysyxSoCFull__DOT___asic_psram_ce_n) 
-                                         & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT___asic_psram_ce_n))) 
-                                        | ((IData)(vlSelf->ysyxSoCFull__DOT___asic_psram_sck) 
-                                           & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT___asic_psram_sck))));
-    vlSelf->__VactTriggered.at(0xcU) = (((IData)(vlSelf->ysyxSoCFull__DOT__psram__DOT__ren) 
-                                         != (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__psram__DOT__ren)) 
-                                        | ((IData)(vlSelf->ysyxSoCFull__DOT__psram__DOT__wen) 
-                                           != (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__psram__DOT__wen)));
-    vlSelf->__VactTriggered.at(0xdU) = (((~ (IData)(vlSelf->clock)) 
-                                         & (IData)(vlSelf->__Vtrigrprev__TOP__clock)) 
-                                        | ((IData)(vlSelf->ysyxSoCFull__DOT__sdram1__DOT__reset) 
-                                           & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__sdram1__DOT__reset))));
-    vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__access 
-        = vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__access;
+    vlSelf->__VactTriggered.at(0xaU) = (((~ (IData)(vlSelf->externalPins_ps2_clk)) 
+                                         & (IData)(vlSelf->__Vtrigrprev__TOP__externalPins_ps2_clk)) 
+                                        | ((IData)(vlSelf->reset) 
+                                           & (~ (IData)(vlSelf->__Vtrigrprev__TOP__reset))));
+    vlSelf->__VactTriggered.at(0xbU) = (((~ (IData)(vlSelf->externalPins_ps2_clk)) 
+                                         & (IData)(vlSelf->__Vtrigrprev__TOP__externalPins_ps2_clk)) 
+                                        | ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lkeyboard__DOT__mps2__DOT__is_read) 
+                                           & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__lkeyboard__DOT__mps2__DOT__is_read))));
+    vlSelf->__VactTriggered.at(0xcU) = (((IData)(vlSelf->clock) 
+                                         & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clock))) 
+                                        | ((~ (IData)(vlSelf->reset)) 
+                                           & (IData)(vlSelf->__Vtrigrprev__TOP__reset)));
+    vlSelf->__VactTriggered.at(0xdU) = (((IData)(vlSelf->ysyxSoCFull__DOT____Vcellinp__flash__ss) 
+                                         & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT____Vcellinp__flash__ss))) 
+                                        | ((IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_sck) 
+                                           & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT___asic_spi_sck))));
+    vlSelf->__VactTriggered.at(0xeU) = ((IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_sck) 
+                                        & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT___asic_spi_sck)));
+    vlSelf->__VactTriggered.at(0xfU) = (((IData)(vlSelf->ysyxSoCFull__DOT____Vcellinp__bitrev__ss) 
+                                         & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT____Vcellinp__bitrev__ss))) 
+                                        | ((IData)(vlSelf->ysyxSoCFull__DOT___asic_spi_sck) 
+                                           & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT___asic_spi_sck))));
+    vlSelf->__VactTriggered.at(0x10U) = ((IData)(vlSelf->ysyxSoCFull__DOT___asic_psram_sck) 
+                                         & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT___asic_psram_sck)));
+    vlSelf->__VactTriggered.at(0x11U) = (((IData)(vlSelf->ysyxSoCFull__DOT___asic_psram_ce_n) 
+                                          & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT___asic_psram_ce_n))) 
+                                         | ((IData)(vlSelf->ysyxSoCFull__DOT___asic_psram_sck) 
+                                            & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT___asic_psram_sck))));
+    vlSelf->__VactTriggered.at(0x12U) = (((IData)(vlSelf->ysyxSoCFull__DOT__psram__DOT__ren) 
+                                          != (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__psram__DOT__ren)) 
+                                         | ((IData)(vlSelf->ysyxSoCFull__DOT__psram__DOT__wen) 
+                                            != (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__psram__DOT__wen)));
+    vlSelf->__VactTriggered.at(0x13U) = (((~ (IData)(vlSelf->clock)) 
+                                          & (IData)(vlSelf->__Vtrigrprev__TOP__clock)) 
+                                         | ((IData)(vlSelf->ysyxSoCFull__DOT__sdram1__DOT__reset) 
+                                            & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__sdram1__DOT__reset))));
+    vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__1__KET____DOT__flag 
+        = vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__1__KET____DOT__flag;
+    vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__2__KET____DOT__flag 
+        = vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__2__KET____DOT__flag;
+    vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__3__KET____DOT__flag 
+        = vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__3__KET____DOT__flag;
+    vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__4__KET____DOT__flag 
+        = vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__4__KET____DOT__flag;
+    vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__5__KET____DOT__flag 
+        = vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__5__KET____DOT__flag;
+    vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__6__KET____DOT__flag 
+        = vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__6__KET____DOT__flag;
+    vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__7__KET____DOT__flag 
+        = vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__comparator__BRA__7__KET____DOT__flag;
     vlSelf->__Vtrigrprev__TOP__clock = vlSelf->clock;
     vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset 
         = vlSelf->ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset;
@@ -265,7 +289,13 @@ void VysyxSoCFull___024root___eval_triggers__act(VysyxSoCFull___024root* vlSelf)
     if (VL_UNLIKELY((1U & (~ (IData)(vlSelf->__VactDidInit))))) {
         vlSelf->__VactDidInit = 1U;
         vlSelf->__VactTriggered.at(0U) = 1U;
-        vlSelf->__VactTriggered.at(0xcU) = 1U;
+        vlSelf->__VactTriggered.at(1U) = 1U;
+        vlSelf->__VactTriggered.at(2U) = 1U;
+        vlSelf->__VactTriggered.at(3U) = 1U;
+        vlSelf->__VactTriggered.at(4U) = 1U;
+        vlSelf->__VactTriggered.at(5U) = 1U;
+        vlSelf->__VactTriggered.at(6U) = 1U;
+        vlSelf->__VactTriggered.at(0x12U) = 1U;
     }
 #ifdef VL_DEBUG
     if (VL_UNLIKELY(vlSymsp->_vm_contextp__->debug())) {

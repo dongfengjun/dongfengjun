@@ -17,7 +17,7 @@
 #ifndef VL_DPIDECL_amat_counter_
 #define VL_DPIDECL_amat_counter_
 int amat_counter(int i) {
-    // DPI export at vsrc/ysyx_24110017_CACHE.v:264:15
+    // DPI export at vsrc/ysyx_24110017_CACHE.v:265:15
     return VysyxSoCFull::amat_counter(i);
 }
 #endif
