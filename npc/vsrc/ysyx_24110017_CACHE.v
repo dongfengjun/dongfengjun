@@ -79,14 +79,14 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
   wire [m-3 : 0]offset = m_axi_araddr[m-1 : 2];
 
   wire [(1<<w) - 1 : 0]access;
-	assign access[0] = (tag == tag_reg[offset][index * (1<<w)]) && (valid_reg[offset][index * (1<<w)]);
+	wire [(1<<w) - 1 : 0]access_raw;
 	generate 
     genvar i; 
-      for(i = 1; i < (1<<w); i = i + 1) begin : comparator
-        wire flag = (access[i - 1:0] == 0);
-				assign access[i] = (tag == tag_reg[offset][index * (1<<w) + i]) && (valid_reg[offset][index * (1<<w) + i]) && flag;
+      for(i = 0; i < (1<<w); i = i + 1) begin : comparator
+        assign access[i] = (tag == tag_reg[offset][index * (1<<w) + i]) && (valid_reg[offset][index * (1<<w) + i]);
 			end
 	endgenerate
+	assign access = access_raw & ~(access_raw - 1);
 
 	localparam IDLE = 2'b00;
   localparam TRANS = 2'b01;
