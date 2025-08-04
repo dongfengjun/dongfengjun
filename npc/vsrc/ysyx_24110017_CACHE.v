@@ -168,7 +168,6 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 					if(s_axi_arvalid && s_axi_arready) begin
 						integer a;
             integer b;
-						if()
 						for (b = 0; b < (1<<(m-2)); b = b + 1) begin : fifo
 							cache_reg[b][index * (1<<w)] <= 0;
               tag_reg[b][index * (1<<w)] <= 0;
