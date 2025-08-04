@@ -80,13 +80,13 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 
   reg [(1<<w) - 1 : 0]access;
 	always @(*) begin
-		if(tag == tag_reg[offset][index * (1<<w)]) && (valid_reg[offset][index * (1<<w)]) begin
+		if(tag == tag_reg[offset][index * (1<<w)] && valid_reg[offset][index * (1<<w)]) begin
 			access[0] = 1'b1;
 		end
 		generate 
 			genvar i; 
 				for(i = 1; i < (1<<w); i = i + 1) begin : comparator
-					else if(tag == tag_reg[offset][index * (1<<w) + i]) && (valid_reg[offset][index * (1<<w) + i) begin
+					else if(tag == tag_reg[offset][index * (1<<w) + i] && valid_reg[offset][index * (1<<w) + i) begin
 						access[i] = 1'b1;
 					end
 				end
