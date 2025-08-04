@@ -16,7 +16,7 @@ extern "C" {
 
 
     // DPI EXPORTS
-    // DPI export at vsrc/ysyx_24110017_CACHE.v:263:15
+    // DPI export at vsrc/ysyx_24110017_CACHE.v:264:15
     extern int amat_counter(int i);
     // DPI export at vsrc/ysyx_24110017.v:321:14
     extern int csr_grab(int i);
