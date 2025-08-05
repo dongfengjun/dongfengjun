@@ -89,15 +89,6 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	endgenerate
 	assign access = access_raw & ~(access_raw - 1);
 
-	always @(posedge clk or posedge rst) begin
-		if(fencei_i) begin
-    integer f;
-      for (f = 0; f < (1<<(m-2)); f = f + 1) begin : fencei
-        valid_reg[f] <= 0;
-      end
-    end
-	end
-
 	localparam IDLE = 2'b00;
   localparam TRANS = 2'b01;
   localparam RETURN = 2'b10;
@@ -149,7 +140,14 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 			end
 		end
 		else begin
-			case(state)
+			if(fencei_i) begin
+				integer f;
+				for (f = 0; f < (1<<(m-2)); f = f + 1) begin : fencei
+					valid_reg[f] <= 0;
+				end
+			end
+			else begin
+				case(state)
 				IDLE	 : begin
 					if(m_axi_arvalid && !m_axi_arready) begin
 						m_axi_arready <= 1'b1;
@@ -227,7 +225,8 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 				end
 				default: begin
 				end
-			endcase
+				endcase
+			end
 		end
 	end
 
