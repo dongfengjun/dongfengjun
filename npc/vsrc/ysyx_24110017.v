@@ -98,6 +98,7 @@ wire [4:0]rs2;	//R S B
 wire [31:0]imm;
 wire [6:0]funct7;	//R
 wire [4:0]shamt; //I shamt
+wire fencei;
 /***EXU***/
 wire ls_read,ls_write,ls_done,ex_valid,wb_ready;
 wire [31:0]ex;
@@ -176,7 +177,7 @@ ysyx_24110017_IFU IFU(clock,reset,
 		if_axi_arlen,if_axi_arsize,if_axi_arburst,
 		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast
 );
-ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset, //w < n
+ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei, //w < n
 		if_axi_awready,if_axi_awvalid,if_axi_awid,if_axi_awaddr,
 		if_axi_awlen,if_axi_awsize,if_axi_awburst,
 		if_axi_wready,if_axi_wvalid,if_axi_wdata,if_axi_wstrb,if_axi_wlast,
@@ -194,7 +195,7 @@ ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset, //w < n
 );
 ysyx_24110017_IDU IDU(clock,reset,
 		inst,if_valid,id_ready,id_valid,ex_ready,
-		op,rd,funct3,rs1,rs2,imm,funct7,shamt
+		op,rd,funct3,rs1,rs2,imm,funct7,shamt,fencei
 );
 ysyx_24110017_EXU EXU(clock,reset,ex,
 		id_valid,ex_ready,ex_valid,wb_ready, //分布式控制

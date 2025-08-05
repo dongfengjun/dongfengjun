@@ -2,6 +2,7 @@
 module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	input clk,
 	input rst,
+	input wire fencei_i,
 	output wire m_axi_awready,
 	input wire m_axi_awvalid,
 	input wire [3:0]m_axi_awid,
@@ -87,6 +88,15 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 			end
 	endgenerate
 	assign access = access_raw & ~(access_raw - 1);
+
+	always @(posedge clk or posedge rst) begin
+		if(fencei_i) begin
+    integer f;
+      for (f = 0; f < (1<<(m-2)); f = f + 1) begin : fencei
+        valid_reg[f] <= 0;
+      end
+    end
+	end
 
 	localparam IDLE = 2'b00;
   localparam TRANS = 2'b01;
