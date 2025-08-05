@@ -29,7 +29,7 @@ SECTIONS {
 	.text : ALIGN(4) {
 		*(.text*)
 		. = ALIGN(16);
-		*(.text.hot*)
+		*(.text.hot)
 		. = ALIGN(4);
   } > sdram AT > flash : text
   etext = .;
