@@ -179,7 +179,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 					end
 					if(s_axi_rready && s_axi_rvalid) begin
 						cache_reg[burst_counter][index * (1<<w)] <= s_axi_rdata;
-						tag_reg[burst_counter][index * (1<<w)] <= {burst_araddr}[31 : m+n-w];
+						tag_reg[burst_counter][index * (1<<w)] <= burst_araddr[31 : m+n-w];
 						valid_reg[burst_counter][index * (1<<w)] <= 1'b1;
 						burst_araddr <= burst_araddr + 4;
 						burst_counter <= burst_counter + 1;
