@@ -90,9 +90,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	assign access = access_raw & ~(access_raw - 1);
 
 	always @(posedge clk or posedge rst) begin
-		if(rst) begin
-		end
-		else(fencei_i) begin
+		if(fencei_i) begin
     integer f;
       for (f = 0; f < (1<<(m-2)); f = f + 1) begin : fencei
         valid_reg[f] <= 0;
