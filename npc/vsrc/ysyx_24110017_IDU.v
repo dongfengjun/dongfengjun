@@ -14,7 +14,8 @@ module ysyx_24110017_IDU(
 	output [4:0]rs2_o,
 	output [31:0]imm_o,
 	output [6:0]funct7_o,
-	output [4:0]shamt_o
+	output [4:0]shamt_o,
+	output fencei_o
 );
 
 assign op_o = op_reg;
@@ -158,6 +159,7 @@ assign imm = (op == 7'b0110111 || op == 7'b0010111) ? immU
  : (op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011) ? immI 
  : 32'b0;
 
+assign fencei_o = (inst_i == 32'b00000000000000000001000000001111);
 
 /***DPIC*etrace***/
 `ifndef YOSYS_STA
