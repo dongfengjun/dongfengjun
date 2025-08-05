@@ -11,7 +11,7 @@ AM_SRCS := riscv/ysyxsoc/start.S \
            platform/dummy/mpe.c
 
 CFLAGS    += -fdata-sections -ffunction-sections
-CFLAGS		+= -freorder-functions
+CFLAGS		+= -freorder-functions	#hot函数
 LDFLAGS   += -T $(AM_HOME)/scripts/linker-ysyxsoc.ld \
              --defsym=_pmem_start=0x30000000 --defsym=_entry_offset=0x0
 						 #--script=$(AM_HOME)/scripts/linker-ysyxsoc.ld \
