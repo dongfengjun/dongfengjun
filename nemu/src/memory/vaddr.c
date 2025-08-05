@@ -25,7 +25,7 @@ word_t vaddr_read(vaddr_t addr, int len) {
 	word_t result = paddr_read(addr, len);
 #ifdef CONFIG_MTRACE
 	//mtrace_p += sprintf(mtrace_p, "addr:0x%08x read:0x%08x\n", addr, result);
-	mtrace_p += sprintf(mtrace_p, "addr:0x%08x\n", addr);
+	mtrace_p += sprintf(mtrace_p, "%08x\n", addr);
 #endif
 	return result;
 }
