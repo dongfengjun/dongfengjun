@@ -186,11 +186,12 @@ always @(posedge clk or posedge rst) begin
           if(ls_axi_arvalid && ls_axi_arready) begin
 						axi_arvalid <= 1'b0;
 						//axi_araddr <= raddr;
-          end
-					if(ls_axi_rvalid && !ls_axi_rready) begin
 						axi_rready <= 1'b1;
-						ls_rdata_reg <= ls_axi_rdata;
 					end
+					//if(ls_axi_rvalid && !ls_axi_rready) begin
+						//axi_rready <= 1'b1;
+						//ls_rdata_reg <= ls_axi_rdata;
+					//end
 /***DELAY_TEST_RAND*RREADY***
           if(M_AXI_RVALID && !M_AXI_RREADY) begin
             if(delay_counter == 0) begin
@@ -206,7 +207,8 @@ always @(posedge clk or posedge rst) begin
           end
 /***END***/
 	        if(ls_axi_rvalid && ls_axi_rready) begin
-            axi_rready <= 0;
+            ls_rdata_reg <= ls_axi_rdata;//
+						axi_rready <= 0;
             state <= DONE;
 `ifndef YOSYS_STA						
 						if((ls_axi_araddr - 32'h10000000 < 32'h1000) || (ls_axi_araddr == 32'h02000000) || (ls_axi_araddr == 32'h02000004)) begin //DEVICE DIFFTEST
