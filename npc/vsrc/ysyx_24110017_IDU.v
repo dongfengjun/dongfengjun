@@ -74,7 +74,7 @@ always@(posedge clk or posedge rst) begin
 		pc_o				<= 32'h0;
 		imm_o				<= 32'h0;
 		op_o				<= 7'b0;
-		funct3			<= 3'b0;
+		funct3_o		<= 3'b0;
 		rd_o				<= 5'b0;
 		gpr_wen_o		<= 1'b0;
 		alu_valid_o <= 1'b0;
