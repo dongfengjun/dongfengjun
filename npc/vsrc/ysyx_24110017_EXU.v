@@ -18,6 +18,7 @@ module ysyx_24110017_EXU(
   input  wire [ 3:0] alu_sel_i,
   input  wire [31:0] a_i,
   input  wire [31:0] b_i,
+	input  wire [31:0] r1_i,
 	input	 wire [31:0] r2_i,
   input  wire fencei_i,
 
