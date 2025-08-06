@@ -56,6 +56,7 @@ always @(posedge clk or posedge rst) begin
 			WAIT:	state <= (if_valid_o && id_ready_i) ? IDLE : state;
 		endcase
 	end
+end
 
 always @(posedge clk or posedge rst) begin
 	if(rst) begin
