@@ -18,7 +18,7 @@ module ysyx_24110017_IDU(
 	output reg  [31:0] pc_o,	//o.bit
 	output reg	[31:0] imm_o,
 	output reg  [ 6:0] op_o,
-	output reg  [ 2:0] funct3,
+	output reg  [ 2:0] funct3_o,
 	output reg  [ 4:0] rd_o,
 	output reg  gpr_wen_o,
 	output reg  alu_valid_o,		//alu
