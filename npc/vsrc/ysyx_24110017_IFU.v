@@ -71,7 +71,7 @@ always @(posedge clk or posedge rst) begin
 			if_ready_o <= 1'b1;
 		end
 		if(if_valid_o && id_ready_i) begin
-			pc_o	 <= pc_i;
+			pc_o	 <= axi_araddr_o;
 			inst_o <= axi_rdata_reg;
 		end
 	end

@@ -2,25 +2,13 @@
 module ysyx_24110017_PCU(
 	input  wire				 clk,
 	input  wire				 rst,
-	output reg [31:0]	 pc_o,
+	output reg  [31:0] pc_o,
 	input  wire [31:0] dnpc_i,
 	output wire				 pc_valid_o,
 	input  wire				 if_ready_i
 );
 
 assign pc_valid_o = 1'b1;
-parameter IDLE = 1'b0,WAIT = 1'b1;
-reg state;
-
-always @(posedge clk or posedge rst) begin
-	if(rst) state <= IDLE;
-  else begin
-		case (state)
-			IDLE:				state	<= (pc_valid_o) ?					WAIT : state;
-			WAIT: state <= (pc_valid_o && if_ready_i) ? IDLE : state;
-		endcase
-	end
-end
 
 always @(posedge clk or posedge rst) begin
 	if(rst) begin
