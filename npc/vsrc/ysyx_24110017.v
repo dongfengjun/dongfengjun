@@ -183,13 +183,14 @@ ysyx_24110017_IDU IDU(clock,reset,
 		pc_if,inst,
 		pc_id,imm,op,funct3,rd,gpr_wen,alu_valid,alu_sel,a,b,fencei
 );
-ysyx_24110017_EXU EXU(clock,reset,ex,
-		id_valid,ex_ready,ex_valid,wb_ready, //分布式控制
-		op,funct3,imm,funct7,shamt,r1,r2,
+ysyx_24110017_EXU EXU(clock,reset,
+		id_valid,ex_ready,ex_valid,wb_ready,
+		pc_id,imm,op,funct3,rd,gpr_wen,alu_valid,alu_sel,a,b,fencei,
+		ex,
 		ls_read,ls_write,ls_done,
 		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,ls_awsize,ls_arsize,ls_awlen,ls_arlen,ls_awburst,ls_arburst,
 		ls_rdata,
-		pc,dnpc,
+		dnpc,
 		mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec,
 		gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
 );
