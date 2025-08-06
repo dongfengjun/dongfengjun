@@ -77,7 +77,7 @@ always @(posedge clk or posedge rst) begin
     mtvec_wen_o		<= 1'b0;
 		ls_read_o			<= 1'b0;
 		ls_write_o		<= 1'b0;
-		ram_rdata_o		<= 32'h0;
+		ram_rdata_reg	<= 32'h0;
 	end
 	else begin
 		case (state)
@@ -90,7 +90,7 @@ always @(posedge clk or posedge rst) begin
 				end
 			end
 			WAIT: begin
-				if(al_valid_i) begin
+				if(alu_valid_i) begin
 					al_start		<= 1'b1;
 				end
 				if(al_done) begin
