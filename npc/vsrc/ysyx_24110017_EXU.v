@@ -48,9 +48,9 @@ always @(posedge clk or posedge rst) begin
 	if(rst) state <= IDLE;
   else begin
 		case (state)
-			IDLE:  state <= (id_valid_i && ex_ready_o) WAIT : state;
-			WAIT:  state <= ((!al_valid) && (!ls_valid_o)) READY : (al_done) ? READY : (ls_done_i) ? READY : state;
-			READY: state <= (ex_valid_o && wb_ready_i) DONE : state;
+			IDLE:  state <= (id_valid_i && ex_ready_o) ? WAIT : state;
+			WAIT:  state <= ((!al_valid) && (!ls_valid_o)) ? READY : (al_done) ? READY : (ls_done_i) ? READY : state;
+			READY: state <= (ex_valid_o && wb_ready_i) ? DONE : state;
 			DONE:  state <= IDLE : state;
 		endcase
 	end
@@ -111,7 +111,7 @@ always @(posedge clk posedge rst) begin
 			READY: begin
 				ex_valid <= 1'b1;
 				if(ex_valid_o && wb_ready_i) begin
-					ex_valid <= 1'b0;
+					ex_valid_o <= 1'b0;
 					ex_reg <= ex;
 					gpr_wen_reg <= gpr_wen;
 
