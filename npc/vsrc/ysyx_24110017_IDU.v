@@ -22,7 +22,7 @@ module ysyx_24110017_IDU(
 	output reg  [ 4:0] rd_o,
 	output reg  gpr_wen_o,
 	output reg  alu_valid_o,		//alu
-	output reg  [ 3:0] alu_sel_o,
+	output reg  [ 2:0] alu_sel_o,
 	output reg  [31:0] a_o,
 	output reg  [31:0] b_o,
 	output reg  [31:0] r1_o,
