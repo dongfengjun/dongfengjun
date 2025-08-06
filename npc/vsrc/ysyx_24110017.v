@@ -98,7 +98,7 @@ wire [2:0] funct3;
 wire [4:0] rd;
 wire gpr_wen,alu_valid;
 wire [2:0] alu_sel;
-wire [31:0] a,b,r2_id;
+wire [31:0] a,b,r1_id,r2_id;
 wire fencei;
 /***EXU***/
 wire ex_ready,ex_valid;
@@ -185,7 +185,7 @@ ysyx_24110017_IDU IDU(clock,reset,
 );
 ysyx_24110017_EXU EXU(clock,reset,
 		id_valid,ex_ready,ex_valid,wb_ready,
-		pc_id,imm,op,funct3,rd,gpr_wen,alu_valid,alu_sel,a,b,r2_id,fencei,
+		pc_id,imm,op,funct3,rd,gpr_wen,alu_valid,alu_sel,a,b,r1_id,r2_id,fencei,
 		ex,
 		ls_read,ls_write,ls_done,
 		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,ls_awsize,ls_arsize,ls_awlen,ls_arlen,ls_awburst,ls_arburst,
