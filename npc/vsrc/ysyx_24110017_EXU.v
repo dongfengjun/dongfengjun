@@ -18,6 +18,7 @@ module ysyx_24110017_EXU(
   input  wire [ 3:0] alu_sel_i,
   input  wire [31:0] a_i,
   input  wire [31:0] b_i,
+	input	 wire [31:0] r2_i,
   input  wire fencei_i,
 
 	output reg  [31:0]ex_o,
@@ -116,7 +117,7 @@ always @(posedge clk or posedge rst) begin
 				if(ex_valid_o && wb_ready_i) begin
 					ex_valid_o <= 1'b0;
 					ex_o <= ex;
-					gpr_wen_o <= gpr_wen;
+					gpr_wen_o <= gpr_wen_i;
 
 					mepc_o <= mepc_w;
 					mstatus_o <= mstatus_w;
@@ -137,7 +138,7 @@ always @(posedge clk or posedge rst) begin
 	end
 end
 
-ysyx_24110017_ALU ALU(clk,rst,a_i,b_i,al_sel_i,al_start,res,al_done);
+ysyx_24110017_ALU ALU(clk,rst,a_i,b_i,alu_sel_i,al_start,res,al_done);
 
 wire [31:0]ex;
 assign ex = 

@@ -25,6 +25,7 @@ module ysyx_24110017_IDU(
 	output reg  [ 3:0] alu_sel_o,
 	output reg  [31:0] a_o,
 	output reg  [31:0] b_o,
+	output reg  [31:0] r2_o,
 	output reg  fencei_o
 );
 
@@ -79,6 +80,7 @@ always@(posedge clk or posedge rst) begin
 		alu_sel_o		<= 4'b0;
 		a_o					<= 32'h0;
 		b_o					<= 32'h0;
+		r2_o				<= 32'h0;
 		fencei_o		<= 1'b0;
 	end
 	else begin
@@ -93,6 +95,7 @@ always@(posedge clk or posedge rst) begin
 	    alu_sel_o   <= alu_sel;
 	    a_o         <= a;
 	    b_o         <= b;
+			r2_o				<= r2;
 			fencei_o		<= fencei;
 		end
 	end

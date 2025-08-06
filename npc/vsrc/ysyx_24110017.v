@@ -69,36 +69,36 @@ wire [31:0] pc;
 wire [31:0] dnpc;
 wire pc_valid,if_ready; //分布式控制
 /***IFU***/
-wire [31:0]inst_if,pc_if;
+wire [31:0] inst,pc_if;
 wire if_valid,id_ready; //分布式控制
-wire [31:0]if_axi_awaddr,if_axi_wdata,if_axi_araddr,if_axi_rdata;
-wire [ 3:0]if_axi_wstrb;
-wire [ 7:0]if_axi_awlen,if_axi_arlen;
-wire [ 3:0]if_axi_awid,if_axi_bid,if_axi_arid,if_axi_rid;
-wire [ 2:0]if_axi_awsize,if_axi_arsize;
-wire [ 1:0]if_axi_awburst,if_axi_arburst;
-wire [ 1:0]if_axi_bresp,if_axi_rresp;
+wire [31:0] if_axi_awaddr,if_axi_wdata,if_axi_araddr,if_axi_rdata;
+wire [ 3:0] if_axi_wstrb;
+wire [ 7:0] if_axi_awlen,if_axi_arlen;
+wire [ 3:0] if_axi_awid,if_axi_bid,if_axi_arid,if_axi_rid;
+wire [ 2:0] if_axi_awsize,if_axi_arsize;
+wire [ 1:0] if_axi_awburst,if_axi_arburst;
+wire [ 1:0] if_axi_bresp,if_axi_rresp;
 wire if_axi_awvalid,if_axi_awready,if_axi_wvalid,if_axi_wready,if_axi_bvalid,if_axi_bready,if_axi_arvalid,if_axi_arready,if_axi_rvalid,if_axi_rready,if_axi_wlast,if_axi_rlast;
 /***ICACHE***/
-wire [31:0]icache_axi_awaddr,icache_axi_wdata,icache_axi_araddr,icache_axi_rdata;
-wire [ 3:0]icache_axi_wstrb;
-wire [ 7:0]icache_axi_awlen,icache_axi_arlen;
-wire [ 3:0]icache_axi_awid,icache_axi_bid,icache_axi_arid,icache_axi_rid;
-wire [ 2:0]icache_axi_awsize,icache_axi_arsize;
-wire [ 1:0]icache_axi_awburst,icache_axi_arburst;
-wire [ 1:0]icache_axi_bresp,icache_axi_rresp;
+wire [31:0] icache_axi_awaddr,icache_axi_wdata,icache_axi_araddr,icache_axi_rdata;
+wire [ 3:0] icache_axi_wstrb;
+wire [ 7:0] icache_axi_awlen,icache_axi_arlen;
+wire [ 3:0] icache_axi_awid,icache_axi_bid,icache_axi_arid,icache_axi_rid;
+wire [ 2:0] icache_axi_awsize,icache_axi_arsize;
+wire [ 1:0] icache_axi_awburst,icache_axi_arburst;
+wire [ 1:0] icache_axi_bresp,icache_axi_rresp;
 wire icache_axi_awvalid,icache_axi_awready,icache_axi_wvalid,icache_axi_wready,icache_axi_bvalid,icache_axi_bready,icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,icache_axi_wlast,icache_axi_rlast;
 /***IDU***/
 wire id_valid,ex_ready;
-wire [4:0]rs1,rs2;
+wire [4:0] rs1,rs2;
 wire if_valid,id_ready,id_valid,ex_ready;
-wire [31:0]pc_id,imm;
-wire [6:0]op;
-wire [2:0]funct3;
-wire [4:0]rd;
+wire [31:0] pc_id,imm;
+wire [6:0] op;
+wire [2:0] funct3;
+wire [4:0] rd;
 wire gpr_wen,alu_valid;
-wire [2:0]alu_sel;
-wire [31:0]a,b;
+wire [2:0] alu_sel;
+wire [31:0] a,b,r2_id;
 wire fencei;
 /***EXU***/
 wire ex_ready,ex_valid;
@@ -181,11 +181,11 @@ ysyx_24110017_IDU IDU(clock,reset,
 		rs1,rs2,r1,r2,
 		if_valid,id_ready,id_valid,ex_ready,
 		pc_if,inst,
-		pc_id,imm,op,funct3,rd,gpr_wen,alu_valid,alu_sel,a,b,fencei
+		pc_id,imm,op,funct3,rd,gpr_wen,alu_valid,alu_sel,a,b,r2_id,fencei
 );
 ysyx_24110017_EXU EXU(clock,reset,
 		id_valid,ex_ready,ex_valid,wb_ready,
-		pc_id,imm,op,funct3,rd,gpr_wen,alu_valid,alu_sel,a,b,fencei,
+		pc_id,imm,op,funct3,rd,gpr_wen,alu_valid,alu_sel,a,b,r2_id,fencei,
 		ex,
 		ls_read,ls_write,ls_done,
 		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,ls_awsize,ls_arsize,ls_awlen,ls_arlen,ls_awburst,ls_arburst,
