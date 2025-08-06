@@ -20,7 +20,7 @@ module ysyx_24110017_EXU(
   input  wire [31:0] b_i,
   input  wire fencei_i,
 
-	output reg  [31:0]ex,
+	output reg  [31:0]ex_o,
 	output reg  ls_read_o,ls_write_o,
 	input  wire ls_done_i,
 	output reg  ls_valid_o,ls_wen_o,
@@ -50,7 +50,7 @@ always @(posedge clk or posedge rst) begin
   else begin
 		case (state)
 			IDLE:  state <= (id_valid_i && ex_ready_o) ? WAIT : state;
-			WAIT:  state <= ((!al_valid) && (!ls_valid_o)) ? READY : (al_done) ? READY : (ls_done_i) ? READY : state;
+			WAIT:  state <= ((!al_valid_i) && (!ls_valid_o)) ? READY : (al_done) ? READY : (ls_done_i) ? READY : state;
 			READY: state <= (ex_valid_o && wb_ready_i) ? DONE : state;
 			DONE:  state <= IDLE;
 		endcase
@@ -63,7 +63,7 @@ always @(posedge clk or posedge rst) begin
 		ex_ready_o		<= 1'b0;
 		ex_o					<= 32'h0;
 		al_start			<= 1'b0;
-		al_res_o			<= 32'b0;
+		al_res				<= 32'b0;
 		dnpc_o				<= pc_i + 4;
 		gpr_wen_o			<= 1'b0;
 		mepc_o				<= 32'h0;
