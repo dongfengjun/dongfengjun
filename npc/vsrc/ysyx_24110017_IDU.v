@@ -2,8 +2,8 @@
 module ysyx_24110017_IDU(
 	input	 wire clk,
 	input  wire rst,
-	output wire rs1_o,
-	output wire rs2_o,
+	output wire [ 4:0] rs1_o,
+	output wire [ 4:0] rs2_o,
 	input  wire [31:0] r1_i,
 	input  wire [31:0] r2_i,
 
