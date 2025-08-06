@@ -181,7 +181,7 @@ assign alu_sel =  ((op == 7'b0010011 && funct3 == 3'b000) || (op == 7'b0110011 &
 							(op == 7'b0110011 && ((funct3 == 3'b110 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? REM 
 							: 4'b1111;
 
-assign fencei_o = (inst_i == 32'b00000000000000000001000000001111);
+assign fencei = (inst_i == 32'b00000000000000000001000000001111);
 
 
 /***DPIC*etrace***/
