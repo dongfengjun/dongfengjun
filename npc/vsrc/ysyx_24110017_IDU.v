@@ -95,7 +95,7 @@ always@(posedge clk or posedge rst) begin
 	    alu_sel_o   <= alu_sel;
 	    a_o         <= a;
 	    b_o         <= b;
-			r2_o				<= r2;
+			r2_o				<= r2_i;
 			fencei_o		<= fencei;
 		end
 	end
