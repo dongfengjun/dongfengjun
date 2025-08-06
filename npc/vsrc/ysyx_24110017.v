@@ -97,7 +97,7 @@ wire [6:0] op;
 wire [2:0] funct3;
 wire [4:0] rd;
 wire gpr_wen,alu_valid;
-wire [2:0] alu_sel;
+wire [3:0] alu_sel;
 wire [31:0] a,b,r1_id,r2_id;
 wire fencei;
 /***EXU***/
