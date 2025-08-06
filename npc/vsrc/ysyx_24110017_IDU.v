@@ -35,9 +35,7 @@ parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
 always @(posedge clk or posedge rst) begin
-	if(rst) begin
-		state = IDLE;
-	end
+	if(rst) state <= IDLE;
   else begin
 		case (state)
 			IDLE: state <= (if_valid_i && id_ready_o) ? WAIT : state;
