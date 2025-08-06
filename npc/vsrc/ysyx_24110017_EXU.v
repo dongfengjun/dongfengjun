@@ -108,28 +108,28 @@ always @(posedge clk or posedge rst) begin
 				if(ls_done_i) begin
 					ls_read_o		<= 1'b0;
 					ls_write_o	<= 1'b0;
-					ram_rdata_o <= ls_rdata;
+					ram_rdata_reg <= ls_rdata;
 				end
 			end
 			READY: begin
-				ex_valid <= 1'b1;
+				ex_valid_o <= 1'b1;
 				if(ex_valid_o && wb_ready_i) begin
 					ex_valid_o <= 1'b0;
-					ex_reg <= ex;
-					gpr_wen_reg <= gpr_wen;
+					ex_o <= ex;
+					gpr_wen_o <= gpr_wen;
 
-					mepc_reg <= mepc_w;
-					mstatus_reg <= mstatus_w;
-					mcause_reg <= mcause_w;
-					mtvec_reg <= mtvec_w;
-					mepc_wen_reg <= mepc_wen;
-					mstatus_wen_reg <= mstatus_wen;
-					mcause_wen_reg <= mcause_wen;
-					mtvec_wen_reg <= mtvec_wen;
+					mepc_o <= mepc_w;
+					mstatus_o <= mstatus_w;
+					mcause_o <= mcause_w;
+					mtvec_o <= mtvec_w;
+					mepc_wen_o <= mepc_wen;
+					mstatus_wen_o <= mstatus_wen;
+					mcause_wen_o <= mcause_wen;
+					mtvec_wen_o <= mtvec_wen;
 				end
 			end
 			DONE: begin
-				dnpc_reg <= dnpc;
+				dnpc_o <= dnpc;
 				al_res <= 32'h0;
 				ram_rdata_reg <= 32'h0;
 			end
