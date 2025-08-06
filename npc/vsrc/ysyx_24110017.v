@@ -96,7 +96,7 @@ wire [31:0]pc_id,imm;
 wire [6:0]op;
 wire [2:0]funct3;
 wire [4:0]rd;
-wire gpr_wen,alu_valid;4
+wire gpr_wen,alu_valid;
 wire [2:0]alu_sel;
 wire [31:0]a,b;
 wire fencei;
