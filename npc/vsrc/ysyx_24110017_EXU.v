@@ -1,166 +1,111 @@
 //`define YOSYS_STA
 module ysyx_24110017_EXU(
-	input clk,
-	input rst,
-	output [31:0]ex_o,
-	input id_valid_i,
-	output ex_ready_o,
-	output ex_valid_o,
-	input wb_ready_i,
-	input [6:0]op_i,
-	input [2:0]funct3_i,
-	input [31:0]imm_i,
-	input [6:0]funct7_i,
-	input [4:0]shamt_i,
-	input [31:0]r1_i,r2_i,
-/***ALU***/
-/***LSU_o***/
-	output ls_read_o,ls_write_o,
-	input ls_done_i,
-	output ls_valid_o,ls_wen_o,
-	output [31:0]ls_waddr_o,ls_wdata_o,ls_raddr_o,
-	output [3:0]ls_wmask_o,
-	output [2:0]ls_awsize_o,ls_arsize_o,
-	output [7:0]ls_awlen_o,ls_arlen_o,
-	output [1:0]ls_awburst_o,ls_arburst_o,
-	input [31:0]ls_rdata_i,
+	input  wire clk,
+	input  wire rst,
+
+	input  wire id_valid_i,
+	output reg  ex_ready_o,
+	output reg  ex_valid_o,
+	input  wire wb_ready_i,
+	
+  input  wire [31:0] pc_i,  //i.bit
+  input  wire [31:0] imm_i,
+  input  wire [ 6:0] op_i,
+  input  wire [ 2:0] funct3_i,
+  input  wire [ 4:0] rd_i,
+  input  wire gpr_wen_i,
+  input  wire alu_valid_i,
+  input  wire [ 3:0] alu_sel_i,
+  input  wire [31:0] a_i,
+  input  wire [31:0] b_i,
+  input  wire fencei_i,
+
+	output reg  ls_read_o,ls_write_o,
+	input  wire ls_done_i,
+	output reg  ls_valid_o,ls_wen_o,
+	output reg  [31:0]ls_waddr_o,ls_wdata_o,ls_raddr_o,
+	output reg  [ 3:0]ls_wmask_o,
+	output reg  [ 2:0]ls_awsize_o,ls_arsize_o,
+	output reg  [ 7:0]ls_awlen_o,ls_arlen_o,
+	output reg  [ 1:0]ls_awburst_o,ls_arburst_o,
+	input  wire [31:0]ls_rdata_i,
 /***BU***/
-	input [31:0]pc_i,
-	output [31:0]dnpc_o,
+	output reg  [31:0]dnpc_o,
 /***CSRU***/
-	input [31:0]mepc_i,mstatus_i,mcause_i,mtvec_i,
-	output [31:0]mepc_o,mstatus_o,mcause_o,mtvec_o,
-	output gpr_wen_o,mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o
+	input  wire [31:0]mepc_i,mstatus_i,mcause_i,mtvec_i,
+	output reg  [31:0]mepc_o,mstatus_o,mcause_o,mtvec_o,
+	output reg  gpr_wen_o,mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o
 );
 
 /***分布式控制***/
-reg ex_ready;
-assign ex_ready_o = ex_ready;
-reg ex_valid;
-assign ex_valid_o = ex_valid;
-
 reg al_start;
 wire al_done;
-reg ls_read_reg,ls_write_reg;
-assign ls_read_o = ls_read_reg;
-assign ls_write_o = ls_write_reg;
-reg [31:0]ex_reg;
-assign ex_o = ex_reg;
-reg [31:0]dnpc_reg;
-assign dnpc_o = dnpc_reg;
-reg gpr_wen_reg;
-assign gpr_wen_o = gpr_wen_reg;
-reg [31:0]mepc_reg,mstatus_reg,mcause_reg,mtvec_reg;
-reg mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg;
-assign mepc_o = mepc_reg;
-assign mstatus_o = mstatus_reg;
-assign mcause_o = mcause_reg;
-assign mtvec_o = mtvec_reg;
-assign mepc_wen_o = mepc_wen_reg;
-assign mstatus_wen_o = mstatus_wen_reg;
-assign mcause_wen_o = mcause_wen_reg;
-assign mtvec_wen_o = mtvec_wen_reg;
 reg [31:0]ram_rdata_reg;
 parameter IDLE = 2'b00,WAIT = 2'b01,READY = 2'b10,DONE=2'b11;
-reg [1:0]state,next_state;
+reg [1:0]state;
 
-always @(posedge clk) begin
-  if (rst) begin
-    state <= IDLE;
-  end
-	else begin
-    state <= next_state;
-  end
-end
-
-always @(*) begin
-  next_state = state;
-	if(rst) begin
-		next_state = IDLE;
-	end
+always @(posedge clk or posedge rst) begin
+	if(rst) state <= IDLE;
   else begin
 		case (state)
-			IDLE: begin
-				if(id_valid_i && ex_ready_o) begin
-					next_state = WAIT;
-				end
-			end
-			WAIT: begin
-				if((!al_valid) && (!ls_valid_o)) begin
-					next_state = READY;
-				end
-				if(al_done) begin
-					next_state = READY;
-				end
-				else if(ls_done_i) begin
-					next_state = READY;
-				end
-			end
-			READY: begin
-				if(ex_valid_o && wb_ready_i) begin
-					next_state = DONE;
-				end
-			end
-			DONE: begin
-				next_state = IDLE;
-			end
-			default: begin
-				next_state = IDLE; // 默认回到初始状态
-			end
+			IDLE:  state <= (id_valid_i && ex_ready_o) WAIT : state;
+			WAIT:  state <= ((!al_valid) && (!ls_valid_o)) READY : (al_done) ? READY : (ls_done_i) ? READY : state;
+			READY: state <= (ex_valid_o && wb_ready_i) DONE : state;
+			DONE:  state <= IDLE : state;
 		endcase
 	end
 end
 
-always @(posedge clk) begin
+always @(posedge clk posedge rst) begin
 	if(rst) begin
-		ex_valid <= 1'b0;
-		ex_ready <= 1'b0;
-		ex_reg <= 32'h0;
-		al_start <= 1'b0;
-		al_res <= 32'b0;
-		dnpc_reg <= pc_i + 4;
-		gpr_wen_reg <= 1'b0;
-		mepc_reg <= 32'h0;
-    mstatus_reg <= 32'h0;
-    mcause_reg <= 32'h0;
-    mtvec_reg <= 32'h0;
-    mepc_wen_reg <= 1'b0;
-    mstatus_wen_reg <= 1'b0;
-    mcause_wen_reg <= 1'b0;
-    mtvec_wen_reg <= 1'b0;
-		ls_read_reg <= 1'b0;
-		ls_write_reg <= 1'b0;
-		ram_rdata_reg <= 32'h0;
+		ex_valid_o		<= 1'b0;
+		ex_ready_o		<= 1'b0;
+		ex_o					<= 32'h0;
+		al_start			<= 1'b0;
+		al_res_o			<= 32'b0;
+		dnpc_o				<= pc_i + 4;
+		gpr_wen_o			<= 1'b0;
+		mepc_o				<= 32'h0;
+    mstatus_o			<= 32'h0;
+    mcause_o			<= 32'h0;
+    mtvec_o				<= 32'h0;
+    mepc_wen_o		<= 1'b0;
+    mstatus_wen_o <= 1'b0;
+    mcause_wen_o	<= 1'b0;
+    mtvec_wen_o		<= 1'b0;
+		ls_read_o			<= 1'b0;
+		ls_write_o		<= 1'b0;
+		ram_rdata_o		<= 32'h0;
 	end
 	else begin
 		case (state)
 			IDLE: begin
 				if(id_valid_i) begin //判断条件
-					ex_ready <= 1'b1;
+					ex_ready_o	<= 1'b1;
 				end
 				if(id_valid_i && ex_ready_o) begin
-					ex_ready <= 1'b0;
+					ex_ready_o	<= 1'b0;
 				end
 			end
 			WAIT: begin
-				if(al_valid) begin
-					al_start <= 1'b1;
+				if(al_valid_i) begin
+					al_start		<= 1'b1;
 				end
 				if(al_done) begin
-					al_start <= 1'b0;
-					al_res <= res;
+					al_start		<= 1'b0;
+					al_res			<= res;
 				end
 				if(ls_valid_o && (!ls_wen_o)) begin
-					ex_reg <= 32'h0;
-					ls_read_reg <= 1'b1;
+					ex_o				<= 32'h0;
+					ls_read_o		<= 1'b1;
 				end
 				if(ls_wen_o) begin
-					ls_write_reg <= 1'b1;
+					ls_write_o	<= 1'b1;
 				end
 				if(ls_done_i) begin
-					ls_read_reg <= 1'b0;
-					ls_write_reg <= 1'b0;
-					ram_rdata_reg <= ls_rdata;
+					ls_read_o		<= 1'b0;
+					ls_write_o	<= 1'b0;
+					ram_rdata_o <= ls_rdata;
 				end
 			end
 			READY: begin
@@ -189,51 +134,7 @@ always @(posedge clk) begin
 	end
 end
 
-/***FU***/
-/***ALU***/
-wire al_valid = (op_i == 7'b0010011) || (op_i == 7'b0110011);
-reg [31:0]al_res;
-wire [3:0]sel;
-wire [31:0]x,y,res;
-assign x = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111) || (op_i == 7'b0110011) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r1_i 
-	: ((op_i == 7'b0010011 && funct3_i == 3'b010) || ((op_i == 7'b0110011) && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b001 && funct7_i == 7'b0000001) || (funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b110 && funct7_i == 7'b0000001)))) ? $signed(r1_i) 
-	: 32'b0;
-assign y = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? imm_i 
-	: ((op_i == 7'b0010011) && (funct3_i == 3'b010)) ? $signed(imm_i) 
-	: ((op_i == 7'b0010011) && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {27'b0,shamt_i} 
-	: ((op_i == 7'b0110011) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r2_i
-	: ((op_i == 7'b0110011 && ((funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000)))) ? {27'b0,r2_i[4:0]}
-	: ((op_i == 7'b0110011) && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b001 && funct7_i == 7'b0000001) || (funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b110 && funct7_i == 7'b0000001))) ? $signed(r2_i)
-	: 32'b0;
-localparam ADD  = 4'b0000;
-localparam SUB  = 4'b0001;
-localparam SLL  = 4'b0010;
-localparam SRL  = 4'b0011;
-localparam SRA  = 4'b0100;
-localparam SLT  = 4'b0101;
-localparam AND  = 4'b0110;
-localparam OR   = 4'b0111;
-localparam XOR  = 4'b1000;
-localparam MUL  = 4'b1001;
-localparam MULH = 4'b1010;
-localparam DIV  = 4'b1011;
-localparam REM  = 4'b1100;
-assign sel =  ((op_i == 7'b0010011 && funct3_i == 3'b000) || (op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0000000)) ? ADD : 
-							(op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0100000) ? SUB :
-						  ((op_i == 7'b0010011 && funct3_i == 3'b001) || (op_i == 7'b0110011 && (funct3_i == 3'b001 && funct7_i == 7'b0000000))) ? SLL :
-							((op_i == 7'b0010011 &&(funct3_i == 3'b010 || funct3_i == 3'b011)) || (op_i == 7'b0110011 && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000)))) ? SLT :
-							((op_i == 7'b0010011 && funct3_i == 3'b100) || (op_i == 7'b0110011 && (funct3_i == 3'b100 && funct7_i == 7'b0000000))) ? XOR :
-							((op_i == 7'b0010011 && funct3_i == 3'b101 && funct7_i == 7'b0000000) || (op_i == 7'b0110011 && funct3_i == 3'b101 && funct7_i == 7'b0000000)) ? SRL :
-							((op_i == 7'b0010011 && funct3_i == 3'b101 && funct7_i == 7'b0100000) || (op_i == 7'b0110011 && funct3_i == 3'b101 && funct7_i == 7'b0100000)) ? SRA :
-							((op_i == 7'b0010011 && funct3_i == 3'b110) || (op_i == 7'b0110011 && funct3_i == 3'b110 && funct7_i == 7'b0000000)) ? OR : 
-							((op_i == 7'b0010011 && funct3_i == 3'b111) || (op_i == 7'b0110011 && funct3_i == 3'b111 && funct7_i == 7'b0000000)) ? AND : 
-							(op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0000001) ? MUL :
-							(op_i == 7'b0110011 && funct3_i == 3'b001 && funct7_i == 7'b0000001) ? MULH :
-							(op_i == 7'b0110011 && ((funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001))) ? DIV :
-							(op_i == 7'b0110011 && ((funct3_i == 3'b110 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? REM 
-							: 4'b1111;
-
-ysyx_24110017_ALU ALU(clk,rst,x,y,sel,al_start,res,al_done);
+ysyx_24110017_ALU ALU(clk,rst,a_i,b_i,al_sel_i,al_start,res,al_done);
 
 assign ex = 
 				({32{op_i == 7'b0010011}}/***I*addi~srai***/
@@ -348,9 +249,6 @@ wire [31:0]dnpc = (jalen) ? (pc_i + offset)	//jal
 	: (ecall_en) ? mtvec_i  //ecall
 	: (mret_en) ? mepc_i  //mret
 	: pc_i + 4;
-
-/***riscv32e_regs_controller***/
-wire gpr_wen = (op_i == 7'b0110111 || op_i == 7'b0010111 || op_i == 7'b1101111 || op_i == 7'b1100111 || op_i == 7'b0010011 || op_i == 7'b0001111 || op_i == 7'b1110011 || op_i == 7'b0110011 || op_i == 7'b0000011) ? 1'b1 : 1'b0;
 
 endmodule
 
