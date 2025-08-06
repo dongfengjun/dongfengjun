@@ -2,6 +2,7 @@ module ysyx_24110017_IFU(
 	input  wire clk,
 	input  wire rst,
 	input  wire [31:0] pc_i,
+	output reg  [31:0] pc_o,
 	output reg  [31:0] inst_o,
 
 	input  wire pc_valid_i,
@@ -53,7 +54,7 @@ always @(posedge clk or posedge rst) begin
   else begin
 		if(if_valid_o && id_ready_i) begin
 			pc_o	 <= pc_i;
-			inst_o <= if_axi_rdata;
+			inst_o <= axi_rdata_reg;
 		end
 	end
 end
@@ -79,7 +80,7 @@ always @(posedge clk or posedge rst) begin
 	else begin
 		case(state)
 			IDLE  : state <= (pc_valid_i) ? FETCH : state;
-			FETCH : state <= (if_axi_rvalid && if_axi_rready) ? IDLE : state;
+			FETCH : state <= (if_axi_rvalid_i && if_axi_rready_o) ? IDLE : state;
 		endcase
 	end
 end
