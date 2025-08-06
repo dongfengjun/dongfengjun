@@ -51,7 +51,7 @@ always @(posedge clk or posedge rst) begin
 			IDLE:  state <= (id_valid_i && ex_ready_o) ? WAIT : state;
 			WAIT:  state <= ((!al_valid) && (!ls_valid_o)) ? READY : (al_done) ? READY : (ls_done_i) ? READY : state;
 			READY: state <= (ex_valid_o && wb_ready_i) ? DONE : state;
-			DONE:  state <= IDLE : state;
+			DONE:  state <= IDLE;
 		endcase
 	end
 end
