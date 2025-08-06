@@ -53,9 +53,11 @@ always @(posedge clk or posedge rst) begin
 		case (state)
 			IDLE: begin
 				id_ready_o <= 1'b1;
+				if(if_valid_i && id_ready_o) begin
+					id_ready_o <= 1'b0;
+				end
 			end
 			WAIT: begin
-				id_ready_o <= 1'b0;
 				id_valid_o <= 1'b1;
 				if(id_valid_o && ex_ready_i) begin
 					id_valid_o <= 1'b0;
