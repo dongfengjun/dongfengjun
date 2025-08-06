@@ -101,14 +101,16 @@ wire [2:0]alu_sel;
 wire [31:0]a,b;
 wire fencei;
 /***EXU***/
-wire ls_read,ls_write,ls_done,ex_valid,wb_ready;
+wire ex_ready,ex_valid;
 wire [31:0]ex;
+wire ls_read,ls_write,ls_done;
 wire ls_valid,ls_wen;
 wire [31:0]ls_waddr,ls_wdata,ls_raddr;
 wire [3:0]ls_wmask;
 wire [2:0]ls_awsize,ls_arsize;
 wire [7:0]ls_awlen,ls_arlen;
 wire [1:0]ls_awburst,ls_arburst;
+wire [31:0]dnpc;
 wire [31:0]mepc,o_mepc,mstatus,o_mstatus,mcause,o_mcause,mtvec,o_mtvec;
 wire gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
 /***LSU***/

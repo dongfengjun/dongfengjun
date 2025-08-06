@@ -20,6 +20,7 @@ module ysyx_24110017_EXU(
   input  wire [31:0] b_i,
   input  wire fencei_i,
 
+	output reg  [31:0]ex,
 	output reg  ls_read_o,ls_write_o,
 	input  wire ls_done_i,
 	output reg  ls_valid_o,ls_wen_o,
