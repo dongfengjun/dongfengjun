@@ -56,7 +56,7 @@ always @(posedge clk or posedge rst) begin
 	end
 end
 
-always @(posedge clk posedge rst) begin
+always @(posedge clk or posedge rst) begin
 	if(rst) begin
 		ex_valid_o		<= 1'b0;
 		ex_ready_o		<= 1'b0;
