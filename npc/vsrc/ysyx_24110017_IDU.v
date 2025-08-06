@@ -4,8 +4,8 @@ module ysyx_24110017_IDU(
 	input  wire rst,
 	output wire rs1_o,
 	output wire rs2_o,
-	input  wire r1_i,
-	input  wire r2_i,
+	input  wire [31:0] r1_i,
+	input  wire [31:0] r2_i,
 
 	input  wire if_valid_i,		//valid
 	output reg  id_ready_o,
