@@ -57,7 +57,8 @@ always @(posedge clk or posedge rst) begin
 	end
 end
 
-reg [31:0]al_res;
+wire [31:0]res;
+reg  [31:0]al_res;
 always @(posedge clk or posedge rst) begin
 	if(rst) begin
 		ex_valid_o		<= 1'b0;
