@@ -193,7 +193,6 @@ end
 /***ALU***/
 wire al_valid = (op_i == 7'b0010011) || (op_i == 7'b0110011);
 reg [31:0]al_res;
-wire [31:0]a,b,ex;
 wire [3:0]sel;
 wire [31:0]x,y,res;
 assign x = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111) || (op_i == 7'b0110011) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r1_i 
@@ -248,7 +247,7 @@ assign ex =
 					)
 				)
 			|
-/***BU***/
+/*********/
 				({32{(op_i == 7'b1101111)}} & (pc_i + 4)) | //I_jal
 				({32{(op_i == 7'b1100111)}} & (pc_i + 4)) | //I_jalr
 				({32{(op_i == 7'b0110111)}} & imm_i) | //U_lui

@@ -1,14 +1,16 @@
 module ysyx_24110017_IFU(
 	input  wire clk,
 	input  wire rst,
-	input  wire [31:0] pc_i,
-	output reg  [31:0] pc_o,
-	output reg  [31:0] inst_o,
 
 	input  wire pc_valid_i,
 	output reg  if_ready_o,
 	output wire if_valid_o,
 	input  wire id_ready_i,
+
+  input  wire [31:0] pc_i,
+	
+  output reg  [31:0] pc_o,
+  output reg  [31:0] inst_o,
 /***AXI4_W**/
 	input  wire if_axi_awready_i,
 	output wire if_axi_awvalid_o,

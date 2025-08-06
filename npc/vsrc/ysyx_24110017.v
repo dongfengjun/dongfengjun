@@ -148,7 +148,8 @@ ysyx_24110017_PCU PCU(clock,reset,
 		if_ready
 );
 ysyx_24110017_IFU IFU(clock,reset,
-		pc,pc_if,inst_if,pc_valid,if_ready,if_valid,id_ready,
+		pc_valid,if_ready,if_valid,id_ready,
+		pc,pc_if,inst,
 		if_axi_awready,if_axi_awvalid,if_axi_awid,if_axi_awaddr,
 		if_axi_awlen,if_axi_awsize,if_axi_awburst,
 		if_axi_wready,if_axi_wvalid,if_axi_wdata,if_axi_wstrb,if_axi_wlast,
