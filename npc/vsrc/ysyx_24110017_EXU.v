@@ -50,7 +50,7 @@ always @(posedge clk or posedge rst) begin
   else begin
 		case (state)
 			IDLE:  state <= (id_valid_i && ex_ready_o) ? WAIT : state;
-			WAIT:  state <= ((!al_valid_i) && (!ls_valid_o)) ? READY : (al_done) ? READY : (ls_done_i) ? READY : state;
+			WAIT:  state <= ((!alu_valid_i) && (!ls_valid_o)) ? READY : (al_done) ? READY : (ls_done_i) ? READY : state;
 			READY: state <= (ex_valid_o && wb_ready_i) ? DONE : state;
 			DONE:  state <= IDLE;
 		endcase
