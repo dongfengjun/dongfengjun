@@ -139,6 +139,7 @@ end
 
 ysyx_24110017_ALU ALU(clk,rst,a_i,b_i,al_sel_i,al_start,res,al_done);
 
+wire [31:0]ex;
 assign ex = 
 				({32{op_i == 7'b0010011}}/***I*addi~srai***/
 				& (
