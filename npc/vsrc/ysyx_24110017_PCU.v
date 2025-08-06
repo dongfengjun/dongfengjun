@@ -9,22 +9,22 @@ module ysyx_24110017_PCU(
 );
 
 assign pc_valid_o = 1'b1;
-parameter IDLE = 1'b0,WAIT_READY = 1'b1;
+parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
 always @(posedge clk or posedge rst) begin
 	if(rst) state <= IDLE;
   else begin
 		case (state)
-			IDLE:				state	<= (pc_valid_o) ?								WAIT_READY : state;
-			WAIT_READY: state <= (pc_valid_o && if_ready_i) ? IDLE			 : state;
+			IDLE:				state	<= (pc_valid_o) ?					WAIT : state;
+			WAIT: state <= (pc_valid_o && if_ready_i) ? IDLE : state;
 		endcase
 	end
 end
 
 always @(posedge clk or posedge rst) begin
 	if(rst) begin
-		pc_o								<= 32'h30000000; //flash
+		pc_o <= 32'h30000000; //flash
 	end
 	else begin
 		case (state)
@@ -39,7 +39,7 @@ always @(posedge clk or posedge rst) begin
 `endif
 				end
 			end
-			WAIT_READY: begin
+			WAIT: begin
 				if(pc_valid_o && if_ready_i) begin
 					pc_o				<= pc_o + 4;
 				end

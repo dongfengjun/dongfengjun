@@ -43,8 +43,19 @@ module ysyx_24110017_IFU(
 );
 
 /***分布式控制***/
-assign if_valid_o = (state == IDLE);
-assign if_ready_o = (state == IDLE);
+assign if_ready_o = (state == IDLE && axi_state == AXI_IDLE);
+assign if_valid_o = (state == WAIT || if_axi_rvalid_i && if_axi_rready_o);
+parameter IDLE = 1'b0,WAIT = 1'b1;
+reg state;
+
+always @(posedge clk or posedge rst) begin
+	if(rst) state <= IDLE;
+	else begin
+		case(state)
+			IDLE: state <= (if_axi_rvalid_i && if_axi_rready_o) ? WAIT : state;
+			WAIT:	state <= (if_valid_o && id_ready_i) ? IDLE : state;
+		endcase
+	end
 
 always @(posedge clk or posedge rst) begin
 	if(rst) begin
@@ -71,16 +82,16 @@ assign if_axi_awburst_o = 0;
 assign if_axi_wstrb_o = 0;
 assign if_axi_bready_o = 0;
 
-parameter IDLE=1'b0,FETCH=1'b1;
-reg state;
+parameter AXI_IDLE = 1'b0,AXI_FETCH = 1'b1;
+reg axi_state;
 reg [31:0] axi_rdata_reg;
 
 always @(posedge clk or posedge rst) begin
-	if(rst) state <= IDLE;
+	if(rst) axi_state <= AXI_IDLE;
 	else begin
-		case(state)
-			IDLE  : state <= (pc_valid_i) ? FETCH : state;
-			FETCH : state <= (if_axi_rvalid_i && if_axi_rready_o) ? IDLE : state;
+		case(axi_state)
+			AXI_IDLE  : axi_state <= (pc_valid_i) ? AXI_FETCH : axi_state;
+			AXI_FETCH : axi_state <= (if_axi_rvalid_i && if_axi_rready_o) ? AXI_IDLE : axi_state;
 		endcase
 	end
 end
@@ -96,14 +107,14 @@ always @(posedge clk or posedge rst) begin
 					if_axi_arburst_o <= 2'b0;
         end 
 				else begin
-            case (state)
-                IDLE: begin
-                    if(pc_valid_i) begin
+            case (axi_state)
+                AXI_IDLE: begin
+                    if(pc_valid_i && if_ready_o) begin
 											if_axi_arvalid_o <= 1'b1;
 											if_axi_araddr_o  <= pc_i;
                     end
                 end
-                FETCH: begin
+                AXI_FETCH: begin
                     if(if_axi_arvalid_o && if_axi_arready_i) begin
                       if_axi_arvalid_o <= 1'b0;
 										end
