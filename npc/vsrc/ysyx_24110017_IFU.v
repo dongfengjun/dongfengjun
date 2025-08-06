@@ -6,7 +6,7 @@ module ysyx_24110017_IFU(
 	output reg  [31:0] inst_o,
 
 	input  wire pc_valid_i,
-	output wire if_ready_o,
+	output reg  if_ready_o,
 	output wire if_valid_o,
 	input  wire id_ready_i,
 /***AXI4_W**/
@@ -43,7 +43,6 @@ module ysyx_24110017_IFU(
 );
 
 /***分布式控制***/
-assign if_ready_o = (state == IDLE && axi_state == AXI_IDLE);
 assign if_valid_o = (state == WAIT || if_axi_rvalid_i && if_axi_rready_o);
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
@@ -60,10 +59,17 @@ end
 
 always @(posedge clk or posedge rst) begin
 	if(rst) begin
+		if_ready_o <= 1'b1;
 		pc_o	 <= 32'h0;
 		inst_o <= 32'h0;
 	end
   else begin
+		if(pc_valid_i && if_ready_o) begin
+			if_ready_o <= 1'b0;
+		end
+		if(axi_state == AXI_IDLE && if_valid_o && id_ready_i) begin
+			if_ready_o <= 1'b1;
+		end
 		if(if_valid_o && id_ready_i) begin
 			pc_o	 <= pc_i;
 			inst_o <= axi_rdata_reg;
@@ -118,9 +124,7 @@ always @(posedge clk or posedge rst) begin
                 AXI_FETCH: begin
                     if(if_axi_arvalid_o && if_axi_arready_i) begin
                       if_axi_arvalid_o <= 1'b0;
-										end
-										if(if_axi_rvalid_i  && !if_axi_rready_o) begin
-											if_axi_rready_o <= 1'b1;
+											if_axi_rready_o  <= 1'b1;
 										end
                     if(if_axi_rvalid_i && if_axi_rready_o) begin
                       if_axi_rready_o <= 1'b0;
