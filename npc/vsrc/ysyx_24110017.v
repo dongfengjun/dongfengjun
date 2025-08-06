@@ -181,7 +181,7 @@ ysyx_24110017_IDU IDU(clock,reset,
 		rs1,rs2,r1,r2,
 		if_valid,id_ready,id_valid,ex_ready,
 		pc_if,inst,
-		pc_id,imm,op,funct3,rd,gpr_wen,alu_valid,alu_sel,a,b,r2_id,fencei
+		pc_id,imm,op,funct3,rd,gpr_wen,alu_valid,alu_sel,a,b,r1_id,r2_id,fencei
 );
 ysyx_24110017_EXU EXU(clock,reset,
 		id_valid,ex_ready,ex_valid,wb_ready,
