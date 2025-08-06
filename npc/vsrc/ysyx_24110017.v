@@ -174,7 +174,7 @@ ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei, //w < n
     icache_axi_rready,icache_axi_rvalid,icache_axi_rid,icache_axi_rdata,icache_axi_rresp,icache_axi_rlast
 );
 ysyx_24110017_IDU IDU(clock,reset,
-		inst,if_valid,id_ready,id_valid,ex_ready,
+		inst_if,if_valid,id_ready,id_valid,ex_ready,
 		op,rd,funct3,rs1,rs2,imm,funct7,shamt,fencei
 );
 ysyx_24110017_EXU EXU(clock,reset,ex,
