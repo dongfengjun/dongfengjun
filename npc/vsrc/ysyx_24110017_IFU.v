@@ -6,8 +6,8 @@ module ysyx_24110017_IFU(
 	output reg  [31:0] inst_o,
 
 	input  wire pc_valid_i,
-	output reg  if_ready_o,
-	output reg  if_valid_o,
+	output wire if_ready_o,
+	output wire if_valid_o,
 	input  wire id_ready_i,
 /***AXI4_W**/
 	input  wire if_axi_awready_i,

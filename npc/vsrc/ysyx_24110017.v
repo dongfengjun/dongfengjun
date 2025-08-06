@@ -1,92 +1,92 @@
 //`define YOSYS_STA
 module ysyx_24110017(
-	input clock,
-	input reset,
-	input io_interrupt,
-	input io_master_awready,
-	output io_master_awvalid,
-	output [3:0]io_master_awid,
-	output [31:0]io_master_awaddr,
-	output [7:0]io_master_awlen,
-	output [2:0]io_master_awsize,
-	output [1:0]io_master_awburst,
-	input io_master_wready,
-	output io_master_wvalid,
-	output [31:0]io_master_wdata,
-	output [3:0]io_master_wstrb,
-	output io_master_wlast,
-	output io_master_bready,
-	input io_master_bvalid,
-	input [3:0]io_master_bid,
-	input [1:0]io_master_bresp,
-	input io_master_arready,
-	output io_master_arvalid,
-	output [3:0]io_master_arid,
-	output [31:0]io_master_araddr,
-	output [7:0]io_master_arlen,
-	output [2:0]io_master_arsize,
-	output [1:0]io_master_arburst,
-	output io_master_rready,
-	input io_master_rvalid,
-	input [3:0]io_master_rid,
-	input [31:0]io_master_rdata,
-	input [1:0]io_master_rresp,
-	input io_master_rlast,
-	output io_slave_awready,
-	input io_slave_awvalid,
-	input [3:0]io_slave_awid,
-	input [31:0]io_slave_awaddr,
-	input [7:0]io_slave_awlen,
-	input [2:0]io_slave_awsize,
-	input [1:0]io_slave_awburst,
-	output io_slave_wready,
-	input io_slave_wvalid,
-	input [31:0]io_slave_wdata,
-	input [3:0]io_slave_wstrb,
-	input io_slave_wlast,
-	input io_slave_bready,
-	output io_slave_bvalid,
-	output [3:0]io_slave_bid,
-	output [1:0]io_slave_bresp,
-	output io_slave_arready,
-	input io_slave_arvalid,
-	input [3:0]io_slave_arid,
-	input [31:0]io_slave_araddr,
-	input [7:0]io_slave_arlen,
-	input [2:0]io_slave_arsize,
-	input [1:0]io_slave_arburst,
-	input io_slave_rready,
-	output io_slave_rvalid,
-	output [3:0]io_slave_rid,
-	output [31:0]io_slave_rdata,
-	output [1:0]io_slave_rresp,
-	output io_slave_rlast
+	input	 wire clock,
+	input	 wire reset,
+	input	 wire io_interrupt,
+	input	 wire io_master_awready,
+	output wire io_master_awvalid,
+	output wire [ 3:0] io_master_awid,
+	output wire [31:0] io_master_awaddr,
+	output wire [ 7:0] io_master_awlen,
+	output wire [ 2:0] io_master_awsize,
+	output wire [ 1:0] io_master_awburst,
+	input  wire io_master_wready,
+	output wire io_master_wvalid,
+	output wire [31:0] io_master_wdata,
+	output wire [ 3:0] io_master_wstrb,
+	output wire io_master_wlast,
+	output wire io_master_bready,
+	input  wire io_master_bvalid,
+	input  wire [ 3:0] io_master_bid,
+	input  wire [ 1:0] io_master_bresp,
+	input  wire io_master_arready,
+	output wire io_master_arvalid,
+	output wire [ 3:0] io_master_arid,
+	output wire [31:0] io_master_araddr,
+	output wire [ 7:0] io_master_arlen,
+	output wire [ 2:0] io_master_arsize,
+	output wire [ 1:0] io_master_arburst,
+	output wire io_master_rready,
+	input  wire io_master_rvalid,
+	input  wire [ 3:0] io_master_rid,
+	input  wire [31:0] io_master_rdata,
+	input  wire [ 1:0] io_master_rresp,
+	input  wire io_master_rlast,
+	output wire io_slave_awready,
+	input  wire io_slave_awvalid,
+	input  wire [ 3:0] io_slave_awid,
+	input  wire [31:0] io_slave_awaddr,
+	input  wire [ 7:0] io_slave_awlen,
+	input  wire [ 2:0] io_slave_awsize,
+	input  wire [ 1:0] io_slave_awburst,
+	output wire io_slave_wready,
+	input  wire io_slave_wvalid,
+	input  wire [31:0] io_slave_wdata,
+	input  wire [ 3:0] io_slave_wstrb,
+	input  wire io_slave_wlast,
+	input  wire io_slave_bready,
+	output wire io_slave_bvalid,
+	output wire [ 3:0] io_slave_bid,
+	output wire [ 1:0] io_slave_bresp,
+	output wire io_slave_arready,
+	input  wire io_slave_arvalid,
+	input  wire [ 3:0] io_slave_arid,
+	input  wire [31:0] io_slave_araddr,
+	input  wire [ 7:0] io_slave_arlen,
+	input  wire [ 2:0] io_slave_arsize,
+	input  wire [ 1:0] io_slave_arburst,
+	input  wire io_slave_rready,
+	output wire io_slave_rvalid,
+	output wire [ 3:0] io_slave_rid,
+	output wire [31:0] io_slave_rdata,
+	output wire [ 1:0] io_slave_rresp,
+	output wire io_slave_rlast
 );
 
 wire DIFFTEST = difftest;
 /***PCU***/
-wire [31:0]pc;
-wire [31:0]dnpc;
+wire [31:0] pc;
+wire [31:0] dnpc;
 wire pc_valid,if_ready; //分布式控制
 /***IFU***/
-wire [31:0]inst;
+wire [31:0]inst_if,pc_if;
 wire if_valid,id_ready; //分布式控制
 wire [31:0]if_axi_awaddr,if_axi_wdata,if_axi_araddr,if_axi_rdata;
-wire [3:0]if_axi_wstrb;
-wire [7:0]if_axi_awlen,if_axi_arlen;
-wire [3:0]if_axi_awid,if_axi_bid,if_axi_arid,if_axi_rid;
-wire [2:0]if_axi_awsize,if_axi_arsize;
-wire [1:0]if_axi_awburst,if_axi_arburst;
-wire [1:0]if_axi_bresp,if_axi_rresp;
+wire [ 3:0]if_axi_wstrb;
+wire [ 7:0]if_axi_awlen,if_axi_arlen;
+wire [ 3:0]if_axi_awid,if_axi_bid,if_axi_arid,if_axi_rid;
+wire [ 2:0]if_axi_awsize,if_axi_arsize;
+wire [ 1:0]if_axi_awburst,if_axi_arburst;
+wire [ 1:0]if_axi_bresp,if_axi_rresp;
 wire if_axi_awvalid,if_axi_awready,if_axi_wvalid,if_axi_wready,if_axi_bvalid,if_axi_bready,if_axi_arvalid,if_axi_arready,if_axi_rvalid,if_axi_rready,if_axi_wlast,if_axi_rlast;
 /***ICACHE***/
 wire [31:0]icache_axi_awaddr,icache_axi_wdata,icache_axi_araddr,icache_axi_rdata;
-wire [3:0]icache_axi_wstrb;
-wire [7:0]icache_axi_awlen,icache_axi_arlen;
-wire [3:0]icache_axi_awid,icache_axi_bid,icache_axi_arid,icache_axi_rid;
-wire [2:0]icache_axi_awsize,icache_axi_arsize;
-wire [1:0]icache_axi_awburst,icache_axi_arburst;
-wire [1:0]icache_axi_bresp,icache_axi_rresp;
+wire [ 3:0]icache_axi_wstrb;
+wire [ 7:0]icache_axi_awlen,icache_axi_arlen;
+wire [ 3:0]icache_axi_awid,icache_axi_bid,icache_axi_arid,icache_axi_rid;
+wire [ 2:0]icache_axi_awsize,icache_axi_arsize;
+wire [ 1:0]icache_axi_awburst,icache_axi_arburst;
+wire [ 1:0]icache_axi_bresp,icache_axi_rresp;
 wire icache_axi_awvalid,icache_axi_awready,icache_axi_wvalid,icache_axi_wready,icache_axi_bvalid,icache_axi_bready,icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,icache_axi_wlast,icache_axi_rlast;
 /***IDU***/
 wire id_valid,ex_ready; //分布式控制
@@ -121,26 +121,6 @@ wire [1:0]ls_axi_awburst,ls_axi_arburst;
 wire [1:0]ls_axi_bresp,ls_axi_rresp;
 wire ls_axi_awvalid,ls_axi_awready,ls_axi_wvalid,ls_axi_wready,ls_axi_bvalid,ls_axi_bready,ls_axi_arvalid,ls_axi_arready,ls_axi_rvalid,ls_axi_rready,ls_axi_wlast,ls_axi_rlast;
 /***Arbiter-Xbar***/
-/***My-Sram***
-wire [31:0]S_AXI_AWADDR,S_AXI_WDATA,S_AXI_ARADDR,S_AXI_RDATA;
-wire [3:0]S_AXI_WSTRB;
-wire [7:0]S_AXI_AWLEN,S_AXI_ARLEN;
-wire [3:0]S_AXI_AWID,S_AXI_BID,S_AXI_ARID,S_AXI_RID;
-wire [2:0]S_AXI_AWSIZE,S_AXI_ARSIZE;
-wire [1:0]S_AXI_AWBURST,S_AXI_ARBURST;
-wire [1:0]S_AXI_BRESP,S_AXI_RRESP;
-wire S_AXI_AWVALID,S_AXI_AWREADY,S_AXI_WVALID,S_AXI_WREADY,S_AXI_BVALID,S_AXI_BREADY,S_AXI_ARVALID,S_AXI_ARREADY,S_AXI_RVALID,S_AXI_RREADY,S_AXI_WLAST,S_AXI_RLAST;
-***/
-/***My-Uart***
-wire [31:0]U_AXI_AWADDR,U_AXI_WDATA,U_AXI_ARADDR,U_AXI_RDATA;
-wire [3:0]U_AXI_WSTRB;
-wire [7:0]U_AXI_AWLEN,U_AXI_ARLEN;
-wire [3:0]U_AXI_AWID,U_AXI_BID,U_AXI_ARID,U_AXI_RID;
-wire [2:0]U_AXI_AWSIZE,U_AXI_ARSIZE;
-wire [1:0]U_AXI_AWBURST,U_AXI_ARBURST;
-wire [1:0]U_AXI_BRESP,U_AXI_RRESP;
-wire U_AXI_AWVALID,U_AXI_AWREADY,U_AXI_WVALID,U_AXI_WREADY,U_AXI_BVALID,U_AXI_BREADY,U_AXI_ARVALID,U_AXI_ARREADY,U_AXI_RVALID,U_AXI_RREADY,U_AXI_WLAST,U_AXI_RLAST;
-***/
 /***My-Clint***/
 wire [31:0]c_axi_awaddr,c_axi_wdata,c_axi_araddr,c_axi_rdata;
 wire [3:0]c_axi_wstrb;
@@ -168,7 +148,7 @@ ysyx_24110017_PCU PCU(clock,reset,
 		if_ready
 );
 ysyx_24110017_IFU IFU(clock,reset,
-		pc,inst,pc_valid,if_ready,if_valid,id_ready,wb_done,
+		pc,pc_if,inst_if,pc_valid,if_ready,if_valid,id_ready,wb_done,
 		if_axi_awready,if_axi_awvalid,if_axi_awid,if_axi_awaddr,
 		if_axi_awlen,if_axi_awsize,if_axi_awburst,
 		if_axi_wready,if_axi_wvalid,if_axi_wdata,if_axi_wstrb,if_axi_wlast,
