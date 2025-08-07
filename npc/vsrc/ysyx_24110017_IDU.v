@@ -49,8 +49,8 @@ assign id_ready_o = (state == IDLE);
 
 always @(posedge clk or posedge rst) begin
 	if(rst) begin
-		id_valid_o <= 1'b0;
-		id_ready_o <= 1'b0;
+//		id_valid_o <= 1'b0;
+//		id_ready_o <= 1'b0;
 	end
 	else begin
 		case (state)
