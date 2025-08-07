@@ -8,8 +8,8 @@ module ysyx_24110017_IDU(
 	input  wire [31:0] r2_i,
 
 	input  wire if_valid_i,		//valid
-	output reg  id_ready_o,
-	output reg  id_valid_o,
+	output wire id_ready_o,
+	output wire id_valid_o,
 	input  wire ex_ready_i,
 
 	input  wire [31:0] pc_i,	//i.bit
@@ -44,6 +44,9 @@ always @(posedge clk or posedge rst) begin
 	end
 end
 
+assign id_valid_o = (state == WAIT);
+assign id_ready_o = (state == IDLE);
+
 always @(posedge clk or posedge rst) begin
 	if(rst) begin
 		id_valid_o <= 1'b0;
@@ -52,15 +55,15 @@ always @(posedge clk or posedge rst) begin
 	else begin
 		case (state)
 			IDLE: begin
-				id_ready_o <= 1'b1;
-				if(if_valid_i && id_ready_o) begin
-					id_ready_o <= 1'b0;
+//				id_ready_o <= 1'b1;
+//				if(if_valid_i && id_ready_o) begin
+//				id_ready_o <= 1'b0;
 				end
 			end
 			WAIT: begin
-				id_valid_o <= 1'b1;
-				if(id_valid_o && ex_ready_i) begin
-					id_valid_o <= 1'b0;
+//				id_valid_o <= 1'b1;
+//				if(id_valid_o && ex_ready_i) begin
+//				id_valid_o <= 1'b0;
 				end
 			end
 		endcase
