@@ -184,19 +184,21 @@ ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei, //w < n
 );
 ysyx_24110017_IDU IDU(clock,reset,
 		rs1,rs2,r1,r2,
-		mepc_i,mstatus_i,mcause_i,mtvec_i,
+		mepc,mstatus,mcause,mtvec,
 		if_valid,id_ready,id_valid,ex_ready,
 		pc_if,inst_if,
 		pc_id,imm_id,op_id,funct3_id,rd_id,gpr_wen_id,
-		alu_valid_id,alu_sel_id,a_id,b_id,r1_id,r2_id,
+		alu_valid_id,alu_sel_id,a_id,b_id,r1_id,r2_id,csr_id,
 		mepc_wen_id,mstatus_wen_id,mcause_wen_id,mtvec_wen_id,fencei_id
 );
 ysyx_24110017_EXU EXU(clock,reset,
 		id_valid,ex_ready,ex_valid,wb_ready,
 		pc_id,imm_id,op_id,funct3_id,rd_id,gpr_wen_id,
-		alu_valid_id,alu_sel_id,a_id,b_id,r1_id,r2_id,
+		alu_valid_id,alu_sel_id,a_id,b_id,r1_id,r2_id,csr_id,
 		mepc_wen_id,mstatus_wen_id,mcause_wen_id,mtvec_wen_i,fencei_id,
 		rd_ex,gpr_wen_ex,mepc_ex,mstatus_ex,mcause_ex,mtvec_ex,fencei_ex,
+		mepc_wen_ex,mstatus_wen_ex,mcause_wen_ex,mtvec_wen_ex,
+		ex_ex,
 		ls_valid_ex,ls_wen_ex,ls_read_ex,ls_write_ex,
 		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,ls_wmask_ex,ls_awsize_ex,ls_arsize_ex,ls_awlen_ex,ls_arlen_ex,ls_awburst_ex,ls_arburst_ex,
 		dnpc_ex
