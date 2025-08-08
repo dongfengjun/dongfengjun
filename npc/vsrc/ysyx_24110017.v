@@ -104,7 +104,7 @@ wire [ 6:0] op_ex;
 wire [ 2:0] funct3_ex;
 wire [ 4:0] rd_ex;
 wire gpr_wen_ex;
-wire mepc_ex,mstatus_ex,mcause_ex,mtvec_ex;
+wire [31:0]mepc_ex,mstatus_ex,mcause_ex,mtvec_ex;
 wire mepc_wen_ex,mstatus_wen_ex,mcause_wen_ex,mtvec_wen_ex;
 wire [31:0] ex_ex;
 wire ls_valid_ex,ls_wen_ex;
