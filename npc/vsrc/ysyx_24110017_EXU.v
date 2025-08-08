@@ -121,8 +121,8 @@ always @(posedge clk or posedge rst) begin
       ex_o          <= ex;
       ls_valid_o    <= ls_valid;
       ls_wen_o      <= ls_wen;
-      ls_read_o     <= ls_read;
-      ls_write_o    <= ls_write;
+      ls_read_o     <= ls_valid && !ls_wen;
+      ls_write_o    <= ls_valid && ls_wen;
       ls_waddr_o    <= ls_waddr;
       ls_wdata_o    <= ls_wdata;
       ls_raddr_o    <= ls_raddr;
