@@ -192,7 +192,7 @@ ysyx_24110017_IDU IDU(clock,reset,
 		mepc_wen_id,mstatus_wen_id,mcause_wen_id,mtvec_wen_id,fencei_id
 );
 ysyx_24110017_EXU EXU(clock,reset,
-		id_valid,ex_ready,ex_valid,wb_ready,
+		id_valid,ex_ready,ex_valid,ls_ready,
 		pc_id,imm_id,op_id,funct3_id,rd_id,gpr_wen_id,
 		alu_valid_id,alu_sel_id,a_id,b_id,r1_id,r2_id,csr_id,
 		mepc_wen_id,mstatus_wen_id,mcause_wen_id,mtvec_wen_i,fencei_id,

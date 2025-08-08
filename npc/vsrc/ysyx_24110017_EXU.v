@@ -6,7 +6,7 @@ module ysyx_24110017_EXU(
 	input  wire id_valid_i,
 	output reg  ex_ready_o,
 	output reg  ex_valid_o,
-	input  wire wb_ready_i,
+	input  wire ls_ready_i,
 	
   input  wire [31:0] pc_i,  //i.bit
   input  wire [31:0] imm_i,
