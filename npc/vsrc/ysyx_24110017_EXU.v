@@ -24,6 +24,8 @@ module ysyx_24110017_EXU(
 	input  wire mepc_wen_i,mstatus_wen_i,mcause_wen_i,mtvec_wen_i,
 	input  wire fencei_i,
 
+	output reg  [ 6:0] op_o,
+	output reg  [ 2:0] funct3_o,
 	output reg  [ 4:0] rd_o,
 	output reg  gpr_wen_o,
 	output reg  [31:0] mepc_o,
@@ -76,6 +78,8 @@ wire [31:0]res;
 reg  [31:0]al_res;
 always @(posedge clk or posedge rst) begin
 	if(rst) begin
+		op_o					<= 7'b0;
+		funct3_o			<= 3'b0;
 		rd_o					<= 5'b0;
 		gpr_wen_o			<= 1'b0;
 		mepc_o				<= 32'h0;
