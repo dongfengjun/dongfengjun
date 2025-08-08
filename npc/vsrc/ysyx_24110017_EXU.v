@@ -65,7 +65,7 @@ end
 always @(posedge clk or posedge rst) begin
 	if(rst) ex_valid_o <= 1'b0;
 	else begin
-		if(al_done || !al_state) begin
+		if(al_done || !al_start) begin
 			ex_valid_o <= 1'b1;
 		end
 		if(ex_valid_o && ls_ready_i) begin
@@ -137,6 +137,7 @@ always @(posedge clk or posedge rst) begin
 	end
 end
 
+wire al_done;
 ysyx_24110017_ALU ALU(clk,rst,a_i,b_i,alu_sel_i,al_start,res,al_done);
 
 wire [31:0]ex;
