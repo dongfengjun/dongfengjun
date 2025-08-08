@@ -117,9 +117,9 @@ always@(posedge clk or posedge rst) begin
 end
 
 reg ls_done_reg;
-assign ls_done_o = ls_done_reg;
+wire ls_done_o = ls_done_reg;
 reg [31:0]ls_rdata_reg;
-assign ls_rdata_o = ls_rdata_reg;
+wire ls_rdata_o = ls_rdata_reg;
 
 wire [31:0]ls_rdata;
 assign ls_rdata = ((ls_raddr_o % 4 == 0) && op_i == 7'b0000011 && funct3_i == 3'b010) ? ls_rdata_i
