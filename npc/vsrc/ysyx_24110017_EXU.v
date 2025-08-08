@@ -63,13 +63,13 @@ always @(posedge clk or posedge rst) begin
 end
 
 always @(posedge clk or posedge rst) begin
-	if(rst) ex_valid <= 1'b0;
+	if(rst) ex_valid_o <= 1'b0;
 	else begin
 		if(al_done || !al_state) begin
-			ex_valid <= 1'b1;
+			ex_valid_o <= 1'b1;
 		end
-		if(ex_valid && ls_ready) begin
-			ex_valid <= 1'b0;
+		if(ex_valid_o && ls_ready_i) begin
+			ex_valid_o <= 1'b0;
 		end
 	end
 end
