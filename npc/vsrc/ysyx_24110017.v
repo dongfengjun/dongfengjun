@@ -97,7 +97,7 @@ wire gpr_wen_id,alu_valid_id;
 wire [3:0] alu_sel_id;
 wire [31:0] a_id,b_id,r1_id,r2_id;
 wire [31:0] csr_id,mepc_id,mtvec_id;
-wire fencei_id;
+wire mepc_wen_id,mstatus_wen_id,mcause_wen_id,mtvec_wen_id,fencei_id;
 /***EXU***/
 wire ex_ready,ex_valid;
 wire [ 4:0] rd_ex;
@@ -166,7 +166,7 @@ ysyx_24110017_IFU IFU(clock,reset,
 		if_axi_arlen,if_axi_arsize,if_axi_arburst,
 		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast
 );
-ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei, //w < n
+ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei_id, //w < n
 		if_axi_awready,if_axi_awvalid,if_axi_awid,if_axi_awaddr,
 		if_axi_awlen,if_axi_awsize,if_axi_awburst,
 		if_axi_wready,if_axi_wvalid,if_axi_wdata,if_axi_wstrb,if_axi_wlast,
