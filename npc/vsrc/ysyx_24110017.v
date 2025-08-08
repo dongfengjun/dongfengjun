@@ -100,6 +100,8 @@ wire [31:0] csr_id,mepc_id,mtvec_id;
 wire mepc_wen_id,mstatus_wen_id,mcause_wen_id,mtvec_wen_id,fencei_id;
 /***EXU***/
 wire ex_ready,ex_valid;
+wire [ 6:0] op_ex;
+wire [ 2:0] funct3_ex;
 wire [ 4:0] rd_ex;
 wire gpr_wen_ex;
 wire mepc_ex,mstatus_ex,mcause_ex,mtvec_ex;
