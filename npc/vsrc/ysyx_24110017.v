@@ -286,7 +286,8 @@ endfunction
 export "DPI-C" function dpic_grab;                                    
 function int dpic_grab(int i);
   begin
-		assign dpic_grab = (i == 0) ? pc : (i == 1) ? dnpc_ex : (i == 2) ? inst_if : (i == 3) ? {31'b0,difftest} : 32'b0;
+		assign dpic_grab = (i == 0) ? pc : (i == 1) ? dnpc_ex : (i == 2) ? inst_if : (i == 3) ? 
+		32'b0 : 32'b0;//{31'b0,difftest} : 32'b0;
   end
 endfunction
 /***E*N*D***/
