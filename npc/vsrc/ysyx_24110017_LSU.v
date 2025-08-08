@@ -2,7 +2,8 @@
 module ysyx_24110017_LSU(
 	input clk,
 	input rst,
-	
+
+	input  wire ex_valid_i,	
   output wire ls_ready_o,
 	input  wire [ 4:0] rd_i,
   input  wire gpr_wen_i,
