@@ -48,7 +48,7 @@ module ysyx_24110017_EXU(
 );
 
 /***分布式控制***/
-assign ex_ready = (state == IDLE);
+assign ex_ready_o = (state == IDLE);
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
