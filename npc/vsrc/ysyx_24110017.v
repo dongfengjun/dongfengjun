@@ -97,6 +97,7 @@ wire [4:0] rd_id;
 wire gpr_wen_id,alu_valid_id;
 wire [3:0] alu_sel_id;
 wire [31:0] a_id,b_id,r1_id,r2_id;
+wire [31:0] csr_id,mepc_id,mtvec_id;
 wire fencei_id;
 /***EXU***/
 wire ex_ready,ex_valid;
@@ -188,13 +189,13 @@ ysyx_24110017_IDU IDU(clock,reset,
 		if_valid,id_ready,id_valid,ex_ready,
 		pc_if,inst_if,
 		pc_id,imm_id,op_id,funct3_id,rd_id,gpr_wen_id,
-		alu_valid_id,alu_sel_id,a_id,b_id,r1_id,r2_id,csr_id,
+		alu_valid_id,alu_sel_id,a_id,b_id,r1_id,r2_id,csr_id,mepc_id,mtvec_id,
 		mepc_wen_id,mstatus_wen_id,mcause_wen_id,mtvec_wen_id,fencei_id
 );
 ysyx_24110017_EXU EXU(clock,reset,
 		id_valid,ex_ready,ex_valid,ls_ready,
 		pc_id,imm_id,op_id,funct3_id,rd_id,gpr_wen_id,
-		alu_valid_id,alu_sel_id,a_id,b_id,r1_id,r2_id,csr_id,
+		alu_valid_id,alu_sel_id,a_id,b_id,r1_id,r2_id,csr_id,mepc_id,mtvec_id,
 		mepc_wen_id,mstatus_wen_id,mcause_wen_id,mtvec_wen_i,fencei_id,
 		op_ex,funct3_ex,rd_ex,gpr_wen_ex,mepc_ex,mstatus_ex,mcause_ex,mtvec_ex,fencei_ex,
 		mepc_wen_ex,mstatus_wen_ex,mcause_wen_ex,mtvec_wen_ex,

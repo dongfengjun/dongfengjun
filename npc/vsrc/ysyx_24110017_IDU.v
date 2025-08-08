@@ -29,6 +29,7 @@ module ysyx_24110017_IDU(
 	output reg  [31:0] r1_o,
 	output reg  [31:0] r2_o,
 	output reg	[31:0] csr_o,
+	output reg  [31:0] mepc_o,mtvec_o,
 	output reg	mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o,
 	output reg  fencei_o
 );
@@ -66,6 +67,8 @@ always@(posedge clk or posedge rst) begin
 		r1_o				<= 32'h0;
 		r2_o				<= 32'h0;
 		csr_o				<= 32'h0;
+		mepc_o			<= 32'h0;
+		mtvec_o			<= 32'h0;
 		mepc_wen_o		<= 1'b0;
 		mstatus_wen_o <= 1'b0;
 		mcause_wen_o	<= 1'b0;
