@@ -203,8 +203,7 @@ ysyx_24110017_EXU EXU(clock,reset,
 		mepc_wen_ex,mstatus_wen_ex,mcause_wen_ex,mtvec_wen_ex,
 		ex_ex,
 		ls_valid_ex,ls_wen_ex,ls_read_ex,ls_write_ex,
-		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,ls_wmask_ex,ls_awsize_ex,ls_arsize_ex,ls_awlen_ex,ls_arlen_ex,ls_awburst_ex,ls_arburst_ex,
-		dnpc_ex
+		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,ls_wmask_ex,ls_awsize_ex,ls_arsize_ex,ls_awlen_ex,ls_arlen_ex,ls_awburst_ex,ls_arburst_ex,dnpc_ex
 );
 ysyx_24110017_LSU LSU(clock,reset,ex_valid,ls_ready,
 		op_ex,funct3_ex,rd_ex,gpr_wen_ex,mepc_ex,mstatus_ex,mcause_ex,mtvec_ex,
