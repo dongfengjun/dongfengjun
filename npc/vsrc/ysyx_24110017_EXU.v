@@ -65,7 +65,7 @@ end
 always @(posedge clk or posedge rst) begin
 	if(rst) ex_valid_o <= 1'b0;
 	else begin
-		if(al_done || !al_start_i) begin
+		if(al_done || !alu_start_i) begin
 			ex_valid_o <= 1'b1;
 		end
 		if(ex_valid_o && ls_ready_i) begin
@@ -109,30 +109,30 @@ always @(posedge clk or posedge rst) begin
 	else begin
 		if(ex_valid_o && ls_ready_i) begin
 			rd_o          <= rd;
-	    gpr_wen_o     <= gpr_wen;
-	    mepc_o        <= mepc_w;
-      mstatus_o     <= mstatus_w;
-      mcause_o      <= mcause_w;
-      mtvec_o       <= mtvec_w;
-      mepc_wen_o    <= mepc_wen;
-      mstatus_wen_o <= mstatus_wen;
-      mcause_wen_o  <= mcause_wen;
-      mtvec_wen_o   <= mtvec_wen;
-      ex_o          <= ex;
-      ls_valid_o    <= ls_valid;
-      ls_wen_o      <= ls_wen;
-      ls_read_o     <= ls_read;
-      ls_write_o    <= ls_write;
-      ls_waddr_o    <= ls_waddr;
-      ls_wdata_o    <= ls_wdata;
-      ls_raddr_o    <= ls_raddr;
-	    ls_wmask_o    <= ls_wmask;
-	    ls_awsize_o   <= ls_awsize;
-	    ls_arsize_o   <= ls_arsize;
-	    ls_awlen_o    <= ls_alwen;
-	    ls_arlen_o    <= ls_arlen;
-	    ls_awburst_o  <= ls_awburst;
-	    ls_arburst_o  <= ls_arburst;
+	    gpr_wen_o     <= gpr_wen_i;
+	    mepc_o        <= mepc_w_i;
+      mstatus_o     <= mstatus_w_i;
+      mcause_o      <= mcause_w_i;
+      mtvec_o       <= mtvec_w_i;
+      mepc_wen_o    <= mepc_wen_i;
+      mstatus_wen_o <= mstatus_wen_i;
+      mcause_wen_o  <= mcause_wen_i;
+      mtvec_wen_o   <= mtvec_wen_i;
+      ex_o          <= ex_i;
+      ls_valid_o    <= ls_valid_i;
+      ls_wen_o      <= ls_wen_i;
+      ls_read_o     <= ls_read_i;
+      ls_write_o    <= ls_write_i;
+      ls_waddr_o    <= ls_waddr_i;
+      ls_wdata_o    <= ls_wdata_i;
+      ls_raddr_o    <= ls_raddr_i;
+	    ls_wmask_o    <= ls_wmask_i;
+	    ls_awsize_o   <= ls_awsize_i;
+	    ls_arsize_o   <= ls_arsize_i;
+	    ls_awlen_o    <= ls_alwen_i;
+	    ls_arlen_o    <= ls_arlen_i;
+	    ls_awburst_o  <= ls_awburst_i;
+	    ls_arburst_o  <= ls_arburst_i;
 		end
 	end
 end
