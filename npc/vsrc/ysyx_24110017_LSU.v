@@ -5,14 +5,14 @@ module ysyx_24110017_LSU(
 	
   input  wire [ 4:0] rd_i,
   input  wire gpr_wen_i,
-	input  wire [31:0] mepc_i;
-  input  wire [31:0] mstatus_i;
-  input  wire [31:0] mcause_i;
-  input  wire [31:0] mtvec_i;
-  input  wire mepc_wen_i;
-  input  wire mstatus_wen_i;
-  input  wire mcause_wen_i;
-  input  wire mtvec_wen_i;
+	input  wire [31:0] mepc_i,
+  input  wire [31:0] mstatus_i,
+  input  wire [31:0] mcause_i,
+  input  wire [31:0] mtvec_i,
+  input  wire mepc_wen_i,
+  input  wire mstatus_wen_i,
+  input  wire mcause_wen_i,
+  input  wire mtvec_wen_i,
   input  wire [31:0] ex_i,
   input  wire ls_valid_i,ls_wen_i,
   input  wire ls_read_i,ls_write_i,
