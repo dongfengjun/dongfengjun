@@ -14,7 +14,7 @@ module ysyx_24110017_EXU(
   input  wire [ 2:0] funct3_i,
   input  wire [ 4:0] rd_i,
   input  wire gpr_wen_i,
-  input  wire alu_valid_i,
+  input  wire alu_start_i,
   input  wire [ 3:0] alu_sel_i,
   input  wire [31:0] a_i,
   input  wire [31:0] b_i,
@@ -44,7 +44,7 @@ module ysyx_24110017_EXU(
 	output reg  [ 2:0] ls_awsize_o,ls_arsize_o,
 	output reg  [ 7:0] ls_awlen_o,ls_arlen_o,
 	output reg  [ 1:0] ls_awburst_o,ls_arburst_o,
-	output reg  [31:0]dnpc_o
+	output reg  [31:0] dnpc_o
 );
 
 /***分布式控制***/
@@ -65,7 +65,7 @@ end
 always @(posedge clk or posedge rst) begin
 	if(rst) ex_valid_o <= 1'b0;
 	else begin
-		if(al_done || !al_start) begin
+		if(al_done || !al_start_i) begin
 			ex_valid_o <= 1'b1;
 		end
 		if(ex_valid_o && ls_ready_i) begin
