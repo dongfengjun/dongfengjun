@@ -117,14 +117,14 @@ wire ls_ready;
 wire [31:0] xrd_ls;
 wire [ 4:0] rd_ls;
 wire gpr_wen_ls;
-wire [31:0] mepc_ls,
-wire [31:0] mstatus_ls,
-wire [31:0] mcause_ls,
-wire [31:0] mtvec_ls,
-wire mepc_wen_ls,
-wire mstatus_wen_ls,
-wire mcause_wen_ls,
-wire mtvec_wen_ls,
+wire [31:0] mepc_ls;
+wire [31:0] mstatus_ls;
+wire [31:0] mcause_ls;
+wire [31:0] mtvec_ls;
+wire mepc_wen_ls;
+wire mstatus_wen_ls;
+wire mcause_wen_ls;
+wire mtvec_wen_ls;
 
 wire [31:0] ls_axi_awaddr,ls_axi_wdata,ls_axi_araddr,ls_axi_rdata;
 wire [ 3:0] ls_axi_wstrb;
