@@ -2,85 +2,142 @@
 module ysyx_24110017_LSU(
 	input clk,
 	input rst,
-	input ls_read_i,ls_write_i,
-	output ls_done_o,
-	output [31:0]ls_rdata_o,
+	
+  input  wire [ 4:0] rd_i,
+  input  wire gpr_wen_i,
+	input  wire [31:0] mepc_i;
+  input  wire [31:0] mstatus_i;
+  input  wire [31:0] mcause_i;
+  input  wire [31:0] mtvec_i;
+  input  wire mepc_wen_i;
+  input  wire mstatus_wen_i;
+  input  wire mcause_wen_i;
+  input  wire mtvec_wen_i;
+  input  wire [31:0] ex_i,
+  input  wire ls_valid_i,ls_wen_i,
+  input  wire ls_read_i,ls_write_i,
+  input  wire [31:0] ls_waddr_i,ls_wdata_i,ls_raddr_i,
+  input  wire [ 3:0] ls_wmask_i,
+  input  wire [ 2:0] ls_awsize_i,ls_arsize_i,
+  input  wire [ 7:0] ls_awlen_i,ls_arlen_i,
+  input  wire [ 1:0] ls_awburst_i,ls_arburst_i,
+	
+	output reg  [31:0] xrd_o,
+	output reg  [ 4:0] rd_o,
+  output reg  gpr_wen_o,
+  output reg  [31:0] mepc_o,
+  output reg  [31:0] mstatus_o,
+  output reg  [31:0] mcause_o,
+  output reg  [31:0] mtvec_o,
+  output reg  mepc_wen_o,
+  output reg  mstatus_wen_o,
+  output reg  mcause_wen_o,
+  output reg  mtvec_wen_o,
+ 
+	input  wire ls_axi_awready,
+	output wire ls_axi_awvalid,
+	output wire [ 3:0]ls_axi_awid,
+	output wire [31:0]ls_axi_awaddr,
+	output wire [ 7:0]ls_axi_awlen,
+	output wire [ 2:0]ls_axi_awsize,
+	output wire [ 1:0]ls_axi_awburst,
+	input  wire ls_axi_wready,
+	output wire ls_axi_wvalid,
+	output wire [31:0]ls_axi_wdata,
+	output wire [ 3:0]ls_axi_wstrb,
+	output wire ls_axi_wlast,
+	output wire ls_axi_bready,
+	input  wire ls_axi_bvalid,
+	input  wire [ 3:0]ls_axi_bid,
+	input  wire [ 1:0]ls_axi_bresp,
 
-	input valid_i,wen_i,
-	input [31:0]waddr_i,wdata_i,raddr_i,
-	input [3:0]wmask_i,
-	input [2:0]awsize_i,arsize_i,
-	input [7:0]awlen_i,arlen_i,
-	input [1:0]awburst_i,arburst_i,
-
-	input ls_axi_awready,
-	output ls_axi_awvalid,
-	output [3:0]ls_axi_awid,
-	output [31:0]ls_axi_awaddr,
-	output [7:0]ls_axi_awlen,
-	output [2:0]ls_axi_awsize,
-	output [1:0]ls_axi_awburst,
-	input ls_axi_wready,
-	output ls_axi_wvalid,
-	output [31:0]ls_axi_wdata,
-	output [3:0]ls_axi_wstrb,
-	output ls_axi_wlast,
-	output ls_axi_bready,
-	input ls_axi_bvalid,
-	input [3:0]ls_axi_bid,
-	input [1:0]ls_axi_bresp,
-
-	input ls_axi_arready,
-	output ls_axi_arvalid,
-	output [3:0]ls_axi_arid,
-	output [31:0]ls_axi_araddr,
-	output [7:0]ls_axi_arlen,
-	output [2:0]ls_axi_arsize,
-	output [1:0]ls_axi_arburst,
-	output ls_axi_rready,
-	input ls_axi_rvalid,
-	input [3:0]ls_axi_rid,
-	input [31:0]ls_axi_rdata,
-	input [1:0]ls_axi_rresp,
-	input ls_axi_rlast
+	input  wire ls_axi_arready,
+	output wire ls_axi_arvalid,
+	output wire [ 3:0]ls_axi_arid,
+	output wire [31:0]ls_axi_araddr,
+	output wire [ 7:0]ls_axi_arlen,
+	output wire [ 2:0]ls_axi_arsize,
+	output wire [ 1:0]ls_axi_arburst,
+	output wire ls_axi_rready,
+	input  wire ls_axi_rvalid,
+	input  wire [ 3:0]ls_axi_rid,
+	input  wire [31:0]ls_axi_rdata,
+	input  wire [ 1:0]ls_axi_rresp,
+	input  wire ls_axi_rlast
 );
+
+/***分布式控制***/
+assign ls_ready_o = (state == IDLE);
+parameter IDLE = 1'b0,WAIT = 1'b1;
+reg state;
+ 
+always @(posedge clk or posedge rst) begin
+  if(rst) state <= IDLE;
+  else begin
+    case (state)
+      IDLE: state <= (ex_valid_i && ls_ready_o) ? WAIT : state;
+      WAIT: state <= (ls_done || !ls_valid_i) ? IDLE : state;
+    endcase
+  end
+end
+
+wire [31:0] xrd = (ls_valid_i) ? ls_rdata : ex_i;
+
+always@(posedge clk or posedge rst) begin
+	if(rst) begin
+		rd_o					<= 5'b0;
+		gpr_wen_o			<= 1'b0;
+		mepc_o				<= 32'h0;
+		mstatus_o			<= 32'h0;
+		mcause_o			<= 32'h0;
+		mtvec_o				<= 32'h0;
+		mepc_wen_o		<= 1'b0;
+		mstatus_wen_o <= 1'b0;
+		mcause_wen_o	<= 1'b0;
+		mtvec_wen_o		<= 1'b0;
+		xrd_o					<= 32'h0;
+	end
+	else begin
+		if(ls_valid && wb_ready) begin
+			rd_o          <= rd_i;
+	    gpr_wen_o     <= gpr_wen_i;
+	    mepc_o        <= mepc_i;
+	    mstatus_o     <= mstatus_i;
+	    mcause_o      <= mcause_i;
+	    mtvec_o       <= mtvec_i;
+	    mepc_wen_o    <= mepc_wen;
+	    mstatus_wen_o <= mstatus_wen;
+	    mcause_wen_o  <= mcause_wen;
+	    mtvec_wen_o   <= mtvec_wen;
+	    xrd_o         <= xrd;
+		end
+	end
+end
 
 reg ls_done_reg;
 assign ls_done_o = ls_done_reg;
 reg [31:0]ls_rdata_reg;
 assign ls_rdata_o = ls_rdata_reg;
 
-/***单周期*DPIC***
-import "DPI-C" function int pmem_read(input int raddr);
-import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
+wire [31:0]ls_rdata;
+assign ls_rdata = ((ls_raddr_o % 4 == 0) && op_i == 7'b0000011 && funct3_i == 3'b010) ? ls_rdata_i
+ : ((ls_raddr_o % 4 == 1) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {8'b0,ls_rdata_i[31:8]}
+ : ((ls_raddr_o % 4 == 2) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {16'b0,ls_rdata_i[31:16]}
+ : ((ls_raddr_o % 4 == 3) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {24'b0,ls_rdata_i[31:24]}
+ : ((ls_raddr_o % 4 == 0) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[7:0]}
+ : ((ls_raddr_o % 4 == 1) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[15:8]}
+ : ((ls_raddr_o % 4 == 2) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[23:16]}
+ : ((ls_raddr_o % 4 == 3) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[31:24]}
+ : ((ls_raddr_o % 4 == 0) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_i[15:0]}
+ : ((ls_raddr_o % 4 == 1) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_i[23:8]}
+ : ((ls_raddr_o % 4 == 2) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_i[31:16]}
+ : ((ls_raddr_o % 4 == 3) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {24'b0,ls_rdata_i[31:24]}
+ : 32'b0;
 
-always @(*) begin
-  if (valid) begin // 有读写请求时
-    rdata = pmem_read(raddr);
-    if (wen) begin // 有写请求时
-      pmem_write(waddr, wdata, wmask);
-    end
-  end
-  else begin
-    rdata = 0;
-  end
-end
-/***E*N*D***/
-
-/***单周期*yosys-sta***
-Sta_RegisterFile Sta_RegisterFile(clk,wdata,wdata[7:0],wen,raddr[7:0],rdata);
-***E*N*D***/
-
-/***多周期***/
-/***DELAY_TEST_RAND***
-wire [7:0]rand_delay;
-reg [7:0]delay_counter,avalid_delay_counter,wvalid_delay_counter;
-LFSR_ysyx_24110017 LFSR_ysyx_20110017(clk,rst,rand_delay);
-***END***/
 import "DPI-C" function void diff_skip_ref();
 
 parameter IDLE=3'b0,READ=3'b001,WRITE1=3'b010,WRITE2=3'b011,DONE=3'b100;
-reg [2:0]state;
+reg [2:0]axi_state;
 
 reg axi_awvalid,axi_wvalid;
 reg [3:0]axi_awid;
@@ -139,12 +196,9 @@ always @(posedge clk or posedge rst) begin
 
 			ls_done_reg <= 0;
 			ls_rdata_reg <= 32'h0;
-//			delay_counter <= 0;
-//			avalid_delay_counter <= 0;
-//			wvalid_delay_counter <= 0;
     end 
 		else begin
-      case (state)
+      case (axi_state)
         IDLE: begin
 				  if(ls_read_i) begin
             state <= READ;
@@ -162,50 +216,13 @@ always @(posedge clk or posedge rst) begin
 						axi_awlen <= awlen_i;
 						axi_awburst <= awburst_i;
 						axi_wstrb <= wmask_i;
-						//axi_wdata <= wdata_i;
 	        end
-/***DELAY_TEST_AR*AWVALID***
-					if(sram_lsu_read || sram_lsu_write) begin
-						avalid_delay_counter <= rand_delay;
-					end
-/***END***/
 				end
 				READ: begin
-/***DELAY_TEST_AR*ARVALID***
-		      if(avalid_delay_counter == 0) begin
-	          avalid_delay_counter <= avalid_delay_counter;
-          end
-          else if(avalid_delay_counter == 1) begin
-            axi_arvalid <= 1;
-            avalid_delay_counter <= 0;
-          end
-          else begin
-            avalid_delay_counter <= avalid_delay_counter - 1;
-          end
-/***END***/
           if(ls_axi_arvalid && ls_axi_arready) begin
 						axi_arvalid <= 1'b0;
-						//axi_araddr <= raddr;
 						axi_rready <= 1'b1;
 					end
-					//if(ls_axi_rvalid && !ls_axi_rready) begin
-						//axi_rready <= 1'b1;
-						//ls_rdata_reg <= ls_axi_rdata;
-					//end
-/***DELAY_TEST_RAND*RREADY***
-          if(M_AXI_RVALID && !M_AXI_RREADY) begin
-            if(delay_counter == 0) begin
-              delay_counter <= rand_delay;
-            end
-            else if(delay_counter == 1) begin
-              axi_rready <= 1;
-              delay_counter <= 0;
-            end
-            else begin
-              delay_counter <= delay_counter - 1;
-            end
-          end
-/***END***/
 	        if(ls_axi_rvalid && ls_axi_rready) begin
             ls_rdata_reg <= ls_axi_rdata;//
 						axi_rready <= 0;
@@ -219,66 +236,20 @@ always @(posedge clk or posedge rst) begin
           end
         end
 				WRITE1: begin
-/***DELAY_TEST_AR*AWVALID***
-          if(avalid_delay_counter == 0) begin
-            avalid_delay_counter <= avalid_delay_counter;
-          end
-          else if(avalid_delay_counter == 1) begin
-            axi_awvalid <= 1;
-            avalid_delay_counter <= 0;
-          end
-          else begin
-            avalid_delay_counter <= avalid_delay_counter - 1;
-          end
-/***END***/
 					axi_wvalid <= 1'b1;
 					if(ls_axi_awvalid && ls_axi_awready) begin
 						axi_awvalid <= 0;
 						axi_wlast <= 1;
 						state <= WRITE2;
-						//axi_awaddr <= waddr;
-/***DELAY_TEST_WVALID***
-					if(M_AXI_AWVALID && M_AXI_AWREADY) begin
-            wvalid_delay_counter <= rand_delay;
-          end
-					else begin
-						if(wvalid_delay_counter == 0) begin
-              wvalid_delay_counter <= wvalid_delay_counter;
-            end
-						else if(wvalid_delay_counter == 1) begin
-							axi_wvalid <= 1;
-							wvalid_delay_counter <= 0;
-						end
-						else begin
-							wvalid_delay_counter <= wvalid_delay_counter - 1;
-						end
-					end
-/***END***/
 					end
 				end
 				WRITE2:begin
 					if(ls_axi_wvalid && ls_axi_wready) begin
 						axi_wvalid <= 0;
-						//axi_wdata <= wdata;//加判断条件
-						//axi_wstrb <= wmask;
 					end
 					if(ls_axi_bvalid && !ls_axi_bready) begin
 						axi_bready <= 1;
 					end
-/***DELAY_TEST_RAND*BREADY***
-					if(M_AXI_BVALID && !M_AXI_BREADY) begin
-			      if(delay_counter == 0) begin
-			        delay_counter <= rand_delay;
-			      end
-						else if(delay_counter == 1) begin
-							axi_bready <= 1;
-							delay_counter <= 0;
-						end
-						else begin
-							delay_counter <= delay_counter - 1;
-						end
-					end
-/***END***/
 					if(ls_axi_bvalid && ls_axi_bready) begin
 						axi_bready <= 0;
 						state <= DONE;
@@ -310,5 +281,4 @@ always @(posedge clk or posedge rst) begin
       endcase
 		end
 end
-/***END***/
 endmodule

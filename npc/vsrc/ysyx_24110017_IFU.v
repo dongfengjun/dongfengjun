@@ -53,25 +53,30 @@ always @(posedge clk or posedge rst) begin
 	if(rst) state <= IDLE;
 	else begin
 		case(state)
-			IDLE: state <= (if_axi_rvalid_i && if_axi_rready_o) ? WAIT : state;
+			IDLE: state <= (pc_valid_i && if_rready) ? WAIT : state;
 			WAIT:	state <= (if_valid_o && id_ready_i) ? IDLE : state;
 		endcase
 	end
 end
 
 always @(posedge clk or posedge rst) begin
+	if(rst) if_valid_o <= 1'b0;
+	else begin
+		if(if_axi_rvalid_i && if_axi_rready_o) begin
+			if_valid_o <= 1'b1;
+		end
+		if(if_valid_o && id_ready_i) begin
+			if_valid_o <= 1'b0;
+		end
+	end
+end
+
+always @(posedge clk or posedge rst) begin
 	if(rst) begin
-		if_ready_o <= 1'b1;
 		pc_o	 <= 32'h0;
 		inst_o <= 32'h0;
 	end
   else begin
-		if(pc_valid_i && if_ready_o) begin
-			if_ready_o <= 1'b0;
-		end
-		if(axi_state == AXI_IDLE && if_valid_o && id_ready_i) begin
-			if_ready_o <= 1'b1;
-		end
 		if(if_valid_o && id_ready_i) begin
 			pc_o	 <= if_axi_araddr_o;
 			inst_o <= axi_rdata_reg;

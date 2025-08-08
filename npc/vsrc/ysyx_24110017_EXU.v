@@ -20,42 +20,55 @@ module ysyx_24110017_EXU(
   input  wire [31:0] b_i,
 	input  wire [31:0] r1_i,
 	input	 wire [31:0] r2_i,
-  input  wire fencei_i,
+  input	 wire [31:0] csr_i,
+	input  wire mepc_wen_i,mstatus_wen_i,mcause_wen_i,mtvec_wen_i,
+	input  wire fencei_i,
 
-	output reg  [31:0]ex_o,
-	output reg  ls_read_o,ls_write_o,
-	input  wire ls_done_i,
+	output reg  [ 4:0] rd_o,
+	output reg  gpr_wen_o,
+	output reg  [31:0] mepc_o,
+  output reg  [31:0] mstatus_o,
+  output reg  [31:0] mcause_o,
+  output reg  [31:0] mtvec_o,
+  output reg  mepc_wen_o,
+	output reg  mstatus_wen_o,
+	output reg  mcause_wen_o,
+	output reg  mtvec_wen_o,
+	output reg  [31:0] ex_o,
 	output reg  ls_valid_o,ls_wen_o,
-	output reg  [31:0]ls_waddr_o,ls_wdata_o,ls_raddr_o,
-	output reg  [ 3:0]ls_wmask_o,
-	output reg  [ 2:0]ls_awsize_o,ls_arsize_o,
-	output reg  [ 7:0]ls_awlen_o,ls_arlen_o,
-	output reg  [ 1:0]ls_awburst_o,ls_arburst_o,
-	input  wire [31:0]ls_rdata_i,
-/***BU***/
-	output reg  [31:0]dnpc_o,
-/***CSRU***/
-	input  wire [31:0]mepc_i,mstatus_i,mcause_i,mtvec_i,
-	output reg  [31:0]mepc_o,mstatus_o,mcause_o,mtvec_o,
-	output reg  gpr_wen_o,mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o
+	output reg  ls_read_o,ls_write_o,
+	output reg  [31:0] ls_waddr_o,ls_wdata_o,ls_raddr_o,
+	output reg  [ 3:0] ls_wmask_o,
+	output reg  [ 2:0] ls_awsize_o,ls_arsize_o,
+	output reg  [ 7:0] ls_awlen_o,ls_arlen_o,
+	output reg  [ 1:0] ls_awburst_o,ls_arburst_o,
+	output reg  [31:0]dnpc_o
 );
 
 /***分布式控制***/
-reg al_start;
-wire al_done;
-reg [31:0]ram_rdata_reg;
-parameter IDLE = 2'b00,WAIT = 2'b01,READY = 2'b10,DONE=2'b11;
-reg [1:0]state;
+assign ex_ready = (state == IDLE);
+parameter IDLE = 1'b0,WAIT = 1'b1;
+reg state;
 
 always @(posedge clk or posedge rst) begin
 	if(rst) state <= IDLE;
   else begin
 		case (state)
 			IDLE:  state <= (id_valid_i && ex_ready_o) ? WAIT : state;
-			WAIT:  state <= ((!alu_valid_i) && (!ls_valid_o)) ? READY : (al_done) ? READY : (ls_done_i) ? READY : state;
-			READY: state <= (ex_valid_o && wb_ready_i) ? DONE : state;
-			DONE:  state <= IDLE;
+			WAIT:  state <= (ex_valid_o && ls_ready_i) ? IDLE : state;
 		endcase
+	end
+end
+
+always @(posedge clk or posedge rst) begin
+	if(rst) ex_valid <= 1'b0;
+	else begin
+		if() begin
+			ex_valid <= 1'b1;
+		end
+		if(ex_valid && ls_ready) begin
+			ex_valid <= 1'b0;
+		end
 	end
 end
 
@@ -63,79 +76,60 @@ wire [31:0]res;
 reg  [31:0]al_res;
 always @(posedge clk or posedge rst) begin
 	if(rst) begin
-		ex_valid_o		<= 1'b0;
-		ex_ready_o		<= 1'b0;
-		ex_o					<= 32'h0;
-		al_start			<= 1'b0;
-		al_res				<= 32'b0;
-		dnpc_o				<= pc_i + 4;
+		rd_o					<= 5'b0;
 		gpr_wen_o			<= 1'b0;
 		mepc_o				<= 32'h0;
-    mstatus_o			<= 32'h0;
-    mcause_o			<= 32'h0;
-    mtvec_o				<= 32'h0;
-    mepc_wen_o		<= 1'b0;
-    mstatus_wen_o <= 1'b0;
-    mcause_wen_o	<= 1'b0;
-    mtvec_wen_o		<= 1'b0;
+		mstatus_o			<= 32'h0;
+		mcause_o			<= 32'h0;
+		mtvec_o				<= 32'h0;
+		mepc_wen_o		<= 1'b0;
+		mstatus_wen_o	<= 1'b0;
+		mcause_wen_o	<= 1'b0;
+		mtvec_wen_o		<= 1'b0;
+		ex_o					<= 32'h0;
+		ls_valid_o		<= 1'b0;
+		ls_wen_o			<= 1'b0;
 		ls_read_o			<= 1'b0;
 		ls_write_o		<= 1'b0;
-		ram_rdata_reg	<= 32'h0;
+		ls_waddr_o		<= 32'h0;
+		ls_wdata_o		<= 32'h0;
+		ls_raddr_o		<= 32'h0;
+		ls_wmask_o		<= 4'b0;
+		ls_awsize_o		<= 3'b0;
+		ls_arsize_o		<= 3'b0;
+		ls_awlen_o		<= 8'b0;
+		ls_arlen_o		<= 8'b0;
+		ls_awburst_o	<= 2'b0;
+		ls_arburst_o	<= 2'b0;
 	end
 	else begin
-		case (state)
-			IDLE: begin
-				if(id_valid_i) begin //判断条件
-					ex_ready_o	<= 1'b1;
-				end
-				if(id_valid_i && ex_ready_o) begin
-					ex_ready_o	<= 1'b0;
-				end
-			end
-			WAIT: begin
-				if(alu_valid_i) begin
-					al_start		<= 1'b1;
-				end
-				if(al_done) begin
-					al_start		<= 1'b0;
-					al_res			<= res;
-				end
-				if(ls_valid_o && (!ls_wen_o)) begin
-					ex_o				<= 32'h0;
-					ls_read_o		<= 1'b1;
-				end
-				if(ls_wen_o) begin
-					ls_write_o	<= 1'b1;
-				end
-				if(ls_done_i) begin
-					ls_read_o		<= 1'b0;
-					ls_write_o	<= 1'b0;
-					ram_rdata_reg <= ls_rdata;
-				end
-			end
-			READY: begin
-				ex_valid_o <= 1'b1;
-				if(ex_valid_o && wb_ready_i) begin
-					ex_valid_o <= 1'b0;
-					ex_o <= ex;
-					gpr_wen_o <= gpr_wen_i;
-
-					mepc_o <= mepc_w;
-					mstatus_o <= mstatus_w;
-					mcause_o <= mcause_w;
-					mtvec_o <= mtvec_w;
-					mepc_wen_o <= mepc_wen;
-					mstatus_wen_o <= mstatus_wen;
-					mcause_wen_o <= mcause_wen;
-					mtvec_wen_o <= mtvec_wen;
-				end
-			end
-			DONE: begin
-				dnpc_o <= dnpc;
-				al_res <= 32'h0;
-				ram_rdata_reg <= 32'h0;
-			end
-		endcase
+		if(ex_valid_o && ls_ready_i) begin
+			rd_o          <= rd;
+	    gpr_wen_o     <= gpr_wen;
+	    mepc_o        <= mepc_w;
+      mstatus_o     <= mstatus_w;
+      mcause_o      <= mcause_w;
+      mtvec_o       <= mtvec_w;
+      mepc_wen_o    <= mepc_wen;
+      mstatus_wen_o <= mstatus_wen;
+      mcause_wen_o  <= mcause_wen;
+      mtvec_wen_o   <= mtvec_wen;
+      ex_o          <= ex;
+      ls_valid_o    <= ls_valid;
+      ls_wen_o      <= ls_wen;
+      ls_read_o     <= ls_read;
+      ls_write_o    <= ls_write;
+      ls_waddr_o    <= ls_waddr;
+      ls_wdata_o    <= ls_wdata;
+      ls_raddr_o    <= ls_raddr;
+	    ls_wmask_o    <= ls_wmask;
+	    ls_awsize_o   <= ls_awsize;
+	    ls_arsize_o   <= ls_arsize;
+	    ls_awlen_o    <= ls_alwen;
+	    ls_arlen_o    <= ls_arlen;
+	    ls_awburst_o  <= ls_awburst;
+	    ls_arburst_o  <= ls_arburst;
+		end
 	end
 end
 
@@ -143,41 +137,20 @@ ysyx_24110017_ALU ALU(clk,rst,a_i,b_i,alu_sel_i,al_start,res,al_done);
 
 wire [31:0]ex;
 assign ex = 
-				({32{op_i == 7'b0010011}}/***I*addi~srai***/
-				& (
-						al_res
-					)
-				)				
-			| ({32{op_i == 7'b0110011}}/***R_add~R_remu***/
-				& (
-						al_res
-					)
-				)
-			|
+/***I*addi~srai***/
+				({32{op_i == 7'b0010011}} & (al_res))
+/***R_add~R_remu***/
+			| ({32{op_i == 7'b0110011}} & (al_res))
 /*********/
+			|
 				({32{(op_i == 7'b1101111)}} & (pc_i + 4)) | //I_jal
 				({32{(op_i == 7'b1100111)}} & (pc_i + 4)) | //I_jalr
 				({32{(op_i == 7'b0110111)}} & imm_i) | //U_lui
 				({32{(op_i == 7'b0010111)}} & (pc_i + imm_i))	//U_auipc
-/***LSU***/
-			|
-				({32{(op_i == 7'b0000011) && (funct3_i == 3'b000)}} & {{24{ram_rdata_reg[7]}},ram_rdata_reg[7:0]}) | //I_lb
-				({32{(op_i == 7'b0000011) && (funct3_i == 3'b001)}} & {{16{ram_rdata_reg[15]}},ram_rdata_reg[15:0]}) | //I_lh 
-				({32{(op_i == 7'b0000011) && (funct3_i == 3'b010)}} & ram_rdata_reg) | //I_lw
-				({32{(op_i == 7'b0000011) && (funct3_i == 3'b100)}} & {{24{1'b0}},ram_rdata_reg[7:0]}) | //I_lbu
-				({32{(op_i == 7'b0000011) && (funct3_i == 3'b101)}} & {{16{1'b0}},ram_rdata_reg[15:0]}) //I_lhu
 /***CSRU***/
 			|
-				({32{(op_i == 7'b1110011) && (funct3_i == 3'b001)}} & csr) |	//I_csrrw
-				({32{(op_i == 7'b1110011) && (funct3_i == 3'b010)}} & csr) |	//I_csrrs
-				({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & csr); 	//I_csrrc
+				({32{(op_i == 7'b1110011) && ((funct3_i == 3'b001) || (funct3_i == 3'b010) || (funct3_i == 3'b000))}} & csr_i); //I_csrrw_csrrs_csrrc
 
-/***CSRU***/
-wire[31:0] csr = (op_i == 7'b1110011 && imm_i == 32'd833) ? mepc_i
- : (op_i == 7'b1110011 && imm_i == 32'd768) ? mstatus_i
- : (op_i == 7'b1110011 && imm_i == 32'd834) ? mcause_i
- : (op_i == 7'b1110011 && imm_i == 32'd773) ? mtvec_i
- : 32'b0;
 wire[31:0] mepc_w = (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000) ? pc_i : csrs_w; //ecall
 wire[31:0] mstatus_w = csrs_w;
 wire[31:0] mcause_w = (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000) ? r2_i : csrs_w; //ecall a5
@@ -186,13 +159,8 @@ wire[31:0] csrs_w =
 			({32{(op_i == 7'b1110011) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
 			({32{(op_i == 7'b1110011) && (funct3_i == 3'b010)}} & (csr |  r1_i)) | //I_csrrs
       ({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & (csr & ~r1_i)) ; //I_csrrc
-wire mepc_wen = ((op_i == 7'b1110011 && imm_i == 32'd833) || (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000)) ? 1'b1 : 1'b0;
-wire mstatus_wen = (op_i == 7'b1110011 && imm_i == 32'd768) ? 1'b1 : 1'b0;
-wire mcause_wen = (op_i == 7'b1110011 && imm_i == 32'd834 || (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000)) ? 1'b1 : 1'b0;
-wire mtvec_wen = (op_i == 7'b1110011 && imm_i == 32'd773) ? 1'b1 : 1'b0;
 
 /***LSU***/
-wire [31:0]ls_rdata;
 assign ls_valid_o = (op_i == 7'b0000011 || op_i == 7'b0100011) ? 1'b1 : 1'b0;
 assign ls_wen_o = (op_i == 7'b0100011) ? 1'b1 : 1'b0;
 assign ls_waddr_o = (op_i == 7'b0100011) ? (r1_i + offset) : 32'h80000000;
@@ -210,23 +178,10 @@ assign ls_wmask_o = ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011 && funct3_i == 
 ((ls_waddr_o % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b1000 : ((ls_waddr_o % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b1000 : ((ls_waddr_o % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1000 //单次非对齐
  : 4'b0;
 assign ls_raddr_o = (op_i == 7'b0000011) ? (r1_i + offset) : 32'h0;
-assign ls_rdata = ((ls_raddr_o % 4 == 0) && op_i == 7'b0000011 && funct3_i == 3'b010) ? ls_rdata_i
- : ((ls_raddr_o % 4 == 1) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {8'b0,ls_rdata_i[31:8]}
- : ((ls_raddr_o % 4 == 2) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {16'b0,ls_rdata_i[31:16]}
- : ((ls_raddr_o % 4 == 3) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {24'b0,ls_rdata_i[31:24]} //
- : ((ls_raddr_o % 4 == 0) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[7:0]}
- : ((ls_raddr_o % 4 == 1) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[15:8]}
- : ((ls_raddr_o % 4 == 2) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[23:16]}
- : ((ls_raddr_o % 4 == 3) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[31:24]} //
- : ((ls_raddr_o % 4 == 0) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_i[15:0]}
- : ((ls_raddr_o % 4 == 1) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_i[23:8]}
- : ((ls_raddr_o % 4 == 2) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_i[31:16]}
- : ((ls_raddr_o % 4 == 3) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {24'b0,ls_rdata_i[31:24]} //
- : 32'b0;
 assign ls_awsize_o = (op_i == 7'b0100011 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  7'b0100011 && funct3_i == 3'b001) ? 3'b1 : (op_i == 7'b0100011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
 assign ls_arsize_o = (op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 7'b0000011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
-assign ls_awlen_o = 8'b0;//(op == 7'b0100011 && funct3 == 3'b000) ? 8'b0 : (op ==  7'b0100011 && funct3 == 3'b001) ? 8'b1 : (op == 7'b0100011 && funct3 == 3'b010) ? 8'b11 : 8'b0;
-assign ls_arlen_o = 8'b0;//(op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? 8'b0 : (op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? 8'b1 : (op == 7'b0000011 && funct3 == 3'b010) ? 8'b11 : 8'b0;
+assign ls_awlen_o = 8'b0;
+assign ls_arlen_o = 8'b0;
 assign ls_awburst_o = 2'b01;
 assign ls_arburst_o = 2'b01;
 

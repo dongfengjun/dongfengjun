@@ -66,11 +66,10 @@ module ysyx_24110017(
 wire DIFFTEST = difftest;
 /***PCU***/
 wire [31:0] pc;
-wire [31:0] dnpc;
-wire pc_valid,if_ready; //分布式控制
+wire pc_valid;
 /***IFU***/
-wire [31:0] inst,pc_if;
-wire if_valid,id_ready; //分布式控制
+wire [31:0] inst_if,pc_if;
+wire if_valid,if_ready;
 wire [31:0] if_axi_awaddr,if_axi_wdata,if_axi_araddr,if_axi_rdata;
 wire [ 3:0] if_axi_wstrb;
 wire [ 7:0] if_axi_awlen,if_axi_arlen;
@@ -89,39 +88,51 @@ wire [ 1:0] icache_axi_awburst,icache_axi_arburst;
 wire [ 1:0] icache_axi_bresp,icache_axi_rresp;
 wire icache_axi_awvalid,icache_axi_awready,icache_axi_wvalid,icache_axi_wready,icache_axi_bvalid,icache_axi_bready,icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,icache_axi_wlast,icache_axi_rlast;
 /***IDU***/
-wire id_valid,ex_ready;
+wire id_valid,id_ready;
 wire [4:0] rs1,rs2;
-wire if_valid,id_ready,id_valid,ex_ready;
-wire [31:0] pc_id,imm;
-wire [6:0] op;
-wire [2:0] funct3;
-wire [4:0] rd;
-wire gpr_wen,alu_valid;
-wire [3:0] alu_sel;
-wire [31:0] a,b,r1_id,r2_id;
-wire fencei;
+wire [31:0] pc_id,imm_id;
+wire [6:0] op_id;
+wire [2:0] funct3_id;
+wire [4:0] rd_id;
+wire gpr_wen_id,alu_valid_id;
+wire [3:0] alu_sel_id;
+wire [31:0] a_id,b_id,r1_id,r2_id;
+wire fencei_id;
 /***EXU***/
 wire ex_ready,ex_valid;
-wire [31:0]ex;
-wire ls_read,ls_write,ls_done;
-wire ls_valid,ls_wen;
-wire [31:0]ls_waddr,ls_wdata,ls_raddr;
-wire [3:0]ls_wmask;
-wire [2:0]ls_awsize,ls_arsize;
-wire [7:0]ls_awlen,ls_arlen;
-wire [1:0]ls_awburst,ls_arburst;
-wire [31:0]dnpc;
-wire [31:0]mepc,o_mepc,mstatus,o_mstatus,mcause,o_mcause,mtvec,o_mtvec;
-wire gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen;
+wire [ 4:0] rd_ex;
+wire gpr_wen_ex;
+wire mepc_ex,mstatus_ex,mcause_ex,mtvec_ex;
+wire gpr_wen_ex,mepc_wen_ex,mstatus_wen_ex,mcause_wen_ex,mtvec_wen_ex;
+wire [31:0] ex_ex;
+wire ls_valid_ex,ls_wen_ex;
+wire [31:0] ls_waddr_ex,ls_wdata_ex,ls_raddr_ex;
+wire [ 3:0] ls_wmask_ex;
+wire [ 2:0] ls_awsize_ex,ls_arsize_ex;
+wire [ 7:0] ls_awlen_ex,ls_arlen_ex;
+wire [ 1:0] ls_awburst_ex,ls_arburst_ex;
+wire [31:0] dnpc_ex;
 /***LSU***/
-wire [31:0]ls_rdata;
-wire [31:0]ls_axi_awaddr,ls_axi_wdata,ls_axi_araddr,ls_axi_rdata;
-wire [3:0]ls_axi_wstrb;
-wire [7:0]ls_axi_awlen,ls_axi_arlen;
-wire [3:0]ls_axi_awid,ls_axi_bid,ls_axi_arid,ls_axi_rid;
-wire [2:0]ls_axi_awsize,ls_axi_arsize;
-wire [1:0]ls_axi_awburst,ls_axi_arburst;
-wire [1:0]ls_axi_bresp,ls_axi_rresp;
+wire ls_ready;
+wire [31:0] xrd_ls;
+wire [ 4:0] rd_ls;
+wire gpr_wen_ls;
+wire [31:0] mepc_ls,
+wire [31:0] mstatus_ls,
+wire [31:0] mcause_ls,
+wire [31:0] mtvec_ls,
+wire mepc_wen_ls,
+wire mstatus_wen_ls,
+wire mcause_wen_ls,
+wire mtvec_wen_ls,
+
+wire [31:0] ls_axi_awaddr,ls_axi_wdata,ls_axi_araddr,ls_axi_rdata;
+wire [ 3:0] ls_axi_wstrb;
+wire [ 7:0] ls_axi_awlen,ls_axi_arlen;
+wire [ 3:0] ls_axi_awid,ls_axi_bid,ls_axi_arid,ls_axi_rid;
+wire [ 2:0] ls_axi_awsize,ls_axi_arsize;
+wire [ 1:0] ls_axi_awburst,ls_axi_arburst;
+wire [ 1:0] ls_axi_bresp,ls_axi_rresp;
 wire ls_axi_awvalid,ls_axi_awready,ls_axi_wvalid,ls_axi_wready,ls_axi_bvalid,ls_axi_bready,ls_axi_arvalid,ls_axi_arready,ls_axi_rvalid,ls_axi_rready,ls_axi_wlast,ls_axi_rlast;
 /***Arbiter-Xbar***/
 /***My-Clint***/
@@ -133,15 +144,9 @@ wire [2:0]c_axi_awsize,c_axi_arsize;
 wire [1:0]c_axi_awburst,c_axi_arburst;
 wire [1:0]c_axi_bresp,c_axi_rresp;
 wire c_axi_awvalid,c_axi_awready,c_axi_wvalid,c_axi_wready,c_axi_bvalid,c_axi_bready,c_axi_arvalid,c_axi_arready,c_axi_rvalid,c_axi_rready,c_axi_wlast,c_axi_rlast;
-/***WBU***/
-wire ex_valid,wb_ready,wb_done,difftest;
-wire [31:0]xrd;
-wire [4:0]rf_addr;
-wire rf_wen;
-wire [31:0]w_mepc,w_mstatus,w_mcause,w_mtvec;
-wire mepc_en,mstatus_en,mcause_en,mtvec_en;
 /***RFU***/
 wire [31:0]r1,r2;
+wire [31:0]mepc,mstatus,mcause,mtvec;
 wire [31:0]mvendorid,marchid; //ID
 
 
@@ -152,7 +157,7 @@ ysyx_24110017_PCU PCU(clock,reset,
 );
 ysyx_24110017_IFU IFU(clock,reset,
 		pc_valid,if_ready,if_valid,id_ready,
-		pc,pc_if,inst,
+		pc,pc_if,inst_if,
 		if_axi_awready,if_axi_awvalid,if_axi_awid,if_axi_awaddr,
 		if_axi_awlen,if_axi_awsize,if_axi_awburst,
 		if_axi_wready,if_axi_wvalid,if_axi_wdata,if_axi_wstrb,if_axi_wlast,
@@ -179,24 +184,26 @@ ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei, //w < n
 );
 ysyx_24110017_IDU IDU(clock,reset,
 		rs1,rs2,r1,r2,
+		mepc_i,mstatus_i,mcause_i,mtvec_i,
 		if_valid,id_ready,id_valid,ex_ready,
-		pc_if,inst,
-		pc_id,imm,op,funct3,rd,gpr_wen,alu_valid,alu_sel,a,b,r1_id,r2_id,fencei
+		pc_if,inst_if,
+		pc_id,imm_id,op_id,funct3_id,rd_id,gpr_wen_id,alu_valid_id,alu_sel_id,a_id,b_id,r1_id,r2_id,fencei_id
 );
 ysyx_24110017_EXU EXU(clock,reset,
 		id_valid,ex_ready,ex_valid,wb_ready,
-		pc_id,imm,op,funct3,rd,gpr_wen,alu_valid,alu_sel,a,b,r1_id,r2_id,fencei,
-		ex,
-		ls_read,ls_write,ls_done,
-		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,ls_awsize,ls_arsize,ls_awlen,ls_arlen,ls_awburst,ls_arburst,
-		ls_rdata,
-		dnpc,
-		mepc,mstatus,mcause,mtvec,o_mepc,o_mstatus,o_mcause,o_mtvec,
-		gpr_wen,mepc_wen,mstatus_wen,mcause_wen,mtvec_wen
+		pc_id,imm_id,op_id,funct3_id,rd_id,gpr_wen_id,alu_valid_id,alu_sel_id,a_id,b_id,r1_id,r2_id,fencei_id,
+		rd_ex,gpr_wen_ex,mepc_ex,mstatus_ex,mcause_ex,mtvec_ex,fencei_ex,
+		ls_valid_ex,ls_wen_ex,ls_read_ex,ls_write_ex,
+		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,ls_wmask_ex,ls_awsize_ex,ls_arsize_ex,ls_awlen_ex,ls_arlen_ex,ls_awburst_ex,ls_arburst_ex,
+		dnpc_ex
 );
-ysyx_24110017_LSU LSU(clock,reset,ls_read,ls_write,ls_done,
-		ls_rdata,
-		ls_valid,ls_wen,ls_waddr,ls_wdata,ls_raddr,ls_wmask,ls_awsize,ls_arsize,ls_awlen,ls_arlen,ls_awburst,ls_arburst,
+ysyx_24110017_LSU LSU(clock,reset,
+		rd_ex,gpr_wen_ex,mepc_ex,mstatus_ex,mcause_ex,mtvec_ex,
+		mepc_wen_ex,mstatus_wen_ex,mcause_wen_ex,mtvec_wen_ex,
+		ex_ex,ls_valid_ex,ls_wen_ex,ls_read_ex,ls_write_ex,
+		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,
+		ls_wmask_ex,ls_awsize_ex,ls_arsize_ex,
+		ls_awlen_ex,ls_arlen_ex,ls_awburst_ex,ls_arburst_ex,	
 		ls_axi_awready,ls_axi_awvalid,ls_axi_awid,ls_axi_awaddr,
 		ls_axi_awlen,ls_axi_awsize,ls_axi_awburst,
 		ls_axi_wready,ls_axi_wvalid,ls_axi_wdata,ls_axi_wstrb,ls_axi_wlast,
@@ -220,22 +227,6 @@ ysyx_24110017_Xbar Xbar(clock,reset,
 		ls_axi_arready,ls_axi_arvalid,ls_axi_arid,ls_axi_araddr,
 		ls_axi_arlen,ls_axi_arsize,ls_axi_arburst,
 		ls_axi_rready,ls_axi_rvalid,ls_axi_rid,ls_axi_rdata,ls_axi_rresp,ls_axi_rlast,
-/***My-sram***
-		S_AXI_AWREADY,S_AXI_AWVALID,S_AXI_AWID,S_AXI_AWADDR,
-		S_AXI_AWLEN,S_AXI_AWSIZE,S_AXI_AWBURST,
-		S_AXI_WREADY,S_AXI_WVALID,S_AXI_WDATA,S_AXI_WSTRB,S_AXI_WLAST,          
-		S_AXI_BREADY,S_AXI_BVALID,S_AXI_BID,S_AXI_BRESP,
-		S_AXI_ARREADY,S_AXI_ARVALID,S_AXI_ARID,S_AXI_ARADDR,
-		S_AXI_ARLEN,S_AXI_ARSIZE,S_AXI_ARBURST,
-		S_AXI_RREADY,S_AXI_RVALID,S_AXI_RID,S_AXI_RDATA,S_AXI_RRESP,S_AXI_RLAST,
-		U_AXI_AWREADY,U_AXI_AWVALID,U_AXI_AWID,U_AXI_AWADDR,
-		U_AXI_AWLEN,U_AXI_AWSIZE,U_AXI_AWBURST,
-		U_AXI_WREADY,U_AXI_WVALID,U_AXI_WDATA,U_AXI_WSTRB,U_AXI_WLAST,          
-		U_AXI_BREADY,U_AXI_BVALID,U_AXI_BID,U_AXI_BRESP,
-		U_AXI_ARREADY,U_AXI_ARVALID,U_AXI_ARID,U_AXI_ARADDR,
-		U_AXI_ARLEN,U_AXI_ARSIZE,U_AXI_ARBURST,
-		U_AXI_RREADY,U_AXI_RVALID,U_AXI_RID,U_AXI_RDATA,U_AXI_RRESP,U_AXI_RLAST,
-******/
 		io_master_awready,io_master_awvalid,io_master_awid,io_master_awaddr,
 		io_master_awlen,io_master_awsize,io_master_awburst,
 		io_master_wready,io_master_wvalid,io_master_wdata,io_master_wstrb,io_master_wlast,
@@ -243,7 +234,6 @@ ysyx_24110017_Xbar Xbar(clock,reset,
 		io_master_arready,io_master_arvalid,io_master_arid,io_master_araddr,
 		io_master_arlen,io_master_arsize,io_master_arburst,
 		io_master_rready,io_master_rvalid,io_master_rid,io_master_rdata,io_master_rresp,io_master_rlast,
-/***My-Clint***/
 		c_axi_awready,c_axi_awvalid,c_axi_awid,c_axi_awaddr,
 		c_axi_awlen,c_axi_awsize,c_axi_awburst,
 		c_axi_wready,c_axi_wvalid,c_axi_wdata,c_axi_wstrb,c_axi_wlast,
@@ -253,28 +243,6 @@ ysyx_24110017_Xbar Xbar(clock,reset,
 		c_axi_rready,c_axi_rvalid,c_axi_rid,c_axi_rdata,c_axi_rresp,c_axi_rlast,
 		mvendorid,marchid
 );
-/***My-sram***
-ysyx_24110017_SRAM ysyx_24110017_SRAM(clock,reset,
-		S_AXI_AWREADY,S_AXI_AWVALID,S_AXI_AWID,S_AXI_AWADDR,
-    S_AXI_AWLEN,S_AXI_AWSIZE,S_AXI_AWBURST,
-    S_AXI_WREADY,S_AXI_WVALID,S_AXI_WDATA,S_AXI_WSTRB,S_AXI_WLAST,
-    S_AXI_BREADY,S_AXI_BVALID,S_AXI_BID,S_AXI_BRESP,
-    S_AXI_ARREADY,S_AXI_ARVALID,S_AXI_ARID,S_AXI_ARADDR,
-    S_AXI_ARLEN,S_AXI_ARSIZE,S_AXI_ARBURST,
-    S_AXI_RREADY,S_AXI_RVALID,S_AXI_RID,S_AXI_RDATA,S_AXI_RRESP,S_AXI_RLAST
-);
-******/
-/***My-Uart***
-ysyx_24110017_UART ysyx_24110017_UART(clock,reset,
-		U_AXI_AWREADY,U_AXI_AWVALID,U_AXI_AWID,U_AXI_AWADDR,
-		U_AXI_AWLEN,U_AXI_AWSIZE,U_AXI_AWBURST,
-		U_AXI_WREADY,U_AXI_WVALID,U_AXI_WDATA,U_AXI_WSTRB,U_AXI_WLAST, 
-		U_AXI_BREADY,U_AXI_BVALID,U_AXI_BID,U_AXI_BRESP,
-		U_AXI_ARREADY,U_AXI_ARVALID,U_AXI_ARID,U_AXI_ARADDR,
-		U_AXI_ARLEN,U_AXI_ARSIZE,U_AXI_ARBURST,
-		U_AXI_RREADY,U_AXI_RVALID,U_AXI_RID,U_AXI_RDATA,U_AXI_RRESP,U_AXI_RLAST
-);
-******/
 /***My-Clint***/
 ysyx_24110017_CLINT CLINT(clock,reset,
 		c_axi_awready,c_axi_awvalid,c_axi_awid,c_axi_awaddr,
@@ -285,20 +253,12 @@ ysyx_24110017_CLINT CLINT(clock,reset,
 		c_axi_arlen,c_axi_arsize,c_axi_arburst,
 		c_axi_rready,c_axi_rvalid,c_axi_rid,c_axi_rdata,c_axi_rresp,c_axi_rlast
 );
-ysyx_24110017_WBU WBU(clock,reset,
-		ex_valid,wb_ready,wb_done,difftest,
-		xrd,ex,
-		rf_addr,rd,
-		rf_wen,gpr_wen,
-		o_mepc,o_mstatus,o_mcause,o_mtvec,w_mepc,w_mstatus,w_mcause,w_mtvec,
-		mepc_wen,mstatus_wen,mcause_wen,mtvec_wen,
-		mepc_en,mstatus_en,mcause_en,mtvec_en
-);
-ysyx_24110017_RegisterFile #(5,32) RFU (clock,xrd,rf_addr,rf_wen,rs1,r1,rs2,r2);
-ysyx_24110017_Reg #(32, 32'b0) mepc_reg (clock,reset,w_mepc,mepc,mepc_en);
-ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,w_mstatus,mstatus,mstatus_en);
-ysyx_24110017_Reg #(32, 32'b0) mcause_reg (clock,reset,w_mcause,mcause,mcause_en);
-ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,w_mtvec,mtvec,mtvec_en);
+
+ysyx_24110017_RegisterFile #(5,32) RFU (clock,xrd_ls,rd_ls,gpr_wen_ls,rs1,r1,rs2,r2);
+ysyx_24110017_Reg #(32, 32'b0) mepc_reg (clock,reset,mepc_ls,mepc,mepc_wen_ls);
+ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,mstatus_ls,mstatus,mstatus_wen_ls);
+ysyx_24110017_Reg #(32, 32'b0) mcause_reg (clock,reset,mcause_ls,mcause,mcause_wen_ls);
+ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,mtvec_ls,mtvec,mtvec_wen_ls);
 ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid,1'b0);
 ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
 

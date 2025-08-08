@@ -6,6 +6,7 @@ module ysyx_24110017_IDU(
 	output wire [ 4:0] rs2_o,
 	input  wire [31:0] r1_i,
 	input  wire [31:0] r2_i,
+	input  wire [31:0] mepc_i,mstatus_i,mcause_i,mtvec_i,
 
 	input  wire if_valid_i,		//valid
 	output wire id_ready_o,
@@ -27,6 +28,8 @@ module ysyx_24110017_IDU(
 	output reg  [31:0] b_o,
 	output reg  [31:0] r1_o,
 	output reg  [31:0] r2_o,
+	output reg	[31:0] csr,
+	output reg	mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o,
 	output reg  fencei_o
 );
 
@@ -47,28 +50,6 @@ end
 assign id_valid_o = (state == WAIT);
 assign id_ready_o = (state == IDLE);
 
-always @(posedge clk or posedge rst) begin
-	if(rst) begin
-//		id_valid_o <= 1'b0;
-//		id_ready_o <= 1'b0;
-	end
-	else begin
-		case (state)
-			IDLE: begin
-//				id_ready_o <= 1'b1;
-//				if(if_valid_i && id_ready_o) begin
-//				id_ready_o <= 1'b0;
-//				end
-			end
-			WAIT: begin
-//				id_valid_o <= 1'b1;
-//				if(id_valid_o && ex_ready_i) begin
-//				id_valid_o <= 1'b0;
-//				end
-			end
-		endcase
-	end
-end
 
 always@(posedge clk or posedge rst) begin
 	if(rst) begin
@@ -84,6 +65,11 @@ always@(posedge clk or posedge rst) begin
 		b_o					<= 32'h0;
 		r1_o				<= 32'h0;
 		r2_o				<= 32'h0;
+		csr_o				<= 32'h0;
+		mepc_wen_o		<= 1'b0;
+		mstatus_wen_o <= 1'b0;
+		mcause_wen_o	<= 1'b0;
+		mtvec_wen_o		<= 1'b0;
 		fencei_o		<= 1'b0;
 	end
 	else begin
@@ -100,6 +86,11 @@ always@(posedge clk or posedge rst) begin
 	    b_o         <= b;
 			r1_o				<= r1_i;
 			r2_o				<= r2_i;
+			csr_o       <= csr;
+	    mepc_wen_o    <= mepc_wen;
+	    mstatus_wen_o <= mstatus_wen;
+	    mcause_wen_o  <= mcause_wen;
+	    mtvec_wen_o   <= mtvec_wen;
 			fencei_o		<= fencei;
 		end
 	end
@@ -187,6 +178,16 @@ assign alu_sel =  ((op == 7'b0010011 && funct3 == 3'b000) || (op == 7'b0110011 &
 							(op == 7'b0110011 && ((funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001))) ? DIV :
 							(op == 7'b0110011 && ((funct3 == 3'b110 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? REM 
 							: 4'b1111;
+
+wire[31:0] csr_o = (op == 7'b1110011 && imm == 32'd833) ? mepc_i
+	: (op == 7'b1110011 && imm == 32'd768) ? mstatus_i
+	: (op == 7'b1110011 && imm == 32'd834) ? mcause_i
+	: (op == 7'b1110011 && imm == 32'd773) ? mtvec_i
+	: 32'b0;
+wire mepc_wen_o = ((op == 7'b1110011 && imm == 32'd833) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
+wire mstatus_wen_o = (op == 7'b1110011 && imm == 32'd768) ? 1'b1 : 1'b0;
+wire mcause_wen_o = (op == 7'b1110011 && imm == 32'd834 || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
+wire mtvec_wen_o = (op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
 
 wire fencei = (inst_i == 32'b00000000000000000001000000001111);
 
