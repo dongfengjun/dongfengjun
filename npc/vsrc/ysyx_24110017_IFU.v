@@ -53,7 +53,7 @@ always @(posedge clk or posedge rst) begin
 	if(rst) state <= IDLE;
 	else begin
 		case(state)
-			IDLE: state <= (pc_valid_i && if_rready) ? WAIT : state;
+			IDLE: state <= (pc_valid_i && if_ready_o) ? WAIT : state;
 			WAIT:	state <= (if_valid_o && id_ready_i) ? IDLE : state;
 		endcase
 	end

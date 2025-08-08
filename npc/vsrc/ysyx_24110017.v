@@ -63,7 +63,6 @@ module ysyx_24110017(
 	output wire io_slave_rlast
 );
 
-wire DIFFTEST = difftest;
 /***PCU***/
 wire [31:0] pc;
 wire pc_valid;
@@ -152,7 +151,7 @@ wire [31:0]mvendorid,marchid; //ID
 
 
 ysyx_24110017_PCU PCU(clock,reset,
-		pc,dnpc,
+		pc,dnpc_ex,
 		pc_valid,
 		if_ready
 );
