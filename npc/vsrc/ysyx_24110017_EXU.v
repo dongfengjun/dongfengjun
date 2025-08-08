@@ -138,7 +138,7 @@ always @(posedge clk or posedge rst) begin
 end
 
 wire al_done;
-ysyx_24110017_ALU ALU(clk,rst,a_i,b_i,alu_sel_i,al_start,res,al_done);
+ysyx_24110017_ALU ALU(clk,rst,a_i,b_i,alu_sel_i,alu_start_i,res,al_done);
 
 wire [31:0]ex;
 assign ex = 
@@ -162,8 +162,8 @@ wire[31:0] mcause_w = (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b00
 wire[31:0] mtvec_w = csrs_w;
 wire[31:0] csrs_w = 
 			({32{(op_i == 7'b1110011) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
-			({32{(op_i == 7'b1110011) && (funct3_i == 3'b010)}} & (csr |  r1_i)) | //I_csrrs
-      ({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & (csr & ~r1_i)) ; //I_csrrc
+			({32{(op_i == 7'b1110011) && (funct3_i == 3'b010)}} & (csr_i |  r1_i)) | //I_csrrs
+      ({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & (csr_i & ~r1_i)) ; //I_csrrc
 
 /***LSU***/
 wire ls_valid = (op_i == 7'b0000011 || op_i == 7'b0100011) ? 1'b1 : 1'b0;
