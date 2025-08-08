@@ -108,7 +108,7 @@ wire mepc_ex,mstatus_ex,mcause_ex,mtvec_ex;
 wire mepc_wen_ex,mstatus_wen_ex,mcause_wen_ex,mtvec_wen_ex;
 wire [31:0] ex_ex;
 wire ls_valid_ex,ls_wen_ex;
-wire ls_read_o,ls_write_o;
+wire ls_read_ex,ls_write_ex;
 wire [31:0] ls_waddr_ex,ls_wdata_ex,ls_raddr_ex;
 wire [ 3:0] ls_wmask_ex;
 wire [ 2:0] ls_awsize_ex,ls_arsize_ex;
