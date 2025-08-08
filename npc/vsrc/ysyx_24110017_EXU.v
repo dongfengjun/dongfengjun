@@ -119,20 +119,20 @@ always @(posedge clk or posedge rst) begin
       mcause_wen_o  <= mcause_wen_i;
       mtvec_wen_o   <= mtvec_wen_i;
       ex_o          <= ex_i;
-      ls_valid_o    <= ls_valid_i;
-      ls_wen_o      <= ls_wen_i;
-      ls_read_o     <= ls_read_i;
-      ls_write_o    <= ls_write_i;
-      ls_waddr_o    <= ls_waddr_i;
-      ls_wdata_o    <= ls_wdata_i;
-      ls_raddr_o    <= ls_raddr_i;
-	    ls_wmask_o    <= ls_wmask_i;
-	    ls_awsize_o   <= ls_awsize_i;
-	    ls_arsize_o   <= ls_arsize_i;
-	    ls_awlen_o    <= ls_alwen_i;
-	    ls_arlen_o    <= ls_arlen_i;
-	    ls_awburst_o  <= ls_awburst_i;
-	    ls_arburst_o  <= ls_arburst_i;
+      ls_valid_o    <= ls_valid;
+      ls_wen_o      <= ls_wen;
+      ls_read_o     <= ls_read;
+      ls_write_o    <= ls_write;
+      ls_waddr_o    <= ls_waddr;
+      ls_wdata_o    <= ls_wdata;
+      ls_raddr_o    <= ls_raddr;
+	    ls_wmask_o    <= ls_wmask;
+	    ls_awsize_o   <= ls_awsize;
+	    ls_arsize_o   <= ls_arsize;
+	    ls_awlen_o    <= ls_alwen;
+	    ls_arlen_o    <= ls_arlen;
+	    ls_awburst_o  <= ls_awburst;
+	    ls_arburst_o  <= ls_arburst;
 		end
 	end
 end
@@ -166,15 +166,15 @@ wire[31:0] csrs_w =
       ({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & (csr & ~r1_i)) ; //I_csrrc
 
 /***LSU***/
-assign ls_valid_o = (op_i == 7'b0000011 || op_i == 7'b0100011) ? 1'b1 : 1'b0;
-assign ls_wen_o = (op_i == 7'b0100011) ? 1'b1 : 1'b0;
-assign ls_waddr_o = (op_i == 7'b0100011) ? (r1_i + offset) : 32'h80000000;
-assign ls_wdata_o = ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011) ? r2_i //对齐
+assign ls_valid = (op_i == 7'b0000011 || op_i == 7'b0100011) ? 1'b1 : 1'b0;
+assign ls_wen = (op_i == 7'b0100011) ? 1'b1 : 1'b0;
+assign ls_waddr = (op_i == 7'b0100011) ? (r1_i + offset) : 32'h80000000;
+assign ls_wdata = ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011) ? r2_i //对齐
  : ((ls_waddr_o % 4 == 1) && op_i == 7'b0100011) ? {r2_i[23:0],8'b0} //0x1
  : ((ls_waddr_o % 4 == 2) && op_i == 7'b0100011) ? {r2_i[15:0],16'b0} //0x2
  : ((ls_waddr_o % 4 == 3) && op_i == 7'b0100011) ? {r2_i[7:0],24'b0} //0x3
  : 32'b0;
-assign ls_wmask_o = ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0001 : ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0011 : ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1111 //对齐访问
+assign ls_wmask = ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0001 : ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0011 : ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1111 //对齐访问
  : 
 ((ls_waddr_o % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0010 : ((ls_waddr_o % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0110 : ((ls_waddr_o % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1110 //单次非对齐
  :
@@ -182,13 +182,13 @@ assign ls_wmask_o = ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011 && funct3_i == 
  :
 ((ls_waddr_o % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b1000 : ((ls_waddr_o % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b1000 : ((ls_waddr_o % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1000 //单次非对齐
  : 4'b0;
-assign ls_raddr_o = (op_i == 7'b0000011) ? (r1_i + offset) : 32'h0;
-assign ls_awsize_o = (op_i == 7'b0100011 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  7'b0100011 && funct3_i == 3'b001) ? 3'b1 : (op_i == 7'b0100011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
-assign ls_arsize_o = (op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 7'b0000011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
-assign ls_awlen_o = 8'b0;
-assign ls_arlen_o = 8'b0;
-assign ls_awburst_o = 2'b01;
-assign ls_arburst_o = 2'b01;
+assign ls_raddr = (op_i == 7'b0000011) ? (r1_i + offset) : 32'h0;
+assign ls_awsize = (op_i == 7'b0100011 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  7'b0100011 && funct3_i == 3'b001) ? 3'b1 : (op_i == 7'b0100011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
+assign ls_arsize = (op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 7'b0000011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
+assign ls_awlen = 8'b0;
+assign ls_arlen = 8'b0;
+assign ls_awburst = 2'b01;
+assign ls_arburst = 2'b01;
 
 /***BU***/
 wire [31:0]offset = imm_i;
