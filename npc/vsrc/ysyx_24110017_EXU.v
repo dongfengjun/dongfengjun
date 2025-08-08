@@ -108,12 +108,12 @@ always @(posedge clk or posedge rst) begin
 	end
 	else begin
 		if(ex_valid_o && ls_ready_i) begin
-			rd_o          <= rd;
+			rd_o          <= rd_i;
 	    gpr_wen_o     <= gpr_wen_i;
-	    mepc_o        <= mepc_w_i;
-      mstatus_o     <= mstatus_w_i;
-      mcause_o      <= mcause_w_i;
-      mtvec_o       <= mtvec_w_i;
+	    mepc_o        <= mepc_w;
+      mstatus_o     <= mstatus_w;
+      mcause_o      <= mcause_w;
+      mtvec_o       <= mtvec_w;
       mepc_wen_o    <= mepc_wen_i;
       mstatus_wen_o <= mstatus_wen_i;
       mcause_wen_o  <= mcause_wen_i;
