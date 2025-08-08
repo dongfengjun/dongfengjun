@@ -179,15 +179,15 @@ assign alu_sel =  ((op == 7'b0010011 && funct3 == 3'b000) || (op == 7'b0110011 &
 							(op == 7'b0110011 && ((funct3 == 3'b110 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? REM 
 							: 4'b1111;
 
-wire[31:0] csr_o = (op == 7'b1110011 && imm == 32'd833) ? mepc_i
+wire[31:0] csr = (op == 7'b1110011 && imm == 32'd833) ? mepc_i
 	: (op == 7'b1110011 && imm == 32'd768) ? mstatus_i
 	: (op == 7'b1110011 && imm == 32'd834) ? mcause_i
 	: (op == 7'b1110011 && imm == 32'd773) ? mtvec_i
 	: 32'b0;
-wire mepc_wen_o = ((op == 7'b1110011 && imm == 32'd833) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
-wire mstatus_wen_o = (op == 7'b1110011 && imm == 32'd768) ? 1'b1 : 1'b0;
-wire mcause_wen_o = (op == 7'b1110011 && imm == 32'd834 || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
-wire mtvec_wen_o = (op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
+wire mepc_wen = ((op == 7'b1110011 && imm == 32'd833) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
+wire mstatus_wen = (op == 7'b1110011 && imm == 32'd768) ? 1'b1 : 1'b0;
+wire mcause_wen = (op == 7'b1110011 && imm == 32'd834 || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
+wire mtvec_wen = (op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
 
 wire fencei = (inst_i == 32'b00000000000000000001000000001111);
 
