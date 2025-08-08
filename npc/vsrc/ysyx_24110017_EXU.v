@@ -129,7 +129,7 @@ always @(posedge clk or posedge rst) begin
 	    ls_wmask_o    <= ls_wmask;
 	    ls_awsize_o   <= ls_awsize;
 	    ls_arsize_o   <= ls_arsize;
-	    ls_awlen_o    <= ls_alwen;
+	    ls_awlen_o    <= ls_awlen;
 	    ls_arlen_o    <= ls_arlen;
 	    ls_awburst_o  <= ls_awburst;
 	    ls_arburst_o  <= ls_arburst;
