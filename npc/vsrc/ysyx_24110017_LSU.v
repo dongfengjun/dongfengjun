@@ -107,11 +107,11 @@ always@(posedge clk or posedge rst) begin
 	    mstatus_o     <= mstatus_i;
 	    mcause_o      <= mcause_i;
 	    mtvec_o       <= mtvec_i;
-	    mepc_wen_o    <= mepc_wen;
-	    mstatus_wen_o <= mstatus_wen;
-	    mcause_wen_o  <= mcause_wen;
-	    mtvec_wen_o   <= mtvec_wen;
-	    xrd_o         <= xrd;
+	    mepc_wen_o    <= mepc_wen_i;
+	    mstatus_wen_o <= mstatus_wen_i;
+	    mcause_wen_o  <= mcause_wen_i;
+	    mtvec_wen_o   <= mtvec_wen_i;
+	    xrd_o         <= xrd_i;
 		end
 	end
 end
