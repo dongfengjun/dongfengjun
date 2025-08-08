@@ -136,7 +136,7 @@ assign ls_rdata = ((ls_raddr_o % 4 == 0) && op_i == 7'b0000011 && funct3_i == 3'
 
 import "DPI-C" function void diff_skip_ref();
 
-parameter IDLE=3'b0,READ=3'b001,WRITE1=3'b010,WRITE2=3'b011,DONE=3'b100;
+parameter AXI_IDLE=3'b0,AXI_READ=3'b001,AXI_WRITE1=3'b010,AXI_WRITE2=3'b011,AXI_DONE=3'b100;
 reg [2:0]axi_state;
 
 reg axi_awvalid,axi_wvalid;
@@ -199,9 +199,9 @@ always @(posedge clk or posedge rst) begin
     end 
 		else begin
       case (axi_state)
-        IDLE: begin
+        AXI_IDLE: begin
 				  if(ls_read_i) begin
-            state <= READ;
+            state <= AXI_READ;
 					  axi_arvalid <= 1'b1;//非DELAY_TEST
 						axi_araddr <= raddr_i;
 						axi_arsize <= arsize_i;
@@ -209,7 +209,7 @@ always @(posedge clk or posedge rst) begin
 						axi_arburst <= arburst_i;
 					end
 					if(ls_write_i) begin
-		        state <= WRITE1;
+		        state <= AXI_WRITE1;
 						axi_awvalid <= 1'b1;//非DELAY_TEST
 						axi_awaddr <= waddr_i;
 						axi_awsize <= awsize_i;
@@ -218,7 +218,7 @@ always @(posedge clk or posedge rst) begin
 						axi_wstrb <= wmask_i;
 	        end
 				end
-				READ: begin
+				AXI_READ: begin
           if(ls_axi_arvalid && ls_axi_arready) begin
 						axi_arvalid <= 1'b0;
 						axi_rready <= 1'b1;
@@ -226,7 +226,7 @@ always @(posedge clk or posedge rst) begin
 	        if(ls_axi_rvalid && ls_axi_rready) begin
             ls_rdata_reg <= ls_axi_rdata;//
 						axi_rready <= 0;
-            state <= DONE;
+            state <= AXI_DONE;
 `ifndef YOSYS_STA						
 						if((ls_axi_araddr - 32'h10000000 < 32'h1000) || (ls_axi_araddr == 32'h02000000) || (ls_axi_araddr == 32'h02000004)) begin //DEVICE DIFFTEST
 							diff_skip_ref();
@@ -235,15 +235,15 @@ always @(posedge clk or posedge rst) begin
 						ls_done_reg <= 1'b1;
           end
         end
-				WRITE1: begin
+				AXI_WRITE1: begin
 					axi_wvalid <= 1'b1;
 					if(ls_axi_awvalid && ls_axi_awready) begin
 						axi_awvalid <= 0;
 						axi_wlast <= 1;
-						state <= WRITE2;
+						state <= AXI_WRITE2;
 					end
 				end
-				WRITE2:begin
+				AXI_WRITE2:begin
 					if(ls_axi_wvalid && ls_axi_wready) begin
 						axi_wvalid <= 0;
 					end
@@ -252,11 +252,11 @@ always @(posedge clk or posedge rst) begin
 					end
 					if(ls_axi_bvalid && ls_axi_bready) begin
 						axi_bready <= 0;
-						state <= DONE;
+						state <= AXI_DONE;
 						ls_done_reg <= 1'b1;
 					end
 				end
-        DONE: begin
+        AXI_DONE: begin
 					axi_arvalid <= 0;
 					axi_rready <= 0;
 					axi_araddr <= 32'h0;
@@ -274,7 +274,7 @@ always @(posedge clk or posedge rst) begin
 					axi_bready <= 0;
 					ls_done_reg <= 0;
 					ls_rdata_reg <= 32'h0;
-          state <= IDLE;
+          state <= AXI_IDLE;
         end
 			default: begin
 			end

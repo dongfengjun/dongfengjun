@@ -28,7 +28,7 @@ module ysyx_24110017_IDU(
 	output reg  [31:0] b_o,
 	output reg  [31:0] r1_o,
 	output reg  [31:0] r2_o,
-	output reg	[31:0] csr,
+	output reg	[31:0] csr_o,
 	output reg	mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o,
 	output reg  fencei_o
 );
