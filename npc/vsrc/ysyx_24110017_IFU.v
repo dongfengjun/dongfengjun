@@ -45,7 +45,7 @@ module ysyx_24110017_IFU(
 );
 
 /***分布式控制***/
-assign if_valid_o = (state == WAIT);
+assign if_ready_o = (state == WAIT);
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
