@@ -121,20 +121,20 @@ end
 reg ls_done_reg;
 wire ls_done_o = ls_done_reg;
 reg [31:0]ls_rdata_reg;
-wire [31:0]ls_rdata = ls_rdata_reg;
+wire [31:0]ls_rdata;
 
-assign ls_rdata = ((ls_raddr_i % 4 == 0) && op_i == 7'b0000011 && funct3_i == 3'b010) ? ls_rdata_i
- : ((ls_raddr_i % 4 == 1) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {8'b0,ls_rdata_i[31:8]}
- : ((ls_raddr_i % 4 == 2) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {16'b0,ls_rdata_i[31:16]}
- : ((ls_raddr_i % 4 == 3) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {24'b0,ls_rdata_i[31:24]}
- : ((ls_raddr_i % 4 == 0) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[7:0]}
- : ((ls_raddr_i % 4 == 1) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[15:8]}
- : ((ls_raddr_i % 4 == 2) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[23:16]}
- : ((ls_raddr_i % 4 == 3) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[31:24]}
- : ((ls_raddr_i % 4 == 0) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_i[15:0]}
- : ((ls_raddr_i % 4 == 1) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_i[23:8]}
- : ((ls_raddr_i % 4 == 2) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_i[31:16]}
- : ((ls_raddr_i % 4 == 3) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {24'b0,ls_rdata_i[31:24]}
+assign ls_rdata = ((ls_raddr_i % 4 == 0) && op_i == 7'b0000011 && funct3_i == 3'b010) ? ls_rdata_reg
+ : ((ls_raddr_i % 4 == 1) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {8'b0,ls_rdata_reg[31:8]}
+ : ((ls_raddr_i % 4 == 2) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {16'b0,ls_rdata_reg[31:16]}
+ : ((ls_raddr_i % 4 == 3) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {24'b0,ls_rdata_reg[31:24]}
+ : ((ls_raddr_i % 4 == 0) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_reg[7:0]}
+ : ((ls_raddr_i % 4 == 1) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_reg[15:8]}
+ : ((ls_raddr_i % 4 == 2) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_reg[23:16]}
+ : ((ls_raddr_i % 4 == 3) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_reg[31:24]}
+ : ((ls_raddr_i % 4 == 0) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_reg[15:0]}
+ : ((ls_raddr_i % 4 == 1) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_reg[23:8]}
+ : ((ls_raddr_i % 4 == 2) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_reg[31:16]}
+ : ((ls_raddr_i % 4 == 3) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {24'b0,ls_rdata_reg[31:24]}
  : 32'b0;
 
 import "DPI-C" function void diff_skip_ref();
