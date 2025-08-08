@@ -155,7 +155,7 @@ assign ls_axi_awvalid = axi_awvalid;
 assign ls_axi_wvalid = axi_wvalid;
 assign ls_axi_awid = axi_awid;
 assign ls_axi_awaddr = axi_awaddr;
-assign ls_axi_wdata = (ls_axi_wvalid) ? wdata_i : 32'h0;//axi_wdata;
+assign ls_axi_wdata = (ls_axi_wvalid) ? ls_wdata_i : 32'h0;//axi_wdata;
 assign ls_axi_awlen = axi_awlen;
 assign ls_axi_awsize = axi_awsize;
 assign ls_axi_awburst = axi_awburst;
@@ -206,19 +206,19 @@ always @(posedge clk or posedge rst) begin
 				  if(ls_read_i) begin
             axi_state <= AXI_READ;
 					  axi_arvalid <= 1'b1;//非DELAY_TEST
-						axi_araddr <= raddr_i;
-						axi_arsize <= arsize_i;
-						axi_arlen <= arlen_i;
-						axi_arburst <= arburst_i;
+						axi_araddr <= ls_raddr_i;
+						axi_arsize <= ls_arsize_i;
+						axi_arlen <= ls_arlen_i;
+						axi_arburst <= ls_arburst_i;
 					end
 					if(ls_write_i) begin
 		        axi_state <= AXI_WRITE1;
 						axi_awvalid <= 1'b1;//非DELAY_TEST
-						axi_awaddr <= waddr_i;
-						axi_awsize <= awsize_i;
-						axi_awlen <= awlen_i;
-						axi_awburst <= awburst_i;
-						axi_wstrb <= wmask_i;
+						axi_awaddr <= ls_waddr_i;
+						axi_awsize <= ls_awsize_i;
+						axi_awlen <= ls_awlen_i;
+						axi_awburst <= ls_awburst_i;
+						axi_wstrb <= ls_wmask_i;
 	        end
 				end
 				AXI_READ: begin
