@@ -54,8 +54,8 @@ always @(posedge clk or posedge rst) begin
 	if(rst) state <= IDLE;
   else begin
 		case (state)
-			IDLE:  state <= (id_valid_i && ex_ready_o) ? WAIT : state;
-			WAIT:  state <= (ex_valid_o && ls_ready_i) ? IDLE : state;
+			IDLE: state <= (id_valid_i && ex_ready_o) ? WAIT : state;
+			WAIT: state <= (ex_valid_o && ls_ready_i) ? IDLE : state;
 		endcase
 	end
 end
@@ -63,7 +63,7 @@ end
 always @(posedge clk or posedge rst) begin
 	if(rst) ex_valid <= 1'b0;
 	else begin
-		if() begin
+		if(al_done || !al_state) begin
 			ex_valid <= 1'b1;
 		end
 		if(ex_valid && ls_ready) begin
