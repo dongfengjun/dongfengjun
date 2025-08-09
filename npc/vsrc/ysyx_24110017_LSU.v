@@ -102,7 +102,7 @@ always@(posedge clk or posedge rst) begin
 		xrd_o					<= 32'h0;
 	end
 	else begin
-		if(ls_done_o) begin
+		if(ls_done_o || !ls_valid_i) begin
 			rd_o          <= rd_i;
 	    gpr_wen_o     <= gpr_wen_i;
 	    mepc_o        <= mepc_i;
