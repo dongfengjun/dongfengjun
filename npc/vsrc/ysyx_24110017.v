@@ -273,7 +273,7 @@ ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid
 ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
 
 wire isRAW = ((rs1 != 0) && ((rs1 == rd_ex) || (rs1 == rd_ls))) || ((rs2 != 0) && ((rs2 == rd_ex) || (rs2 == rd_ls)));
-wire isCHazard = (dnpc_ex != pc_id != 32'h0);
+wire isCHazard = (dnpc_ex != pc_id) && (pc_id != 32'h0);
 
 `ifndef YOSYS_STA
 /***DPI-C*CSR***/
