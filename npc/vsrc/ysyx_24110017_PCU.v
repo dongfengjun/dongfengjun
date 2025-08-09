@@ -16,10 +16,12 @@ always @(posedge clk or posedge rst) begin
 		pc_o <= 32'h30000000; //flash
 	end
 	else begin
-		if(pc_valid_o && if_ready_i) begin
-      if(isCHazard) pc_o <= dnpc_i;
-			else pc_o <= pc_o + 4;
-    end
+		if(isCHazard) pc_o <= dnpc_i
+		else begin
+			if(pc_valid_o && if_ready_i) begin
+				pc_o <= pc_o + 4;
+			end
+		end
 		if(((pc_o < 32'h30000000) || (pc_o >= 32'h40000000)) 
 			&& ((pc_o < 32'h0f000000) || (pc_o >= 32'h0f002000))
 			&& ((pc_o < 32'h80000000) || (pc_o >= 32'h84000000))
