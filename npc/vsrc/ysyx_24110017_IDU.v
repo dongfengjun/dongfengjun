@@ -99,23 +99,24 @@ always@(posedge clk or posedge rst) begin
 			end
 			WAIT: begin
 				if(id_valid_o && ex_ready_i) begin
-				pc_o        <= pc_i;
-				imm_o       <= imm;
-				op_o				<= op;
-				funct3_o		<= funct3;
-				rd_o        <= rd;
-				gpr_wen_o   <= gpr_wen;
-				alu_sel_o   <= alu_sel;
-				a_o         <= a;
-				b_o         <= b;
-				r1_o				<= r1_i;
-				r2_o				<= r2_i;
-				csr_o       <= csr;
-				mepc_wen_o    <= mepc_wen;
-				mstatus_wen_o <= mstatus_wen;
-				mcause_wen_o  <= mcause_wen;
-				mtvec_wen_o   <= mtvec_wen;
-				fencei_o		<= fencei;
+					pc_o        <= pc_i;
+					imm_o       <= imm;
+					op_o				<= op;
+					funct3_o		<= funct3;
+					rd_o        <= rd;
+					gpr_wen_o   <= gpr_wen;
+					alu_sel_o   <= alu_sel;
+					a_o         <= a;
+					b_o         <= b;
+					r1_o				<= r1_i;
+					r2_o				<= r2_i;
+					csr_o       <= csr;
+					mepc_wen_o    <= mepc_wen;
+					mstatus_wen_o <= mstatus_wen;
+					mcause_wen_o  <= mcause_wen;
+					mtvec_wen_o   <= mtvec_wen;
+					fencei_o		<= fencei;
+				end
 			end
 		endcase
 	end
