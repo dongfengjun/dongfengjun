@@ -272,7 +272,7 @@ ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,mtvec_ls,mtvec,mtvec_wen_l
 ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid,1'b0);
 ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
 
-wire isRAW = (rs1 == rd_ex) || (rs2 == rd_ex) || (rs1 == rd_ls) || (rs2 == rd_ls);
+wire isRAW = ((rs1 != 0) && ((rs1 == rd_ex) || (rs1 == rd_ls))) || ((rs1 != 0) && ((rs2 == rd_ex) || (rs2 == rd_ls)));
 
 `ifndef YOSYS_STA
 /***DPI-C*CSR***/
