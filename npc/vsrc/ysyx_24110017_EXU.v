@@ -129,7 +129,6 @@ always @(posedge clk or posedge rst) begin
 		    mcause_wen_o  <= 1'b0;
 		    mtvec_wen_o   <= 1'b0;
 		    ex_o          <= 32'h0;
-		    ls_valid_o    <= 1'b0;
 		    ls_wen_o      <= 1'b0;
 		    ls_read_o     <= 1'b0;
 		    ls_write_o    <= 1'b0;
