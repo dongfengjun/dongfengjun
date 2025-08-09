@@ -257,19 +257,19 @@ module ysyx_24110017_ALU(
 	reg [31:0]quotient,remainder;
 	reg [5:0]div_counter;
 
-	assign res = (op == OP_ADD) ? (a + b)
-	 : (op == OP_SUB) ? (a - b)
-	 : (op == OP_SLL) ? (a << b) 
-	 : (op == OP_SRL) ? a >> b 
-	 : (op == OP_SRA) ? ({32{a[31]}} << (32 - b)) | (a >> b) 
-	 : (op == OP_SLT) ? {31'b0,a < b} 
-	 : (op == OP_AND) ? a & b 
-	 : (op == OP_OR) ? a | b 
-	 : (op == OP_XOR) ? a ^ b 
-	 : (op == OP_MUL && done) ? mul_result[31:0]
-	 : (OP_MULH && done) ? mul_result[63:32]
-	 : (OP_DIV && done) ? quotient
-	 : (OP_REM && done) ? remainder
+	assign res = (opcode == OP_ADD) ? (a + b)
+	 : (opcode == OP_SUB) ? (a - b)
+	 : (opcode == OP_SLL) ? (a << b) 
+	 : (opcode == OP_SRL) ? a >> b 
+	 : (opcode == OP_SRA) ? ({32{a[31]}} << (32 - b)) | (a >> b) 
+	 : (opcode == OP_SLT) ? {31'b0,a < b} 
+	 : (opcode == OP_AND) ? a & b 
+	 : (opcode == OP_OR) ? a | b 
+	 : (opcode == OP_XOR) ? a ^ b 
+	 : (opcode == OP_MUL && done) ? mul_result[31:0]
+	 : (opcode == OP_MULH && done) ? mul_result[63:32]
+	 : (opcode == OP_DIV && done) ? quotient
+	 : (opcode == OP_REM && done) ? remainder
 	 : 32'h0;
 
 	assign done = (op == OP_MUL || op == OP_MULH || op == OP_DIV || op == OP_REM) ? (state == EXECUTE) && done_reg : 1'b1;
