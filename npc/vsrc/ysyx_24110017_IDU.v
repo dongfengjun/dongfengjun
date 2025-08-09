@@ -22,7 +22,6 @@ module ysyx_24110017_IDU(
 	output reg  [ 2:0] funct3_o,
 	output reg  [ 4:0] rd_o,
 	output reg  gpr_wen_o,
-	output reg  alu_valid_o,		//alu
 	output reg  [ 3:0] alu_sel_o,
 	output reg  [31:0] a_o,
 	output reg  [31:0] b_o,
@@ -60,7 +59,6 @@ always@(posedge clk or posedge rst) begin
 		funct3_o		<= 3'b0;
 		rd_o				<= 5'b0;
 		gpr_wen_o		<= 1'b0;
-		alu_valid_o <= 1'b0;
 		alu_sel_o		<= 4'b0;
 		a_o					<= 32'h0;
 		b_o					<= 32'h0;
@@ -83,7 +81,6 @@ always@(posedge clk or posedge rst) begin
 			funct3_o		<= funct3;
       rd_o        <= rd;
 	    gpr_wen_o   <= gpr_wen;
-	    alu_valid_o <= alu_valid;
 	    alu_sel_o   <= alu_sel;
 	    a_o         <= a;
 	    b_o         <= b;
