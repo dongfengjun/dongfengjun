@@ -324,7 +324,7 @@ module ysyx_24110017_ALU(
               end
               else begin
 								done <= 1'b1;
-                state <= FINISH;
+                state <= IDLE;
               end
             end
 						OP_DIV: begin
@@ -341,7 +341,7 @@ module ysyx_24110017_ALU(
 							end
 							else begin
 								done <= 1'b1;
-								state <= FINISH;
+								state <= IDLE;
 							end
 						end
 						OP_REM: begin
@@ -358,7 +358,7 @@ module ysyx_24110017_ALU(
               end
               else begin
 								done <= 1'b1;
-                state <= FINISH;
+                state <= IDLE;
               end
             end
 						default: begin
