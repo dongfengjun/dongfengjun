@@ -2,6 +2,7 @@
 module ysyx_24110017_IDU(
 	input	 wire clk,
 	input  wire rst,
+	input  wire isRAW,
 	output wire [ 4:0] rs1_o,
 	output wire [ 4:0] rs2_o,
 	input  wire [31:0] r1_i,
@@ -47,8 +48,8 @@ always @(posedge clk or posedge rst) begin
 	end
 end
 
-assign id_valid_o = (state == WAIT);
-assign id_ready_o = (state == IDLE);
+assign id_valid_o = (state == WAIT) && (!isRAW);
+assign id_ready_o = (state == IDLE) && (!isRAW);
 
 
 always@(posedge clk or posedge rst) begin
