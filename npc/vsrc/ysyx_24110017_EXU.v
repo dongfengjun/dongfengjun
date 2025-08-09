@@ -79,8 +79,7 @@ always @(posedge clk or posedge rst) begin
 	end
 end
 
-wire [31:0]res;
-reg  [31:0]al_res;
+wire [31:0]al_res;
 always @(posedge clk or posedge rst) begin
 	if(rst) begin
 		op_o					<= 7'b0;
@@ -143,7 +142,7 @@ always @(posedge clk or posedge rst) begin
 end
 
 wire al_done;
-ysyx_24110017_ALU ALU(clk,rst,a_i,b_i,alu_sel_i,alu_start_i,res,al_done);
+ysyx_24110017_ALU ALU(clk,rst,a_i,b_i,alu_sel_i,alu_start_i,al_res,al_done);
 
 wire [31:0]ex;
 assign ex = 
