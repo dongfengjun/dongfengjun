@@ -171,7 +171,7 @@ always @(posedge clk or posedge rst) begin
 					ls_arlen_o    <= ls_arlen;
 					ls_awburst_o  <= ls_awburst;
 					ls_arburst_o  <= ls_arburst;
-					dnpc_ex				<= dnpc;
+					dnpc_o				<= dnpc;
 				end
 			end
 		endcase
