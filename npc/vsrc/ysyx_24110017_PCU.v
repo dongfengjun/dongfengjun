@@ -2,6 +2,7 @@
 module ysyx_24110017_PCU(
 	input  wire				 clk,
 	input  wire				 rst,
+	input  wire				 isCHazard,
 	output reg  [31:0] pc_o,
 	input  wire [31:0] dnpc_i,
 	output wire				 pc_valid_o,
@@ -16,7 +17,8 @@ always @(posedge clk or posedge rst) begin
 	end
 	else begin
 		if(pc_valid_o && if_ready_i) begin
-      pc_o <= pc_o + 4;
+      if(isCHazard) pc_o <= dnpc_i;
+			else pc_o <= pc_o + 4;
     end
 		if(((pc_o < 32'h30000000) || (pc_o >= 32'h40000000)) 
 			&& ((pc_o < 32'h0f000000) || (pc_o >= 32'h0f002000))

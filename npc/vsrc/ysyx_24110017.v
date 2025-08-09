@@ -153,12 +153,12 @@ wire [31:0]mepc,mstatus,mcause,mtvec;
 wire [31:0]mvendorid,marchid; //ID
 
 
-ysyx_24110017_PCU PCU(clock,reset,
+ysyx_24110017_PCU PCU(clock,reset,isCHazard,
 		pc,dnpc_ex,
 		pc_valid,
 		if_ready
 );
-ysyx_24110017_IFU IFU(clock,reset,
+ysyx_24110017_IFU IFU(clock,reset,isCHazard,
 		pc_valid,if_ready,if_valid,id_ready,
 		pc,pc_if,inst_if,
 		if_axi_awready,if_axi_awvalid,if_axi_awid,if_axi_awaddr,
@@ -185,7 +185,7 @@ ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei_id, //w < n
     icache_axi_arlen,icache_axi_arsize,icache_axi_arburst,
     icache_axi_rready,icache_axi_rvalid,icache_axi_rid,icache_axi_rdata,icache_axi_rresp,icache_axi_rlast
 );
-ysyx_24110017_IDU IDU(clock,reset,isRAW,
+ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 		rs1,rs2,r1,r2,
 		mepc,mstatus,mcause,mtvec,
 		if_valid,id_ready,id_valid,ex_ready,
@@ -273,7 +273,7 @@ ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid
 ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
 
 wire isRAW = ((rs1 != 0) && ((rs1 == rd_ex) || (rs1 == rd_ls))) || ((rs2 != 0) && ((rs2 == rd_ex) || (rs2 == rd_ls)));
-wire isCHazard = (dnpc_ex != pc_if) || (dnpc_ex != pc_id);
+wire isCHazard = (dnpc_ex != pc_id);
 
 `ifndef YOSYS_STA
 /***DPI-C*CSR***/

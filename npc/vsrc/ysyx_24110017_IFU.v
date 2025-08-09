@@ -2,6 +2,7 @@ module ysyx_24110017_IFU(
 	input  wire clk,
 	input  wire rst,
 
+	input  wire isCHazard,
 	input  wire pc_valid_i,
 	output wire if_ready_o,
 	output reg  if_valid_o,
@@ -50,7 +51,7 @@ parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
 always @(posedge clk or posedge rst) begin
-	if(rst) state <= IDLE;
+	if(rst || isCHazard) state <= IDLE;
 	else begin
 		case(state)
 			IDLE: state <= (pc_valid_i && if_ready_o) ? WAIT : state;
@@ -60,7 +61,7 @@ always @(posedge clk or posedge rst) begin
 end
 
 always @(posedge clk or posedge rst) begin
-	if(rst) if_valid_o <= 1'b0;
+	if(rst || isCHazard) if_valid_o <= 1'b0;
 	else begin
 		if(if_axi_rvalid_i && if_axi_rready_o) begin
 			if_valid_o <= 1'b1;
@@ -72,7 +73,7 @@ always @(posedge clk or posedge rst) begin
 end
 
 always @(posedge clk or posedge rst) begin
-	if(rst) begin
+	if(rst || isCHazard) begin
 		pc_o	 <= 32'h0;
 		inst_o <= 32'h0;
 	end

@@ -3,6 +3,7 @@ module ysyx_24110017_IDU(
 	input	 wire clk,
 	input  wire rst,
 	input  wire isRAW,
+	input  wire isCHazard,
 	output wire [ 4:0] rs1_o,
 	output wire [ 4:0] rs2_o,
 	input  wire [31:0] r1_i,
@@ -39,7 +40,7 @@ parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
 always @(posedge clk or posedge rst) begin
-	if(rst) state <= IDLE;
+	if(rst || isCHazard) state <= IDLE;
   else begin
 		case (state)
 			IDLE: state <= (if_valid_i && id_ready_o) ? WAIT : state;
@@ -53,7 +54,7 @@ assign id_ready_o = (state == IDLE) && (!isRAW);
 
 
 always@(posedge clk or posedge rst) begin
-	if(rst) begin
+	if(rst || isCHazard) begin
 		pc_o				<= 32'h0;
 		imm_o				<= 32'h0;
 		op_o				<= 7'b0;
