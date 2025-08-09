@@ -110,7 +110,7 @@ reg axi_state;
 reg [31:0] axi_rdata_reg;
 
 always @(posedge clk or posedge rst) begin
-	if(rst) axi_state <= AXI_IDLE;
+	if(rst || isCHazard) axi_state <= AXI_IDLE;
 	else begin
 		case(axi_state)
 			AXI_IDLE  : axi_state <= (pc_valid_i && if_ready_o) ? AXI_FETCH : axi_state;
