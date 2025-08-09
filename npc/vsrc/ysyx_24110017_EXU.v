@@ -14,7 +14,6 @@ module ysyx_24110017_EXU(
   input  wire [ 2:0] funct3_i,
   input  wire [ 4:0] rd_i,
   input  wire gpr_wen_i,
-  input  wire alu_start_i,
   input  wire [ 3:0] alu_sel_i,
   input  wire [31:0] a_i,
   input  wire [31:0] b_i,
@@ -68,7 +67,7 @@ always @(posedge clk or posedge rst) begin
 		case(state)
 			IDLE: ex_valid_o <= 1'b0;
 			WAIT: begin
-				if(al_done || !alu_start_i) begin
+				if(al_done) begin
 					ex_valid_o <= 1'b1;
 				end
 				if(ex_valid_o && ls_ready_i) begin
@@ -142,7 +141,7 @@ always @(posedge clk or posedge rst) begin
 end
 
 wire al_done;
-ysyx_24110017_ALU ALU(clk,rst,a_i,b_i,alu_sel_i,alu_start_i,al_res,al_done);
+ysyx_24110017_ALU ALU(clk,rst,a_i,b_i,alu_sel_i,al_res,al_done);
 
 wire [31:0]ex;
 assign ex = 
@@ -229,9 +228,8 @@ module ysyx_24110017_ALU(
 	input wire [31:0] a,
 	input wire [31:0] b,
 	input wire [3:0] opcode,
-	input wire start,
-	output reg [31:0] res,
-	output reg done
+	output wire [31:0] res,
+	output wire done
 );
 
 	localparam OP_ADD  = 4'b0000;
@@ -248,14 +246,10 @@ module ysyx_24110017_ALU(
   localparam OP_DIV  = 4'b1011;
 	localparam OP_REM  = 4'b1100;
 
-	localparam IDLE		 = 2'b00;
-	localparam EXECUTE = 2'b01;
-	localparam FINISH  = 2'b10;
-	localparam NULL    = 2'b11;
+	localparam IDLE		 = 1'b0;
+	localparam EXECUTE = 1'b1;
 
-	reg [1:0]state;
-	reg [31:0]a_reg,b_reg;
-	reg [3:0]opcode_reg;
+	reg state;
 
 	reg [63:0]mul_result;
 	reg [5:0]mul_counter;
@@ -263,22 +257,35 @@ module ysyx_24110017_ALU(
 	reg [31:0]quotient,remainder;
 	reg [5:0]div_counter;
 
+	assign res = (op == OP_ADD) ? (a + b)
+	 : (op == OP_SUB) ? (a - b)
+	 : (op == OP_SLL) ? (a << b) 
+	 : (op == OP_SRL) ? a >> b 
+	 : (op == OP_SRA) ? ({32{a[31]}} << (32 - b)) | (a >> b) 
+	 : (op == OP_SLT) ? {31'b0,a < b} 
+	 : (op == OP_AND) ? a & b 
+	 : (op == OP_OR) ? a | b 
+	 : (op == OP_XOR) ? a ^ b 
+	 : (op == OP_MUL && done) ? mul_result[31:0]
+	 : (OP_MULH && done) ? mul_result[63:32]
+	 : (OP_DIV && done) ? quotient
+	 : (OP_REM && done) ? remainder
+	 : 32'h0;
+
+	assign done = (op == OP_MUL || op == OP_MULH || op == OP_DIV || op == OP_REM) ? (state == EXECUTE) && done_reg : 1'b1;
+	reg done_reg;
+
 	always @(posedge clk or posedge rst) begin
 		if(rst) begin
 			state <= IDLE;
-			res <= 32'h0;
-			done <= 1'b0;
+			done_reg <= 1'b0;
 		end
 		else begin
 			case(state)
 				IDLE: begin
-					done <= 1'b0;
-					if(start) begin
-						a_reg <= a;
-						b_reg <= b;
-						opcode_reg <= opcode;
+					if((op == OP_MUL || op == OP_MULH || op == OP_DIV || op == OP_REM) && !done_reg) begin
 						state <= EXECUTE;
-
+						done <= 1'b0;
 						if(opcode == OP_MUL || opcode == OP_MULH) begin
 							mul_result <= {32'b0, a};
 							mul_counter <= 6'd0;
@@ -292,68 +299,31 @@ module ysyx_24110017_ALU(
 						end
 					end
 				end
-
 				EXECUTE: begin
-					case (opcode_reg)
-						OP_ADD: begin
-							res <= a_reg + b_reg;
-							state <= FINISH;
-						end
-						OP_SUB: begin
-							res <= a_reg - b_reg;
-							state <= FINISH;
-						end
-						OP_SLL: begin
-							res <= a_reg << b_reg;
-							state <= FINISH;
-						end
-						OP_SRL: begin
-							res <= a_reg >> b_reg;
-							state <= FINISH;
-						end
-						OP_SRA: begin
-							res <= ({32{a_reg[31]}} << (32 - b_reg)) | (a_reg >> b_reg);
-							state <= FINISH;
-						end
-						OP_SLT: begin
-							res <= {31'b0,a < b};
-							state <= FINISH;
-						end
-						OP_AND: begin
-							res <= a_reg & b_reg;
-							state <= FINISH;
-						end
-						OP_OR: begin
-							res <= a_reg | b_reg;
-							state <= FINISH;
-						end
-						OP_XOR: begin
-							res <= a_reg ^ b_reg;
-							state <= FINISH;
-						end
+					case (opcode)
 						OP_MUL: begin
 							if(mul_counter < 32) begin
 								if(mul_result[0]) begin
-									mul_result[63:32] <= mul_result[63:32] + b_reg;
+									mul_result[63:32] <= mul_result[63:32] + b;
 								end
 								mul_result <= {1'b0,mul_result[63:1]};
 								mul_counter <= mul_counter + 1;
 							end
 							else begin
-								res <= mul_result[31:0];
-								state <= FINISH;
+								done <= 1'b1;
+								state <= IDLE;
 							end
 						end
 						OP_MULH: begin
 							if(mul_counter < 32) begin
                 if(mul_result[0]) begin
-                  mul_result[63:32] <= mul_result[63:32] + b_reg;
+                  mul_result[63:32] <= mul_result[63:32] + b;
                 end
                 mul_result <= {1'b0,mul_result[63:1]};
                 mul_counter <= mul_counter + 1;
               end
               else begin
-                res <= mul_result[63:32];
+								done <= 1'b1;
                 state <= FINISH;
               end
             end
@@ -370,7 +340,7 @@ module ysyx_24110017_ALU(
 								div_counter <= div_counter + 1;
 							end
 							else begin
-								res <= quotient;
+								done <= 1'b1;
 								state <= FINISH;
 							end
 						end
@@ -387,24 +357,13 @@ module ysyx_24110017_ALU(
 	              div_counter <= div_counter + 1;
               end
               else begin
-                res <= remainder;
+								done <= 1'b1;
                 state <= FINISH;
               end
             end
 						default: begin
-							res <= 32'b0;
-							state <= FINISH;
 						end
 					endcase
-				end
-
-				FINISH: begin
-					done <= 1'b1;
-					state <= NULL;
-				end
-				NULL: begin
-					done <= 1'b0;
-					state <= IDLE;
 				end
 			endcase
 		end
