@@ -110,33 +110,65 @@ always @(posedge clk or posedge rst) begin
 		ls_arburst_o	<= 2'b0;
 	end
 	else begin
-		if(ex_valid_o && ls_ready_i) begin
-			rd_o          <= rd_i;
-	    gpr_wen_o     <= gpr_wen_i;
-	    mepc_o        <= mepc_w;
-      mstatus_o     <= mstatus_w;
-      mcause_o      <= mcause_w;
-      mtvec_o       <= mtvec_w;
-      mepc_wen_o    <= mepc_wen_i;
-      mstatus_wen_o <= mstatus_wen_i;
-      mcause_wen_o  <= mcause_wen_i;
-      mtvec_wen_o   <= mtvec_wen_i;
-      ex_o          <= ex;
-      ls_valid_o    <= ls_valid;
-      ls_wen_o      <= ls_wen;
-      ls_read_o     <= ls_valid && !ls_wen;
-      ls_write_o    <= ls_valid && ls_wen;
-      ls_waddr_o    <= ls_waddr;
-      ls_wdata_o    <= ls_wdata;
-      ls_raddr_o    <= ls_raddr;
-	    ls_wmask_o    <= ls_wmask;
-	    ls_awsize_o   <= ls_awsize;
-	    ls_arsize_o   <= ls_arsize;
-	    ls_awlen_o    <= ls_awlen;
-	    ls_arlen_o    <= ls_arlen;
-	    ls_awburst_o  <= ls_awburst;
-	    ls_arburst_o  <= ls_arburst;
-		end
+		case(state)
+			IDLE: begin
+				op_o          <= 7'b0;
+		    funct3_o      <= 3'b0;
+		    rd_o          <= 5'b0;
+		    gpr_wen_o     <= 1'b0;
+		    mepc_o        <= 32'h0;
+		    mstatus_o     <= 32'h0;
+		    mcause_o      <= 32'h0;
+		    mtvec_o       <= 32'h0;
+		    mepc_wen_o    <= 1'b0;
+		    mstatus_wen_o <= 1'b0;
+		    mcause_wen_o  <= 1'b0;
+		    mtvec_wen_o   <= 1'b0;
+		    ex_o          <= 32'h0;
+		    ls_valid_o    <= 1'b0;
+		    ls_wen_o      <= 1'b0;
+		    ls_read_o     <= 1'b0;
+		    ls_write_o    <= 1'b0;
+		    ls_waddr_o    <= 32'h0;
+		    ls_wdata_o    <= 32'h0;
+		    ls_raddr_o    <= 32'h0;
+		    ls_wmask_o    <= 4'b0;
+		    ls_awsize_o   <= 3'b0;
+		    ls_arsize_o   <= 3'b0;
+		    ls_awlen_o    <= 8'b0;
+		    ls_arlen_o    <= 8'b0;
+		    ls_awburst_o  <= 2'b0;
+		    ls_arburst_o  <= 2'b0;
+			end
+			WAIT: begin
+				if(ex_valid_o && ls_ready_i) begin
+				rd_o          <= rd_i;
+				gpr_wen_o     <= gpr_wen_i;
+				mepc_o        <= mepc_w;
+				mstatus_o     <= mstatus_w;
+				mcause_o      <= mcause_w;
+				mtvec_o       <= mtvec_w;
+				mepc_wen_o    <= mepc_wen_i;
+				mstatus_wen_o <= mstatus_wen_i;
+				mcause_wen_o  <= mcause_wen_i;
+				mtvec_wen_o   <= mtvec_wen_i;
+				ex_o          <= ex;
+				ls_valid_o    <= ls_valid;
+				ls_wen_o      <= ls_wen;
+				ls_read_o     <= ls_valid && !ls_wen;
+				ls_write_o    <= ls_valid && ls_wen;
+				ls_waddr_o    <= ls_waddr;
+				ls_wdata_o    <= ls_wdata;
+				ls_raddr_o    <= ls_raddr;
+				ls_wmask_o    <= ls_wmask;
+				ls_awsize_o   <= ls_awsize;
+				ls_arsize_o   <= ls_arsize;
+				ls_awlen_o    <= ls_awlen;
+				ls_arlen_o    <= ls_arlen;
+				ls_awburst_o  <= ls_awburst;
+				ls_arburst_o  <= ls_arburst;
+			end
+		endcase
 	end
 end
 

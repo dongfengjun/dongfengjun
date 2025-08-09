@@ -75,25 +75,49 @@ always@(posedge clk or posedge rst) begin
 		fencei_o		<= 1'b0;
 	end
 	else begin
-		if(id_valid_o && ex_ready_i) begin
-			pc_o        <= pc_i;
-      imm_o       <= imm;
-			op_o				<= op;
-			funct3_o		<= funct3;
-      rd_o        <= rd;
-	    gpr_wen_o   <= gpr_wen;
-	    alu_sel_o   <= alu_sel;
-	    a_o         <= a;
-	    b_o         <= b;
-			r1_o				<= r1_i;
-			r2_o				<= r2_i;
-			csr_o       <= csr;
-	    mepc_wen_o    <= mepc_wen;
-	    mstatus_wen_o <= mstatus_wen;
-	    mcause_wen_o  <= mcause_wen;
-	    mtvec_wen_o   <= mtvec_wen;
-			fencei_o		<= fencei;
-		end
+		case(state)
+			IDLE: begin
+				pc_o        <= 32'h0;
+		    imm_o       <= 32'h0;
+		    op_o        <= 7'b0;
+		    funct3_o    <= 3'b0;
+		    rd_o        <= 5'b0;
+		    gpr_wen_o   <= 1'b0;
+		    alu_sel_o   <= 4'b0;
+		    a_o         <= 32'h0;
+		    b_o         <= 32'h0;
+		    r1_o        <= 32'h0;
+		    r2_o        <= 32'h0;
+		    csr_o       <= 32'h0;
+		    mepc_o      <= 32'h0;
+		    mtvec_o     <= 32'h0;
+		    mepc_wen_o    <= 1'b0;
+		    mstatus_wen_o <= 1'b0;
+		    mcause_wen_o  <= 1'b0;
+		    mtvec_wen_o   <= 1'b0;
+		    fencei_o    <= 1'b0;
+			end
+			WAIT: begin
+				if(id_valid_o && ex_ready_i) begin
+				pc_o        <= pc_i;
+				imm_o       <= imm;
+				op_o				<= op;
+				funct3_o		<= funct3;
+				rd_o        <= rd;
+				gpr_wen_o   <= gpr_wen;
+				alu_sel_o   <= alu_sel;
+				a_o         <= a;
+				b_o         <= b;
+				r1_o				<= r1_i;
+				r2_o				<= r2_i;
+				csr_o       <= csr;
+				mepc_wen_o    <= mepc_wen;
+				mstatus_wen_o <= mstatus_wen;
+				mcause_wen_o  <= mcause_wen;
+				mtvec_wen_o   <= mtvec_wen;
+				fencei_o		<= fencei;
+			end
+		endcase
 	end
 end
 
