@@ -75,6 +75,7 @@ always@(posedge clk or posedge rst) begin
 		fencei_o		<= 1'b0;
 	end
 	else begin
+		case(state)
 			IDLE: begin
 				pc_o        <= 32'h0;
 		    imm_o       <= 32'h0;
