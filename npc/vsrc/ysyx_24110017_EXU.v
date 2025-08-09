@@ -142,7 +142,6 @@ always @(posedge clk or posedge rst) begin
 		    ls_arlen_o    <= 8'b0;
 		    ls_awburst_o  <= 2'b0;
 		    ls_arburst_o  <= 2'b0;
-				dnpc_o				<= 32'h0;
 			end
 			WAIT: begin
 				if(ex_valid_o && ls_ready_i) begin
