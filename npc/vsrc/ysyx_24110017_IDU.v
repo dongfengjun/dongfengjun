@@ -75,6 +75,28 @@ always@(posedge clk or posedge rst) begin
 		fencei_o		<= 1'b0;
 	end
 	else begin
+			IDLE: begin
+				pc_o        <= 32'h0;
+		    imm_o       <= 32'h0;
+		    op_o        <= 7'b0;
+		    funct3_o    <= 3'b0;
+		    rd_o        <= 5'b0;
+		    gpr_wen_o   <= 1'b0;
+		    alu_sel_o   <= 4'b0;
+		    a_o         <= 32'h0;
+		    b_o         <= 32'h0;
+		    r1_o        <= 32'h0;
+		    r2_o        <= 32'h0;
+		    csr_o       <= 32'h0;
+		    mepc_o      <= 32'h0;
+		    mtvec_o     <= 32'h0;
+		    mepc_wen_o    <= 1'b0;
+		    mstatus_wen_o <= 1'b0;
+		    mcause_wen_o  <= 1'b0;
+		    mtvec_wen_o   <= 1'b0;
+		    fencei_o    <= 1'b0;
+			end
+			WAIT: begin
 				if(id_valid_o && ex_ready_i) begin
 					pc_o        <= pc_i;
 					imm_o       <= imm;
@@ -94,6 +116,8 @@ always@(posedge clk or posedge rst) begin
 					mtvec_wen_o   <= mtvec_wen;
 					fencei_o		<= fencei;
 				end
+			end
+		endcase
 	end
 end
 
@@ -101,8 +125,8 @@ end
 wire [6:0]op;
 wire [4:0]rd; //R I U J
 wire [2:0]funct3;
-//wire [4:0]rs1_o;  //R I S B
-//wire [4:0]rs2_o;  //R S B
+//wire [4:0]rs1;  //R I S B
+//wire [4:0]rs2;  //R S B
 wire [31:0]immI,immU,immS,immB,immJ,imm;
 wire [6:0]funct7; //R
 wire [4:0]shamt;  //I shamt
