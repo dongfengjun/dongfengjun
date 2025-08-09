@@ -77,10 +77,18 @@ always @(posedge clk or posedge rst) begin
 		inst_o <= 32'h0;
 	end
   else begin
+		case(state)
+			IDLE: begin
+				pc_o   <= 32'h0;
+        inst_o <= 32'h0;
+			end
+			WAIT: begin
 				if(if_valid_o && id_ready_i) begin
 					pc_o	 <= if_axi_araddr_o;
 					inst_o <= axi_rdata_reg;
 				end
+			end
+		endcase
 	end
 end
 
