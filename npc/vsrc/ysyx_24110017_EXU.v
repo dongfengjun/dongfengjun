@@ -2,6 +2,7 @@
 module ysyx_24110017_EXU(
 	input  wire clk,
 	input  wire rst,
+	input  wire isCHazard,
 
 	input  wire id_valid_i,
 	output wire  ex_ready_o,
@@ -54,7 +55,7 @@ parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
 always @(posedge clk or posedge rst) begin
-	if(rst) state <= IDLE;
+	if(rst || isCHazard) state <= IDLE;
   else begin
 		case (state)
 			IDLE: state <= (id_valid_i && ex_ready_o) ? WAIT : state;
@@ -64,7 +65,7 @@ always @(posedge clk or posedge rst) begin
 end
 
 always @(posedge clk or posedge rst) begin
-	if(rst) ex_valid_reg <= 1'b0;
+	if(rst || isCHazard) ex_valid_reg <= 1'b0;
 	else begin
 		case(state)
 			IDLE: ex_valid_reg <= 1'b0;
@@ -82,7 +83,7 @@ end
 
 wire [31:0]al_res;
 always @(posedge clk or posedge rst) begin
-	if(rst) begin
+	if(rst || isCHazard) begin
 		op_o					<= 7'b0;
 		funct3_o			<= 3'b0;
 		rd_o					<= 5'b0;

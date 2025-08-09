@@ -120,7 +120,7 @@ always @(posedge clk or posedge rst) begin
 end
 
 always @(posedge clk or posedge rst) begin
-        if(rst) begin
+        if(rst || isCHazard) begin
 					if_axi_arvalid_o <= 1'b0;
 					if_axi_rready_o  <= 1'b0;
 					if_axi_arid_o		 <= 4'b0;
