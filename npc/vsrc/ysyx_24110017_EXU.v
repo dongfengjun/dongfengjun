@@ -66,7 +66,7 @@ always @(posedge clk or posedge rst) begin
 	if(rst) ex_valid_o <= 1'b0;
 	else begin
 		case(state)
-			IDLE: ex_valid <= 1'b0;
+			IDLE: ex_valid_o <= 1'b0;
 			WAIT: begin
 				if(al_done || !alu_start_i) begin
 					ex_valid_o <= 1'b1;
