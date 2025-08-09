@@ -4,8 +4,8 @@ module ysyx_24110017_EXU(
 	input  wire rst,
 
 	input  wire id_valid_i,
-	output reg  ex_ready_o,
-	output reg  ex_valid_o,
+	output wire  ex_ready_o,
+	output wire  ex_valid_o,
 	input  wire ls_ready_i,
 	
   input  wire [31:0] pc_i,  //i.bit
@@ -48,6 +48,8 @@ module ysyx_24110017_EXU(
 
 /***分布式控制***/
 assign ex_ready_o = (state == IDLE);
+assign ex_valid_o = (al_done || ex_valid_reg);
+reg ex_valid_reg;
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
@@ -62,16 +64,16 @@ always @(posedge clk or posedge rst) begin
 end
 
 always @(posedge clk or posedge rst) begin
-	if(rst) ex_valid_o <= 1'b0;
+	if(rst) ex_valid_reg <= 1'b0;
 	else begin
 		case(state)
-			IDLE: ex_valid_o <= 1'b0;
+			IDLE: ex_valid_reg <= 1'b0;
 			WAIT: begin
-				if(al_done) begin
-					ex_valid_o <= 1'b1;
-				end
-				if(ex_valid_o && ls_ready_i) begin
-					ex_valid_o <= 1'b0;
+				if(ex_valid_o && ls_ready_i) begin                                  
+          ex_valid_reg <= 1'b0;
+        end
+				else if(al_done) begin
+					ex_valid_reg <= 1'b1;
 				end
 			end
 		endcase
