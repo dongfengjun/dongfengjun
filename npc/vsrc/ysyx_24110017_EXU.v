@@ -142,31 +142,32 @@ always @(posedge clk or posedge rst) begin
 			end
 			WAIT: begin
 				if(ex_valid_o && ls_ready_i) begin
-				rd_o          <= rd_i;
-				gpr_wen_o     <= gpr_wen_i;
-				mepc_o        <= mepc_w;
-				mstatus_o     <= mstatus_w;
-				mcause_o      <= mcause_w;
-				mtvec_o       <= mtvec_w;
-				mepc_wen_o    <= mepc_wen_i;
-				mstatus_wen_o <= mstatus_wen_i;
-				mcause_wen_o  <= mcause_wen_i;
-				mtvec_wen_o   <= mtvec_wen_i;
-				ex_o          <= ex;
-				ls_valid_o    <= ls_valid;
-				ls_wen_o      <= ls_wen;
-				ls_read_o     <= ls_valid && !ls_wen;
-				ls_write_o    <= ls_valid && ls_wen;
-				ls_waddr_o    <= ls_waddr;
-				ls_wdata_o    <= ls_wdata;
-				ls_raddr_o    <= ls_raddr;
-				ls_wmask_o    <= ls_wmask;
-				ls_awsize_o   <= ls_awsize;
-				ls_arsize_o   <= ls_arsize;
-				ls_awlen_o    <= ls_awlen;
-				ls_arlen_o    <= ls_arlen;
-				ls_awburst_o  <= ls_awburst;
-				ls_arburst_o  <= ls_arburst;
+					rd_o          <= rd_i;
+					gpr_wen_o     <= gpr_wen_i;
+					mepc_o        <= mepc_w;
+					mstatus_o     <= mstatus_w;
+					mcause_o      <= mcause_w;
+					mtvec_o       <= mtvec_w;
+					mepc_wen_o    <= mepc_wen_i;
+					mstatus_wen_o <= mstatus_wen_i;
+					mcause_wen_o  <= mcause_wen_i;
+					mtvec_wen_o   <= mtvec_wen_i;
+					ex_o          <= ex;
+					ls_valid_o    <= ls_valid;
+					ls_wen_o      <= ls_wen;
+					ls_read_o     <= ls_valid && !ls_wen;
+					ls_write_o    <= ls_valid && ls_wen;
+					ls_waddr_o    <= ls_waddr;
+					ls_wdata_o    <= ls_wdata;
+					ls_raddr_o    <= ls_raddr;
+					ls_wmask_o    <= ls_wmask;
+					ls_awsize_o   <= ls_awsize;
+					ls_arsize_o   <= ls_arsize;
+					ls_awlen_o    <= ls_awlen;
+					ls_arlen_o    <= ls_arlen;
+					ls_awburst_o  <= ls_awburst;
+					ls_arburst_o  <= ls_arburst;
+				end
 			end
 		endcase
 	end
