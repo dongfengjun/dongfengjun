@@ -285,7 +285,7 @@ module ysyx_24110017_ALU(
 				IDLE: begin
 					if((opcode == OP_MUL || opcode == OP_MULH || opcode == OP_DIV || opcode == OP_REM) && !done_reg) begin
 						state <= EXECUTE;
-						done <= 1'b0;
+						done_reg <= 1'b0;
 						if(opcode == OP_MUL || opcode == OP_MULH) begin
 							mul_result <= {32'b0, a};
 							mul_counter <= 6'd0;
@@ -310,7 +310,7 @@ module ysyx_24110017_ALU(
 								mul_counter <= mul_counter + 1;
 							end
 							else begin
-								done <= 1'b1;
+								done_reg <= 1'b1;
 								state <= IDLE;
 							end
 						end
@@ -323,7 +323,7 @@ module ysyx_24110017_ALU(
                 mul_counter <= mul_counter + 1;
               end
               else begin
-								done <= 1'b1;
+								done_reg <= 1'b1;
                 state <= IDLE;
               end
             end
@@ -340,7 +340,7 @@ module ysyx_24110017_ALU(
 								div_counter <= div_counter + 1;
 							end
 							else begin
-								done <= 1'b1;
+								done_reg <= 1'b1;
 								state <= IDLE;
 							end
 						end
@@ -357,7 +357,7 @@ module ysyx_24110017_ALU(
 	              div_counter <= div_counter + 1;
               end
               else begin
-								done <= 1'b1;
+								done_reg <= 1'b1;
                 state <= IDLE;
               end
             end
