@@ -272,7 +272,7 @@ module ysyx_24110017_ALU(
 	 : (opcode == OP_REM && done) ? remainder
 	 : 32'h0;
 
-	assign done = (op == OP_MUL || op == OP_MULH || op == OP_DIV || op == OP_REM) ? (state == EXECUTE) && done_reg : 1'b1;
+	assign done = (opcode == OP_MUL || opcode == OP_MULH || opcode == OP_DIV || opcode == OP_REM) ? (state == EXECUTE) && done_reg : 1'b1;
 	reg done_reg;
 
 	always @(posedge clk or posedge rst) begin
