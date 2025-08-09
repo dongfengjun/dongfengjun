@@ -16,7 +16,7 @@ always @(posedge clk or posedge rst) begin
 		pc_o <= 32'h30000000; //flash
 	end
 	else begin
-		if(isCHazard) pc_o <= dnpc_i
+		if(isCHazard) pc_o <= dnpc_i;
 		else begin
 			if(pc_valid_o && if_ready_i) begin
 				pc_o <= pc_o + 4;
