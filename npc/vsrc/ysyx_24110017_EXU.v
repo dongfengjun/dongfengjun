@@ -283,7 +283,7 @@ module ysyx_24110017_ALU(
 		else begin
 			case(state)
 				IDLE: begin
-					if((op == OP_MUL || op == OP_MULH || op == OP_DIV || op == OP_REM) && !done_reg) begin
+					if((opcode == OP_MUL || opcode == OP_MULH || opcode == OP_DIV || opcode == OP_REM) && !done_reg) begin
 						state <= EXECUTE;
 						done <= 1'b0;
 						if(opcode == OP_MUL || opcode == OP_MULH) begin
