@@ -78,7 +78,6 @@ always@(posedge clk or posedge rst) begin
 	else begin
 		case(state)
 			IDLE: begin
-				pc_o        <= 32'h0;
 		    imm_o       <= 32'h0;
 		    op_o        <= 7'b0;
 		    funct3_o    <= 3'b0;
