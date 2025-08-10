@@ -137,52 +137,65 @@ wire [1:0]X_AXI_AWBURST,X_AXI_ARBURST;
 wire [1:0]X_AXI_BRESP,X_AXI_RRESP;
 wire X_AXI_AWVALID,X_AXI_AWREADY,X_AXI_WVALID,X_AXI_WREADY,X_AXI_BVALID,X_AXI_BREADY,X_AXI_ARVALID,X_AXI_ARREADY,X_AXI_RVALID,X_AXI_RREADY,X_AXI_WLAST,X_AXI_RLAST;
 
-wire state = (LSU_AXI_ARADDR != 0 || LSU_AXI_AWADDR != 0) ? GRANT_LSU : GRANT_IFU;
+reg  [1:0] state;
+wire [1:0] sel_m = ((state == IDLE || state == GRANT_LSU) && (LSU_AXI_ARADDR != 0 || LSU_AXI_AWADDR != 0)) ? GRANT_LSU : ((state == IDLE || state == GRANT_IFU) && (IFU_AXI_ARADDR != 0)) ? GRANT_IFU : 2'b11;
 
-parameter GRANT_LSU = 1'b0,GRANT_IFU = 1'b1;
+parameter IDLE = 2'b00,GRANT_LSU = 2'b01,GRANT_IFU = 2'b10;
 
-assign X_AXI_AWID = (state == GRANT_LSU) ? LSU_AXI_AWID : (state == GRANT_IFU) ? IFU_AXI_AWID : 4'b0;
-assign X_AXI_AWLEN = (state == GRANT_LSU) ? LSU_AXI_AWLEN : (state == GRANT_IFU) ? IFU_AXI_AWLEN : 8'b0;
-assign X_AXI_AWSIZE = (state == GRANT_LSU) ? LSU_AXI_AWSIZE : (state == GRANT_IFU) ? IFU_AXI_AWSIZE : 3'b0;
-assign X_AXI_AWBURST = (state == GRANT_LSU) ? LSU_AXI_AWBURST : (state == GRANT_IFU) ? IFU_AXI_AWBURST : 2'b0;
-assign X_AXI_WLAST = (state == GRANT_LSU) ? LSU_AXI_WLAST : (state == GRANT_IFU) ? IFU_AXI_WLAST : 1'b0;
-assign LSU_AXI_BID = (state == GRANT_LSU) ? X_AXI_BID : 4'b0;
-assign X_AXI_AWADDR = (state == GRANT_LSU) ? LSU_AXI_AWADDR : (state == GRANT_IFU) ? IFU_AXI_AWADDR : 32'h0;
-assign X_AXI_AWVALID = (state == GRANT_LSU) ? LSU_AXI_AWVALID : (state == GRANT_IFU) ? IFU_AXI_AWVALID : 1'b0;
-assign LSU_AXI_AWREADY = (state == GRANT_LSU) ? X_AXI_AWREADY : 1'b0;
-assign X_AXI_WDATA = (state == GRANT_LSU) ? LSU_AXI_WDATA : (state == GRANT_IFU) ? IFU_AXI_WDATA : 32'h0;
-assign X_AXI_WSTRB = (state == GRANT_LSU) ? LSU_AXI_WSTRB : (state == GRANT_IFU) ? IFU_AXI_WSTRB : 4'b0;
-assign X_AXI_WVALID = (state == GRANT_LSU) ? LSU_AXI_WVALID : (state == GRANT_IFU) ? IFU_AXI_WVALID : 1'b0;
-assign LSU_AXI_WREADY = (state == GRANT_LSU) ? X_AXI_WREADY : 1'b0;
-assign LSU_AXI_BRESP = (state == GRANT_LSU) ? X_AXI_BRESP : 2'b0;
-assign LSU_AXI_BVALID = (state == GRANT_LSU) ? X_AXI_BVALID : 1'b0;
-assign X_AXI_BREADY = (state == GRANT_LSU) ? LSU_AXI_BREADY : (state == GRANT_IFU) ? IFU_AXI_BREADY : 1'b0;
+always @(posedge clk or posedge rst) begin
+	if(rst) state <= IDLE;
+	else begin
+		case (state)
+			IDLE:			 state <= (LSU_AXI_ARVALID || LSU_AXI_AEVALID) ? GRANT_LSU : (IFU_AXI_ARVALID || IFU_AXI_AEVALID) ? GRANT_IFU : state;
+			GRANT_LSU: state <= (io_master_rvalid || io_master_bvalid) ? IDLE : state;
+			GRANT_IFU: state <= (io_master_rlast) ? IDLE : state;
+			default:	 state <= state;
+		endcase
+	end
+end
+
+assign X_AXI_AWID = (sel_m == GRANT_LSU) ? LSU_AXI_AWID : (sel_m == GRANT_IFU) ? IFU_AXI_AWID : 4'b0;
+assign X_AXI_AWLEN = (sel_m == GRANT_LSU) ? LSU_AXI_AWLEN : (sel_m == GRANT_IFU) ? IFU_AXI_AWLEN : 8'b0;
+assign X_AXI_AWSIZE = (sel_m == GRANT_LSU) ? LSU_AXI_AWSIZE : (sel_m == GRANT_IFU) ? IFU_AXI_AWSIZE : 3'b0;
+assign X_AXI_AWBURST = (sel_m == GRANT_LSU) ? LSU_AXI_AWBURST : (sel_m == GRANT_IFU) ? IFU_AXI_AWBURST : 2'b0;
+assign X_AXI_WLAST = (sel_m == GRANT_LSU) ? LSU_AXI_WLAST : (sel_m == GRANT_IFU) ? IFU_AXI_WLAST : 1'b0;
+assign LSU_AXI_BID = (sel_m == GRANT_LSU) ? X_AXI_BID : 4'b0;
+assign X_AXI_AWADDR = (sel_m == GRANT_LSU) ? LSU_AXI_AWADDR : (sel_m == GRANT_IFU) ? IFU_AXI_AWADDR : 32'h0;
+assign X_AXI_AWVALID = (sel_m == GRANT_LSU) ? LSU_AXI_AWVALID : (sel_m == GRANT_IFU) ? IFU_AXI_AWVALID : 1'b0;
+assign LSU_AXI_AWREADY = (sel_m == GRANT_LSU) ? X_AXI_AWREADY : 1'b0;
+assign X_AXI_WDATA = (sel_m == GRANT_LSU) ? LSU_AXI_WDATA : (sel_m == GRANT_IFU) ? IFU_AXI_WDATA : 32'h0;
+assign X_AXI_WSTRB = (sel_m == GRANT_LSU) ? LSU_AXI_WSTRB : (sel_m == GRANT_IFU) ? IFU_AXI_WSTRB : 4'b0;
+assign X_AXI_WVALID = (sel_m == GRANT_LSU) ? LSU_AXI_WVALID : (sel_m == GRANT_IFU) ? IFU_AXI_WVALID : 1'b0;
+assign LSU_AXI_WREADY = (sel_m == GRANT_LSU) ? X_AXI_WREADY : 1'b0;
+assign LSU_AXI_BRESP = (sel_m == GRANT_LSU) ? X_AXI_BRESP : 2'b0;
+assign LSU_AXI_BVALID = (sel_m == GRANT_LSU) ? X_AXI_BVALID : 1'b0;
+assign X_AXI_BREADY = (sel_m == GRANT_LSU) ? LSU_AXI_BREADY : (sel_m == GRANT_IFU) ? IFU_AXI_BREADY : 1'b0;
  
-assign X_AXI_ARID = (state == GRANT_LSU) ? LSU_AXI_ARID : (state == GRANT_IFU) ? IFU_AXI_ARID : 4'b0;
-assign X_AXI_ARLEN = (state == GRANT_LSU) ? LSU_AXI_ARLEN : (state == GRANT_IFU) ? IFU_AXI_ARLEN : 8'b0;
-assign X_AXI_ARSIZE = (state == GRANT_LSU) ? LSU_AXI_ARSIZE : (state == GRANT_IFU) ? IFU_AXI_ARSIZE : 3'b0;
-assign X_AXI_ARBURST = (state == GRANT_LSU) ? LSU_AXI_ARBURST : (state == GRANT_IFU) ? IFU_AXI_ARBURST : 2'b0;
-assign X_AXI_ARADDR = (state == GRANT_LSU) ? LSU_AXI_ARADDR : (state == GRANT_IFU) ? IFU_AXI_ARADDR : 32'h0;
-assign X_AXI_ARVALID = (state == GRANT_LSU) ? LSU_AXI_ARVALID : (state == GRANT_IFU) ? IFU_AXI_ARVALID : 1'b0;
-assign LSU_AXI_ARREADY = (state == GRANT_LSU) ? X_AXI_ARREADY : 1'b0;
-assign LSU_AXI_RDATA = (state == GRANT_LSU) ? X_AXI_RDATA : 32'h0;
-assign LSU_AXI_RRESP = (state == GRANT_LSU) ? X_AXI_RRESP : 2'b0;
-assign LSU_AXI_RVALID = (state == GRANT_LSU) ? X_AXI_RVALID : 1'b0;
-assign X_AXI_RREADY = (state == GRANT_LSU) ? LSU_AXI_RREADY : (state == GRANT_IFU) ? IFU_AXI_RREADY : 1'b0;
-assign LSU_AXI_RID = (state == GRANT_LSU) ? X_AXI_RID : 4'b0;
-assign LSU_AXI_RLAST = (state == GRANT_LSU) ? X_AXI_RLAST : 1'b0;
+assign X_AXI_ARID = (sel_m == GRANT_LSU) ? LSU_AXI_ARID : (sel_m == GRANT_IFU) ? IFU_AXI_ARID : 4'b0;
+assign X_AXI_ARLEN = (sel_m == GRANT_LSU) ? LSU_AXI_ARLEN : (sel_m == GRANT_IFU) ? IFU_AXI_ARLEN : 8'b0;
+assign X_AXI_ARSIZE = (sel_m == GRANT_LSU) ? LSU_AXI_ARSIZE : (sel_m == GRANT_IFU) ? IFU_AXI_ARSIZE : 3'b0;
+assign X_AXI_ARBURST = (sel_m == GRANT_LSU) ? LSU_AXI_ARBURST : (sel_m == GRANT_IFU) ? IFU_AXI_ARBURST : 2'b0;
+assign X_AXI_ARADDR = (sel_m == GRANT_LSU) ? LSU_AXI_ARADDR : (sel_m == GRANT_IFU) ? IFU_AXI_ARADDR : 32'h0;
+assign X_AXI_ARVALID = (sel_m == GRANT_LSU) ? LSU_AXI_ARVALID : (sel_m == GRANT_IFU) ? IFU_AXI_ARVALID : 1'b0;
+assign LSU_AXI_ARREADY = (sel_m == GRANT_LSU) ? X_AXI_ARREADY : 1'b0;
+assign LSU_AXI_RDATA = (sel_m == GRANT_LSU) ? X_AXI_RDATA : 32'h0;
+assign LSU_AXI_RRESP = (sel_m == GRANT_LSU) ? X_AXI_RRESP : 2'b0;
+assign LSU_AXI_RVALID = (sel_m == GRANT_LSU) ? X_AXI_RVALID : 1'b0;
+assign X_AXI_RREADY = (sel_m == GRANT_LSU) ? LSU_AXI_RREADY : (sel_m == GRANT_IFU) ? IFU_AXI_RREADY : 1'b0;
+assign LSU_AXI_RID = (sel_m == GRANT_LSU) ? X_AXI_RID : 4'b0;
+assign LSU_AXI_RLAST = (sel_m == GRANT_LSU) ? X_AXI_RLAST : 1'b0;
 
-assign IFU_AXI_AWREADY = (state == GRANT_IFU) ? X_AXI_AWREADY : 1'b0;
-assign IFU_AXI_WREADY = (state == GRANT_IFU) ? X_AXI_WREADY : 1'b0;
-assign IFU_AXI_BRESP = (state == GRANT_IFU) ? X_AXI_BRESP : 2'b0;
-assign IFU_AXI_BVALID = (state == GRANT_IFU) ? X_AXI_BVALID : 1'b0;
-assign IFU_AXI_BID = (state == GRANT_IFU) ? X_AXI_BID : 4'b0;
-assign IFU_AXI_ARREADY = (state == GRANT_IFU) ? X_AXI_ARREADY : 1'b0;
-assign IFU_AXI_RDATA = (state == GRANT_IFU) ? X_AXI_RDATA : 32'h0;
-assign IFU_AXI_RRESP = (state == GRANT_IFU) ? X_AXI_RRESP : 2'b0;
-assign IFU_AXI_RVALID = (state == GRANT_IFU) ? X_AXI_RVALID : 1'b0;
-assign IFU_AXI_RID = (state == GRANT_IFU) ? X_AXI_RID : 4'b0;
-assign IFU_AXI_RLAST = (state == GRANT_IFU) ? X_AXI_RLAST : 1'b0;
+assign IFU_AXI_AWREADY = (sel_m == GRANT_IFU) ? X_AXI_AWREADY : 1'b0;
+assign IFU_AXI_WREADY = (sel_m == GRANT_IFU) ? X_AXI_WREADY : 1'b0;
+assign IFU_AXI_BRESP = (sel_m == GRANT_IFU) ? X_AXI_BRESP : 2'b0;
+assign IFU_AXI_BVALID = (sel_m == GRANT_IFU) ? X_AXI_BVALID : 1'b0;
+assign IFU_AXI_BID = (sel_m == GRANT_IFU) ? X_AXI_BID : 4'b0;
+assign IFU_AXI_ARREADY = (sel_m == GRANT_IFU) ? X_AXI_ARREADY : 1'b0;
+assign IFU_AXI_RDATA = (sel_m == GRANT_IFU) ? X_AXI_RDATA : 32'h0;
+assign IFU_AXI_RRESP = (sel_m == GRANT_IFU) ? X_AXI_RRESP : 2'b0;
+assign IFU_AXI_RVALID = (sel_m == GRANT_IFU) ? X_AXI_RVALID : 1'b0;
+assign IFU_AXI_RID = (sel_m == GRANT_IFU) ? X_AXI_RID : 4'b0;
+assign IFU_AXI_RLAST = (sel_m == GRANT_IFU) ? X_AXI_RLAST : 1'b0;
 
 /***SoC***/
 localparam DEVICE_CLINT_LOW_ADDR = 32'h2000000;//32'ha0000048;
