@@ -119,15 +119,6 @@ always @(posedge clk or posedge rst) begin
 		    ls_wen_o      <= 1'b0;
 		    ls_read_o     <= 1'b0;
 		    ls_write_o    <= 1'b0;
-		    ls_waddr_o    <= 32'h0;
-		    ls_wdata_o    <= 32'h0;
-		    ls_wmask_o    <= 4'b0;
-		    ls_awsize_o   <= 3'b0;
-		    ls_arsize_o   <= 3'b0;
-		    ls_awlen_o    <= 8'b0;
-		    ls_arlen_o    <= 8'b0;
-		    ls_awburst_o  <= 2'b0;
-		    ls_arburst_o  <= 2'b0;
 			end
 			WAIT: begin
 				if(ex_valid_o && ls_ready_i) begin
