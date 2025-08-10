@@ -63,7 +63,7 @@ end
 always @(posedge clk or posedge rst) begin
 	if(rst || isCHazard) if_valid_o <= 1'b0;
 	else begin
-		if(if_axi_rvalid_i && if_axi_rready_o && !if_axi_arvalid) begin
+		if(if_axi_rvalid_i && if_axi_rready_o && !if_axi_arvalid_o) begin
 			if_valid_o <= 1'b1;
 		end
 		if(if_valid_o && id_ready_i) begin
