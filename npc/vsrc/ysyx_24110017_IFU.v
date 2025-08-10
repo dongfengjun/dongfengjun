@@ -108,7 +108,7 @@ reg axi_state;
 reg [31:0] axi_rdata_reg;
 
 always @(posedge clk or posedge rst) begin
-	if(rst) axi_state <= AXI_IDLE;
+	if(rst || isCHazard) axi_state <= AXI_IDLE;
 	else begin
 		case(axi_state)
 			AXI_IDLE  : axi_state <= (pc_valid_i && if_ready_o) ? AXI_FETCH : axi_state;
@@ -118,9 +118,9 @@ always @(posedge clk or posedge rst) begin
 end
 
 always @(posedge clk or posedge rst) begin
-        if(rst) begin
+        if(rst || isCHazard) begin
 					if_axi_arvalid_o <= 1'b0;
-					if_axi_rready_o  <= 1'b0;
+					if_axi_rready_o  <= 1'b1;
 					if_axi_arid_o		 <= 4'b0;
 					if_axi_araddr_o  <= 32'h0;
 					if_axi_arlen_o	 <= 8'b0;
