@@ -116,8 +116,6 @@ always @(posedge clk or posedge rst) begin
 	else begin
 		case(state)
 			IDLE: begin
-				op_o          <= 7'b0;
-		    funct3_o      <= 3'b0;
 		    rd_o          <= 5'b0;
 		    gpr_wen_o     <= 1'b0;
 		    mepc_o        <= 32'h0;
@@ -134,7 +132,6 @@ always @(posedge clk or posedge rst) begin
 		    ls_write_o    <= 1'b0;
 		    ls_waddr_o    <= 32'h0;
 		    ls_wdata_o    <= 32'h0;
-		    ls_raddr_o    <= 32'h0;
 		    ls_wmask_o    <= 4'b0;
 		    ls_awsize_o   <= 3'b0;
 		    ls_arsize_o   <= 3'b0;
