@@ -81,17 +81,17 @@ module ysyx_24110017_LSU(
 /***分布式控制***/
 assign ls_ready_o = (state == IDLE);
 assign difftest_o = (state == DIFFTEST);
-parameter IDLE = 2'b00,WAIT = 2'b01,DIFFTEST = 2'b10;
+parameter IDLE = 2'b00,WAIT = 2'b01,DONE = 2'b10,DIFFTEST = 2'b11;
 reg[1:0] state;
  
 always @(posedge clk or posedge rst) begin
   if(rst) state <= IDLE;
   else begin
     case (state)
-      IDLE: state <= (ex_valid_i && ls_ready_o) ? WAIT		 : state;
-      WAIT: state <= (ls_done_o || !ls_valid_i) ? DIFFTEST : state;
+      IDLE: state <= (ex_valid_i && ls_ready_o) ? WAIT : state;
+      WAIT: state <= (ls_done_o || !ls_valid_i) ? DONE : state;
+			DONE: state <= DIFFTEST;
 			DIFFTEST : state <= IDLE;
-			default: state <= state;
     endcase
   end
 end

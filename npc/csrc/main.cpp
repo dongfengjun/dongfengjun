@@ -311,13 +311,12 @@ void isa_parser_elf(char *filename){
 	FILE *mtracelog;
 #endif
 
-bool difftest_flag = false;
 static void trace_and_difftest() {
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", logbuf); }
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(logbuf)); }
-		IFDEF(CONFIG_DIFFTEST, if(dpic_display(3) && difftest_flag){difftest_step(dpic_display(0), dpic_display(1));} if(dpic_display(3)){difftest_flag = true;});
+		IFDEF(CONFIG_DIFFTEST, if(dpic_display(3)){difftest_step(dpic_display(0), dpic_display(1));});
 		IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
 
@@ -438,7 +437,7 @@ void cpu_exec(int n) {
 	while(RUNNING && n != 0) {
 		single_cycle();
 		nvboard_update();
-		cpu.pc = dpic_display(0);
+		cpu.pc = dpic_display(1);
 		isa_gpr_push();
 		performance_evaluation();
 //		if(dpic_display(3)) printf("pc:%08x  access:%ld\n",dpic_display(0),icache_access_cnt);
