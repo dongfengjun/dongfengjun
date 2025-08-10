@@ -120,7 +120,7 @@ wire [31:0] dnpc_ex;
 /***LSU***/
 wire [31:0]pc_ls,inst_ls,dnpc_ls;//difftest
 wire ls_ready;
-wire ls_valid;
+wire difftest;
 wire [31:0] xrd_ls;
 wire [ 4:0] rd_ls;
 wire gpr_wen_ls;

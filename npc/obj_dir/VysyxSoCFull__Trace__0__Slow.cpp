@@ -1874,6 +1874,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBus(c+920,"mtvec", false,-1, 31,0);
     tracep->declBus(c+350,"mvendorid", false,-1, 31,0);
     tracep->declBus(c+351,"marchid", false,-1, 31,0);
+    tracep->declBit(c+1662,"difftest", false,-1);
     tracep->declBit(c+1098,"isRAW", false,-1);
     tracep->declBit(c+1099,"isCHazard", false,-1);
     tracep->pushNamePrefix("CLINT ");
@@ -2277,7 +2278,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBus(c+478,"dnpc_o", false,-1, 31,0);
     tracep->declBit(c+1152,"ex_valid_i", false,-1);
     tracep->declBit(c+1057,"ls_ready_o", false,-1);
-    tracep->declBit(c+1703,"ls_valid_o", false,-1);
+    tracep->declBit(c+1662,"difftest_o", false,-1);
     tracep->declBus(c+468,"op_i", false,-1, 6,0);
     tracep->declBus(c+469,"funct3_i", false,-1, 2,0);
     tracep->declBus(c+470,"rd_i", false,-1, 4,0);
@@ -2345,7 +2346,6 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBus(c+1617,"ls_axi_rdata", false,-1, 31,0);
     tracep->declBus(c+1619,"ls_axi_rresp", false,-1, 1,0);
     tracep->declBit(c+1622,"ls_axi_rlast", false,-1);
-    tracep->declBit(c+1662,"difftest_o", false,-1);
     tracep->declBus(c+1653,"IDLE", false,-1, 1,0);
     tracep->declBus(c+1654,"WAIT", false,-1, 1,0);
     tracep->declBus(c+1655,"DIFFTEST", false,-1, 1,0);
