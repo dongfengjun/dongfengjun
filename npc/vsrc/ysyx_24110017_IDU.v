@@ -78,17 +78,6 @@ always@(posedge clk or posedge rst) begin
 	else begin
 		case(state)
 			IDLE: begin
-		    rd_o        <= 5'b0;
-		    gpr_wen_o   <= 1'b0;
-		    alu_sel_o   <= 4'b0;
-		    a_o         <= 32'h0;
-		    b_o         <= 32'h0;
-		    csr_o       <= 32'h0;
-		    mepc_wen_o    <= 1'b0;
-		    mstatus_wen_o <= 1'b0;
-		    mcause_wen_o  <= 1'b0;
-		    mtvec_wen_o   <= 1'b0;
-		    fencei_o    <= 1'b0;
 			end
 			WAIT: begin
 				if(id_valid_o && ex_ready_i) begin
