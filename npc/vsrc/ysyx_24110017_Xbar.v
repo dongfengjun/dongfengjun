@@ -178,7 +178,7 @@ assign IFU_AXI_BRESP = (state == GRANT_IFU) ? X_AXI_BRESP : 2'b0;
 assign IFU_AXI_BVALID = (state == GRANT_IFU) ? X_AXI_BVALID : 1'b0;
 assign IFU_AXI_BID = (state == GRANT_IFU) ? X_AXI_BID : 4'b0;
 assign IFU_AXI_ARREADY = (state == GRANT_IFU) ? X_AXI_ARREADY : 1'b0;
-assign IFU_AXI_RDATA = (state == GRANT_IFU || state == IDLE) ? X_AXI_RDATA : 32'h0;
+assign IFU_AXI_RDATA = (state == GRANT_IFU) ? X_AXI_RDATA : 32'h0;
 assign IFU_AXI_RRESP = (state == GRANT_IFU) ? X_AXI_RRESP : 2'b0;
 assign IFU_AXI_RVALID = (state == GRANT_IFU) ? X_AXI_RVALID : 1'b0;
 assign IFU_AXI_RID = (state == GRANT_IFU) ? X_AXI_RID : 4'b0;
@@ -217,7 +217,7 @@ assign {C_AXI_ARBURST,I_AXI_ARBURST,io_master_arburst} = (sel_clint) ? {X_AXI_AR
 assign {C_AXI_RREADY,I_AXI_RREADY,io_master_rready} = (sel_clint) ? {X_AXI_RREADY,1'b0,1'b0} : (sel_id) ? {1'b0,X_AXI_RREADY,1'b0} : {1'b0,1'b0,X_AXI_RREADY};
 assign X_AXI_RVALID = (sel_clint) ? C_AXI_RVALID : (sel_id) ? I_AXI_RVALID : io_master_rvalid;
 assign X_AXI_RID = (sel_clint) ? C_AXI_RID : (sel_id) ? I_AXI_RID : io_master_rid;
-assign X_AXI_RDATA = (sel_clint || state == WAIT_CLINT) ? C_AXI_RDATA : (sel_id) ? I_AXI_RDATA : io_master_rdata;
+assign X_AXI_RDATA = (sel_clint) ? C_AXI_RDATA : (sel_id) ? I_AXI_RDATA : io_master_rdata;
 assign X_AXI_RRESP = (sel_clint) ? C_AXI_RRESP : (sel_id) ? I_AXI_RRESP : io_master_rresp;
 assign X_AXI_RLAST = (sel_clint) ? C_AXI_RLAST : (sel_id) ? I_AXI_RLAST : io_master_rlast;
 
