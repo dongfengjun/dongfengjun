@@ -213,7 +213,7 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 );
 ysyx_24110017_LSU LSU(clock,reset,
 		pc_ex,inst_ex,dnpc_ex,pc_ls,inst_ls,dnpc_ls,//difftest
-		(ex_valid && !isCHazard),ls_ready,ls_valid,
+		(ex_valid && !isCHazard),ls_ready,difftest,
 		op_ex,funct3_ex,rd_ex,gpr_wen_ex,mepc_ex,mstatus_ex,mcause_ex,mtvec_ex,
 		mepc_wen_ex,mstatus_wen_ex,mcause_wen_ex,mtvec_wen_ex,
 		ex_ex,ls_valid_ex,ls_wen_ex,ls_read_ex,ls_write_ex,
@@ -295,7 +295,7 @@ endfunction
 export "DPI-C" function dpic_grab;                                    
 function int dpic_grab(int i);
   begin
-		assign dpic_grab = (i == 0) ? pc_ls : (i == 1) ? dnpc_ls : (i == 2) ? inst_ls : (i == 3) ? {31'b0,ls_valid} : 32'b0;
+		assign dpic_grab = (i == 0) ? pc_ls : (i == 1) ? dnpc_ls : (i == 2) ? inst_ls : (i == 3) ? {31'b0,difftest} : 32'b0;
   end
 endfunction
 /***E*N*D***/

@@ -12,7 +12,7 @@ module ysyx_24110017_LSU(
 
 	input  wire ex_valid_i,	
   output wire ls_ready_o,
-	output wire ls_valid_o,
+	output wire difftest_o,
 	input  wire [ 6:0] op_i,
 	input  wire [ 2:0] funct3_i,
 	input  wire [ 4:0] rd_i,
