@@ -8,7 +8,7 @@ module ysyx_24110017_LSU(
 	input  wire [31:0] dnpc_i,
 	output reg  [31:0] pc_o,
 	output reg  [31:0] inst_o,
-	output reg  [31:0] dnpc_o
+	output reg  [31:0] dnpc_o,
 
 	input  wire ex_valid_i,	
   output wire ls_ready_o,
