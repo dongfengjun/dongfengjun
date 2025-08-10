@@ -165,7 +165,7 @@ assign X_AXI_ARBURST = (state == GRANT_LSU) ? LSU_AXI_ARBURST : (state == GRANT_
 assign X_AXI_ARADDR = (state == GRANT_LSU) ? LSU_AXI_ARADDR : (state == GRANT_IFU) ? IFU_AXI_ARADDR : 32'h0;
 assign X_AXI_ARVALID = (state == GRANT_LSU) ? LSU_AXI_ARVALID : (state == GRANT_IFU) ? IFU_AXI_ARVALID : 1'b0;
 assign LSU_AXI_ARREADY = (state == GRANT_LSU) ? X_AXI_ARREADY : 1'b0;
-assign LSU_AXI_RDATA = (state == GRANT_LSU || state == IDLE || state == WAIT_CLINT) ? X_AXI_RDATA : 32'h0;
+assign LSU_AXI_RDATA = (state == GRANT_LSU) ? X_AXI_RDATA : 32'h0;
 assign LSU_AXI_RRESP = (state == GRANT_LSU) ? X_AXI_RRESP : 2'b0;
 assign LSU_AXI_RVALID = (state == GRANT_LSU) ? X_AXI_RVALID : 1'b0;
 assign X_AXI_RREADY = (state == GRANT_LSU) ? LSU_AXI_RREADY : (state == GRANT_IFU) ? IFU_AXI_RREADY : 1'b0;
