@@ -146,7 +146,7 @@ always @(posedge clk or posedge rst) begin
 	if(rst) state <= IDLE;
 	else begin
 		case (state)
-			IDLE:			 state <= (LSU_AXI_ARVALID || LSU_AXI_AEVALID) ? GRANT_LSU : (IFU_AXI_ARVALID || IFU_AXI_AEVALID) ? GRANT_IFU : state;
+			IDLE:			 state <= (LSU_AXI_ARVALID || LSU_AXI_AWVALID) ? GRANT_LSU : (IFU_AXI_ARVALID) ? GRANT_IFU : state;
 			GRANT_LSU: state <= (io_master_rvalid || io_master_bvalid) ? IDLE : state;
 			GRANT_IFU: state <= (io_master_rlast) ? IDLE : state;
 			default:	 state <= state;
