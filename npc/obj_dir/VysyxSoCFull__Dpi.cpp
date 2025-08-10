@@ -25,7 +25,7 @@ int amat_counter(int i) {
 #ifndef VL_DPIDECL_csr_grab_
 #define VL_DPIDECL_csr_grab_
 int csr_grab(int i) {
-    // DPI export at vsrc/ysyx_24110017.v:281:14
+    // DPI export at vsrc/ysyx_24110017.v:288:14
     return VysyxSoCFull::csr_grab(i);
 }
 #endif
@@ -33,7 +33,7 @@ int csr_grab(int i) {
 #ifndef VL_DPIDECL_dpic_grab_
 #define VL_DPIDECL_dpic_grab_
 int dpic_grab(int i) {
-    // DPI export at vsrc/ysyx_24110017.v:288:14
+    // DPI export at vsrc/ysyx_24110017.v:295:14
     return VysyxSoCFull::dpic_grab(i);
 }
 #endif
@@ -49,7 +49,7 @@ int gpr_reg_grab(int addr) {
 #ifndef VL_DPIDECL_performance_counter_
 #define VL_DPIDECL_performance_counter_
 int performance_counter(int i) {
-    // DPI export at vsrc/ysyx_24110017.v:298:14
+    // DPI export at vsrc/ysyx_24110017.v:304:14
     return VysyxSoCFull::performance_counter(i);
 }
 #endif
