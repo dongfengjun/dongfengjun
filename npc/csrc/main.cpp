@@ -317,7 +317,7 @@ static void trace_and_difftest() {
   if (ITRACE_COND) { log_write("%s\n", logbuf); }
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(logbuf)); }
-		IFDEF(CONFIG_DIFFTEST, if(dpic_display(3)){difftest_flag = true;} if(dpic_display(3) && difftest_flag){difftest_step(dpic_display(0), dpic_display(1));});
+		IFDEF(CONFIG_DIFFTEST, if(dpic_display(3) && difftest_flag){difftest_step(dpic_display(0), dpic_display(1));} if(dpic_display(3)){difftest_flag = true;});
 		IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
 
