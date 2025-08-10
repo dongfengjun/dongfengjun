@@ -142,6 +142,8 @@ always @(posedge clk or posedge rst) begin
 			end
 			WAIT: begin
 				if(ex_valid_o && ls_ready_i) begin
+					op_o          <= op_i;
+			    funct3_o      <= funct3_i;
 					rd_o          <= rd_i;
 					gpr_wen_o     <= gpr_wen_i;
 					mepc_o        <= mepc_w;
