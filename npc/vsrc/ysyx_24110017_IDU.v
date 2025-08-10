@@ -4,21 +4,24 @@ module ysyx_24110017_IDU(
 	input  wire rst,
 	input  wire isRAW,
 	input  wire isCHazard,
+
+	output reg  [31:0] inst_o,//difftest
+	
 	output wire [ 4:0] rs1_o,
 	output wire [ 4:0] rs2_o,
 	input  wire [31:0] r1_i,
 	input  wire [31:0] r2_i,
 	input  wire [31:0] mepc_i,mstatus_i,mcause_i,mtvec_i,
 
-	input  wire if_valid_i,		//valid
+	input  wire if_valid_i,
 	output wire id_ready_o,
 	output wire id_valid_o,
 	input  wire ex_ready_i,
 
-	input  wire [31:0] pc_i,	//i.bit
+	input  wire [31:0] pc_i,
   input  wire [31:0] inst_i,
 	
-	output reg  [31:0] pc_o,	//o.bit
+	output reg  [31:0] pc_o,
 	output reg	[31:0] imm_o,
 	output reg  [ 6:0] op_o,
 	output reg  [ 2:0] funct3_o,
@@ -55,6 +58,7 @@ assign id_ready_o = (state == IDLE) && (!isRAW);
 
 always@(posedge clk or posedge rst) begin
 	if(rst || isCHazard) begin
+		inst_o			<= 32'h0;
 		pc_o				<= 32'h0;
 		imm_o				<= 32'h0;
 		op_o				<= 7'b0;
@@ -81,6 +85,7 @@ always@(posedge clk or posedge rst) begin
 			end
 			WAIT: begin
 				if(id_valid_o && ex_ready_i) begin
+					inst_o			<= inst_i;
 					pc_o        <= pc_i;
 					imm_o       <= imm;
 					op_o				<= op;

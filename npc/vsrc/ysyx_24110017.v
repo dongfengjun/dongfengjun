@@ -87,6 +87,7 @@ wire [ 1:0] icache_axi_awburst,icache_axi_arburst;
 wire [ 1:0] icache_axi_bresp,icache_axi_rresp;
 wire icache_axi_awvalid,icache_axi_awready,icache_axi_wvalid,icache_axi_wready,icache_axi_bvalid,icache_axi_bready,icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,icache_axi_wlast,icache_axi_rlast;
 /***IDU***/
+wire [31:0]inst_id;//difftest
 wire id_valid,id_ready;
 wire [4:0] rs1,rs2;
 wire [31:0] pc_id,imm_id;
@@ -99,6 +100,7 @@ wire [31:0] a_id,b_id,r1_id,r2_id;
 wire [31:0] csr_id,mepc_id,mtvec_id;
 wire mepc_wen_id,mstatus_wen_id,mcause_wen_id,mtvec_wen_id,fencei_id;
 /***EXU***/
+wire [31:0]pc_ex,inst_ex;//difftest
 wire ex_ready,ex_valid;
 wire [ 6:0] op_ex;
 wire [ 2:0] funct3_ex;
@@ -116,7 +118,9 @@ wire [ 7:0] ls_awlen_ex,ls_arlen_ex;
 wire [ 1:0] ls_awburst_ex,ls_arburst_ex;
 wire [31:0] dnpc_ex;
 /***LSU***/
+wire [31:0]pc_ls,inst_ls,dnpc_ls;//difftest
 wire ls_ready;
+wire ls_valid;
 wire [31:0] xrd_ls;
 wire [ 4:0] rd_ls;
 wire gpr_wen_ls;
@@ -186,6 +190,7 @@ ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei_id, //w < n
     icache_axi_rready,icache_axi_rvalid,icache_axi_rid,icache_axi_rdata,icache_axi_rresp,icache_axi_rlast
 );
 ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
+		inst_id,//difftest
 		rs1,rs2,r1,r2,
 		mepc,mstatus,mcause,mtvec,
 		if_valid,id_ready,id_valid,ex_ready,
@@ -195,6 +200,7 @@ ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 		mepc_wen_id,mstatus_wen_id,mcause_wen_id,mtvec_wen_id,fencei_id
 );
 ysyx_24110017_EXU EXU(clock,reset,isCHazard,
+		inst_id,pc_ex,inst_ex,//difftest
 		id_valid,ex_ready,ex_valid,ls_ready,
 		pc_id,imm_id,op_id,funct3_id,rd_id,gpr_wen_id,
 		alu_sel_id,a_id,b_id,r1_id,r2_id,csr_id,mepc_id,mtvec_id,
@@ -205,7 +211,8 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 		ls_valid_ex,ls_wen_ex,ls_read_ex,ls_write_ex,
 		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,ls_wmask_ex,ls_awsize_ex,ls_arsize_ex,ls_awlen_ex,ls_arlen_ex,ls_awburst_ex,ls_arburst_ex,dnpc_ex
 );
-ysyx_24110017_LSU LSU(clock,reset,(ex_valid && !isCHazard),ls_ready,
+ysyx_24110017_LSU LSU(clock,reset,(ex_valid && !isCHazard),ls_ready,ls_valid,
+		pc_ex,inst_ex,dnpc_ex,pc_ls,inst_ls,dnpc_ls,//difftest
 		op_ex,funct3_ex,rd_ex,gpr_wen_ex,mepc_ex,mstatus_ex,mcause_ex,mtvec_ex,
 		mepc_wen_ex,mstatus_wen_ex,mcause_wen_ex,mtvec_wen_ex,
 		ex_ex,ls_valid_ex,ls_wen_ex,ls_read_ex,ls_write_ex,
@@ -287,8 +294,7 @@ endfunction
 export "DPI-C" function dpic_grab;                                    
 function int dpic_grab(int i);
   begin
-		assign dpic_grab = (i == 0) ? pc : (i == 1) ? dnpc_ex : (i == 2) ? inst_if : (i == 3) ? 
-		32'b0 : 32'b0;//{31'b0,difftest} : 32'b0;
+		assign dpic_grab = (i == 0) ? pc_ls : (i == 1) ? dnpc_ls : (i == 2) ? inst_ls : (i == 3) ? {31'b0,ls_valid} : 32'b0;
   end
 endfunction
 /***E*N*D***/

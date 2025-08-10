@@ -4,6 +4,10 @@ module ysyx_24110017_EXU(
 	input  wire rst,
 	input  wire isCHazard,
 
+	input  wire [31:0] inst_i,//difftest
+	output reg  [31:0] pc_o,
+	output reg  [31:0] inst_o,
+
 	input  wire id_valid_i,
 	output wire  ex_ready_o,
 	output wire  ex_valid_o,
@@ -84,6 +88,8 @@ end
 wire [31:0]al_res;
 always @(posedge clk or posedge rst) begin
 	if(rst || isCHazard) begin
+		pc_o					<= 32'h0;
+		inst_o				<= 32'h0;
 		op_o					<= 7'b0;
 		funct3_o			<= 3'b0;
 		rd_o					<= 5'b0;
@@ -122,6 +128,8 @@ always @(posedge clk or posedge rst) begin
 			end
 			WAIT: begin
 				if(ex_valid_o && ls_ready_i) begin
+					pc_o					<= pc_i;
+					inst_o				<= inst_i;
 					op_o          <= op_i;
 			    funct3_o      <= funct3_i;
 					rd_o          <= rd_i;

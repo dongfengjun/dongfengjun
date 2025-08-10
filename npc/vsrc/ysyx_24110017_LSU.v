@@ -1,10 +1,18 @@
 //`define YOSYS_STA
 module ysyx_24110017_LSU(
-	input clk,
-	input rst,
+	input  wire clk,
+	input  wire rst,
+
+	input  wire [31:0] pc_i,//difftest
+	input  wire [31:0] inst_i,
+	input  wire [31:0] dnpc_i,
+	output reg  [31:0] pc_o,
+	output reg  [31:0] inst_o,
+	output reg  [31:0] dnpc_o
 
 	input  wire ex_valid_i,	
   output wire ls_ready_o,
+	output wire ls_valid_o,
 	input  wire [ 6:0] op_i,
 	input  wire [ 2:0] funct3_i,
 	input  wire [ 4:0] rd_i,
@@ -72,6 +80,7 @@ module ysyx_24110017_LSU(
 
 /***分布式控制***/
 assign ls_ready_o = (state == IDLE);
+assign ls_valid_o = (state == WAIT);
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
  
@@ -89,6 +98,10 @@ wire [31:0] xrd = (ls_valid_i) ? ls_rdata : ex_i;
 
 always@(posedge clk or posedge rst) begin
 	if(rst) begin
+		pc_o					<= 32'h0;
+		inst_o				<= 32'h0;
+		dnpc_o				<= 32'h0;
+
 		rd_o					<= 5'b0;
 		gpr_wen_o			<= 1'b0;
 		mepc_o				<= 32'h0;
@@ -118,6 +131,10 @@ always@(posedge clk or posedge rst) begin
 			end
 			WAIT: begin
 				if(ls_done_o || !ls_valid_i) begin
+					pc_o          <= pc_i;
+			    inst_o        <= inst_i;
+			    dnpc_o        <= dnpc_i;
+					
 					rd_o          <= rd_i;
 					gpr_wen_o     <= gpr_wen_i;
 					mepc_o        <= mepc_i;
