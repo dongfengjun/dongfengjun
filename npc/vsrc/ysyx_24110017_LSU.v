@@ -82,7 +82,7 @@ module ysyx_24110017_LSU(
 assign ls_ready_o = (state == IDLE);
 assign difftest_o = (state == DIFFTEST);
 parameter IDLE = 2'b00,WAIT = 2'b01,DIFFTEST = 2'b10;
-reg state;
+reg[1:0] state;
  
 always @(posedge clk or posedge rst) begin
   if(rst) state <= IDLE;
