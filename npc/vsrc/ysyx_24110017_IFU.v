@@ -60,10 +60,23 @@ always @(posedge clk or posedge rst) begin
 	end
 end
 
+reg isCHazard_reg;
+always @(posedge clk or posedge rst) begin
+	if(rst) isCHazard_reg <= 1'b0;
+	else begin
+		if(isCHazard) begin
+			isCHazard_reg <= 1'b1;
+		end
+		else if(if_axi_rvalid_i && if_axi_rready_o) begin
+			isCHazard_reg <= 1'b0;
+		end
+	end
+end
+
 always @(posedge clk or posedge rst) begin
 	if(rst || isCHazard) if_valid_o <= 1'b0;
 	else begin
-		if(if_axi_rvalid_i && if_axi_rready_o) begin
+		if(if_axi_rvalid_i && if_axi_rready_o && !isCHazard_reg) begin
 			if_valid_o <= 1'b1;
 		end
 		if(if_valid_o && id_ready_i) begin
