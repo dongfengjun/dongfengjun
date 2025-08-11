@@ -277,9 +277,9 @@ always @(posedge clk or posedge rst) begin
           end
         end
 				AXI_WRITE1: begin
+					axi_wvalid <= 1'b1;
 					if(ls_axi_awvalid && ls_axi_awready) begin
 						axi_awvalid <= 1'b0;
-						axi_wvalid <= 1'b1;
 						axi_wlast <= 1'b1;
 						axi_state <= AXI_WRITE2;
 					end
