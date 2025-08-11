@@ -281,10 +281,10 @@ always @(posedge clk or posedge rst) begin
 					if(ls_axi_awvalid && ls_axi_awready) begin
 						axi_awvalid <= 1'b0;
 						axi_wlast <= 1'b1;
-						axi_state <= AXI_WRITE2;
+						//axi_state <= AXI_WRITE2;
 					end
 				end
-				AXI_WRITE2:begin
+				//AXI_WRITE2:begin
 					if(ls_axi_wvalid && ls_axi_wready) begin
 						axi_wvalid <= 0;
 					end
@@ -296,7 +296,7 @@ always @(posedge clk or posedge rst) begin
 						axi_state <= AXI_DONE;
 						ls_done_reg <= 1'b1;
 					end
-				end
+				//end
         AXI_DONE: begin
 					axi_arvalid <= 0;
 					axi_rready <= 0;
