@@ -99,7 +99,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
     else begin
       case(state)
         IDLE   : begin
-          if(m_axi_arvalid) begin
+          if(m_axi_arvalid && m_axi_arready) begin
 						if(access != 0) begin
 							state <= RETURN;
 						end
@@ -149,23 +149,25 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 			else begin
 				case(state)
 				IDLE	 : begin
-						m_axi_arready <= 1'b1;
+					m_axi_arready <= 1'b1;
+					if(access == 0) begin
+						if(m_axi_arvalid && m_axi_arready) begin
+							m_axi_arready <= 1'b0;
+							s_axi_arvalid <= 1'b1;
+							s_axi_araddr <= m_axi_araddr;
+							burst_araddr <= m_axi_araddr;
+							s_axi_arburst <= 2'b01;
+							if(m_axi_araddr - 32'ha0000000 < 32'h20000000) begin
+								s_axi_arlen <= (1 << (m - 2)) - {6'b0,offset} - 1;
+							end
+							else begin
+								s_axi_arlen <= 8'h0;
+							end
+							s_axi_arsize <= 3'h2;
+						end
+					end
 				end
 				TRANS  : begin
-				//	if(m_axi_arvalid && m_axi_arready) begin
-						m_axi_arready <= 1'b0;
-						s_axi_arvalid <= 1'b1;
-						s_axi_araddr <= m_axi_araddr;
-						burst_araddr <= m_axi_araddr;
-						s_axi_arburst <= 2'b01;
-						if(m_axi_araddr - 32'ha0000000 < 32'h20000000) begin
-							s_axi_arlen <= (1 << (m - 2)) - {6'b0,offset} - 1;
-						end
-						else begin
-							s_axi_arlen <= 8'h0;
-						end
-						s_axi_arsize <= 3'h2;
-					//end
 					if(s_axi_arvalid && s_axi_arready) begin
 						integer a;
             integer b;
