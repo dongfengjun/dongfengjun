@@ -80,6 +80,9 @@ wire [31-m-n+w : 0]test1 = tag_reg[0][8];
 	wire [31-m-n+w : 0]tag = m_axi_araddr[31 : m+n-w];
   wire [n-1-w : 0]index = m_axi_araddr[m+n-w-1 : m];
   wire [m-3 : 0]offset = m_axi_araddr[m-1 : 2];
+	wire [31-m-n+w : 0]s_tag = s_axi_araddr[31 : m+n-w];
+  wire [n-1-w : 0]s_index = s_axi_araddr[m+n-w-1 : m];
+  wire [m-3 : 0]s_offset = s_axi_araddr[m-1 : 2];
 
   wire [(1<<w) - 1 : 0]access;
 	wire [(1<<w) - 1 : 0]access_raw;
@@ -174,23 +177,23 @@ wire [31-m-n+w : 0]test1 = tag_reg[0][8];
 						integer a;
             integer b;
 						for (b = 0; b < (1<<(m-2)); b = b + 1) begin : fifo
-							cache_reg[b][index * (1<<w)] <= 0;
-              tag_reg[b][index * (1<<w)] <= 0;
-							valid_reg[b][index * (1<<w)] <= 0;
+							cache_reg[b][s_index * (1<<w)] <= 0;
+              tag_reg[b][s_index * (1<<w)] <= 0;
+							valid_reg[b][s_index * (1<<w)] <= 0;
 							for (a = 1; a < (1<<w); a = a + 1) begin
-                cache_reg[b][index * (1<<w) + a] <= cache_reg[b][index * (1<<w) + a - 1];
-                tag_reg[b][index * (1<<w) + a] <= tag_reg[b][index * (1<<w) + a - 1];
-                valid_reg[b][index * (1<<w) + a] <= valid_reg[b][index * (1<<w) + a - 1];
+                cache_reg[b][s_index * (1<<w) + a] <= cache_reg[b][s_index * (1<<w) + a - 1];
+                tag_reg[b][s_index * (1<<w) + a] <= tag_reg[b][s_index * (1<<w) + a - 1];
+                valid_reg[b][s_index * (1<<w) + a] <= valid_reg[b][s_index * (1<<w) + a - 1];
               end
             end
 						s_axi_arvalid <= 1'b0;
 						s_axi_rready <= 1'b1;                                           
-            burst_counter <= offset;
+            burst_counter <= s_offset;
 					end
 					if(s_axi_rready && s_axi_rvalid) begin
-						cache_reg[burst_counter][index * (1<<w)] <= s_axi_rdata;
-						tag_reg[burst_counter][index * (1<<w)] <= burst_araddr[31 : m+n-w];
-						valid_reg[burst_counter][index * (1<<w)] <= 1'b1;
+						cache_reg[burst_counter][s_index * (1<<w)] <= s_axi_rdata;
+						tag_reg[burst_counter][s_index * (1<<w)] <= burst_araddr[31 : m+n-w];
+						valid_reg[burst_counter][s_index * (1<<w)] <= 1'b1;
 						burst_araddr <= burst_araddr + 4;
 						burst_counter <= burst_counter + 1;
 					end
@@ -205,7 +208,7 @@ wire [31-m-n+w : 0]test1 = tag_reg[0][8];
 							m_axi_rdata <= s_axi_rdata;
 						end
 						else begin
-							m_axi_rdata <= cache_reg[offset][index * (1 << w)];
+							m_axi_rdata <= cache_reg[s_offset][s_index * (1 << w)];
 						end
 					end
 					if(m_axi_rvalid && m_axi_rready) begin
