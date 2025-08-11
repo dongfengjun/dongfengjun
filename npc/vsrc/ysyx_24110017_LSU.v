@@ -251,7 +251,8 @@ always @(posedge clk or posedge rst) begin
 					end
 					if(ls_write_i) begin
 		        axi_state <= AXI_WRITE1;
-						axi_awvalid <= 1'b1;//非DELAY_TEST
+						axi_awvalid <= 1'b1;
+						axi_wvalid <= 1'b1; 
 						axi_awaddr <= ls_waddr_i;
 						axi_awsize <= ls_awsize_i;
 						axi_awlen <= ls_awlen_i;
@@ -277,20 +278,16 @@ always @(posedge clk or posedge rst) begin
           end
         end
 				AXI_WRITE1: begin
-					axi_wvalid <= 1'b1;
 					if(ls_axi_awvalid && ls_axi_awready) begin
 						axi_awvalid <= 1'b0;
 						axi_wlast <= 1'b1;
 						axi_state <= AXI_WRITE2;
 					end
-					if(ls_axi_wvalid && ls_axi_wready) begin
-						axi_wvalid <= 0;
-          end
 				end
 				AXI_WRITE2:begin
-					//if(ls_axi_wvalid && ls_axi_wready) begin
-						//axi_wvalid <= 0;
-					//end
+					if(ls_axi_wvalid && ls_axi_wready) begin
+						axi_wvalid <= 0;
+					end
 					if(ls_axi_bvalid && !ls_axi_bready) begin
 						axi_bready <= 1;
 					end
