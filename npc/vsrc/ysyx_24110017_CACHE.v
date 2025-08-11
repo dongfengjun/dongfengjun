@@ -149,9 +149,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 			else begin
 				case(state)
 				IDLE	 : begin
-					if(m_axi_arvalid && !m_axi_arready) begin
 						m_axi_arready <= 1'b1;
-          end
 				end
 				TRANS  : begin
 					if(m_axi_arvalid && m_axi_arready) begin
