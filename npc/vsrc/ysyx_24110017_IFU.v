@@ -63,7 +63,7 @@ end
 always @(posedge clk or posedge rst) begin
 	if(rst || isCHazard) if_valid_o <= 1'b0;
 	else begin
-		if(if_axi_rvalid_i && if_axi_rready_o && !if_axi_arvalid_o) begin
+		if(if_axi_rvalid_i && if_axi_rready_o) begin
 			if_valid_o <= 1'b1;
 		end
 		if(if_valid_o && id_ready_i) begin
@@ -112,7 +112,7 @@ always @(posedge clk or posedge rst) begin
 	else begin
 		case(axi_state)
 			AXI_IDLE  : axi_state <= (pc_valid_i && if_ready_o) ? AXI_FETCH : axi_state;
-			AXI_FETCH : axi_state <= (if_axi_rvalid_i && if_axi_rready_o && !if_axi_arvalid_o) ? AXI_IDLE : axi_state;
+			AXI_FETCH : axi_state <= (if_axi_rvalid_i && if_axi_rready_o) ? AXI_IDLE : axi_state;
 		endcase
 	end
 end
