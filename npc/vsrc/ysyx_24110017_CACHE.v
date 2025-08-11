@@ -66,8 +66,9 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	input wire s_axi_rlast
 );
 
-	wire[127:0]cache_test0,cache_test1,cache_test2,cache_test3;
-	assign cache_test0 = {cache_reg[1][0],cache_reg[2][0],cache_reg[3][0],cache_reg[4][0]};
+wire [31:0]test = cache_reg[0][8];
+//	wire[127:0]cache_test0,cache_test1,cache_test2,cache_test3;
+//	assign cache_test0 = {cache_reg[0][0],cache_reg[1][0],cache_reg[2][0],cache_reg[3][0]};
 //	assign cache_test1 = {cache_reg[0][1],cache_reg[1][1],cache_reg[2][1],cache_reg[3][1]};
 //	assign cache_test2 = {cache_reg[0][2],cache_reg[1][2],cache_reg[2][2],cache_reg[3][2]};
 //	assign cache_test3 = {cache_reg[0][3],cache_reg[1][3],cache_reg[2][3],cache_reg[3][3]};
