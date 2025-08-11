@@ -149,9 +149,12 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 			else begin
 				case(state)
 				IDLE	 : begin
+					if(m_axi_arvalid && !m_axi_arready) begin
 						m_axi_arready <= 1'b1;
+          end
 				end
 				TRANS  : begin
+					if(m_axi_arvalid && m_axi_arready) begin
 						m_axi_arready <= 1'b0;
 						s_axi_arvalid <= 1'b1;
 						s_axi_araddr <= m_axi_araddr;
@@ -164,6 +167,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 							s_axi_arlen <= 8'h0;
 						end
 						s_axi_arsize <= 3'h2;
+					end
 					if(s_axi_arvalid && s_axi_arready) begin
 						integer a;
             integer b;
@@ -207,12 +211,14 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 					end
 				end
 				RETURN : begin
+					if(m_axi_arvalid && m_axi_arready) begin
 						m_axi_rvalid <= 1'b1;
 						m_axi_arready <= 1'b0;
 `ifndef YOSYS_STA
 						m_axi_rdata <= cache_reg[offset][index * (2 ** w) + $clog2(access)];
 `endif
 						m_axi_rresp  <= 2'b11;
+					end
 					if(m_axi_rvalid && m_axi_rready) begin
 						m_axi_rvalid <= 0;
 					end		
