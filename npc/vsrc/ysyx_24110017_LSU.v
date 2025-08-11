@@ -285,7 +285,7 @@ always @(posedge clk or posedge rst) begin
 					end
 				//end
 				//AXI_WRITE2:begin
-					if(ls_axi_wvalid && ls_axi_wready && (ls_axi_awvalid && ls_axi_awready) && !ls_axi_awvalid) begin
+					if(ls_axi_wvalid && ls_axi_wready && ((ls_axi_awvalid && ls_axi_awready) || !ls_axi_awvalid)) begin
 						axi_wvalid <= 0;
 					end
 					if(ls_axi_bvalid && !ls_axi_bready) begin
