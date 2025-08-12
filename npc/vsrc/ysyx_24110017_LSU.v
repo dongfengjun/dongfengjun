@@ -12,6 +12,7 @@ module ysyx_24110017_LSU(
 
 	input  wire ex_valid_i,	
   output wire ls_ready_o,
+	output wire ls_valid_o,
 	output wire difftest_o,
 	input  wire [ 6:0] op_i,
 	input  wire [ 2:0] funct3_i,
@@ -79,6 +80,7 @@ module ysyx_24110017_LSU(
 );
 
 /***分布式控制***/
+assign ls_valid_o = (state == DONE);
 assign ls_ready_o = (state == IDLE);
 assign difftest_o = (state == DIFFTEST);
 parameter IDLE = 2'b00,WAIT = 2'b01,DONE = 2'b10,DIFFTEST = 2'b11;

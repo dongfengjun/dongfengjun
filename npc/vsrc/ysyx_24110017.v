@@ -120,6 +120,7 @@ wire [31:0] dnpc_ex;
 /***LSU***/
 wire [31:0]pc_ls,inst_ls,dnpc_ls;//difftest
 wire ls_ready;
+wire ls_valid;
 wire difftest;
 wire [31:0] xrd_ls;
 wire [ 4:0] rd_ls;
@@ -213,7 +214,7 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 );
 ysyx_24110017_LSU LSU(clock,reset,
 		pc_ex,inst_ex,dnpc_ex,pc_ls,inst_ls,dnpc_ls,//difftest
-		(ex_valid && !isCHazard),ls_ready,difftest,
+		(ex_valid && !isCHazard),ls_ready,ls_valid,difftest,
 		op_ex,funct3_ex,rd_ex,gpr_wen_ex,mepc_ex,mstatus_ex,mcause_ex,mtvec_ex,
 		mepc_wen_ex,mstatus_wen_ex,mcause_wen_ex,mtvec_wen_ex,
 		ex_ex,ls_valid_ex,ls_wen_ex,ls_read_ex,ls_write_ex,
@@ -284,6 +285,14 @@ wire isRAW = ((rs1 != 0) && (((!ls_ready) && (rs1 == rd_ex)) || (rs1 == rd_ls)))
 wire isCHazard = (ex_valid && ls_ready) && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
 
 `ifndef YOSYS_STA
+/***DPIC*etrace***/
+import "DPI-C" function void npc_trap();
+always@(*) begin
+  if(ls_valid && inst_if == 32'b00000000000100000000000001110011) begin
+    npc_trap();
+  end
+end
+/***DPIC*END***/
 /***DPI-C*CSR***/
 export "DPI-C" function csr_grab;                                    
 function int csr_grab(int i);

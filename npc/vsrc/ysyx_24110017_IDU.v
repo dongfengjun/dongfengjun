@@ -203,16 +203,4 @@ wire mtvec_wen = (op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
 
 wire fencei = (inst_i == 32'b00000000000000000001000000001111);
 
-
-/***DPIC*etrace***/
-`ifndef YOSYS_STA
-import "DPI-C" function void npc_trap();
-always@(*) begin
-	if(inst_i == 32'b00000000000100000000000001110011) begin
-		npc_trap();
-	end
-end
-`endif
-/***DPIC*END***/
-
 endmodule
