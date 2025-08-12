@@ -1,7 +1,7 @@
 module ysyx_24110017_CLINT(
     input wire clk,
     input wire rst,
-		    output wire c_axi_awready,
+		output wire c_axi_awready,
     input wire c_axi_awvalid,
     input wire [3:0]c_axi_awid,
     input wire [31:0]c_axi_awaddr,
