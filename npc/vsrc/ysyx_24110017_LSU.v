@@ -297,7 +297,7 @@ always @(posedge clk or posedge rst) begin
 					if(ls_axi_awvalid && ls_axi_awready) begin
 						axi_awvalid <= 1'b0;
 						axi_wlast <= 1'b1;
-						if(axi_awaddr - 32'h0f000000 < 32'h2000) begin
+						if(!(ls_waddr_i - 32'ha0000000 < 32'h20000000)) begin
 							axi_wvalid <= 1'b1;
 						end
 					end
