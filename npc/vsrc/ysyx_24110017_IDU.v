@@ -98,6 +98,8 @@ always@(posedge clk or posedge rst) begin
 					r1_o				<= r1_i;
 					r2_o				<= r2_i;
 					csr_o       <= csr;
+					mepc_o      <= mepc_i;
+					mtvec_o     <= mtvec_i;
 					mepc_wen_o    <= mepc_wen;
 					mstatus_wen_o <= mstatus_wen;
 					mcause_wen_o  <= mcause_wen;
