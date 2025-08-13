@@ -233,44 +233,6 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 		end
 	end
 
-/***
-	reg cache_axi_awready,cache_axi_wready,cache_axi_bvalid,cache_axi_arready,cache_axi_rvalid;
-	reg cache_axi_rlast;
-	reg [1:0]cache_axi_bresp,cache_axi_rresp;
-	reg [3:0]cache_axi_bid,cache_axi_rid;
-	reg [31:0]cache_axi_rdata;
-	assign s_axi_awid = (state == TRANS) ? m_axi_awid : 4'b0;
-	assign s_axi_awlen = (state == TRANS) ? m_axi_awlen : 8'b0;
-	assign s_axi_awsize = (state == TRANS) ? m_axi_awsize : 3'b0;
-	assign s_axi_awburst = (state == TRANS) ? m_axi_awburst : 2'b0;
-	assign s_axi_wlast = (state == TRANS) ? m_axi_wlast : 1'b0;
-	assign m_axi_bid = (state == TRANS) ? s_axi_bid : (state == RETURN) ? cache_axi_bid : 4'b0;
-	assign s_axi_awaddr = (state == TRANS) ? m_axi_awaddr : 32'h0;
-	assign s_axi_awvalid = (state == TRANS) ? m_axi_awvalid : 1'b0;
-	assign m_axi_awready = (state == TRANS) ? s_axi_awready : (state == RETURN) ? cache_axi_awready : 1'b0;
-	assign s_axi_wdata = (state == TRANS) ? m_axi_wdata : 32'h0;
-	assign s_axi_wstrb = (state == TRANS) ? m_axi_wstrb : 4'b0;
-	assign s_axi_wvalid = (state == TRANS) ? m_axi_wvalid : 1'b0;
-	assign m_axi_wready = (state == TRANS) ? s_axi_wready : (state == RETURN) ? cache_axi_wready : 1'b0;
-	assign m_axi_bresp = (state == TRANS) ? s_axi_bresp : (state == RETURN) ? cache_axi_bresp : 2'b0;
-	assign m_axi_bvalid = (state == TRANS) ? s_axi_bvalid : (state == RETURN) ? cache_axi_bvalid : 1'b0;
-	assign s_axi_bready = (state == TRANS) ? m_axi_bready : 1'b0;
-
-	assign s_axi_arid = (state == TRANS) ? m_axi_arid : 4'b0;
-	assign s_axi_arlen = (state == TRANS) ? m_axi_arlen : 8'b0;
-	assign s_axi_arsize = (state == TRANS) ? m_axi_arsize : 3'b0;
-	assign s_axi_arburst = (state == TRANS) ? m_axi_arburst : 2'b0;
-	assign s_axi_araddr = (state == TRANS) ? m_axi_araddr : 32'h0;
-	assign s_axi_arvalid = (state == TRANS) ? m_axi_arvalid : 1'b0;
-	assign m_axi_arready = (state == TRANS) ? s_axi_arready : (state == RETURN) ? cache_axi_arready : 1'b0;
-	assign m_axi_rdata = (state == TRANS) ? s_axi_rdata : (state == RETURN) ? cache_axi_rdata : 32'h0;
-	assign m_axi_rresp = (state == TRANS) ? s_axi_rresp : (state == RETURN) ? cache_axi_rresp : 2'b0;
-	assign m_axi_rvalid = (state == TRANS) ? s_axi_rvalid : (state == RETURN) ? cache_axi_rvalid : 1'b0;
-	assign s_axi_rready = (state == TRANS) ? m_axi_rready : 1'b0;
-	assign m_axi_rid = (state == TRANS) ? s_axi_rid : (state == RETURN) ? cache_axi_rid : 4'b0;
-	assign m_axi_rlast = (state == TRANS) ? s_axi_rlast : (state == RETURN) ? cache_axi_rlast : 1'b0;
-***/
-
 /***DPIC-AMAT***/
 `ifndef YOSYS_STA
 	export "DPI-C" function amat_counter;

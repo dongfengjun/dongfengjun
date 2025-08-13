@@ -329,7 +329,7 @@ function int performance_counter(int i);
 															 : (i == 8) ? {31'b0,pc_valid && if_ready}
 															 : (i == 9) ? {31'b0,ls_axi_awvalid && ls_axi_awready}
 															 : (i == 10) ? {31'b0,ls_axi_arvalid && ls_axi_arready}
-															 : (i == 11) ? {31'b0,ls_axi_wvalid && ls_axi_wready}
+															 : (i == 11) ? {31'b0,ls_axi_bvalid && ls_axi_bready}
 															 : 32'b0;
   end
 endfunction
