@@ -417,7 +417,7 @@ void performance_evaluation() {
   if(Immediate_flag) Immediate_wait ++;
   if(System_flag) System_wait ++;
 	if(performance_counters(9)) { ls_store_flag = true; ls_store_cnt ++; }
-	if(performance_counters(3)) ls_store_flag = false;
+	if(performance_counters(11)) ls_store_flag = false;
 	if(performance_counters(10)) { ls_load_flag = true; ls_load_cnt ++; }
 	if(performance_counters(3)) ls_load_flag = false;
 	if(ls_store_flag) ls_store_wait ++;
@@ -440,7 +440,6 @@ void cpu_exec(int n) {
 		cpu.pc = dpic_display(1);
 		isa_gpr_push();
 		performance_evaluation();
-//		if(dpic_display(3)) printf("pc:%08x  access:%ld\n",dpic_display(0),icache_access_cnt);
 #ifdef CONFIG_ITRACE
 		itrace_push();
 #endif

@@ -321,14 +321,15 @@ function int performance_counter(int i);
     assign performance_counter = (i == 0) ? {31'b0,if_valid && id_ready}
 															 : (i == 1) ? {31'b0,id_valid && ex_ready}
 															 : (i == 2) ? {31'b0,ex_valid && ls_ready}//wb_ready
-															 : (i == 3) ? {32'b0}//ls_done
+															 : (i == 3) ? {31'b0,ls_axi_rvalid && ls_axi_rready}
 															 : (i == 4) ? {25'b0,inst_if[6:0]}
-															 : (i == 5) ? {32'b0}//wb_done
+															 : (i == 5) ? {31'b0,ls_valid}
 															 : (i == 6) ? {31'b0,if_axi_arvalid && if_axi_arready}
 															 : (i == 7) ? {31'b0,if_axi_rvalid && if_axi_rready}
 															 : (i == 8) ? {31'b0,pc_valid && if_ready}
 															 : (i == 9) ? {31'b0,ls_axi_awvalid && ls_axi_awready}
 															 : (i == 10) ? {31'b0,ls_axi_arvalid && ls_axi_arready}
+															 : (i == 11) ? {31'b0,ls_axi_wvalid && ls_axi_wready}
 															 : 32'b0;
   end
 endfunction
