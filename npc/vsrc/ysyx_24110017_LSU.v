@@ -153,6 +153,17 @@ always@(posedge clk or posedge rst) begin
 				end
 			end
 			default: begin
+				rd_o          <= 5'b0;
+        gpr_wen_o     <= 1'b0;
+        mepc_o        <= 32'h0;
+        mstatus_o     <= 32'h0;
+        mcause_o      <= 32'h0;
+        mtvec_o       <= 32'h0;
+        mepc_wen_o    <= 1'b0;
+        mstatus_wen_o <= 1'b0;
+        mcause_wen_o  <= 1'b0;
+        mtvec_wen_o   <= 1'b0;
+        xrd_o         <= 32'h0;
 			end
 		endcase
 	end
