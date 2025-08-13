@@ -281,12 +281,15 @@ ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,mtvec_ls,mtvec,mtvec_wen_l
 ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid,1'b0);
 ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
 
-wire isRAW = ((rs1 != 0) && ((ls_valid && (rs1 == rd_ex)) || (rs1 == rd_ls))) ||
+wire isRAW = 0;
+/*** 
+((rs1 != 0) && ((ls_valid && (rs1 == rd_ex)) || (rs1 == rd_ls))) ||
 						 ((rs2 != 0) && ((ls_valid && (rs2 == rd_ex)) || (rs2 == rd_ls))) ||
 						 ((ls_valid && (mepc		!= mepc_ex	 )) || (mepc_wen_ls		 && (mepc		 != mepc_ls		))) ||
 						 ((ls_valid && (mstatus != mstatus_ex)) || (mstatus_wen_ls && (mstatus != mstatus_ls))) ||
 						 ((ls_valid && (mcause	!= mcause_ex )) || (mcause_wen_ls	 && (mcause  != mcause_ls ))) ||
 						 ((ls_valid && (mtvec		!= mtvec_ex	 )) || (mtvec_wen_ls	 && (mtvec	 != mtvec_ls	)));
+***/
 
 wire isCHazard = (ex_valid && ls_ready) && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
 
