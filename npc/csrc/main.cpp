@@ -143,6 +143,7 @@ static void statistic() {
 	Log("LS LOAD:%ld (Average Delay)", ls_load_wait/ls_load_cnt);
 	Log("LS STORE:%ld (Average Delay)", ls_store_wait/ls_store_cnt);
 	Log("******ICACHE AMAT******\n				access cnt:%ld access time:%ld miss penalty:%ld  p=%.6f amat=%ld",icache_access_cnt,icache_access_time/icache_access_cnt,icache_miss_penalty/icache_miss_cnt,(double)icache_access_cnt/(double)if_cnt,if_mem_wait/if_fin_cnt);
+	Log("CHazard cnt = %ld",isCHazard_cnt);
 }
 
 void assert_fail_msg() {
@@ -426,7 +427,7 @@ void performance_evaluation() {
 	if(performance_counters(3)) ls_load_flag = false;
 	if(ls_store_flag) ls_store_wait ++;
 	if(ls_load_flag) ls_load_wait ++;
-
+	if(performance_counters(12)) isCHazard_cnt ++;
 }
 
 void cpu_exec(int n) {
