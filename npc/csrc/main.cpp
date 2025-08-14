@@ -429,9 +429,12 @@ void performance_evaluation() {
 	if(ls_store_flag) ls_store_wait ++;
 	if(ls_load_flag) ls_load_wait ++;
 	if(performance_counters(12)) isCHazard_cnt ++;
+	if(if_fin_cnt - id_fin_cnt == 1) {
+    printf("pc = %08x\n",dpic_display(0));
+  }
 	if(if_fin_cnt - id_fin_cnt >= 2) {
 		RUNNING = false;
-		printf("pc = %08x\n",dpic_display(0));
+		printf("aaaa pc = %08x\n",dpic_display(0));
 	}
 }
 
