@@ -373,7 +373,7 @@ void performance_evaluation() {
 	if(performance_counters(1)) id_fin_cnt ++;
 	if(performance_counters(2)) ex_fin_cnt ++;
 	if(performance_counters(3)) ls_fin_cnt ++;
-	if(performance_counters(3)) wb_fin_cnt ++;
+	if(performance_counters(5)) wb_fin_cnt ++;
 	if(performance_counters(6)) {
 		if_mem_flag = true;
 		if_cnt ++;
