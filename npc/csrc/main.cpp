@@ -84,6 +84,7 @@ uint64_t if_fin_cnt = 0;
 uint64_t id_fin_cnt = 0;
 uint64_t ex_fin_cnt = 0;
 uint64_t ls_fin_cnt = 0;
+uint64_t wb_fin_cnt = 0;
 uint64_t if_cnt = 0;
 uint64_t if_wait = 0;
 uint64_t if_mem_wait = 0;
@@ -131,7 +132,7 @@ static void statistic() {
 	Log("******************Performance Evaluation*************************");
 	Log("IPC = %.6f", (double)g_nr_guest_inst/(double)g_nr_guest_cycle);
 	Log("CPI = %.6f", (double)g_nr_guest_cycle/(double)g_nr_guest_inst);
-	Log("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt);
+	Log("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld WB FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt,wb_fin_cnt);
 	Log("Integer   Transfer  Load      Store     Immediate System");
 	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Count)",Integer_Computational_cnt,Transfer_cnt,Load_cnt,Store_cnt,Immediate_cnt,System_cnt);
 	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Cycles)",Integer_Computational_wait,Transfer_wait,Load_wait,Store_wait,Immediate_wait,System_wait);
@@ -372,6 +373,7 @@ void performance_evaluation() {
 	if(performance_counters(1)) id_fin_cnt ++;
 	if(performance_counters(2)) ex_fin_cnt ++;
 	if(performance_counters(3)) ls_fin_cnt ++;
+	if(performance_counters(3)) wb_fin_cnt ++;
 	if(performance_counters(6)) {
 		if_mem_flag = true;
 		if_cnt ++;
