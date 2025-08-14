@@ -429,6 +429,10 @@ void performance_evaluation() {
 	if(ls_store_flag) ls_store_wait ++;
 	if(ls_load_flag) ls_load_wait ++;
 	if(performance_counters(12)) isCHazard_cnt ++;
+	if(if_fin_cnt - id_fin_cnt >= 2) {
+		RUNNING = false;
+		printf("aaa\n");
+	}
 }
 
 void cpu_exec(int n) {
