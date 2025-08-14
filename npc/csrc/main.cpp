@@ -432,7 +432,7 @@ void performance_evaluation() {
 	if((performance_counters(5)) && (if_fin_cnt - id_fin_cnt == 1)) {
     printf("pc = %08x\n",dpic_display(0));
   }
-	if(if_fin_cnt - id_fin_cnt == 2) {
+	if(if_fin_cnt - id_fin_cnt == 3) {
 		RUNNING = false;
 		printf("aaaa pc = %08x\n",dpic_display(0));
 	}
