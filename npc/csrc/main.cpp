@@ -109,6 +109,7 @@ uint64_t icache_access_cnt = 0;
 uint64_t icache_access_time = 0;
 uint64_t icache_miss_cnt = 0;
 uint64_t icache_miss_penalty = 0;
+uint64_t isCHazard_cnt = 0;
 
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
