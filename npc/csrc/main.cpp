@@ -119,6 +119,9 @@ IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
 	char itracebuf[0x10000000] = {0};
 	char *itrace_p = itracebuf;
 	FILE *itracelog;
+	char btracebuf[0x10000] = {0};
+	char *btrace_p = btracebuf;
+	FILE *btracelog;
 #endif
 uint8_t fopcode;
 
@@ -166,6 +169,7 @@ static void itrace_push(){
 	p += snprintf(p, sizeof(logbuf), FMT_WORD ":", dpic_display(0));
 	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", dpic_display(0));
 	if(dpic_display(3)) itrace_p += snprintf(itrace_p, sizeof(itracebuf), FMT_WORD "\n", dpic_display(0));
+	if(dpic_display(3) && ((dpic_display(2) & 0b1111111 ) == 0b1100011)) btrace_p += snprintf(itrace_p, sizeof(itracebuf), FMT_    WORD "\n", dpic_display(0));
 	int ilen = 4;
 	int i;
 	for (i = ilen - 1; i >= 0; i --) {
@@ -434,7 +438,8 @@ void performance_evaluation() {
 void cpu_exec(int n) {
 	g_print_step = (n > 0 && n < MAX_INST_TO_PRINT);
 #ifdef CONFIG_ITRACE
-    itracelog = fopen("build/npc-itrace-log.txt", "w");  //Mtrace
+    itracelog = fopen("build/npc-itrace-log.txt", "w");  //Itrace
+		btracelog = fopen("build/npc-btrace-log.txt", "w");	 //Btrace
 #endif
 #ifdef CONFIG_MTRACE
 		mtracelog = fopen("build/npc-mtrace-log.txt", "w");  //Mtrace
@@ -460,6 +465,8 @@ void cpu_exec(int n) {
 #ifdef CONFIG_ITRACE
     fprintf(itracelog, "%s", itracebuf);
 		fclose(itracelog);
+		fprintf(btracelog, "%s", btracebuf);
+    fclose(btracelog);
 #endif
 #ifdef CONFIG_FTRACE
 		cpu_show_ftrace();
