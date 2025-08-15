@@ -333,7 +333,7 @@ function int performance_counter(int i);
 															 : (i == 12) ? {31'b0,isCHazard}
 															 : (i == 13) ? {31'b0,if_valid}
 															 : (i == 14) ? {25'b0,inst_ls[6:0]}
-															 : (i == 15) ? {31'b0,((ex_valid && ls_ready) && inst_id[6:0] == 7'b1100011) && isCHazard}
+															 : (i == 15) ? {31'b0,(ex_valid && ls_ready && inst_if[6:0] == 7'b1100011) && isCHazard}
 															 : 32'b0;
   end
 endfunction
