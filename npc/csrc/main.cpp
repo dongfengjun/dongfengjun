@@ -112,6 +112,7 @@ uint64_t icache_access_time = 0;
 uint64_t icache_miss_cnt = 0;
 uint64_t icache_miss_penalty = 0;
 uint64_t isCHazard_cnt = 0;
+uint64_t Branch_pre_err_cnt = 0;
 
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
@@ -150,6 +151,7 @@ static void statistic() {
 	Log("LS STORE:%ld (Average Delay)", ls_store_wait/ls_store_cnt);
 	Log("******ICACHE AMAT******\n				access cnt:%ld access time:%ld miss penalty:%ld  p=%.6f amat=%ld",icache_access_cnt,icache_access_time/icache_access_cnt,icache_miss_penalty/icache_miss_cnt,(double)icache_access_cnt/(double)if_cnt,if_mem_wait/if_fin_cnt);
 	Log("CHazard cnt = %ld",isCHazard_cnt);
+	LOg("Branch prediction error:%ld accuracy rate:%.6f",Branch_pre_err_cnt,(double)Branch_pre_err_cnt/(double)Branch_cnt);
 }
 
 void assert_fail_msg() {
@@ -471,6 +473,7 @@ void performance_evaluation() {
 	if(ls_store_flag) ls_store_wait ++;
 	if(ls_load_flag) ls_load_wait ++;
 	if(performance_counters(12)) isCHazard_cnt ++;
+	if(performance_counters(15)) Branch_pre_err_cnt ++;
 }
 
 void cpu_exec(int n) {
