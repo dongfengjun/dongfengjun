@@ -282,8 +282,8 @@ ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid
 ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
 
 wire isRAW = 1'b0;
-wire [31:0]r1_forward = (rs1 == rd_ex) ? ex_ex : (rs1 == rd_ls) ? xrd : r1;
-wire [31:0]r2_forward = (rs2 == rd_ex) ? ex_ex : (rs2 == rd_ls) ? xrd : r2;
+wire [31:0]r1_forward = (rs1 == rd_ex) ? ex_ex : (rs1 == rd_ls) ? xrd_ls : r1;
+wire [31:0]r2_forward = (rs2 == rd_ex) ? ex_ex : (rs2 == rd_ls) ? xrd_ls : r2;
 
 wire isCHazard = (ex_valid && ls_ready) && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
 
