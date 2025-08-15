@@ -20,9 +20,9 @@ int main(int argc, char *argv[]) {
 		uint32_t inst;
 		if(sscanf(line, "%x %x", &pc, &inst) == 2);
 		if((pinst & 0b1111111) ==  0b1100011) {
-			//bool offset = (pinst >> 31) & 0b1;
-			//if((((pc != (ppc + 4)) && offset) || ((pc == (ppc + 4)) && !offset))) {
-			if(pc == ppc + 4) {
+			bool offset = (pinst >> 31) & 0b1;
+			if((((pc != (ppc + 4)) && offset) || ((pc == (ppc + 4)) && !offset))) {
+			//if(pc == ppc + 4) {
 				branch_right_cnt ++;
 				//printf("%8x %8x %8x %ld\n",ppc,pinst,pc,branch_right_cnt);
 			}
