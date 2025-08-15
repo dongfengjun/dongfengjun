@@ -119,7 +119,7 @@ IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
 	char itracebuf[0x10000000] = {0};
 	char *itrace_p = itracebuf;
 	FILE *itracelog;
-	char btracebuf[0x10000] = {0};
+	char btracebuf[0x10000000] = {0};
 	char *btrace_p = btracebuf;
 	FILE *btracelog;
 #endif
