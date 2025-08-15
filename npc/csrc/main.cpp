@@ -397,7 +397,7 @@ void performance_evaluation() {
 	if(icache_access_flag) icache_access_time ++;
 	if(icache_miss_flag) icache_miss_penalty ++;
 	if(performance_counters(8)) if_flag = true;
-	if(performance_counters(0)) if_flag = false;
+	if(performance_counters(13)) if_flag = false;
 	if(if_flag) if_wait ++;
 	if(performance_counters(1)) ex_total_flag = true;
 	if(performance_counters(5)) ex_total_flag = false;
