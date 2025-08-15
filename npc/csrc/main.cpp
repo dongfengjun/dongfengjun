@@ -412,13 +412,22 @@ void performance_evaluation() {
 	if(performance_counters(1)) ex_total_flag = true;
 	if(performance_counters(5)) ex_total_flag = false;
 	if(ex_total_flag) ex_total_wait ++;
-	if(performance_counters(5) && performance_counters(4) == 0b0110011) { Integer_Computational_flag = true; Integer_Computational_cnt ++; }
-	if(performance_counters(5) && performance_counters(4) == 0b1101111 || performance_counters(4) == 0b1100111) { Jump_flag = true; Jump_cnt ++; }
-	if(performance_counters(5) && performance_counters(4) == 0b1100011) { Branch_flag = true; Branch_cnt ++;}
-	if(performance_counters(5) && performance_counters(4) == 0b0000011) { Load_flag = true; Load_cnt ++; }
-	if(performance_counters(5) && performance_counters(4) == 0b0100011) { Store_flag = true; Store_cnt ++; }
-	if(performance_counters(5) && performance_counters(4) == 0b0010011) { Immediate_flag = true; Immediate_cnt ++; }
-	if(performance_counters(5) && performance_counters(4) == 0b1110011) { System_flag = true; System_cnt ++; }
+	if(performance_counters(1) && performance_counters(4) == 0b0110011) { Integer_Computational_flag = true;}
+	if(performance_counters(1) && performance_counters(4) == 0b1101111 || performance_counters(4) == 0b1100111) { Jump_flag = true;}
+	if(performance_counters(1) && performance_counters(4) == 0b1100011) { Branch_flag = true;}
+	if(performance_counters(1) && performance_counters(4) == 0b0000011) { Load_flag = true;}
+	if(performance_counters(1) && performance_counters(4) == 0b0100011) { Store_flag = true;}
+	if(performance_counters(1) && performance_counters(4) == 0b0010011) { Immediate_flag = true;}
+	if(performance_counters(1) && performance_counters(4) == 0b1110011) { System_flag = true;}
+
+	int Integer_Computational_tmp = 0;
+	int Jump_tmp = 0;
+	int Branch_tmp = 0;
+	int Load_tmp = 0;
+	int Store_tmp = 0;
+	int Immediate_tmp = 0;
+	int System_tmp = 0;
+
 	if(performance_counters(5)) {
 		Integer_Computational_flag = false;
 		Jump_flag = false;
@@ -428,13 +437,22 @@ void performance_evaluation() {
 		Immediate_flag = false;
 		System_flag = false;
 	}
-	if(Integer_Computational_flag) Integer_Computational_wait ++;
-  if(Jump_flag) Jump_wait ++;
-	if(Branch_flag) Branch_wait ++;
-  if(Load_flag) Load_wait ++;
-  if(Store_flag) Store_wait ++;
-  if(Immediate_flag) Immediate_wait ++;
-  if(System_flag) System_wait ++;
+	if(Integer_Computational_flag) Integer_Computational_tmp ++;
+  if(Jump_flag) Jump_tmp ++;
+	if(Branch_flag) Branch_tmp ++;
+  if(Load_flag) Load_tmp ++;
+  if(Store_flag) Store_tmp ++;
+  if(Immediate_flag) Immediate_tmp ++;
+  if(System_flag) System_tmp ++;
+
+	if(performance_counters(5) && performance_counters(14) == 0b0110011) { Integer_Computational_wait += Integer_Computational_tmp; Integer_Computational_cnt ++; }
+	if(performance_counters(5) && performance_counters(14) == 0b1101111 || performance_counters(14) == 0b1100111) { Jump_wait += Jump_tmp ; Jump_cnt ++; }
+  if(performance_counters(5) && performance_counters(14) == 0b1100011) { Branch_wait += Branch_tmp; Branch_cnt ++;}
+  if(performance_counters(5) && performance_counters(14) == 0b0000011) { Load_wait += Load_tmp; Load_cnt ++; }
+  if(performance_counters(5) && performance_counters(14) == 0b0100011) { Store_wait += Store_tmp; Store_cnt ++; }
+  if(performance_counters(5) && performance_counters(14) == 0b0010011) { Immediate_wait += Immediate_tmp; Immediate_cnt ++; }
+  if(performance_counters(5) && performance_counters(14) == 0b1110011) { System_wait += System_tmp; System_cnt ++; }
+	
 	if(performance_counters(9)) { ls_store_flag = true; ls_store_cnt ++; }
 	if(performance_counters(11)) ls_store_flag = false;
 	if(performance_counters(10)) { ls_load_flag = true; ls_load_cnt ++; }
