@@ -78,6 +78,9 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	wire [31-m-n+w : 0]tag = m_axi_araddr[31 : m+n-w];
   wire [n-1-w : 0]index = m_axi_araddr[m+n-w-1 : m];
   wire [m-3 : 0]offset = m_axi_araddr[m-1 : 2];
+	wire [31-m-n+w : 0]s_tag = s_axi_araddr[31 : m+n-w];
+  wire [n-1-w : 0]s_index = s_axi_araddr[m+n-w-1 : m];
+  wire [m-3 : 0]s_offset = s_axi_araddr[m-1 : 2];
 
   wire [(1<<w) - 1 : 0]access;
 	wire [(1<<w) - 1 : 0]access_raw;
@@ -99,7 +102,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
     else begin
       case(state)
         IDLE   : begin
-          if(m_axi_arvalid) begin
+          if(m_axi_arvalid && m_axi_arready) begin
 						if(access != 0) begin
 							state <= RETURN;
 						end
@@ -149,46 +152,46 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 			else begin
 				case(state)
 				IDLE	 : begin
-					if(m_axi_arvalid && !m_axi_arready) begin
-						m_axi_arready <= 1'b1;
-          end
+					m_axi_arready <= 1'b1;
+					if(access == 0) begin
+						if(m_axi_arvalid && m_axi_arready) begin
+							m_axi_arready <= 1'b0;
+							s_axi_arvalid <= 1'b1;
+							s_axi_araddr <= m_axi_araddr;
+							burst_araddr <= m_axi_araddr;
+							s_axi_arburst <= 2'b01;
+							if(m_axi_araddr - 32'ha0000000 < 32'h20000000) begin
+								s_axi_arlen <= (1 << (m - 2)) - {6'b0,offset} - 1;
+							end
+							else begin
+								s_axi_arlen <= 8'h0;
+							end
+							s_axi_arsize <= 3'h2;
+						end
+					end
 				end
 				TRANS  : begin
-					if(m_axi_arvalid && m_axi_arready) begin
-						m_axi_arready <= 1'b0;
-						s_axi_arvalid <= 1'b1;
-						s_axi_araddr <= m_axi_araddr;
-						burst_araddr <= m_axi_araddr;
-						s_axi_arburst <= 2'b01;
-						if(m_axi_araddr - 32'ha0000000 < 32'h20000000) begin
-							s_axi_arlen <= (1 << (m - 2)) - {6'b0,offset} - 1;
-						end
-						else begin
-							s_axi_arlen <= 8'h0;
-						end
-						s_axi_arsize <= 3'h2;
-					end
 					if(s_axi_arvalid && s_axi_arready) begin
 						integer a;
             integer b;
 						for (b = 0; b < (1<<(m-2)); b = b + 1) begin : fifo
-							cache_reg[b][index * (1<<w)] <= 0;
-              tag_reg[b][index * (1<<w)] <= 0;
-							valid_reg[b][index * (1<<w)] <= 0;
+							cache_reg[b][s_index * (1<<w)] <= 0;
+              tag_reg[b][s_index * (1<<w)] <= 0;
+							valid_reg[b][s_index * (1<<w)] <= 0;
 							for (a = 1; a < (1<<w); a = a + 1) begin
-                cache_reg[b][index * (1<<w) + a] <= cache_reg[b][index * (1<<w) + a - 1];
-                tag_reg[b][index * (1<<w) + a] <= tag_reg[b][index * (1<<w) + a - 1];
-                valid_reg[b][index * (1<<w) + a] <= valid_reg[b][index * (1<<w) + a - 1];
+                cache_reg[b][s_index * (1<<w) + a] <= cache_reg[b][s_index * (1<<w) + a - 1];
+                tag_reg[b][s_index * (1<<w) + a] <= tag_reg[b][s_index * (1<<w) + a - 1];
+                valid_reg[b][s_index * (1<<w) + a] <= valid_reg[b][s_index * (1<<w) + a - 1];
               end
             end
 						s_axi_arvalid <= 1'b0;
 						s_axi_rready <= 1'b1;                                           
-            burst_counter <= offset;
+            burst_counter <= s_offset;
 					end
 					if(s_axi_rready && s_axi_rvalid) begin
-						cache_reg[burst_counter][index * (1<<w)] <= s_axi_rdata;
-						tag_reg[burst_counter][index * (1<<w)] <= burst_araddr[31 : m+n-w];
-						valid_reg[burst_counter][index * (1<<w)] <= 1'b1;
+						cache_reg[burst_counter][s_index * (1<<w)] <= s_axi_rdata;
+						tag_reg[burst_counter][s_index * (1<<w)] <= burst_araddr[31 : m+n-w];
+						valid_reg[burst_counter][s_index * (1<<w)] <= 1'b1;
 						burst_araddr <= burst_araddr + 4;
 						burst_counter <= burst_counter + 1;
 					end
@@ -203,7 +206,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 							m_axi_rdata <= s_axi_rdata;
 						end
 						else begin
-							m_axi_rdata <= cache_reg[offset][index * (1 << w)];
+							m_axi_rdata <= cache_reg[s_offset][s_index * (1 << w)];
 						end
 					end
 					if(m_axi_rvalid && m_axi_rready) begin
@@ -211,14 +214,14 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 					end
 				end
 				RETURN : begin
-					if(m_axi_arvalid && m_axi_arready) begin
+					//if(m_axi_arvalid && m_axi_arready) begin
 						m_axi_rvalid <= 1'b1;
 						m_axi_arready <= 1'b0;
 `ifndef YOSYS_STA
 						m_axi_rdata <= cache_reg[offset][index * (2 ** w) + $clog2(access)];
 `endif
 						m_axi_rresp  <= 2'b11;
-					end
+					//end
 					if(m_axi_rvalid && m_axi_rready) begin
 						m_axi_rvalid <= 0;
 					end		
@@ -229,44 +232,6 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 			end
 		end
 	end
-
-/***
-	reg cache_axi_awready,cache_axi_wready,cache_axi_bvalid,cache_axi_arready,cache_axi_rvalid;
-	reg cache_axi_rlast;
-	reg [1:0]cache_axi_bresp,cache_axi_rresp;
-	reg [3:0]cache_axi_bid,cache_axi_rid;
-	reg [31:0]cache_axi_rdata;
-	assign s_axi_awid = (state == TRANS) ? m_axi_awid : 4'b0;
-	assign s_axi_awlen = (state == TRANS) ? m_axi_awlen : 8'b0;
-	assign s_axi_awsize = (state == TRANS) ? m_axi_awsize : 3'b0;
-	assign s_axi_awburst = (state == TRANS) ? m_axi_awburst : 2'b0;
-	assign s_axi_wlast = (state == TRANS) ? m_axi_wlast : 1'b0;
-	assign m_axi_bid = (state == TRANS) ? s_axi_bid : (state == RETURN) ? cache_axi_bid : 4'b0;
-	assign s_axi_awaddr = (state == TRANS) ? m_axi_awaddr : 32'h0;
-	assign s_axi_awvalid = (state == TRANS) ? m_axi_awvalid : 1'b0;
-	assign m_axi_awready = (state == TRANS) ? s_axi_awready : (state == RETURN) ? cache_axi_awready : 1'b0;
-	assign s_axi_wdata = (state == TRANS) ? m_axi_wdata : 32'h0;
-	assign s_axi_wstrb = (state == TRANS) ? m_axi_wstrb : 4'b0;
-	assign s_axi_wvalid = (state == TRANS) ? m_axi_wvalid : 1'b0;
-	assign m_axi_wready = (state == TRANS) ? s_axi_wready : (state == RETURN) ? cache_axi_wready : 1'b0;
-	assign m_axi_bresp = (state == TRANS) ? s_axi_bresp : (state == RETURN) ? cache_axi_bresp : 2'b0;
-	assign m_axi_bvalid = (state == TRANS) ? s_axi_bvalid : (state == RETURN) ? cache_axi_bvalid : 1'b0;
-	assign s_axi_bready = (state == TRANS) ? m_axi_bready : 1'b0;
-
-	assign s_axi_arid = (state == TRANS) ? m_axi_arid : 4'b0;
-	assign s_axi_arlen = (state == TRANS) ? m_axi_arlen : 8'b0;
-	assign s_axi_arsize = (state == TRANS) ? m_axi_arsize : 3'b0;
-	assign s_axi_arburst = (state == TRANS) ? m_axi_arburst : 2'b0;
-	assign s_axi_araddr = (state == TRANS) ? m_axi_araddr : 32'h0;
-	assign s_axi_arvalid = (state == TRANS) ? m_axi_arvalid : 1'b0;
-	assign m_axi_arready = (state == TRANS) ? s_axi_arready : (state == RETURN) ? cache_axi_arready : 1'b0;
-	assign m_axi_rdata = (state == TRANS) ? s_axi_rdata : (state == RETURN) ? cache_axi_rdata : 32'h0;
-	assign m_axi_rresp = (state == TRANS) ? s_axi_rresp : (state == RETURN) ? cache_axi_rresp : 2'b0;
-	assign m_axi_rvalid = (state == TRANS) ? s_axi_rvalid : (state == RETURN) ? cache_axi_rvalid : 1'b0;
-	assign s_axi_rready = (state == TRANS) ? m_axi_rready : 1'b0;
-	assign m_axi_rid = (state == TRANS) ? s_axi_rid : (state == RETURN) ? cache_axi_rid : 4'b0;
-	assign m_axi_rlast = (state == TRANS) ? s_axi_rlast : (state == RETURN) ? cache_axi_rlast : 1'b0;
-***/
 
 /***DPIC-AMAT***/
 `ifndef YOSYS_STA

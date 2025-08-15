@@ -1,328 +1,226 @@
 //`define YOSYS_STA
 module ysyx_24110017_EXU(
-	input clk,
-	input rst,
-	output [31:0]ex_o,
-	input id_valid_i,
-	output ex_ready_o,
-	output ex_valid_o,
-	input wb_ready_i,
-	input [6:0]op_i,
-	input [2:0]funct3_i,
-	input [31:0]imm_i,
-	input [6:0]funct7_i,
-	input [4:0]shamt_i,
-	input [31:0]r1_i,r2_i,
-/***ALU***/
-/***LSU_o***/
-	output ls_read_o,ls_write_o,
-	input ls_done_i,
-	output ls_valid_o,ls_wen_o,
-	output [31:0]ls_waddr_o,ls_wdata_o,ls_raddr_o,
-	output [3:0]ls_wmask_o,
-	output [2:0]ls_awsize_o,ls_arsize_o,
-	output [7:0]ls_awlen_o,ls_arlen_o,
-	output [1:0]ls_awburst_o,ls_arburst_o,
-	input [31:0]ls_rdata_i,
-/***BU***/
-	input [31:0]pc_i,
-	output [31:0]dnpc_o,
-/***CSRU***/
-	input [31:0]mepc_i,mstatus_i,mcause_i,mtvec_i,
-	output [31:0]mepc_o,mstatus_o,mcause_o,mtvec_o,
-	output gpr_wen_o,mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o
+	input  wire clk,
+	input  wire rst,
+	input  wire isCHazard,
+
+	input  wire [31:0] inst_i,//difftest
+	output reg  [31:0] pc_o,
+	output reg  [31:0] inst_o,
+
+	input  wire id_valid_i,
+	output wire  ex_ready_o,
+	output wire  ex_valid_o,
+	input  wire ls_ready_i,
+	
+  input  wire [31:0] pc_i,  //i.bit
+  input  wire [31:0] imm_i,
+  input  wire [ 6:0] op_i,
+  input  wire [ 2:0] funct3_i,
+  input  wire [ 4:0] rd_i,
+  input  wire gpr_wen_i,
+  input  wire [ 3:0] alu_sel_i,
+  input  wire [31:0] a_i,
+  input  wire [31:0] b_i,
+	input  wire [31:0] r1_i,
+	input	 wire [31:0] r2_i,
+  input	 wire [31:0] csr_i,
+	input  wire [31:0] mepc_i,mtvec_i,
+	input  wire mepc_wen_i,mstatus_wen_i,mcause_wen_i,mtvec_wen_i,
+
+	output reg  [ 6:0] op_o,
+	output reg  [ 2:0] funct3_o,
+	output reg  [ 4:0] rd_o,
+	output reg  gpr_wen_o,
+	output reg  [31:0] mepc_o,
+  output reg  [31:0] mstatus_o,
+  output reg  [31:0] mcause_o,
+  output reg  [31:0] mtvec_o,
+  output reg  mepc_wen_o,
+	output reg  mstatus_wen_o,
+	output reg  mcause_wen_o,
+	output reg  mtvec_wen_o,
+	output reg  [31:0] ex_o,
+	output reg  ls_valid_o,ls_wen_o,
+	output reg  ls_read_o,ls_write_o,
+	output reg  [31:0] ls_waddr_o,ls_wdata_o,ls_raddr_o,
+	output reg  [ 3:0] ls_wmask_o,
+	output reg  [ 2:0] ls_awsize_o,ls_arsize_o,
+	output reg  [ 7:0] ls_awlen_o,ls_arlen_o,
+	output reg  [ 1:0] ls_awburst_o,ls_arburst_o,
+	output reg  [31:0] dnpc_o
 );
 
 /***分布式控制***/
-reg ex_ready;
-assign ex_ready_o = ex_ready;
-reg ex_valid;
-assign ex_valid_o = ex_valid;
+assign ex_ready_o = (state == IDLE);
+assign ex_valid_o = (state == WAIT) && (al_done || ex_valid_reg);
+reg ex_valid_reg;
+parameter IDLE = 1'b0,WAIT = 1'b1;
+reg state;
 
-reg al_start;
-wire al_done;
-reg ls_read_reg,ls_write_reg;
-assign ls_read_o = ls_read_reg;
-assign ls_write_o = ls_write_reg;
-reg [31:0]ex_reg;
-assign ex_o = ex_reg;
-reg [31:0]dnpc_reg;
-assign dnpc_o = dnpc_reg;
-reg gpr_wen_reg;
-assign gpr_wen_o = gpr_wen_reg;
-reg [31:0]mepc_reg,mstatus_reg,mcause_reg,mtvec_reg;
-reg mepc_wen_reg,mstatus_wen_reg,mcause_wen_reg,mtvec_wen_reg;
-assign mepc_o = mepc_reg;
-assign mstatus_o = mstatus_reg;
-assign mcause_o = mcause_reg;
-assign mtvec_o = mtvec_reg;
-assign mepc_wen_o = mepc_wen_reg;
-assign mstatus_wen_o = mstatus_wen_reg;
-assign mcause_wen_o = mcause_wen_reg;
-assign mtvec_wen_o = mtvec_wen_reg;
-reg [31:0]ram_rdata_reg;
-parameter IDLE = 2'b00,WAIT = 2'b01,READY = 2'b10,DONE=2'b11;
-reg [1:0]state,next_state;
-
-always @(posedge clk) begin
-  if (rst) begin
-    state <= IDLE;
-  end
-	else begin
-    state <= next_state;
-  end
-end
-
-always @(*) begin
-  next_state = state;
-	if(rst) begin
-		next_state = IDLE;
-	end
+always @(posedge clk or posedge rst) begin
+	if(rst || isCHazard) state <= IDLE;
   else begin
 		case (state)
-			IDLE: begin
-				if(id_valid_i && ex_ready_o) begin
-					next_state = WAIT;
-				end
-			end
+			IDLE: state <= (id_valid_i && ex_ready_o) ? WAIT : state;
+			WAIT: state <= (ex_valid_o && ls_ready_i) ? IDLE : state;
+		endcase
+	end
+end
+
+always @(posedge clk or posedge rst) begin
+	if(rst || isCHazard) ex_valid_reg <= 1'b0;
+	else begin
+		case(state)
+			IDLE: ex_valid_reg <= 1'b0;
 			WAIT: begin
-				if((!al_valid) && (!ls_valid_o)) begin
-					next_state = READY;
+				if(ex_valid_o && ls_ready_i) begin                                  
+          ex_valid_reg <= 1'b0;
+        end
+				else if(al_done) begin
+					ex_valid_reg <= 1'b1;
 				end
-				if(al_done) begin
-					next_state = READY;
-				end
-				else if(ls_done_i) begin
-					next_state = READY;
-				end
-			end
-			READY: begin
-				if(ex_valid_o && wb_ready_i) begin
-					next_state = DONE;
-				end
-			end
-			DONE: begin
-				next_state = IDLE;
-			end
-			default: begin
-				next_state = IDLE; // 默认回到初始状态
 			end
 		endcase
 	end
 end
 
-always @(posedge clk) begin
-	if(rst) begin
-		ex_valid <= 1'b0;
-		ex_ready <= 1'b0;
-		ex_reg <= 32'h0;
-		al_start <= 1'b0;
-		al_res <= 32'b0;
-		dnpc_reg <= pc_i + 4;
-		gpr_wen_reg <= 1'b0;
-		mepc_reg <= 32'h0;
-    mstatus_reg <= 32'h0;
-    mcause_reg <= 32'h0;
-    mtvec_reg <= 32'h0;
-    mepc_wen_reg <= 1'b0;
-    mstatus_wen_reg <= 1'b0;
-    mcause_wen_reg <= 1'b0;
-    mtvec_wen_reg <= 1'b0;
-		ls_read_reg <= 1'b0;
-		ls_write_reg <= 1'b0;
-		ram_rdata_reg <= 32'h0;
+wire [31:0]al_res;
+always @(posedge clk or posedge rst) begin
+	if(rst || isCHazard) begin
+		pc_o					<= 32'h0;
+		inst_o				<= 32'h0;
+		op_o					<= 7'b0;
+		funct3_o			<= 3'b0;
+		rd_o					<= 5'b0;
+		gpr_wen_o			<= 1'b0;
+		mepc_o				<= 32'h0;
+		mstatus_o			<= 32'h0;
+		mcause_o			<= 32'h0;
+		mtvec_o				<= 32'h0;
+		mepc_wen_o		<= 1'b0;
+		mstatus_wen_o	<= 1'b0;
+		mcause_wen_o	<= 1'b0;
+		mtvec_wen_o		<= 1'b0;
+		ex_o					<= 32'h0;
+		ls_valid_o		<= 1'b0;
+		ls_wen_o			<= 1'b0;
+		ls_read_o			<= 1'b0;
+		ls_write_o		<= 1'b0;
+		ls_waddr_o		<= 32'h0;
+		ls_wdata_o		<= 32'h0;
+		ls_raddr_o		<= 32'h0;
+		ls_wmask_o		<= 4'b0;
+		ls_awsize_o		<= 3'b0;
+		ls_arsize_o		<= 3'b0;
+		ls_awlen_o		<= 8'b0;
+		ls_arlen_o		<= 8'b0;
+		ls_awburst_o	<= 2'b0;
+		ls_arburst_o	<= 2'b0;
+		dnpc_o				<= 32'h0;
 	end
 	else begin
-		case (state)
+		case(state)
 			IDLE: begin
-				if(id_valid_i) begin //判断条件
-					ex_ready <= 1'b1;
-				end
-				if(id_valid_i && ex_ready_o) begin
-					ex_ready <= 1'b0;
-				end
+		    ls_wen_o      <= 1'b0;
+		    ls_read_o     <= 1'b0;
+		    ls_write_o    <= 1'b0;
 			end
 			WAIT: begin
-				if(al_valid) begin
-					al_start <= 1'b1;
+				if(ex_valid_o && ls_ready_i) begin
+					pc_o					<= pc_i;
+					inst_o				<= inst_i;
+					op_o          <= op_i;
+			    funct3_o      <= funct3_i;
+					rd_o          <= rd_i;
+					gpr_wen_o     <= gpr_wen_i;
+					mepc_o        <= mepc_w;
+					mstatus_o     <= mstatus_w;
+					mcause_o      <= mcause_w;
+					mtvec_o       <= mtvec_w;
+					mepc_wen_o    <= mepc_wen_i;
+					mstatus_wen_o <= mstatus_wen_i;
+					mcause_wen_o  <= mcause_wen_i;
+					mtvec_wen_o   <= mtvec_wen_i;
+					ex_o          <= ex;
+					ls_valid_o    <= ls_valid;
+					ls_wen_o      <= ls_wen;
+					ls_read_o     <= ls_valid && !ls_wen;
+					ls_write_o    <= ls_valid && ls_wen;
+					ls_waddr_o    <= ls_waddr;
+					ls_wdata_o    <= ls_wdata;
+					ls_raddr_o    <= ls_raddr;
+					ls_wmask_o    <= ls_wmask;
+					ls_awsize_o   <= ls_awsize;
+					ls_arsize_o   <= ls_arsize;
+					ls_awlen_o    <= ls_awlen;
+					ls_arlen_o    <= ls_arlen;
+					ls_awburst_o  <= ls_awburst;
+					ls_arburst_o  <= ls_arburst;
+					dnpc_o				<= dnpc;
 				end
-				if(al_done) begin
-					al_start <= 1'b0;
-					al_res <= res;
-				end
-				if(ls_valid_o && (!ls_wen_o)) begin
-					ex_reg <= 32'h0;
-					ls_read_reg <= 1'b1;
-				end
-				if(ls_wen_o) begin
-					ls_write_reg <= 1'b1;
-				end
-				if(ls_done_i) begin
-					ls_read_reg <= 1'b0;
-					ls_write_reg <= 1'b0;
-					ram_rdata_reg <= ls_rdata;
-				end
-			end
-			READY: begin
-				ex_valid <= 1'b1;
-				if(ex_valid_o && wb_ready_i) begin
-					ex_valid <= 1'b0;
-					ex_reg <= ex;
-					gpr_wen_reg <= gpr_wen;
-
-					mepc_reg <= mepc_w;
-					mstatus_reg <= mstatus_w;
-					mcause_reg <= mcause_w;
-					mtvec_reg <= mtvec_w;
-					mepc_wen_reg <= mepc_wen;
-					mstatus_wen_reg <= mstatus_wen;
-					mcause_wen_reg <= mcause_wen;
-					mtvec_wen_reg <= mtvec_wen;
-				end
-			end
-			DONE: begin
-				dnpc_reg <= dnpc;
-				al_res <= 32'h0;
-				ram_rdata_reg <= 32'h0;
 			end
 		endcase
 	end
 end
 
-/***FU***/
-/***ALU***/
-wire al_valid = (op_i == 7'b0010011) || (op_i == 7'b0110011);
-reg [31:0]al_res;
-wire [31:0]a,b,ex;
-wire [3:0]sel;
-wire [31:0]x,y,res;
-assign x = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111) || (op_i == 7'b0110011) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r1_i 
-	: ((op_i == 7'b0010011 && funct3_i == 3'b010) || ((op_i == 7'b0110011) && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b001 && funct7_i == 7'b0000001) || (funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b110 && funct7_i == 7'b0000001)))) ? $signed(r1_i) 
-	: 32'b0;
-assign y = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? imm_i 
-	: ((op_i == 7'b0010011) && (funct3_i == 3'b010)) ? $signed(imm_i) 
-	: ((op_i == 7'b0010011) && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {27'b0,shamt_i} 
-	: ((op_i == 7'b0110011) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r2_i
-	: ((op_i == 7'b0110011 && ((funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000)))) ? {27'b0,r2_i[4:0]}
-	: ((op_i == 7'b0110011) && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b001 && funct7_i == 7'b0000001) || (funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b110 && funct7_i == 7'b0000001))) ? $signed(r2_i)
-	: 32'b0;
-localparam ADD  = 4'b0000;
-localparam SUB  = 4'b0001;
-localparam SLL  = 4'b0010;
-localparam SRL  = 4'b0011;
-localparam SRA  = 4'b0100;
-localparam SLT  = 4'b0101;
-localparam AND  = 4'b0110;
-localparam OR   = 4'b0111;
-localparam XOR  = 4'b1000;
-localparam MUL  = 4'b1001;
-localparam MULH = 4'b1010;
-localparam DIV  = 4'b1011;
-localparam REM  = 4'b1100;
-assign sel =  ((op_i == 7'b0010011 && funct3_i == 3'b000) || (op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0000000)) ? ADD : 
-							(op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0100000) ? SUB :
-						  ((op_i == 7'b0010011 && funct3_i == 3'b001) || (op_i == 7'b0110011 && (funct3_i == 3'b001 && funct7_i == 7'b0000000))) ? SLL :
-							((op_i == 7'b0010011 &&(funct3_i == 3'b010 || funct3_i == 3'b011)) || (op_i == 7'b0110011 && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000)))) ? SLT :
-							((op_i == 7'b0010011 && funct3_i == 3'b100) || (op_i == 7'b0110011 && (funct3_i == 3'b100 && funct7_i == 7'b0000000))) ? XOR :
-							((op_i == 7'b0010011 && funct3_i == 3'b101 && funct7_i == 7'b0000000) || (op_i == 7'b0110011 && funct3_i == 3'b101 && funct7_i == 7'b0000000)) ? SRL :
-							((op_i == 7'b0010011 && funct3_i == 3'b101 && funct7_i == 7'b0100000) || (op_i == 7'b0110011 && funct3_i == 3'b101 && funct7_i == 7'b0100000)) ? SRA :
-							((op_i == 7'b0010011 && funct3_i == 3'b110) || (op_i == 7'b0110011 && funct3_i == 3'b110 && funct7_i == 7'b0000000)) ? OR : 
-							((op_i == 7'b0010011 && funct3_i == 3'b111) || (op_i == 7'b0110011 && funct3_i == 3'b111 && funct7_i == 7'b0000000)) ? AND : 
-							(op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0000001) ? MUL :
-							(op_i == 7'b0110011 && funct3_i == 3'b001 && funct7_i == 7'b0000001) ? MULH :
-							(op_i == 7'b0110011 && ((funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001))) ? DIV :
-							(op_i == 7'b0110011 && ((funct3_i == 3'b110 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? REM 
-							: 4'b1111;
+wire al_done;
+ysyx_24110017_ALU ALU(clk,rst,a_i,b_i,alu_sel_i,al_res,al_done);
 
-ysyx_24110017_ALU ALU(clk,rst,x,y,sel,al_start,res,al_done);
-
+wire [31:0]ex;
 assign ex = 
-				({32{op_i == 7'b0010011}}/***I*addi~srai***/
-				& (
-						al_res
-					)
-				)				
-			| ({32{op_i == 7'b0110011}}/***R_add~R_remu***/
-				& (
-						al_res
-					)
-				)
+/***I*addi~srai***/
+				({32{op_i == 7'b0010011}} & (al_res))
+/***R_add~R_remu***/
+			| ({32{op_i == 7'b0110011}} & (al_res))
+/*********/
 			|
-/***BU***/
 				({32{(op_i == 7'b1101111)}} & (pc_i + 4)) | //I_jal
 				({32{(op_i == 7'b1100111)}} & (pc_i + 4)) | //I_jalr
 				({32{(op_i == 7'b0110111)}} & imm_i) | //U_lui
 				({32{(op_i == 7'b0010111)}} & (pc_i + imm_i))	//U_auipc
-/***LSU***/
-			|
-				({32{(op_i == 7'b0000011) && (funct3_i == 3'b000)}} & {{24{ram_rdata_reg[7]}},ram_rdata_reg[7:0]}) | //I_lb
-				({32{(op_i == 7'b0000011) && (funct3_i == 3'b001)}} & {{16{ram_rdata_reg[15]}},ram_rdata_reg[15:0]}) | //I_lh 
-				({32{(op_i == 7'b0000011) && (funct3_i == 3'b010)}} & ram_rdata_reg) | //I_lw
-				({32{(op_i == 7'b0000011) && (funct3_i == 3'b100)}} & {{24{1'b0}},ram_rdata_reg[7:0]}) | //I_lbu
-				({32{(op_i == 7'b0000011) && (funct3_i == 3'b101)}} & {{16{1'b0}},ram_rdata_reg[15:0]}) //I_lhu
 /***CSRU***/
 			|
-				({32{(op_i == 7'b1110011) && (funct3_i == 3'b001)}} & csr) |	//I_csrrw
-				({32{(op_i == 7'b1110011) && (funct3_i == 3'b010)}} & csr) |	//I_csrrs
-				({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & csr); 	//I_csrrc
+				({32{(op_i == 7'b1110011) && ((funct3_i == 3'b001) || (funct3_i == 3'b010) || (funct3_i == 3'b000))}} & csr_i); //I_csrrw_csrrs_csrrc
 
-/***CSRU***/
-wire[31:0] csr = (op_i == 7'b1110011 && imm_i == 32'd833) ? mepc_i
- : (op_i == 7'b1110011 && imm_i == 32'd768) ? mstatus_i
- : (op_i == 7'b1110011 && imm_i == 32'd834) ? mcause_i
- : (op_i == 7'b1110011 && imm_i == 32'd773) ? mtvec_i
- : 32'b0;
 wire[31:0] mepc_w = (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000) ? pc_i : csrs_w; //ecall
 wire[31:0] mstatus_w = csrs_w;
 wire[31:0] mcause_w = (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000) ? r2_i : csrs_w; //ecall a5
 wire[31:0] mtvec_w = csrs_w;
 wire[31:0] csrs_w = 
 			({32{(op_i == 7'b1110011) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
-			({32{(op_i == 7'b1110011) && (funct3_i == 3'b010)}} & (csr |  r1_i)) | //I_csrrs
-      ({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & (csr & ~r1_i)) ; //I_csrrc
-wire mepc_wen = ((op_i == 7'b1110011 && imm_i == 32'd833) || (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000)) ? 1'b1 : 1'b0;
-wire mstatus_wen = (op_i == 7'b1110011 && imm_i == 32'd768) ? 1'b1 : 1'b0;
-wire mcause_wen = (op_i == 7'b1110011 && imm_i == 32'd834 || (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000)) ? 1'b1 : 1'b0;
-wire mtvec_wen = (op_i == 7'b1110011 && imm_i == 32'd773) ? 1'b1 : 1'b0;
+			({32{(op_i == 7'b1110011) && (funct3_i == 3'b010)}} & (csr_i |  r1_i)) | //I_csrrs
+      ({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & (csr_i & ~r1_i)) ; //I_csrrc
 
 /***LSU***/
-wire [31:0]ls_rdata;
-assign ls_valid_o = (op_i == 7'b0000011 || op_i == 7'b0100011) ? 1'b1 : 1'b0;
-assign ls_wen_o = (op_i == 7'b0100011) ? 1'b1 : 1'b0;
-assign ls_waddr_o = (op_i == 7'b0100011) ? (r1_i + offset) : 32'h80000000;
-assign ls_wdata_o = ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011) ? r2_i //对齐
- : ((ls_waddr_o % 4 == 1) && op_i == 7'b0100011) ? {r2_i[23:0],8'b0} //0x1
- : ((ls_waddr_o % 4 == 2) && op_i == 7'b0100011) ? {r2_i[15:0],16'b0} //0x2
- : ((ls_waddr_o % 4 == 3) && op_i == 7'b0100011) ? {r2_i[7:0],24'b0} //0x3
+wire ls_valid = (op_i == 7'b0000011 || op_i == 7'b0100011) ? 1'b1 : 1'b0;
+wire ls_wen = (op_i == 7'b0100011) ? 1'b1 : 1'b0;
+wire [31:0]ls_waddr = (op_i == 7'b0100011) ? (r1_i + offset) : 32'h80000000;
+wire [31:0]ls_wdata = ((ls_waddr % 4 == 0) && op_i == 7'b0100011) ? r2_i //对齐
+ : ((ls_waddr % 4 == 1) && op_i == 7'b0100011) ? {r2_i[23:0],8'b0} //0x1
+ : ((ls_waddr % 4 == 2) && op_i == 7'b0100011) ? {r2_i[15:0],16'b0} //0x2
+ : ((ls_waddr % 4 == 3) && op_i == 7'b0100011) ? {r2_i[7:0],24'b0} //0x3
  : 32'b0;
-assign ls_wmask_o = ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0001 : ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0011 : ((ls_waddr_o % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1111 //对齐访问
- : 
-((ls_waddr_o % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0010 : ((ls_waddr_o % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0110 : ((ls_waddr_o % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1110 //单次非对齐
- :
-((ls_waddr_o % 4 == 2) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0100 : ((ls_waddr_o % 4 == 2) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b1100 : ((ls_waddr_o % 4 == 2) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1100 //单次非对齐
- :
-((ls_waddr_o % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b1000 : ((ls_waddr_o % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b1000 : ((ls_waddr_o % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1000 //单次非对齐
+wire [3:0]ls_wmask = ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0001
+ : ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0011
+ : ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1111 //对齐访问
+ : ((ls_waddr % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0010
+ : ((ls_waddr % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0110 
+ : ((ls_waddr % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1110 //单次非对齐
+ : ((ls_waddr % 4 == 2) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0100 
+ : ((ls_waddr % 4 == 2) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b1100 
+ : ((ls_waddr % 4 == 2) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1100 //单次非对齐
+ : ((ls_waddr % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b1000 
+ : ((ls_waddr % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b1000 
+ : ((ls_waddr % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1000 //单次非对齐
  : 4'b0;
-assign ls_raddr_o = (op_i == 7'b0000011) ? (r1_i + offset) : 32'h0;
-assign ls_rdata = ((ls_raddr_o % 4 == 0) && op_i == 7'b0000011 && funct3_i == 3'b010) ? ls_rdata_i
- : ((ls_raddr_o % 4 == 1) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {8'b0,ls_rdata_i[31:8]}
- : ((ls_raddr_o % 4 == 2) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {16'b0,ls_rdata_i[31:16]}
- : ((ls_raddr_o % 4 == 3) && op_i == 7'b0000011 && funct3_i == 3'b010) ? {24'b0,ls_rdata_i[31:24]} //
- : ((ls_raddr_o % 4 == 0) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[7:0]}
- : ((ls_raddr_o % 4 == 1) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[15:8]}
- : ((ls_raddr_o % 4 == 2) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[23:16]}
- : ((ls_raddr_o % 4 == 3) && op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? {24'b0,ls_rdata_i[31:24]} //
- : ((ls_raddr_o % 4 == 0) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_i[15:0]}
- : ((ls_raddr_o % 4 == 1) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_i[23:8]}
- : ((ls_raddr_o % 4 == 2) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {16'b0,ls_rdata_i[31:16]}
- : ((ls_raddr_o % 4 == 3) && op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {24'b0,ls_rdata_i[31:24]} //
- : 32'b0;
-assign ls_awsize_o = (op_i == 7'b0100011 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  7'b0100011 && funct3_i == 3'b001) ? 3'b1 : (op_i == 7'b0100011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
-assign ls_arsize_o = (op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 7'b0000011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
-assign ls_awlen_o = 8'b0;//(op == 7'b0100011 && funct3 == 3'b000) ? 8'b0 : (op ==  7'b0100011 && funct3 == 3'b001) ? 8'b1 : (op == 7'b0100011 && funct3 == 3'b010) ? 8'b11 : 8'b0;
-assign ls_arlen_o = 8'b0;//(op == 7'b0000011 && (funct3 == 3'b000 || funct3 == 3'b100)) ? 8'b0 : (op == 7'b0000011 && (funct3 == 3'b001 || funct3 == 3'b101)) ? 8'b1 : (op == 7'b0000011 && funct3 == 3'b010) ? 8'b11 : 8'b0;
-assign ls_awburst_o = 2'b01;
-assign ls_arburst_o = 2'b01;
+wire [31:0]ls_raddr = (op_i == 7'b0000011) ? (r1_i + offset) : 32'h0;
+wire [ 2:0]ls_awsize = (op_i == 7'b0100011 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  7'b0100011 && funct3_i == 3'b001) ? 3'b1 : (op_i == 7'b0100011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
+wire [2:0]ls_arsize = (op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 7'b0000011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
+wire [7:0]ls_awlen = 8'b0;
+wire [7:0]ls_arlen = 8'b0;
+wire [1:0]ls_awburst = 2'b01;
+wire [1:0]ls_arburst = 2'b01;
 
 /***BU***/
 wire [31:0]offset = imm_i;
@@ -350,9 +248,6 @@ wire [31:0]dnpc = (jalen) ? (pc_i + offset)	//jal
 	: (mret_en) ? mepc_i  //mret
 	: pc_i + 4;
 
-/***riscv32e_regs_controller***/
-wire gpr_wen = (op_i == 7'b0110111 || op_i == 7'b0010111 || op_i == 7'b1101111 || op_i == 7'b1100111 || op_i == 7'b0010011 || op_i == 7'b0001111 || op_i == 7'b1110011 || op_i == 7'b0110011 || op_i == 7'b0000011) ? 1'b1 : 1'b0;
-
 endmodule
 
 
@@ -362,9 +257,8 @@ module ysyx_24110017_ALU(
 	input wire [31:0] a,
 	input wire [31:0] b,
 	input wire [3:0] opcode,
-	input wire start,
-	output reg [31:0] res,
-	output reg done
+	output wire [31:0] res,
+	output wire done
 );
 
 	localparam OP_ADD  = 4'b0000;
@@ -381,14 +275,10 @@ module ysyx_24110017_ALU(
   localparam OP_DIV  = 4'b1011;
 	localparam OP_REM  = 4'b1100;
 
-	localparam IDLE		 = 2'b00;
-	localparam EXECUTE = 2'b01;
-	localparam FINISH  = 2'b10;
-	localparam NULL    = 2'b11;
+	localparam IDLE		 = 1'b0;
+	localparam EXECUTE = 1'b1;
 
-	reg [1:0]state;
-	reg [31:0]a_reg,b_reg;
-	reg [3:0]opcode_reg;
+	reg state;
 
 	reg [63:0]mul_result;
 	reg [5:0]mul_counter;
@@ -396,22 +286,35 @@ module ysyx_24110017_ALU(
 	reg [31:0]quotient,remainder;
 	reg [5:0]div_counter;
 
+	assign res = (opcode == OP_ADD) ? (a + b)
+	 : (opcode == OP_SUB) ? (a - b)
+	 : (opcode == OP_SLL) ? (a << b) 
+	 : (opcode == OP_SRL) ? a >> b 
+	 : (opcode == OP_SRA) ? ({32{a[31]}} << (32 - b)) | (a >> b) 
+	 : (opcode == OP_SLT) ? {31'b0,a < b} 
+	 : (opcode == OP_AND) ? a & b 
+	 : (opcode == OP_OR) ? a | b 
+	 : (opcode == OP_XOR) ? a ^ b 
+	 : (opcode == OP_MUL && done) ? mul_result[31:0]
+	 : (opcode == OP_MULH && done) ? mul_result[63:32]
+	 : (opcode == OP_DIV && done) ? quotient
+	 : (opcode == OP_REM && done) ? remainder
+	 : 32'h0;
+
+	assign done = (opcode == OP_MUL || opcode == OP_MULH || opcode == OP_DIV || opcode == OP_REM) ? (state == EXECUTE) && done_reg : 1'b1;
+	reg done_reg;
+
 	always @(posedge clk or posedge rst) begin
 		if(rst) begin
 			state <= IDLE;
-			res <= 32'h0;
-			done <= 1'b0;
+			done_reg <= 1'b0;
 		end
 		else begin
 			case(state)
 				IDLE: begin
-					done <= 1'b0;
-					if(start) begin
-						a_reg <= a;
-						b_reg <= b;
-						opcode_reg <= opcode;
+					if((opcode == OP_MUL || opcode == OP_MULH || opcode == OP_DIV || opcode == OP_REM) && !done_reg) begin
 						state <= EXECUTE;
-
+						done_reg <= 1'b0;
 						if(opcode == OP_MUL || opcode == OP_MULH) begin
 							mul_result <= {32'b0, a};
 							mul_counter <= 6'd0;
@@ -425,69 +328,32 @@ module ysyx_24110017_ALU(
 						end
 					end
 				end
-
 				EXECUTE: begin
-					case (opcode_reg)
-						OP_ADD: begin
-							res <= a_reg + b_reg;
-							state <= FINISH;
-						end
-						OP_SUB: begin
-							res <= a_reg - b_reg;
-							state <= FINISH;
-						end
-						OP_SLL: begin
-							res <= a_reg << b_reg;
-							state <= FINISH;
-						end
-						OP_SRL: begin
-							res <= a_reg >> b_reg;
-							state <= FINISH;
-						end
-						OP_SRA: begin
-							res <= ({32{a_reg[31]}} << (32 - b_reg)) | (a_reg >> b_reg);
-							state <= FINISH;
-						end
-						OP_SLT: begin
-							res <= {31'b0,a < b};
-							state <= FINISH;
-						end
-						OP_AND: begin
-							res <= a_reg & b_reg;
-							state <= FINISH;
-						end
-						OP_OR: begin
-							res <= a_reg | b_reg;
-							state <= FINISH;
-						end
-						OP_XOR: begin
-							res <= a_reg ^ b_reg;
-							state <= FINISH;
-						end
+					case (opcode)
 						OP_MUL: begin
 							if(mul_counter < 32) begin
 								if(mul_result[0]) begin
-									mul_result[63:32] <= mul_result[63:32] + b_reg;
+									mul_result[63:32] <= mul_result[63:32] + b;
 								end
 								mul_result <= {1'b0,mul_result[63:1]};
 								mul_counter <= mul_counter + 1;
 							end
 							else begin
-								res <= mul_result[31:0];
-								state <= FINISH;
+								done_reg <= 1'b1;
+								state <= IDLE;
 							end
 						end
 						OP_MULH: begin
 							if(mul_counter < 32) begin
                 if(mul_result[0]) begin
-                  mul_result[63:32] <= mul_result[63:32] + b_reg;
+                  mul_result[63:32] <= mul_result[63:32] + b;
                 end
                 mul_result <= {1'b0,mul_result[63:1]};
                 mul_counter <= mul_counter + 1;
               end
               else begin
-                res <= mul_result[63:32];
-                state <= FINISH;
+								done_reg <= 1'b1;
+                state <= IDLE;
               end
             end
 						OP_DIV: begin
@@ -503,8 +369,8 @@ module ysyx_24110017_ALU(
 								div_counter <= div_counter + 1;
 							end
 							else begin
-								res <= quotient;
-								state <= FINISH;
+								done_reg <= 1'b1;
+								state <= IDLE;
 							end
 						end
 						OP_REM: begin
@@ -520,24 +386,13 @@ module ysyx_24110017_ALU(
 	              div_counter <= div_counter + 1;
               end
               else begin
-                res <= remainder;
-                state <= FINISH;
+								done_reg <= 1'b1;
+                state <= IDLE;
               end
             end
 						default: begin
-							res <= 32'b0;
-							state <= FINISH;
 						end
 					endcase
-				end
-
-				FINISH: begin
-					done <= 1'b1;
-					state <= NULL;
-				end
-				NULL: begin
-					done <= 1'b0;
-					state <= IDLE;
 				end
 			endcase
 		end

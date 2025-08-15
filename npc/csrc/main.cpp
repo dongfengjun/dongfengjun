@@ -84,6 +84,8 @@ uint64_t if_fin_cnt = 0;
 uint64_t id_fin_cnt = 0;
 uint64_t ex_fin_cnt = 0;
 uint64_t ls_fin_cnt = 0;
+uint64_t wb_fin_cnt = 0;
+uint64_t if_cnt = 0;
 uint64_t if_wait = 0;
 uint64_t if_mem_wait = 0;
 uint64_t ex_total_wait = 0;
@@ -107,6 +109,7 @@ uint64_t icache_access_cnt = 0;
 uint64_t icache_access_time = 0;
 uint64_t icache_miss_cnt = 0;
 uint64_t icache_miss_penalty = 0;
+uint64_t isCHazard_cnt = 0;
 
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
@@ -130,7 +133,7 @@ static void statistic() {
 	Log("******************Performance Evaluation*************************");
 	Log("IPC = %.6f", (double)g_nr_guest_inst/(double)g_nr_guest_cycle);
 	Log("CPI = %.6f", (double)g_nr_guest_cycle/(double)g_nr_guest_inst);
-	Log("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt);
+	Log("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld WB FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt,wb_fin_cnt);
 	Log("Integer   Transfer  Load      Store     Immediate System");
 	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Count)",Integer_Computational_cnt,Transfer_cnt,Load_cnt,Store_cnt,Immediate_cnt,System_cnt);
 	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Cycles)",Integer_Computational_wait,Transfer_wait,Load_wait,Store_wait,Immediate_wait,System_wait);
@@ -140,7 +143,8 @@ static void statistic() {
 	Log("The proportion of IF MEM access:%.6f", (double)if_mem_wait/(double)if_wait);
 	Log("LS LOAD:%ld (Average Delay)", ls_load_wait/ls_load_cnt);
 	Log("LS STORE:%ld (Average Delay)", ls_store_wait/ls_store_cnt);
-	Log("******ICACHE AMAT******\n				access cnt:%ld access time:%ld miss penalty:%ld  p=%.6f amat=%ld",icache_access_cnt,icache_access_time/icache_access_cnt,icache_miss_penalty/icache_miss_cnt,(double)icache_access_cnt/(double)if_fin_cnt,if_mem_wait/if_fin_cnt);
+	Log("******ICACHE AMAT******\n				access cnt:%ld access time:%ld miss penalty:%ld  p=%.6f amat=%ld",icache_access_cnt,icache_access_time/icache_access_cnt,icache_miss_penalty/icache_miss_cnt,(double)icache_access_cnt/(double)if_cnt,if_mem_wait/if_fin_cnt);
+	Log("CHazard cnt = %ld",isCHazard_cnt);
 }
 
 void assert_fail_msg() {
@@ -371,8 +375,10 @@ void performance_evaluation() {
 	if(performance_counters(1)) id_fin_cnt ++;
 	if(performance_counters(2)) ex_fin_cnt ++;
 	if(performance_counters(3)) ls_fin_cnt ++;
+	if(performance_counters(5)) wb_fin_cnt ++;
 	if(performance_counters(6)) {
 		if_mem_flag = true;
+		if_cnt ++;
 		if(amat_counters(0)) {
 			icache_access_flag = true;
 			icache_access_cnt ++;
@@ -417,12 +423,12 @@ void performance_evaluation() {
   if(Immediate_flag) Immediate_wait ++;
   if(System_flag) System_wait ++;
 	if(performance_counters(9)) { ls_store_flag = true; ls_store_cnt ++; }
-	if(performance_counters(3)) ls_store_flag = false;
+	if(performance_counters(11)) ls_store_flag = false;
 	if(performance_counters(10)) { ls_load_flag = true; ls_load_cnt ++; }
 	if(performance_counters(3)) ls_load_flag = false;
 	if(ls_store_flag) ls_store_wait ++;
 	if(ls_load_flag) ls_load_wait ++;
-
+	if(performance_counters(12)) isCHazard_cnt ++;
 }
 
 void cpu_exec(int n) {
@@ -440,7 +446,6 @@ void cpu_exec(int n) {
 		cpu.pc = dpic_display(1);
 		isa_gpr_push();
 		performance_evaluation();
-//		if(dpic_display(3)) printf("pc:%08x  access:%ld\n",dpic_display(0),icache_access_cnt);
 #ifdef CONFIG_ITRACE
 		itrace_push();
 #endif
