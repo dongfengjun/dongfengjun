@@ -169,8 +169,8 @@ static void itrace_push(){
 	p += snprintf(p, sizeof(logbuf), FMT_WORD ":", dpic_display(0));
 	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", dpic_display(0));
 	if(dpic_display(3)) itrace_p += snprintf(itrace_p, sizeof(itracebuf), FMT_WORD "\n", dpic_display(0));
-	if(dpic_display(3) && ((dpic_display(2) & 0b1111111 ) == 0b1100011)) btrace_p += snprintf(btrace_p, sizeof(btracebuf), FMT_WORD " ", dpic_display(0));
-	if(dpic_display(3) && ((dpic_display(2) & 0b1111111 ) == 0b1100011)) {
+	if(dpic_display(3)) btrace_p += snprintf(btrace_p, sizeof(btracebuf), FMT_WORD " ", dpic_display(0));
+	if(dpic_display(3)) {
     btrace_p += snprintf(btrace_p, 12, "0x%08x\n", dpic_display(2)); 
   }
 	int ilen = 4;
