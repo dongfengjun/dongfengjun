@@ -289,6 +289,7 @@ wire isRAW = ((rs1 != 0) && (((!ls_ready) && (rs1 == rd_ex)) || (rs1 == rd_ls)))
              ((ls_valid && (mtvec   != mtvec_ex  )) || (mtvec_wen_ls   && (mtvec   != mtvec_ls  )));
 
 wire isCHazard = (ex_valid && ls_ready) && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
+wire JUMP = (ex_valid && ls_ready) && (inst_id[6:0] == 7'b1101111 || inst_id[6:0] == 7'b1100111);
 
 `ifndef YOSYS_STA
 /***DPIC*etrace***/
