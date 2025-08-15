@@ -18,15 +18,15 @@ int main(int argc, char *argv[]) {
 	while(fgets(line, sizeof(line), file)) {
 		uint32_t pc;
 		uint32_t inst;
-    if(sscanf(line, "%x %x", &pc, &inst) == 2);
-		if(branch_total_cnt > 0) {
+		if(sscanf(line, "%x %x", &pc, &inst) == 2);
+		if((pinst & 0b1111111) ==  0b1100011) {
 			bool offset = (pinst >> 31) & 0b1;
-			if((((ppc == pc) && offset) || ((ppc != pc) && !offset))) {
+			if((((pc != (ppc + 4)) && offset) || ((pc == (ppc + 4)) && !offset))) {
 				branch_right_cnt ++;
+				printf("%8x %8x %8x %ld\n",ppc,pinst,pc,branch_right_cnt);
 			}
+			branch_total_cnt ++; 
 		}
-		printf("%8x %8x %8x %ld\n",ppc,pinst,pc,branch_right_cnt);
-		branch_total_cnt ++;
 		ppc = pc;
 		pinst = inst;
 	}
