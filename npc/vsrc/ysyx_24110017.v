@@ -192,7 +192,7 @@ ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei_id, //w < n
 );
 ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 		inst_id,//difftest
-		rs1,rs2,r1,r2,
+		rs1,rs2,r1_forward,r2_forward,
 		mepc,mstatus,mcause,mtvec,
 		if_valid,id_ready,id_valid,ex_ready,
 		pc_if,inst_if,
@@ -281,12 +281,9 @@ ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,mtvec_ls,mtvec,mtvec_wen_l
 ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid,1'b0);
 ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
 
-wire isRAW = ((rs1 != 0) && (((!ls_ready) && (rs1 == rd_ex)) || (rs1 == rd_ls))) || 
-						 ((rs2 != 0) && (((!ls_ready) && (rs2 == rd_ex)) || (rs2 == rd_ls))) ||
-						 ((ls_valid && (mepc		!= mepc_ex))		|| (mepc_wen_ls		 && (mepc		 != mepc_ls))) ||
-             ((ls_valid && (mstatus != mstatus_ex)) || (mstatus_wen_ls && (mstatus != mstatus_ls))) ||
-             ((ls_valid && (mcause  != mcause_ex )) || (mcause_wen_ls  && (mcause  != mcause_ls ))) ||
-             ((ls_valid && (mtvec   != mtvec_ex  )) || (mtvec_wen_ls   && (mtvec   != mtvec_ls  )));
+wire isRAW = 1'b0;
+wire [31:0]r1_forward = (rs1 == rd_ex) ? ex_ex : (rs1 == rd_ls) ? xrd : r1;
+wire [31:0]r2_forward = (rs2 == rd_ex) ? ex_ex : (rs2 == rd_ls) ? xrd : r2;
 
 wire isCHazard = (ex_valid && ls_ready) && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
 
