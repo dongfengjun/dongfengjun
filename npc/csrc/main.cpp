@@ -169,16 +169,15 @@ static void itrace_push(){
 	p += snprintf(p, sizeof(logbuf), FMT_WORD ":", dpic_display(0));
 	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", dpic_display(0));
 	if(dpic_display(3)) itrace_p += snprintf(itrace_p, sizeof(itracebuf), FMT_WORD "\n", dpic_display(0));
-	if(dpic_display(3) && ((dpic_display(2) & 0b1111111 ) == 0b1100011)) btrace_p += snprintf(btrace_p, sizeof(btracebuf), FMT_WORD "", dpic_display(0));
+	if(dpic_display(3) && ((dpic_display(2) & 0b1111111 ) == 0b1100011)) btrace_p += snprintf(btrace_p, sizeof(btracebuf), FMT_WORD " ", dpic_display(0));
+	if(dpic_display(3) && ((dpic_display(2) & 0b1111111 ) == 0b1100011)) {
+    btrace_p += snprintf(btrace_p, 4, "%08x\n", dpic_display(2)); 
+  }
 	int ilen = 4;
 	int i;
 	for (i = ilen - 1; i >= 0; i --) {
 	  p += snprintf(p, 4, " %02x", insts[i]);
 		irp += snprintf(irp, 4, " %02x", insts[i]);
-		if(dpic_display(3) && ((dpic_display(2) & 0b1111111 ) == 0b1100011)) {
-			btrace_p += snprintf(btrace_p, 4, " %02x", insts[i]); 
-			if(i = 0) memset(btrace_p, '\n', 1);
-		}
 	}
 	memset(p, ' ', 1);
 	memset(irp, ' ', 1);
