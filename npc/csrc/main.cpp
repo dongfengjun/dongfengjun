@@ -151,7 +151,7 @@ static void statistic() {
 	Log("LS STORE:%ld (Average Delay)", ls_store_wait/ls_store_cnt);
 	Log("******ICACHE AMAT******\n				access cnt:%ld access time:%ld miss penalty:%ld  p=%.6f amat=%ld",icache_access_cnt,icache_access_time/icache_access_cnt,icache_miss_penalty/icache_miss_cnt,(double)icache_access_cnt/(double)if_cnt,if_mem_wait/if_fin_cnt);
 	Log("CHazard cnt = %ld",isCHazard_cnt);
-	LOg("Branch prediction error:%ld accuracy rate:%.6f",Branch_pre_err_cnt,(double)Branch_pre_err_cnt/(double)Branch_cnt);
+	Log("Branch prediction error:%ld accuracy rate:%.6f",Branch_pre_err_cnt,(double)Branch_pre_err_cnt/(double)Branch_cnt);
 }
 
 void assert_fail_msg() {
