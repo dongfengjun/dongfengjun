@@ -42,7 +42,7 @@ module ysyx_24110017_IDU(
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
-always @(posedge clk or posedge rst) begin
+always @(posedge clk) begin
 	if(rst || isCHazard) state <= IDLE;
   else begin
 		case (state)
@@ -56,7 +56,7 @@ assign id_valid_o = (state == WAIT) && (!isRAW);
 assign id_ready_o = (state == IDLE) && (!isRAW);
 
 
-always@(posedge clk or posedge rst) begin
+always@(posedge clk) begin
 	if(rst || isCHazard) begin
 		inst_o			<= 32'h0;
 		pc_o				<= 32'h0;

@@ -58,7 +58,7 @@ reg ex_valid_reg;
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
-always @(posedge clk or posedge rst) begin
+always @(posedge clk) begin
 	if(rst || isCHazard) state <= IDLE;
   else begin
 		case (state)
@@ -68,7 +68,7 @@ always @(posedge clk or posedge rst) begin
 	end
 end
 
-always @(posedge clk or posedge rst) begin
+always @(posedge clk) begin
 	if(rst || isCHazard) ex_valid_reg <= 1'b0;
 	else begin
 		case(state)
@@ -86,7 +86,7 @@ always @(posedge clk or posedge rst) begin
 end
 
 wire [31:0]al_res;
-always @(posedge clk or posedge rst) begin
+always @(posedge clk) begin
 	if(rst || isCHazard) begin
 		pc_o					<= 32'h0;
 		inst_o				<= 32'h0;

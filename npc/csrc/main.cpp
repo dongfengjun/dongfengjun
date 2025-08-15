@@ -90,13 +90,15 @@ uint64_t if_wait = 0;
 uint64_t if_mem_wait = 0;
 uint64_t ex_total_wait = 0;
 uint64_t Integer_Computational_cnt = 0;
-uint64_t Transfer_cnt = 0;
+uint64_t Jump_cnt = 0;
+uint64_t Branch_cnt = 0;
 uint64_t Load_cnt = 0;
 uint64_t Store_cnt = 0;
 uint64_t Immediate_cnt = 0;
 uint64_t System_cnt = 0;
 uint64_t Integer_Computational_wait = 0;
-uint64_t Transfer_wait = 0;
+uint64_t Jump_wait = 0;
+uint64_t Branch_wait = 0;
 uint64_t Load_wait = 0;
 uint64_t Store_wait = 0;
 uint64_t Immediate_wait = 0;
@@ -110,6 +112,7 @@ uint64_t icache_access_time = 0;
 uint64_t icache_miss_cnt = 0;
 uint64_t icache_miss_penalty = 0;
 uint64_t isCHazard_cnt = 0;
+uint64_t Branch_pre_err_cnt = 0;
 
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
@@ -119,6 +122,9 @@ IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
 	char itracebuf[0x10000000] = {0};
 	char *itrace_p = itracebuf;
 	FILE *itracelog;
+	char btracebuf[0x10000000] = {0};
+	char *btrace_p = btracebuf;
+	FILE *btracelog;
 #endif
 uint8_t fopcode;
 
@@ -134,17 +140,18 @@ static void statistic() {
 	Log("IPC = %.6f", (double)g_nr_guest_inst/(double)g_nr_guest_cycle);
 	Log("CPI = %.6f", (double)g_nr_guest_cycle/(double)g_nr_guest_inst);
 	Log("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld WB FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt,wb_fin_cnt);
-	Log("Integer   Transfer  Load      Store     Immediate System");
-	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Count)",Integer_Computational_cnt,Transfer_cnt,Load_cnt,Store_cnt,Immediate_cnt,System_cnt);
-	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Cycles)",Integer_Computational_wait,Transfer_wait,Load_wait,Store_wait,Immediate_wait,System_wait);
-	Log("%-10.6f%-10.6f%-10.6f%-10.6f%-10.6f%-10.6f (Proportion)",(double)Integer_Computational_wait/(double)ex_total_wait,(double)Transfer_wait/(double)ex_total_wait,(double)Load_wait/(double)ex_total_wait,(double)Store_wait/(double)ex_total_wait,(double)Immediate_wait/(double)ex_total_wait,(double)System_wait/(double)ex_total_wait);
-	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Transfer_wait/Transfer_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, (System_cnt == 0) ? 0 : System_wait/System_cnt);
+	Log("Integer   Jump      Branch    Load      Store     Immediate System");
+	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Count)",Integer_Computational_cnt,Jump_cnt,Branch_cnt,Load_cnt,Store_cnt,Immediate_cnt,System_cnt);
+	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Cycles)",Integer_Computational_wait,Jump_wait,Branch_wait,Load_wait,Store_wait,Immediate_wait,System_wait);
+	Log("%-10.6f%-10.6f%-10.6f%-10.6f%-10.6f%-10.6f%-10.6f (Proportion)",(double)Integer_Computational_wait/(double)ex_total_wait,(double)Jump_wait/(double)ex_total_wait,(double)Branch_wait/(double)ex_total_wait,(double)Load_wait/(double)ex_total_wait,(double)Store_wait/(double)ex_total_wait,(double)Immediate_wait/(double)ex_total_wait,(double)System_wait/(double)ex_total_wait);
+	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Jump_wait/Jump_cnt, Branch_wait/Branch_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, System_wait/System_cnt);
 	Log("IF->MEM:%ld IF TOTAL:%ld",if_mem_wait,if_wait);
 	Log("The proportion of IF MEM access:%.6f", (double)if_mem_wait/(double)if_wait);
 	Log("LS LOAD:%ld (Average Delay)", ls_load_wait/ls_load_cnt);
 	Log("LS STORE:%ld (Average Delay)", ls_store_wait/ls_store_cnt);
 	Log("******ICACHE AMAT******\n				access cnt:%ld access time:%ld miss penalty:%ld  p=%.6f amat=%ld",icache_access_cnt,icache_access_time/icache_access_cnt,icache_miss_penalty/icache_miss_cnt,(double)icache_access_cnt/(double)if_cnt,if_mem_wait/if_fin_cnt);
 	Log("CHazard cnt = %ld",isCHazard_cnt);
+	Log("Branch prediction error:%ld accuracy rate:%.6f",Branch_pre_err_cnt,1-((double)Branch_pre_err_cnt/(double)Branch_cnt));
 }
 
 void assert_fail_msg() {
@@ -166,6 +173,10 @@ static void itrace_push(){
 	p += snprintf(p, sizeof(logbuf), FMT_WORD ":", dpic_display(0));
 	irp += snprintf(irp, sizeof(iringbuf), FMT_WORD ":", dpic_display(0));
 	if(dpic_display(3)) itrace_p += snprintf(itrace_p, sizeof(itracebuf), FMT_WORD "\n", dpic_display(0));
+	if(dpic_display(3)) btrace_p += snprintf(btrace_p, sizeof(btracebuf), FMT_WORD " ", dpic_display(0));
+	if(dpic_display(3)) {
+    btrace_p += snprintf(btrace_p, 12, "0x%08x\n", dpic_display(2)); 
+  }
 	int ilen = 4;
 	int i;
 	for (i = ilen - 1; i >= 0; i --) {
@@ -355,13 +366,21 @@ static void reset(int n) {
 	top->reset=0;
 }
 
+int Integer_Computational_tmp = 0;
+int Jump_tmp = 0;
+int Branch_tmp = 0;
+int Load_tmp = 0;
+int Store_tmp = 0;
+int Immediate_tmp = 0;
+int System_tmp = 0;
 bool if_mem_flag = false;
 bool if_flag = false;
 bool ex_total_flag = false;
 bool ls_store_flag = false;
 bool ls_load_flag = false;
 bool Integer_Computational_flag = false;
-bool Transfer_flag = false;
+bool Jump_flag = false;
+bool Branch_flag = false;
 bool Load_flag = false;
 bool Store_flag = false;
 bool Immediate_flag = false;
@@ -397,31 +416,56 @@ void performance_evaluation() {
 	if(icache_access_flag) icache_access_time ++;
 	if(icache_miss_flag) icache_miss_penalty ++;
 	if(performance_counters(8)) if_flag = true;
-	if(performance_counters(0)) if_flag = false;
+	if(performance_counters(13)) if_flag = false;
 	if(if_flag) if_wait ++;
 	if(performance_counters(1)) ex_total_flag = true;
 	if(performance_counters(5)) ex_total_flag = false;
 	if(ex_total_flag) ex_total_wait ++;
-	if(performance_counters(1) && performance_counters(4) == 0b0110011) { Integer_Computational_flag = true; Integer_Computational_cnt ++; }
-	if(performance_counters(1) && (performance_counters(4) == 0b1100011 || performance_counters(4) == 0b1101111 || performance_counters(4) == 0b1100111)) { Transfer_flag = true; Transfer_cnt ++; }
-	if(performance_counters(1) && performance_counters(4) == 0b0000011) { Load_flag = true; Load_cnt ++; }
-	if(performance_counters(1) && performance_counters(4) == 0b0100011) { Store_flag = true; Store_cnt ++; }
-	if(performance_counters(1) && performance_counters(4) == 0b0010011) { Immediate_flag = true; Immediate_cnt ++; }
-	if(performance_counters(1) && performance_counters(4) == 0b1110011) { System_flag = true; System_cnt ++; }
+	
+	if(performance_counters(1) && performance_counters(4) == 0b0110011) { Integer_Computational_flag = true;}
+	if(performance_counters(1) && performance_counters(4) == 0b1101111 || performance_counters(4) == 0b1100111) { Jump_flag = true;}
+	if(performance_counters(1) && performance_counters(4) == 0b1100011) { Branch_flag = true;}
+	if(performance_counters(1) && performance_counters(4) == 0b0000011) { Load_flag = true;}
+	if(performance_counters(1) && performance_counters(4) == 0b0100011) { Store_flag = true;}
+	if(performance_counters(1) && performance_counters(4) == 0b0010011) { Immediate_flag = true;}
+	if(performance_counters(1) && performance_counters(4) == 0b1110011) { System_flag = true;}
+
 	if(performance_counters(5)) {
 		Integer_Computational_flag = false;
-		Transfer_flag = false;
+		Jump_flag = false;
+		Branch_flag = false;
 		Load_flag = false;
 		Store_flag = false;
 		Immediate_flag = false;
 		System_flag = false;
 	}
-	if(Integer_Computational_flag) Integer_Computational_wait ++;
-  if(Transfer_flag) Transfer_wait ++;
-  if(Load_flag) Load_wait ++;
-  if(Store_flag) Store_wait ++;
-  if(Immediate_flag) Immediate_wait ++;
-  if(System_flag) System_wait ++;
+	
+	if(Integer_Computational_flag) Integer_Computational_tmp ++;
+  if(Jump_flag) Jump_tmp ++;
+	if(Branch_flag) Branch_tmp ++;
+  if(Load_flag) Load_tmp ++;
+  if(Store_flag) Store_tmp ++;
+  if(Immediate_flag) Immediate_tmp ++;
+  if(System_flag) System_tmp ++;
+
+	if(performance_counters(5) && performance_counters(14) == 0b0110011) { Integer_Computational_wait += Integer_Computational_tmp; Integer_Computational_cnt ++; }
+	if(performance_counters(5) && (performance_counters(14) == 0b1101111 || performance_counters(14) == 0b1100111)) { Jump_wait += Jump_tmp ; Jump_cnt ++; }
+  if(performance_counters(5) && performance_counters(14) == 0b1100011) { Branch_wait += Branch_tmp; Branch_cnt ++;}
+  if(performance_counters(5) && performance_counters(14) == 0b0000011) { Load_wait += Load_tmp; Load_cnt ++; }
+  if(performance_counters(5) && performance_counters(14) == 0b0100011) { Store_wait += Store_tmp; Store_cnt ++; }
+  if(performance_counters(5) && performance_counters(14) == 0b0010011) { Immediate_wait += Immediate_tmp; Immediate_cnt ++; }
+  if(performance_counters(5) && performance_counters(14) == 0b1110011) { System_wait += System_tmp; System_cnt ++; }
+
+	if(performance_counters(5)) {
+		Integer_Computational_tmp = 0;
+		Jump_tmp = 0;
+		Branch_tmp = 0;
+		Load_tmp = 0;
+		Store_tmp = 0;
+		Immediate_tmp = 0;
+		System_tmp = 0;
+	}
+	
 	if(performance_counters(9)) { ls_store_flag = true; ls_store_cnt ++; }
 	if(performance_counters(11)) ls_store_flag = false;
 	if(performance_counters(10)) { ls_load_flag = true; ls_load_cnt ++; }
@@ -429,12 +473,14 @@ void performance_evaluation() {
 	if(ls_store_flag) ls_store_wait ++;
 	if(ls_load_flag) ls_load_wait ++;
 	if(performance_counters(12)) isCHazard_cnt ++;
+	if(performance_counters(15)) Branch_pre_err_cnt ++;
 }
 
 void cpu_exec(int n) {
 	g_print_step = (n > 0 && n < MAX_INST_TO_PRINT);
 #ifdef CONFIG_ITRACE
-    itracelog = fopen("build/npc-itrace-log.txt", "w");  //Mtrace
+    itracelog = fopen("build/npc-itrace-log.txt", "w");  //Itrace
+		btracelog = fopen("build/npc-btrace-log.txt", "w");	 //Btrace
 #endif
 #ifdef CONFIG_MTRACE
 		mtracelog = fopen("build/npc-mtrace-log.txt", "w");  //Mtrace
@@ -460,6 +506,8 @@ void cpu_exec(int n) {
 #ifdef CONFIG_ITRACE
     fprintf(itracelog, "%s", itracebuf);
 		fclose(itracelog);
+		fprintf(btracelog, "%s", btracebuf);
+    fclose(btracelog);
 #endif
 #ifdef CONFIG_FTRACE
 		cpu_show_ftrace();

@@ -50,7 +50,7 @@ assign if_ready_o = (state == IDLE);
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
-always @(posedge clk or posedge rst) begin
+always @(posedge clk) begin
 	if(rst || isCHazard) state <= IDLE;
 	else begin
 		case(state)
@@ -61,7 +61,7 @@ always @(posedge clk or posedge rst) begin
 end
 
 reg isCHazard_reg;
-always @(posedge clk or posedge rst) begin
+always @(posedge clk) begin
 	if(rst) isCHazard_reg <= 1'b0;
 	else begin
 		if(isCHazard && ((axi_state != AXI_IDLE) && !(if_axi_rvalid_i && if_axi_rready_o))) begin
@@ -73,7 +73,7 @@ always @(posedge clk or posedge rst) begin
 	end
 end
 
-always @(posedge clk or posedge rst) begin
+always @(posedge clk) begin
 	if(rst || isCHazard) if_valid_o <= 1'b0;
 	else begin
 		if(if_axi_rvalid_i && if_axi_rready_o && !isCHazard_reg) begin
@@ -85,7 +85,7 @@ always @(posedge clk or posedge rst) begin
 	end
 end
 
-always @(posedge clk or posedge rst) begin
+always @(posedge clk) begin
 	if(rst || isCHazard) begin
 		pc_o	 <= 32'h0;
 		inst_o <= 32'h0;
@@ -120,7 +120,7 @@ parameter AXI_IDLE = 1'b0,AXI_FETCH = 1'b1;
 reg axi_state;
 reg [31:0] axi_rdata_reg;
 
-always @(posedge clk or posedge rst) begin
+always @(posedge clk) begin
 	if(rst || isCHazard) axi_state <= AXI_IDLE;
 	else begin
 		case(axi_state)
@@ -130,7 +130,7 @@ always @(posedge clk or posedge rst) begin
 	end
 end
 
-always @(posedge clk or posedge rst) begin
+always @(posedge clk) begin
         if(rst || isCHazard) begin
 					if_axi_arvalid_o <= 1'b0;
 					if_axi_rready_o  <= 1'b1;
