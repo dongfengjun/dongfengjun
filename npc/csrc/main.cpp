@@ -175,7 +175,10 @@ static void itrace_push(){
 	for (i = ilen - 1; i >= 0; i --) {
 	  p += snprintf(p, 4, " %02x", insts[i]);
 		irp += snprintf(irp, 4, " %02x", insts[i]);
-		if(dpic_display(3) && ((dpic_display(2) & 0b1111111 ) == 0b1100011)) btrace_p += snprintf(btrace_p, 4, " %02x" "\n", insts[i]);
+		if(dpic_display(3) && ((dpic_display(2) & 0b1111111 ) == 0b1100011)) {
+			btrace_p += snprintf(btrace_p, 4, " %02x", insts[i]); 
+			if(i = 0) memset(btrace_p, '\n', 1);
+		}
 	}
 	memset(p, ' ', 1);
 	memset(irp, ' ', 1);
