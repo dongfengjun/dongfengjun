@@ -428,7 +428,8 @@ void performance_evaluation() {
 		System_flag = false;
 	}
 	if(Integer_Computational_flag) Integer_Computational_wait ++;
-  if(Transfer_flag) Transfer_wait ++;
+  if(Jump_flag) Jump_wait ++;
+	if(Branch_flag) Branch_wait ++;
   if(Load_flag) Load_wait ++;
   if(Store_flag) Store_wait ++;
   if(Immediate_flag) Immediate_wait ++;
