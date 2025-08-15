@@ -429,7 +429,7 @@ void performance_evaluation() {
 	if(ex_total_flag) ex_total_wait ++;
 	
 	if(performance_counters(1) && performance_counters(4) == 0b0110011) { Integer_Computational_flag = true;}
-	if(performance_counters(1) && performance_counters(4) == 0b1101111 || performance_counters(4) == 0b1100111) { Jump_flag = true;}
+	if(performance_counters(1) && (performance_counters(4) == 0b1101111 || performance_counters(4) == 0b1100111)) { Jump_flag = true;}
 	if(performance_counters(1) && performance_counters(4) == 0b1100011) { Branch_flag = true;}
 	if(performance_counters(1) && performance_counters(4) == 0b0000011) { Load_flag = true;}
 	if(performance_counters(1) && performance_counters(4) == 0b0100011) { Store_flag = true;}
