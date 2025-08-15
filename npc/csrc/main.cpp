@@ -447,7 +447,7 @@ void performance_evaluation() {
   if(System_flag) System_tmp ++;
 
 	if(performance_counters(5) && performance_counters(14) == 0b0110011) { Integer_Computational_wait += Integer_Computational_tmp; Integer_Computational_cnt ++; }
-	if(performance_counters(5) && performance_counters(14) == 0b1101111 || performance_counters(14) == 0b1100111) { Jump_wait += Jump_tmp ; Jump_cnt ++; }
+	if(performance_counters(5) && (performance_counters(14) == 0b1101111 || performance_counters(14) == 0b1100111)) { Jump_wait += Jump_tmp ; Jump_cnt ++; }
   if(performance_counters(5) && performance_counters(14) == 0b1100011) { Branch_wait += Branch_tmp; Branch_cnt ++;}
   if(performance_counters(5) && performance_counters(14) == 0b0000011) { Load_wait += Load_tmp; Load_cnt ++; }
   if(performance_counters(5) && performance_counters(14) == 0b0100011) { Store_wait += Store_tmp; Store_cnt ++; }
