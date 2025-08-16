@@ -18,10 +18,18 @@ module ysyx_24110017_BTB #(n = 4, w = 3) (
   wire [(1<<w) - 1 : 0]hit;
 	generate 
     genvar i; 
-      for(i = 0; i < (1<<w); i = i + 1) begin : comparator
+      for(i = 0; i < (1<<w); i = i + 1) begin : comparator_o
         assign hit[i] = (tag == tag_reg[index * (1<<w) + i]);
 			end
 	endgenerate
+
+	wire [(1<<w) - 1 : 0]already;
+  generate
+    genvar k;
+      for(k = 0; k < (1<<w); k = k + 1) begin : comparator_i
+        assign already[k] = (dnpc_tag == tag_reg[dnpc_index * (1<<w) + k]);
+      end
+  endgenerate
 	
 	assign snpc_o = (hit != 0) ? snpc_reg[index * (1 << w) + $clog2(hit)] : pc_i + 4;
 
@@ -39,7 +47,7 @@ module ysyx_24110017_BTB #(n = 4, w = 3) (
 				tag_reg[j]		<= 0;
 			end
 		end
-		else if(dnpc_en_i && !enable) begin
+		else if(dnpc_en_i && !enable && (already == 0)) begin
 			integer a;
 			for (a = 1; a < (1<<w); a = a + 1) begin
         snpc_reg[dnpc_index * (1<<w) + a] <= snpc_reg[dnpc_index * (1<<w) + a - 1];
