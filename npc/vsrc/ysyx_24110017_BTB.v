@@ -32,9 +32,9 @@ module ysyx_24110017_BTB #(n = 3, w = 2) (
 	always @(posedge clk) begin
 		if(rst) begin
       integer j;
-			for (j = 0; j < (1<<(m-2)); j = j + 1) begin : init_reg
-					snpc_reg[j]	<= 0;
-					tag_reg[j]		<= 0;
+			for (j = 0; j < (1<<n); j = j + 1) begin : init_reg
+				snpc_reg[j]	<= 0;
+				tag_reg[j]		<= 0;
 			end
 		end
 		else if(dnpc_en_i && !enable) begin

@@ -209,7 +209,7 @@ wire mtvec_wen = (op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
 wire fencei = (inst_i == 32'b00000000000000000001000000001111);
 
 //静态分支预测
-assign prepc_en_o = (op == 7'b1100011 && !inst[31]) || (op == 7'b1101111);
-assign prepc_o = ((op == 7'b1100011 && !inst[31]) || (op == 7'b1101111)) ? pc_i + imm : 32'h0;
+assign prepc_en_o = (op == 7'b1100011 && !inst_i[31]) || (op == 7'b1101111);
+assign prepc_o = ((op == 7'b1100011 && !inst_i[31]) || (op == 7'b1101111)) ? pc_i + imm : 32'h0;
 
 endmodule
