@@ -113,6 +113,10 @@ uint64_t icache_miss_cnt = 0;
 uint64_t icache_miss_penalty = 0;
 uint64_t isCHazard_cnt = 0;
 uint64_t Branch_pre_err_cnt = 0;
+uint64_t Jal_pre_err_cnt = 0; 
+uint64_t Jalr_pre_err_cnt = 0;
+uint64_t Jal_cnt = 0;
+uint64_t Jalr_cnt = 0;
 
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
@@ -151,7 +155,9 @@ static void statistic() {
 	Log("LS STORE:%ld (Average Delay)", ls_store_wait/ls_store_cnt);
 	Log("******ICACHE AMAT******\n				access cnt:%ld access time:%ld miss penalty:%ld  p=%.6f amat=%ld",icache_access_cnt,icache_access_time/icache_access_cnt,icache_miss_penalty/icache_miss_cnt,(double)icache_access_cnt/(double)if_cnt,if_mem_wait/if_fin_cnt);
 	Log("CHazard cnt = %ld",isCHazard_cnt);
-	Log("Branch prediction error:%ld accuracy rate:%.6f",Branch_pre_err_cnt,1-((double)Branch_pre_err_cnt/(double)Branch_cnt));
+	Log("Branch total:%ld prediction error:%ld accuracy rate:%.6f",Branch_cnt,Branch_pre_err_cnt,1-((double)Branch_pre_err_cnt/(double)Branch_cnt));
+	Log("Jal total:%ld prediction error:%ld accuracy rate:%.6f",Jal_cnt,Jal_pre_err_cnt,1-((double)Jal_pre_err_cnt/(double)Jal_cnt));
+	Log("Jalr total:%ld prediction error:%ld accuracy rate:%.6f",Jalr_cnt,Jalr_pre_err_cnt,1-((double)Jalr_pre_err_cnt/(double)Jalr_cnt));
 }
 
 void assert_fail_msg() {
@@ -423,7 +429,7 @@ void performance_evaluation() {
 	if(ex_total_flag) ex_total_wait ++;
 	
 	if(performance_counters(1) && performance_counters(4) == 0b0110011) { Integer_Computational_flag = true;}
-	if(performance_counters(1) && performance_counters(4) == 0b1101111 || performance_counters(4) == 0b1100111) { Jump_flag = true;}
+	if(performance_counters(1) && (performance_counters(4) == 0b1101111 || performance_counters(4) == 0b1100111)) { Jump_flag = true;}
 	if(performance_counters(1) && performance_counters(4) == 0b1100011) { Branch_flag = true;}
 	if(performance_counters(1) && performance_counters(4) == 0b0000011) { Load_flag = true;}
 	if(performance_counters(1) && performance_counters(4) == 0b0100011) { Store_flag = true;}
@@ -449,7 +455,11 @@ void performance_evaluation() {
   if(System_flag) System_tmp ++;
 
 	if(performance_counters(5) && performance_counters(14) == 0b0110011) { Integer_Computational_wait += Integer_Computational_tmp; Integer_Computational_cnt ++; }
-	if(performance_counters(5) && (performance_counters(14) == 0b1101111 || performance_counters(14) == 0b1100111)) { Jump_wait += Jump_tmp ; Jump_cnt ++; }
+	if(performance_counters(5) && (performance_counters(14) == 0b1101111 || performance_counters(14) == 0b1100111)) { 
+		Jump_wait += Jump_tmp ; Jump_cnt ++; 
+		if(performance_counters(14) == 0b1101111) Jal_cnt ++;
+		if(performance_counters(14) == 0b1100111) Jalr_cnt ++;
+	}
   if(performance_counters(5) && performance_counters(14) == 0b1100011) { Branch_wait += Branch_tmp; Branch_cnt ++;}
   if(performance_counters(5) && performance_counters(14) == 0b0000011) { Load_wait += Load_tmp; Load_cnt ++; }
   if(performance_counters(5) && performance_counters(14) == 0b0100011) { Store_wait += Store_tmp; Store_cnt ++; }
@@ -474,6 +484,8 @@ void performance_evaluation() {
 	if(ls_load_flag) ls_load_wait ++;
 	if(performance_counters(12)) isCHazard_cnt ++;
 	if(performance_counters(15)) Branch_pre_err_cnt ++;
+	if(performance_counters(16)) Jal_pre_err_cnt ++;
+	if(performance_counters(17)) Jalr_pre_err_cnt ++;
 }
 
 void cpu_exec(int n) {
