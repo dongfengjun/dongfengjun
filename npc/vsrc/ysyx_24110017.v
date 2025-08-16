@@ -167,7 +167,7 @@ ysyx_24110017_PCU PCU(clock,reset,isCHazard,
 		pc_valid,
 		if_ready
 );
-ysyx_24110017_BTB #(4,3) BTB(clock,reset,pc,snpc,prepc,pc_if,prepc_en);
+ysyx_24110017_BTB #(3,2) BTB(clock,reset,pc,snpc,prepc,pc_if,prepc_en);
 ysyx_24110017_IFU IFU(clock,reset,isCHazard,
 		pc_valid,if_ready,if_valid,id_ready,
 		pc,pc_if,inst_if,

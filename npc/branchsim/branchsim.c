@@ -8,8 +8,8 @@ typedef struct {
 	uint32_t tag;
 } matedata;
 
-int n = 4;
-int w = 3;
+int n = 3;
+int w = 2;
 
 int bbt(uint32_t pc, matedata *liness) {
 	uint32_t index = (pc >> 2 & ((int)pow(2,(n - w)) - 1));
@@ -50,16 +50,28 @@ int main(int argc, char *argv[]) {
 		if(sscanf(line, "%x %x", &pc, &inst) == 2);
 		if((pinst & 0b1111111) ==  0b1100011) {
 			bool offset = (pinst >> 31) & 0b1;
-			if(((ppc != (pc + 4)) && (bbt(ppc,liness) && offset) || ((pc == (ppc + 4)) && !offset))) {
+			bool hit = false;
+			if(offset) {
+				if(bbt(ppc,liness)) {
+					hit = true;
+				}
+			}
+			if(((pc != (ppc + 4)) && hit && offset) || ((pc == (ppc + 4)) && !offset) || ((pc == (ppc + 4)) && !hit && offset)) {
 			//if(pc == ppc + 4) {
 				branch_right_cnt ++;
+			}
+			else {
+				//printf("branch pre err: pc=%08x\n",ppc);
 			}
 			branch_total_cnt ++; 
 		}
 		if((pinst & 0b1111111) ==  0b1101111) {
-      if((ppc != (pc + 4)) && bbt(ppc,liness)) {
+      if(bbt(ppc,liness) || ((pc == ppc + 4))) {
         jal_right_cnt ++;
       }
+			else {
+				//printf("jal pre err: pc=%08x\n",ppc);
+			}
       jal_total_cnt ++;
     }
 
