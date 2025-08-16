@@ -7,9 +7,6 @@ module ysyx_24110017_IDU(
 
 	output reg  [31:0] inst_o,//difftest
 	
-	output wire [31:0] prepc_o,
-	output wire prepc_en_o,
-
 	output wire [ 4:0] rs1_o,
 	output wire [ 4:0] rs2_o,
 	input  wire [31:0] r1_i,
@@ -207,9 +204,5 @@ wire mcause_wen = (op == 7'b1110011 && imm == 32'd834 || (op == 7'b1110011 && im
 wire mtvec_wen = (op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
 
 wire fencei = (inst_i == 32'b00000000000000000001000000001111);
-
-//静态分支预测
-assign prepc_en_o = (op == 7'b1100011 && inst_i[31]) || (op == 7'b1101111);
-assign prepc_o = ((op == 7'b1100011 && inst_i[31]) || (op == 7'b1101111)) ? pc_i + imm : 32'h0;
 
 endmodule

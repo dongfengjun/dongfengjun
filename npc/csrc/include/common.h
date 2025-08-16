@@ -50,7 +50,7 @@ typedef uint16_t ioaddr_t;
 
 
 //main
-void cpu_exec(int n);
+void cpu_exec(int64_t n);
 void isa_parser_elf(char *filename);
 typedef struct {
 	vaddr_t mepc;
