@@ -12,6 +12,8 @@ module ysyx_24110017_BTB #(n = 4, w = 3) (
   reg [29-n+w : 0] tag_reg [(1<<n)-1 : 0];
 	wire [29-n+w : 0]tag = pc_i[31 : 2+n-w];
 	wire [n-1-w : 0]index = pc_i[1+n-w : 2];
+	wire [29-n+w : 0]dnpc_tag = dnpc_tag_i[31 : 2+n-w];
+	wire [n-1-w : 0]dnpc_index = dnpc_tag_i[1+n-w : 2];
 
   wire [(1<<w) - 1 : 0]hit;
 	generate 
@@ -40,11 +42,11 @@ module ysyx_24110017_BTB #(n = 4, w = 3) (
 		else if(dnpc_en_i && !enable) begin
 			integer a;
 			for (a = 1; a < (1<<w); a = a + 1) begin
-        snpc_reg[index * (1<<w) + a] <= snpc_reg[index * (1<<w) + a - 1];
-        tag_reg[index * (1<<w) + a] <= tag_reg[index * (1<<w) + a - 1];
+        snpc_reg[dnpc_index * (1<<w) + a] <= snpc_reg[dnpc_index * (1<<w) + a - 1];
+        tag_reg[dnpc_index * (1<<w) + a] <= tag_reg[dnpc_index * (1<<w) + a - 1];
       end
-			snpc_reg[index * (1<<w)] <= dnpc_i;
-			tag_reg[index * (1<<w)] <= dnpc_tag_i[31 : 2+n-w];
+			snpc_reg[dnpc_index * (1<<w)] <= dnpc_i;
+			tag_reg[dnpc_index * (1<<w)] <= dnpc_tag;
 		end
 	end
 
