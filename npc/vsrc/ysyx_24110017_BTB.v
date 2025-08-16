@@ -21,7 +21,7 @@ module ysyx_24110017_BTB #(n = 3, w = 2) (
 			end
 	endgenerate
 	
-	assign snpc_o = (hit) ? snpc_reg[index * (1 << w) + $clog2(hit)] : pc_i + 4;
+	assign snpc_o = (hit != 0) ? snpc_reg[index * (1 << w) + $clog2(hit)] : pc_i + 4;
 
 	reg enable;
 	always @(posedge clk) begin
