@@ -26,9 +26,7 @@ module ysyx_24110017_BTB #(n = 3, w = 2) (
 	reg enable;
 	always @(posedge clk) begin
 		if(rst) enable <= 1'b0;
-		else
-			enable <= dnpc_en_i;
-		end
+		else enable <= dnpc_en_i;
 	end
 
 	always @(posedge clk) begin
