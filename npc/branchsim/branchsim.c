@@ -50,14 +50,14 @@ int main(int argc, char *argv[]) {
 		if(sscanf(line, "%x %x", &pc, &inst) == 2);
 		if((pinst & 0b1111111) ==  0b1100011) {
 			bool offset = (pinst >> 31) & 0b1;
-			if(((bbt(ppc,liness) && offset) || ((pc == (ppc + 4)) && !offset))) {
+			if(((ppc != (pc + 4)) && (bbt(ppc,liness) && offset) || ((pc == (ppc + 4)) && !offset))) {
 			//if(pc == ppc + 4) {
 				branch_right_cnt ++;
 			}
 			branch_total_cnt ++; 
 		}
 		if((pinst & 0b1111111) ==  0b1101111) {
-      if(bbt(ppc,liness)) {
+      if((ppc != (pc + 4)) && bbt(ppc,liness)) {
         jal_right_cnt ++;
       }
       jal_total_cnt ++;
