@@ -1,3 +1,4 @@
+//`define YOSYS_STA
 module ysyx_24110017_BTB #(n = 4, w = 3) (
 	input clk,
 	input rst,
@@ -31,8 +32,9 @@ module ysyx_24110017_BTB #(n = 4, w = 3) (
       end
   endgenerate
 	
+`ifndef YOSYS_STA	
 	assign snpc_o = (hit != 0) ? snpc_reg[index * (1 << w) + $clog2(hit)] : pc_i + 4;
-
+`endif
 	reg enable;
 	always @(posedge clk) begin
 		if(rst) enable <= 1'b0;

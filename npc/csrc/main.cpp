@@ -488,7 +488,7 @@ void performance_evaluation() {
 	if(performance_counters(17)) Jalr_pre_err_cnt ++;
 }
 
-void cpu_exec(int n) {
+void cpu_exec(int64_t n) {
 	g_print_step = (n > 0 && n < MAX_INST_TO_PRINT);
 #ifdef CONFIG_ITRACE
     itracelog = fopen("build/npc-itrace-log.txt", "w");  //Itrace
