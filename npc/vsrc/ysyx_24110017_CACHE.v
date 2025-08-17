@@ -1,4 +1,4 @@
-`define YOSYS_STA
+//`define YOSYS_STA
 module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 	input clk,
 	input rst,
@@ -70,18 +70,18 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 	localparam CACHE_DEPTH = (1 << n);
 	localparam CACHE_WAY	 = (1 << w);
 
-	reg [31:0] cache_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
-  reg [31-m-n+w : 0] tag_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
-  reg [CACHE_DEPTH - 1 : 0] valid_reg[CACHE_WIDTH - 1 : 0];
-	wire [31-m-n+w : 0]tag = m_axi_araddr[31 : m+n-w];
-  wire [n-1-w : 0]index = m_axi_araddr[m+n-w-1 : m];
-  wire [m-3 : 0]offset = m_axi_araddr[m-1 : 2];
-	wire [31-m-n+w : 0]s_tag = s_axi_araddr[31 : m+n-w];
-  wire [n-1-w : 0]s_index = s_axi_araddr[m+n-w-1 : m];
-  wire [m-3 : 0]s_offset = s_axi_araddr[m-1 : 2];
-
+	reg  [31:0]								 cache_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
+  reg  [31-m-n+w : 0]				 tag_reg	 [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
+  reg  [CACHE_DEPTH - 1 : 0] valid_reg [CACHE_WIDTH - 1 : 0];
+	wire [31-m-n+w : 0]				 tag			 = m_axi_araddr[31 : m+n-w];
+  wire [n-w-1 : 0]					 index		 = m_axi_araddr[m+n-w-1 : m];
+  wire [m-3 : 0]						 offset	   = m_axi_araddr[m-1 : 2];
+	wire [31-m-n+w : 0]				 s_tag		 = s_axi_araddr[31 : m+n-w];
+  wire [n-w-1 : 0]					 s_index   = s_axi_araddr[m+n-w-1 : m];
+  wire [m-3 : 0]						 s_offset  = s_axi_araddr[m-1 : 2];
   wire [CACHE_WAY - 1 : 0]access;
 	wire [CACHE_WAY - 1 : 0]access_raw;
+
 	generate 
     genvar i; 
       for(i = 0; i < CACHE_WAY; i = i + 1) begin : comparator
@@ -131,12 +131,12 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 	always @(posedge clk or posedge rst) begin
 		if(rst) begin
       integer j;
-			integer k;
+			//integer k;
 			for (j = 0; j < CACHE_WIDTH; j = j + 1) begin : init_reg
-				for (k = 0; k < CACHE_DEPTH; k = k + 1) begin
-					cache_reg[j][k]	<= 0;
-					tag_reg[j][k]		<= 0;
-				end
+				//for (k = 0; k < CACHE_DEPTH; k = k + 1) begin
+					//cache_reg[j][k]	<= 0;
+					//tag_reg[j][k]		<= 0;
+				//end
 				valid_reg[j]      <= 0;
 			end
 		end
@@ -172,7 +172,7 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 					if(s_axi_arvalid && s_axi_arready) begin
 						integer a;
             integer b;
-						for (b = 0; b < (1<<(m-2)); b = b + 1) begin : fifo
+						for (b = 0; b < CACHE_WIDTH; b = b + 1) begin : fifo
 							cache_reg[b][s_index * CACHE_WAY] <= 0;
               tag_reg[b][s_index * CACHE_WAY] <= 0;
 							valid_reg[b][s_index * CACHE_WAY] <= 0;
