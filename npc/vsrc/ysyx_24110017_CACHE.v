@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 	input clk,
 	input rst,
@@ -68,6 +68,7 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 
 	localparam CACHE_WIDTH = (1 << (m-2));
 	localparam CACHE_DEPTH = (1 << n);
+	localparam CACHE_WAY	 = (1 << w);
 
 	reg [31:0] cache_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
   reg [31-m-n+w : 0] tag_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
@@ -79,12 +80,12 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
   wire [n-1-w : 0]s_index = s_axi_araddr[m+n-w-1 : m];
   wire [m-3 : 0]s_offset = s_axi_araddr[m-1 : 2];
 
-  wire [(1<<w) - 1 : 0]access;
-	wire [(1<<w) - 1 : 0]access_raw;
+  wire [CACHE_WAY - 1 : 0]access;
+	wire [CACHE_WAY - 1 : 0]access_raw;
 	generate 
     genvar i; 
-      for(i = 0; i < (1<<w); i = i + 1) begin : comparator
-        assign access_raw[i] = (tag == tag_reg[offset][index * (1<<w) + i]) && (valid_reg[offset][index * (1<<w) + i]);
+      for(i = 0; i < CACHE_WAY; i = i + 1) begin : comparator
+        assign access_raw[i] = (tag == tag_reg[offset][index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i]);
 			end
 	endgenerate
 	assign access = access_raw & ~(access_raw - 1);
@@ -131,8 +132,8 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 		if(rst) begin
       integer j;
 			integer k;
-			for (j = 0; j < (1<<(m-2)); j = j + 1) begin : init_reg
-				for (k = 0; k < (1 << n); k = k + 1) begin
+			for (j = 0; j < CACHE_WIDTH; j = j + 1) begin : init_reg
+				for (k = 0; k < CACHE_DEPTH; k = k + 1) begin
 					cache_reg[j][k]	<= 0;
 					tag_reg[j][k]		<= 0;
 				end
@@ -142,7 +143,7 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 		else begin
 			if(fencei_i) begin
 				integer f;
-				for (f = 0; f < (1<<(m-2)); f = f + 1) begin : fencei
+				for (f = 0; f < CACHE_WIDTH; f = f + 1) begin : fencei
 					valid_reg[f] <= 0;
 				end
 			end
@@ -158,7 +159,7 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 							burst_araddr <= m_axi_araddr;
 							s_axi_arburst <= 2'b01;
 							if(m_axi_araddr - 32'ha0000000 < 32'h20000000) begin
-								s_axi_arlen <= (1 << (m - 2)) - {6'b0,offset} - 1;
+								s_axi_arlen <= CACHE_WIDTH - {6'b0,offset} - 1;
 							end
 							else begin
 								s_axi_arlen <= 8'h0;
@@ -172,13 +173,13 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 						integer a;
             integer b;
 						for (b = 0; b < (1<<(m-2)); b = b + 1) begin : fifo
-							cache_reg[b][s_index * (1<<w)] <= 0;
-              tag_reg[b][s_index * (1<<w)] <= 0;
-							valid_reg[b][s_index * (1<<w)] <= 0;
-							for (a = 1; a < (1<<w); a = a + 1) begin
-                cache_reg[b][s_index * (1<<w) + a] <= cache_reg[b][s_index * (1<<w) + a - 1];
-                tag_reg[b][s_index * (1<<w) + a] <= tag_reg[b][s_index * (1<<w) + a - 1];
-                valid_reg[b][s_index * (1<<w) + a] <= valid_reg[b][s_index * (1<<w) + a - 1];
+							cache_reg[b][s_index * CACHE_WAY] <= 0;
+              tag_reg[b][s_index * CACHE_WAY] <= 0;
+							valid_reg[b][s_index * CACHE_WAY] <= 0;
+							for (a = 1; a < CACHE_WAY; a = a + 1) begin
+                cache_reg[b][s_index * CACHE_WAY + a] <= cache_reg[b][s_index * CACHE_WAY + a - 1];
+                tag_reg[b][s_index * CACHE_WAY + a] <= tag_reg[b][s_index * CACHE_WAY + a - 1];
+                valid_reg[b][s_index * CACHE_WAY + a] <= valid_reg[b][s_index * CACHE_WAY + a - 1];
               end
             end
 						s_axi_arvalid <= 1'b0;
@@ -186,9 +187,9 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
             burst_counter <= s_offset;
 					end
 					if(s_axi_rready && s_axi_rvalid) begin
-						cache_reg[burst_counter][s_index * (1<<w)] <= s_axi_rdata;
-						tag_reg[burst_counter][s_index * (1<<w)] <= burst_araddr[31 : m+n-w];
-						valid_reg[burst_counter][s_index * (1<<w)] <= 1'b1;
+						cache_reg[burst_counter][s_index * CACHE_WAY] <= s_axi_rdata;
+						tag_reg[burst_counter][s_index * CACHE_WAY] <= burst_araddr[31 : m+n-w];
+						valid_reg[burst_counter][s_index * CACHE_WAY] <= 1'b1;
 						burst_araddr <= burst_araddr + 4;
 						burst_counter <= burst_counter + 1;
 					end
@@ -203,7 +204,7 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 							m_axi_rdata <= s_axi_rdata;
 						end
 						else begin
-							m_axi_rdata <= cache_reg[s_offset][s_index * (1 << w)];
+							m_axi_rdata <= cache_reg[s_offset][s_index * CACHE_WAY];
 						end
 					end
 					if(m_axi_rvalid && m_axi_rready) begin
@@ -215,7 +216,7 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 						m_axi_rvalid <= 1'b1;
 						m_axi_arready <= 1'b0;
 `ifndef YOSYS_STA
-						m_axi_rdata <= cache_reg[offset][index * (2 ** w) + $clog2(access)];
+						m_axi_rdata <= cache_reg[offset][index * CACHE_WAY + $clog2(access)];
 `endif
 						m_axi_rresp  <= 2'b11;
 					//end
