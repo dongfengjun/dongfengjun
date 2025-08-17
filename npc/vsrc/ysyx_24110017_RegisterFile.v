@@ -1,5 +1,5 @@
 //`define YOSYS_STA
-module ysyx_24110017_RegisterFile #(ADDR_WIDTH = 5, DATA_WIDTH = 32) (
+module ysyx_24110017_RegisterFile #(ADDR_WIDTH = 1, DATA_WIDTH = 1) (
   input clk,
   input [DATA_WIDTH-1:0] wdata,
   input [ADDR_WIDTH-1:0] waddr,
