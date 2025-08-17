@@ -1,80 +1,77 @@
 //`define YOSYS_STA
-module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
+module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 	input clk,
 	input rst,
-	input wire fencei_i,
+	input  wire fencei_i,
 	output wire m_axi_awready,
-	input wire m_axi_awvalid,
-	input wire [3:0]m_axi_awid,
-	input wire [31:0]m_axi_awaddr,
-	input wire [7:0]m_axi_awlen,
-	input wire [2:0]m_axi_awsize,
-	input wire [1:0]m_axi_awburst, 
+	input  wire m_axi_awvalid,
+	input  wire [ 3:0]m_axi_awid,
+	input  wire [31:0]m_axi_awaddr,
+	input  wire [ 7:0]m_axi_awlen,
+	input  wire [ 2:0]m_axi_awsize,
+	input  wire [ 1:0]m_axi_awburst, 
 	output wire m_axi_wready,
-	input wire m_axi_wvalid,
-	input wire [31:0]m_axi_wdata,
-	input wire [3:0]m_axi_wstrb,
-	input wire m_axi_wlast,
-	input wire m_axi_bready,
+	input  wire m_axi_wvalid,
+	input  wire [31:0]m_axi_wdata,
+	input  wire [ 3:0]m_axi_wstrb,
+	input  wire m_axi_wlast,
+	input  wire m_axi_bready,
 	output wire m_axi_bvalid,
-	output wire [3:0]m_axi_bid,
-	output wire [1:0]m_axi_bresp,
+	output wire [ 3:0]m_axi_bid,
+	output wire [ 1:0]m_axi_bresp,
 
-	output reg m_axi_arready,
-	input wire m_axi_arvalid,
-	input wire [3:0]m_axi_arid,
-	input wire [31:0]m_axi_araddr,
-	input wire [7:0]m_axi_arlen,
-	input wire [2:0]m_axi_arsize,
-	input wire [1:0]m_axi_arburst,
-	input wire m_axi_rready,
-	output reg m_axi_rvalid,
-	output wire [3:0]m_axi_rid,
-	output reg [31:0]m_axi_rdata,
-	output wire [1:0]m_axi_rresp,
+	output reg  m_axi_arready,
+	input  wire m_axi_arvalid,
+	input  wire [ 3:0]m_axi_arid,
+	input  wire [31:0]m_axi_araddr,
+	input  wire [ 7:0]m_axi_arlen,
+	input  wire [ 2:0]m_axi_arsize,
+	input  wire [ 1:0]m_axi_arburst,
+	input  wire m_axi_rready,
+	output reg  m_axi_rvalid,
+	output wire [ 3:0]m_axi_rid,
+	output reg  [31:0]m_axi_rdata,
+	output wire [ 1:0]m_axi_rresp,
 	output wire m_axi_rlast,
 
-	input wire s_axi_awready,
+	input  wire s_axi_awready,
 	output wire s_axi_awvalid,
-	output wire [3:0]s_axi_awid,
+	output wire [ 3:0]s_axi_awid,
 	output wire [31:0]s_axi_awaddr,
-	output wire [7:0]s_axi_awlen,
-	output wire [2:0]s_axi_awsize,
-	output wire [1:0]s_axi_awburst,
-	input wire s_axi_wready,
+	output wire [ 7:0]s_axi_awlen,
+	output wire [ 2:0]s_axi_awsize,
+	output wire [ 1:0]s_axi_awburst,
+	input  wire s_axi_wready,
 	output wire s_axi_wvalid,
 	output wire [31:0]s_axi_wdata,
-	output wire [3:0]s_axi_wstrb,
+	output wire [ 3:0]s_axi_wstrb,
 	output wire s_axi_wlast,
 	output wire s_axi_bready,
-	input wire s_axi_bvalid,
-	input wire [3:0]s_axi_bid,
-	input wire [1:0]s_axi_bresp,
+	input  wire s_axi_bvalid,
+	input  wire [ 3:0]s_axi_bid,
+	input  wire [ 1:0]s_axi_bresp,
 
-	input wire s_axi_arready,
-	output reg s_axi_arvalid,
-	output wire [3:0]s_axi_arid,
-	output reg [31:0]s_axi_araddr,
-	output reg [7:0]s_axi_arlen,
-	output reg [2:0]s_axi_arsize,
-	output reg [1:0]s_axi_arburst,
-	output reg s_axi_rready,
-	input wire s_axi_rvalid,
-	input wire [3:0]s_axi_rid,
-	input wire [31:0]s_axi_rdata,
-	input wire [1:0]s_axi_rresp,
-	input wire s_axi_rlast
+	input  wire s_axi_arready,
+	output reg  s_axi_arvalid,
+	output wire [ 3:0]s_axi_arid,
+	output reg  [31:0]s_axi_araddr,
+	output reg  [ 7:0]s_axi_arlen,
+	output reg  [ 2:0]s_axi_arsize,
+	output reg  [ 1:0]s_axi_arburst,
+	output reg  s_axi_rready,
+	input wire  s_axi_rvalid,
+	input wire  [ 3:0]s_axi_rid,
+	input wire  [31:0]s_axi_rdata,
+	input wire  [ 1:0]s_axi_rresp,
+	input wire  s_axi_rlast
 );
 
-//	wire[127:0]cache_test0,cache_test1,cache_test2,cache_test3;
-//	assign cache_test0 = {cache_reg[0][0],cache_reg[1][0],cache_reg[2][0],cache_reg[3][0]};
-//	assign cache_test1 = {cache_reg[0][1],cache_reg[1][1],cache_reg[2][1],cache_reg[3][1]};
-//	assign cache_test2 = {cache_reg[0][2],cache_reg[1][2],cache_reg[2][2],cache_reg[3][2]};
-//	assign cache_test3 = {cache_reg[0][3],cache_reg[1][3],cache_reg[2][3],cache_reg[3][3]};
+	localparam CACHE_WIDTH = (1 << (m-2));
+	localparam CACHE_DEPTH = (1 << n);
 
-	reg [31:0] cache_reg [(1<<(m-2))-1 : 0][(1<<n)-1 : 0];
-  reg [31-m-n+w : 0] tag_reg [(1<<(m-2))-1 : 0][(1<<n)-1 : 0];
-  reg [(1<<n)-1 : 0] valid_reg[(1<<(m-2))-1 : 0];
+	reg [31:0] cache_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
+  reg [31-m-n+w : 0] tag_reg [CACHE_WIDTH - 1 : 0][DEPTH_WIDTH - 1 : 0];
+  reg [CACHE_DEPTH - 1 : 0] valid_reg[CACHE_WIDTH - 1 : 0];
 	wire [31-m-n+w : 0]tag = m_axi_araddr[31 : m+n-w];
   wire [n-1-w : 0]index = m_axi_araddr[m+n-w-1 : m];
   wire [m-3 : 0]offset = m_axi_araddr[m-1 : 2];
