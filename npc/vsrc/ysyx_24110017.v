@@ -66,6 +66,8 @@ module ysyx_24110017(
 /***PCU***/
 wire [31:0] pc;
 wire pc_valid;
+/***BTB***/
+wire [31:0]snpc;
 /***IFU***/
 wire [31:0] inst_if,pc_if;
 wire if_valid,if_ready;
@@ -89,6 +91,8 @@ wire icache_axi_awvalid,icache_axi_awready,icache_axi_wvalid,icache_axi_wready,i
 /***IDU***/
 wire [31:0]inst_id;//difftest
 wire id_valid,id_ready;
+wire [31:0]prepc;
+wire prepc_en;
 wire [4:0] rs1,rs2;
 wire [31:0] pc_id,imm_id;
 wire [6:0] op_id;
@@ -159,10 +163,11 @@ wire [31:0]mvendorid,marchid; //ID
 
 
 ysyx_24110017_PCU PCU(clock,reset,isCHazard,
-		pc,dnpc_ex,
+		pc,dnpc_ex,snpc,
 		pc_valid,
 		if_ready
 );
+ysyx_24110017_BTB #(3,2) BTB(clock,reset,pc,snpc,prepc,pc_if,prepc_en);
 ysyx_24110017_IFU IFU(clock,reset,isCHazard,
 		pc_valid,if_ready,if_valid,id_ready,
 		pc,pc_if,inst_if,
@@ -192,6 +197,7 @@ ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei_id, //w < n
 );
 ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 		inst_id,//difftest
+		prepc,prepc_en,
 		rs1,rs2,r1,r2,
 		mepc,mstatus,mcause,mtvec,
 		if_valid,id_ready,id_valid,ex_ready,
@@ -334,6 +340,8 @@ function int performance_counter(int i);
 															 : (i == 13) ? {31'b0,if_valid}
 															 : (i == 14) ? {25'b0,inst_ls[6:0]}
 															 : (i == 15) ? {31'b0,(ex_valid && ls_ready && inst_ls[6:0] == 7'b1100011) && isCHazard}
+															 : (i == 16) ? {31'b0,(ex_valid && ls_ready && inst_ls[6:0] == 7'b1101111) && isCHazard}
+															 : (i == 17) ? {31'b0,(ex_valid && ls_ready && inst_ls[6:0] == 7'b1100111) && isCHazard}
 															 : 32'b0;
   end
 endfunction

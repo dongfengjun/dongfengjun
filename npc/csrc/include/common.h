@@ -28,15 +28,15 @@ typedef uint16_t ioaddr_t;
 #define CONFIG_DUMP_WAVE 1//是否保存波形（内存不足）
 //#define CONFIG_DUMP_WAVE_SIM 1//只保存状态
 
-//#define CONFIG_TRACE 1
-	//#ifdef CONFIG_TRACE
-		//#define CONFIG_ITRACE 1
-			//#define CONFIG_ITRACE_COND 1
+#define CONFIG_TRACE 1
+	#ifdef CONFIG_TRACE
+		#define CONFIG_ITRACE 1
+			#define CONFIG_ITRACE_COND 1
 			//#define CONFIG_FTRACE 1
 			//#define CONFIG_MTRACE 1 
 		//#define CONFIG_WATCHPOINT 1
-	//#endif
-#define CONFIG_DIFFTEST 1
+	#endif
+//#define CONFIG_DIFFTEST 1
 
 #define CONFIG_MBASE 0x30000000//IM
 #define CONFIG_MSIZE 0x10000000
@@ -50,7 +50,7 @@ typedef uint16_t ioaddr_t;
 
 
 //main
-void cpu_exec(int64_t n);
+void cpu_exec(int n);
 void isa_parser_elf(char *filename);
 typedef struct {
 	vaddr_t mepc;
