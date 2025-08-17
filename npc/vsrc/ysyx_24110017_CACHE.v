@@ -70,7 +70,7 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 	localparam CACHE_DEPTH = (1 << n);
 
 	reg [31:0] cache_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
-  reg [31-m-n+w : 0] tag_reg [CACHE_WIDTH - 1 : 0][DEPTH_WIDTH - 1 : 0];
+  reg [31-m-n+w : 0] tag_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
   reg [CACHE_DEPTH - 1 : 0] valid_reg[CACHE_WIDTH - 1 : 0];
 	wire [31-m-n+w : 0]tag = m_axi_araddr[31 : m+n-w];
   wire [n-1-w : 0]index = m_axi_araddr[m+n-w-1 : m];
