@@ -1,5 +1,5 @@
 //`define YOSYS_STA
-module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
+module ysyx_24110017_CACHE #(n = 2, m = 4, w = 2) (
 	input clk,
 	input rst,
 	input  wire fencei_i,
@@ -95,33 +95,14 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
   localparam RETURN = 2'b10;
   reg [1:0]state;
 
-  always @(posedge clk or posedge rst) begin
-    if(rst) state <= IDLE;
-    else begin
-      case(state)
-        IDLE   : begin
-          if(m_axi_arvalid && m_axi_arready) begin
-						if(access != 0) begin
-							state <= RETURN;
-						end
-						else begin
-							state <= TRANS;
-						end
-					end
-				end
-				TRANS  : begin
-					if(m_axi_rready && m_axi_rvalid) begin
-						state <= IDLE;
-					end
-				end
-				RETURN : begin
-					if(m_axi_rready && m_axi_rvalid) begin
-						state <= IDLE;
-					end
-				end
-				default: begin
-					state <= state;
-				end
+	always @(posedge clk or posedge rst) begin
+		if(rst) state <= IDLE;
+		else begin
+			case(state)
+				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && (access != 0) ? RETURN : (m_axi_arvalid && m_axi_arready) && (access == 0) ? TRANS : state;
+				TRANS:   state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
+        RETURN:	 state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
+        default: state <= state;
 			endcase
 		end
 	end
@@ -131,12 +112,7 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 	always @(posedge clk or posedge rst) begin
 		if(rst) begin
       integer j;
-			//integer k;
 			for (j = 0; j < CACHE_WIDTH; j = j + 1) begin : init_reg
-				//for (k = 0; k < CACHE_DEPTH; k = k + 1) begin
-					//cache_reg[j][k]	<= 0;
-					//tag_reg[j][k]		<= 0;
-				//end
 				valid_reg[j]      <= 0;
 			end
 		end
@@ -149,7 +125,7 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 			end
 			else begin
 				case(state)
-				IDLE	 : begin
+				IDLE: begin
 					m_axi_arready <= 1'b1;
 					if(access == 0) begin
 						if(m_axi_arvalid && m_axi_arready) begin
@@ -168,7 +144,7 @@ module ysyx_24110017_CACHE #(n = 3, m = 4, w = 3) (
 						end
 					end
 				end
-				TRANS  : begin
+				TRANS: begin
 					if(s_axi_arvalid && s_axi_arready) begin
 						integer a;
             integer b;
