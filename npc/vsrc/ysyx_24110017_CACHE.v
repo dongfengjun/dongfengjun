@@ -84,10 +84,10 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 2) (
 	
 	always @(*) begin
 		casez(access)
-			4'1zzz: hit = 3;
-			4'01zz: hit = 2;
-			4'001z: hit = 1;
-			4'0001: hit = 0;
+			4'b1zzz: hit = 3;
+			4'b01zz: hit = 2;
+			4'b001z: hit = 1;
+			4'b0001: hit = 0;
 		default:
 			hit = 0;
 		endcase
