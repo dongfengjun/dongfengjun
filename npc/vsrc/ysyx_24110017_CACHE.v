@@ -1,5 +1,5 @@
-//`define YOSYS_STA
-module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
+`define YOSYS_STA
+module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	input clk,
 	input rst,
 	input  wire fencei_i,
