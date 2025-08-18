@@ -1,4 +1,3 @@
-//`define YOSYS_STA
 module ysyx_24110017_CACHE #(n = 2, m = 4, w = 2) (
 	input clk,
 	input rst,
@@ -79,16 +78,27 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 2) (
 	wire [31-m-n+w : 0]				 s_tag		 = s_axi_araddr[31 : m+n-w];
   wire [n-w-1 : 0]					 s_index   = s_axi_araddr[m+n-w-1 : m];
   wire [m-3 : 0]						 s_offset  = s_axi_araddr[m-1 : 2];
-  wire [CACHE_WAY - 1 : 0]access;
-	wire [CACHE_WAY - 1 : 0]access_raw;
+ 
+	wire [CACHE_WAY - 1 : 0]access;
+	wire [3:0]hit;
+	
+	always @(*) begin
+		casez(access)
+			4'1zzz: hit = 3;
+			4'01zz: hit = 2;
+			4'001z: hit = 1;
+			4'0001: hit = 0;
+		default:
+			hit = 0;
+		endcase
+	end
 
 	generate 
     genvar i; 
       for(i = 0; i < CACHE_WAY; i = i + 1) begin : comparator
-        assign access_raw[i] = (tag == tag_reg[offset][index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i]);
+        assign access[i] = (tag == tag_reg[offset][index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i]);
 			end
 	endgenerate
-	assign access = access_raw & ~(access_raw - 1);
 
 	localparam IDLE = 2'b00;
   localparam TRANS = 2'b01;
@@ -188,14 +198,10 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 2) (
 					end
 				end
 				RETURN : begin
-					//if(m_axi_arvalid && m_axi_arready) begin
-						m_axi_rvalid <= 1'b1;
-						m_axi_arready <= 1'b0;
-`ifndef YOSYS_STA
-						m_axi_rdata <= cache_reg[offset][index * CACHE_WAY + $clog2(access)];
-`endif
-						m_axi_rresp  <= 2'b11;
-					//end
+					m_axi_rvalid <= 1'b1;
+					m_axi_arready <= 1'b0;
+					m_axi_rdata <= cache_reg[offset][index * CACHE_WAY + hit];
+					m_axi_rresp  <= 2'b11;
 					if(m_axi_rvalid && m_axi_rready) begin
 						m_axi_rvalid <= 0;
 					end		
