@@ -120,7 +120,7 @@ always@(posedge clk or posedge rst) begin
 					csr_o       <= csr;
 					mepc_o      <= mepc_i;
 					mtvec_o     <= mtvec_i;
-					csrs_wen_o  <= csrs_wen_i;
+					csrs_wen_o  <= csrs_wen;
 					fencei_o		<= fencei;
 				end
 			end
@@ -215,7 +215,7 @@ wire[31:0] csr = (op == 7'b1110011 && imm == 32'd833) ? mepc_i
 	: (op == 7'b1110011 && imm == 32'd834) ? mcause_i
 	: (op == 7'b1110011 && imm == 32'd773) ? mtvec_i
 	: 32'b0;
-wire csrs_wen = ((op == 7'b1110011 && imm == 32'd833) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 4'b0001 : (op == 7'b1110011 && imm == 32'd768) ? 4'b0010 : (op == 7'b1110011 && imm == 32'd834 || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 4'b0100 : (op == 7'b1110011 && imm == 32'd773) ? 4'b1000 : 4'b0;
+wire [3:0]csrs_wen = ((op == 7'b1110011 && imm == 32'd833) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 4'b0001 : (op == 7'b1110011 && imm == 32'd768) ? 4'b0010 : (op == 7'b1110011 && imm == 32'd834 || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 4'b0100 : (op == 7'b1110011 && imm == 32'd773) ? 4'b1000 : 4'b0;
 
 wire fencei = (inst_i == 32'b00000000000000000001000000001111);
 
