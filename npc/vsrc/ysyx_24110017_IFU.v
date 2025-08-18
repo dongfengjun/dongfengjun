@@ -50,8 +50,9 @@ assign if_ready_o = (state == IDLE);
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
-always @(posedge clk) begin
-	if(rst || isCHazard) state <= IDLE;
+always @(posedge clk or posedge rst) begin
+	if(rst) state <= IDLE;
+	else if(isCHazard) state <= IDLE;
 	else begin
 		case(state)
 			IDLE: state <= (pc_valid_i && if_ready_o) ? WAIT : state;
@@ -61,7 +62,7 @@ always @(posedge clk) begin
 end
 
 reg isCHazard_reg;
-always @(posedge clk) begin
+always @(posedge clk or posedge rst) begin
 	if(rst) isCHazard_reg <= 1'b0;
 	else begin
 		if(isCHazard && ((axi_state != AXI_IDLE) && !(if_axi_rvalid_i && if_axi_rready_o))) begin
@@ -73,8 +74,9 @@ always @(posedge clk) begin
 	end
 end
 
-always @(posedge clk) begin
-	if(rst || isCHazard) if_valid_o <= 1'b0;
+always @(posedge clk or posedge rst) begin
+	if(rst) if_valid_o <= 1'b0;
+	else if(isCHazard) if_valid_o <= 1'b0;
 	else begin
 		if(if_axi_rvalid_i && if_axi_rready_o && !isCHazard_reg) begin
 			if_valid_o <= 1'b1;
@@ -85,10 +87,14 @@ always @(posedge clk) begin
 	end
 end
 
-always @(posedge clk) begin
-	if(rst || isCHazard) begin
+always @(posedge clk or posedge rst) begin
+	if(rst) begin
 		pc_o	 <= 32'h0;
 		inst_o <= 32'h0;
+	end
+	else if(isCHazard) begin
+		pc_o   <= 32'h0;
+    inst_o <= 32'h0;
 	end
   else begin
 		case(state)
@@ -120,8 +126,9 @@ parameter AXI_IDLE = 1'b0,AXI_FETCH = 1'b1;
 reg axi_state;
 reg [31:0] axi_rdata_reg;
 
-always @(posedge clk) begin
-	if(rst || isCHazard) axi_state <= AXI_IDLE;
+always @(posedge clk or posedge rst) begin
+	if(rst) axi_state <= AXI_IDLE;
+	else if(isCHazard) axi_state <= AXI_IDLE;
 	else begin
 		case(axi_state)
 			AXI_IDLE  : axi_state <= (pc_valid_i && if_ready_o) ? AXI_FETCH : axi_state;
@@ -130,36 +137,45 @@ always @(posedge clk) begin
 	end
 end
 
-always @(posedge clk) begin
-        if(rst || isCHazard) begin
+always @(posedge clk or posedge rst) begin
+  if(rst) begin
+		if_axi_arvalid_o <= 1'b0;
+		if_axi_rready_o  <= 1'b1;
+		if_axi_arid_o		 <= 4'b0;
+		if_axi_araddr_o  <= 32'h0;
+		if_axi_arlen_o	 <= 8'b0;
+		if_axi_arsize_o  <= 3'b0;
+		if_axi_arburst_o <= 2'b0;
+  end 
+	else if(isCHazard) begin
+    if_axi_arvalid_o <= 1'b0;
+    if_axi_rready_o  <= 1'b1;
+    if_axi_arid_o    <= 4'b0;
+    if_axi_araddr_o  <= 32'h0;
+    if_axi_arlen_o   <= 8'b0;
+    if_axi_arsize_o  <= 3'b0;
+    if_axi_arburst_o <= 2'b0;
+  end
+	else begin
+    case (axi_state)
+      AXI_IDLE: begin
+        if(pc_valid_i && if_ready_o) begin
+					if_axi_arvalid_o <= 1'b1;
+					if_axi_araddr_o  <= pc_i;
+        end
+      end
+      AXI_FETCH: begin
+				if(if_axi_arvalid_o && if_axi_arready_i) begin
 					if_axi_arvalid_o <= 1'b0;
 					if_axi_rready_o  <= 1'b1;
-					if_axi_arid_o		 <= 4'b0;
-					if_axi_araddr_o  <= 32'h0;
-					if_axi_arlen_o	 <= 8'b0;
-					if_axi_arsize_o  <= 3'b0;
-					if_axi_arburst_o <= 2'b0;
-        end 
-				else begin
-            case (axi_state)
-                AXI_IDLE: begin
-                    if(pc_valid_i && if_ready_o) begin
-											if_axi_arvalid_o <= 1'b1;
-											if_axi_araddr_o  <= pc_i;
-                    end
-                end
-                AXI_FETCH: begin
-                    if(if_axi_arvalid_o && if_axi_arready_i) begin
-                      if_axi_arvalid_o <= 1'b0;
-											if_axi_rready_o  <= 1'b1;
-										end
-                    if(if_axi_rvalid_i && if_axi_rready_o) begin
-                      if_axi_rready_o <= 1'b0;
-											axi_rdata_reg   <= if_axi_rdata_i;
-                    end
-                end
-            endcase
-        end
-    end
+				end
+        if(if_axi_rvalid_i && if_axi_rready_o) begin
+					if_axi_rready_o <= 1'b0;
+					axi_rdata_reg   <= if_axi_rdata_i;
+				end
+      end
+    endcase
+  end
+end
 
 endmodule

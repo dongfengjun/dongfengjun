@@ -45,8 +45,9 @@ module ysyx_24110017_IDU(
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
-always @(posedge clk) begin
-	if(rst || isCHazard) state <= IDLE;
+always @(posedge clk or posedge rst) begin
+	if(rst) state <= IDLE;
+	else if(isCHazard) state <= IDLE;
   else begin
 		case (state)
 			IDLE: state <= (if_valid_i && id_ready_o) ? WAIT : state;
@@ -59,8 +60,8 @@ assign id_valid_o = (state == WAIT) && (!isRAW);
 assign id_ready_o = (state == IDLE) && (!isRAW);
 
 
-always@(posedge clk) begin
-	if(rst || isCHazard) begin
+always@(posedge clk or posedge rst) begin
+	if(rst) begin
 		inst_o			<= 32'h0;
 		pc_o				<= 32'h0;
 		imm_o				<= 32'h0;
@@ -82,6 +83,28 @@ always@(posedge clk) begin
 		mtvec_wen_o		<= 1'b0;
 		fencei_o		<= 1'b0;
 	end
+	else if(isCHazard) begin
+    inst_o      <= 32'h0;
+    pc_o        <= 32'h0;
+    imm_o       <= 32'h0;
+    op_o        <= 7'b0;
+    funct3_o    <= 3'b0;
+    rd_o        <= 5'b0;
+    gpr_wen_o   <= 1'b0;
+    alu_sel_o   <= 4'b0;
+    a_o         <= 32'h0;
+    b_o         <= 32'h0;
+    r1_o        <= 32'h0;
+    r2_o        <= 32'h0;
+    csr_o       <= 32'h0;
+    mepc_o      <= 32'h0;
+    mtvec_o     <= 32'h0;
+    mepc_wen_o    <= 1'b0;
+		mstatus_wen_o <= 1'b0;
+		mcause_wen_o  <= 1'b0;
+    mtvec_wen_o   <= 1'b0;
+    fencei_o    <= 1'b0;
+  end
 	else begin
 		case(state)
 			IDLE: begin
@@ -123,30 +146,31 @@ wire [2:0]funct3;
 wire [31:0]immI,immU,immS,immB,immJ,imm;
 wire [6:0]funct7; //R
 wire [4:0]shamt;  //I shamt
- 
-assign op = inst_i[6:0];
-assign rd = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 
- || op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111
- || op == 7'b1110011 || op == 7'b0110011) ? inst_i[11:7] : 5'b0;
-assign funct3 = inst_i[14:12];
-assign rs1_o = (op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011	//I
- || op == 7'b1100011	//B
- || op == 7'b0100011	//S
- || op == 7'b0110011) ? //R
- inst_i[19:15] : 5'b0;
-assign rs2_o = (op == 7'b1100011  //B
- || op == 7'b0100011  //S
- || op == 7'b0110011) ? inst_i[24:20] //R
- : (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? 5'd15 //ecall
+assign op = (state == WAIT) ? inst_i[6:0] : 7'b0;
+wire ALUR		= (op == 7'b0110011);
+wire ALUI		= (op == 7'b0010011);
+wire LOAD		= (op == 7'b0000011);
+wire STORE  = (op == 7'b0100011);
+wire BRANCH = (op == 7'b1100011);
+wire JAL		= (op == 7'b1101111);
+wire JALR		= (op == 7'b1100111);
+wire LUI		= (op == 7'b0110111);
+wire AUIPC	= (op == 7'b0010111);
+wire FENCE	= (op == 7'b0001111);
+wire SYSTEM = (op == 7'b1110011);
+assign rd = ((state == WAIT) && (LUI || AUIPC || JAL || JALR || LOAD || ALUI || ALUR || SYSTEM)) ? inst_i[11:7] : 5'b0;
+assign funct3 = (state == WAIT) ? inst_i[14:12] : 3'b0;
+assign rs1_o = (JALR || LOAD || ALUI || SYSTEM || BRANCH || STORE || ALUR) ? inst_i[19:15] : 5'b0;
+assign rs2_o = (BRANCH || STORE || ALUR) ? inst_i[24:20] : (SYSTEM && (inst_i[31:20] == 12'd0) && funct3 == 3'b000) ? 5'd15 //ecall
  : 5'b0;
-assign funct7 = (op == 7'b0110011 || op == 7'b0010011) ? inst_i[31:25] : 7'b0;
-assign immI = {{20{inst_i[31]}},inst_i[31:20]};	//SEXTIimmediate
-assign shamt = {inst_i[24:20]};	//I shamt
-assign immU = {inst_i[31:12],{12{1'b0}}};	//UEXTUimm
-assign immS = {{20{inst_i[31]}}, inst_i[31:25], inst_i[11:7]};	//SEXTSimm
-assign immB = {{19{inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};	//SEXTBimm
-assign immJ = {{11{inst_i[31]}}, inst_i[31], inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};	//SEXTJimm
+assign funct7 = (state == WAIT && ALUR) ? inst_i[31:25] : 7'b0;
 
+assign immI = (state == WAIT)  ? {{20{inst_i[31]}},inst_i[31:20]} : 32'b0; //SEXTIimmediate
+assign shamt = (state == WAIT) ? {inst_i[24:20]} : 32'b0;	//I shamt
+assign immU = (state == WAIT)  ? {inst_i[31:12],{12{1'b0}}} : 32'b0; //UEXTUimm
+assign immS = (state == WAIT)  ? {{20{inst_i[31]}}, inst_i[31:25], inst_i[11:7]} : 32'b0; //SEXTSimm
+assign immB = (state == WAIT)  ? {{19{inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0} : 32'b0; //SEXTBimm
+assign immJ = (state == WAIT)  ? {{11{inst_i[31]}}, inst_i[31], inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0} : 32'b0; //SEXTJimm
 assign imm = (op == 7'b0110111 || op == 7'b0010111) ? immU
  : (op == 7'b1101111) ? immJ
  : (op == 7'b1100011) ? immB
