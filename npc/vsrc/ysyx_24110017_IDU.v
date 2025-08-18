@@ -178,15 +178,14 @@ wire gpr_wen = (state == WAIT) && (LUI || AUIPC || JAL || JALR || LOAD || ALUI |
 /***ALU***/
 wire [3:0]alu_sel;
 wire [31:0]a,b;
-assign a = (ALUI && (funct3 == 3'b000 || funct3 == 3'b001 || funct3 == 3'b011 || funct3 == 3'b100 || funct3 == 3'b101 || funct3 == 3'b110 || funct3 == 3'b111) || (op == 7'b0110011) && ((funct3 == 3'b000 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0100000) || (funct3 == 3'b001 && funct7 == 7'b0000000) || (funct3 == 3'b011 && funct7 == 7'b0000000) || (funct3 == 3'b100 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0100000) || (funct3 == 3'b110 && funct7 == 7'b0000000) || (funct3 == 3'b111 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? r1_i 
-	: ((op == 7'b0010011 && funct3 == 3'b010) || ((op == 7'b0110011) && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b001 && funct7 == 7'b0000001) || (funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b110 && funct7 == 7'b0000001)))) ? $signed(r1_i)
-	: 32'b0;
-assign b = ((op == 7'b0010011) && (funct3 == 3'b000 || funct3 == 3'b001 || funct3 == 3'b011 || funct3 == 3'b100 || funct3 == 3'b110 || funct3 == 3'b111)) ? imm
-	: ((op == 7'b0010011) && (funct3 == 3'b010)) ? $signed(imm) 
-	: ((op == 7'b0010011) && (funct3 == 3'b001 || funct3 == 3'b101)) ? {27'b0,shamt} 
-	: ((op == 7'b0110011) && ((funct3 == 3'b000 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0100000) || (funct3 == 3'b011 && funct7 == 7'b0000000) || (funct3 == 3'b100 && funct7 == 7'b0000000) || (funct3 == 3'b110 && funct7 == 7'b0000000) || (funct3 == 3'b111 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? r2_i
-	: ((op == 7'b0110011 && ((funct3 == 3'b001 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0100000)))) ? {27'b0,r2_i[4:0]}
-	: ((op == 7'b0110011) && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b001 && funct7 == 7'b0000001) || (funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b110 && funct7 == 7'b0000001))) ? $signed(r2_i)
+assign a = ((state == WAIT) && ALUI && (funct3 == 3'b000 || funct3 == 3'b001 || funct3 == 3'b011 || funct3 == 3'b100 || funct3 == 3'b101 || funct3 == 3'b110 || funct3 == 3'b111) || (ALUR && ((funct3 == 3'b000 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0100000) || (funct3 == 3'b001 && funct7 == 7'b0000000) || (funct3 == 3'b011 && funct7 == 7'b0000000) || (funct3 == 3'b100 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0100000) || (funct3 == 3'b110 && funct7 == 7'b0000000) || (funct3 == 3'b111 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001)))) ? r1_i
+ : ((state == WAIT) && ((ALUI && funct3 == 3'b010) || (ALUR && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b001 && funct7 == 7'b0000001) || (funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b110 && funct7 == 7'b0000001))))) ? $signed(r1_i) : 32'b0;
+assign b = ((state == WAIT) && (ALUI && (funct3 == 3'b000 || funct3 == 3'b001 || funct3 == 3'b011 || funct3 == 3'b100 || funct3 == 3'b110 || funct3 == 3'b111))) ? imm
+	: ((state == WAIT) && ALUI && (funct3 == 3'b010)) ? $signed(imm) 
+	: ((state == WAIT) && ALUI && (funct3 == 3'b001 || funct3 == 3'b101)) ? {27'b0,shamt} 
+	: ((state == WAIT) && (ALUR && ((funct3 == 3'b000 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0100000) || (funct3 == 3'b011 && funct7 == 7'b0000000) || (funct3 == 3'b100 && funct7 == 7'b0000000) || (funct3 == 3'b110 && funct7 == 7'b0000000) || (funct3 == 3'b111 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001)))) ? r2_i
+	: ((state == WAIT) && (ALUR && ((funct3 == 3'b001 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0100000)))) ? {27'b0,r2_i[4:0]}
+	: ((state == WAIT) && ALUR && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b001 && funct7 == 7'b0000001) || (funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b110 && funct7 == 7'b0000001))) ? $signed(r2_i)
 	: 32'b0;
 localparam ADD  = 4'b0000;
 localparam SUB  = 4'b0001;
