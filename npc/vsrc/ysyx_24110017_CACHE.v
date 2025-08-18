@@ -1,3 +1,4 @@
+`define YOSYS_STA
 module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	input clk,
 	input rst,
@@ -85,8 +86,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	generate 
     genvar i; 
       for(i = 0; i < CACHE_WAY; i = i + 1) begin : comparator
-        assign access[i] = (tag == tag_reg[offset][index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i]);
-				assign hit = i;
+        assign access = ((tag == tag_reg[offset][index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i])) ? i : {CACHE_WAY{1'bz}};
 			end
 	endgenerate
 
