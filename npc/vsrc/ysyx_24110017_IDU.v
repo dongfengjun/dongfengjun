@@ -171,7 +171,7 @@ assign immU = (state == WAIT)  ? {inst_i[31:12],{12{1'b0}}} : 32'b0; //UEXTUimm
 assign immS = (state == WAIT)  ? {{20{inst_i[31]}}, inst_i[31:25], inst_i[11:7]} : 32'b0; //SEXTSimm
 assign immB = (state == WAIT)  ? {{19{inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0} : 32'b0; //SEXTBimm
 assign immJ = (state == WAIT)  ? {{11{inst_i[31]}}, inst_i[31], inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0} : 32'b0; //SEXTJimm
-assign imm = (LUI && AUIPC) ? immU : (JAL) ? immJ : (BRANCH) ? immB : (STORE) ? immS : (JALR || LOAD || ALUI || SYSTEM) ? immI : 32'b0;
+assign imm = (LUI || AUIPC) ? immU : (JAL) ? immJ : (BRANCH) ? immB : (STORE) ? immS : (JALR || LOAD || ALUI || SYSTEM) ? immI : 32'b0;
 
 wire gpr_wen = (state == WAIT) && (LUI || AUIPC || JAL || JALR || LOAD || ALUI || ALUR || SYSTEM);
 
