@@ -120,7 +120,7 @@ always@(posedge clk or posedge rst) begin
 					csr_o       <= csr;
 					mepc_o      <= mepc_i;
 					mtvec_o     <= mtvec_i;
-					csrs_wen_o  <= csrs_wen;
+					csrs_wen_o  <= csrs_wen_i;
 					fencei_o		<= fencei;
 				end
 			end
