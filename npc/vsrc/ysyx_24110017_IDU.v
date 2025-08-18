@@ -215,20 +215,20 @@ assign alu_sel = (state == WAIT) ?
 									 (ALUR && ((funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001))) ? DIV :
 									 (ALUR && ((funct3 == 3'b110 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? REM : 4'b1111) : 4'b1111;
 
-wire[31:0] csr = (SYSTEM && imm == 32'd833) ? mepc_i
-	: (SYSTEM && imm == 32'd768) ? mstatus_i
-	: (SYSTEM && imm == 32'd834) ? mcause_i
-	: (SYSTEM && imm == 32'd773) ? mtvec_i
+wire[31:0] csr = ((state == WAIT) && SYSTEM && imm == 32'd833) ? mepc_i
+	: ((state == WAIT) && SYSTEM && imm == 32'd768) ? mstatus_i
+	: ((state == WAIT) && SYSTEM && imm == 32'd834) ? mcause_i
+	: ((state == WAIT) && SYSTEM && imm == 32'd773) ? mtvec_i
 	: 32'b0;
-wire mepc_wen = ((SYSTEM && imm == 32'd833) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
-wire mstatus_wen = (SYSTEM && imm == 32'd768) ? 1'b1 : 1'b0;
-wire mcause_wen = (SYSTEM && imm == 32'd834 || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
-wire mtvec_wen = (SYSTEM && imm == 32'd773) ? 1'b1 : 1'b0;
+wire mepc_wen		 = ((state == WAIT) && ((SYSTEM && imm == 32'd833) || (SYSTEM && imm == 32'd0 && funct3 == 3'b000))) ? 1'b1 : 1'b0;
+wire mstatus_wen = ((state == WAIT) && (SYSTEM && imm == 32'd768)) ? 1'b1 : 1'b0;
+wire mcause_wen  = ((state == WAIT) && (SYSTEM && imm == 32'd834 || (SYSTEM && imm == 32'd0 && funct3 == 3'b000))) ? 1'b1 : 1'b0;
+wire mtvec_wen	 = ((state == WAIT) && (SYSTEM && imm == 32'd773)) ? 1'b1 : 1'b0;
 
 wire fencei = (inst_i == 32'b00000000000000000001000000001111);
 
 //静态分支预测
-assign prepc_en_o = (BRANCH && inst_i[31]) || (op == 7'b1101111);
-assign prepc_o = ((BRANCH && inst_i[31]) || (op == 7'b1101111)) ? pc_i + imm : 32'h0;
+assign prepc_en_o = (BRANCH && inst_i[31]) || (JAL);
+assign prepc_o = ((BRANCH && inst_i[31]) || (op == JAL)) ? pc_i + imm : 32'h0;
 
 endmodule
