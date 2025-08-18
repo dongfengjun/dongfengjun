@@ -80,7 +80,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 2) (
   wire [m-3 : 0]						 s_offset  = s_axi_araddr[m-1 : 2];
  
 	wire [CACHE_WAY - 1 : 0]access;
-	wire [3:0]hit;
+	reg [3:0]hit;
 	
 	always @(*) begin
 		casez(access)
