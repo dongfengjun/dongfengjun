@@ -80,21 +80,13 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
   wire [m-3 : 0]						 s_offset  = s_axi_araddr[m-1 : 2];
  
 	wire [CACHE_WAY - 1 : 0]access;
-	reg [3:0]hit;
-	
-	always @(*) begin
-		casez(access)
-			2'b1z: hit = 1;
-			2'b01: hit = 0;
-		default:
-			hit = 0;
-		endcase
-	end
+	wire [CACHE_WAY - 1 : 0]hit;
 
 	generate 
     genvar i; 
       for(i = 0; i < CACHE_WAY; i = i + 1) begin : comparator
         assign access[i] = (tag == tag_reg[offset][index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i]);
+				assign hit = i;
 			end
 	endgenerate
 
