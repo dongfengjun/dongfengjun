@@ -200,35 +200,35 @@ localparam MUL  = 4'b1001;
 localparam MULH = 4'b1010;
 localparam DIV  = 4'b1011;
 localparam REM  = 4'b1100;
-assign alu_sel =  ((op == 7'b0010011 && funct3 == 3'b000) || (op == 7'b0110011 && funct3 == 3'b000 && funct7 == 7'b0000000)) ? ADD : 
-							(op == 7'b0110011 && funct3 == 3'b000 && funct7 == 7'b0100000) ? SUB :
-						  ((op == 7'b0010011 && funct3 == 3'b001) || (op == 7'b0110011 && (funct3 == 3'b001 && funct7 == 7'b0000000))) ? SLL :
-							((op == 7'b0010011 &&(funct3 == 3'b010 || funct3 == 3'b011)) || (op == 7'b0110011 && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b011 && funct7 == 7'b0000000)))) ? SLT :
-							((op == 7'b0010011 && funct3 == 3'b100) || (op == 7'b0110011 && (funct3 == 3'b100 && funct7 == 7'b0000000))) ? XOR :
-							((op == 7'b0010011 && funct3 == 3'b101 && funct7 == 7'b0000000) || (op == 7'b0110011 && funct3 == 3'b101 && funct7 == 7'b0000000)) ? SRL :
-							((op == 7'b0010011 && funct3 == 3'b101 && funct7 == 7'b0100000) || (op == 7'b0110011 && funct3 == 3'b101 && funct7 == 7'b0100000)) ? SRA :
-							((op == 7'b0010011 && funct3 == 3'b110) || (op == 7'b0110011 && funct3 == 3'b110 && funct7 == 7'b0000000)) ? OR : 
-							((op == 7'b0010011 && funct3 == 3'b111) || (op == 7'b0110011 && funct3 == 3'b111 && funct7 == 7'b0000000)) ? AND : 
-							(op == 7'b0110011 && funct3 == 3'b000 && funct7 == 7'b0000001) ? MUL :
-							(op == 7'b0110011 && funct3 == 3'b001 && funct7 == 7'b0000001) ? MULH :
-							(op == 7'b0110011 && ((funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001))) ? DIV :
-							(op == 7'b0110011 && ((funct3 == 3'b110 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? REM 
-							: 4'b1111;
+assign alu_sel = (state == WAIT) ? 
+								(((ALUI && funct3 == 3'b000) || (op == 7'b0110011 && funct3 == 3'b000 && funct7 == 7'b0000000)) ? ADD : 
+									(ALUR && funct3 == 3'b000 && funct7 == 7'b0100000) ? SUB :
+									((ALUI && funct3 == 3'b001) || (op == 7'b0110011 && (funct3 == 3'b001 && funct7 == 7'b0000000))) ? SLL :
+									((ALUI &&(funct3 == 3'b010 || funct3 == 3'b011)) || (op == 7'b0110011 && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b011 && funct7 == 7'b0000000)))) ? SLT :
+									((ALUI && funct3 == 3'b100) || (op == 7'b0110011 && (funct3 == 3'b100 && funct7 == 7'b0000000))) ? XOR :
+									((ALUI && funct3 == 3'b101 && funct7 == 7'b0000000) || (op == 7'b0110011 && funct3 == 3'b101 && funct7 == 7'b0000000)) ? SRL :
+									((ALUI && funct3 == 3'b101 && funct7 == 7'b0100000) || (op == 7'b0110011 && funct3 == 3'b101 && funct7 == 7'b0100000)) ? SRA :
+									((ALUI && funct3 == 3'b110) || (op == 7'b0110011 && funct3 == 3'b110 && funct7 == 7'b0000000)) ? OR : 
+									((ALUI && funct3 == 3'b111) || (op == 7'b0110011 && funct3 == 3'b111 && funct7 == 7'b0000000)) ? AND : 
+									 (ALUR && funct3 == 3'b000 && funct7 == 7'b0000001) ? MUL :
+									 (ALUR && funct3 == 3'b001 && funct7 == 7'b0000001) ? MULH :
+									 (ALUR && ((funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001))) ? DIV :
+									 (ALUR && ((funct3 == 3'b110 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? REM : 4'b1111) : 4'b1111;
 
-wire[31:0] csr = (op == 7'b1110011 && imm == 32'd833) ? mepc_i
-	: (op == 7'b1110011 && imm == 32'd768) ? mstatus_i
-	: (op == 7'b1110011 && imm == 32'd834) ? mcause_i
-	: (op == 7'b1110011 && imm == 32'd773) ? mtvec_i
+wire[31:0] csr = (SYSTEM && imm == 32'd833) ? mepc_i
+	: (SYSTEM && imm == 32'd768) ? mstatus_i
+	: (SYSTEM && imm == 32'd834) ? mcause_i
+	: (SYSTEM && imm == 32'd773) ? mtvec_i
 	: 32'b0;
-wire mepc_wen = ((op == 7'b1110011 && imm == 32'd833) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
-wire mstatus_wen = (op == 7'b1110011 && imm == 32'd768) ? 1'b1 : 1'b0;
-wire mcause_wen = (op == 7'b1110011 && imm == 32'd834 || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
-wire mtvec_wen = (op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
+wire mepc_wen = ((SYSTEM && imm == 32'd833) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
+wire mstatus_wen = (SYSTEM && imm == 32'd768) ? 1'b1 : 1'b0;
+wire mcause_wen = (SYSTEM && imm == 32'd834 || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
+wire mtvec_wen = (SYSTEM && imm == 32'd773) ? 1'b1 : 1'b0;
 
 wire fencei = (inst_i == 32'b00000000000000000001000000001111);
 
 //静态分支预测
-assign prepc_en_o = (op == 7'b1100011 && inst_i[31]) || (op == 7'b1101111);
-assign prepc_o = ((op == 7'b1100011 && inst_i[31]) || (op == 7'b1101111)) ? pc_i + imm : 32'h0;
+assign prepc_en_o = (BRANCH && inst_i[31]) || (op == 7'b1101111);
+assign prepc_o = ((BRANCH && inst_i[31]) || (op == 7'b1101111)) ? pc_i + imm : 32'h0;
 
 endmodule
