@@ -1,4 +1,4 @@
-module ysyx_24110017_CACHE #(n = 2, m = 4, w = 2) (
+module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	input clk,
 	input rst,
 	input  wire fencei_i,
@@ -84,10 +84,8 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 2) (
 	
 	always @(*) begin
 		casez(access)
-			4'b1zzz: hit = 3;
-			4'b01zz: hit = 2;
-			4'b001z: hit = 1;
-			4'b0001: hit = 0;
+			2'b1z: hit = 1;
+			2'b01: hit = 0;
 		default:
 			hit = 0;
 		endcase
