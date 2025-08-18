@@ -1,4 +1,4 @@
-`define YOSYS_STA
+//`define YOSYS_STA
 module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	input clk,
 	input rst,
@@ -190,7 +190,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 				RETURN : begin
 					m_axi_rvalid <= 1'b1;
 					m_axi_arready <= 1'b0;
-					m_axi_rdata <= cache_reg[offset][index * CACHE_WAY + hit];
+					m_axi_rdata <= cache_reg[offset][index * CACHE_WAY + access];
 					m_axi_rresp  <= 2'b11;
 					if(m_axi_rvalid && m_axi_rready) begin
 						m_axi_rvalid <= 0;
