@@ -171,14 +171,9 @@ assign immU = (state == WAIT)  ? {inst_i[31:12],{12{1'b0}}} : 32'b0; //UEXTUimm
 assign immS = (state == WAIT)  ? {{20{inst_i[31]}}, inst_i[31:25], inst_i[11:7]} : 32'b0; //SEXTSimm
 assign immB = (state == WAIT)  ? {{19{inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0} : 32'b0; //SEXTBimm
 assign immJ = (state == WAIT)  ? {{11{inst_i[31]}}, inst_i[31], inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0} : 32'b0; //SEXTJimm
-assign imm = (op == 7'b0110111 || op == 7'b0010111) ? immU
- : (op == 7'b1101111) ? immJ
- : (op == 7'b1100011) ? immB
- : (op == 7'b0100011) ? immS
- : (op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011) ? immI 
- : 32'b0;
+assign imm = (LUI && AUIPC) ? immU : (JAL) ? immJ : (BRANCH) ? immB : (STORE) ? immS : (JALR || LOAD || ALUI || SYSTEM) ? immI : 32'b0;
 
-wire gpr_wen = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 || op == 7'b1100111 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011 || op == 7'b0110011 || op == 7'b0000011) ? 1'b1 : 1'b0;
+wire gpr_wen = (LUI || AUIPC || JAL || JALR || ALUI || SYSTEM || ALUR || LOAD);
 /***ALU***/
 wire [3:0]alu_sel;
 wire [31:0]a,b;
