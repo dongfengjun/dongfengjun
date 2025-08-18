@@ -173,7 +173,7 @@ assign immB = (state == WAIT)  ? {{19{inst_i[31]}}, inst_i[31], inst_i[7], inst_
 assign immJ = (state == WAIT)  ? {{11{inst_i[31]}}, inst_i[31], inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0} : 32'b0; //SEXTJimm
 assign imm = (LUI && AUIPC) ? immU : (JAL) ? immJ : (BRANCH) ? immB : (STORE) ? immS : (JALR || LOAD || ALUI || SYSTEM) ? immI : 32'b0;
 
-wire gpr_wen = (state == WAIT) && (LUI || AUIPC || JAL || JALR || ALUI || SYSTEM || ALUR || LOAD);
+wire gpr_wen = (state == WAIT) && (LUI || AUIPC || JAL || JALR || LOAD || ALUI || ALUR || SYSTEM);
 
 /***ALU***/
 wire [3:0]alu_sel;
