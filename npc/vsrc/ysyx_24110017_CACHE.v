@@ -1,5 +1,5 @@
-//`define YOSYS_STA
-module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
+`define YOSYS_STA
+module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
 	input clk,
 	input rst,
 	input  wire fencei_i,
@@ -86,7 +86,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	generate 
     genvar i; 
       for(i = 0; i < CACHE_WAY; i = i + 1) begin : comparator
-        assign access = ((tag == tag_reg[offset][index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i])) ? i : {CACHE_WAY{1'bz}};
+        assign access = ((tag == tag_reg[offset][index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i])) ? i : 0;
 			end
 	endgenerate
 
@@ -190,7 +190,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 				RETURN : begin
 					m_axi_rvalid <= 1'b1;
 					m_axi_arready <= 1'b0;
-					m_axi_rdata <= cache_reg[offset][index * CACHE_WAY + access];
+					m_axi_rdata <= cache_reg[offset][index * CACHE_WAY + access - 1];
 					m_axi_rresp  <= 2'b11;
 					if(m_axi_rvalid && m_axi_rready) begin
 						m_axi_rvalid <= 0;
