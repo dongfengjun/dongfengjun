@@ -26,7 +26,7 @@ module ysyx_24110017_EXU(
 	input	 wire [31:0] r2_i,
   input	 wire [31:0] csr_i,
 	input  wire [31:0] mepc_i,mtvec_i,
-	input  wire mepc_wen_i,mstatus_wen_i,mcause_wen_i,mtvec_wen_i,
+	input  wire [ 3:0] csrs_wen_i,
 
 	output reg  [ 6:0] op_o,
 	output reg  [ 2:0] funct3_o,
@@ -36,10 +36,7 @@ module ysyx_24110017_EXU(
   output reg  [31:0] mstatus_o,
   output reg  [31:0] mcause_o,
   output reg  [31:0] mtvec_o,
-  output reg  mepc_wen_o,
-	output reg  mstatus_wen_o,
-	output reg  mcause_wen_o,
-	output reg  mtvec_wen_o,
+  output reg  [ 3:0] csrs_wen_o,
 	output reg  [31:0] ex_o,
 	output reg  ls_valid_o,ls_wen_o,
 	output reg  ls_read_o,ls_write_o,
@@ -98,10 +95,7 @@ always @(posedge clk) begin
 		mstatus_o			<= 32'h0;
 		mcause_o			<= 32'h0;
 		mtvec_o				<= 32'h0;
-		mepc_wen_o		<= 1'b0;
-		mstatus_wen_o	<= 1'b0;
-		mcause_wen_o	<= 1'b0;
-		mtvec_wen_o		<= 1'b0;
+		csrs_wen_o		<= 4'b0;
 		ex_o					<= 32'h0;
 		ls_valid_o		<= 1'b0;
 		ls_wen_o			<= 1'b0;
@@ -138,10 +132,7 @@ always @(posedge clk) begin
 					mstatus_o     <= mstatus_w;
 					mcause_o      <= mcause_w;
 					mtvec_o       <= mtvec_w;
-					mepc_wen_o    <= mepc_wen_i;
-					mstatus_wen_o <= mstatus_wen_i;
-					mcause_wen_o  <= mcause_wen_i;
-					mtvec_wen_o   <= mtvec_wen_i;
+					csrs_wen_o    <= csrs_wen_i;
 					ex_o          <= ex;
 					ls_valid_o    <= ls_valid;
 					ls_wen_o      <= ls_wen;

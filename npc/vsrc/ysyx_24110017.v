@@ -102,7 +102,8 @@ wire gpr_wen_id;
 wire [3:0] alu_sel_id;
 wire [31:0] a_id,b_id,r1_id,r2_id;
 wire [31:0] csr_id,mepc_id,mtvec_id;
-wire mepc_wen_id,mstatus_wen_id,mcause_wen_id,mtvec_wen_id,fencei_id;
+wire [3:0]csrs_wen_id;
+wire fencei_id;
 /***EXU***/
 wire [31:0]pc_ex,inst_ex;//difftest
 wire ex_ready,ex_valid;
@@ -111,7 +112,7 @@ wire [ 2:0] funct3_ex;
 wire [ 4:0] rd_ex;
 wire gpr_wen_ex;
 wire [31:0]mepc_ex,mstatus_ex,mcause_ex,mtvec_ex;
-wire mepc_wen_ex,mstatus_wen_ex,mcause_wen_ex,mtvec_wen_ex;
+wire [3:0]csrs_wen_ex;
 wire [31:0] ex_ex;
 wire ls_valid_ex,ls_wen_ex;
 wire ls_read_ex,ls_write_ex;
@@ -133,10 +134,7 @@ wire [31:0] mepc_ls;
 wire [31:0] mstatus_ls;
 wire [31:0] mcause_ls;
 wire [31:0] mtvec_ls;
-wire mepc_wen_ls;
-wire mstatus_wen_ls;
-wire mcause_wen_ls;
-wire mtvec_wen_ls;
+wire [3:0] csrs_wen_ls;
 
 wire [31:0] ls_axi_awaddr,ls_axi_wdata,ls_axi_araddr,ls_axi_rdata;
 wire [ 3:0] ls_axi_wstrb;
@@ -280,19 +278,15 @@ ysyx_24110017_CLINT CLINT(clock,reset,
 );
 
 ysyx_24110017_RegisterFile #(4,32) RFU (clock,xrd_ls,rd_ls[3:0],gpr_wen_ls,rs1[3:0],r1,rs2[3:0],r2);
-ysyx_24110017_Reg #(32, 32'b0) mepc_reg (clock,reset,mepc_ls,mepc,mepc_wen_ls);
-ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,mstatus_ls,mstatus,mstatus_wen_ls);
-ysyx_24110017_Reg #(32, 32'b0) mcause_reg (clock,reset,mcause_ls,mcause,mcause_wen_ls);
-ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,mtvec_ls,mtvec,mtvec_wen_ls);
+ysyx_24110017_Reg #(32, 32'b0) mepc_reg (clock,reset,mepc_ls,mepc,csrs_wen_ls[0]);
+ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,mstatus_ls,mstatus,csrs_wen_ls[1]);
+ysyx_24110017_Reg #(32, 32'b0) mcause_reg (clock,reset,mcause_ls,mcause,csrs_wen_ls[2]);
+ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,mtvec_ls,mtvec,csrs_wen_ls[3]);
 ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid,1'b0);
 ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
 
 wire isRAW = ((rs1 != 0) && (((!ls_ready) && (rs1 == rd_ex)) || (rs1 == rd_ls))) || 
-						 ((rs2 != 0) && (((!ls_ready) && (rs2 == rd_ex)) || (rs2 == rd_ls))) ||
-						 ((ls_valid && (mepc		!= mepc_ex))		|| (mepc_wen_ls		 && (mepc		 != mepc_ls))) ||
-             ((ls_valid && (mstatus != mstatus_ex)) || (mstatus_wen_ls && (mstatus != mstatus_ls))) ||
-             ((ls_valid && (mcause  != mcause_ex )) || (mcause_wen_ls  && (mcause  != mcause_ls ))) ||
-             ((ls_valid && (mtvec   != mtvec_ex  )) || (mtvec_wen_ls   && (mtvec   != mtvec_ls  )));
+						 ((rs2 != 0) && (((!ls_ready) && (rs2 == rd_ex)) || (rs2 == rd_ls)));
 
 wire isCHazard = (ex_valid && ls_ready) && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
 

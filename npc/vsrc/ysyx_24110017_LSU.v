@@ -22,10 +22,7 @@ module ysyx_24110017_LSU(
   input  wire [31:0] mstatus_i,
   input  wire [31:0] mcause_i,
   input  wire [31:0] mtvec_i,
-  input  wire mepc_wen_i,
-  input  wire mstatus_wen_i,
-  input  wire mcause_wen_i,
-  input  wire mtvec_wen_i,
+  input  wire [ 3:0] csrs_wen_i,
   input  wire [31:0] ex_i,
   input  wire ls_valid_i,ls_wen_i,
   input  wire ls_read_i,ls_write_i,
@@ -42,10 +39,7 @@ module ysyx_24110017_LSU(
   output reg  [31:0] mstatus_o,
   output reg  [31:0] mcause_o,
   output reg  [31:0] mtvec_o,
-  output reg  mepc_wen_o,
-  output reg  mstatus_wen_o,
-  output reg  mcause_wen_o,
-  output reg  mtvec_wen_o,
+  output reg  [ 3:0] csrs_wen_o,
  
 	input  wire ls_axi_awready,
 	output wire ls_axi_awvalid,
@@ -112,10 +106,7 @@ always@(posedge clk or posedge rst) begin
 		mstatus_o			<= 32'h0;
 		mcause_o			<= 32'h0;
 		mtvec_o				<= 32'h0;
-		mepc_wen_o		<= 1'b0;
-		mstatus_wen_o <= 1'b0;
-		mcause_wen_o	<= 1'b0;
-		mtvec_wen_o		<= 1'b0;
+		csrs_wen_o		<= 4'b0;
 		xrd_o					<= 32'h0;
 	end
 	else begin
@@ -127,10 +118,7 @@ always@(posedge clk or posedge rst) begin
 		    mstatus_o     <= 32'h0;
 		    mcause_o      <= 32'h0;
 		    mtvec_o       <= 32'h0;
-		    mepc_wen_o    <= 1'b0;
-		    mstatus_wen_o <= 1'b0;
-		    mcause_wen_o  <= 1'b0;
-		    mtvec_wen_o   <= 1'b0;
+		    csrs_wen_o    <= 4'b0;
 		    xrd_o         <= 32'h0; 
 			end
 			WAIT: begin
@@ -145,10 +133,7 @@ always@(posedge clk or posedge rst) begin
 					mstatus_o     <= mstatus_i;
 					mcause_o      <= mcause_i;
 					mtvec_o       <= mtvec_i;
-					mepc_wen_o    <= mepc_wen_i;
-					mstatus_wen_o <= mstatus_wen_i;
-					mcause_wen_o  <= mcause_wen_i;
-					mtvec_wen_o   <= mtvec_wen_i;
+					csrs_wen_o    <= csrs_wen_i;
 					xrd_o         <= xrd;
 				end
 			end
@@ -159,10 +144,7 @@ always@(posedge clk or posedge rst) begin
         mstatus_o     <= 32'h0;
         mcause_o      <= 32'h0;
         mtvec_o       <= 32'h0;
-        mepc_wen_o    <= 1'b0;
-        mstatus_wen_o <= 1'b0;
-        mcause_wen_o  <= 1'b0;
-        mtvec_wen_o   <= 1'b0;
+        csrs_wen_o    <= 4'b0;
         xrd_o         <= 32'h0;
 			end
 		endcase
