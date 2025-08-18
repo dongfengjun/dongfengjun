@@ -166,7 +166,7 @@ assign rs2_o = (BRANCH || STORE || ALUR) ? inst_i[24:20] : (SYSTEM && (inst_i[31
 assign funct7 = (state == WAIT && ALUR) ? inst_i[31:25] : 7'b0;
 
 assign immI = (state == WAIT)  ? {{20{inst_i[31]}},inst_i[31:20]} : 32'b0; //SEXTIimmediate
-assign shamt = (state == WAIT) ? {inst_i[24:20]} : 32'b0;	//I shamt
+assign shamt = (state == WAIT) ? inst_i[24:20] : 5'b0;	//I shamt
 assign immU = (state == WAIT)  ? {inst_i[31:12],{12{1'b0}}} : 32'b0; //UEXTUimm
 assign immS = (state == WAIT)  ? {{20{inst_i[31]}}, inst_i[31:25], inst_i[11:7]} : 32'b0; //SEXTSimm
 assign immB = (state == WAIT)  ? {{19{inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0} : 32'b0; //SEXTBimm
