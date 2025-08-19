@@ -176,17 +176,20 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 						s_axi_rready <= 1'b0;
 						m_axi_rvalid <= 1'b1;
 						burst_counter <= 0;
+						/***
 						if(s_axi_arlen == 8'b0) begin
 							m_axi_rdata <= s_axi_rdata;
 						end
 						else begin
+						****/
 							m_axi_rdata <= cache_reg[s_offset][s_index * CACHE_WAY];
-						end
+					//	end
 					end
 					if(m_axi_rvalid && m_axi_rready) begin
 						m_axi_rvalid <= 1'b0;
 					end
 				end
+/***/
 				RETURN : begin
 					m_axi_rvalid <= 1'b1;
 					m_axi_arready <= 1'b0;
@@ -196,6 +199,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 						m_axi_rvalid <= 0;
 					end		
 				end
+/***/
 				default: begin
 				end
 				endcase
