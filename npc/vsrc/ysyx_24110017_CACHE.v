@@ -191,6 +191,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 						m_axi_rvalid <= 1'b0;
 					end
 ***/
+					end
 				end
 /***
 				RETURN : begin
@@ -203,8 +204,6 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 					end		
 				end
 ***/
-				default: begin
-				end
 				endcase
 			end
 		end
