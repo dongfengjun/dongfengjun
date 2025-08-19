@@ -91,7 +91,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	endgenerate
 
 	assign m_axi_rvalid = (access != 0) ? 1'b1 : 1'b0;
-	assign m_axi_rdata  = (access != 0) ? cache_reg[offset][index * CACHE_WAY + access - 1] : 32'h0;
+	assign m_axi_rdata  = (access != 0) ? cache_reg[s_offset][s_index * CACHE_WAY + access - 1] : 32'h0;
 
 	localparam IDLE = 1'b0;
   localparam TRANS = 1'b1;
@@ -174,7 +174,6 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 					end
 					if(s_axi_rlast) begin
 						s_axi_arvalid <=1'b0;
-						s_axi_araddr <= 32'h0;
 						s_axi_arsize <= 3'b0;
 						s_axi_rready <= 1'b0;
 //						m_axi_rvalid <= 1'b1;
