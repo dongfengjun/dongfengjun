@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	input clk,
 	input rst,
@@ -28,9 +28,9 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	input  wire [ 2:0]m_axi_arsize,
 	input  wire [ 1:0]m_axi_arburst,
 	input  wire m_axi_rready,
-	output reg  m_axi_rvalid,
+	output wire m_axi_rvalid,
 	output wire [ 3:0]m_axi_rid,
-	output reg  [31:0]m_axi_rdata,
+	output wire [31:0]m_axi_rdata,
 	output wire [ 1:0]m_axi_rresp,
 	output wire m_axi_rlast,
 
@@ -90,18 +90,21 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 			end
 	endgenerate
 
-	localparam IDLE = 2'b00;
-  localparam TRANS = 2'b01;
-  localparam RETURN = 2'b10;
-  reg [1:0]state;
+	assign m_axi_rvalid = (access != 0) ? 1'b1 : 1'b0;
+	assign m_axi_rdata = (access != 0) ? cache_reg[s_offset][s_index * CACHE_WAY + access - 1] : 32'h0;
+
+	localparam IDLE = 1'b0;
+  localparam TRANS = 1'b1;
+//  localparam RETURN = 2'b10;
+  reg state;
 
 	always @(posedge clk or posedge rst) begin
 		if(rst) state <= IDLE;
 		else begin
 			case(state)
-				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && (access != 0) ? RETURN : (m_axi_arvalid && m_axi_arready) && (access == 0) ? TRANS : state;
+				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && (access == 0) ? TRANS : state;
 				TRANS:   state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
-        RETURN:	 state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
+//        RETURN:	 state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
         default: state <= state;
 			endcase
 		end
@@ -174,22 +177,22 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 						s_axi_araddr <= 32'h0;
 						s_axi_arsize <= 3'b0;
 						s_axi_rready <= 1'b0;
-						m_axi_rvalid <= 1'b1;
+//						m_axi_rvalid <= 1'b1;
 						burst_counter <= 0;
-						/***
+/***
 						if(s_axi_arlen == 8'b0) begin
 							m_axi_rdata <= s_axi_rdata;
 						end
 						else begin
-						****/
 							m_axi_rdata <= cache_reg[s_offset][s_index * CACHE_WAY];
-					//	end
+						end
 					end
 					if(m_axi_rvalid && m_axi_rready) begin
 						m_axi_rvalid <= 1'b0;
 					end
+***/
 				end
-/***/
+/***
 				RETURN : begin
 					m_axi_rvalid <= 1'b1;
 					m_axi_arready <= 1'b0;
@@ -199,7 +202,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 						m_axi_rvalid <= 0;
 					end		
 				end
-/***/
+***/
 				default: begin
 				end
 				endcase
