@@ -103,7 +103,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 		if(rst) state <= IDLE;
 		else begin
 			case(state)
-				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && (hit != 0) ? TRANS : state;
+				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && (hit == 0) ? TRANS : state;
 				TRANS:   state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
 //        RETURN:	 state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
         default: state <= state;
