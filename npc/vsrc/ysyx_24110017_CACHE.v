@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	input clk,
 	input rst,
