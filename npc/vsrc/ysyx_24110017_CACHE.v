@@ -79,20 +79,19 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	wire [31-m-n+w : 0]				 s_tag		 = s_axi_araddr[31 : m+n-w];
   wire [n-w-1 : 0]					 s_index   = s_axi_araddr[m+n-w-1 : m];
   wire [m-3 : 0]						 s_offset  = s_axi_araddr[m-1 : 2];
-
-	wire [CACHE_WAY - 1 : 0]hit; 
+ 
 	wire [CACHE_WAY - 1 : 0]access;
+	wire [CACHE_WAY - 1 : 0]hit;
 
 	generate 
     genvar i; 
       for(i = 0; i < CACHE_WAY; i = i + 1) begin : comparator
-        assign hit = ((tag == tag_reg[offset][index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i])) ? i + 1  : 0;
-				assign access = ((s_tag == tag_reg[s_offset][s_index * CACHE_WAY + i]) && (valid_reg[s_offset][s_index * CACHE_WAY + i])) ? i + 1  : 0;
+        assign access = ((tag == tag_reg[offset][index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i])) ? i + 1  : 0;
 			end
 	endgenerate
 
-	assign m_axi_rvalid = (access != 0) ? 1'b1 : 1'b0;
-	assign m_axi_rdata  = (access != 0) ? cache_reg[s_offset][s_index * CACHE_WAY + access - 1] : 32'h0;
+	assign m_axi_rvalid = (state == TRANS) ? ((s_axi_rlast) ? 1'b1 : 1'b0) : (access) ? 1'b1 : 1'b0;
+	assign m_axi_rdata  = (state == TRANS) ? ((s_axi_rlast) ? ((s_axi_arlen == 8'b0) ? s_axi_rdata : cache_reg[s_offset][s_index * CACHE_WAY]) : 32'h0) : (access) ? cache_reg[s_offset][s_index * CACHE_WAY + access - 1] : 32'h0;
 
 	localparam IDLE = 1'b0;
   localparam TRANS = 1'b1;
@@ -103,7 +102,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 		if(rst) state <= IDLE;
 		else begin
 			case(state)
-				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && (hit == 0) ? TRANS : state;
+				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && (access == 0) ? TRANS : state;
 				TRANS:   state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
 //        RETURN:	 state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
         default: state <= state;
@@ -131,11 +130,11 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 				case(state)
 				IDLE: begin
 					m_axi_arready <= 1'b1;
-					if(m_axi_arvalid && m_axi_arready) begin
-						s_axi_araddr <= m_axi_araddr;
-						if(hit == 0) begin
+					if(access == 0) begin
+						if(m_axi_arvalid && m_axi_arready) begin
 							m_axi_arready <= 1'b0;
 							s_axi_arvalid <= 1'b1;
+							s_axi_araddr <= m_axi_araddr;
 							burst_araddr <= m_axi_araddr;
 							s_axi_arburst <= 2'b01;
 							if(m_axi_araddr - 32'ha0000000 < 32'h20000000) begin
@@ -145,9 +144,6 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 								s_axi_arlen <= 8'h0;
 							end
 							s_axi_arsize <= 3'h2;
-						end
-						else begin
-							m_axi_arready <= 1'b0;
 						end
 					end
 				end
