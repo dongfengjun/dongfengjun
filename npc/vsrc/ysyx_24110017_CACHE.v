@@ -130,8 +130,8 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 				case(state)
 				IDLE: begin
 					m_axi_arready <= 1'b1;
-					if(access == 0) begin
-						if(m_axi_arvalid && m_axi_arready) begin
+					if(m_axi_arvalid && m_axi_arready) begin
+						if(access == 0) begin
 							m_axi_arready <= 1'b0;
 							s_axi_arvalid <= 1'b1;
 							s_axi_araddr <= m_axi_araddr;
@@ -144,6 +144,10 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 								s_axi_arlen <= 8'h0;
 							end
 							s_axi_arsize <= 3'h2;
+						end
+						else begin
+							m_axi_arready <= 1'b0;
+	            s_axi_araddr <= m_axi_araddr;
 						end
 					end
 				end
