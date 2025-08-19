@@ -79,14 +79,15 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	wire [31-m-n+w : 0]				 s_tag		 = s_axi_araddr[31 : m+n-w];
   wire [n-w-1 : 0]					 s_index   = s_axi_araddr[m+n-w-1 : m];
   wire [m-3 : 0]						 s_offset  = s_axi_araddr[m-1 : 2];
- 
+
+	wire [CACHE_WAY - 1 : 0]hit; 
 	wire [CACHE_WAY - 1 : 0]access;
-	wire [CACHE_WAY - 1 : 0]hit;
 
 	generate 
     genvar i; 
       for(i = 0; i < CACHE_WAY; i = i + 1) begin : comparator
-        assign access = ((s_tag == tag_reg[s_offset][s_index * CACHE_WAY + i]) && (valid_reg[s_offset][s_index * CACHE_WAY + i])) ? i + 1  : 0;
+        assign hit = ((tag == tag_reg[offset][index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i])) ? i + 1  : 0;
+				assign access = ((s_tag == tag_reg[s_offset][s_index * CACHE_WAY + i]) && (valid_reg[s_offset][s_index * CACHE_WAY + i])) ? i + 1  : 0;
 			end
 	endgenerate
 
@@ -102,7 +103,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 		if(rst) state <= IDLE;
 		else begin
 			case(state)
-				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && (access == 0) ? TRANS : state;
+				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && (hit != 0) ? TRANS : state;
 				TRANS:   state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
 //        RETURN:	 state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
         default: state <= state;
@@ -132,7 +133,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 					m_axi_arready <= 1'b1;
 					if(m_axi_arvalid && m_axi_arready) begin
 						s_axi_araddr <= m_axi_araddr;
-						if(access == 0) begin
+						if(hit == 0) begin
 							m_axi_arready <= 1'b0;
 							s_axi_arvalid <= 1'b1;
 							burst_araddr <= m_axi_araddr;
