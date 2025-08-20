@@ -28,7 +28,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	input  wire [ 2:0]m_axi_arsize,
 	input  wire [ 1:0]m_axi_arburst,
 	input  wire m_axi_rready,
-	output reg  m_axi_rvalid,
+	output wire m_axi_rvalid,
 	output wire [ 3:0]m_axi_rid,
 	output wire [31:0]m_axi_rdata,
 	output wire [ 1:0]m_axi_rresp,
@@ -91,11 +91,14 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 			end
 	endgenerate
 
+	assign m_axi_rvalid = axi_rvalid && !axi_rvalid_enable;
 	assign m_axi_rdata  = (|hit) ? cache_reg[s_offset][s_index * CACHE_WAY + hit - 1] : 32'h0;
 	wire	 axi_rvalid   = (|hit);
+	reg axi_rvalid_enable;
 	always @(posedge clk) begin
-		if(m_axi_rvalid && m_axi_rready) m_axi_rvalid <= 1'b0;
-		else if(axi_rvalid) m_axi_rvalid <= 1'b1;
+		if(m_axi_rvalid && m_axi_rready) axi_rvalid_enable <= 1'b0;
+		else if(axi_rvalid) axi_rvalid_enable <= 1'b1;
+		else axi_rvalid_enable <= 1'b0;
 	end 
 /***
 	assign m_axi_rvalid = (state == TRANS) ? ((s_axi_rlast) ? 1'b1 : 1'b0) : (|hit) ? 1'b1 : 1'b0;
