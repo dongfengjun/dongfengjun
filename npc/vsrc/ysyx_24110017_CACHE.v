@@ -92,7 +92,13 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	endgenerate
 
 	reg axi_rvalid;
-	assign m_axi_rvalid = (state == TRANS) ? axi_rvalid : (|hit) ? 1'b1 : 1'b0;
+	reg axi_rvalid_enable;
+	always @(posedge clk) begin
+		if(m_axi_rvalid_en) axi_rvalid_enable <= 1'b1;
+		else axi_rvalid_enable <= 1'b0;
+	end
+	wire m_axi_rvalid_en = (state == TRANS) ? axi_rvalid : (|hit) ? 1'b1 : 1'b0;
+	assign m_axi_rvalid = m_axi_rvalid_en && !axi_rvalid_enable;
 	assign m_axi_rdata  = (|hit) ? cache_reg[s_offset][s_index * CACHE_WAY + hit - 1] : 32'h0;
 /***
 	assign m_axi_rvalid = (state == TRANS) ? ((s_axi_rlast) ? 1'b1 : 1'b0) : (|hit) ? 1'b1 : 1'b0;
