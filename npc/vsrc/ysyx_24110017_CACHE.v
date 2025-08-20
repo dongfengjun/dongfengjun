@@ -96,8 +96,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	wire	 axi_rvalid   = (|hit);
 	reg axi_rvalid_enable;
 	always @(posedge clk) begin
-		if(m_axi_rvalid && m_axi_rready) axi_rvalid_enable <= 1'b0;
-		else if(axi_rvalid) axi_rvalid_enable <= 1'b1;
+		if(axi_rvalid) axi_rvalid_enable <= 1'b1;
 		else axi_rvalid_enable <= 1'b0;
 	end 
 /***
