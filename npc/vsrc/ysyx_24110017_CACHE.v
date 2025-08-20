@@ -76,9 +76,9 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	wire [31-m-n+w : 0]				 tag			 = m_axi_araddr[31 : m+n-w];
   wire [n-w-1 : 0]					 index		 = m_axi_araddr[m+n-w-1 : m];
   wire [m-3 : 0]						 offset	   = m_axi_araddr[m-1 : 2];
-	wire [31-m-n+w : 0]				 s_tag		 = s_axi_araddr[31 : m+n-w];
-  wire [n-w-1 : 0]					 s_index   = s_axi_araddr[m+n-w-1 : m];
-  wire [m-3 : 0]						 s_offset  = s_axi_araddr[m-1 : 2];
+	wire [31-m-n+w : 0]				 s_tag		 = sraddr[31 : m+n-w];
+  wire [n-w-1 : 0]					 s_index   = sraddr[m+n-w-1 : m];
+  wire [m-3 : 0]						 s_offset  = sraddr[m-1 : 2];
  
 	wire [CACHE_WAY - 1 : 0]access;
 	wire [CACHE_WAY - 1 : 0]hit;
@@ -93,7 +93,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 
 	assign m_axi_rvalid = axi_rvalid && !axi_rvalid_enable;
 	assign m_axi_rdata  = (|hit) ? cache_reg[s_offset][s_index * CACHE_WAY + hit - 1] : 32'h0;
-	wire	 axi_rvalid   = (|hit) && !(m_axi_arvalid && m_axi_arready);
+	wire	 axi_rvalid   = (|hit) && (m_axi_arvalid && m_axi_arready);
 	reg axi_rvalid_enable;
 	always @(posedge clk) begin
 		if(axi_rvalid) axi_rvalid_enable <= 1'b1;
@@ -121,6 +121,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 		end
 	end
 
+	reg [31:0] sraddr;
 	reg [m-3 : 0]burst_counter;
 	reg [31:0] burst_araddr;
 	always @(posedge clk or posedge rst) begin
@@ -142,10 +143,11 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 				IDLE: begin
 					m_axi_arready <= 1'b1;
 					if(m_axi_arvalid && m_axi_arready) begin
-						s_axi_araddr <= m_axi_araddr;
+						sraddr <= m_axi_araddr;
 						if(access == 0) begin
 							m_axi_arready <= 1'b0;
 							s_axi_arvalid <= 1'b1;
+							s_axi_araddr <= m_axi_araddr;
 							burst_araddr <= m_axi_araddr;
 							s_axi_arburst <= 2'b01;
 							if(m_axi_araddr - 32'ha0000000 < 32'h20000000) begin
