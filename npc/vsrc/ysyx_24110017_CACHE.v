@@ -189,6 +189,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 					if(s_axi_rlast) begin
 						s_axi_arvalid <=1'b0;
 						s_axi_arsize <= 3'b0;
+						s_axi_arlen  <= 8'b0;
 						s_axi_rready <= 1'b0;
 //						m_axi_rvalid <= 1'b1;
 						burst_counter <= 0;
