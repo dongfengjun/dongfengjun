@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	input clk,
 	input rst,
@@ -91,8 +91,18 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 			end
 	endgenerate
 
+	assign m_axi_rvalid = axi_rvalid && !axi_rvalid_enable;
+	assign m_axi_rdata  = (hit) ? cache_reg[s_offset][s_index * CACHE_WAY + hit - 1] : 32'h0;
+	assign axi_rvalid   = (hit) ? 1'b1 : 1'b0;
+	reg axi_rvalid_enable;
+	always @(posedge clk) begin
+		if(axi_rvalid) axi_rvalid_enable <= 1'b1;
+		else axi_rvalid_enable <= 1'b0;
+	end 
+/***
 	assign m_axi_rvalid = (state == TRANS) ? ((s_axi_rlast) ? 1'b1 : 1'b0) : (|hit) ? 1'b1 : 1'b0;
 	assign m_axi_rdata  = (state == TRANS) ? ((s_axi_rlast) ? ((s_axi_arlen == 8'b0) ? s_axi_rdata : cache_reg[s_offset][s_index * CACHE_WAY]) : 32'h0) : (|hit) ? cache_reg[s_offset][s_index * CACHE_WAY + hit - 1] : 32'h0;
+***/
 
 	localparam IDLE = 1'b0;
   localparam TRANS = 1'b1;
