@@ -94,8 +94,8 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 	assign m_axi_rdata  = (|hit) ? cache_reg[s_offset][s_index * CACHE_WAY + hit - 1] : 32'h0;
 	wire	 axi_rvalid   = (|hit);
 	always @(posedge clk) begin
-		if(axi_rvalid) m_axi_rvalid <= 1'b1;
 		if(m_axi_rvalid && m_axi_rready) m_axi_rvalid <= 1'b0;
+		else if(axi_rvalid) m_axi_rvalid <= 1'b1;
 	end 
 /***
 	assign m_axi_rvalid = (state == TRANS) ? ((s_axi_rlast) ? 1'b1 : 1'b0) : (|hit) ? 1'b1 : 1'b0;
