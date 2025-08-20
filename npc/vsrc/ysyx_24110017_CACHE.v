@@ -93,7 +93,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 1) (
 
 	assign m_axi_rvalid = axi_rvalid && !axi_rvalid_enable;
 	assign m_axi_rdata  = (|hit) ? cache_reg[s_offset][s_index * CACHE_WAY + hit - 1] : 32'h0;
-	wire	 axi_rvalid   = (state == TRANS) ? ((|hit) && (s_axi_rlast)) ? : (|hit);
+	wire	 axi_rvalid   = (state == TRANS) ? ((|hit) && (s_axi_rlast)) : (|hit);
 	reg axi_rvalid_enable;
 	always @(posedge clk) begin
 		if(axi_rvalid) axi_rvalid_enable <= 1'b1;
