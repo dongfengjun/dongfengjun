@@ -100,6 +100,23 @@ module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
 	wire [127:0] cache_test16 = {cache_reg[0][14],cache_reg[1][14],cache_reg[2][14],cache_reg[3][14]};
 	wire [127:0] cache_test17 = {cache_reg[0][15],cache_reg[1][15],cache_reg[2][15],cache_reg[3][15]};
 
+	wire [127:0] tag_test00 = {tag_reg[0][0],tag_reg[1][0],tag_reg[2][0],tag_reg[3][0]};
+	wire [127:0] tag_test01 = {tag_reg[0][1],tag_reg[1][1],tag_reg[2][1],tag_reg[3][1]};
+	wire [127:0] tag_test02 = {tag_reg[0][2],tag_reg[1][2],tag_reg[2][2],tag_reg[3][2]};
+	wire [127:0] tag_test03 = {tag_reg[0][3],tag_reg[1][3],tag_reg[2][3],tag_reg[3][3]};
+	wire [127:0] tag_test04 = {tag_reg[0][4],tag_reg[1][4],tag_reg[2][4],tag_reg[3][4]};
+	wire [127:0] tag_test05 = {tag_reg[0][5],tag_reg[1][5],tag_reg[2][5],tag_reg[3][5]};
+	wire [127:0] tag_test06 = {tag_reg[0][6],tag_reg[1][6],tag_reg[2][6],tag_reg[3][6]};
+	wire [127:0] tag_test07 = {tag_reg[0][7],tag_reg[1][7],tag_reg[2][7],tag_reg[3][7]};
+	wire [127:0] tag_test10 = {tag_reg[0][8],tag_reg[1][8],tag_reg[2][8],tag_reg[3][8]};
+	wire [127:0] tag_test11 = {tag_reg[0][9],tag_reg[1][9],tag_reg[2][9],tag_reg[3][9]};
+	wire [127:0] tag_test12 = {tag_reg[0][10],tag_reg[1][10],tag_reg[2][10],tag_reg[3][10]};
+	wire [127:0] tag_test13 = {tag_reg[0][11],tag_reg[1][11],tag_reg[2][11],tag_reg[3][11]};
+	wire [127:0] tag_test14 = {tag_reg[0][12],tag_reg[1][12],tag_reg[2][12],tag_reg[3][12]};
+	wire [127:0] tag_test15 = {tag_reg[0][13],tag_reg[1][13],tag_reg[2][13],tag_reg[3][13]};
+	wire [127:0] tag_test16 = {tag_reg[0][14],tag_reg[1][14],tag_reg[2][14],tag_reg[3][14]};
+	wire [127:0] tag_test17 = {tag_reg[0][15],tag_reg[1][15],tag_reg[2][15],tag_reg[3][15]};
+
 	generate 
     genvar i; 
       for(i = 0; i < CACHE_WAY; i = i + 1) begin : comparator
