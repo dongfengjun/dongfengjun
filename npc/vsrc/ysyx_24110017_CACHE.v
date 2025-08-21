@@ -83,6 +83,23 @@ module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
 	wire [CACHE_WAY - 1 : 0]access;
 	wire [CACHE_WAY - 1 : 0]hit;
 
+	wire [127:0] cache_test0 = {cache_reg[0][0],cacge_reg[1][0],cache_reg[2][0],cache_reg[3][0]};
+	wire [127:0] cache_test0 = {cache_reg[0][1],cacge_reg[1][1],cache_reg[2][1],cache_reg[3][1]};
+	wire [127:0] cache_test0 = {cache_reg[0][2],cacge_reg[1][2],cache_reg[2][2],cache_reg[3][2]};
+	wire [127:0] cache_test0 = {cache_reg[0][3],cacge_reg[1][3],cache_reg[2][3],cache_reg[3][3]};
+	wire [127:0] cache_test0 = {cache_reg[0][4],cacge_reg[1][4],cache_reg[2][4],cache_reg[3][4]};
+	wire [127:0] cache_test0 = {cache_reg[0][5],cacge_reg[1][5],cache_reg[2][5],cache_reg[3][5]};
+	wire [127:0] cache_test0 = {cache_reg[0][6],cacge_reg[1][6],cache_reg[2][6],cache_reg[3][6]};
+	wire [127:0] cache_test0 = {cache_reg[0][7],cacge_reg[1][7],cache_reg[2][7],cache_reg[3][7]};
+	wire [127:0] cache_test0 = {cache_reg[0][8],cacge_reg[1][8],cache_reg[2][8],cache_reg[3][8]};
+	wire [127:0] cache_test0 = {cache_reg[0][9],cacge_reg[1][9],cache_reg[2][9],cache_reg[3][9]};
+	wire [127:0] cache_test0 = {cache_reg[0][10],cacge_reg[1][10],cache_reg[2][10],cache_reg[3][10]};
+	wire [127:0] cache_test0 = {cache_reg[0][11],cacge_reg[1][11],cache_reg[2][11],cache_reg[3][11]};
+	wire [127:0] cache_test0 = {cache_reg[0][12],cacge_reg[1][12],cache_reg[2][12],cache_reg[3][12]};
+	wire [127:0] cache_test0 = {cache_reg[0][13],cacge_reg[1][13],cache_reg[2][13],cache_reg[3][13]};
+	wire [127:0] cache_test0 = {cache_reg[0][14],cacge_reg[1][14],cache_reg[2][14],cache_reg[3][14]};
+	wire [127:0] cache_test0 = {cache_reg[0][15],cacge_reg[1][15],cache_reg[2][15],cache_reg[3][15]};
+
 	generate 
     genvar i; 
       for(i = 0; i < CACHE_WAY; i = i + 1) begin : comparator
@@ -99,10 +116,6 @@ module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
 		if(axi_rvalid) axi_rvalid_enable <= 1'b1;
 		else axi_rvalid_enable <= 1'b0;
 	end 
-/***
-	assign m_axi_rvalid = (state == TRANS) ? ((s_axi_rlast) ? 1'b1 : 1'b0) : (|hit) ? 1'b1 : 1'b0;
-	assign m_axi_rdata  = (state == TRANS) ? ((s_axi_rlast) ? ((s_axi_arlen == 8'b0) ? s_axi_rdata : cache_reg[s_offset][s_index * CACHE_WAY]) : 32'h0) : (|hit) ? cache_reg[s_offset][s_index * CACHE_WAY + hit - 1] : 32'h0;
-***/
 
 	localparam IDLE = 1'b0;
   localparam TRANS = 1'b1;
@@ -166,14 +179,14 @@ module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
 						integer a;
             integer b;
 						for (b = 0; b < CACHE_WIDTH; b = b + 1) begin : fifo
-							cache_reg[b][s_index * CACHE_WAY] <= 0;
-              tag_reg[b][s_index * CACHE_WAY] <= 0;
-							valid_reg[b][s_index * CACHE_WAY] <= 0;
 							for (a = 1; a < CACHE_WAY; a = a + 1) begin
                 cache_reg[b][s_index * CACHE_WAY + a] <= cache_reg[b][s_index * CACHE_WAY + a - 1];
                 tag_reg[b][s_index * CACHE_WAY + a] <= tag_reg[b][s_index * CACHE_WAY + a - 1];
                 valid_reg[b][s_index * CACHE_WAY + a] <= valid_reg[b][s_index * CACHE_WAY + a - 1];
               end
+							cache_reg[b][s_index * CACHE_WAY] <= 0;
+              tag_reg[b][s_index * CACHE_WAY] <= 0;
+              valid_reg[b][s_index * CACHE_WAY] <= 0;
             end
 						s_axi_arvalid <= 1'b0;
 						s_axi_rready <= 1'b1;                                           
