@@ -57,7 +57,7 @@ always @(posedge clk) begin
     c_axi_rdata   <= 32'b0;
 	end 
 	else begin
-		axi_arready <= 1'b1;
+		c_axi_arready <= 1'b1;
 		if(c_axi_arvalid && c_axi_arready) begin
 			c_axi_rvalid <= 1'b1;
 			c_axi_rdata  <= c_rdata;
