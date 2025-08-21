@@ -83,6 +83,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
 	wire [CACHE_WAY - 1 : 0]access;
 	wire [CACHE_WAY - 1 : 0]hit;
 
+/***
 	wire [127:0] cache_test00 = {cache_reg[0][0],cache_reg[1][0],cache_reg[2][0],cache_reg[3][0]};
 	wire [127:0] cache_test01 = {cache_reg[0][1],cache_reg[1][1],cache_reg[2][1],cache_reg[3][1]};
 	wire [127:0] cache_test02 = {cache_reg[0][2],cache_reg[1][2],cache_reg[2][2],cache_reg[3][2]};
@@ -116,17 +117,31 @@ module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
 	wire [107:0] tag_test15 = {tag_reg[0][13],tag_reg[1][13],tag_reg[2][13],tag_reg[3][13]};
 	wire [107:0] tag_test16 = {tag_reg[0][14],tag_reg[1][14],tag_reg[2][14],tag_reg[3][14]};
 	wire [107:0] tag_test17 = {tag_reg[0][15],tag_reg[1][15],tag_reg[2][15],tag_reg[3][15]};
+***/
 
 	generate 
     genvar i; 
       for(i = 0; i < CACHE_WAY; i = i + 1) begin : comparator
-        assign hit = ((s_tag == tag_reg[s_offset][s_index * CACHE_WAY + i]) && (valid_reg[s_offset][s_index * CACHE_WAY + i])) ? i + 1 : 0;
-				assign access = ((tag == tag_reg[offset][index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i])) ? i + 1  : access;
+        assign hit[i] = ((s_tag == tag_reg[s_offset][s_index * CACHE_WAY + i]) && (valid_reg[s_offset][s_index * CACHE_WAY + i])) ? 1 : 0;
+				assign access[i] = ((tag == tag_reg[offset][index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i])) ? 1 : 0;
 			end
 	endgenerate
 
+	function integer log2;
+    input value;
+    integer loop_var;
+		begin
+    for (loop_var = 0; loop_var < CACHE_WAY; loop_var = loop_var + 1) begin
+      if(value != 0) begin
+				value = value >> 1;
+				log2 = loop_var;
+			end
+    end
+	end
+endfunction
+
 	assign m_axi_rvalid = axi_rvalid && !axi_rvalid_enable;
-	assign m_axi_rdata  = (|hit) ? cache_reg[s_offset][s_index * CACHE_WAY + hit - 1] : 32'h0;
+	assign m_axi_rdata  = (|hit) ? cache_reg[s_offset][s_index * CACHE_WAY + log2(hit) - 1] : 32'h0;
 	wire	 axi_rvalid   = (s_axi_arlen != 0) ? s_axi_rlast : (|hit) && !(m_axi_arvalid && m_axi_arready);
 	reg axi_rvalid_enable;
 	always @(posedge clk) begin
