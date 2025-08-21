@@ -83,22 +83,22 @@ module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
 	wire [CACHE_WAY - 1 : 0]access;
 	wire [CACHE_WAY - 1 : 0]hit;
 
-	wire [127:0] cache_test00 = {cache_reg[0][0],cacge_reg[1][0],cache_reg[2][0],cache_reg[3][0]};
-	wire [127:0] cache_test01 = {cache_reg[0][1],cacge_reg[1][1],cache_reg[2][1],cache_reg[3][1]};
-	wire [127:0] cache_test02 = {cache_reg[0][2],cacge_reg[1][2],cache_reg[2][2],cache_reg[3][2]};
-	wire [127:0] cache_test03 = {cache_reg[0][3],cacge_reg[1][3],cache_reg[2][3],cache_reg[3][3]};
-	wire [127:0] cache_test04 = {cache_reg[0][4],cacge_reg[1][4],cache_reg[2][4],cache_reg[3][4]};
-	wire [127:0] cache_test05 = {cache_reg[0][5],cacge_reg[1][5],cache_reg[2][5],cache_reg[3][5]};
-	wire [127:0] cache_test06 = {cache_reg[0][6],cacge_reg[1][6],cache_reg[2][6],cache_reg[3][6]};
-	wire [127:0] cache_test07 = {cache_reg[0][7],cacge_reg[1][7],cache_reg[2][7],cache_reg[3][7]};
-	wire [127:0] cache_test10 = {cache_reg[0][8],cacge_reg[1][8],cache_reg[2][8],cache_reg[3][8]};
-	wire [127:0] cache_test11 = {cache_reg[0][9],cacge_reg[1][9],cache_reg[2][9],cache_reg[3][9]};
-	wire [127:0] cache_test12 = {cache_reg[0][10],cacge_reg[1][10],cache_reg[2][10],cache_reg[3][10]};
-	wire [127:0] cache_test13 = {cache_reg[0][11],cacge_reg[1][11],cache_reg[2][11],cache_reg[3][11]};
-	wire [127:0] cache_test14 = {cache_reg[0][12],cacge_reg[1][12],cache_reg[2][12],cache_reg[3][12]};
-	wire [127:0] cache_test15 = {cache_reg[0][13],cacge_reg[1][13],cache_reg[2][13],cache_reg[3][13]};
-	wire [127:0] cache_test16 = {cache_reg[0][14],cacge_reg[1][14],cache_reg[2][14],cache_reg[3][14]};
-	wire [127:0] cache_test17 = {cache_reg[0][15],cacge_reg[1][15],cache_reg[2][15],cache_reg[3][15]};
+	wire [127:0] cache_test00 = {cache_reg[0][0],cache_reg[1][0],cache_reg[2][0],cache_reg[3][0]};
+	wire [127:0] cache_test01 = {cache_reg[0][1],cache_reg[1][1],cache_reg[2][1],cache_reg[3][1]};
+	wire [127:0] cache_test02 = {cache_reg[0][2],cache_reg[1][2],cache_reg[2][2],cache_reg[3][2]};
+	wire [127:0] cache_test03 = {cache_reg[0][3],cache_reg[1][3],cache_reg[2][3],cache_reg[3][3]};
+	wire [127:0] cache_test04 = {cache_reg[0][4],cache_reg[1][4],cache_reg[2][4],cache_reg[3][4]};
+	wire [127:0] cache_test05 = {cache_reg[0][5],cache_reg[1][5],cache_reg[2][5],cache_reg[3][5]};
+	wire [127:0] cache_test06 = {cache_reg[0][6],cache_reg[1][6],cache_reg[2][6],cache_reg[3][6]};
+	wire [127:0] cache_test07 = {cache_reg[0][7],cache_reg[1][7],cache_reg[2][7],cache_reg[3][7]};
+	wire [127:0] cache_test10 = {cache_reg[0][8],cache_reg[1][8],cache_reg[2][8],cache_reg[3][8]};
+	wire [127:0] cache_test11 = {cache_reg[0][9],cache_reg[1][9],cache_reg[2][9],cache_reg[3][9]};
+	wire [127:0] cache_test12 = {cache_reg[0][10],cache_reg[1][10],cache_reg[2][10],cache_reg[3][10]};
+	wire [127:0] cache_test13 = {cache_reg[0][11],cache_reg[1][11],cache_reg[2][11],cache_reg[3][11]};
+	wire [127:0] cache_test14 = {cache_reg[0][12],cache_reg[1][12],cache_reg[2][12],cache_reg[3][12]};
+	wire [127:0] cache_test15 = {cache_reg[0][13],cache_reg[1][13],cache_reg[2][13],cache_reg[3][13]};
+	wire [127:0] cache_test16 = {cache_reg[0][14],cache_reg[1][14],cache_reg[2][14],cache_reg[3][14]};
+	wire [127:0] cache_test17 = {cache_reg[0][15],cache_reg[1][15],cache_reg[2][15],cache_reg[3][15]};
 
 	generate 
     genvar i; 
