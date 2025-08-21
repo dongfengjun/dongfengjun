@@ -26,6 +26,7 @@ VM_CLASSES_FAST += \
 	VysyxSoCFull \
 	VysyxSoCFull__Dpi_Export__0 \
 	VysyxSoCFull___024root__DepSet_h4d156741__0 \
+	VysyxSoCFull___024root__DepSet_h4d156741__1 \
 	VysyxSoCFull___024root__DepSet_h0188974b__0 \
 	VysyxSoCFull___024root__DepSet_h0188974b__1 \
 	VysyxSoCFull___024root__DepSet_h0188974b__2 \

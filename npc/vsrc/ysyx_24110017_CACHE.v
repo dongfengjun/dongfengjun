@@ -128,7 +128,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
 	endgenerate
 
 	function integer log2;
-    input value;
+    input [CACHE_WAY - 1 : 0] value;
     integer loop_var;
 		begin
     for (loop_var = 0; loop_var < CACHE_WAY; loop_var = loop_var + 1) begin
