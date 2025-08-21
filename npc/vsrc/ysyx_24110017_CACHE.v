@@ -83,42 +83,6 @@ module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
 	wire [CACHE_WAY - 1 : 0]access;
 	wire [CACHE_WAY - 1 : 0]hit;
 
-/***
-	wire [127:0] cache_test00 = {cache_reg[0][0],cache_reg[1][0],cache_reg[2][0],cache_reg[3][0]};
-	wire [127:0] cache_test01 = {cache_reg[0][1],cache_reg[1][1],cache_reg[2][1],cache_reg[3][1]};
-	wire [127:0] cache_test02 = {cache_reg[0][2],cache_reg[1][2],cache_reg[2][2],cache_reg[3][2]};
-	wire [127:0] cache_test03 = {cache_reg[0][3],cache_reg[1][3],cache_reg[2][3],cache_reg[3][3]};
-	wire [127:0] cache_test04 = {cache_reg[0][4],cache_reg[1][4],cache_reg[2][4],cache_reg[3][4]};
-	wire [127:0] cache_test05 = {cache_reg[0][5],cache_reg[1][5],cache_reg[2][5],cache_reg[3][5]};
-	wire [127:0] cache_test06 = {cache_reg[0][6],cache_reg[1][6],cache_reg[2][6],cache_reg[3][6]};
-	wire [127:0] cache_test07 = {cache_reg[0][7],cache_reg[1][7],cache_reg[2][7],cache_reg[3][7]};
-	wire [127:0] cache_test10 = {cache_reg[0][8],cache_reg[1][8],cache_reg[2][8],cache_reg[3][8]};
-	wire [127:0] cache_test11 = {cache_reg[0][9],cache_reg[1][9],cache_reg[2][9],cache_reg[3][9]};
-	wire [127:0] cache_test12 = {cache_reg[0][10],cache_reg[1][10],cache_reg[2][10],cache_reg[3][10]};
-	wire [127:0] cache_test13 = {cache_reg[0][11],cache_reg[1][11],cache_reg[2][11],cache_reg[3][11]};
-	wire [127:0] cache_test14 = {cache_reg[0][12],cache_reg[1][12],cache_reg[2][12],cache_reg[3][12]};
-	wire [127:0] cache_test15 = {cache_reg[0][13],cache_reg[1][13],cache_reg[2][13],cache_reg[3][13]};
-	wire [127:0] cache_test16 = {cache_reg[0][14],cache_reg[1][14],cache_reg[2][14],cache_reg[3][14]};
-	wire [127:0] cache_test17 = {cache_reg[0][15],cache_reg[1][15],cache_reg[2][15],cache_reg[3][15]};
-
-	wire [107:0] tag_test00 = {tag_reg[0][0],tag_reg[1][0],tag_reg[2][0],tag_reg[3][0]};
-	wire [107:0] tag_test01 = {tag_reg[0][1],tag_reg[1][1],tag_reg[2][1],tag_reg[3][1]};
-	wire [107:0] tag_test02 = {tag_reg[0][2],tag_reg[1][2],tag_reg[2][2],tag_reg[3][2]};
-	wire [107:0] tag_test03 = {tag_reg[0][3],tag_reg[1][3],tag_reg[2][3],tag_reg[3][3]};
-	wire [107:0] tag_test04 = {tag_reg[0][4],tag_reg[1][4],tag_reg[2][4],tag_reg[3][4]};
-	wire [107:0] tag_test05 = {tag_reg[0][5],tag_reg[1][5],tag_reg[2][5],tag_reg[3][5]};
-	wire [107:0] tag_test06 = {tag_reg[0][6],tag_reg[1][6],tag_reg[2][6],tag_reg[3][6]};
-	wire [107:0] tag_test07 = {tag_reg[0][7],tag_reg[1][7],tag_reg[2][7],tag_reg[3][7]};
-	wire [107:0] tag_test10 = {tag_reg[0][8],tag_reg[1][8],tag_reg[2][8],tag_reg[3][8]};
-	wire [107:0] tag_test11 = {tag_reg[0][9],tag_reg[1][9],tag_reg[2][9],tag_reg[3][9]};
-	wire [107:0] tag_test12 = {tag_reg[0][10],tag_reg[1][10],tag_reg[2][10],tag_reg[3][10]};
-	wire [107:0] tag_test13 = {tag_reg[0][11],tag_reg[1][11],tag_reg[2][11],tag_reg[3][11]};
-	wire [107:0] tag_test14 = {tag_reg[0][12],tag_reg[1][12],tag_reg[2][12],tag_reg[3][12]};
-	wire [107:0] tag_test15 = {tag_reg[0][13],tag_reg[1][13],tag_reg[2][13],tag_reg[3][13]};
-	wire [107:0] tag_test16 = {tag_reg[0][14],tag_reg[1][14],tag_reg[2][14],tag_reg[3][14]};
-	wire [107:0] tag_test17 = {tag_reg[0][15],tag_reg[1][15],tag_reg[2][15],tag_reg[3][15]};
-***/
-
 	generate 
     genvar i; 
       for(i = 0; i < CACHE_WAY; i = i + 1) begin : comparator
@@ -131,14 +95,14 @@ module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
     input [CACHE_WAY - 1 : 0] value;
     integer loop_var;
 		begin
-    for (loop_var = 0; loop_var < CACHE_WAY; loop_var = loop_var + 1) begin
-      if(value != 0) begin
-				value = value >> 1;
-				log2 = loop_var;
+			for (loop_var = 0; loop_var < CACHE_WAY; loop_var = loop_var + 1) begin
+				if(value != 0) begin
+					value = value >> 1;
+					log2 = loop_var;
+				end
 			end
-    end
-	end
-endfunction
+		end
+	endfunction
 
 	assign m_axi_rvalid = axi_rvalid && !axi_rvalid_enable;
 	assign m_axi_rdata  = (|hit) ? cache_reg[s_offset][s_index * CACHE_WAY + log2(hit)] : 32'h0;
@@ -149,9 +113,8 @@ endfunction
 		else axi_rvalid_enable <= 1'b0;
 	end 
 
-	localparam IDLE = 1'b0;
+	localparam IDLE  = 1'b0;
   localparam TRANS = 1'b1;
-//  localparam RETURN = 2'b10;
   reg state;
 
 	always @(posedge clk or posedge rst) begin
@@ -160,7 +123,6 @@ endfunction
 			case(state)
 				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && (access == 0) ? TRANS : state;
 				TRANS:   state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
-//        RETURN:	 state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
         default: state <= state;
 			endcase
 		end
@@ -236,33 +198,9 @@ endfunction
 						s_axi_arsize <= 3'b0;
 						s_axi_arlen  <= 8'b0;
 						s_axi_rready <= 1'b0;
-//						m_axi_rvalid <= 1'b1;
 						burst_counter <= 0;
-/***
-						if(s_axi_arlen == 8'b0) begin
-							m_axi_rdata <= s_axi_rdata;
-						end
-						else begin
-							m_axi_rdata <= cache_reg[s_offset][s_index * CACHE_WAY];
-						end
-					end
-					if(m_axi_rvalid && m_axi_rready) begin
-						m_axi_rvalid <= 1'b0;
-					end
-***/
 					end
 				end
-/***
-				RETURN : begin
-					m_axi_rvalid <= 1'b1;
-					m_axi_arready <= 1'b0;
-					m_axi_rdata <= cache_reg[offset][index * CACHE_WAY + access - 1];
-					m_axi_rresp  <= 2'b11;
-					if(m_axi_rvalid && m_axi_rready) begin
-						m_axi_rvalid <= 0;
-					end		
-				end
-***/
 				endcase
 			end
 		end

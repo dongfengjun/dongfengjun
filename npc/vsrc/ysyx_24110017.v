@@ -177,7 +177,7 @@ ysyx_24110017_IFU IFU(clock,reset,isCHazard,
 		if_axi_arlen,if_axi_arsize,if_axi_arburst,
 		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast
 );
-ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei_id, //w < n
+ysyx_24110017_CACHE #(2,4,1) ICACHE(clock,reset,fencei_id, //w < n
 		if_axi_awready,if_axi_awvalid,if_axi_awid,if_axi_awaddr,
 		if_axi_awlen,if_axi_awsize,if_axi_awburst,
 		if_axi_wready,if_axi_wvalid,if_axi_wdata,if_axi_wstrb,if_axi_wlast,
