@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_EXU(
 	input  wire clk,
 	input  wire rst,
@@ -10,10 +10,10 @@ module ysyx_24110017_EXU(
 	output reg  [31:0] inst_o,
 `endif
 
-	input  wire id_valid_i,
+	input  wire  id_valid_i,
 	output wire  ex_ready_o,
 	output wire  ex_valid_o,
-	input  wire ls_ready_i,
+	input  wire  ls_ready_i,
 	
   input  wire [31:0] pc_i,  //i.bit
   input  wire [31:0] imm_i,
@@ -201,6 +201,15 @@ wire [3:0]ls_wmask = ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3
  : ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0011
  : ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1111
  : ((ls_waddr % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0010
+ : ((ls_waddr % 4 == 2) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0100 
+ : ((ls_waddr % 4 == 2) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b1100 
+ : ((ls_waddr % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b1000 
+ : 4'b0;
+/***
+wire [3:0]ls_wmask = ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0001
+ : ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0011
+ : ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1111
+ : ((ls_waddr % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0010
  : ((ls_waddr % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0110 
  : ((ls_waddr % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1110
  : ((ls_waddr % 4 == 2) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0100 
@@ -210,13 +219,12 @@ wire [3:0]ls_wmask = ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3
  : ((ls_waddr % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b1000 
  : ((ls_waddr % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1000
  : 4'b0;
+***/
 wire [31:0]ls_raddr = (op_i == 7'b0000011) ? (r1_i + offset) : 32'h0;
-/***
 wire [ 2:0]ls_awsize = (op_i == 7'b0100011 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  7'b0100011 && funct3_i == 3'b001) ? 3'b1 : (op_i == 7'b0100011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
 wire [2:0]ls_arsize = (op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 7'b0000011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
-***/
-wire [2:0]ls_awsize = 3'b10;
-wire [2:0]ls_arsize = 3'b10;
+//wire [2:0]ls_awsize = 3'b10;
+//wire [2:0]ls_arsize = 3'b10;
 wire [7:0]ls_awlen = 8'b0;
 wire [7:0]ls_arlen = 8'b0;
 wire [1:0]ls_awburst = 2'b01;
