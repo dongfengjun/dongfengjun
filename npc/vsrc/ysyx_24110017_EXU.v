@@ -134,7 +134,7 @@ always @(posedge clk) begin
 					gpr_wen_o     <= gpr_wen_i;
 					mepc_o        <= mepc_w;
 					mcause_o      <= mcause_w;
-					csrsw_o       <= csrsw;
+					csrsw_o       <= csrs_w;
 					csrs_wen_o    <= csrs_wen_i;
 					ex_o          <= ex;
 					ls_valid_o    <= ls_valid;
