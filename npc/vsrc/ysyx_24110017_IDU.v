@@ -5,8 +5,10 @@ module ysyx_24110017_IDU(
 	input  wire isRAW,
 	input  wire isCHazard,
 
+`ifndef YOSYS_STA
 	output reg  [31:0] inst_o,//difftest
-	
+`endif
+
 	output wire [31:0] prepc_o,
 	output wire prepc_en_o,
 
@@ -45,7 +47,7 @@ module ysyx_24110017_IDU(
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
-always @(posedge clk or posedge rst) begin
+always @(posedge clk) begin
 	if(rst) state <= IDLE;
 	else if(isCHazard) state <= IDLE;
   else begin
@@ -60,9 +62,11 @@ assign id_valid_o = (state == WAIT) && (!isRAW);
 assign id_ready_o = (state == IDLE) && (!isRAW);
 
 
-always@(posedge clk or posedge rst) begin
+always@(posedge clk) begin
 	if(rst) begin
+`ifndef YOSYS_STA
 		inst_o			<= 32'h0;
+`endif
 		pc_o				<= 32'h0;
 		imm_o				<= 32'h0;
 		op_o				<= 7'b0;
@@ -81,7 +85,9 @@ always@(posedge clk or posedge rst) begin
 		fencei_o		<= 1'b0;
 	end
 	else if(isCHazard) begin
-    inst_o      <= 32'h0;
+`ifndef YOSYS_STA
+		inst_o      <= 32'h0;
+`endif
     pc_o        <= 32'h0;
     imm_o       <= 32'h0;
     op_o        <= 7'b0;
@@ -105,7 +111,9 @@ always@(posedge clk or posedge rst) begin
 			end
 			WAIT: begin
 				if(id_valid_o && ex_ready_i) begin
+`ifndef YOSYS_STA
 					inst_o			<= inst_i;
+`endif
 					pc_o        <= pc_i;
 					imm_o       <= imm;
 					op_o				<= op;

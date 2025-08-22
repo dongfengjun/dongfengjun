@@ -12,7 +12,7 @@ module ysyx_24110017_PCU(
 
 assign pc_valid_o = 1'b1;
 
-always @(posedge clk or posedge rst) begin
+always @(posedge clk) begin
 	if(rst) begin
 		pc_o <= 32'h30000000; //flash
 	end
@@ -23,15 +23,15 @@ always @(posedge clk or posedge rst) begin
 				pc_o <= snpc_i;
 			end
 		end
+`ifndef YOSYS_STA
 		if(((pc_o < 32'h30000000) || (pc_o >= 32'h40000000)) 
 			&& ((pc_o < 32'h0f000000) || (pc_o >= 32'h0f002000))
 			&& ((pc_o < 32'h80000000) || (pc_o >= 32'h84000000))
 			&& ((pc_o < 32'ha0000000) || (pc_o >= 32'hc0000000))) begin
-`ifndef YOSYS_STA
 			$fwrite(32'h80000002, "Assertion failed: Invalid PC `%xh`\n",pc_o);
       $fatal;
-`endif
 		end
+`endif
 	end
 end
 

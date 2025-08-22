@@ -19,9 +19,8 @@ module ysyx_24110017_LSU(
 	input  wire [ 4:0] rd_i,
   input  wire gpr_wen_i,
 	input  wire [31:0] mepc_i,
-  input  wire [31:0] mstatus_i,
   input  wire [31:0] mcause_i,
-  input  wire [31:0] mtvec_i,
+  input  wire [31:0] csrsw_i,
   input  wire [ 3:0] csrs_wen_i,
   input  wire [31:0] ex_i,
   input  wire ls_valid_i,ls_wen_i,
@@ -36,9 +35,8 @@ module ysyx_24110017_LSU(
 	output reg  [ 4:0] rd_o,
   output reg  gpr_wen_o,
   output reg  [31:0] mepc_o,
-  output reg  [31:0] mstatus_o,
   output reg  [31:0] mcause_o,
-  output reg  [31:0] mtvec_o,
+  output reg  [31:0] csrsw_o,
   output reg  [ 3:0] csrs_wen_o,
  
 	input  wire ls_axi_awready,
@@ -103,9 +101,8 @@ always@(posedge clk or posedge rst) begin
 		rd_o					<= 5'b0;
 		gpr_wen_o			<= 1'b0;
 		mepc_o				<= 32'h0;
-		mstatus_o			<= 32'h0;
 		mcause_o			<= 32'h0;
-		mtvec_o				<= 32'h0;
+		csrsw_o				<= 32'h0;
 		csrs_wen_o		<= 4'b0;
 		xrd_o					<= 32'h0;
 	end
@@ -115,9 +112,8 @@ always@(posedge clk or posedge rst) begin
 				rd_o          <= 5'b0;
 		    gpr_wen_o     <= 1'b0;
 		    mepc_o        <= 32'h0;
-		    mstatus_o     <= 32'h0;
 		    mcause_o      <= 32'h0;
-		    mtvec_o       <= 32'h0;
+		    csrsw_o       <= 32'h0;
 		    csrs_wen_o    <= 4'b0;
 		    xrd_o         <= 32'h0; 
 			end
@@ -130,9 +126,8 @@ always@(posedge clk or posedge rst) begin
 					rd_o          <= rd_i;
 					gpr_wen_o     <= gpr_wen_i;
 					mepc_o        <= mepc_i;
-					mstatus_o     <= mstatus_i;
 					mcause_o      <= mcause_i;
-					mtvec_o       <= mtvec_i;
+					csrsw_o       <= csrsw_i;
 					csrs_wen_o    <= csrs_wen_i;
 					xrd_o         <= xrd;
 				end
@@ -141,9 +136,8 @@ always@(posedge clk or posedge rst) begin
 				rd_o          <= 5'b0;
         gpr_wen_o     <= 1'b0;
         mepc_o        <= 32'h0;
-        mstatus_o     <= 32'h0;
         mcause_o      <= 32'h0;
-        mtvec_o       <= 32'h0;
+        csrsw_o       <= 32'h0;
         csrs_wen_o    <= 4'b0;
         xrd_o         <= 32'h0;
 			end

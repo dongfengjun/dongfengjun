@@ -111,7 +111,7 @@ wire [ 6:0] op_ex;
 wire [ 2:0] funct3_ex;
 wire [ 4:0] rd_ex;
 wire gpr_wen_ex;
-wire [31:0]mepc_ex,mstatus_ex,mcause_ex,mtvec_ex;
+wire [31:0]mepc_ex,mcause_ex,csrsw_ex;
 wire [3:0]csrs_wen_ex;
 wire [31:0] ex_ex;
 wire ls_valid_ex,ls_wen_ex;
@@ -130,10 +130,7 @@ wire difftest;
 wire [31:0] xrd_ls;
 wire [ 4:0] rd_ls;
 wire gpr_wen_ls;
-wire [31:0] mepc_ls;
-wire [31:0] mstatus_ls;
-wire [31:0] mcause_ls;
-wire [31:0] mtvec_ls;
+wire [31:0] mepc_ls,mcause_ls,csrsw_ls;
 wire [3:0] csrs_wen_ls;
 
 wire [31:0] ls_axi_awaddr,ls_axi_wdata,ls_axi_araddr,ls_axi_rdata;
@@ -210,8 +207,8 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 		pc_id,imm_id,op_id,funct3_id,rd_id,gpr_wen_id,
 		alu_sel_id,a_id,b_id,r1_id,r2_id,csr_id,mepc_id,mtvec_id,
 		csrs_wen_id,
-		op_ex,funct3_ex,rd_ex,gpr_wen_ex,mepc_ex,mstatus_ex,mcause_ex,mtvec_ex,
-		csrs_wen_ex,
+		op_ex,funct3_ex,rd_ex,gpr_wen_ex,
+		mepc_ex,mcause_ex,csrsw_ex,csrs_wen_ex,
 		ex_ex,
 		ls_valid_ex,ls_wen_ex,ls_read_ex,ls_write_ex,
 		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,ls_wmask_ex,ls_awsize_ex,ls_arsize_ex,ls_awlen_ex,ls_arlen_ex,ls_awburst_ex,ls_arburst_ex,dnpc_ex
@@ -219,14 +216,14 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 ysyx_24110017_LSU LSU(clock,reset,
 		pc_ex,inst_ex,dnpc_ex,pc_ls,inst_ls,dnpc_ls,//difftest
 		(ex_valid && !isCHazard),ls_ready,ls_valid,difftest,
-		op_ex,funct3_ex,rd_ex,gpr_wen_ex,mepc_ex,mstatus_ex,mcause_ex,mtvec_ex,
-		csrs_wen_ex,
+		op_ex,funct3_ex,rd_ex,gpr_wen_ex,
+		mepc_ex,mcause_ex,csrsw_ex,csrs_wen_ex,
 		ex_ex,ls_valid_ex,ls_wen_ex,ls_read_ex,ls_write_ex,
 		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,
 		ls_wmask_ex,ls_awsize_ex,ls_arsize_ex,
 		ls_awlen_ex,ls_arlen_ex,ls_awburst_ex,ls_arburst_ex,	
-		xrd_ls,rd_ls,gpr_wen_ls,mepc_ls,mstatus_ls,mcause_ls,mtvec_ls,
-		csrs_wen_ls,
+		xrd_ls,rd_ls,gpr_wen_ls,
+		mepc_ls,mcause_ls,csrsw_ls,csrs_wen_ls,
 		ls_axi_awready,ls_axi_awvalid,ls_axi_awid,ls_axi_awaddr,
 		ls_axi_awlen,ls_axi_awsize,ls_axi_awburst,
 		ls_axi_wready,ls_axi_wvalid,ls_axi_wdata,ls_axi_wstrb,ls_axi_wlast,
@@ -279,9 +276,9 @@ ysyx_24110017_CLINT CLINT(clock,reset,
 
 ysyx_24110017_RegisterFile #(4,32) RFU (clock,xrd_ls,rd_ls[3:0],gpr_wen_ls,rs1[3:0],r1,rs2[3:0],r2);
 ysyx_24110017_Reg #(32, 32'b0) mepc_reg (clock,reset,mepc_ls,mepc,csrs_wen_ls[0]);
-ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,mstatus_ls,mstatus,csrs_wen_ls[1]);
+ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,csrsw_ls,mstatus,csrs_wen_ls[1]);
 ysyx_24110017_Reg #(32, 32'b0) mcause_reg (clock,reset,mcause_ls,mcause,csrs_wen_ls[2]);
-ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,mtvec_ls,mtvec,csrs_wen_ls[3]);
+ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,mtvec_ls,csrsw_ls,csrs_wen_ls[3]);
 ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid,1'b0);
 ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
 
