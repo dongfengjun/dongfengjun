@@ -95,9 +95,8 @@ always @(posedge clk) begin
 		rd_o					<= 5'b0;
 		gpr_wen_o			<= 1'b0;
 		mepc_o				<= 32'h0;
-		mstatus_o			<= 32'h0;
 		mcause_o			<= 32'h0;
-		mtvec_o				<= 32'h0;
+		csrsw_o				<= 32'h0;
 		csrs_wen_o		<= 4'b0;
 		ex_o					<= 32'h0;
 		ls_valid_o		<= 1'b0;
@@ -134,9 +133,8 @@ always @(posedge clk) begin
 					rd_o          <= rd_i;
 					gpr_wen_o     <= gpr_wen_i;
 					mepc_o        <= mepc_w;
-					mstatus_o     <= mstatus_w;
 					mcause_o      <= mcause_w;
-					mtvec_o       <= mtvec_w;
+					csrsw_o       <= csrsw;
 					csrs_wen_o    <= csrs_wen_i;
 					ex_o          <= ex;
 					ls_valid_o    <= ls_valid;
