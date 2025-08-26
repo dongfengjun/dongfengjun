@@ -140,6 +140,7 @@ always @(posedge clk) begin
 		case(state)
 			IDLE: begin
 		    ls_wen_o      <= 1'b0;
+				ls_ren_o			<= 1'b0;
 			end
 			WAIT: begin
 				if(ex_valid_o && ls_ready_i) begin
