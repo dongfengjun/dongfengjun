@@ -241,7 +241,7 @@ always @(posedge clk or posedge rst) begin
 		else begin
       case (axi_state)
         AXI_IDLE: begin
-				  if(ls_valid_i && !ls_wen_i) begin
+				  if(ls_valid_i && ls_ren_i) begin
             axi_state <= AXI_READ;
 					  axi_arvalid <= 1'b1;//非DELAY_TEST
 						axi_araddr <= ls_raddr_i;
