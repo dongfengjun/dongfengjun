@@ -23,7 +23,7 @@ module ysyx_24110017_LSU(
   input  wire [31:0] csrsw_i,
   input  wire [ 3:0] csrs_wen_i,
   input  wire [31:0] ex_i,
-  input  wire ls_valid_i,ls_wen_i,
+  input  wire ls_valid_i,ls_wen_i,ls_ren_i,
   input  wire [31:0] ls_waddr_i,ls_wdata_i,ls_raddr_i,
   input  wire [ 3:0] ls_wmask_i,
   input  wire [ 2:0] ls_awsize_i,ls_arsize_i,

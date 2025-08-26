@@ -114,10 +114,11 @@ wire gpr_wen_ex;
 wire [31:0]mepc_ex,mcause_ex,csrsw_ex;
 wire [3:0]csrs_wen_ex;
 wire [31:0] ex_ex;
-wire ls_valid_ex,ls_wen_ex;
+wire ls_valid_ex,ls_wen_ex,ls_ren_ex;
 wire [31:0] ls_waddr_ex,ls_wdata_ex,ls_raddr_ex;
 wire [ 3:0] ls_wmask_ex;
 wire [ 2:0] ls_awsize_ex,ls_arsize_ex;
+wire [ 1:0] ls_awburst_ex,ls_arburst_ex;
 wire [31:0] dnpc_ex;
 /***LSU***/
 wire [31:0]pc_ls,inst_ls,dnpc_ls;//difftest
@@ -207,7 +208,7 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 		op_ex,funct3_ex,rd_ex,gpr_wen_ex,
 		mepc_ex,mcause_ex,csrsw_ex,csrs_wen_ex,
 		ex_ex,
-		ls_valid_ex,ls_wen_ex,
+		ls_valid_ex,ls_wen_ex,ls_ren_ex,
 		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,ls_wmask_ex,ls_awsize_ex,ls_arsize_ex,dnpc_ex
 );
 ysyx_24110017_LSU LSU(clock,reset,

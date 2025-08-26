@@ -39,7 +39,7 @@ module ysyx_24110017_EXU(
   output reg  [31:0] csrsw_o,
   output reg  [ 3:0] csrs_wen_o,
 	output reg  [31:0] ex_o,
-	output reg  ls_valid_o,ls_wen_o,
+	output reg  ls_valid_o,ls_wen_o,ls_ren_o,
 	output reg  [31:0] ls_waddr_o,ls_wdata_o,ls_raddr_o,
 	output reg  [ 3:0] ls_wmask_o,
 	output reg  [ 2:0] ls_awsize_o,ls_arsize_o,
@@ -102,6 +102,7 @@ always @(posedge clk) begin
 		ex_o					<= 32'h0;
 		ls_valid_o		<= 1'b0;
 		ls_wen_o			<= 1'b0;
+		ls_ren_o			<= 1'b0;
 		ls_waddr_o		<= 32'h0;
 		ls_wdata_o		<= 32'h0;
 		ls_raddr_o		<= 32'h0;
@@ -126,6 +127,7 @@ always @(posedge clk) begin
     ex_o          <= 32'h0;
     ls_valid_o    <= 1'b0;
     ls_wen_o      <= 1'b0;
+		ls_ren_o			<= 1'b0;
     ls_waddr_o    <= 32'h0;
     ls_wdata_o    <= 32'h0;
     ls_raddr_o    <= 32'h0;
@@ -155,7 +157,8 @@ always @(posedge clk) begin
 					csrs_wen_o    <= csrs_wen_i;
 					ex_o          <= ex;
 					ls_valid_o    <= ls_valid;
-					ls_wen_o      <= ls_wen;
+					ls_wen_o      <= ls_valid && ls_wen;
+					ls_ren_o			<= ls_valid && !ls_wen;
 					ls_waddr_o    <= ls_waddr;
 					ls_wdata_o    <= ls_wdata;
 					ls_raddr_o    <= ls_raddr;
