@@ -40,12 +40,11 @@ module ysyx_24110017_EXU(
   output reg  [ 3:0] csrs_wen_o,
 	output reg  [31:0] ex_o,
 	output reg  ls_valid_o,ls_wen_o,
-	output reg  ls_read_o,ls_write_o,
 	output reg  [31:0] ls_waddr_o,ls_wdata_o,ls_raddr_o,
 	output reg  [ 3:0] ls_wmask_o,
 	output reg  [ 2:0] ls_awsize_o,ls_arsize_o,
-	output reg  [ 7:0] ls_awlen_o,ls_arlen_o,
-	output reg  [ 1:0] ls_awburst_o,ls_arburst_o,
+//	output reg  [ 7:0] ls_awlen_o,ls_arlen_o,	LSU用不到突发传输
+//	output reg  [ 1:0] ls_awburst_o,ls_arburst_o,
 	output reg  [31:0] dnpc_o
 );
 
@@ -57,7 +56,8 @@ parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
 always @(posedge clk) begin
-	if(rst || isCHazard) state <= IDLE;
+	if(rst) state <= IDLE;
+	else if(isCHazard) state <= IDLE;
   else begin
 		case (state)
 			IDLE: state <= (id_valid_i && ex_ready_o) ? WAIT : state;
@@ -67,7 +67,8 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-	if(rst || isCHazard) ex_valid_reg <= 1'b0;
+	if(rst) ex_valid_reg <= 1'b0;
+	else if(isCHazard) ex_valid_reg <= 1'b0;
 	else begin
 		case(state)
 			IDLE: ex_valid_reg <= 1'b0;
@@ -85,7 +86,7 @@ end
 
 wire [31:0]al_res;
 always @(posedge clk) begin
-	if(rst || isCHazard) begin
+	if(rst) begin
 `ifndef YOSYS_STA
 		pc_o					<= 32'h0;
 		inst_o				<= 32'h0;
@@ -101,26 +102,42 @@ always @(posedge clk) begin
 		ex_o					<= 32'h0;
 		ls_valid_o		<= 1'b0;
 		ls_wen_o			<= 1'b0;
-		ls_read_o			<= 1'b0;
-		ls_write_o		<= 1'b0;
 		ls_waddr_o		<= 32'h0;
 		ls_wdata_o		<= 32'h0;
 		ls_raddr_o		<= 32'h0;
 		ls_wmask_o		<= 4'b0;
 		ls_awsize_o		<= 3'b0;
 		ls_arsize_o		<= 3'b0;
-		ls_awlen_o		<= 8'b0;
-		ls_arlen_o		<= 8'b0;
-		ls_awburst_o	<= 2'b0;
-		ls_arburst_o	<= 2'b0;
 		dnpc_o				<= 32'h0;
 	end
+	else if(isCHazard) begin
+`ifndef YOSYS_STA
+		pc_o          <= 32'h0;
+    inst_o        <= 32'h0;
+    op_o          <= 7'b0;
+`endif
+    funct3_o      <= 3'b0;
+    rd_o          <= 5'b0;
+    gpr_wen_o     <= 1'b0;
+    mepc_o        <= 32'h0;
+    mcause_o      <= 32'h0;
+    csrsw_o       <= 32'h0;
+    csrs_wen_o    <= 4'b0;
+    ex_o          <= 32'h0;
+    ls_valid_o    <= 1'b0;
+    ls_wen_o      <= 1'b0;
+    ls_waddr_o    <= 32'h0;
+    ls_wdata_o    <= 32'h0;
+    ls_raddr_o    <= 32'h0;
+    ls_wmask_o    <= 4'b0;
+		ls_awsize_o   <= 3'b0;
+    ls_arsize_o   <= 3'b0;
+    dnpc_o        <= 32'h0;
+  end
 	else begin
 		case(state)
 			IDLE: begin
 		    ls_wen_o      <= 1'b0;
-		    ls_read_o     <= 1'b0;
-		    ls_write_o    <= 1'b0;
 			end
 			WAIT: begin
 				if(ex_valid_o && ls_ready_i) begin
@@ -139,18 +156,12 @@ always @(posedge clk) begin
 					ex_o          <= ex;
 					ls_valid_o    <= ls_valid;
 					ls_wen_o      <= ls_wen;
-					ls_read_o     <= ls_valid && !ls_wen;
-					ls_write_o    <= ls_valid && ls_wen;
 					ls_waddr_o    <= ls_waddr;
 					ls_wdata_o    <= ls_wdata;
 					ls_raddr_o    <= ls_raddr;
 					ls_wmask_o    <= ls_wmask;
 					ls_awsize_o   <= ls_awsize;
 					ls_arsize_o   <= ls_arsize;
-					ls_awlen_o    <= ls_awlen;
-					ls_arlen_o    <= ls_arlen;
-					ls_awburst_o  <= ls_awburst;
-					ls_arburst_o  <= ls_arburst;
 					dnpc_o				<= dnpc;
 				end
 			end
@@ -196,14 +207,14 @@ wire [31:0]ls_wdata = ((ls_waddr % 4 == 0) && op_i == 7'b0100011) ? r2_i
  : ((ls_waddr % 4 == 3) && op_i == 7'b0100011) ? {r2_i[7:0],24'b0}
  : 32'b0;
 ***/
-wire [31:0]ls_wdata = (op_i == 7'b0100011) ? ((ls_waddr % 4 == 0) ? r2_i : (ls_waddr % 4 == 1) ? {r2_i[23:0],8'b0} : (ls_waddr % 4 == 2) ? {r2_i[15:0],16'b0} : (ls_waddr % 4 == 3) ? {r2_i[7:0],24'b0} : 32'h0) : 32'h0;
-wire [3:0]ls_wmask = ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0001
- : ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0011
- : ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1111
- : ((ls_waddr % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0010
- : ((ls_waddr % 4 == 2) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0100 
- : ((ls_waddr % 4 == 2) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b1100 
- : ((ls_waddr % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b1000 
+wire [31:0]ls_wdata = (op_i == 7'b0100011) ? ((ls_waddr[1:0] == 0) ? r2_i : (ls_waddr[1:0] == 1) ? {r2_i[23:0],8'b0} : (ls_waddr[1:0] == 2) ? {r2_i[15:0],16'b0} : (ls_waddr[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0) : 32'h0;
+wire [3:0]ls_wmask = ((ls_waddr[1:0] == 0) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0001
+ : ((ls_waddr[1:0] == 0) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0011
+ : ((ls_waddr[1:0] == 0) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1111
+ : ((ls_waddr[1:0] == 1) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0010
+ : ((ls_waddr[1:0] == 2) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0100 
+ : ((ls_waddr[1:0] == 2) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b1100 
+ : ((ls_waddr[1:0] == 3) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b1000 
  : 4'b0;
 /***
 wire [3:0]ls_wmask = ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0001
@@ -223,12 +234,6 @@ wire [3:0]ls_wmask = ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3
 wire [31:0]ls_raddr = (op_i == 7'b0000011) ? (r1_i + offset) : 32'h0;
 wire [ 2:0]ls_awsize = (op_i == 7'b0100011 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  7'b0100011 && funct3_i == 3'b001) ? 3'b1 : (op_i == 7'b0100011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
 wire [2:0]ls_arsize = (op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 7'b0000011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
-//wire [2:0]ls_awsize = 3'b10;
-//wire [2:0]ls_arsize = 3'b10;
-wire [7:0]ls_awlen = 8'b0;
-wire [7:0]ls_arlen = 8'b0;
-wire [1:0]ls_awburst = 2'b01;
-wire [1:0]ls_arburst = 2'b01;
 
 /***BU***/
 wire [31:0]offset = imm_i;

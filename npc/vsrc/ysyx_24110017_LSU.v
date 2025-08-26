@@ -24,12 +24,11 @@ module ysyx_24110017_LSU(
   input  wire [ 3:0] csrs_wen_i,
   input  wire [31:0] ex_i,
   input  wire ls_valid_i,ls_wen_i,
-  input  wire ls_read_i,ls_write_i,
   input  wire [31:0] ls_waddr_i,ls_wdata_i,ls_raddr_i,
   input  wire [ 3:0] ls_wmask_i,
   input  wire [ 2:0] ls_awsize_i,ls_arsize_i,
-  input  wire [ 7:0] ls_awlen_i,ls_arlen_i,
-  input  wire [ 1:0] ls_awburst_i,ls_arburst_i,
+//  input  wire [ 7:0] ls_awlen_i,ls_arlen_i,
+//  input  wire [ 1:0] ls_awburst_i,ls_arburst_i,
 	
 	output reg  [31:0] xrd_o,
 	output reg  [ 4:0] rd_o,
@@ -242,15 +241,13 @@ always @(posedge clk or posedge rst) begin
 		else begin
       case (axi_state)
         AXI_IDLE: begin
-				  if(ls_read_i) begin
+				  if(ls_valid_i && !ls_wen_i) begin
             axi_state <= AXI_READ;
 					  axi_arvalid <= 1'b1;//非DELAY_TEST
 						axi_araddr <= ls_raddr_i;
 						axi_arsize <= ls_arsize_i;
-						axi_arlen <= ls_arlen_i;
-						axi_arburst <= ls_arburst_i;
 					end
-					if(ls_write_i) begin
+					if(ls_valid_i && ls_wen_i) begin
 		        axi_state <= AXI_WRITE1;
 						axi_awvalid <= 1'b1;
 						if(ls_waddr_i - 32'ha0000000 < 32'h20000000) begin
@@ -258,8 +255,6 @@ always @(posedge clk or posedge rst) begin
 						end
 						axi_awaddr <= ls_waddr_i;
 						axi_awsize <= ls_awsize_i;
-						axi_awlen <= ls_awlen_i;
-						axi_awburst <= ls_awburst_i;
 						axi_wstrb <= ls_wmask_i;
 	        end
 				end

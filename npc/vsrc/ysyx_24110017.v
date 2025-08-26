@@ -115,12 +115,9 @@ wire [31:0]mepc_ex,mcause_ex,csrsw_ex;
 wire [3:0]csrs_wen_ex;
 wire [31:0] ex_ex;
 wire ls_valid_ex,ls_wen_ex;
-wire ls_read_ex,ls_write_ex;
 wire [31:0] ls_waddr_ex,ls_wdata_ex,ls_raddr_ex;
 wire [ 3:0] ls_wmask_ex;
 wire [ 2:0] ls_awsize_ex,ls_arsize_ex;
-wire [ 7:0] ls_awlen_ex,ls_arlen_ex;
-wire [ 1:0] ls_awburst_ex,ls_arburst_ex;
 wire [31:0] dnpc_ex;
 /***LSU***/
 wire [31:0]pc_ls,inst_ls,dnpc_ls;//difftest
@@ -174,7 +171,7 @@ ysyx_24110017_IFU IFU(clock,reset,isCHazard,
 		if_axi_arlen,if_axi_arsize,if_axi_arburst,
 		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast
 );
-ysyx_24110017_CACHE #(6,4,3) ICACHE(clock,reset,fencei_id, //w < n
+ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei_id, //w < n
 		if_axi_awready,if_axi_awvalid,if_axi_awid,if_axi_awaddr,
 		if_axi_awlen,if_axi_awsize,if_axi_awburst,
 		if_axi_wready,if_axi_wvalid,if_axi_wdata,if_axi_wstrb,if_axi_wlast,
@@ -210,18 +207,17 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 		op_ex,funct3_ex,rd_ex,gpr_wen_ex,
 		mepc_ex,mcause_ex,csrsw_ex,csrs_wen_ex,
 		ex_ex,
-		ls_valid_ex,ls_wen_ex,ls_read_ex,ls_write_ex,
-		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,ls_wmask_ex,ls_awsize_ex,ls_arsize_ex,ls_awlen_ex,ls_arlen_ex,ls_awburst_ex,ls_arburst_ex,dnpc_ex
+		ls_valid_ex,ls_wen_ex,
+		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,ls_wmask_ex,ls_awsize_ex,ls_arsize_ex,dnpc_ex
 );
 ysyx_24110017_LSU LSU(clock,reset,
 		pc_ex,inst_ex,dnpc_ex,pc_ls,inst_ls,dnpc_ls,//difftest
 		(ex_valid && !isCHazard),ls_ready,ls_valid,difftest,
 		op_ex,funct3_ex,rd_ex,gpr_wen_ex,
 		mepc_ex,mcause_ex,csrsw_ex,csrs_wen_ex,
-		ex_ex,ls_valid_ex,ls_wen_ex,ls_read_ex,ls_write_ex,
+		ex_ex,ls_valid_ex,ls_wen_ex,
 		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,
 		ls_wmask_ex,ls_awsize_ex,ls_arsize_ex,
-		ls_awlen_ex,ls_arlen_ex,ls_awburst_ex,ls_arburst_ex,	
 		xrd_ls,rd_ls,gpr_wen_ls,
 		mepc_ls,mcause_ls,csrsw_ls,csrs_wen_ls,
 		ls_axi_awready,ls_axi_awvalid,ls_axi_awid,ls_axi_awaddr,
