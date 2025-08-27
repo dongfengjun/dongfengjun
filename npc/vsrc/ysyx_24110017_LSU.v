@@ -16,7 +16,7 @@ module ysyx_24110017_LSU(
 	output wire difftest_o,
 	input  wire [ 6:0] op_i,
 	input  wire [ 2:0] funct3_i,
-	input  wire [ 4:0] rd_i,
+	input  wire [ 3:0] rd_i,
   input  wire gpr_wen_i,
 	input  wire [31:0] mepc_i,
   input  wire [31:0] mcause_i,
@@ -31,7 +31,7 @@ module ysyx_24110017_LSU(
 //  input  wire [ 1:0] ls_awburst_i,ls_arburst_i,
 	
 	output reg  [31:0] xrd_o,
-	output reg  [ 4:0] rd_o,
+	output reg  [ 3:0] rd_o,
   output reg  gpr_wen_o,
   output reg  [31:0] mepc_o,
   output reg  [31:0] mcause_o,
@@ -98,7 +98,7 @@ always@(posedge clk or posedge rst) begin
 		inst_o				<= 32'h0;
 		dnpc_o				<= 32'h0;
 `endif
-		rd_o					<= 5'b0;
+		rd_o					<= 4'b0;
 		gpr_wen_o			<= 1'b0;
 		mepc_o				<= 32'h0;
 		mcause_o			<= 32'h0;
@@ -109,7 +109,7 @@ always@(posedge clk or posedge rst) begin
 	else begin
 		case(state)
 			IDLE: begin
-				rd_o          <= 5'b0;
+				rd_o          <= 4'b0;
 		    gpr_wen_o     <= 1'b0;
 		    mepc_o        <= 32'h0;
 		    mcause_o      <= 32'h0;
@@ -134,7 +134,7 @@ always@(posedge clk or posedge rst) begin
 				end
 			end
 			default: begin
-				rd_o          <= 5'b0;
+				rd_o          <= 4'b0;
         gpr_wen_o     <= 1'b0;
         mepc_o        <= 32'h0;
         mcause_o      <= 32'h0;

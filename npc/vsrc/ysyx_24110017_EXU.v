@@ -1,8 +1,8 @@
-//`define YOSYS_STA
 module ysyx_24110017_EXU(
 	input  wire clk,
 	input  wire rst,
-	input  wire isCHazard,
+
+	input  wire flush_i,
 
 `ifndef YOSYS_STA
 	input  wire [31:0] inst_i,//difftest
@@ -15,24 +15,21 @@ module ysyx_24110017_EXU(
 	output wire  ex_valid_o,
 	input  wire  ls_ready_i,
 	
-  input  wire [31:0] pc_i,  //i.bit
+  input  wire [31:0] pc_i,
   input  wire [31:0] imm_i,
   input  wire [ 6:0] op_i,
   input  wire [ 2:0] funct3_i,
-  input  wire [ 4:0] rd_i,
-  input  wire gpr_wen_i,
-  input  wire [ 3:0] alu_sel_i,
-  input  wire [31:0] a_i,
-  input  wire [31:0] b_i,
-	input  wire [31:0] r1_i,
-	input	 wire [31:0] r2_i,
+  input  wire [31:0] r1_i,
+	input  wire [31:0] r2_i,
+	input  wire [ 3:0] rd_i,
+  input  wire				 gpr_wen_i,
   input	 wire [31:0] csr_i,
 	input  wire [31:0] mepc_i,mtvec_i,
 	input  wire [ 3:0] csrs_wen_i,
 
 	output reg  [ 6:0] op_o,
 	output reg  [ 2:0] funct3_o,
-	output reg  [ 4:0] rd_o,
+	output reg  [ 3:0] rd_o,
 	output reg  gpr_wen_o,
 	output reg  [31:0] mepc_o,
   output reg  [31:0] mcause_o,
@@ -93,13 +90,14 @@ always @(posedge clk) begin
 		op_o					<= 7'b0;
 `endif
 		funct3_o			<= 3'b0;
-		rd_o					<= 5'b0;
+		rd_o					<= 4'b0;
 		gpr_wen_o			<= 1'b0;
 		mepc_o				<= 32'h0;
 		mcause_o			<= 32'h0;
 		csrsw_o				<= 32'h0;
 		csrs_wen_o		<= 4'b0;
 		ex_o					<= 32'h0;
+
 		ls_valid_o		<= 1'b0;
 		ls_wen_o			<= 1'b0;
 		ls_ren_o			<= 1'b0;
@@ -118,13 +116,14 @@ always @(posedge clk) begin
     op_o          <= 7'b0;
 `endif
     funct3_o      <= 3'b0;
-    rd_o          <= 5'b0;
+    rd_o          <= 4'b0;
     gpr_wen_o     <= 1'b0;
     mepc_o        <= 32'h0;
     mcause_o      <= 32'h0;
     csrsw_o       <= 32'h0;
     csrs_wen_o    <= 4'b0;
     ex_o          <= 32'h0;
+
     ls_valid_o    <= 1'b0;
     ls_wen_o      <= 1'b0;
 		ls_ren_o			<= 1'b0;
@@ -157,6 +156,7 @@ always @(posedge clk) begin
 					csrsw_o       <= csrs_w;
 					csrs_wen_o    <= csrs_wen_i;
 					ex_o          <= ex;
+
 					ls_valid_o    <= ls_valid;
 					ls_wen_o      <= ls_valid && ls_wen;
 					ls_ren_o			<= ls_valid && !ls_wen;
@@ -174,7 +174,7 @@ always @(posedge clk) begin
 end
 
 wire al_done;
-ysyx_24110017_ALU ALU(clk,rst,a_i,b_i,alu_sel_i,al_res,al_done);
+ysyx_24110017_ALU ALU(clk,rst,a,b,alu_sel,al_res,al_done);
 
 wire [31:0]ex;
 assign ex = 
@@ -199,6 +199,47 @@ wire[31:0] csrs_w =
 			({32{(op_i == 7'b1110011) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
 			({32{(op_i == 7'b1110011) && (funct3_i == 3'b010)}} & (csr_i |  r1_i)) | //I_csrrs
       ({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & (csr_i & ~r1_i)) ; //I_csrrc
+
+/***ALU***/
+wire [3:0]alu_sel;
+wire [31:0]a,b;
+assign a = ((op == 7'b0010011) && (funct3 == 3'b000 || funct3 == 3'b001 || funct3 == 3'b011 || funct3 == 3'b100 || funct3 == 3'b101 || funct3 == 3'b110 || funct3 == 3'b111) || (op == 7'b0110011) && ((funct3 == 3'b000 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0100000) || (funct3 == 3'b001 && funct7 == 7'b0000000) || (funct3 == 3'b011 && funct7 == 7'b0000000) || (funct3 == 3'b100 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0100000) || (funct3 == 3'b110 && funct7 == 7'b0000000) || (funct3 == 3'b111 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? r1_i
+	: ((op == 7'b0010011 && funct3 == 3'b010) || ((op == 7'b0110011) && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b001 && funct7 == 7'b0000001) || (funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b110 && funct7 == 7'b0000001)))) ? $signed(r1_i)
+	: 32'b0;
+assign b = ((op == 7'b0010011) && (funct3 == 3'b000 || funct3 == 3'b001 || funct3 == 3'b011 || funct3 == 3'b100 || funct3 == 3'b110 || funct3 == 3'b111)) ? imm
+	: ((op == 7'b0010011) && (funct3 == 3'b010)) ? $signed(imm)
+	: ((op == 7'b0010011) && (funct3 == 3'b001 || funct3 == 3'b101)) ? {27'b0,shamt}
+	: ((op == 7'b0110011) && ((funct3 == 3'b000 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0100000) || (funct3 == 3'b011 && funct7 == 7'b0000000) || (funct3 == 3'b100 && funct7 == 7'b0000000) || (funct3 == 3'b110 && funct7 == 7'b0000000) || (funct3 == 3'b111 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? r2_i
+	: ((op == 7'b0110011 && ((funct3 == 3'b001 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0100000)))) ? {27'b0,r2_i[4:0]}
+	: ((op == 7'b0110011) && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b001 && funct7 == 7'b0000001) || (funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b110 && funct7 == 7'b0000001))) ? $signed(r2_i)
+	: 32'b0;
+localparam ADD  = 4'b0000;
+localparam SUB  = 4'b0001;
+localparam SLL  = 4'b0010;
+localparam SRL  = 4'b0011;
+localparam SRA  = 4'b0100;
+localparam SLT  = 4'b0101;
+localparam AND  = 4'b0110;
+localparam OR   = 4'b0111;
+localparam XOR  = 4'b1000;
+localparam MUL  = 4'b1001;
+localparam MULH = 4'b1010;
+localparam DIV  = 4'b1011;
+localparam REM  = 4'b1100;
+assign alu_sel =  ((op == 7'b0010011 && funct3 == 3'b000) || (op == 7'b0110011 && funct3 == 3'b000 && funct7 == 7'b0000000)) ? ADD :
+							(op == 7'b0110011 && funct3 == 3'b000 && funct7 == 7'b0100000) ? SUB :
+						  ((op == 7'b0010011 && funct3 == 3'b001) || (op == 7'b0110011 && (funct3 == 3'b001 && funct7 == 7'b0000000))) ? SLL :
+							((op == 7'b0010011 &&(funct3 == 3'b010 || funct3 == 3'b011)) || (op == 7'b0110011 && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b011 && funct7 == 7'b0000000)))) ? SLT :
+							((op == 7'b0010011 && funct3 == 3'b100) || (op == 7'b0110011 && (funct3 == 3'b100 && funct7 == 7'b0000000))) ? XOR :
+							((op == 7'b0010011 && funct3 == 3'b101 && funct7 == 7'b0000000) || (op == 7'b0110011 && funct3 == 3'b101 && funct7 == 7'b0000000)) ? SRL :
+							((op == 7'b0010011 && funct3 == 3'b101 && funct7 == 7'b0100000) || (op == 7'b0110011 && funct3 == 3'b101 && funct7 == 7'b0100000)) ? SRA :
+							((op == 7'b0010011 && funct3 == 3'b110) || (op == 7'b0110011 && funct3 == 3'b110 && funct7 == 7'b0000000)) ? OR :
+							((op == 7'b0010011 && funct3 == 3'b111) || (op == 7'b0110011 && funct3 == 3'b111 && funct7 == 7'b0000000)) ? AND :
+							(op == 7'b0110011 && funct3 == 3'b000 && funct7 == 7'b0000001) ? MUL :
+							(op == 7'b0110011 && funct3 == 3'b001 && funct7 == 7'b0000001) ? MULH :
+							(op == 7'b0110011 && ((funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001))) ? DIV :
+							(op == 7'b0110011 && ((funct3 == 3'b110 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? REM
+							: 4'b1111;
 
 /***LSU***/
 wire ls_valid = (op_i == 7'b0000011 || op_i == 7'b0100011);

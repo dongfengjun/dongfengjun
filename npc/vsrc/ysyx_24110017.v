@@ -95,14 +95,12 @@ wire [31:0]inst_id;//difftest
 wire id_valid,id_ready;
 wire [31:0]prepc;
 wire prepc_en;
-wire [4:0] rs1,rs2;
 wire [31:0] pc_id,imm_id;
 wire [6:0] op_id;
 wire [2:0] funct3_id;
-wire [4:0] rd_id;
+wire [3:0] rs1_id,rs2_id;
+wire [3:0] rd_id;
 wire gpr_wen_id;
-wire [3:0] alu_sel_id;
-wire [31:0] a_id,b_id,r1_id,r2_id;
 wire [31:0] csr_id,mepc_id,mtvec_id;
 wire [3:0]csrs_wen_id;
 wire fencei_id;
@@ -113,7 +111,7 @@ wire [31:0]pc_ex,inst_ex;//difftest
 wire ex_ready,ex_valid;
 wire [ 6:0] op_ex;
 wire [ 2:0] funct3_ex;
-wire [ 4:0] rd_ex;
+wire [ 3:0] rd_ex;
 wire gpr_wen_ex;
 wire [31:0]mepc_ex,mcause_ex,csrsw_ex;
 wire [3:0]csrs_wen_ex;
@@ -132,7 +130,7 @@ wire ls_ready;
 wire ls_valid;
 wire difftest;
 wire [31:0] xrd_ls;
-wire [ 4:0] rd_ls;
+wire [ 3:0] rd_ls;
 wire gpr_wen_ls;
 wire [31:0] mepc_ls,mcause_ls,csrsw_ls;
 wire [3:0] csrs_wen_ls;
@@ -199,12 +197,11 @@ ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 		inst_id,
 `endif
 		prepc,prepc_en,
-		rs1,rs2,r1,r2,
 		mepc,mstatus,mcause,mtvec,
 		if_valid,id_ready,id_valid,ex_ready,
 		pc_if,inst_if,
 		pc_id,imm_id,op_id,funct3_id,rd_id,gpr_wen_id,
-		alu_sel_id,a_id,b_id,r1_id,r2_id,csr_id,mepc_id,mtvec_id,
+		rs1_id,rs2_id,csr_id,mepc_id,mtvec_id,
 		csrs_wen_id,fencei_id
 );
 ysyx_24110017_EXU EXU(clock,reset,isCHazard,
@@ -212,9 +209,9 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 		inst_id,pc_ex,inst_ex,
 `endif
 		id_valid,ex_ready,ex_valid,ls_ready,
-		pc_id,imm_id,op_id,funct3_id,rd_id,gpr_wen_id,
-		alu_sel_id,a_id,b_id,r1_id,r2_id,csr_id,mepc_id,mtvec_id,
-		csrs_wen_id,
+		pc_id,imm_id,op_id,funct3_id,
+		r1,r2,rd_id,gpr_wen_id,
+		csr_id,mepc_id,mtvec_id,csrs_wen_id,
 		op_ex,funct3_ex,rd_ex,gpr_wen_ex,
 		mepc_ex,mcause_ex,csrsw_ex,csrs_wen_ex,
 		ex_ex,
