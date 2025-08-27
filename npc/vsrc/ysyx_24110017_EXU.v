@@ -201,7 +201,7 @@ wire[31:0] csrs_w =
       ({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & (csr_i & ~r1_i)) ; //I_csrrc
 
 /***ALU***/
-wire [6:0]funct7_i = imm_i[6:0];
+wire [6:0]funct7_i = imm_i[11:5];
 wire [4:0]shamt_i  = imm_i[4:0];
 wire [3:0]alu_sel;
 wire [31:0]a,b;
