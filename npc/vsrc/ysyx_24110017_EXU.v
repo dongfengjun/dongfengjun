@@ -203,15 +203,15 @@ wire[31:0] csrs_w =
 /***ALU***/
 wire [3:0]alu_sel;
 wire [31:0]a,b;
-assign a = ((op == 7'b0010011) && (funct3 == 3'b000 || funct3 == 3'b001 || funct3 == 3'b011 || funct3 == 3'b100 || funct3 == 3'b101 || funct3 == 3'b110 || funct3 == 3'b111) || (op == 7'b0110011) && ((funct3 == 3'b000 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0100000) || (funct3 == 3'b001 && funct7 == 7'b0000000) || (funct3 == 3'b011 && funct7 == 7'b0000000) || (funct3 == 3'b100 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0100000) || (funct3 == 3'b110 && funct7 == 7'b0000000) || (funct3 == 3'b111 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? r1_i
-	: ((op == 7'b0010011 && funct3 == 3'b010) || ((op == 7'b0110011) && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b001 && funct7 == 7'b0000001) || (funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b110 && funct7 == 7'b0000001)))) ? $signed(r1_i)
+assign a = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111) || (op_i == 7'b0110011) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r1_i
+	: ((op_i == 7'b0010011 && funct3_i == 3'b010) || ((op_i == 7'b0110011) && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b001 && funct7_i == 7'b0000001) || (funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b110 && funct7_i == 7'b0000001)))) ? $signed(r1_i)
 	: 32'b0;
-assign b = ((op == 7'b0010011) && (funct3 == 3'b000 || funct3 == 3'b001 || funct3 == 3'b011 || funct3 == 3'b100 || funct3 == 3'b110 || funct3 == 3'b111)) ? imm
-	: ((op == 7'b0010011) && (funct3 == 3'b010)) ? $signed(imm)
-	: ((op == 7'b0010011) && (funct3 == 3'b001 || funct3 == 3'b101)) ? {27'b0,shamt}
-	: ((op == 7'b0110011) && ((funct3 == 3'b000 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0100000) || (funct3 == 3'b011 && funct7 == 7'b0000000) || (funct3 == 3'b100 && funct7 == 7'b0000000) || (funct3 == 3'b110 && funct7 == 7'b0000000) || (funct3 == 3'b111 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? r2_i
-	: ((op == 7'b0110011 && ((funct3 == 3'b001 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0100000)))) ? {27'b0,r2_i[4:0]}
-	: ((op == 7'b0110011) && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b001 && funct7 == 7'b0000001) || (funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b110 && funct7 == 7'b0000001))) ? $signed(r2_i)
+assign b = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? imm
+	: ((op_i == 7'b0010011) && (funct3_i == 3'b010)) ? $signed(imm)
+	: ((op_i == 7'b0010011) && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {27'b0,shamt}
+	: ((op_i == 7'b0110011) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r2_i
+	: ((op_i == 7'b0110011 && ((funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000)))) ? {27'b0,r2_i[4:0]}
+	: ((op_i == 7'b0110011) && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b001 && funct7_i == 7'b0000001) || (funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b110 && funct7_i == 7'b0000001))) ? $signed(r2_i)
 	: 32'b0;
 localparam ADD  = 4'b0000;
 localparam SUB  = 4'b0001;
@@ -226,19 +226,19 @@ localparam MUL  = 4'b1001;
 localparam MULH = 4'b1010;
 localparam DIV  = 4'b1011;
 localparam REM  = 4'b1100;
-assign alu_sel =  ((op == 7'b0010011 && funct3 == 3'b000) || (op == 7'b0110011 && funct3 == 3'b000 && funct7 == 7'b0000000)) ? ADD :
-							(op == 7'b0110011 && funct3 == 3'b000 && funct7 == 7'b0100000) ? SUB :
-						  ((op == 7'b0010011 && funct3 == 3'b001) || (op == 7'b0110011 && (funct3 == 3'b001 && funct7 == 7'b0000000))) ? SLL :
-							((op == 7'b0010011 &&(funct3 == 3'b010 || funct3 == 3'b011)) || (op == 7'b0110011 && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b011 && funct7 == 7'b0000000)))) ? SLT :
-							((op == 7'b0010011 && funct3 == 3'b100) || (op == 7'b0110011 && (funct3 == 3'b100 && funct7 == 7'b0000000))) ? XOR :
-							((op == 7'b0010011 && funct3 == 3'b101 && funct7 == 7'b0000000) || (op == 7'b0110011 && funct3 == 3'b101 && funct7 == 7'b0000000)) ? SRL :
-							((op == 7'b0010011 && funct3 == 3'b101 && funct7 == 7'b0100000) || (op == 7'b0110011 && funct3 == 3'b101 && funct7 == 7'b0100000)) ? SRA :
-							((op == 7'b0010011 && funct3 == 3'b110) || (op == 7'b0110011 && funct3 == 3'b110 && funct7 == 7'b0000000)) ? OR :
-							((op == 7'b0010011 && funct3 == 3'b111) || (op == 7'b0110011 && funct3 == 3'b111 && funct7 == 7'b0000000)) ? AND :
-							(op == 7'b0110011 && funct3 == 3'b000 && funct7 == 7'b0000001) ? MUL :
-							(op == 7'b0110011 && funct3 == 3'b001 && funct7 == 7'b0000001) ? MULH :
-							(op == 7'b0110011 && ((funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001))) ? DIV :
-							(op == 7'b0110011 && ((funct3 == 3'b110 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? REM
+assign alu_sel =  ((op_i == 7'b0010011 && funct3_i == 3'b000) || (op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0000000)) ? ADD :
+							(op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0100000) ? SUB :
+						  ((op_i == 7'b0010011 && funct3_i == 3'b001) || (op_i == 7'b0110011 && (funct3_i == 3'b001 && funct7_i == 7'b0000000))) ? SLL :
+							((op_i == 7'b0010011 &&(funct3_i == 3'b010 || funct3_i == 3'b011)) || (op_i == 7'b0110011 && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000)))) ? SLT :
+							((op_i == 7'b0010011 && funct3_i == 3'b100) || (op_i == 7'b0110011 && (funct3_i == 3'b100 && funct7_i == 7'b0000000))) ? XOR :
+							((op_i == 7'b0010011 && funct3_i == 3'b101 && funct7_i == 7'b0000000) || (op_i == 7'b0110011 && funct3_i == 3'b101 && funct7_i == 7'b0000000)) ? SRL :
+							((op_i == 7'b0010011 && funct3_i == 3'b101 && funct7_i == 7'b0100000) || (op_i == 7'b0110011 && funct3_i == 3'b101 && funct7_i == 7'b0100000)) ? SRA :
+							((op_i == 7'b0010011 && funct3_i == 3'b110) || (op_i == 7'b0110011 && funct3_i == 3'b110 && funct7_i == 7'b0000000)) ? OR :
+							((op_i == 7'b0010011 && funct3_i == 3'b111) || (op_i == 7'b0110011 && funct3_i == 3'b111 && funct7_i == 7'b0000000)) ? AND :
+							(op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0000001) ? MUL :
+							(op_i == 7'b0110011 && funct3_i == 3'b001 && funct7_i == 7'b0000001) ? MULH :
+							(op_i == 7'b0110011 && ((funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001))) ? DIV :
+							(op_i == 7'b0110011 && ((funct3_i == 3'b110 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? REM
 							: 4'b1111;
 
 /***LSU***/
