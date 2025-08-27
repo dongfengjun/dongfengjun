@@ -89,7 +89,9 @@ wire [ 1:0] icache_axi_awburst,icache_axi_arburst;
 wire [ 1:0] icache_axi_bresp,icache_axi_rresp;
 wire icache_axi_awvalid,icache_axi_awready,icache_axi_wvalid,icache_axi_wready,icache_axi_bvalid,icache_axi_bready,icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,icache_axi_wlast,icache_axi_rlast;
 /***IDU***/
+`ifndef YOSYS_STA
 wire [31:0]inst_id;//difftest
+`endif
 wire id_valid,id_ready;
 wire [31:0]prepc;
 wire prepc_en;
@@ -105,7 +107,9 @@ wire [31:0] csr_id,mepc_id,mtvec_id;
 wire [3:0]csrs_wen_id;
 wire fencei_id;
 /***EXU***/
+`ifndef YOSYS_STA
 wire [31:0]pc_ex,inst_ex;//difftest
+`endif
 wire ex_ready,ex_valid;
 wire [ 6:0] op_ex;
 wire [ 2:0] funct3_ex;
@@ -121,7 +125,9 @@ wire [ 2:0] ls_awsize_ex,ls_arsize_ex;
 wire [ 1:0] ls_awburst_ex,ls_arburst_ex;
 wire [31:0] dnpc_ex;
 /***LSU***/
+`ifndef YOSYS_STA
 wire [31:0]pc_ls,inst_ls,dnpc_ls;//difftest
+`endif
 wire ls_ready;
 wire ls_valid;
 wire difftest;
@@ -172,7 +178,7 @@ ysyx_24110017_IFU IFU(clock,reset,isCHazard,
 		if_axi_arlen,if_axi_arsize,if_axi_arburst,
 		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast
 );
-ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei_id, //w < n
+ysyx_24110017_CACHE #(2,4,3) ICACHE(clock,reset,fencei_id, //w < n
 		if_axi_awready,if_axi_awvalid,if_axi_awid,if_axi_awaddr,
 		if_axi_awlen,if_axi_awsize,if_axi_awburst,
 		if_axi_wready,if_axi_wvalid,if_axi_wdata,if_axi_wstrb,if_axi_wlast,
@@ -189,7 +195,9 @@ ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei_id, //w < n
     icache_axi_rready,icache_axi_rvalid,icache_axi_rid,icache_axi_rdata,icache_axi_rresp,icache_axi_rlast
 );
 ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
-		inst_id,//difftest
+`ifndef YOSYS_STA
+		inst_id,
+`endif
 		prepc,prepc_en,
 		rs1,rs2,r1,r2,
 		mepc,mstatus,mcause,mtvec,
@@ -200,7 +208,9 @@ ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 		csrs_wen_id,fencei_id
 );
 ysyx_24110017_EXU EXU(clock,reset,isCHazard,
-		inst_id,pc_ex,inst_ex,//difftest
+`ifndef YOSYS_STA
+		inst_id,pc_ex,inst_ex,
+`endif
 		id_valid,ex_ready,ex_valid,ls_ready,
 		pc_id,imm_id,op_id,funct3_id,rd_id,gpr_wen_id,
 		alu_sel_id,a_id,b_id,r1_id,r2_id,csr_id,mepc_id,mtvec_id,
@@ -212,7 +222,9 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,ls_wmask_ex,ls_awsize_ex,ls_arsize_ex,dnpc_ex
 );
 ysyx_24110017_LSU LSU(clock,reset,
+`ifndef YOSYS_STA
 		pc_ex,inst_ex,dnpc_ex,pc_ls,inst_ls,dnpc_ls,//difftest
+`endif
 		(ex_valid && !isCHazard),ls_ready,ls_valid,difftest,
 		op_ex,funct3_ex,rd_ex,gpr_wen_ex,
 		mepc_ex,mcause_ex,csrsw_ex,csrs_wen_ex,

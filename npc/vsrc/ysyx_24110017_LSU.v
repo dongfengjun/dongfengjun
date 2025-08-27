@@ -2,14 +2,14 @@
 module ysyx_24110017_LSU(
 	input  wire clk,
 	input  wire rst,
-
-	input  wire [31:0] pc_i,//difftest
+`ifndef YOSYS_STA
+	input  wire [31:0] pc_i,
 	input  wire [31:0] inst_i,
 	input  wire [31:0] dnpc_i,
 	output reg  [31:0] pc_o,
 	output reg  [31:0] inst_o,
 	output reg  [31:0] dnpc_o,
-
+`endif
 	input  wire ex_valid_i,	
   output wire ls_ready_o,
 	output wire ls_valid_o,
@@ -93,10 +93,11 @@ wire [31:0] xrd = (ls_valid_i) ? ls_rdata : ex_i;
 
 always@(posedge clk or posedge rst) begin
 	if(rst) begin
+`ifndef YOSYS_STA
 		pc_o					<= 32'h0;
 		inst_o				<= 32'h0;
 		dnpc_o				<= 32'h0;
-
+`endif
 		rd_o					<= 5'b0;
 		gpr_wen_o			<= 1'b0;
 		mepc_o				<= 32'h0;
@@ -118,10 +119,11 @@ always@(posedge clk or posedge rst) begin
 			end
 			WAIT: begin
 				if(ls_done_o || !ls_valid_i) begin
+`ifndef YOSYS_STA
 					pc_o          <= pc_i;
 			    inst_o        <= inst_i;
 			    dnpc_o        <= dnpc_i;
-					
+`endif
 					rd_o          <= rd_i;
 					gpr_wen_o     <= gpr_wen_i;
 					mepc_o        <= mepc_i;

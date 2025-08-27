@@ -1,4 +1,3 @@
-//`define YOSYS_STA
 module ysyx_24110017_BTB #(n = 4, w = 3) (
 	input clk,
 	input rst,
@@ -16,7 +15,20 @@ module ysyx_24110017_BTB #(n = 4, w = 3) (
 	wire [29-n+w : 0]dnpc_tag = dnpc_tag_i[31 : 2+n-w];
 	wire [n-1-w : 0]dnpc_index = dnpc_tag_i[1+n-w : 2];
 
-  wire [(1<<w) - 1 : 0]hit;
+	function integer log2;
+    input [(1<<w) - 1 : 0] value;
+    integer loop_var;
+    begin
+      for (loop_var = 0; loop_var < (1<<w); loop_var = loop_var + 1) begin
+        if(value != 0) begin
+          value = value >> 1;
+          log2 = loop_var;
+        end
+      end
+    end
+  endfunction
+  
+	wire [(1<<w) - 1 : 0]hit;
 	generate 
     genvar i; 
       for(i = 0; i < (1<<w); i = i + 1) begin : comparator_o
@@ -32,9 +44,8 @@ module ysyx_24110017_BTB #(n = 4, w = 3) (
       end
   endgenerate
 	
-`ifndef YOSYS_STA	
-	assign snpc_o = (hit != 0) ? snpc_reg[index * (1 << w) + $clog2(hit)] : pc_i + 4;
-`endif
+	assign snpc_o = (hit != 0) ? snpc_reg[index * (1 << w) + log2(hit)] : pc_i + 4;
+	
 	reg enable;
 	always @(posedge clk) begin
 		if(rst) enable <= 1'b0;
