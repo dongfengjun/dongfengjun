@@ -11,7 +11,7 @@ module ysyx_24110017_RegisterFile #(ADDR_WIDTH = 4, DATA_WIDTH = 32) (
 	reg [DATA_WIDTH-1:0] rf [2**ADDR_WIDTH-1:0];
 
 	always @(posedge clk) begin
-    if (wen && waddr != 0) rf[waddr] <= wdata;
+    if (wen && (waddr != 0)) rf[waddr] <= wdata;
 	end
 
 	wire [31:0] rdata1_low = {
