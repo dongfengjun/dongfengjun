@@ -12,7 +12,6 @@ module ysyx_24110017_IDU(
 
 	output wire [31:0] prepc_o,
 	output wire prepc_en_o,
-	input  wire [31:0] mepc_i,mstatus_i,mcause_i,mtvec_i,
 
 	input  wire if_valid_i,
 	output wire id_ready_o,
@@ -30,9 +29,6 @@ module ysyx_24110017_IDU(
   output reg	[ 3:0] rs2_o,
 	output reg	[ 3:0] rd_o,
 	output reg  gpr_wen_o,
-	output reg	[31:0] csr_o,
-	output reg  [31:0] mepc_o,mtvec_o,
-	output reg	[ 3:0] csrs_wen_o,
 	output reg  fencei_o
 );
 
@@ -68,10 +64,6 @@ always@(posedge clk) begin
 		rs2_o				<= 4'b0;
 		rd_o				<= 4'b0;
 		gpr_wen_o		<= 1'b0;
-		csr_o				<= 32'h0;
-		mepc_o			<= 32'h0;
-		mtvec_o			<= 32'h0;
-		csrs_wen_o  <= 4'b0;
 		fencei_o		<= 1'b0;
 	end
 	else if(flush_i) begin
@@ -86,10 +78,6 @@ always@(posedge clk) begin
 		rs2_o       <= 4'b0;
 		rd_o        <= 4'b0;
     gpr_wen_o   <= 1'b0;
-    csr_o       <= 32'h0;
-    mepc_o      <= 32'h0;
-    mtvec_o     <= 32'h0;
-    csrs_wen_o  <= 4'b0;
 		fencei_o    <= 1'b0;
   end
 	else begin
@@ -109,10 +97,6 @@ always@(posedge clk) begin
 					rs2_o				<= rs2;
 					rd_o        <= rd;
 					gpr_wen_o   <= gpr_wen;
-					csr_o       <= csr;
-					mepc_o      <= mepc_i;
-					mtvec_o     <= mtvec_i;
-					csrs_wen_o  <= csrs_wen;
 					fencei_o		<= fencei;
 				end
 			end
@@ -160,18 +144,6 @@ assign imm = (op == 7'b0110111 || op == 7'b0010111) ? immU
  : 32'b0;
 
 wire gpr_wen = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 || op == 7'b1100111 || op == 7'b0010011 || op == 7'b1110011 || op == 7'b0110011 || op == 7'b0000011) ? 1'b1 : 1'b0;
-
-wire[31:0] csr = (op == 7'b1110011 && imm == 32'd833) ? mepc_i
-	: (op == 7'b1110011 && imm == 32'd768) ? mstatus_i
-	: (op == 7'b1110011 && imm == 32'd834) ? mcause_i
-	: (op == 7'b1110011 && imm == 32'd773) ? mtvec_i
-	: 32'b0;
-wire [3:0] csrs_wen = {
-    (op == 7'b1110011 && imm == 32'd773),
-    (op == 7'b1110011 && (imm == 32'd834 || (imm == 32'd0 && funct3 == 3'b000))),
-    (op == 7'b1110011 && imm == 32'd768),
-    (op == 7'b1110011 && (imm == 32'd833 || (imm == 32'd0 && funct3 == 3'b000)))
-};
 
 wire fencei = (inst_i == 32'b00000000000000000001000000001111);
 
