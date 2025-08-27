@@ -86,7 +86,7 @@ always @(posedge clk) begin
 		pc_o					<= 32'h0;
 		inst_o				<= 32'h0;
 `endif
-		op_o					<= 4'b0;
+		op_o					<= 5'b0;
 		funct3_o			<= 3'b0;
 		rd_o					<= 4'b0;
 		gpr_wen_o			<= 1'b0;
