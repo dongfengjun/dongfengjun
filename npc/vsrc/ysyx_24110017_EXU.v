@@ -186,9 +186,14 @@ assign ex =
 				(op_i == 7'b0110111) ? imm_i				: //U_lui
 				(op_i == 7'b0010111) ? pc_i + imm_i :	//U_auipc
 /***CSRU***/
-				((op_i == 7'b1110011) && ((funct3_i == 3'b001) || (funct3_i == 3'b010) || (funct3_i == 3'b000))) ? csr_i : //I_csrrw_csrrs_csrrc
+				((op_i == 7'b1110011) && ((funct3_i == 3'b001) || (funct3_i == 3'b010) || (funct3_i == 3'b000))) ? csr : //I_csrrw_csrrs_csrrc
 				32'h0;
 
+wire[31:0] csr = (op == 7'b1110011 && imm == 32'd833) ? mepc_i
+	: (op == 7'b1110011 && imm == 32'd768) ? mstatus_i
+	: (op == 7'b1110011 && imm == 32'd834) ? mcause_i
+	: (op == 7'b1110011 && imm == 32'd773) ? mtvec_i
+	: 32'b0;
 wire[31:0] mepc_w = (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000) ? pc_i : csrs_w; //ecall
 wire[31:0] mstatus_w = csrs_w;
 wire[31:0] mcause_w = (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000) ? r2_i : csrs_w; //ecall a5
