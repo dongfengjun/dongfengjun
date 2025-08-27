@@ -96,7 +96,7 @@ wire id_valid,id_ready;
 wire [31:0]prepc;
 wire prepc_en;
 wire [31:0] pc_id,imm_id;
-wire [6:0] op_id;
+wire [4:0] op_id;
 wire [2:0] funct3_id;
 wire [3:0] rs1_id,rs2_id;
 wire [3:0] rd_id;
@@ -107,7 +107,7 @@ wire fencei_id;
 wire [31:0]pc_ex,inst_ex;//difftest
 `endif
 wire ex_ready,ex_valid;
-wire [ 6:0] op_ex;
+wire [ 4:0] op_ex;
 wire [ 2:0] funct3_ex;
 wire [ 3:0] rd_ex;
 wire gpr_wen_ex;

@@ -23,7 +23,7 @@ module ysyx_24110017_IDU(
 	
 	output reg  [31:0] pc_o,
 	output reg	[31:0] imm_o,
-	output reg  [ 6:0] op_o,
+	output reg  [ 4:0] op_o,
 	output reg  [ 2:0] funct3_o,
 	output reg	[ 3:0] rs1_o,
   output reg	[ 3:0] rs2_o,
@@ -58,7 +58,7 @@ always@(posedge clk) begin
 `endif
 		pc_o				<= 32'h0;
 		imm_o				<= 32'h0;
-		op_o				<= 7'b0;
+		op_o				<= 5'b0;
 		funct3_o		<= 3'b0;
 		rs1_o				<= 4'b0;
 		rs2_o				<= 4'b0;
@@ -72,7 +72,7 @@ always@(posedge clk) begin
 `endif
     pc_o        <= 32'h0;
     imm_o       <= 32'h0;
-    op_o        <= 7'b0;
+    op_o        <= 5'b0;
     funct3_o    <= 3'b0;
     rs1_o				<= 4'b0;
 		rs2_o       <= 4'b0;
@@ -105,7 +105,7 @@ always@(posedge clk) begin
 end
 
 /***pattern***/
-wire [6:0]op;
+wire [4:0]op;
 wire [3:0]rd; //R I U J
 wire [2:0]funct3;
 wire [3:0]rs1;  //R I S B
@@ -113,20 +113,20 @@ wire [3:0]rs2;  //R S B
 wire [31:0]immI,immU,immS,immB,immJ,imm;
 wire [6:0]funct7; //R
  
-assign op = inst_i[6:0];
-assign rd = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 
- || op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011
- || op == 7'b1110011 || op == 7'b0110011) ? inst_i[10:7] : 4'b0;
+assign op = inst_i[6:2];
+assign rd = (op == 5'b01101 || op == 5'b00101 || op == 5'b11011 
+ || op == 5'b11001 || op == 5'b00000 || op == 5'b00100
+ || op == 5'b11100 || op == 5'b01100) ? inst_i[10:7] : 4'b0;
 assign funct3 = inst_i[14:12];
-assign rs1 = (op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b1110011	//I
- || op == 7'b1100011	//B
- || op == 7'b0100011	//S
- || op == 7'b0110011) ? //R
+assign rs1 = (op == 5'b11001 || op == 5'b00000 || op == 5'b00100 || op == 5'b11100	//I
+ || op == 5'b11000	//B
+ || op == 5'b01000	//S
+ || op == 5'b01100) ? //R
  inst_i[18:15] : 4'b0;
-assign rs2 = (op == 7'b1100011  //B
- || op == 7'b0100011  //S
- || op == 7'b0110011) ? inst_i[23:20] //R
- : (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? 4'd15 //ecall
+assign rs2 = (op == 5'b11000  //B
+ || op == 5'b01000 //S
+ || op == 5'b01100) ? inst_i[23:20] //R
+ : (op == 5'b11100 && imm == 32'd0 && funct3 == 3'b000) ? 4'd15 //ecall
  : 4'b0;
 assign immI = {{20{inst_i[31]}},inst_i[31:20]};	//SEXTIimmediate
 assign immU = {inst_i[31:12],{12{1'b0}}};	//UEXTUimm
@@ -135,20 +135,20 @@ assign immB = {{19{inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11
 assign immJ = {{11{inst_i[31]}}, inst_i[31], inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};	//SEXTJimm
 assign funct7 = inst_i[31:25];
 
-assign imm = (op == 7'b0110111 || op == 7'b0010111) ? immU
- : (op == 7'b1101111) ? immJ
- : (op == 7'b1100011) ? immB
- : (op == 7'b0100011) ? immS
- : (op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b1110011) ? immI 
- : (op == 7'b0110011) ? {20'b0,funct7,5'b0}
+assign imm = (op == 5'b01101 || op == 5'b00101) ? immU
+ : (op == 5'b11011) ? immJ
+ : (op == 5'b11000) ? immB
+ : (op == 5'b01000) ? immS
+ : (op == 5'b11001 || op == 5'b00000 || op == 5'b00100 || op == 5'b11100) ? immI 
+ : (op == 5'b01100) ? {20'b0,funct7,5'b0}
  : 32'b0;
 
-wire gpr_wen = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 || op == 7'b1100111 || op == 7'b0010011 || op == 7'b1110011 || op == 7'b0110011 || op == 7'b0000011) ? 1'b1 : 1'b0;
+wire gpr_wen = (op == 5'b01101 || op == 5'b00101 || op == 5'b11011 || op == 5'b11001 || op == 5'b00100 || op == 5'b11100 || op == 5'b01100 || op == 5'b00000) ? 1'b1 : 1'b0;
 
 wire fencei = (inst_i == 32'b00000000000000000001000000001111);
 
 //静态分支预测
-assign prepc_en_o = (op == 7'b1100011 && inst_i[31]) || (op == 7'b1101111);
-assign prepc_o = ((op == 7'b1100011 && inst_i[31]) || (op == 7'b1101111)) ? pc_i + imm : 32'h0;
+assign prepc_en_o = (op == 5'b11000 && inst_i[31]) || (op == 5'b11011);
+assign prepc_o = ((op == 5'b11000 && inst_i[31]) || (op == 5'b11011)) ? pc_i + imm : 32'h0;
 
 endmodule

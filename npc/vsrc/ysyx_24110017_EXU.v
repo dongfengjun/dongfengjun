@@ -17,7 +17,7 @@ module ysyx_24110017_EXU(
 	
   input  wire [31:0] pc_i,
   input  wire [31:0] imm_i,
-  input  wire [ 6:0] op_i,
+  input  wire [ 4:0] op_i,
   input  wire [ 2:0] funct3_i,
   input  wire [31:0] r1_i,
 	input  wire [31:0] r2_i,
@@ -25,7 +25,7 @@ module ysyx_24110017_EXU(
 	input  wire				 gpr_wen_i,
 	input  wire [31:0] mepc_i,mstatus_i,mcause_i,mtvec_i,
 
-	output reg  [ 6:0] op_o,
+	output reg  [ 4:0] op_o,
 	output reg  [ 2:0] funct3_o,
 	output reg  [ 3:0] rd_o,
 	output reg  gpr_wen_o,
@@ -85,8 +85,8 @@ always @(posedge clk) begin
 `ifndef YOSYS_STA
 		pc_o					<= 32'h0;
 		inst_o				<= 32'h0;
-		op_o					<= 7'b0;
 `endif
+		op_o					<= 4'b0;
 		funct3_o			<= 3'b0;
 		rd_o					<= 4'b0;
 		gpr_wen_o			<= 1'b0;
@@ -111,8 +111,8 @@ always @(posedge clk) begin
 `ifndef YOSYS_STA
 		pc_o          <= 32'h0;
     inst_o        <= 32'h0;
-    op_o          <= 7'b0;
 `endif
+    op_o          <= 5'b0;
     funct3_o      <= 3'b0;
     rd_o          <= 4'b0;
     gpr_wen_o     <= 1'b0;
@@ -177,36 +177,36 @@ ysyx_24110017_ALU ALU(clk,rst,a,b,alu_sel,al_res,al_done);
 wire [31:0]ex;
 assign ex = 
 /***I*addi~srai***/
-				(op_i == 7'b0010011) ? (al_res) :
+				(op_i == 5'b00100) ? (al_res) :
 /***R_add~R_remu***/
-				(op_i == 7'b0110011) ? (al_res) :
+				(op_i == 5'b01100) ? (al_res) :
 /*********/
-				(op_i == 7'b1101111) ? pc_i + 4			: //I_jal
-				(op_i == 7'b1100111) ? pc_i + 4			: //I_jalr
-				(op_i == 7'b0110111) ? imm_i				: //U_lui
-				(op_i == 7'b0010111) ? pc_i + imm_i :	//U_auipc
+				(op_i == 5'b11011) ? pc_i + 4			: //I_jal
+				(op_i == 5'b11001) ? pc_i + 4			: //I_jalr
+				(op_i == 5'b01101) ? imm_i				: //U_lui
+				(op_i == 5'b00101) ? pc_i + imm_i :	//U_auipc
 /***CSRU***/
-				((op_i == 7'b1110011) && ((funct3_i == 3'b001) || (funct3_i == 3'b010) || (funct3_i == 3'b000))) ? csr : //I_csrrw_csrrs_csrrc
+				((op_i == 5'b11100) && ((funct3_i == 3'b001) || (funct3_i == 3'b010) || (funct3_i == 3'b000))) ? csr : //I_csrrw_csrrs_csrrc
 				32'h0;
 
-wire[31:0] csr = (op_i == 7'b1110011 && imm_i == 32'd833) ? mepc_i
-	: (op_i == 7'b1110011 && imm_i == 32'd768) ? mstatus_i
-	: (op_i == 7'b1110011 && imm_i == 32'd834) ? mcause_i
-	: (op_i == 7'b1110011 && imm_i == 32'd773) ? mtvec_i
+wire[31:0] csr = (op_i == 5'b11100 && imm_i == 32'd833) ? mepc_i
+	: (op_i == 5'b11100 && imm_i == 32'd768) ? mstatus_i
+	: (op_i == 5'b11100 && imm_i == 32'd834) ? mcause_i
+	: (op_i == 5'b11100 && imm_i == 32'd773) ? mtvec_i
 	: 32'b0;
-wire[31:0] mepc_w = (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000) ? pc_i : csrs_w; //ecall
+wire[31:0] mepc_w = (op_i == 5'b11100 && imm_i == 32'd0 && funct3_i == 3'b000) ? pc_i : csrs_w; //ecall
 wire[31:0] mstatus_w = csrs_w;
-wire[31:0] mcause_w = (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000) ? r2_i : csrs_w; //ecall a5
+wire[31:0] mcause_w = (op_i == 5'b11100 && imm_i == 32'd0 && funct3_i == 3'b000) ? r2_i : csrs_w; //ecall a5
 wire[31:0] mtvec_w = csrs_w;
 wire[31:0] csrs_w = 
-			({32{(op_i == 7'b1110011) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
-			({32{(op_i == 7'b1110011) && (funct3_i == 3'b010)}} & (csr |  r1_i)) | //I_csrrs
-      ({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & (csr & ~r1_i)) ; //I_csrrc
+			({32{(op_i == 5'b11100) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
+			({32{(op_i == 5'b11100) && (funct3_i == 3'b010)}} & (csr |  r1_i)) | //I_csrrs
+      ({32{(op_i == 5'b11100) && (funct3_i == 3'b000)}} & (csr & ~r1_i)) ; //I_csrrc
 wire [3:0] csrs_wen = {
-    (op_i == 7'b1110011 && imm_i == 32'd773),
-    (op_i == 7'b1110011 && (imm_i == 32'd834 || (imm_i == 32'd0 && funct3_i == 3'b000))),
-    (op_i == 7'b1110011 && imm_i == 32'd768),
-    (op_i == 7'b1110011 && (imm_i == 32'd833 || (imm_i == 32'd0 && funct3_i == 3'b000)))
+    (op_i == 5'b11100 && imm_i == 32'd773),
+    (op_i == 5'b11100 && (imm_i == 32'd834 || (imm_i == 32'd0 && funct3_i == 3'b000))),
+    (op_i == 5'b11100 && imm_i == 32'd768),
+    (op_i == 5'b11100 && (imm_i == 32'd833 || (imm_i == 32'd0 && funct3_i == 3'b000)))
 };
 
 /***ALU***/
