@@ -128,7 +128,6 @@ wire [4:0]rs1;  //R I S B
 wire [4:0]rs2;  //R S B
 wire [31:0]immI,immU,immS,immB,immJ,imm;
 wire [6:0]funct7; //R
-wire [4:0]shamt;  //I shamt
  
 assign op = inst_i[6:0];
 assign rd = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 
@@ -145,19 +144,19 @@ assign rs2 = (op == 7'b1100011  //B
  || op == 7'b0110011) ? inst_i[23:20] //R
  : (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? 4'd15 //ecall
  : 4'b0;
-assign funct7 = (op == 7'b0110011 || op == 7'b0010011) ? inst_i[31:25] : 7'b0;
 assign immI = {{20{inst_i[31]}},inst_i[31:20]};	//SEXTIimmediate
-assign shamt = {inst_i[24:20]};	//I shamt
 assign immU = {inst_i[31:12],{12{1'b0}}};	//UEXTUimm
 assign immS = {{20{inst_i[31]}}, inst_i[31:25], inst_i[11:7]};	//SEXTSimm
 assign immB = {{19{inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};	//SEXTBimm
 assign immJ = {{11{inst_i[31]}}, inst_i[31], inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};	//SEXTJimm
+assign funct7 = inst[31:25];
 
 assign imm = (op == 7'b0110111 || op == 7'b0010111) ? immU
  : (op == 7'b1101111) ? immJ
  : (op == 7'b1100011) ? immB
  : (op == 7'b0100011) ? immS
  : (op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b1110011) ? immI 
+ : (op == 7'b0110011) ? {25'b0,funct7}
  : 32'b0;
 
 wire gpr_wen = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 || op == 7'b1100111 || op == 7'b0010011 || op == 7'b1110011 || op == 7'b0110011 || op == 7'b0000011) ? 1'b1 : 1'b0;
