@@ -200,8 +200,9 @@ ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 		mepc,mstatus,mcause,mtvec,
 		if_valid,id_ready,id_valid,ex_ready,
 		pc_if,inst_if,
-		pc_id,imm_id,op_id,funct3_id,rd_id,gpr_wen_id,
-		rs1_id,rs2_id,csr_id,mepc_id,mtvec_id,
+		pc_id,imm_id,op_id,funct3_id,rs1_id,rs2_id,
+		rd_id,gpr_wen_id,
+		csr_id,mepc_id,mtvec_id,
 		csrs_wen_id,fencei_id
 );
 ysyx_24110017_EXU EXU(clock,reset,isCHazard,

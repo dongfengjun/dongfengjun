@@ -2239,8 +2239,8 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBus(c+1114,"op", false,-1, 6,0);
     tracep->declBus(c+1115,"rd", false,-1, 3,0);
     tracep->declBus(c+1116,"funct3", false,-1, 2,0);
-    tracep->declBus(c+1117,"rs1", false,-1, 4,0);
-    tracep->declBus(c+1118,"rs2", false,-1, 4,0);
+    tracep->declBus(c+1117,"rs1", false,-1, 3,0);
+    tracep->declBus(c+1118,"rs2", false,-1, 3,0);
     tracep->declBus(c+1119,"immI", false,-1, 31,0);
     tracep->declBus(c+1120,"immU", false,-1, 31,0);
     tracep->declBus(c+1121,"immS", false,-1, 31,0);
@@ -5758,14 +5758,16 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_full_sub_0(VysyxSoCFull___024roo
                                  | (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__IDU__DOT____VdfgTmp_h46c457aa__0))
                                  ? (0xfU & (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__inst_if 
                                             >> 0xfU))
-                                 : 0U)),5);
-    bufp->fullCData(oldp+1118,(((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__IDU__DOT____VdfgTmp_h46c457aa__0)
-                                 ? (0xfU & (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__inst_if 
-                                            >> 0x14U))
-                                 : (((0x73U == (0x7fU 
-                                                & vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__inst_if)) 
-                                     & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__IDU__DOT____VdfgTmp_h13049c0c__0))
-                                     ? 0xfU : 0U))),5);
+                                 : 0U)),4);
+    bufp->fullCData(oldp+1118,((0xfU & ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__IDU__DOT____VdfgTmp_h46c457aa__0)
+                                         ? (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__inst_if 
+                                            >> 0x14U)
+                                         : (((0x73U 
+                                              == (0x7fU 
+                                                  & vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__inst_if)) 
+                                             & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__IDU__DOT____VdfgTmp_h13049c0c__0))
+                                             ? 0xfU
+                                             : 0U)))),4);
     bufp->fullIData(oldp+1119,((((- (IData)((vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__inst_if 
                                              >> 0x1fU))) 
                                  << 0xcU) | (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__inst_if 
