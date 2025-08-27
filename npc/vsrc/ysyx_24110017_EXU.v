@@ -54,7 +54,7 @@ reg state;
 
 always @(posedge clk) begin
 	if(rst) state <= IDLE;
-	else if(isCHazard) state <= IDLE;
+	else if(flush_i) state <= IDLE;
   else begin
 		case (state)
 			IDLE: state <= (id_valid_i && ex_ready_o) ? WAIT : state;
@@ -65,7 +65,7 @@ end
 
 always @(posedge clk) begin
 	if(rst) ex_valid_reg <= 1'b0;
-	else if(isCHazard) ex_valid_reg <= 1'b0;
+	else if(flush_i) ex_valid_reg <= 1'b0;
 	else begin
 		case(state)
 			IDLE: ex_valid_reg <= 1'b0;
@@ -109,7 +109,7 @@ always @(posedge clk) begin
 		ls_arsize_o		<= 3'b0;
 		dnpc_o				<= 32'h0;
 	end
-	else if(isCHazard) begin
+	else if(flush_i) begin
 `ifndef YOSYS_STA
 		pc_o          <= 32'h0;
     inst_o        <= 32'h0;
