@@ -200,8 +200,8 @@ wire[31:0] mcause_w = (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b00
 wire[31:0] mtvec_w = csrs_w;
 wire[31:0] csrs_w = 
 			({32{(op_i == 7'b1110011) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
-			({32{(op_i == 7'b1110011) && (funct3_i == 3'b010)}} & (csr_i |  r1_i)) | //I_csrrs
-      ({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & (csr_i & ~r1_i)) ; //I_csrrc
+			({32{(op_i == 7'b1110011) && (funct3_i == 3'b010)}} & (csr |  r1_i)) | //I_csrrs
+      ({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & (csr & ~r1_i)) ; //I_csrrc
 wire [3:0] csrs_wen = {
     (op_i == 7'b1110011 && imm_i == 32'd773),
     (op_i == 7'b1110011 && (imm_i == 32'd834 || (imm_i == 32'd0 && funct3_i == 3'b000))),
