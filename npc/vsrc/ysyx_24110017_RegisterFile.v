@@ -61,7 +61,7 @@ module ysyx_24110017_RegisterFile #(ADDR_WIDTH = 4, DATA_WIDTH = 32) (
 export "DPI-C" function gpr_reg_grab;
 function int gpr_reg_grab(int addr);
 	begin
-		assign gpr_reg_grab = (addr == 0) ? 32'b0 : rf[addr];
+		assign gpr_reg_grab = rf[addr];
 	end
 endfunction
 `endif
