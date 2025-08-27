@@ -42,7 +42,7 @@ reg state;
 
 always @(posedge clk) begin
 	if(rst) state <= IDLE;
-	else if(isCHazard) state <= IDLE;
+	else if(flush_i) state <= IDLE;
   else begin
 		case (state)
 			IDLE: state <= (if_valid_i && id_ready_o) ? WAIT : state;
@@ -124,8 +124,8 @@ end
 wire [6:0]op;
 wire [3:0]rd; //R I U J
 wire [2:0]funct3;
-//wire [4:0]rs1;  //R I S B
-//wire [4:0]rs2;  //R S B
+wire [4:0]rs1;  //R I S B
+wire [4:0]rs2;  //R S B
 wire [31:0]immI,immU,immS,immB,immJ,imm;
 wire [6:0]funct7; //R
 wire [4:0]shamt;  //I shamt
