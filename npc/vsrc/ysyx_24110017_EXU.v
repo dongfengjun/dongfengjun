@@ -24,8 +24,7 @@ module ysyx_24110017_EXU(
 	input  wire [ 3:0] rd_i,
   input  wire				 gpr_wen_i,
   input	 wire [31:0] csr_i,
-	input  wire [31:0] mepc_i,mtvec_i,
-	input  wire [ 3:0] csrs_wen_i,
+	input  wire [31:0] mepc_i,mstatus_i,mcause_i,mtvec_i,
 
 	output reg  [ 6:0] op_o,
 	output reg  [ 2:0] funct3_o,
@@ -154,7 +153,7 @@ always @(posedge clk) begin
 					mepc_o        <= mepc_w;
 					mcause_o      <= mcause_w;
 					csrsw_o       <= csrs_w;
-					csrs_wen_o    <= csrs_wen_i;
+					csrs_wen_o    <= csrs_wen;
 					ex_o          <= ex;
 
 					ls_valid_o    <= ls_valid;
@@ -199,6 +198,12 @@ wire[31:0] csrs_w =
 			({32{(op_i == 7'b1110011) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
 			({32{(op_i == 7'b1110011) && (funct3_i == 3'b010)}} & (csr_i |  r1_i)) | //I_csrrs
       ({32{(op_i == 7'b1110011) && (funct3_i == 3'b000)}} & (csr_i & ~r1_i)) ; //I_csrrc
+wire [3:0] csrs_wen = {
+    (op == 7'b1110011 && imm == 32'd773),
+    (op == 7'b1110011 && (imm == 32'd834 || (imm == 32'd0 && funct3 == 3'b000))),
+    (op == 7'b1110011 && imm == 32'd768),
+    (op == 7'b1110011 && (imm == 32'd833 || (imm == 32'd0 && funct3 == 3'b000)))
+};
 
 /***ALU***/
 wire [6:0]funct7_i = imm_i[11:5];
