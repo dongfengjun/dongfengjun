@@ -214,15 +214,15 @@ wire [6:0]funct7_i = imm_i[11:5];
 wire [4:0]shamt_i  = imm_i[4:0];
 wire [3:0]alu_sel;
 wire [31:0]a,b;
-assign a = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111) || (op_i == 7'b0110011) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r1_i
-	: ((op_i == 7'b0010011 && funct3_i == 3'b010) || ((op_i == 7'b0110011) && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b001 && funct7_i == 7'b0000001) || (funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b110 && funct7_i == 7'b0000001)))) ? $signed(r1_i)
+assign a = ((op_i == 5'b00100) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111) || (op_i == 7'b0110011) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r1_i
+	: ((op_i == 5'b00100 && funct3_i == 3'b010) || ((op_i == 5'b01100) && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b001 && funct7_i == 7'b0000001) || (funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b110 && funct7_i == 7'b0000001)))) ? $signed(r1_i)
 	: 32'b0;
-assign b = ((op_i == 7'b0010011) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? imm_i
-	: ((op_i == 7'b0010011) && (funct3_i == 3'b010)) ? $signed(imm_i)
-	: ((op_i == 7'b0010011) && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {27'b0,shamt_i}
-	: ((op_i == 7'b0110011) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r2_i
-	: ((op_i == 7'b0110011 && ((funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000)))) ? {27'b0,r2_i[4:0]}
-	: ((op_i == 7'b0110011) && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b001 && funct7_i == 7'b0000001) || (funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b110 && funct7_i == 7'b0000001))) ? $signed(r2_i)
+assign b = ((op_i == 5'b00100) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? imm_i
+	: ((op_i == 5'b00100) && (funct3_i == 3'b010)) ? $signed(imm_i)
+	: ((op_i == 5'b00100) && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {27'b0,shamt_i}
+	: ((op_i == 5'b01100) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r2_i
+	: ((op_i == 5'b01100 && ((funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000)))) ? {27'b0,r2_i[4:0]}
+	: ((op_i == 5'b01100) && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b001 && funct7_i == 7'b0000001) || (funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b110 && funct7_i == 7'b0000001))) ? $signed(r2_i)
 	: 32'b0;
 localparam ADD  = 4'b0000;
 localparam SUB  = 4'b0001;
@@ -237,25 +237,25 @@ localparam MUL  = 4'b1001;
 localparam MULH = 4'b1010;
 localparam DIV  = 4'b1011;
 localparam REM  = 4'b1100;
-assign alu_sel =  ((op_i == 7'b0010011 && funct3_i == 3'b000) || (op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0000000)) ? ADD :
-							(op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0100000) ? SUB :
-						  ((op_i == 7'b0010011 && funct3_i == 3'b001) || (op_i == 7'b0110011 && (funct3_i == 3'b001 && funct7_i == 7'b0000000))) ? SLL :
-							((op_i == 7'b0010011 &&(funct3_i == 3'b010 || funct3_i == 3'b011)) || (op_i == 7'b0110011 && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000)))) ? SLT :
-							((op_i == 7'b0010011 && funct3_i == 3'b100) || (op_i == 7'b0110011 && (funct3_i == 3'b100 && funct7_i == 7'b0000000))) ? XOR :
-							((op_i == 7'b0010011 && funct3_i == 3'b101 && funct7_i == 7'b0000000) || (op_i == 7'b0110011 && funct3_i == 3'b101 && funct7_i == 7'b0000000)) ? SRL :
-							((op_i == 7'b0010011 && funct3_i == 3'b101 && funct7_i == 7'b0100000) || (op_i == 7'b0110011 && funct3_i == 3'b101 && funct7_i == 7'b0100000)) ? SRA :
-							((op_i == 7'b0010011 && funct3_i == 3'b110) || (op_i == 7'b0110011 && funct3_i == 3'b110 && funct7_i == 7'b0000000)) ? OR :
-							((op_i == 7'b0010011 && funct3_i == 3'b111) || (op_i == 7'b0110011 && funct3_i == 3'b111 && funct7_i == 7'b0000000)) ? AND :
-							(op_i == 7'b0110011 && funct3_i == 3'b000 && funct7_i == 7'b0000001) ? MUL :
-							(op_i == 7'b0110011 && funct3_i == 3'b001 && funct7_i == 7'b0000001) ? MULH :
-							(op_i == 7'b0110011 && ((funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001))) ? DIV :
-							(op_i == 7'b0110011 && ((funct3_i == 3'b110 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? REM
+assign alu_sel =  ((op_i == 5'b00100 && funct3_i == 3'b000) || (op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 7'b0000000)) ? ADD :
+							(op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 7'b0100000) ? SUB :
+						  ((op_i == 5'b00100 && funct3_i == 3'b001) || (op_i == 5'b01100 && (funct3_i == 3'b001 && funct7_i == 7'b0000000))) ? SLL :
+							((op_i == 5'b00100 &&(funct3_i == 3'b010 || funct3_i == 3'b011)) || (op_i == 5'b01100 && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000)))) ? SLT :
+							((op_i == 5'b00100 && funct3_i == 3'b100) || (op_i == 5'b01100 && (funct3_i == 3'b100 && funct7_i == 7'b0000000))) ? XOR :
+							((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 7'b0000000) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 7'b0000000)) ? SRL :
+							((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 7'b0100000) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 7'b0100000)) ? SRA :
+							((op_i == 5'b00100 && funct3_i == 3'b110) || (op_i == 5'b01100 && funct3_i == 3'b110 && funct7_i == 7'b0000000)) ? OR :
+							((op_i == 5'b00100 && funct3_i == 3'b111) || (op_i == 5'b01100 && funct3_i == 3'b111 && funct7_i == 7'b0000000)) ? AND :
+							(op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 7'b0000001) ? MUL :
+							(op_i == 5'b01100 && funct3_i == 3'b001 && funct7_i == 7'b0000001) ? MULH :
+							(op_i == 5'b01100 && ((funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001))) ? DIV :
+							(op_i == 5'b01100 && ((funct3_i == 3'b110 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? REM
 							: 4'b1111;
 
 /***LSU***/
-wire ls_valid = (op_i == 7'b0000011 || op_i == 7'b0100011);
-wire ls_wen = (op_i == 7'b0100011);
-wire [31:0]ls_waddr = (op_i == 7'b0100011) ? (r1_i + offset) : 32'h0;
+wire ls_valid = (op_i == 5'b00000 || op_i == 5'b01000);
+wire ls_wen = (op_i == 5'b01000);
+wire [31:0]ls_waddr = (op_i == 5'b01000) ? (r1_i + offset) : 32'h0;
 /***
 wire [31:0]ls_wdata = ((ls_waddr % 4 == 0) && op_i == 7'b0100011) ? r2_i
  : ((ls_waddr % 4 == 1) && op_i == 7'b0100011) ? {r2_i[23:0],8'b0}
@@ -263,14 +263,14 @@ wire [31:0]ls_wdata = ((ls_waddr % 4 == 0) && op_i == 7'b0100011) ? r2_i
  : ((ls_waddr % 4 == 3) && op_i == 7'b0100011) ? {r2_i[7:0],24'b0}
  : 32'b0;
 ***/
-wire [31:0]ls_wdata = (op_i == 7'b0100011) ? ((ls_waddr[1:0] == 0) ? r2_i : (ls_waddr[1:0] == 1) ? {r2_i[23:0],8'b0} : (ls_waddr[1:0] == 2) ? {r2_i[15:0],16'b0} : (ls_waddr[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0) : 32'h0;
-wire [3:0]ls_wmask = ((ls_waddr[1:0] == 0) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0001
- : ((ls_waddr[1:0] == 0) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0011
- : ((ls_waddr[1:0] == 0) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1111
- : ((ls_waddr[1:0] == 1) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0010
- : ((ls_waddr[1:0] == 2) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0100 
- : ((ls_waddr[1:0] == 2) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b1100 
- : ((ls_waddr[1:0] == 3) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b1000 
+wire [31:0]ls_wdata = (op_i == 5'b01000) ? ((ls_waddr[1:0] == 0) ? r2_i : (ls_waddr[1:0] == 1) ? {r2_i[23:0],8'b0} : (ls_waddr[1:0] == 2) ? {r2_i[15:0],16'b0} : (ls_waddr[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0) : 32'h0;
+wire [3:0]ls_wmask = ((ls_waddr[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0001
+ : ((ls_waddr[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b0011
+ : ((ls_waddr[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b010) ? 4'b1111
+ : ((ls_waddr[1:0] == 1) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0010
+ : ((ls_waddr[1:0] == 2) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0100 
+ : ((ls_waddr[1:0] == 2) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b1100 
+ : ((ls_waddr[1:0] == 3) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b1000 
  : 4'b0;
 /***
 wire [3:0]ls_wmask = ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0001
@@ -287,23 +287,23 @@ wire [3:0]ls_wmask = ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3
  : ((ls_waddr % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1000
  : 4'b0;
 ***/
-wire [31:0]ls_raddr = (op_i == 7'b0000011) ? (r1_i + offset) : 32'h0;
-wire [ 2:0]ls_awsize = (op_i == 7'b0100011 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  7'b0100011 && funct3_i == 3'b001) ? 3'b1 : (op_i == 7'b0100011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
-wire [2:0]ls_arsize = (op_i == 7'b0000011 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 7'b0000011 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 7'b0000011 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
+wire [31:0]ls_raddr = (op_i == 5'b00000) ? (r1_i + offset) : 32'h0;
+wire [ 2:0]ls_awsize = (op_i == 5'b01000 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  5'b01000 && funct3_i == 3'b001) ? 3'b1 : (op_i == 5'b01000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
+wire [2:0]ls_arsize = (op_i == 5'b00000 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 5'b00000 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 5'b00000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
 
 /***BU***/
 wire [31:0]offset = imm_i;
 wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
-assign jalen = (op_i == 7'b1101111) ? 1'b1 : 1'b0;
-assign jalren = (op_i == 7'b1100111) ? 1'b1 : 1'b0;
-assign beqen = (op_i == 7'b1100011 && funct3_i == 3'b000 && (r1_i == r2_i));
-assign bneen = (op_i == 7'b1100011 && funct3_i == 3'b001 && (r1_i != r2_i));
-assign blten = (op_i == 7'b1100011 && funct3_i == 3'b100 && ($signed(r1_i) < $signed(r2_i)));
-assign bgeen = (op_i == 7'b1100011 && funct3_i == 3'b101 && ($signed(r1_i) >= $signed(r2_i)));
-assign bltuen = (op_i == 7'b1100011 && funct3_i == 3'b110 && (r1_i < r2_i));
-assign bgeuen = (op_i == 7'b1100011 && funct3_i == 3'b111 && (r1_i >= r2_i));
-assign ecall_en = (op_i == 7'b1110011 && offset == 32'd0 && funct3_i == 3'b000);
-assign mret_en = (op_i == 7'b1110011 && offset == 32'b1100000010 && funct3_i == 3'b000);
+assign jalen = (op_i == 5'b11011) ? 1'b1 : 1'b0;
+assign jalren = (op_i == 5'b11001) ? 1'b1 : 1'b0;
+assign beqen = (op_i == 5'b11000 && funct3_i == 3'b000 && (r1_i == r2_i));
+assign bneen = (op_i == 5'b11000 && funct3_i == 3'b001 && (r1_i != r2_i));
+assign blten = (op_i == 5'b11000 && funct3_i == 3'b100 && ($signed(r1_i) < $signed(r2_i)));
+assign bgeen = (op_i == 5'b11000 && funct3_i == 3'b101 && ($signed(r1_i) >= $signed(r2_i)));
+assign bltuen = (op_i == 5'b11000 && funct3_i == 3'b110 && (r1_i < r2_i));
+assign bgeuen = (op_i == 5'b11000 && funct3_i == 3'b111 && (r1_i >= r2_i));
+assign ecall_en = (op_i == 5'b11100 && offset == 32'd0 && funct3_i == 3'b000);
+assign mret_en = (op_i == 5'b11100 && offset == 32'b1100000010 && funct3_i == 3'b000);
 
 wire [31:0]dnpc = (jalen) ? (pc_i + offset)	//jal
 	: (jalren) ? ((r1_i + offset) & ~1) //jalr
