@@ -22,8 +22,7 @@ module ysyx_24110017_EXU(
   input  wire [31:0] r1_i,
 	input  wire [31:0] r2_i,
 	input  wire [ 3:0] rd_i,
-  input  wire				 gpr_wen_i,
-  input	 wire [31:0] csr_i,
+	input  wire				 gpr_wen_o,
 	input  wire [31:0] mepc_i,mstatus_i,mcause_i,mtvec_i,
 
 	output reg  [ 6:0] op_o,
