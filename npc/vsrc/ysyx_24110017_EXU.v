@@ -189,10 +189,10 @@ assign ex =
 				((op_i == 7'b1110011) && ((funct3_i == 3'b001) || (funct3_i == 3'b010) || (funct3_i == 3'b000))) ? csr : //I_csrrw_csrrs_csrrc
 				32'h0;
 
-wire[31:0] csr = (op == 7'b1110011 && imm == 32'd833) ? mepc_i
-	: (op == 7'b1110011 && imm == 32'd768) ? mstatus_i
-	: (op == 7'b1110011 && imm == 32'd834) ? mcause_i
-	: (op == 7'b1110011 && imm == 32'd773) ? mtvec_i
+wire[31:0] csr = (op_i == 7'b1110011 && imm_i == 32'd833) ? mepc_i
+	: (op_i == 7'b1110011 && imm_i == 32'd768) ? mstatus_i
+	: (op_i == 7'b1110011 && imm_i == 32'd834) ? mcause_i
+	: (op_i == 7'b1110011 && imm_i == 32'd773) ? mtvec_i
 	: 32'b0;
 wire[31:0] mepc_w = (op_i == 7'b1110011 && imm_i == 32'd0 && funct3_i == 3'b000) ? pc_i : csrs_w; //ecall
 wire[31:0] mstatus_w = csrs_w;
