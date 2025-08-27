@@ -149,7 +149,7 @@ assign immU = {inst_i[31:12],{12{1'b0}}};	//UEXTUimm
 assign immS = {{20{inst_i[31]}}, inst_i[31:25], inst_i[11:7]};	//SEXTSimm
 assign immB = {{19{inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};	//SEXTBimm
 assign immJ = {{11{inst_i[31]}}, inst_i[31], inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};	//SEXTJimm
-assign funct7 = inst[31:25];
+assign funct7 = inst_i[31:25];
 
 assign imm = (op == 7'b0110111 || op == 7'b0010111) ? immU
  : (op == 7'b1101111) ? immJ
