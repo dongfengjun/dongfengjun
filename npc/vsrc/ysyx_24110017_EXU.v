@@ -28,18 +28,16 @@ module ysyx_24110017_EXU(
 	output reg  [ 4:0] op_o,
 	output reg  [ 2:0] funct3_o,
 	output reg  [ 3:0] rd_o,
-	output reg  gpr_wen_o,
+	output reg				 gpr_wen_o,
 	output reg  [31:0] mepc_o,
   output reg  [31:0] mcause_o,
   output reg  [31:0] csrsw_o,
   output reg  [ 3:0] csrs_wen_o,
 	output reg  [31:0] ex_o,
-	output reg  ls_valid_o,ls_wen_o,ls_ren_o,
+	output reg				 ls_valid_o,ls_wen_o,ls_ren_o,
 	output reg  [31:0] ls_waddr_o,ls_wdata_o,ls_raddr_o,
 	output reg  [ 3:0] ls_wmask_o,
 	output reg  [ 2:0] ls_awsize_o,ls_arsize_o,
-//	output reg  [ 7:0] ls_awlen_o,ls_arlen_o,	LSU用不到突发传输
-//	output reg  [ 1:0] ls_awburst_o,ls_arburst_o,
 	output reg  [31:0] dnpc_o
 );
 
@@ -214,7 +212,7 @@ wire [6:0]funct7_i = imm_i[11:5];
 wire [4:0]shamt_i  = imm_i[4:0];
 wire [3:0]alu_sel;
 wire [31:0]a,b;
-assign a = ((op_i == 5'b00100) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111) || (op_i == 5'b01100) && ((funct3_i == 3'b000 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0100000) || (funct3_i == 3'b001 && funct7_i == 7'b0000000) || (funct3_i == 3'b011 && funct7_i == 7'b0000000) || (funct3_i == 3'b100 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0000000) || (funct3_i == 3'b101 && funct7_i == 7'b0100000) || (funct3_i == 3'b110 && funct7_i == 7'b0000000) || (funct3_i == 3'b111 && funct7_i == 7'b0000000) || (funct3_i == 3'b000 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? r1_i
+assign a = ((state == WAIT) && ALUI && (funct3 == 3'b000 || funct3 == 3'b001 || funct3 == 3'b011 || funct3 == 3'b100 || funct3 == 3'b101 || funct3 == 3'b110 || funct3 == 3'b111) || (ALUR && ((funct3 == 3'b000 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0100000) || (funct3 == 3'b001 && funct7 == 7'b0000000) || (funct3 == 3'b011 && funct7 == 7'b0000000) || (funct3 == 3'b100 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0100000) || (funct3 == 3'b110 && funct7 == 7'b0000000) || (funct3 == 3'b111 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001)))) ? r1_i
 	: ((op_i == 5'b00100 && funct3_i == 3'b010) || ((op_i == 5'b01100) && ((funct3_i == 3'b010 && funct7_i == 7'b0000000) || (funct3_i == 3'b001 && funct7_i == 7'b0000001) || (funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b110 && funct7_i == 7'b0000001)))) ? $signed(r1_i)
 	: 32'b0;
 assign b = ((op_i == 5'b00100) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? imm_i
@@ -256,13 +254,6 @@ assign alu_sel =  ((op_i == 5'b00100 && funct3_i == 3'b000) || (op_i == 5'b01100
 wire ls_valid = (op_i == 5'b00000 || op_i == 5'b01000);
 wire ls_wen = (op_i == 5'b01000);
 wire [31:0]ls_waddr = (op_i == 5'b01000) ? (r1_i + offset) : 32'h0;
-/***
-wire [31:0]ls_wdata = ((ls_waddr % 4 == 0) && op_i == 7'b0100011) ? r2_i
- : ((ls_waddr % 4 == 1) && op_i == 7'b0100011) ? {r2_i[23:0],8'b0}
- : ((ls_waddr % 4 == 2) && op_i == 7'b0100011) ? {r2_i[15:0],16'b0}
- : ((ls_waddr % 4 == 3) && op_i == 7'b0100011) ? {r2_i[7:0],24'b0}
- : 32'b0;
-***/
 wire [31:0]ls_wdata = (op_i == 5'b01000) ? ((ls_waddr[1:0] == 0) ? r2_i : (ls_waddr[1:0] == 1) ? {r2_i[23:0],8'b0} : (ls_waddr[1:0] == 2) ? {r2_i[15:0],16'b0} : (ls_waddr[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0) : 32'h0;
 wire [3:0]ls_wmask = ((ls_waddr[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0001
  : ((ls_waddr[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b0011
@@ -272,21 +263,6 @@ wire [3:0]ls_wmask = ((ls_waddr[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'
  : ((ls_waddr[1:0] == 2) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b1100 
  : ((ls_waddr[1:0] == 3) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b1000 
  : 4'b0;
-/***
-wire [3:0]ls_wmask = ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0001
- : ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0011
- : ((ls_waddr % 4 == 0) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1111
- : ((ls_waddr % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0010
- : ((ls_waddr % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b0110 
- : ((ls_waddr % 4 == 1) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1110
- : ((ls_waddr % 4 == 2) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b0100 
- : ((ls_waddr % 4 == 2) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b1100 
- : ((ls_waddr % 4 == 2) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1100
- : ((ls_waddr % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b000) ? 4'b1000 
- : ((ls_waddr % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b001) ? 4'b1000 
- : ((ls_waddr % 4 == 3) && op_i == 7'b0100011 && funct3_i == 3'b010) ? 4'b1000
- : 4'b0;
-***/
 wire [31:0]ls_raddr = (op_i == 5'b00000) ? (r1_i + offset) : 32'h0;
 wire [ 2:0]ls_awsize = (op_i == 5'b01000 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  5'b01000 && funct3_i == 3'b001) ? 3'b1 : (op_i == 5'b01000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
 wire [2:0]ls_arsize = (op_i == 5'b00000 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 5'b00000 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 5'b00000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
