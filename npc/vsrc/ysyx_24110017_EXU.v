@@ -337,7 +337,7 @@ module ysyx_24110017_ALU(
         32'b0;
     
     assign res = (state == IDLE) ? imm_res : multi_cycle_res;
-    assign done = (state == IDLE) || (shared_counter == 6'd32 && state == EXECUTE);
+    assign done = (opcode == OP_MUL || opcode == OP_MULH || opcode == OP_DIV || opcode == OP_REM) ? (state == EXECUTE) && shared_counter == 6'd32 : 1'b1;
     
     localparam OP_TYPE_MUL   = 2'b00;
     localparam OP_TYPE_MULH  = 2'b01;
