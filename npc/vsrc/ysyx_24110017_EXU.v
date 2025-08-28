@@ -323,8 +323,8 @@ module ysyx_24110017_ALU(
         (opcode == OP_SUB) ? (a - b) :
         (opcode == OP_SLL) ? (a << b[4:0]) : 
         (opcode == OP_SRL) ? (a >> b[4:0]) : 
-        (opcode == OP_SRA) ? ($signed(a) >>> b[4:0]) : 
-        (opcode == OP_SLT) ? {31'b0, $signed(a) < $signed(b)} : 
+        (opcode == OP_SRA) ? ({32{a[31]}} << (32 - b[4:0])) | (a >> b[4:0]) : 
+        (opcode == OP_SLT) ? {31'b0, a < b} : 
         (opcode == OP_AND) ? (a & b) : 
         (opcode == OP_OR)  ? (a | b) : 
         (opcode == OP_XOR) ? (a ^ b) : 32'b0;
