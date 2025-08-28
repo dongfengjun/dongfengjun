@@ -92,7 +92,8 @@ end
 
 wire [31:0] xrd = (ls_valid_i) ? ls_rdata : ex_i;
 wire ls_valid_i = (op_i == 5'b00000 || op_i == 5'b01000);
-wire [ 3:0]ls_wmask_i = ((ls_waddr[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0001
+wire [ 3:0]ls_wmask_i = 
+	 ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0001
  : ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b0011
  : ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b010) ? 4'b1111
  : ((ls_waddr_i[1:0] == 1) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0010
