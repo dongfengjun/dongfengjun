@@ -252,9 +252,10 @@ always @(posedge clk or posedge rst) begin
 					if(ls_valid_i && ls_wen_i) begin
 		        axi_state <= AXI_WRITE1;
 						axi_awvalid <= 1'b1;
-						if(ls_waddr_i - 32'ha0000000 < 32'h20000000) begin
-							axi_wvalid <= 1'b1; 
-						end
+						//if(ls_waddr_i - 32'ha0000000 < 32'h20000000) begin
+							axi_wvalid <= 1'b1;
+							axi_wlast  <= 1'b1;
+						//end
 						axi_awaddr <= ls_waddr_i;
 						axi_awsize <= ls_awsize_i;
 						axi_wstrb <= ls_wmask_i;
@@ -280,10 +281,11 @@ always @(posedge clk or posedge rst) begin
 				AXI_WRITE1: begin
 					if(ls_axi_awvalid && ls_axi_awready) begin
 						axi_awvalid <= 1'b0;
-						axi_wlast <= 1'b1;
-						if(!(ls_waddr_i - 32'ha0000000 < 32'h20000000)) begin
-							axi_wvalid <= 1'b1;
-						end
+						//axi_wlast <= 1'b1;
+						//if(!(ls_waddr_i - 32'ha0000000 < 32'h20000000)) begin
+							//axi_wvalid <= 1'b1;
+							//axi_wlast  <= 1'b1;
+						//end
 					end
 					if(ls_axi_wvalid && ls_axi_wready && ((ls_axi_awvalid && ls_axi_awready) || !ls_axi_awvalid)) begin
 						axi_wvalid <= 0;
