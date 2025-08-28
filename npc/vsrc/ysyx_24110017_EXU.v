@@ -41,8 +41,8 @@ module ysyx_24110017_EXU(
 
 /***分布式控制***/
 assign ex_ready_o = (state == IDLE);
-assign ex_valid_o = (state == WAIT) && (al_done || ex_valid_reg);
-reg ex_valid_reg;
+assign ex_valid_o = (state == WAIT); //&& (al_done || ex_valid_reg);
+//reg ex_valid_reg;
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
@@ -56,7 +56,7 @@ always @(posedge clk) begin
 		endcase
 	end
 end
-
+/***
 always @(posedge clk) begin
 	if(rst) ex_valid_reg <= 1'b0;
 	else if(flush_i) ex_valid_reg <= 1'b0;
@@ -74,6 +74,7 @@ always @(posedge clk) begin
 		endcase
 	end
 end
+***/
 
 wire [31:0]al_res;
 always @(posedge clk) begin
@@ -155,8 +156,8 @@ always @(posedge clk) begin
 	end
 end
 
-wire al_done;
-ysyx_24110017_ALU ALU(clk,rst,a,b,alu_sel,al_res,al_done);
+//wire al_done;
+ysyx_24110017_ALU ALU(clk,rst,a,b,alu_sel,al_res);//,al_done);
 
 wire [31:0]ex;
 assign ex = 
@@ -290,8 +291,8 @@ module ysyx_24110017_ALU(
     input wire [31:0] a,
     input wire [31:0] b,
     input wire [3:0] opcode,
-    output wire [31:0] res,
-    output wire done
+    output wire [31:0] res
+//    output wire done
 );
 
     localparam OP_ADD  = 4'b0000;
@@ -311,13 +312,15 @@ module ysyx_24110017_ALU(
     localparam IDLE     = 1'b0;
     localparam EXECUTE = 1'b1;
 
+/***
     reg state;
     reg [63:0] shared_result;
     reg [5:0] shared_counter;
     reg [31:0] opA_reg, opB_reg;
     reg [1:0] current_op;
-    
-    wire [31:0] imm_res = 
+***/
+
+    wire [31:0] res = 
         (opcode == OP_ADD) ? (a + b) :
         (opcode == OP_SUB) ? (a - b) :
         (opcode == OP_SLL) ? (a << b[4:0]) : 
@@ -327,8 +330,10 @@ module ysyx_24110017_ALU(
         (opcode == OP_AND) ? (a & b) : 
         (opcode == OP_OR)  ? (a | b) : 
         (opcode == OP_XOR) ? (a ^ b) : 32'b0;
-    
-    wire [31:0] multi_cycle_res =
+
+endmodule    
+/*** 
+		wire [31:0] multi_cycle_res =
         (current_op[1:0] == 2'b00) ? shared_result[31:0] :
         (current_op[1:0] == 2'b10) ? shared_result[63:32] :
         (current_op[1:0] == 2'b11) ? shared_result[31:0] :
@@ -403,3 +408,4 @@ module ysyx_24110017_ALU(
     end
 
 endmodule
+***/
