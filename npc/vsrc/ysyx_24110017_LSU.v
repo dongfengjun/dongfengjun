@@ -23,10 +23,11 @@ module ysyx_24110017_LSU(
   input  wire [31:0] csrsw_i,
   input  wire [ 3:0] csrs_wen_i,
   input  wire [31:0] ex_i,
-  input  wire ls_valid_i,ls_wen_i,ls_ren_i,
+//  input  wire ls_valid_i,
+	input ls_wen_i,ls_ren_i,
   input  wire [31:0] ls_waddr_i,ls_wdata_i,ls_raddr_i,
-  input  wire [ 3:0] ls_wmask_i,
-  input  wire [ 2:0] ls_awsize_i,ls_arsize_i,
+//  input  wire [ 3:0] ls_wmask_i,
+//  input  wire [ 2:0] ls_awsize_i,ls_arsize_i,
 //  input  wire [ 7:0] ls_awlen_i,ls_arlen_i,
 //  input  wire [ 1:0] ls_awburst_i,ls_arburst_i,
 	
@@ -90,6 +91,17 @@ always @(posedge clk or posedge rst) begin
 end
 
 wire [31:0] xrd = (ls_valid_i) ? ls_rdata : ex_i;
+wire ls_valid_i = (op_i == 5'b00000 || op_i == 5'b01000);
+wire [ 3:0]ls_wmask_i = ((ls_waddr[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0001
+ : ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b0011
+ : ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b010) ? 4'b1111
+ : ((ls_waddr_i[1:0] == 1) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0010
+ : ((ls_waddr_i[1:0] == 2) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0100 
+ : ((ls_waddr_i[1:0] == 2) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b1100 
+ : ((ls_waddr_i[1:0] == 3) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b1000 
+ : 4'b0;
+wire [ 2:0]ls_awsize_i = (op_i == 5'b01000 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  5'b01000 && funct3_i == 3'b001) ? 3'b1 : (op_i == 5'b01000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
+wire [ 2:0]ls_arsize_i = (op_i == 5'b00000 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 5'b00000 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 5'b00000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
 
 always@(posedge clk or posedge rst) begin
 	if(rst) begin
