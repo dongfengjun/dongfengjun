@@ -330,10 +330,10 @@ module ysyx_24110017_ALU(
         (opcode == OP_XOR) ? (a ^ b) : 32'b0;
     
     wire [31:0] multi_cycle_res =
-        (current_op[2:0] == 3'b001) ? shared_result[31:0] :
-        (current_op[2:0] == 3'b010) ? shared_result[63:32] :
-        (current_op[2:0] == 3'b011) ? shared_result[31:0] :
-        (current_op[2:0] == 3'b100) ? shared_result[63:32] :
+        (current_op[1:0] == 3'b00) ? shared_result[31:0] :
+        (current_op[1:0] == 3'b10) ? shared_result[63:32] :
+        (current_op[1:0] == 3'b11) ? shared_result[31:0] :
+        (current_op[1:0] == 3'b10) ? shared_result[63:32] :
         32'b0;
     
     assign res = (state == IDLE) ? imm_res : multi_cycle_res;
