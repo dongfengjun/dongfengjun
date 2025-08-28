@@ -320,7 +320,7 @@ module ysyx_24110017_ALU(
     reg [1:0] current_op;
 ***/
 
-    wire [31:0] res = 
+    assign res = 
         (opcode == OP_ADD) ? (a + b) :
         (opcode == OP_SUB) ? (a - b) :
         (opcode == OP_SLL) ? (a << b[4:0]) : 
