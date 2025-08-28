@@ -82,7 +82,7 @@ always @(posedge clk or posedge rst) begin
   else begin
     case (state)
       IDLE: state <= (ex_valid_i && ls_ready_o) ? WAIT : state;
-      WAIT: state <= (ls_done_o || !ls_valid_i) ? DONE : state;
+      WAIT: state <= (ls_done_o || (!ls_wen_i && !ls_ren_i)) ? DONE : state;
 			DONE: state <= DIFFTEST;
 			DIFFTEST : state <= IDLE;
     endcase
