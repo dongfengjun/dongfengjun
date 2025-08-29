@@ -67,10 +67,10 @@ module ysyx_24110017_LSU(
 );
 
 /***分布式控制***/
-assign ls_valid_o = (state == DONE);
 assign ls_ready_o = (state == IDLE);
 
 `ifndef YOSYS_STA
+assign ls_valid_o = (state == DONE);
 assign difftest_o = (state == DIFFTEST);
 parameter IDLE = 2'b00,WAIT = 2'b01,DONE = 2'b10,DIFFTEST = 2'b11;
 reg[1:0] state; 
