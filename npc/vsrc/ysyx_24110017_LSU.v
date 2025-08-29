@@ -69,11 +69,12 @@ module ysyx_24110017_LSU(
 /***分布式控制***/
 assign ls_valid_o = (state == DONE);
 assign ls_ready_o = (state == IDLE);
+
+`ifndef YOSYS_STA
 assign difftest_o = (state == DIFFTEST);
 parameter IDLE = 2'b00,WAIT = 2'b01,DONE = 2'b10,DIFFTEST = 2'b11;
-reg[1:0] state;
- 
-always @(posedge clk or posedge rst) begin
+reg[1:0] state; 
+always @(posedge clk) begin
   if(rst) state <= IDLE;
   else begin
     case (state)
@@ -84,6 +85,19 @@ always @(posedge clk or posedge rst) begin
     endcase
   end
 end
+`else
+parameter IDLE = 1'b0,WAIT = 1'b1;
+reg state; 
+always @(posedge clk) begin
+  if(rst) state <= IDLE;
+  else begin
+    case (state)
+      IDLE: state      <= (ex_valid_i && ls_ready_o) ? WAIT : state;
+      WAIT: state      <= (ls_done || !ls_valid_i)   ? IDLE : state;
+    endcase
+  end
+end
+`endif
 
 wire ls_valid_i = (op_i == 5'b00000 || op_i == 5'b01000);
 wire ls_done = (ls_axi_rvalid && ls_axi_rready) || (ls_axi_bvalid && ls_axi_bready);
@@ -115,7 +129,7 @@ wire [31:0]ls_rdata =
 wire [ 2:0]ls_awsize_i = (op_i == 5'b01000 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  5'b01000 && funct3_i == 3'b001) ? 3'b1 : (op_i == 5'b01000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
 wire [ 2:0]ls_arsize_i = (op_i == 5'b00000 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 5'b00000 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 5'b00000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
 
-always@(posedge clk or posedge rst) begin
+always@(posedge clk) begin
 	if(rst) begin
 `ifndef YOSYS_STA
 		pc_o					<= 32'h0;
@@ -175,12 +189,12 @@ import "DPI-C" function void diff_skip_ref();
 parameter AXI_IDLE=2'b00,AXI_READ=2'b01,AXI_WRITE=2'b10,AXI_DONE=2'b11;
 reg [1:0]axi_state;
 
-assign ls_axi_awaddr = (ls_axi_awvalid) ? ls_waddr_i  : 32'h0;
+assign ls_axi_awaddr = (ls_axi_awvalid || ls_axi_bready) ? ls_waddr_i  : 32'h0;
 assign ls_axi_awsize = (ls_axi_awvalid) ? ls_awsize_i : 3'b0;
 assign ls_axi_wdata  = (ls_axi_wvalid)  ? ls_wdata_i  : 32'h0;
 assign ls_axi_wstrb  = (ls_axi_wvalid)  ? ls_wmask_i  : 4'b0;
-assign ls_axi_wlast  = (ls_axi_wvalid) ? 1'b1 : 1'b0;
-assign ls_axi_araddr = (ls_axi_arvalid) ? ls_raddr_i  : 32'h0;
+assign ls_axi_wlast  = (ls_axi_wvalid)  ? 1'b1 : 1'b0;
+assign ls_axi_araddr = (ls_axi_arvalid || ls_axi_rready) ? ls_raddr_i  : 32'h0;
 assign ls_axi_arsize = (ls_axi_arvalid) ? ls_arsize_i : 3'b0;
 
 always @(posedge clk or posedge rst) begin
