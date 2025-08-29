@@ -43,7 +43,7 @@ module ysyx_24110017_LSU(
 	output wire [ 1:0]ls_axi_awburst,
 	input  wire				ls_axi_wready,
 	output reg 				ls_axi_wvalid,
-	output reg  [31:0]ls_axi_wdata,
+	output wire [31:0]ls_axi_wdata,
 	output reg  [ 3:0]ls_axi_wstrb,
 	output reg 				ls_axi_wlast,
 	output reg				ls_axi_bready,
@@ -200,7 +200,6 @@ always @(posedge clk or posedge rst) begin
 			ls_axi_arsize  <= 3'b0;
       ls_axi_awvalid <= 1'b0;
       ls_axi_awaddr  <= 32'h0;
-      ls_axi_wdata   <= 32'h0;
       ls_axi_wstrb   <= 4'b0;
 			ls_axi_awsize  <= 3'b0;
 		  ls_axi_wvalid  <= 1'b0;
@@ -270,7 +269,6 @@ always @(posedge clk or posedge rst) begin
 					ls_axi_awvalid <= 1'b0;
 					ls_axi_awaddr  <= 32'h0;
 					ls_axi_awsize  <= 3'b0;
-					ls_axi_wdata   <= 32'h0;
 					ls_axi_wstrb   <= 4'b0;
 					ls_axi_wvalid  <= 1'b0;
 					ls_axi_bready  <= 1'b0;
