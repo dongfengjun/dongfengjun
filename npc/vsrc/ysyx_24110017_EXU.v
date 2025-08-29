@@ -175,6 +175,7 @@ wire [3:0] csrs_wen = {
 wire [6:0]funct7_i = imm_i[11:5];
 wire [4:0]shamt_i  = imm_i[4:0];
 wire [3:0]alu_sel;
+wire [31:0]alu_res;
 wire [31:0]a,b;
 assign a = 
 	((op_i == 5'b00100) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? r1_i
