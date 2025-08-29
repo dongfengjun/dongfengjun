@@ -202,7 +202,7 @@ always @(posedge clk or posedge rst) begin
       ls_axi_awaddr  <= 32'h0;
       ls_axi_wdata   <= 32'h0;
       ls_axi_wstrb   <= 4'b0;
-			ls_axi_wsize   <= 3'b0;
+			ls_axi_awsize  <= 3'b0;
 		  ls_axi_wvalid  <= 1'b0;
 			ls_axi_wlast   <= 1'b0;
       ls_axi_bready  <= 1'b0;
