@@ -186,17 +186,12 @@ always @(posedge clk or posedge rst) begin
 		if (rst) begin
 			axi_state			 <= AXI_IDLE;
       ls_axi_awvalid <= 1'b0;
-      ls_axi_awaddr  <= 32'h0;
-      ls_axi_wstrb   <= 4'b0;
-      ls_axi_awsize  <= 3'b0;
       ls_axi_wvalid  <= 1'b0;
       ls_axi_wlast   <= 1'b0;
       ls_axi_bready  <= 1'b0;
 
 			ls_axi_arvalid <= 1'b0;
       ls_axi_rready	 <= 1'b0;
-      ls_axi_araddr  <= 32'h0;
-			ls_axi_arsize  <= 3'b0;
     end 
 		else begin
       case (axi_state)
