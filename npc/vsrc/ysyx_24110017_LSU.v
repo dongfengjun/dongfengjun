@@ -275,7 +275,7 @@ always @(posedge clk or posedge rst) begin
 					ls_axi_wvalid  <= 1'b0;
 					ls_axi_bready  <= 1'b0;
 					ls_done_reg    <= 1'b0;
-					ls_rdata_reg   <= 32'h0;
+					//ls_rdata_reg   <= 32'h0;
           axi_state      <= AXI_IDLE;
         end
       endcase
