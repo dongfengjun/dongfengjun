@@ -23,13 +23,8 @@ module ysyx_24110017_LSU(
   input  wire [31:0] csrsw_i,
   input  wire [ 3:0] csrs_wen_i,
   input  wire [31:0] ex_i,
-//  input  wire ls_valid_i,
 	input ls_wen_i,ls_ren_i,
   input  wire [31:0] ls_waddr_i,ls_wdata_i,ls_raddr_i,
-//  input  wire [ 3:0] ls_wmask_i,
-//  input  wire [ 2:0] ls_awsize_i,ls_arsize_i,
-//  input  wire [ 7:0] ls_awlen_i,ls_arlen_i,
-//  input  wire [ 1:0] ls_awburst_i,ls_arburst_i,
 	
 	output reg  [31:0] xrd_o,
 	output reg  [ 3:0] rd_o,
@@ -39,36 +34,36 @@ module ysyx_24110017_LSU(
   output reg  [31:0] csrsw_o,
   output reg  [ 3:0] csrs_wen_o,
  
-	input  wire ls_axi_awready,
-	output wire ls_axi_awvalid,
+	input  wire				ls_axi_awready,
+	output reg				ls_axi_awvalid,
 	output wire [ 3:0]ls_axi_awid,
-	output wire [31:0]ls_axi_awaddr,
+	output reg  [31:0]ls_axi_awaddr,
 	output wire [ 7:0]ls_axi_awlen,
-	output wire [ 2:0]ls_axi_awsize,
+	output reg  [ 2:0]ls_axi_awsize,
 	output wire [ 1:0]ls_axi_awburst,
-	input  wire ls_axi_wready,
-	output wire ls_axi_wvalid,
-	output wire [31:0]ls_axi_wdata,
-	output wire [ 3:0]ls_axi_wstrb,
-	output wire ls_axi_wlast,
-	output wire ls_axi_bready,
-	input  wire ls_axi_bvalid,
+	input  wire				ls_axi_wready,
+	output reg 				ls_axi_wvalid,
+	output reg  [31:0]ls_axi_wdata,
+	output reg  [ 3:0]ls_axi_wstrb,
+	output reg 				ls_axi_wlast,
+	output reg				ls_axi_bready,
+	input  wire				ls_axi_bvalid,
 	input  wire [ 3:0]ls_axi_bid,
 	input  wire [ 1:0]ls_axi_bresp,
 
-	input  wire ls_axi_arready,
-	output wire ls_axi_arvalid,
+	input  wire				ls_axi_arready,
+	output reg				ls_axi_arvalid,
 	output wire [ 3:0]ls_axi_arid,
-	output wire [31:0]ls_axi_araddr,
+	output reg  [31:0]ls_axi_araddr,
 	output wire [ 7:0]ls_axi_arlen,
-	output wire [ 2:0]ls_axi_arsize,
+	output reg  [ 2:0]ls_axi_arsize,
 	output wire [ 1:0]ls_axi_arburst,
-	output wire ls_axi_rready,
-	input  wire ls_axi_rvalid,
-	input  wire [ 3:0]ls_axi_rid,
+	output reg				ls_axi_rready,
+	input  wire				ls_axi_rvalid,
+	input  wire	[ 3:0]ls_axi_rid,
 	input  wire [31:0]ls_axi_rdata,
 	input  wire [ 1:0]ls_axi_rresp,
-	input  wire ls_axi_rlast
+	input  wire				ls_axi_rlast
 );
 
 /***分布式控制***/
@@ -83,15 +78,15 @@ always @(posedge clk or posedge rst) begin
   else begin
     case (state)
       IDLE: state <= (ex_valid_i && ls_ready_o) ? WAIT : state;
-      WAIT: state <= (ls_done_o || !ls_valid_i) ? DONE : state;
+      WAIT: state <= (ls_done_reg || !ls_valid_i) ? DONE : state;
 			DONE: state <= DIFFTEST;
 			DIFFTEST : state <= IDLE;
     endcase
   end
 end
 
-wire [31:0] xrd = (ls_valid_i) ? ls_rdata : ex_i;
 wire ls_valid_i = (op_i == 5'b00000 || op_i == 5'b01000);
+wire [31:0] xrd = (ls_valid_i) ? ls_rdata : ex_i;
 wire [ 3:0]ls_wmask_i = 
 	 ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0001
  : ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b0011
@@ -131,7 +126,7 @@ always@(posedge clk or posedge rst) begin
 		    xrd_o         <= 32'h0; 
 			end
 			WAIT: begin
-				if(ls_done_o || !ls_valid_i) begin
+				if(ls_done_reg || !ls_valid_i) begin
 `ifndef YOSYS_STA
 					pc_o          <= pc_i;
 			    inst_o        <= inst_i;
@@ -160,10 +155,9 @@ always@(posedge clk or posedge rst) begin
 end
 
 reg ls_done_reg;
-wire ls_done_o = ls_done_reg;
+
 reg [31:0]ls_rdata_reg;
 wire [31:0]ls_rdata;
-
 assign ls_rdata = ((ls_raddr_i % 4 == 0) && op_i == 5'b00000 && funct3_i == 3'b010) ? ls_rdata_reg
  : ((ls_raddr_i % 4 == 1) && op_i == 5'b00000 && funct3_i == 3'b010) ? {8'b0,ls_rdata_reg[31:8]}
  : ((ls_raddr_i % 4 == 2) && op_i == 5'b00000 && funct3_i == 3'b010) ? {16'b0,ls_rdata_reg[31:16]}
@@ -192,141 +186,97 @@ assign ls_rdata = ((ls_raddr_i % 4 == 0) && op_i == 5'b00000 && funct3_i == 3'b0
 
 import "DPI-C" function void diff_skip_ref();
 
-parameter AXI_IDLE=3'b0,AXI_READ=3'b001,AXI_WRITE1=3'b010,AXI_WRITE2=3'b011,AXI_DONE=3'b100;
-reg [2:0]axi_state;
+parameter AXI_IDLE=2'b00,AXI_READ=2'b01,AXI_WRITE=2'b10,AXI_DONE=2'b11;
+reg [1:0]axi_state;
 
-reg axi_awvalid,axi_wvalid;
-reg [3:0]axi_awid;
-reg [31:0]axi_awaddr,axi_wdata;
-reg [7:0]axi_awlen;
-reg [2:0]axi_awsize;
-reg [1:0]axi_awburst;
-reg [3:0]axi_wstrb;
-reg axi_bready;
-reg axi_wlast;
-assign ls_axi_awvalid = axi_awvalid;
-assign ls_axi_wvalid = axi_wvalid;
-assign ls_axi_awid = axi_awid;
-assign ls_axi_awaddr = axi_awaddr;
 assign ls_axi_wdata = (ls_axi_wvalid) ? ls_wdata_i : 32'h0;//axi_wdata;
-assign ls_axi_awlen = axi_awlen;
-assign ls_axi_awsize = axi_awsize;
-assign ls_axi_awburst = axi_awburst;
-assign ls_axi_wstrb = axi_wstrb;
-assign ls_axi_bready = axi_bready;
-assign ls_axi_wlast = axi_wlast;
-
-reg axi_arvalid,axi_rready;
-reg [3:0]axi_arid;
-reg [31:0]axi_araddr;
-reg [7:0]axi_arlen;
-reg [2:0]axi_arsize;
-reg [1:0]axi_arburst;
-assign ls_axi_arvalid = axi_arvalid;
-assign ls_axi_rready = axi_rready;
-assign ls_axi_arid = axi_arid;
-assign ls_axi_araddr = axi_araddr;
-assign ls_axi_arlen = axi_arlen;
-assign ls_axi_arsize = axi_arsize;
-assign ls_axi_arburst = axi_arburst;
 
 always @(posedge clk or posedge rst) begin
 		if (rst) begin
-			axi_state <= AXI_IDLE;
-      axi_arvalid <= 0;
-      axi_rready <= 0;
-      axi_araddr <= 32'h0;
-      axi_awvalid <= 0;
-      axi_awaddr <= 32'h0;
-			axi_arsize <= 3'b0;
-			axi_arlen <= 8'b0;
-			axi_arburst <= 2'b01;
-			axi_awsize <= 3'b0; 
-      axi_wdata <= 32'h0;
-      axi_wstrb <= 4'b0;
-		  axi_wvalid <= 0;
-			axi_awlen <= 8'b0;
-			axi_awburst <= 2'b01;
-			axi_wlast <= 0;
-      axi_bready <= 0;
+			axi_state			 <= AXI_IDLE;
+      ls_axi_arvalid <= 1'b0;
+      ls_axi_rready	 <= 1'b0;
+      ls_axi_araddr  <= 32'h0;
+			ls_axi_arsize  <= 3'b0;
+      ls_axi_awvalid <= 1'b0;
+      ls_axi_awaddr  <= 32'h0;
+      ls_axi_wdata   <= 32'h0;
+      ls_axi_wstrb   <= 4'b0;
+			ls_axi_wsize   <= 3'b0;
+		  ls_axi_wvalid  <= 1'b0;
+			ls_axi_wlast   <= 1'b0;
+      ls_axi_bready  <= 1'b0;
 
-			ls_done_reg <= 0;
-			ls_rdata_reg <= 32'h0;
+			ls_done_reg    <= 1'b0;
+			ls_rdata_reg   <= 32'h0;
     end 
 		else begin
       case (axi_state)
         AXI_IDLE: begin
 				  if(ls_valid_i && ls_ren_i) begin
-            axi_state <= AXI_READ;
-					  axi_arvalid <= 1'b1;//非DELAY_TEST
-						axi_araddr <= ls_raddr_i;
-						axi_arsize <= ls_arsize_i;
+            axi_state		   <= AXI_READ;
+					  ls_axi_arvalid <= 1'b1;
+						ls_axi_araddr  <= ls_raddr_i;
+						ls_axi_arsize  <= ls_arsize_i;
 					end
 					if(ls_valid_i && ls_wen_i) begin
-		        axi_state <= AXI_WRITE1;
-						axi_awvalid <= 1'b1;
-						axi_wvalid <= 1'b1;
-						axi_wlast  <= 1'b1;
-						axi_awaddr <= ls_waddr_i;
-						axi_awsize <= ls_awsize_i;
-						axi_wstrb <= ls_wmask_i;
+		        axi_state      <= AXI_WRITE;
+						ls_axi_awvalid <= 1'b1;
+						ls_axi_wvalid  <= 1'b1;
+						ls_axi_wlast   <= 1'b1;
+						ls_axi_awaddr  <= ls_waddr_i;
+						ls_axi_wstrb   <= ls_wmask_i;
+						ls_axi_awsize	 <= ls_awsize_i;
 	        end
 				end
 				AXI_READ: begin
           if(ls_axi_arvalid && ls_axi_arready) begin
-						axi_arvalid <= 1'b0;
-						axi_rready <= 1'b1;
+						ls_axi_arvalid <= 1'b0;
+						ls_axi_rready  <= 1'b1;
 					end
 	        if(ls_axi_rvalid && ls_axi_rready) begin
-            ls_rdata_reg <= ls_axi_rdata;
-						axi_rready <= 0;
-            axi_state <= AXI_DONE;
+            ls_rdata_reg   <= ls_axi_rdata;
+						ls_axi_rready  <= 1'b0;
+            axi_state   <= AXI_DONE;
 `ifndef YOSYS_STA						
 						if((ls_axi_araddr - 32'h10000000 < 32'h1000) || (ls_axi_araddr == 32'h02000000) || (ls_axi_araddr == 32'h02000004)) begin //DEVICE DIFFTEST
 							diff_skip_ref();
 						end
 `endif
-						ls_done_reg <= 1'b1;
+						ls_done_reg    <= 1'b1;
           end
         end
-				AXI_WRITE1: begin
+				AXI_WRITE: begin
 					if(ls_axi_awvalid && ls_axi_awready) begin
-						axi_awvalid <= 1'b0;
+						ls_axi_awvalid <= 1'b0;
 					end
 					if(ls_axi_wvalid && ls_axi_wready && ((ls_axi_awvalid && ls_axi_awready) || !ls_axi_awvalid)) begin
-						axi_wvalid <= 0;
+						ls_axi_wvalid  <= 1'b0;
 					end
 					if(ls_axi_bvalid && !ls_axi_bready) begin
-						axi_bready <= 1;
+						ls_axi_bready  <= 1'b1;
 					end
 					if(ls_axi_bvalid && ls_axi_bready) begin
-						axi_bready <= 0;
-						axi_state <= AXI_DONE;
-						ls_done_reg <= 1'b1;
+						ls_axi_bready <= 1'b0;
+						axi_state     <= AXI_DONE;
+						ls_done_reg   <= 1'b1;
 					end
 				end
         AXI_DONE: begin
-					axi_arvalid <= 0;
-					axi_rready <= 0;
-					axi_araddr <= 32'h0;
-					axi_awvalid <= 0;
-					axi_awaddr <= 0;
-					axi_wdata <= 32'h0;
-					axi_wstrb <= 4'b0;
-					axi_arsize <= 3'b0;
-					axi_awsize <= 3'b0;
-					axi_awburst <= 2'b0;
-					axi_arburst <= 2'b0;
-					axi_awlen <= 8'b0;
-					axi_arlen <= 8'b0;
-					axi_wvalid <= 0;
-					axi_bready <= 0;
-					ls_done_reg <= 0;
-					ls_rdata_reg <= 32'h0;
-          axi_state <= AXI_IDLE;
+					ls_axi_arvalid <= 1'b0;
+					ls_axi_rready	 <= 1'b0;
+					ls_axi_araddr  <= 32'h0;
+					ls_axi_arsize  <= 3'b0;
+					ls_axi_awvalid <= 1'b0;
+					ls_axi_awaddr  <= 1'b0;
+					ls_axi_awsize  <= 3'b0;
+					ls_axi_wdata   <= 32'h0;
+					ls_axi_wstrb   <= 4'b0;
+					ls_axi_wvalid  <= 1'b0;
+					ls_axi_bready  <= 1'b0;
+					ls_rdata_reg   <= 32'h0;
+          axi_state      <= AXI_IDLE;
         end
-			default: begin
-			end
       endcase
 		end
 	end

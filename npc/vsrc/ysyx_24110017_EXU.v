@@ -177,36 +177,14 @@ wire [4:0]shamt_i  = imm_i[4:0];
 wire [3:0]alu_sel;
 wire [31:0]alu_res;
 wire [31:0]a,b;
-/***
-assign a = 
-	((op_i == 5'b00100) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b101 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? r1_i
-	: ((op_i == 5'b01100) && ((funct3_i == 3'b000 && funct7_i == 1'b0) || (funct3_i == 3'b000 && funct7_i == 1'b1) || (funct3_i == 3'b001 && funct7_i == 1'b0) || (funct3_i == 3'b011 && funct7_i == 1'b0) || (funct3_i == 3'b100 && funct7_i == 1'b0) || (funct3_i == 3'b101 && funct7_i == 1'b0) || (funct3_i == 3'b101 && funct7_i == 1'b1) || (funct3_i == 3'b110 && funct7_i == 1'b0) || (funct3_i == 3'b111 && funct7_i == 1'b0))) ? r1_i
-	: ((op_i == 5'b00100 && funct3_i == 3'b010)) ? $signed(r1_i)
-	: (((op_i == 5'b01100) && ((funct3_i == 3'b010 && funct7_i == 1'b0)))) ? $signed(r1_i)
-	: 32'b0;
-assign b = ((op_i == 5'b00100) && (funct3_i == 3'b000 || funct3_i == 3'b001 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111)) ? imm_i
-	: ((op_i == 5'b00100) && (funct3_i == 3'b010)) ? $signed(imm_i)
-	: ((op_i == 5'b00100) && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? {27'b0,shamt_i}
-	: ((op_i == 5'b01100) && ((funct3_i == 3'b000 && funct7_i == 1'b0) || (funct3_i == 3'b000 && funct7_i == 1'b1) || (funct3_i == 3'b011 && funct7_i == 1'b0) || (funct3_i == 3'b100 && funct7_i == 1'b0) || (funct3_i == 3'b110 && funct7_i == 1'b0) || (funct3_i == 3'b111 && funct7_i == 1'b0) || (funct3_i == 3'b001 && funct7_i == 1'b0) || (funct3_i == 3'b101 && funct7_i == 1'b0) || (funct3_i == 3'b101 && funct7_i == 1'b1))) ? r2_i
-	: ((op_i == 5'b01100) && ((funct3_i == 3'b010 && funct7_i == 1'b0))) ? $signed(r2_i)
-	: 32'b0;
-***/
-wire use_r1 = (op_i == 5'b00100) || (op_i == 5'b01100);
-wire use_imm = (op_i == 5'b00100);
-wire use_shamt = (funct3_i == 3'b001 || funct3_i == 3'b101);
-wire use_r2 = (op_i == 5'b01100);
-wire use_signed = (funct3_i == 3'b010);
-assign a = use_r1 ? (use_signed ? $signed(r1_i) : r1_i) : 32'b0;
-assign b = use_imm ? (use_signed ? $signed(imm_i) : use_shamt ? {27'b0, shamt_i} : imm_i) :
-           use_r2 ? (use_signed ? $signed(r2_i) : r2_i) : 32'b0;
-/***
-assign a = (op_i == 5'b00100) ? ((funct3_i == 3'b010) ? $signed(r1_i) : r1_i)
-  : (op_i == 5'b01100) ? ((funct3_i == 3'b010 && funct7_i == 1'b0) ? $signed(r1_i) : r1_i)
-  : 32'b0;
-assign b = (op_i == 5'b00100) ? ((funct3_i == 3'b010) ? $signed(imm_i) : (funct3_i == 3'b001 || funct3_i == 3'b101) ? {27'b0,shamt_i} : imm_i)
-  : (op_i == 5'b01100) ? ((funct3_i == 3'b010 && funct7_i == 1'b0) ? $signed(r2_i) : r2_i)
-  : 32'b0;
-***/
+wire a_use_r1 = (op_i == 5'b00100) || (op_i == 5'b01100);
+wire b_use_imm = (op_i == 5'b00100);
+wire b_use_shamt = (funct3_i == 3'b001 || funct3_i == 3'b101);
+wire b_use_r2 = (op_i == 5'b01100);
+wire ab_use_signed = (funct3_i == 3'b010);
+assign a = a_use_r1 ? (ab_use_signed ? $signed(r1_i) : r1_i) : 32'b0;
+assign b = b_use_imm ? (ab_use_signed ? $signed(imm_i) : b_use_shamt ? {27'b0, shamt_i} : imm_i) :
+           b_use_r2 ? (ab_use_signed ? $signed(r2_i) : r2_i) : 32'b0;
 
 localparam ADD  = 4'b0001;
 localparam SUB  = 4'b0010;
