@@ -138,7 +138,7 @@ wire			 X_AXI_AWVALID,X_AXI_AWREADY,X_AXI_WVALID,X_AXI_WREADY,X_AXI_BVALID,X_AXI
 wire			 X_AXI_ARVALID,X_AXI_ARREADY,X_AXI_RVALID,X_AXI_RREADY,X_AXI_RLAST;
 
 reg  [1:0] state;
-wire [1:0] sel_m = ((state == IDLE || state == GRANT_LSU) && (LSU_AXI_ARADDR != 0 || LSU_AXI_AWADDR != 0)) ? GRANT_LSU : ((state == IDLE || state == GRANT_IFU) && (IFU_AXI_ARADDR != 0)) ? GRANT_IFU : 2'b11;
+wire [1:0] sel_m = (LSU_AXI_ARVALID || LSU_AXI_AWVALID || state == GRANT_LSU) ? GRANT_LSU : (IFU_AXI_ARVALID || state == GRANT_IFU) ? GRANT_IFU : 2'b00;
 
 parameter IDLE = 2'b00,GRANT_LSU = 2'b01,GRANT_IFU = 2'b10;
 
