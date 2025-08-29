@@ -179,8 +179,8 @@ assign ls_axi_awaddr = (ls_axi_awvalid) ? ls_waddr_i  : 32'h0;
 assign ls_axi_wdata  = (ls_axi_wvalid)  ? ls_wdata_i  : 32'h0;
 assign ls_axi_awsize = (ls_axi_wvalid)  ? ls_awsize_i : 3'b0;
 assign ls_axi_wstrb  = (ls_axi_wvalid)  ? ls_wmask_i  : 4'b0;
-assign ls_axi_araddr = (ls_axi_arvalid) ? ls_raddr_i;
-assign ls_axi_arsize = (ls_axi_arvalid) ? ls_arsize_i;
+assign ls_axi_araddr = (ls_axi_arvalid) ? ls_raddr_i  : 32'h0;
+assign ls_axi_arsize = (ls_axi_arvalid) ? ls_arsize_i : 3'b0;
 
 always @(posedge clk or posedge rst) begin
 		if (rst) begin
