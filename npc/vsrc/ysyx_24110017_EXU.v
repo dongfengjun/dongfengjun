@@ -215,15 +215,15 @@ assign alu_sel =  ((op_i == 5'b00100 && funct3_i == 3'b000) || (op_i == 5'b01100
 							(op_i == 5'b01100 && ((funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001))) ? DIV :
 							(op_i == 5'b01100 && ((funct3_i == 3'b110 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? REM
 							: 4'b1111;
-assign alu_res = (alu_sel == OP_ADD) ? (a + b)
-	: (alu_sel == OP_SUB) ? (a - b)
-	: (alu_sel == OP_SLL) ? (a << b[4:0]) 
-	: (alu_sel == OP_SRL) ? (a >> b[4:0]) 
-	: (alu_sel == OP_SRA) ? ({32{a[31]}} << (32 - b[4:0])) | (a >> b[4:0]) 
-	: (alu_sel == OP_SLT) ? {31'b0, a < b} 
-	: (alu_sel == OP_AND) ? (a & b) 
-	: (alu_sel == OP_OR)  ? (a | b) 
-	: (alu_sel == OP_XOR) ? (a ^ b) 
+assign alu_res = (alu_sel == ADD) ? (a + b)
+	: (alu_sel == SUB) ? (a - b)
+	: (alu_sel == SLL) ? (a << b[4:0]) 
+	: (alu_sel == SRL) ? (a >> b[4:0]) 
+	: (alu_sel == SRA) ? ({32{a[31]}} << (32 - b[4:0])) | (a >> b[4:0]) 
+	: (alu_sel == SLT) ? {31'b0, a < b} 
+	: (alu_sel == AND) ? (a & b) 
+	: (alu_sel == OR)  ? (a | b) 
+	: (alu_sel == XOR) ? (a ^ b) 
 	: 32'b0;
 
 /***LSU***/
