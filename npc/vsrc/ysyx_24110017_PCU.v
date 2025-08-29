@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_PCU(
 	input  wire				 clk,
 	input  wire				 rst,
@@ -9,7 +9,7 @@ module ysyx_24110017_PCU(
 	output wire				 pc_valid_o,
 	input  wire				 if_ready_i
 );
-
+//
 assign pc_valid_o = 1'b1;
 
 always @(posedge clk) begin

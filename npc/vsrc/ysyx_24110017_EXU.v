@@ -41,8 +41,7 @@ module ysyx_24110017_EXU(
 
 /***分布式控制***/
 assign ex_ready_o = (state == IDLE);
-assign ex_valid_o = (state == WAIT); //&& (al_done || ex_valid_reg);
-//reg ex_valid_reg;
+assign ex_valid_o = (state == WAIT);
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
@@ -56,25 +55,6 @@ always @(posedge clk) begin
 		endcase
 	end
 end
-/***
-always @(posedge clk) begin
-	if(rst) ex_valid_reg <= 1'b0;
-	else if(flush_i) ex_valid_reg <= 1'b0;
-	else begin
-		case(state)
-			IDLE: ex_valid_reg <= 1'b0;
-			WAIT: begin
-				if(ex_valid_o && ls_ready_i) begin                                  
-          ex_valid_reg <= 1'b0;
-        end
-				else if(al_done) begin
-					ex_valid_reg <= 1'b1;
-				end
-			end
-		endcase
-	end
-end
-***/
 
 wire [31:0]al_res;
 always @(posedge clk) begin
@@ -156,15 +136,12 @@ always @(posedge clk) begin
 	end
 end
 
-//wire al_done;
-ysyx_24110017_ALU ALU(clk,rst,a,b,alu_sel,al_res);//,al_done);
-
 wire [31:0]ex;
 assign ex = 
 /***I*addi~srai***/
-				(op_i == 5'b00100) ? (al_res) :
+				(op_i == 5'b00100) ? (alu_res) :
 /***R_add~R_remu***/
-				(op_i == 5'b01100) ? (al_res) :
+				(op_i == 5'b01100) ? (alu_res) :
 /*********/
 				(op_i == 5'b11011) ? pc_i + 4			: //I_jal
 				(op_i == 5'b11001) ? pc_i + 4			: //I_jalr
@@ -238,6 +215,16 @@ assign alu_sel =  ((op_i == 5'b00100 && funct3_i == 3'b000) || (op_i == 5'b01100
 							(op_i == 5'b01100 && ((funct3_i == 3'b100 && funct7_i == 7'b0000001) || (funct3_i == 3'b101 && funct7_i == 7'b0000001))) ? DIV :
 							(op_i == 5'b01100 && ((funct3_i == 3'b110 && funct7_i == 7'b0000001) || (funct3_i == 3'b111 && funct7_i == 7'b0000001))) ? REM
 							: 4'b1111;
+assign alu_res = (alu_sel == OP_ADD) ? (a + b)
+	: (alu_sel == OP_SUB) ? (a - b)
+	: (alu_sel == OP_SLL) ? (a << b[4:0]) 
+	: (alu_sel == OP_SRL) ? (a >> b[4:0]) 
+	: (alu_sel == OP_SRA) ? ({32{a[31]}} << (32 - b[4:0])) | (a >> b[4:0]) 
+	: (alu_sel == OP_SLT) ? {31'b0, a < b} 
+	: (alu_sel == OP_AND) ? (a & b) 
+	: (alu_sel == OP_OR)  ? (a | b) 
+	: (alu_sel == OP_XOR) ? (a ^ b) 
+	: 32'b0;
 
 /***LSU***/
 wire ls_valid = (op_i == 5'b00000 || op_i == 5'b01000);
@@ -284,128 +271,3 @@ wire [31:0]dnpc = (jalen) ? (pc_i + offset)	//jal
 	: pc_i + 4;
 
 endmodule
-
-module ysyx_24110017_ALU(
-    input wire clk,
-    input wire rst,
-    input wire [31:0] a,
-    input wire [31:0] b,
-    input wire [3:0] opcode,
-    output wire [31:0] res
-//    output wire done
-);
-
-    localparam OP_ADD  = 4'b0000;
-    localparam OP_SUB  = 4'b0001;
-    localparam OP_SLL  = 4'b0010;
-    localparam OP_SRL  = 4'b0011;
-    localparam OP_SRA  = 4'b0100;
-    localparam OP_SLT  = 4'b0101;
-    localparam OP_AND  = 4'b0110;
-    localparam OP_OR   = 4'b0111;
-    localparam OP_XOR  = 4'b1000;
-    localparam OP_MUL  = 4'b1001;
-    localparam OP_MULH = 4'b1010;
-    localparam OP_DIV  = 4'b1011;
-    localparam OP_REM  = 4'b1100;
-
-    localparam IDLE     = 1'b0;
-    localparam EXECUTE = 1'b1;
-
-/***
-    reg state;
-    reg [63:0] shared_result;
-    reg [5:0] shared_counter;
-    reg [31:0] opA_reg, opB_reg;
-    reg [1:0] current_op;
-***/
-
-    assign res = 
-        (opcode == OP_ADD) ? (a + b) :
-        (opcode == OP_SUB) ? (a - b) :
-        (opcode == OP_SLL) ? (a << b[4:0]) : 
-        (opcode == OP_SRL) ? (a >> b[4:0]) : 
-        (opcode == OP_SRA) ? ({32{a[31]}} << (32 - b[4:0])) | (a >> b[4:0]) : 
-        (opcode == OP_SLT) ? {31'b0, a < b} : 
-        (opcode == OP_AND) ? (a & b) : 
-        (opcode == OP_OR)  ? (a | b) : 
-        (opcode == OP_XOR) ? (a ^ b) : 32'b0;
-
-endmodule    
-/*** 
-		wire [31:0] multi_cycle_res =
-        (current_op[1:0] == 2'b00) ? shared_result[31:0] :
-        (current_op[1:0] == 2'b10) ? shared_result[63:32] :
-        (current_op[1:0] == 2'b11) ? shared_result[31:0] :
-        (current_op[1:0] == 2'b10) ? shared_result[63:32] :
-        32'b0;
-    
-    assign res = (state == IDLE) ? imm_res : multi_cycle_res;
-    assign done = (opcode == OP_MUL || opcode == OP_MULH || opcode == OP_DIV || opcode == OP_REM) ? (state == EXECUTE) && shared_counter == 6'd32 : 1'b1;
-    
-    localparam OP_TYPE_MUL   = 2'b00;
-    localparam OP_TYPE_MULH  = 2'b01;
-    localparam OP_TYPE_DIV   = 2'b11;
-    localparam OP_TYPE_REM   = 2'b10;
-    
-    always @(posedge clk) begin
-        if (rst) begin
-            state <= IDLE;
-            shared_result <= 64'b0;
-            shared_counter <= 6'b0;
-            opA_reg <= 32'b0;
-            opB_reg <= 32'b0;
-            current_op <= 2'b0;
-        end else begin
-            case (state)
-                IDLE: begin
-                    if (opcode == OP_MUL || opcode == OP_MULH || opcode == OP_DIV || opcode == OP_REM) begin
-                        state <= EXECUTE;
-                        shared_counter <= 6'b0;
-                        opA_reg <= a;
-                        opB_reg <= b;
-                        
-                        case (opcode)
-                            OP_MUL:  current_op <= OP_TYPE_MUL;
-                            OP_MULH: current_op <= OP_TYPE_MULH;
-                            OP_DIV:  current_op <= OP_TYPE_DIV;
-                            OP_REM:  current_op <= OP_TYPE_REM;
-                            default: current_op <= 2'b0;
-                        endcase
-                        
-                        if (opcode == OP_MUL || opcode == OP_MULH) begin
-                            shared_result <= {32'b0, b};
-                        end else if (opcode == OP_DIV || opcode == OP_REM) begin
-                            shared_result <= {a, 32'b0};
-                        end
-                    end
-                end
-                
-                EXECUTE: begin
-                    if (shared_counter < 32) begin
-                        shared_counter <= shared_counter + 1;
-                        
-                        if (current_op == OP_TYPE_MUL || current_op == OP_TYPE_MULH) begin
-                            if (shared_result[0]) begin
-                                shared_result[63:32] <= shared_result[63:32] + opA_reg;
-                            end
-                            shared_result <= {1'b0, shared_result[63:1]};
-                        end else begin
-                            if (shared_result[63:32] >= opB_reg) begin
-                                shared_result[63:32] <= shared_result[63:32] - opB_reg;
-                                shared_result <= {shared_result[62:0], 1'b1};
-                            end else begin
-                                shared_result <= {shared_result[62:0], 1'b0};
-                            end
-                        end
-                    end else begin
-                        state <= IDLE;
-                        shared_counter <= 6'b0;
-                    end
-                end
-            endcase
-        end
-    end
-
-endmodule
-***/
