@@ -207,8 +207,7 @@ assign alu_sel =  ((op_i == 5'b00100 && funct3_i == 3'b000) || (op_i == 5'b01100
 							((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 1'b0) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 1'b0)) ? SRL :
 							((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 1'b1) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 1'b1)) ? SRA :
 							((op_i == 5'b00100 && funct3_i == 3'b110) || (op_i == 5'b01100 && funct3_i == 3'b110 && funct7_i == 1'b0)) ? OR :
-							((op_i == 5'b00100 && funct3_i == 3'b111) || (op_i == 5'b01100 && funct3_i == 3'b111 && funct7_i == 1'b0)) ? AND :
-							: NULL;
+							((op_i == 5'b00100 && funct3_i == 3'b111) || (op_i == 5'b01100 && funct3_i == 3'b111 && funct7_i == 1'b0)) ? AND : NULL;
 assign alu_res = (alu_sel == ADD) ? (a + b)
 	: (alu_sel == SUB) ? (a - b)
 	: (alu_sel == SLL) ? (a << b[4:0]) 
