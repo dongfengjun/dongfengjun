@@ -151,11 +151,6 @@ assign X_AXI_RREADY    = (sel_m == SEL_LSU) ? LSU_AXI_RREADY  : (sel_m == SEL_IF
 assign LSU_AXI_RID     = (sel_m == SEL_LSU) ? X_AXI_RID       : 4'b0;
 assign LSU_AXI_RLAST   = (sel_m == SEL_LSU) ? X_AXI_RLAST     : 1'b0;
 
-assign IFU_AXI_AWREADY = 1'b0;
-assign IFU_AXI_WREADY  = 1'b0;
-assign IFU_AXI_BRESP   = 2'b0;
-assign IFU_AXI_BVALID  = 1'b0;
-assign IFU_AXI_BID     = 4'b0;
 assign IFU_AXI_ARREADY = (sel_m == SEL_IFU) ? X_AXI_ARREADY   : 1'b0;
 assign IFU_AXI_RDATA   = (sel_m == SEL_IFU) ? X_AXI_RDATA     : 32'h0;
 assign IFU_AXI_RRESP   = (sel_m == SEL_IFU) ? X_AXI_RRESP     : 2'b0;
