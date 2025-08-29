@@ -115,7 +115,7 @@ parameter AXI_IDLE = 1'b0,AXI_FETCH = 1'b1;
 reg axi_state;
 reg [31:0] axi_rdata_reg;
 assign if_axi_arid_o    = 4'b0;
-assign if_axi_araddr_o  = (if_axi_arvalid) ? pc_i : 32'h0;
+assign if_axi_araddr_o  = (if_axi_arvalid_o) ? pc_i : 32'h0;
 assign if_axi_arlen_o   = 8'b0;
 assign if_axi_arsize_o  = 3'b0;
 assign if_axi_arburst_o = 2'b00;
