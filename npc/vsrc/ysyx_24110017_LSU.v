@@ -194,17 +194,18 @@ assign ls_axi_wdata = (ls_axi_wvalid) ? ls_wdata_i : 32'h0;//axi_wdata;
 always @(posedge clk or posedge rst) begin
 		if (rst) begin
 			axi_state			 <= AXI_IDLE;
-      ls_axi_arvalid <= 1'b0;
-      ls_axi_rready	 <= 1'b0;
-      ls_axi_araddr  <= 32'h0;
-			ls_axi_arsize  <= 3'b0;
       ls_axi_awvalid <= 1'b0;
       ls_axi_awaddr  <= 32'h0;
       ls_axi_wstrb   <= 4'b0;
-			ls_axi_awsize  <= 3'b0;
-		  ls_axi_wvalid  <= 1'b0;
-			ls_axi_wlast   <= 1'b0;
+      ls_axi_awsize  <= 3'b0;
+      ls_axi_wvalid  <= 1'b0;
+      ls_axi_wlast   <= 1'b0;
       ls_axi_bready  <= 1'b0;
+
+			ls_axi_arvalid <= 1'b0;
+      ls_axi_rready	 <= 1'b0;
+      ls_axi_araddr  <= 32'h0;
+			ls_axi_arsize  <= 3'b0;
 
 			ls_done_reg    <= 1'b0;
 			ls_rdata_reg   <= 32'h0;
@@ -257,6 +258,7 @@ always @(posedge clk or posedge rst) begin
 					end
 					if(ls_axi_bvalid && ls_axi_bready) begin
 						ls_axi_bready <= 1'b0;
+						
 						axi_state     <= AXI_DONE;
 						ls_done_reg   <= 1'b1;
 					end
@@ -272,6 +274,7 @@ always @(posedge clk or posedge rst) begin
 					ls_axi_wstrb   <= 4'b0;
 					ls_axi_wvalid  <= 1'b0;
 					ls_axi_bready  <= 1'b0;
+					ls_done_reg    <= 1'b0;
 					ls_rdata_reg   <= 32'h0;
           axi_state      <= AXI_IDLE;
         end
