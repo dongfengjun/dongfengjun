@@ -133,38 +133,38 @@ always@(posedge clk or posedge rst) begin
 	else begin
 		case(state)
 			IDLE: begin
-				rd_o          <= 4'b0;
-		    gpr_wen_o     <= 1'b0;
-		    mepc_o        <= 32'h0;
-		    mcause_o      <= 32'h0;
-		    csrsw_o       <= 32'h0;
-		    csrs_wen_o    <= 4'b0;
-		    xrd_o         <= 32'h0; 
+				rd_o         <= 4'b0;
+		    gpr_wen_o    <= 1'b0;
+		    mepc_o       <= 32'h0;
+		    mcause_o     <= 32'h0;
+		    csrsw_o      <= 32'h0;
+		    csrs_wen_o   <= 4'b0;
+		    xrd_o        <= 32'h0; 
 			end
 			WAIT: begin
 				if(ls_done || !ls_valid_i) begin
 `ifndef YOSYS_STA
-					pc_o          <= pc_i;
-			    inst_o        <= inst_i;
-			    dnpc_o        <= dnpc_i;
+					pc_o       <= pc_i;
+			    inst_o     <= inst_i;
+			    dnpc_o     <= dnpc_i;
 `endif
-					rd_o          <= rd_i;
-					gpr_wen_o     <= gpr_wen_i;
-					mepc_o        <= mepc_i;
-					mcause_o      <= mcause_i;
-					csrsw_o       <= csrsw_i;
-					csrs_wen_o    <= csrs_wen_i;
-					xrd_o         <= xrd;
+					rd_o       <= rd_i;
+					gpr_wen_o  <= gpr_wen_i;
+					mepc_o     <= mepc_i;
+					mcause_o   <= mcause_i;
+					csrsw_o    <= csrsw_i;
+					csrs_wen_o <= csrs_wen_i;
+					xrd_o      <= xrd;
 				end
 			end
 			default: begin
-				rd_o          <= 4'b0;
-        gpr_wen_o     <= 1'b0;
-        mepc_o        <= 32'h0;
-        mcause_o      <= 32'h0;
-        csrsw_o       <= 32'h0;
-        csrs_wen_o    <= 4'b0;
-        xrd_o         <= 32'h0;
+				rd_o         <= 4'b0;
+        gpr_wen_o    <= 1'b0;
+        mepc_o       <= 32'h0;
+        mcause_o     <= 32'h0;
+        csrsw_o      <= 32'h0;
+        csrs_wen_o   <= 4'b0;
+        xrd_o        <= 32'h0;
 			end
 		endcase
 	end
@@ -175,7 +175,7 @@ import "DPI-C" function void diff_skip_ref();
 parameter AXI_IDLE=2'b00,AXI_READ=2'b01,AXI_WRITE=2'b10,AXI_DONE=2'b11;
 reg [1:0]axi_state;
 
-assign ls_axi_wdata = (ls_axi_wvalid) ? ls_wdata_i : 32'h0;//axi_wdata;
+assign ls_axi_wdata = (ls_axi_wvalid) ? ls_wdata_i : 32'h0;
 
 always @(posedge clk or posedge rst) begin
 		if (rst) begin

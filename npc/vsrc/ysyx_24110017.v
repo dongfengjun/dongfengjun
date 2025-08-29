@@ -128,7 +128,7 @@ wire [31:0] xrd_ls;
 wire [ 3:0] rd_ls;
 wire gpr_wen_ls;
 wire [31:0] mepc_ls,mcause_ls,csrsw_ls;
-wire [3:0] csrs_wen_ls;
+wire [ 3:0] csrs_wen_ls;
 
 wire [31:0] ls_axi_awaddr,ls_axi_wdata,ls_axi_araddr,ls_axi_rdata;
 wire [ 3:0] ls_axi_wstrb;
@@ -140,19 +140,18 @@ wire [ 1:0] ls_axi_bresp,ls_axi_rresp;
 wire ls_axi_awvalid,ls_axi_awready,ls_axi_wvalid,ls_axi_wready,ls_axi_bvalid,ls_axi_bready,ls_axi_arvalid,ls_axi_arready,ls_axi_rvalid,ls_axi_rready,ls_axi_wlast,ls_axi_rlast;
 /***Arbiter-Xbar***/
 /***My-Clint***/
-wire [31:0]c_axi_awaddr,c_axi_wdata,c_axi_araddr,c_axi_rdata;
-wire [3:0]c_axi_wstrb;
-wire [7:0]c_axi_awlen,c_axi_arlen;
-wire [3:0]c_axi_awid,c_axi_bid,c_axi_arid,c_axi_rid;
-wire [2:0]c_axi_awsize,c_axi_arsize;
-wire [1:0]c_axi_awburst,c_axi_arburst;
-wire [1:0]c_axi_bresp,c_axi_rresp;
+wire [31:0] c_axi_awaddr,c_axi_wdata,c_axi_araddr,c_axi_rdata;
+wire [ 3:0] c_axi_wstrb;
+wire [ 7:0] c_axi_awlen,c_axi_arlen;
+wire [ 3:0] c_axi_awid,c_axi_bid,c_axi_arid,c_axi_rid;
+wire [ 2:0] c_axi_awsize,c_axi_arsize;
+wire [ 1:0] c_axi_awburst,c_axi_arburst;
+wire [ 1:0] c_axi_bresp,c_axi_rresp;
 wire c_axi_awvalid,c_axi_awready,c_axi_wvalid,c_axi_wready,c_axi_bvalid,c_axi_bready,c_axi_arvalid,c_axi_arready,c_axi_rvalid,c_axi_rready,c_axi_wlast,c_axi_rlast;
 /***RFU***/
 wire [31:0]r1,r2;
 wire [31:0]mepc,mstatus,mcause,mtvec;
 wire [31:0]mvendorid,marchid; //ID
-
 
 ysyx_24110017_PCU PCU(clock,reset,isCHazard,
 		pc,dnpc_ex,snpc,
@@ -171,7 +170,7 @@ ysyx_24110017_IFU IFU(clock,reset,isCHazard,
 		if_axi_arlen,if_axi_arsize,if_axi_arburst,
 		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast
 );
-ysyx_24110017_CACHE #(2,4,1) ICACHE(clock,reset,fencei_id, //w < n
+ysyx_24110017_CACHE #(4,4,3) ICACHE(clock,reset,fencei_id, //w < n
 		if_axi_awready,if_axi_awvalid,if_axi_awid,if_axi_awaddr,
 		if_axi_awlen,if_axi_awsize,if_axi_awburst,
 		if_axi_wready,if_axi_wvalid,if_axi_wdata,if_axi_wstrb,if_axi_wlast,
