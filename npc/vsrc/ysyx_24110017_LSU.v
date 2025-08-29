@@ -37,14 +37,14 @@ module ysyx_24110017_LSU(
 	input  wire				 ls_axi_awready,
 	output reg				 ls_axi_awvalid,
 	output wire [ 3:0] ls_axi_awid,
-	output reg  [31:0] ls_axi_awaddr,
+	output wire [31:0] ls_axi_awaddr,
 	output wire [ 7:0] ls_axi_awlen,
-	output reg  [ 2:0] ls_axi_awsize,
+	output wire [ 2:0] ls_axi_awsize,
 	output wire [ 1:0] ls_axi_awburst,
 	input  wire				 ls_axi_wready,
-	output reg 				 ls_axi_wvalid,
+	output reg				 ls_axi_wvalid,
 	output wire [31:0] ls_axi_wdata,
-	output reg  [ 3:0] ls_axi_wstrb,
+	output wire [ 3:0] ls_axi_wstrb,
 	output reg 				 ls_axi_wlast,
 	output reg				 ls_axi_bready,
 	input  wire				 ls_axi_bvalid,
@@ -54,9 +54,9 @@ module ysyx_24110017_LSU(
 	input  wire				 ls_axi_arready,
 	output reg				 ls_axi_arvalid,
 	output wire [ 3:0] ls_axi_arid,
-	output reg  [31:0] ls_axi_araddr,
+	output wire  [31:0] ls_axi_araddr,
 	output wire [ 7:0] ls_axi_arlen,
-	output reg  [ 2:0] ls_axi_arsize,
+	output wire [ 2:0] ls_axi_arsize,
 	output wire [ 1:0] ls_axi_arburst,
 	output reg				 ls_axi_rready,
 	input  wire				 ls_axi_rvalid,
@@ -175,7 +175,12 @@ import "DPI-C" function void diff_skip_ref();
 parameter AXI_IDLE=2'b00,AXI_READ=2'b01,AXI_WRITE=2'b10,AXI_DONE=2'b11;
 reg [1:0]axi_state;
 
-assign ls_axi_wdata = (ls_axi_wvalid) ? ls_wdata_i : 32'h0;
+assign ls_axi_awaddr = (ls_axi_awvalid) ? ls_waddr_i  : 32'h0;
+assign ls_axi_wdata  = (ls_axi_wvalid)  ? ls_wdata_i  : 32'h0;
+assign ls_axi_awsize = (ls_axi_wvalid)  ? ls_awsize_i : 3'b0;
+assign ls_axi_wstrb  = (ls_axi_wvalid)  ? ls_wmask_i  : 4'b0;
+assign ls_axi_araddr = (ls_axi_arvalid) ? ls_raddr_i;
+assign ls_axi_arsize = (ls_axi_arvalid) ? ls_arsize_i;
 
 always @(posedge clk or posedge rst) begin
 		if (rst) begin
@@ -199,17 +204,12 @@ always @(posedge clk or posedge rst) begin
 				  if(ls_valid_i && ls_ren_i) begin
             axi_state		   <= AXI_READ;
 					  ls_axi_arvalid <= 1'b1;
-						ls_axi_araddr  <= ls_raddr_i;
-						ls_axi_arsize  <= ls_arsize_i;
 					end
 					if(ls_valid_i && ls_wen_i) begin
 		        axi_state      <= AXI_WRITE;
 						ls_axi_awvalid <= 1'b1;
 						ls_axi_wvalid  <= 1'b1;
 						ls_axi_wlast   <= 1'b1;
-						ls_axi_awaddr  <= ls_waddr_i;
-						ls_axi_wstrb   <= ls_wmask_i;
-						ls_axi_awsize	 <= ls_awsize_i;
 	        end
 				end
 				AXI_READ: begin
@@ -243,12 +243,7 @@ always @(posedge clk or posedge rst) begin
         AXI_DONE: begin
 					ls_axi_arvalid <= 1'b0;
 					ls_axi_rready	 <= 1'b0;
-					ls_axi_araddr  <= 32'h0;
-					ls_axi_arsize  <= 3'b0;
 					ls_axi_awvalid <= 1'b0;
-					ls_axi_awaddr  <= 32'h0;
-					ls_axi_awsize  <= 3'b0;
-					ls_axi_wstrb   <= 4'b0;
 					ls_axi_wvalid  <= 1'b0;
 					ls_axi_bready  <= 1'b0;
           axi_state      <= AXI_IDLE;
