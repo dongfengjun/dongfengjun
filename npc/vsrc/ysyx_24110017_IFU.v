@@ -12,28 +12,11 @@ module ysyx_24110017_IFU(
 	
   output reg  [31:0] pc_o,
   output reg  [31:0] inst_o,
-	/***AXI4_W***/
-	input  wire if_axi_awready_i,
-	output wire if_axi_awvalid_o,
-	output wire [ 3:0]if_axi_awid_o,
-	output wire [31:0]if_axi_awaddr_o,
-	output wire [ 7:0]if_axi_awlen_o,
-	output wire [ 2:0]if_axi_awsize_o,
-	output wire [ 1:0]if_axi_awburst_o,
-	input  wire if_axi_wready_i,
-	output wire if_axi_wvalid_o,
-	output wire [31:0]if_axi_wdata_o,
-	output wire [ 3:0]if_axi_wstrb_o,
-	output wire if_axi_wlast_o,
-	output wire if_axi_bready_o,
-	input  wire if_axi_bvalid_i,
-	input  wire [ 3:0]if_axi_bid_i,
-	input  wire [ 1:0]if_axi_bresp_i,
 /***AXI4*R***/
 	input  wire				 if_axi_arready_i,
 	output reg				 if_axi_arvalid_o,
 	output wire [ 3:0] if_axi_arid_o,
-	output wire [31:0] if_axi_araddr_o,
+	output reg  [31:0] if_axi_araddr_o,
 	output wire [ 7:0] if_axi_arlen_o,
 	output wire	[ 2:0] if_axi_arsize_o,
 	output wire	[ 1:0] if_axi_arburst_o,
@@ -115,10 +98,9 @@ parameter AXI_IDLE = 1'b0,AXI_FETCH = 1'b1;
 reg axi_state;
 reg [31:0] axi_rdata_reg;
 assign if_axi_arid_o    = 4'b0;
-assign if_axi_araddr_o  = (if_axi_arvalid_o) ? pc_i : 32'h0;
 assign if_axi_arlen_o   = 8'b0;
 assign if_axi_arsize_o  = 3'b0;
-assign if_axi_arburst_o = 2'b00;
+assign if_axi_arburst_o = 2'b0;
 
 always @(posedge clk) begin
 	if(rst) axi_state <= AXI_IDLE;
@@ -135,16 +117,19 @@ always @(posedge clk) begin
   if(rst) begin
 		if_axi_arvalid_o <= 1'b0;
 		if_axi_rready_o  <= 1'b1;
+		if_axi_araddr_o  <= 32'h0;
   end 
 	else if(isCHazard) begin
     if_axi_arvalid_o <= 1'b0;
     if_axi_rready_o  <= 1'b1;
+    if_axi_araddr_o  <= 32'h0;
   end
 	else begin
     case (axi_state)
       AXI_IDLE: begin
         if(pc_valid_i && if_ready_o) begin
 					if_axi_arvalid_o <= 1'b1;
+					if_axi_araddr_o  <= pc_i;
         end
       end
       AXI_FETCH: begin
