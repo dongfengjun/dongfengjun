@@ -198,7 +198,7 @@ wire use_signed_r1 = ((op_i == 5'b00100) && (funct3_i == 3'b010)) ||
 assign a = use_r1 ? (use_signed_r1 ? $signed(r1_i) : r1_i) : 32'b0;
 wire use_imm = (op_i == 5'b00100) && (funct3_i == 3'b000 || funct3_i == 3'b010 || funct3_i == 3'b011 || funct3_i == 3'b100 || funct3_i == 3'b110 || funct3_i == 3'b111);
 wire use_signed_imm = (op_i == 5'b00100) && (funct3_i == 3'b010);
-wire use_shamt = (op_i == 5'b00100) && (funct3_i && (funct3_i == 3'b001 || funct3_i == 3'b101));
+wire use_shamt = (op_i == 5'b00100) && (funct3_i == 3'b001 || funct3_i == 3'b101);
 wire use_r2 = (op_i == 5'b01100) && (funct7_i == 1'b0) && (funct3_i != 3'b010);
 wire use_signed_r2 = (op_i == 5'b01100) && (funct3_i == 3'b010) && (funct7_i == 1'b0);
 assign b = use_imm ? (use_signed_imm ? $signed(imm_i) : imm_i) :
