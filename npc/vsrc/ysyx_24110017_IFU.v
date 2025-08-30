@@ -128,7 +128,7 @@ always @(posedge clk) begin
 	else begin
     case (axi_state)
       AXI_IDLE: begin
-        if(pc_valid_i && if_ready_o) begin
+        if(if_ready_o) begin
 					if_axi_arvalid_o <= 1'b1;
 					if_axi_araddr_o  <= pc_i;
         end
