@@ -11,18 +11,13 @@ module ysyx_24110017_PCU(
 
 localparam RESET_PC = 32'h30000000;
 
-wire [31:0] npc;
-always @(*) begin
-  casez({rst, isCHazard, if_ready_i})
-    3'b1??:  npc = RESET_PC;
-    3'b01?:  npc = dnpc_i;
-    3'b001:  npc = snpc_i;
-		default: npc = pc_o;
-	endcase
-end
-
 always @(posedge clk) begin
-	pc_o <= npc;
+  casez({rst, isCHazard, if_ready_i})
+    3'b1??:  pc_o <= RESET_PC;
+    3'b01?:  pc_o <= dnpc_i;
+    3'b001:  pc_o <= snpc_i;
+		default: pc_o <= pc_o;
+	endcase
 end
 
 /***
