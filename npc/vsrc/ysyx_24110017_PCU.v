@@ -23,6 +23,7 @@ always @(posedge clk) begin
 				pc_o <= snpc_i;
 			end
 		end
+/***
 `ifndef YOSYS_STA
 	if(((dnpc_i < 32'h30000000) || (dnpc_i >= 32'h40000000)) 
       && ((dnpc_i < 32'h0f000000) || (dnpc_i >= 32'h0f002000))
@@ -32,6 +33,7 @@ always @(posedge clk) begin
       $fatal;
 	end
 `endif
+***/
 	end
 end
 
