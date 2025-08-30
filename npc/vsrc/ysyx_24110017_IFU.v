@@ -47,7 +47,8 @@ end
 always @(posedge clk) begin
 	if(rst || flush) if_valid_o <= 1'b0;
 	else begin
-		if(if_axi_rvalid_i && if_axi_rready_o && !if_axi_arvalid_o && !flush) begin
+//		if(if_axi_rvalid_i && if_axi_rready_o && !if_axi_arvalid_o && !flush) begin
+		if(if_axi_rvalid_i && if_axi_rready_o) begin
 			if_valid_o <= 1'b1;
 		end
 		if(if_valid_o && id_ready_i) begin
