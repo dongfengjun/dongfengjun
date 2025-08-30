@@ -3,14 +3,18 @@ module ysyx_24110017_BTB #(n = 2, w = 1) (
 	input rst,
 	input  wire [31:0] pc_i,
 	output wire [31:0] snpc_o,
-	input  wire [ 9:0] prepc_i,
+	input  wire [20:0] prepc_i,
 	input  wire [31:0] prepc_tag_i,
-	input  wire        prepc_en_i
+	input  wire [ 1:0] prepc_en_i
 );
 	
-	reg [9:0]     snpc_reg [(1<<n)-1:0];
-  reg [29-n+w:0] tag_reg  [(1<<n)-1:0];
-	
+	reg  [20:0] jsnpc_reg;
+	reg  [29:0] jtag_reg;
+	wire [29:0] jtag = pc_i[31:2];
+	wire jhit = (jtag == jtag_reg);
+
+	reg  [ 9:0]     snpc_reg [(1<<n)-1:0];
+  reg  [29-n+w:0] tag_reg  [(1<<n)-1:0];
 	wire [29-n+w:0] tag   = pc_i[31:2+n-w];
 	wire [n-1-w :0] index = pc_i[1+n-w:2];
 
@@ -46,24 +50,28 @@ module ysyx_24110017_BTB #(n = 2, w = 1) (
       end
   endgenerate
 	
-	assign snpc_o = (hit != 0) ? pc_i + {{22{1'b1}},snpc_reg[index * (1<<w) + log2(hit)]} : pc_i + 4;
+	assign snpc_o = (jhit) ? pc_i + {{11{jsnpc_reg[31]}},jsnpc_reg} : (hit != 0) ? pc_i + {{22{1'b1}},snpc_reg[index * (1<<w) + log2(hit)]} : pc_i + 4;
 	
-	reg enable;
+	reg [1:0]enable;
 	always @(posedge clk) begin
-		if(rst) enable <= 1'b0;
+		if(rst) enable <= 2'b0;
 		else enable <= prepc_en_i;
 	end
 
 	always @(posedge clk) begin
 		if(rst) begin
 		end
-		else if(prepc_en_i && !enable && (already == 0)) begin
+		else if(prepc_en_i[1] && !enable[1]) begin
+			jsnpc_reg <= prepc_i;
+      jtag_reg  <= prepc_tag_i[31:2];
+		end
+		else if(prepc_en_i[0] && !enable[0] && (already == 0)) begin
 			integer a;
 			for (a = 1; a < (1<<w); a = a + 1) begin
         snpc_reg[prepc_index * (1<<w) + a] <= snpc_reg[prepc_index * (1<<w) + a - 1];
         tag_reg[prepc_index * (1<<w) + a]  <= tag_reg[prepc_index * (1<<w) + a - 1];
       end
-			snpc_reg[prepc_index * (1<<w)] <= prepc_i;
+			snpc_reg[prepc_index * (1<<w)] <= prepc_i[9:0];
 			tag_reg[prepc_index * (1<<w)]  <= prepc_tag;
 		end
 	end
