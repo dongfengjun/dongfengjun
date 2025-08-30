@@ -9,11 +9,11 @@ module ysyx_24110017_LSU(
 	output reg  [31:0] pc_o,
 	output reg  [31:0] inst_o,
 	output reg  [31:0] dnpc_o,
+	output wire        ls_valid_o,
+  output wire        difftest_o,
 `endif
 	input  wire				 ex_valid_i,	
   output wire				 ls_ready_o,
-	output wire				 ls_valid_o,
-	output wire				 difftest_o,
 	input  wire [ 4:0] op_i,
 	input  wire [ 2:0] funct3_i,
 	input  wire [ 3:0] rd_i,

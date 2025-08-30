@@ -91,7 +91,7 @@ wire icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,i
 wire [31:0]inst_id;//difftest
 `endif
 wire id_valid,id_ready;
-wire [31:0]prepc;
+wire [9:0]prepc;
 wire prepc_en;
 wire [31:0] pc_id,imm_id;
 wire [4:0] op_id;
@@ -118,10 +118,9 @@ wire [31:0] dnpc_ex;
 /***LSU***/
 `ifndef YOSYS_STA
 wire [31:0]pc_ls,inst_ls,dnpc_ls;//difftest
+wire ls_valid,difftest;
 `endif
 wire ls_ready;
-wire ls_valid;
-wire difftest;
 wire [31:0] xrd_ls;
 wire [ 3:0] rd_ls;
 wire gpr_wen_ls;
@@ -199,9 +198,9 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 );
 ysyx_24110017_LSU LSU(clock,reset,
 `ifndef YOSYS_STA
-		pc_ex,inst_ex,dnpc_ex,pc_ls,inst_ls,dnpc_ls,//difftest
+		pc_ex,inst_ex,dnpc_ex,pc_ls,inst_ls,dnpc_ls,ls_valid,difftest,
 `endif
-		(ex_valid && !isCHazard),ls_ready,ls_valid,difftest,
+		(ex_valid && !isCHazard),ls_ready,
 		op_ex,funct3_ex,rd_ex,gpr_wen_ex,
 		mepc_ex,mcause_ex,csrsw_ex,csrs_wen_ex,
 		ex_ex,

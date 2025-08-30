@@ -10,7 +10,7 @@ module ysyx_24110017_IDU(
 	output reg  [31:0] inst_o,//difftest
 `endif
 
-	output wire [31:0] prepc_o,
+	output wire [9:0] prepc_o,
 	output wire prepc_en_o,
 
 	input  wire if_valid_i,
@@ -149,6 +149,6 @@ wire fencei = (inst_i == 32'b00000000000000000001000000001111);
 
 //静态分支预测
 assign prepc_en_o = (op == 5'b11000 && inst_i[31]) || (op == 5'b11011);
-assign prepc_o = ((op == 5'b11000 && inst_i[31]) || (op == 5'b11011)) ? pc_i + imm : 32'h0;
+assign prepc_o = ((op == 5'b11000 && inst_i[31]) || (op == 5'b11011)) ? imm[9:0] : 10'b0;
 
 endmodule
