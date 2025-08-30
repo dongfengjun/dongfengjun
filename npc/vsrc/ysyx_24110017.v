@@ -91,7 +91,7 @@ wire icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,i
 wire [31:0]inst_id;//difftest
 `endif
 wire id_valid,id_ready;
-wire [12:0]prepc;
+wire [9:0]prepc;
 wire prepc_en;
 wire [31:0] pc_id,imm_id;
 wire [4:0] op_id;
