@@ -63,13 +63,13 @@ always @(posedge clk) begin
 	end
   else begin
 		case(state)
-			IDLE: begin
-			end
 			WAIT: begin
 				if(if_valid_o && id_ready_i) begin
 					pc_o	 <= if_axi_araddr_o;
 					inst_o <= if_axi_rdata_i;
 				end
+			end
+			default: begin
 			end
 		endcase
 	end
