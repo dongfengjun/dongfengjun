@@ -80,6 +80,11 @@ assign if_axi_arid_o    = 4'b0;
 assign if_axi_arlen_o   = 8'b0;
 assign if_axi_arsize_o  = 3'b0;
 assign if_axi_arburst_o = 2'b0;
+assign if_axi_arvalid_o = (flush) ? 1'b0  : if_axi_arvalid;
+assign if_axi_araddr_o  = (flush) ? 32'h0 : if_axi_araddr;
+reg if_axi_arvalid;
+reg [31:0]if_axi_araddr;
+
 always @(posedge clk) begin
   if(rst || flush) begin
 		if_axi_arvalid_o <= 1'b0;
@@ -89,15 +94,13 @@ always @(posedge clk) begin
 	else begin
     case (state)
       IDLE: begin
-				if(!flush) begin
-					if_axi_arvalid_o <= 1'b1;
-					if_axi_araddr_o  <= pc_i;
-				end
+				if_axi_arvalid <= 1'b1;
+				if_axi_araddr  <= pc_i;
       end
       WAIT: begin
 				if(if_axi_arvalid_o && if_axi_arready_i) begin
-					if_axi_arvalid_o <= 1'b0;
-					if_axi_rready_o  <= 1'b1;
+					if_axi_arvalid  <= 1'b0;
+					if_axi_rready_o <= 1'b1;
 				end
         if(if_axi_rvalid_i && if_axi_rready_o) begin
 					if_axi_rready_o <= 1'b0;
