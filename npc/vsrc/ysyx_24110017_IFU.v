@@ -128,8 +128,10 @@ always @(posedge clk) begin
     case (axi_state)
       AXI_IDLE: begin
         if(pc_valid_i && if_ready_o) begin
-					if_axi_arvalid_o <= 1'b1;
-					if_axi_araddr_o  <= pc_i;
+					if(((pc_i >= 32'h30000000) && (pc_i < 32'h40000000)) || ((pc_i >= 32'h0f000000) && (pc_i < 32'h0f002000)) || ((pc_i >= 32'h80000000) && (pc_i < 32'h84000000)) || ((pc_i >= 32'ha0000000) && (pc_i < 32'hc0000000))) begin
+						if_axi_arvalid_o <= 1'b1;
+						if_axi_araddr_o  <= pc_i;
+					end
         end
       end
       AXI_FETCH: begin
