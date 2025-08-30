@@ -3,12 +3,12 @@ module ysyx_24110017_BTB #(n = 3, w = 2) (
 	input rst,
 	input  wire [31:0] pc_i,
 	output wire [31:0] snpc_o,
-	input  wire [ 9:0] prepc_i,
+	input  wire [12:0] prepc_i,
 	input  wire [31:0] prepc_tag_i,
 	input  wire        prepc_en_i
 );
 	
-	reg [9:0]      snpc_reg [(1<<n)-1:0];
+	reg [12:0]     snpc_reg [(1<<n)-1:0];
   reg [29-n+w:0] tag_reg  [(1<<n)-1:0];
 	
 	wire [29-n+w:0] tag   = pc_i[31:2+n-w];
@@ -46,7 +46,7 @@ module ysyx_24110017_BTB #(n = 3, w = 2) (
       end
   endgenerate
 	
-	assign snpc_o = (hit != 0) ? pc_i + {22'b0,snpc_reg[index * (1<<w) + log2(hit)]} : pc_i + 4;
+	assign snpc_o = (hit != 0) ? pc_i + {{19{snpc_reg[index * (1<<w) + log2(hit)][12]}},snpc_reg[index * (1<<w) + log2(hit)]} : pc_i + 4;
 	
 	reg enable;
 	always @(posedge clk) begin
