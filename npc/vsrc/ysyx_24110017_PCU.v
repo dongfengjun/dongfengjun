@@ -6,24 +6,23 @@ module ysyx_24110017_PCU(
 	output reg  [31:0] pc_o,
 	input  wire [31:0] dnpc_i,
 	input  wire [31:0] snpc_i,
-	output wire				 pc_valid_o,
 	input  wire				 if_ready_i
 );
 
-assign pc_valid_o = 1'b1;
+localparam RESET_PC = 32'h30000000;
+
+wire [31:0] npc;
+always @(*) begin
+  casez({rst, isCHazard, if_ready_i})
+    3'b1??:  npc = RESET_PC;
+    3'b01?:  npc = dnpc_i;
+    3'b001:  npc = snpc_i;
+		default: npc = pc_o;
+	endcase
+end
 
 always @(posedge clk) begin
-	if(rst) begin
-		pc_o <= 32'h30000000; //flash
-	end
-	else begin
-		if(isCHazard) pc_o <= dnpc_i;
-		else begin
-			if(pc_valid_o && if_ready_i) begin
-				pc_o <= snpc_i;
-			end
-		end
-	end
+	pc_o <= npc;
 end
 
 /***

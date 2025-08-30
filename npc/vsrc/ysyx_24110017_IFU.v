@@ -3,7 +3,6 @@ module ysyx_24110017_IFU(
 	input  wire rst,
 
 	input  wire isCHazard,
-	input  wire pc_valid_i,
 	output wire if_ready_o,
 	output reg  if_valid_o,
 	input  wire id_ready_i,
@@ -39,7 +38,7 @@ always @(posedge clk) begin
 	else if(isCHazard) state <= IDLE;
 	else begin
 		case(state)
-			IDLE: state <= (pc_valid_i && if_ready_o && ifaddr_valid) ? WAIT : state;
+			IDLE: state <= (if_ready_o && ifaddr_valid) ? WAIT : state;
 			WAIT:	state <= (if_valid_o && id_ready_i) ? IDLE : state;
 		endcase
 	end
@@ -87,7 +86,8 @@ always @(posedge clk) begin
 			WAIT: begin
 				if(if_valid_o && id_ready_i) begin
 					pc_o	 <= if_axi_araddr_o;
-					inst_o <= axi_rdata_reg;
+					//inst_o <= axi_rdata_reg;
+					inst_o <= if_axi_rdata_i;
 				end
 			end
 		endcase
@@ -97,7 +97,7 @@ end
 /***AXI4_LITE***/
 parameter AXI_IDLE = 1'b0,AXI_FETCH = 1'b1;
 reg axi_state;
-reg [31:0] axi_rdata_reg;
+//reg [31:0] axi_rdata_reg;
 assign if_axi_arid_o    = 4'b0;
 assign if_axi_arlen_o   = 8'b0;
 assign if_axi_arsize_o  = 3'b0;
@@ -108,7 +108,7 @@ always @(posedge clk) begin
 	else if(isCHazard) axi_state <= AXI_IDLE;
 	else begin
 		case(axi_state)
-			AXI_IDLE  : axi_state <= (pc_valid_i && if_ready_o && ifaddr_valid)							? AXI_FETCH : axi_state;
+			AXI_IDLE  : axi_state <= (if_ready_o && ifaddr_valid)             							? AXI_FETCH : axi_state;
 			AXI_FETCH : axi_state <= (if_axi_rvalid_i && if_axi_rready_o && !isCHazard_reg) ? AXI_IDLE  : axi_state;
 		endcase
 	end
@@ -140,7 +140,7 @@ always @(posedge clk) begin
 				end
         if(if_axi_rvalid_i && if_axi_rready_o) begin
 					if_axi_rready_o <= 1'b0;
-					axi_rdata_reg   <= if_axi_rdata_i;
+					//axi_rdata_reg   <= if_axi_rdata_i;
 				end
       end
     endcase

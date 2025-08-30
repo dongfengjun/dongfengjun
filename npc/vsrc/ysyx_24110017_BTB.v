@@ -1,4 +1,4 @@
-module ysyx_24110017_BTB #(n = 6, w = 5) (
+module ysyx_24110017_BTB #(n = 2, w = 0) (
 	input clk,
 	input rst,
 	input  wire [31:0] pc_i,
@@ -50,7 +50,7 @@ module ysyx_24110017_BTB #(n = 6, w = 5) (
       end
   endgenerate
 	
-	assign snpc_o = (jhit) ? pc_i + {{11{jsnpc_reg[20]}},jsnpc_reg} : (hit != 0) ? pc_i + {{22{1'b1}},snpc_reg[index * (1<<w) + log2(hit)]} : pc_i + 4;
+	assign snpc_o = (jhit) ? pc_i + {{11{jsnpc_reg[20]}},jsnpc_reg} : (hit != 0) ? pc_i + {{22{1'b1}},snpc_reg[index * (1<<w)]} : pc_i + 4;
 	
 	reg [1:0]enable;
 	always @(posedge clk) begin

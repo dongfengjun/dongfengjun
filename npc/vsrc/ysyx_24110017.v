@@ -65,7 +65,6 @@ module ysyx_24110017(
 
 /***PCU***/
 wire [31:0] pc;
-wire pc_valid;
 /***BTB***/
 wire [31:0]snpc;
 /***IFU***/
@@ -152,12 +151,11 @@ wire [31:0]mvendorid,marchid; //ID
 
 ysyx_24110017_PCU PCU(clock,reset,isCHazard,
 		pc,dnpc_ex,snpc,
-		pc_valid,
 		if_ready
 );
 ysyx_24110017_BTB #(2,0) BTB(clock,reset,pc,snpc,prepc,pc_if,prepc_en);
 ysyx_24110017_IFU IFU(clock,reset,isCHazard,
-		pc_valid,if_ready,if_valid,id_ready,
+		if_ready,if_valid,id_ready,
 		pc,pc_if,inst_if,
 		if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
 		if_axi_arlen,if_axi_arsize,if_axi_arburst,
