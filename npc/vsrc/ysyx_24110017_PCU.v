@@ -2,17 +2,20 @@
 module ysyx_24110017_PCU(
 	input  wire				 clk,
 	input  wire				 rst,
-	input  wire				 isCHazard,
+	input  wire				 flush,
 	output reg  [31:0] pc_o,
 	input  wire [31:0] dnpc_i,
 	input  wire [31:0] snpc_i,
+	output wire        pc_valid_o,
 	input  wire				 if_ready_i
 );
+
+assign pc_valid_o = !flush;
 
 localparam RESET_PC = 32'h30000000;
 
 always @(posedge clk) begin
-  casez({rst, isCHazard, if_ready_i})
+  casez({rst, flush, if_ready_i})
     3'b1??:  pc_o <= RESET_PC;
     3'b01?:  pc_o <= dnpc_i;
     3'b001:  pc_o <= snpc_i;
