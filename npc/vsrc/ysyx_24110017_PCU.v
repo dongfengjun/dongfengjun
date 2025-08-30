@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_PCU(
 	input  wire				 clk,
 	input  wire				 rst,
@@ -23,18 +23,21 @@ always @(posedge clk) begin
 				pc_o <= snpc_i;
 			end
 		end
-/***
-`ifndef YOSYS_STA
-	if(((dnpc_i < 32'h30000000) || (dnpc_i >= 32'h40000000)) 
-      && ((dnpc_i < 32'h0f000000) || (dnpc_i >= 32'h0f002000))
-      && ((dnpc_i < 32'h80000000) || (dnpc_i >= 32'h84000000))
-      && ((dnpc_i < 32'ha0000000) || (dnpc_i >= 32'hc0000000))) begin
-      $fwrite(32'h80000002, "Assertion failed: Invalid PC `%xh`\n",dnpc_i);
-      $fatal;
-	end
-`endif
-***/
 	end
 end
+
+/***
+`ifndef YOSYS_STA
+always @(posedge clk) begin
+	if(((dnpc_i < 32'h30000000) || (dnpc_i >= 32'h40000000)) 
+     && ((dnpc_i < 32'h0f000000) || (dnpc_i >= 32'h0f002000))
+     && ((dnpc_i < 32'h80000000) || (dnpc_i >= 32'h84000000))
+     && ((dnpc_i < 32'ha0000000) || (dnpc_i >= 32'hc0000000))) begin
+     $fwrite(32'h80000002, "Assertion failed: Invalid PC `%xh`\n",dnpc_i);
+     $fatal;
+	end
+end
+`endif
+***/
 
 endmodule
