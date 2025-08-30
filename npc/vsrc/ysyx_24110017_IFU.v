@@ -14,9 +14,9 @@ module ysyx_24110017_IFU(
   output reg  [31:0] inst_o,
 /***AXI4*R***/
 	input  wire				 if_axi_arready_i,
-	output reg				 if_axi_arvalid_o,
+	output wire				 if_axi_arvalid_o,
 	output wire [ 3:0] if_axi_arid_o,
-	output reg  [31:0] if_axi_araddr_o,
+	output wire [31:0] if_axi_araddr_o,
 	output wire [ 7:0] if_axi_arlen_o,
 	output wire	[ 2:0] if_axi_arsize_o,
 	output wire	[ 1:0] if_axi_arburst_o,
