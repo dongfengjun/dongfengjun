@@ -87,9 +87,9 @@ reg [31:0]if_axi_araddr;
 
 always @(posedge clk) begin
   if(rst || flush) begin
-		if_axi_arvalid_o <= 1'b0;
+		if_axi_arvalid   <= 1'b0;
 		if_axi_rready_o  <= 1'b1;
-		if_axi_araddr_o  <= 32'h0;
+		if_axi_araddr    <= 32'h0;
   end 
 	else begin
     case (state)
