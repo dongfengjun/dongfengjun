@@ -89,8 +89,10 @@ always @(posedge clk) begin
 	else begin
     case (state)
       IDLE: begin
-				if_axi_arvalid_o <= 1'b1;
-				if_axi_araddr_o  <= pc_i;
+				if(!flush) begin
+					if_axi_arvalid_o <= 1'b1;
+					if_axi_araddr_o  <= pc_i;
+				end
       end
       WAIT: begin
 				if(if_axi_arvalid_o && if_axi_arready_i) begin
