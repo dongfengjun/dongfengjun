@@ -293,7 +293,7 @@ function int performance_counter(int i);
 															 : (i == 5) ? {31'b0,ls_valid}
 															 : (i == 6) ? {31'b0,if_axi_arvalid && if_axi_arready}
 															 : (i == 7) ? {31'b0,if_axi_rvalid && if_axi_rready}
-															 : (i == 8) ? {31'b0,pc_valid && if_ready}
+															 : (i == 8) ? {31'b0,if_ready}
 															 : (i == 9) ? {31'b0,ls_axi_awvalid && ls_axi_awready}
 															 : (i == 10) ? {31'b0,ls_axi_arvalid && ls_axi_arready}
 															 : (i == 11) ? {31'b0,ls_axi_bvalid && ls_axi_bready}
