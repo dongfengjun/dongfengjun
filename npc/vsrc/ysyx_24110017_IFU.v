@@ -32,13 +32,14 @@ module ysyx_24110017_IFU(
 assign if_ready_o = (state == IDLE);
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
+wire ifaddr_valid = ((pc_i >= 32'h30000000) && (pc_i < 32'h40000000)) || ((pc_i >= 32'h0f000000) && (pc_i < 32'h0f002000)) || ((pc_i >= 32'h80000000) && (pc_i < 32'h84000000)) || ((pc_i >= 32'ha0000000) && (pc_i < 32'hc0000000));
 
 always @(posedge clk) begin
 	if(rst) state <= IDLE;
 	else if(isCHazard) state <= IDLE;
 	else begin
 		case(state)
-			IDLE: state <= (pc_valid_i && if_ready_o) ? WAIT : state;
+			IDLE: state <= (pc_valid_i && if_ready_o && ifaddr_valid) ? WAIT : state;
 			WAIT:	state <= (if_valid_o && id_ready_i) ? IDLE : state;
 		endcase
 	end
@@ -107,7 +108,7 @@ always @(posedge clk) begin
 	else if(isCHazard) axi_state <= AXI_IDLE;
 	else begin
 		case(axi_state)
-			AXI_IDLE  : axi_state <= (pc_valid_i && if_ready_o)															? AXI_FETCH : axi_state;
+			AXI_IDLE  : axi_state <= (pc_valid_i && if_ready_o && ifaddr_valid)							? AXI_FETCH : axi_state;
 			AXI_FETCH : axi_state <= (if_axi_rvalid_i && if_axi_rready_o && !isCHazard_reg) ? AXI_IDLE  : axi_state;
 		endcase
 	end
