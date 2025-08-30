@@ -1,4 +1,4 @@
-module ysyx_24110017_BTB #(n = 6, w = 1) (
+module ysyx_24110017_BTB #(n = 6, w = 5) (
 	input clk,
 	input rst,
 	input  wire [31:0] pc_i,
