@@ -56,6 +56,7 @@ always @(posedge clk) begin
 	end
 end
 
+/***
 always @(posedge clk) begin
 	if(rst || flush) begin
 		pc_o	 <= 32'h0;
@@ -73,6 +74,22 @@ always @(posedge clk) begin
 			end
 		endcase
 	end
+end
+***/
+
+always @(posedge clk) begin
+  case({rst || flush,state,if_valid_o && id_ready_i})
+    3'b1??: begin
+      pc_o   <= 32'h0;
+      inst_o <= 32'h0;
+    end
+    3'b011: begin
+			pc_o   <= if_axi_araddr_o;
+			inst_o <= if_axi_rdata_i;
+		end
+    default: begin
+    end
+  endcase
 end
 
 /***AXI4_LITE***/

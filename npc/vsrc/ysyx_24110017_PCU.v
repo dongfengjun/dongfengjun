@@ -10,7 +10,7 @@ module ysyx_24110017_PCU(
 	input  wire				 if_ready_i
 );
 
-assign pc_valid_o = flush!
+assign pc_valid_o = !flush;
 
 localparam RESET_PC = 32'h30000000;
 
