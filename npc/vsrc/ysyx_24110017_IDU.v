@@ -95,7 +95,7 @@ wire [6:0]funct7; //R
  
 assign op = inst_i[6:2];
 assign rd = (op == 5'b01101 || op == 5'b00101 || op == 5'b11011 || op == 5'b11001 || op == 5'b00000 || op == 5'b00100 || op == 5'b11100 || op == 5'b01100) ? inst_i[10:7] : 4'b0;
-assign gpr_wen_o = (op_o == 5'b01101 || op_o == 5'b00101 || op_o == 5'b11011 || op_o == 5'b11001 || op_o == 5'b00100 || op_o == 5'b11100 || op_o == 5'b01100 || op_O == 5'b00000);
+assign gpr_wen_o = (op_o == 5'b01101 || op_o == 5'b00101 || op_o == 5'b11011 || op_o == 5'b11001 || op_o == 5'b00100 || op_o == 5'b11100 || op_o == 5'b01100 || op_o == 5'b00000);
 assign funct3 = inst_i[14:12];
 assign rs1 = (op == 5'b11001 || op == 5'b00000 || op == 5'b00100 || op == 5'b11100	//I
  || op == 5'b11000	//B
