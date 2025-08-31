@@ -78,7 +78,7 @@ end
 ***/
 
 always @(posedge clk) begin
-  case({rst || flush,state,if_valid_o && id_ready_i})
+  casez({rst || flush,state,if_valid_o && id_ready_i})
     3'b1??: begin
       pc_o   <= 32'h0;
       inst_o <= 32'h0;
