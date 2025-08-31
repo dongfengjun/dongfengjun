@@ -77,6 +77,7 @@ always @(posedge clk) begin
 end
 ***/
 
+/***
 always @(posedge clk) begin
   casez({rst || flush,state})
     2'b1?: begin
@@ -89,6 +90,22 @@ always @(posedge clk) begin
 				inst_o <= if_axi_rdata_i;
 			end
 		end
+    default: begin
+    end
+  endcase
+end
+***/
+
+always @(posedge clk) begin
+  casez({rst || flush,state,if_valid_o && id_ready_i})
+    3'b100: begin
+      pc_o   <= 32'h0;
+      inst_o <= 32'h0;
+    end
+    3'b011: begin
+      pc_o   <= if_axi_araddr_o;
+      inst_o <= if_axi_rdata_i;
+    end
     default: begin
     end
   endcase
