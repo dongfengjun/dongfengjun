@@ -257,10 +257,8 @@ void VysyxSoCFull___024root___eval_triggers__act(VysyxSoCFull___024root* vlSelf)
                                        & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clock))) 
                                       | ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset) 
                                          & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset))));
-    vlSelf->__VactTriggered.at(2U) = (((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset) 
-                                       & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset))) 
-                                      | ((~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime)) 
-                                         & (IData)(vlSelf->__Vtrigprevexpr_h7a940e1a__0)));
+    vlSelf->__VactTriggered.at(2U) = ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset) 
+                                      & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset)));
     vlSelf->__VactTriggered.at(3U) = (((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset) 
                                        & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset))) 
                                       | ((~ (IData)(
@@ -674,7 +672,7 @@ void VysyxSoCFull___024root___eval_triggers__act(VysyxSoCFull___024root* vlSelf)
                                          | ((IData)(vlSelf->ysyxSoCFull__DOT__sdram1__DOT__reset) 
                                             & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__sdram1__DOT__reset))));
     vlSelf->__VactTriggered.at(0x4cU) = (((((((((((
-                                                   (((((((((((((((((((((((((((((((((((((((((((((((((((((((IData)(vlSelf->clock) 
+                                                   ((((((((((((((((((((((((((((((((((((((((((((((((((((((IData)(vlSelf->clock) 
                                                                                 & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clock))) 
                                                                                 | ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset) 
                                                                                 & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset)))) 
@@ -770,168 +768,165 @@ void VysyxSoCFull___024root___eval_triggers__act(VysyxSoCFull___024root* vlSelf)
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
                                                                                 >> 0x28U))) 
                                                                                 & (IData)(vlSelf->__Vtrigprevexpr_h7a9df198__0))) 
-                                                                                | ((~ (IData)(
+                                                                               | ((~ (IData)(
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
                                                                                 >> 0x27U))) 
                                                                                 & (IData)(vlSelf->__Vtrigprevexpr_h7a9e5eb5__0))) 
-                                                                               | ((~ (IData)(
+                                                                              | ((~ (IData)(
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
                                                                                 >> 0x26U))) 
                                                                                 & (IData)(vlSelf->__Vtrigprevexpr_h7a9e4bb7__0))) 
-                                                                              | ((~ (IData)(
+                                                                             | ((~ (IData)(
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
                                                                                 >> 0x25U))) 
                                                                                 & (IData)(vlSelf->__Vtrigprevexpr_h7a9bb71f__0))) 
-                                                                             | ((~ (IData)(
-                                                                                (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                                >> 0x24U))) 
-                                                                                & (IData)(vlSelf->__Vtrigprevexpr_h7aa6aa91__0))) 
                                                                             | ((~ (IData)(
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                                >> 0x23U))) 
-                                                                               & (IData)(vlSelf->__Vtrigprevexpr_h7a9e0aba__0))) 
+                                                                                >> 0x24U))) 
+                                                                               & (IData)(vlSelf->__Vtrigprevexpr_h7aa6aa91__0))) 
                                                                            | ((~ (IData)(
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                                >> 0x22U))) 
-                                                                              & (IData)(vlSelf->__Vtrigprevexpr_h7a9dfbee__0))) 
+                                                                                >> 0x23U))) 
+                                                                              & (IData)(vlSelf->__Vtrigprevexpr_h7a9e0aba__0))) 
                                                                           | ((~ (IData)(
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                                >> 0x21U))) 
-                                                                             & (IData)(vlSelf->__Vtrigprevexpr_h7a9e782b__0))) 
+                                                                                >> 0x22U))) 
+                                                                             & (IData)(vlSelf->__Vtrigprevexpr_h7a9dfbee__0))) 
                                                                          | ((~ (IData)(
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                                >> 0x20U))) 
-                                                                            & (IData)(vlSelf->__Vtrigprevexpr_h7a9e5a10__0))) 
+                                                                                >> 0x21U))) 
+                                                                            & (IData)(vlSelf->__Vtrigprevexpr_h7a9e782b__0))) 
                                                                         | ((~ (IData)(
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                                >> 0x1fU))) 
-                                                                           & (IData)(vlSelf->__Vtrigprevexpr_h7a9cd5c9__0))) 
+                                                                                >> 0x20U))) 
+                                                                           & (IData)(vlSelf->__Vtrigprevexpr_h7a9e5a10__0))) 
                                                                        | ((~ (IData)(
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                                >> 0x1eU))) 
-                                                                          & (IData)(vlSelf->__Vtrigprevexpr_h7a9cc65a__0))) 
+                                                                                >> 0x1fU))) 
+                                                                          & (IData)(vlSelf->__Vtrigprevexpr_h7a9cd5c9__0))) 
                                                                       | ((~ (IData)(
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                                >> 0x1dU))) 
-                                                                         & (IData)(vlSelf->__Vtrigprevexpr_h7a9e3623__0))) 
+                                                                                >> 0x1eU))) 
+                                                                         & (IData)(vlSelf->__Vtrigprevexpr_h7a9cc65a__0))) 
                                                                      | ((~ (IData)(
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                                >> 0x1cU))) 
-                                                                        & (IData)(vlSelf->__Vtrigprevexpr_h7a95508a__0))) 
+                                                                                >> 0x1dU))) 
+                                                                        & (IData)(vlSelf->__Vtrigprevexpr_h7a9e3623__0))) 
                                                                     | ((~ (IData)(
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                                >> 0x1bU))) 
-                                                                       & (IData)(vlSelf->__Vtrigprevexpr_h7a9c8cbc__0))) 
+                                                                                >> 0x1cU))) 
+                                                                       & (IData)(vlSelf->__Vtrigprevexpr_h7a95508a__0))) 
                                                                    | ((~ (IData)(
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                                >> 0x1aU))) 
-                                                                      & (IData)(vlSelf->__Vtrigprevexpr_h7a9c7ceb__0))) 
+                                                                                >> 0x1bU))) 
+                                                                      & (IData)(vlSelf->__Vtrigprevexpr_h7a9c8cbc__0))) 
                                                                   | ((~ (IData)(
                                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                                >> 0x19U))) 
-                                                                     & (IData)(vlSelf->__Vtrigprevexpr_h7a9cf922__0))) 
+                                                                                >> 0x1aU))) 
+                                                                     & (IData)(vlSelf->__Vtrigprevexpr_h7a9c7ceb__0))) 
                                                                  | ((~ (IData)(
                                                                                (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                                >> 0x18U))) 
-                                                                    & (IData)(vlSelf->__Vtrigprevexpr_h7a9cdc09__0))) 
+                                                                                >> 0x19U))) 
+                                                                    & (IData)(vlSelf->__Vtrigprevexpr_h7a9cf922__0))) 
                                                                 | ((~ (IData)(
                                                                               (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                               >> 0x17U))) 
-                                                                   & (IData)(vlSelf->__Vtrigprevexpr_h7aa13dc4__0))) 
+                                                                               >> 0x18U))) 
+                                                                   & (IData)(vlSelf->__Vtrigprevexpr_h7a9cdc09__0))) 
                                                                | ((~ (IData)(
                                                                              (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                              >> 0x16U))) 
-                                                                  & (IData)(vlSelf->__Vtrigprevexpr_h7aa14f78__0))) 
+                                                                              >> 0x17U))) 
+                                                                  & (IData)(vlSelf->__Vtrigprevexpr_h7aa13dc4__0))) 
                                                               | ((~ (IData)(
                                                                             (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                             >> 0x15U))) 
-                                                                 & (IData)(vlSelf->__Vtrigprevexpr_h7a7ab52a__0))) 
+                                                                             >> 0x16U))) 
+                                                                 & (IData)(vlSelf->__Vtrigprevexpr_h7aa14f78__0))) 
                                                              | ((~ (IData)(
                                                                            (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                            >> 0x14U))) 
-                                                                & (IData)(vlSelf->__Vtrigprevexpr_h7aa1aa9e__0))) 
+                                                                            >> 0x15U))) 
+                                                                & (IData)(vlSelf->__Vtrigprevexpr_h7a7ab52a__0))) 
                                                             | ((~ (IData)(
                                                                           (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                           >> 0x13U))) 
-                                                               & (IData)(vlSelf->__Vtrigprevexpr_h7a9540bd__0))) 
+                                                                           >> 0x14U))) 
+                                                               & (IData)(vlSelf->__Vtrigprevexpr_h7aa1aa9e__0))) 
                                                            | ((~ (IData)(
                                                                          (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                          >> 0x12U))) 
-                                                              & (IData)(vlSelf->__Vtrigprevexpr_h7a9545db__0))) 
+                                                                          >> 0x13U))) 
+                                                              & (IData)(vlSelf->__Vtrigprevexpr_h7a9540bd__0))) 
                                                           | ((~ (IData)(
                                                                         (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                         >> 0x11U))) 
-                                                             & (IData)(vlSelf->__Vtrigprevexpr_h7a93e01e__0))) 
+                                                                         >> 0x12U))) 
+                                                             & (IData)(vlSelf->__Vtrigprevexpr_h7a9545db__0))) 
                                                          | ((~ (IData)(
                                                                        (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                        >> 0x10U))) 
-                                                            & (IData)(vlSelf->__Vtrigprevexpr_h7a93e3f9__0))) 
+                                                                        >> 0x11U))) 
+                                                            & (IData)(vlSelf->__Vtrigprevexpr_h7a93e01e__0))) 
                                                         | ((~ (IData)(
                                                                       (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                       >> 0xfU))) 
-                                                           & (IData)(vlSelf->__Vtrigprevexpr_h7a937dc0__0))) 
+                                                                       >> 0x10U))) 
+                                                           & (IData)(vlSelf->__Vtrigprevexpr_h7a93e3f9__0))) 
                                                        | ((~ (IData)(
                                                                      (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                      >> 0xeU))) 
-                                                          & (IData)(vlSelf->__Vtrigprevexpr_h7a93ae6f__0))) 
+                                                                      >> 0xfU))) 
+                                                          & (IData)(vlSelf->__Vtrigprevexpr_h7a937dc0__0))) 
                                                       | ((~ (IData)(
                                                                     (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                     >> 0xdU))) 
-                                                         & (IData)(vlSelf->__Vtrigprevexpr_h7a95342e__0))) 
+                                                                     >> 0xeU))) 
+                                                         & (IData)(vlSelf->__Vtrigprevexpr_h7a93ae6f__0))) 
                                                      | ((~ (IData)(
                                                                    (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                    >> 0xcU))) 
-                                                        & (IData)(vlSelf->__Vtrigprevexpr_h7a94509b__0))) 
+                                                                    >> 0xdU))) 
+                                                        & (IData)(vlSelf->__Vtrigprevexpr_h7a95342e__0))) 
                                                     | ((~ (IData)(
                                                                   (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                   >> 0xbU))) 
-                                                       & (IData)(vlSelf->__Vtrigprevexpr_h7a93d2cb__0))) 
+                                                                   >> 0xcU))) 
+                                                       & (IData)(vlSelf->__Vtrigprevexpr_h7a94509b__0))) 
                                                    | ((~ (IData)(
                                                                  (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                  >> 0xaU))) 
-                                                      & (IData)(vlSelf->__Vtrigprevexpr_h7a93c2dc__0))) 
+                                                                  >> 0xbU))) 
+                                                      & (IData)(vlSelf->__Vtrigprevexpr_h7a93d2cb__0))) 
                                                   | ((~ (IData)(
                                                                 (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                 >> 9U))) 
-                                                     & (IData)(vlSelf->__Vtrigprevexpr_h7a945d6d__0))) 
+                                                                 >> 0xaU))) 
+                                                     & (IData)(vlSelf->__Vtrigprevexpr_h7a93c2dc__0))) 
                                                  | ((~ (IData)(
                                                                (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                                >> 8U))) 
-                                                    & (IData)(vlSelf->__Vtrigprevexpr_h7a9461fa__0))) 
+                                                                >> 9U))) 
+                                                    & (IData)(vlSelf->__Vtrigprevexpr_h7a945d6d__0))) 
                                                 | ((~ (IData)(
                                                               (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                               >> 7U))) 
-                                                   & (IData)(vlSelf->__Vtrigprevexpr_h7a93fdcf__0))) 
+                                                               >> 8U))) 
+                                                   & (IData)(vlSelf->__Vtrigprevexpr_h7a9461fa__0))) 
                                                | ((~ (IData)(
                                                              (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                              >> 6U))) 
-                                                  & (IData)(vlSelf->__Vtrigprevexpr_h7a940359__0))) 
+                                                              >> 7U))) 
+                                                  & (IData)(vlSelf->__Vtrigprevexpr_h7a93fdcf__0))) 
                                               | ((~ (IData)(
                                                             (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                             >> 5U))) 
-                                                 & (IData)(vlSelf->__Vtrigprevexpr_h7aa19b69__0))) 
+                                                             >> 6U))) 
+                                                 & (IData)(vlSelf->__Vtrigprevexpr_h7a940359__0))) 
                                              | ((~ (IData)(
                                                            (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                            >> 4U))) 
-                                                & (IData)(vlSelf->__Vtrigprevexpr_h7a9c92a7__0))) 
+                                                            >> 5U))) 
+                                                & (IData)(vlSelf->__Vtrigprevexpr_h7aa19b69__0))) 
                                             | ((~ (IData)(
                                                           (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                           >> 3U))) 
-                                               & (IData)(vlSelf->__Vtrigprevexpr_h7a943ed0__0))) 
+                                                           >> 4U))) 
+                                               & (IData)(vlSelf->__Vtrigprevexpr_h7a9c92a7__0))) 
                                            | ((~ (IData)(
                                                          (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                          >> 2U))) 
-                                              & (IData)(vlSelf->__Vtrigprevexpr_h7a946fbc__0))) 
+                                                          >> 3U))) 
+                                              & (IData)(vlSelf->__Vtrigprevexpr_h7a943ed0__0))) 
                                           | ((~ (IData)(
                                                         (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
-                                                         >> 1U))) 
-                                             & (IData)(vlSelf->__Vtrigprevexpr_h7a7ae471__0))) 
-                                         | ((~ (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime)) 
-                                            & (IData)(vlSelf->__Vtrigprevexpr_h7a940e1a__0)));
+                                                         >> 2U))) 
+                                             & (IData)(vlSelf->__Vtrigprevexpr_h7a946fbc__0))) 
+                                         | ((~ (IData)(
+                                                       (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
+                                                        >> 1U))) 
+                                            & (IData)(vlSelf->__Vtrigprevexpr_h7a7ae471__0)));
     vlSelf->__Vtrigrprev__TOP__clock = vlSelf->clock;
     vlSelf->__Vtrigrprev__TOP__ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset 
         = vlSelf->ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset;
-    vlSelf->__Vtrigprevexpr_h7a940e1a__0 = (1U & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime));
     vlSelf->__Vtrigprevexpr_h7a7ae471__0 = (1U & (IData)(
                                                          (vlSelf->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__CLINT__DOT__mtime 
                                                           >> 1U)));
