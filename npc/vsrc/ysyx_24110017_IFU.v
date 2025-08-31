@@ -65,10 +65,6 @@ always @(posedge clk) begin
 		pc_o   <= if_axi_araddr_o;
 		inst_o <= if_axi_rdata_i;
 	end
-  default: begin
-		pc_o   <= pc_o;
-    inst_o <= inst_o;
-  end
 end
 
 /***AXI4_LITE***/

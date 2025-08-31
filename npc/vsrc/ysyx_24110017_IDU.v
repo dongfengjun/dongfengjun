@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_IDU(
 	input	 wire clk,
 	input  wire rst,
@@ -50,7 +50,8 @@ assign id_valid_o = (state == WAIT) && (!isRAW_i);
 assign id_ready_o = (state == IDLE) && (!isRAW_i);
 
 always@(posedge clk) begin
-	if(rst || flush_i) begin
+/***	
+	if(flush_i) begin
 `ifndef YOSYS_STA
 		inst_o			<= 32'h0;
 `endif
@@ -62,12 +63,13 @@ always@(posedge clk) begin
 		rs2_o				<= 4'b0;
 		rd_o				<= 4'b0;
 	end
-	else begin
-		case(state)
-			IDLE: begin
-			end
-			WAIT: begin
-				if(id_valid_o && ex_ready_i) begin
+***/
+//	else begin
+//		case(state)
+//			IDLE: begin
+//			end
+//			WAIT: begin
+				if(id_valid_o && ex_ready_i && !flush_i) begin
 `ifndef YOSYS_STA
 					inst_o			<= inst_i;
 `endif
@@ -79,9 +81,9 @@ always@(posedge clk) begin
 					rs2_o				<= rs2;
 					rd_o        <= rd;
 				end
-			end
-		endcase
-	end
+//			end
+//		endcase
+//	end
 end
 
 /***pattern***/
