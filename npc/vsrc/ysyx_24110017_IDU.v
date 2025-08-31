@@ -11,7 +11,7 @@ module ysyx_24110017_IDU(
 `endif
 
 	output wire [20:0] prepc_o,
-	output wire [ 1:0]prepc_en_o,
+	output wire [ 1:0] prepc_en_o,
 
 	input  wire if_valid_i,
 	output wire id_ready_o,
@@ -28,8 +28,8 @@ module ysyx_24110017_IDU(
 	output reg	[ 3:0] rs1_o,
   output reg	[ 3:0] rs2_o,
 	output reg	[ 3:0] rd_o,
-	output reg  gpr_wen_o,
-	output reg  fencei_o
+	output reg	       gpr_wen_o,
+	output reg         fencei_o
 );
 
 /***分布式控制***/
@@ -37,18 +37,17 @@ parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
 always @(posedge clk) begin
-	if(rst) state <= IDLE;
-	else if(flush_i) state <= IDLE;
+	if(rst || flush_i) state <= IDLE;
   else begin
 		case (state)
-			IDLE: state <= (if_valid_i && id_ready_o) ? WAIT : state;
-			WAIT: state <= (id_valid_o && ex_ready_i) ?	IDLE : state;
+			IDLE: state <= (if_valid_i) ? WAIT : state;
+			WAIT: state <= (ex_ready_i) ?	IDLE : state;
 		endcase
 	end
 end
 
-assign id_valid_o = (state == WAIT) && (!isRAW_i);
-assign id_ready_o = (state == IDLE) && (!isRAW_i);
+assign id_valid_o = (state == WAIT);
+assign id_ready_o = (state == IDLE);
 
 
 always@(posedge clk) begin
