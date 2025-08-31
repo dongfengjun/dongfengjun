@@ -23,10 +23,6 @@ always @(*) begin
 	endcase
 end
 
-always @(posedge clk) begin
-	pc_o <= npc;
-end
-
 /***
 `ifndef YOSYS_STA
 always @(posedge clk) begin
