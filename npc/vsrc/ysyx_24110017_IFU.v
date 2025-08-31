@@ -45,42 +45,24 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-	if(rst || flush) if_valid_o <= 1'b0;
-	else begin
-		if(if_axi_rvalid_i && if_axi_rready_o && !if_axi_arvalid_o && (state == WAIT)) begin
-			if_valid_o <= 1'b1;
+  casez({rst || flush, state})
+		2'b1? : if_valid_o <= 1'b0;
+		2'b01 : begin
+			if(if_axi_rvalid_i && if_axi_rready_o && !if_axi_arvalid_o) begin
+				if_valid_o <= 1'b1;
+			end
+			if(if_valid_o && id_ready_i) begin
+				if_valid_o <= 1'b0;
+			end
 		end
-		if(if_valid_o && id_ready_i) begin
-			if_valid_o <= 1'b0;
+		default : begin
 		end
-	end
+  endcase
 end
 
-/***
-always @(posedge clk) begin
-	if(rst || flush) begin
-		pc_o	 <= 32'h0;
-		inst_o <= 32'h0;
-	end
-  else begin
-		case(state)
-			WAIT: begin
-				if(if_valid_o && id_ready_i) begin
-					pc_o	 <= if_axi_araddr_o;
-					inst_o <= if_axi_rdata_i;
-				end
-			end
-			default: begin
-			end
-		endcase
-	end
-end
-***/
-
-/***
 always @(posedge clk) begin
   casez({rst || flush,state})
-    2'b1?: begin
+    2'b1z: begin
       pc_o   <= 32'h0;
       inst_o <= 32'h0;
     end
@@ -91,22 +73,8 @@ always @(posedge clk) begin
 			end
 		end
     default: begin
-    end
-  endcase
-end
-***/
-
-always @(posedge clk) begin
-  case({rst || flush,state,if_valid_o && id_ready_i})
-    3'b100: begin
-      pc_o   <= 32'h0;
-      inst_o <= 32'h0;
-    end
-    3'b011: begin
-      pc_o   <= if_axi_araddr_o;
-      inst_o <= if_axi_rdata_i;
-    end
-    default: begin
+			pc_o   <= pc_o;
+      inst_o <= inst_o;
     end
   endcase
 end
@@ -116,6 +84,7 @@ assign if_axi_arid_o    = 4'b0;
 assign if_axi_arlen_o   = 8'b0;
 assign if_axi_arsize_o  = 3'b0;
 assign if_axi_arburst_o = 2'b0;
+
 always @(posedge clk) begin
   if(rst || flush) begin
 		if_axi_arvalid_o <= 1'b0;
