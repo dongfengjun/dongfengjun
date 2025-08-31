@@ -58,7 +58,7 @@ wire [15:0] counter_out [3:0];
 wire [3:0] carry_chain;
 counter_8bit counter_level0 (
     .clk(clk),
-    .rst_n(rst),
+    .rst(rst),
     .enable(1'b1),
     .count(counter_out[0]),
     .carry_out(carry_chain[0])
@@ -68,7 +68,7 @@ generate
     for (i = 1; i < 7; i = i + 1) begin : counter_levels
         counter_8bit counter (
             .clk(clk),
-            .rst_n(rst),
+            .rst(rst),
             .enable(carry_chain[i-1]),  // 前一级的进位作为使能
             .count(counter_out[i]),
             .carry_out(carry_chain[i])
@@ -77,7 +77,7 @@ generate
 endgenerate
 counter_8bit counter_level7 (
     .clk(clk),
-    .rst_n(rst),
+    .rst(rst),
     .enable(carry_chain[6]),
     .count(counter_out[7]),
     .carry_out(carry_chain[7])
