@@ -53,8 +53,8 @@ end
 
 /***分层次进位***/
 // 第一级计数器（最低8位）
-wire [64:0]mtime = {counter_out[7], counter_out[6], counter_out[5], counter_out[4],counter_out[3], counter_out[2], counter_out[1], counter_out[0]};
-wire [15:0] counter_out [7:0];
+wire [63:0]mtime = {counter_out[7], counter_out[6], counter_out[5], counter_out[4],counter_out[3], counter_out[2], counter_out[1], counter_out[0]};
+wire [7:0] counter_out [7:0];
 wire [7:0] carry_chain;
 counter_8bit counter_level0 (
     .clk(clk),
