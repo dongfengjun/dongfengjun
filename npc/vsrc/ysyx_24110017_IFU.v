@@ -61,22 +61,14 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-  casez({rst || flush,state})
-    2'b1?: begin
-      pc_o   <= 32'h0;
-      inst_o <= 32'h0;
-    end
-    2'b01: begin
-			if(if_valid_o && id_ready_i) begin
-				pc_o   <= if_axi_araddr_o;
-				inst_o <= if_axi_rdata_i;
-			end
-		end
-    default: begin
-			pc_o   <= pc_o;
-      inst_o <= inst_o;
-    end
-  endcase
+	if(if_valid_o && id_ready_i) begin
+		pc_o   <= if_axi_araddr_o;
+		inst_o <= if_axi_rdata_i;
+	end
+  default: begin
+		pc_o   <= pc_o;
+    inst_o <= inst_o;
+  end
 end
 
 /***AXI4_LITE***/
