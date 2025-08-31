@@ -19,25 +19,28 @@ module ysyx_24110017_CLINT(
 
 localparam DEVICE_CLINT_LOW_ADDR = 32'h02000000;
 localparam DEVICE_CLINT_HIGH_ADDR = 32'h02000004;
-//reg [63:0] mtime;
-wire [63:0] mtime = {mtime63, mtime62, mtime61, mtime60,
-                     mtime59, mtime58, mtime57, mtime56,
-                     mtime55, mtime54, mtime53, mtime52,
-                     mtime51, mtime50, mtime49, mtime48,
-                     mtime47, mtime46, mtime45, mtime44,
-                     mtime43, mtime42, mtime41, mtime40,
-                     mtime39, mtime38, mtime37, mtime36,
-                     mtime35, mtime34, mtime33, mtime32,
-                     mtime31, mtime30, mtime29, mtime28,
-                     mtime27, mtime26, mtime25, mtime24,
-                     mtime23, mtime22, mtime21, mtime20,
-                     mtime19, mtime18, mtime17, mtime16,
-                     mtime15, mtime14, mtime13, mtime12,
-                     mtime11, mtime10, mtime9,  mtime8,
-                     mtime7,  mtime6,  mtime5,  mtime4,
-                     mtime3,  mtime2,  mtime1,  mtime0};
 
-/***
+wire[31:0] c_rdata = {32{(c_axi_araddr == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | {32{(c_axi_araddr == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
+assign c_axi_rdata = (c_axi_rvalid) ? c_rdata : 32'h0;
+
+always @(posedge clk) begin
+  if(rst) begin
+    c_axi_arready <= 1'b0;
+    c_axi_rvalid  <= 1'b0;
+	end
+	else begin
+		c_axi_arready <= 1'b1;
+		if(c_axi_arvalid && c_axi_arready) begin
+			c_axi_rvalid <= 1'b1;
+		end
+		if(c_axi_rvalid && c_axi_rready) begin
+			c_axi_rvalid <= 1'b0;
+		end
+	end
+end
+
+/***基本二进制***
+reg [63:0] mtime;
 always @(posedge clk) begin
 	if(rst) begin
 		mtime <= 64'b0;
@@ -47,6 +50,72 @@ always @(posedge clk) begin
 	end
 end
 ***/
+
+/***分层次进位***/
+// 第一级计数器（最低8位）
+wire [64:0]mtime = {counter_out[7], counter_out[6], counter_out[5], counter_out[4],counter_out[3], counter_out[2], counter_out[1], counter_out[0]};
+wire [15:0] counter_out [3:0];
+wire [3:0] carry_chain;
+counter_8bit #(
+    .INIT_VALUE(8'h00)
+) counter_level0 (
+    .clk(clk),
+    .rst_n(rst_n),
+    .enable(1'b1),
+    .count(counter_out[0]),
+    .carry_out(carry_chain[0])
+);
+genvar i;
+generate
+    for (i = 1; i < 7; i = i + 1) begin : counter_levels
+        counter_8bit #(
+            .INIT_VALUE(8'h00)
+        ) counter (
+            .clk(clk),
+            .rst_n(rst_n),
+            .enable(carry_chain[i-1]),  // 前一级的进位作为使能
+            .count(counter_out[i]),
+            .carry_out(carry_chain[i])
+        );
+    end
+endgenerate
+counter_8bit counter_level7 (
+    .clk(clk),
+    .rst_n(rst_n),
+    .enable(carry_chain[6]),
+    .count(counter_out[7]),
+    .carry_out(carry_chain[7])
+);
+endmodule
+
+module counter_8bit (
+    input wire clk,
+    input wire rst_n,
+    input wire enable,
+    output reg [7:0] count,
+    output wire carry_out
+);
+
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        count <= INIT_VALUE;      // 异步复位到初始值
+    end else if (enable) begin
+        count <= count + 1'b1;    // 使能时计数
+    end
+end
+
+assign carry_out = (count == 8'hFF) & enable;
+
+/***行波进位***
+wire [63:0] mtime = {mtime63, mtime62, mtime61, mtime60,mtime59, mtime58, mtime57, mtime56,
+                     mtime55, mtime54, mtime53, mtime52,mtime51, mtime50, mtime49, mtime48,
+                     mtime47, mtime46, mtime45, mtime44,mtime43, mtime42, mtime41, mtime40,
+                     mtime39, mtime38, mtime37, mtime36,mtime35, mtime34, mtime33, mtime32,
+                     mtime31, mtime30, mtime29, mtime28,mtime27, mtime26, mtime25, mtime24,
+                     mtime23, mtime22, mtime21, mtime20,mtime19, mtime18, mtime17, mtime16,
+                     mtime15, mtime14, mtime13, mtime12,mtime11, mtime10, mtime9,  mtime8,
+                     mtime7,  mtime6,  mtime5,  mtime4,mtime3,  mtime2,  mtime1,  mtime0};
+
 reg mtime0, mtime1, mtime2, mtime3, mtime4, mtime5, mtime6, mtime7,
     mtime8, mtime9, mtime10, mtime11, mtime12, mtime13, mtime14, mtime15,
     mtime16, mtime17, mtime18, mtime19, mtime20, mtime21, mtime22, mtime23,
@@ -503,24 +572,5 @@ always @(posedge rst or negedge mtime62) begin
   else
     mtime63 <= ~mtime63;
 end
-
-wire[31:0] c_rdata = {32{(c_axi_araddr == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | {32{(c_axi_araddr == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
-assign c_axi_rdata = (c_axi_rvalid && c_axi_rready) ? c_rdata : 32'h0;
-
-always @(posedge clk) begin
-  if(rst) begin
-    c_axi_arready <= 1'b0;
-    c_axi_rvalid  <= 1'b0;
-	end 
-	else begin
-		c_axi_arready <= 1'b1;
-		if(c_axi_arvalid && c_axi_arready) begin
-			c_axi_rvalid <= 1'b1;
-		end
-		if(c_axi_rvalid && c_axi_rready) begin
-			c_axi_rvalid <= 1'b0;
-		end
-	end
-end
-
+***/
 endmodule
