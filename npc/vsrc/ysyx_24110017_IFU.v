@@ -62,7 +62,7 @@ end
 
 always @(posedge clk) begin
   casez({rst || flush,state})
-    2'b1z: begin
+    2'b1?: begin
       pc_o   <= 32'h0;
       inst_o <= 32'h0;
     end

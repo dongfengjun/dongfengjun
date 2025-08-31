@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_IDU(
 	input	 wire clk,
 	input  wire rst,
@@ -40,15 +40,14 @@ always @(posedge clk) begin
 	if(rst || flush_i) state <= IDLE;
   else begin
 		case (state)
-			IDLE: state <= (if_valid_i) ? WAIT : state;
-			WAIT: state <= (ex_ready_i) ?	IDLE : state;
+			IDLE: state <= (if_valid_i && id_ready_o) ? WAIT : state;
+			WAIT: state <= (id_valid_o && ex_ready_i) ?	IDLE : state;
 		endcase
 	end
 end
 
-assign id_valid_o = (state == WAIT);
-assign id_ready_o = (state == IDLE);
-
+assign id_valid_o = (state == WAIT) && (!isRAW_i);
+assign id_ready_o = (state == IDLE) && (!isRAW_i);
 
 always@(posedge clk) begin
 	if(rst || flush_i) begin
@@ -130,7 +129,7 @@ assign imm = (op == 5'b01101 || op == 5'b00101) ? immU
 
 wire gpr_wen = (op == 5'b01101 || op == 5'b00101 || op == 5'b11011 || op == 5'b11001 || op == 5'b00100 || op == 5'b11100 || op == 5'b01100 || op == 5'b00000) ? 1'b1 : 1'b0;
 
-wire fencei = (inst_i == 32'b00000000000000000001000000001111);
+wire fencei = (op == 5'b00011);
 
 //静态分支预测
 assign prepc_en_o[1:0] = (op == 5'b11000 && inst_i[31]) ? 2'b01 : (op == 5'b11011) ? 2'b10 : 2'b00;
