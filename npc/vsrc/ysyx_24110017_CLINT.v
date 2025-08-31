@@ -38,9 +38,16 @@ always @(posedge clk) begin
       mtime[0] <= ~mtime[0];
 end
 
+always @(posedge rst) begin
+	if(rst)
+		mtime[1] <= 1'b0;
+	else
+		mtime[1] <= ~mtime[1];
+end
+
 genvar i;
 generate
-  for (i = 1; i < 64; i = i + 1) begin : counter_chain
+  for (i = 2; i < 64; i = i + 1) begin : counter_chain
     always @(posedge rst or negedge mtime[i-1]) begin
       if(rst)
         mtime[i] <= 1'b0;
