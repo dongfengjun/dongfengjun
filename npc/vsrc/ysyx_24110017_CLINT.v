@@ -40,7 +40,7 @@ end
 
 genvar i;
 generate
-  for (i = 2; i < 64; i = i + 1) begin : counter_chain
+  for (i = 1; i < 64; i = i + 1) begin : counter_chain
     always @(posedge clk) begin
       if(rst)
         mtime[i] <= 1'b0;
