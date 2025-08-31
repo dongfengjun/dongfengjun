@@ -51,7 +51,7 @@ assign id_ready_o = (state == IDLE);
 
 
 always@(posedge clk) begin
-	if(rst) begin
+	if(rst || flush_i) begin
 `ifndef YOSYS_STA
 		inst_o			<= 32'h0;
 `endif
@@ -65,20 +65,6 @@ always@(posedge clk) begin
 		gpr_wen_o		<= 1'b0;
 		fencei_o		<= 1'b0;
 	end
-	else if(flush_i) begin
-`ifndef YOSYS_STA
-		inst_o      <= 32'h0;
-`endif
-    pc_o        <= 32'h0;
-    imm_o       <= 32'h0;
-    op_o        <= 5'b0;
-    funct3_o    <= 3'b0;
-    rs1_o				<= 4'b0;
-		rs2_o       <= 4'b0;
-		rd_o        <= 4'b0;
-    gpr_wen_o   <= 1'b0;
-		fencei_o    <= 1'b0;
-  end
 	else begin
 		case(state)
 			IDLE: begin
