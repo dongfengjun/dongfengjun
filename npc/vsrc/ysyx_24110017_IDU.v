@@ -76,7 +76,7 @@ always@(posedge clk) begin
 					inst_o			<= inst_i;
 `endif
 					pc_o        <= pc_i;
-					i           <= inst[31:7];
+					i           <= inst_i[31:7];
 					op_o				<= op;
 					funct3_o		<= funct3;
 					rs1_o				<= rs1;
