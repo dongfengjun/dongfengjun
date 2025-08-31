@@ -41,13 +41,11 @@ end
 genvar i;
 generate
   for (i = 1; i < 64; i = i + 1) begin : counter_chain
-    always @(posedge clk) begin
+    always @(negedge mtime[i-1]) begin
       if(rst)
         mtime[i] <= 1'b0;
-      else if(mtime[i-1])
-        mtime[i] <= 1'b1;
-			else
-				mtime[i] <= 1'b0;
+      else
+        mtime[i] <= ~mtime[i];
 		end
   end
 endgenerate
