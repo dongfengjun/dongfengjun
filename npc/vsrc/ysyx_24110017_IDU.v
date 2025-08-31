@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_IDU(
 	input	 wire clk,
 	input  wire rst,
@@ -22,7 +22,7 @@ module ysyx_24110017_IDU(
   input  wire [31:0] inst_i,
 	
 	output reg  [31:0] pc_o,
-	output reg	[31:0] imm_o,
+	output wire	[31:0] imm_o,
 	output reg  [ 4:0] op_o,
 	output reg  [ 2:0] funct3_o,
 	output reg	[ 3:0] rs1_o,
@@ -49,13 +49,15 @@ end
 assign id_valid_o = (state == WAIT) && (!isRAW_i);
 assign id_ready_o = (state == IDLE) && (!isRAW_i);
 
+reg [24:0]imm_reg;
+assign imm_o = imm;
 always@(posedge clk) begin
 	if(rst || flush_i) begin
 `ifndef YOSYS_STA
 		inst_o			<= 32'h0;
 `endif
 		pc_o				<= 32'h0;
-		imm_o				<= 32'h0;
+		imm_reg			<= 25'b0;
 		op_o				<= 5'b0;
 		funct3_o		<= 3'b0;
 		rs1_o				<= 4'b0;
@@ -74,7 +76,7 @@ always@(posedge clk) begin
 					inst_o			<= inst_i;
 `endif
 					pc_o        <= pc_i;
-					imm_o       <= imm;
+					imm_reg     <= inst[31:7];
 					op_o				<= op;
 					funct3_o		<= funct3;
 					rs1_o				<= rs1;
@@ -98,9 +100,8 @@ wire [31:0]immI,immU,immS,immB,immJ,imm;
 wire [6:0]funct7; //R
  
 assign op = inst_i[6:2];
-assign rd = (op == 5'b01101 || op == 5'b00101 || op == 5'b11011 
- || op == 5'b11001 || op == 5'b00000 || op == 5'b00100
- || op == 5'b11100 || op == 5'b01100) ? inst_i[10:7] : 4'b0;
+assign rd = (op == 5'b01101 || op == 5'b00101 || op == 5'b11011 || op == 5'b11001 || op == 5'b00000 || op == 5'b00100 || op == 5'b11100 || op == 5'b01100) ? inst_i[10:7] : 4'b0;
+wire gpr_wen = (op == 5'b01101 || op == 5'b00101 || op == 5'b11011 || op == 5'b11001 || op == 5'b00100 || op == 5'b11100 || op == 5'b01100 || op == 5'b00000) ? 1'b1 : 1'b0;
 assign funct3 = inst_i[14:12];
 assign rs1 = (op == 5'b11001 || op == 5'b00000 || op == 5'b00100 || op == 5'b11100	//I
  || op == 5'b11000	//B
@@ -112,12 +113,12 @@ assign rs2 = (op == 5'b11000  //B
  || op == 5'b01100) ? inst_i[23:20] //R
  : (op == 5'b11100 && imm == 32'd0 && funct3 == 3'b000) ? 4'd15 //ecall
  : 4'b0;
-assign immI = {{20{inst_i[31]}},inst_i[31:20]};	//SEXTIimmediate
-assign immU = {inst_i[31:12],{12{1'b0}}};	//UEXTUimm
-assign immS = {{20{inst_i[31]}}, inst_i[31:25], inst_i[11:7]};	//SEXTSimm
-assign immB = {{19{inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};	//SEXTBimm
-assign immJ = {{11{inst_i[31]}}, inst_i[31], inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};	//SEXTJimm
-assign funct7 = inst_i[31:25];
+assign immI = {{20{imm_reg[24]}},imm_reg[24:13]};	//SEXTIimmediate
+assign immU = {imm_reg[24:5],{12{1'b0}}};	//UEXTUimm
+assign immS = {{20{imm_reg[24]}},imm_reg[24:18], imm_reg[4:0]};	//SEXTSimm
+assign immB = {{19{imm_reg[24]}},imm_reg[24],imm_reg[0],imm_reg[23:18],imm_reg[4:1],1'b0}; //SEXTBimm
+assign immJ = {{11{imm_reg[24]}},imm_reg[24],imm_reg[12:5],imm_reg[13],imm_reg[23:14],1'b0}; //SEXTJimm
+assign funct7 = imm_reg[24:18];
 
 assign imm = (op == 5'b01101 || op == 5'b00101) ? immU
  : (op == 5'b11011) ? immJ
@@ -125,9 +126,7 @@ assign imm = (op == 5'b01101 || op == 5'b00101) ? immU
  : (op == 5'b01000) ? immS
  : (op == 5'b11001 || op == 5'b00000 || op == 5'b00100 || op == 5'b11100) ? immI 
  : (op == 5'b01100) ? {20'b0,funct7,5'b0}
- : 32'b0;
-
-wire gpr_wen = (op == 5'b01101 || op == 5'b00101 || op == 5'b11011 || op == 5'b11001 || op == 5'b00100 || op == 5'b11100 || op == 5'b01100 || op == 5'b00000) ? 1'b1 : 1'b0;
+ : 32'b0; 
 
 wire fencei = (op == 5'b00011);
 
