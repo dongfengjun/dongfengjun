@@ -31,9 +31,6 @@ always @(posedge clk) begin
 	end
 end
 ***/
-
-reg [63:0] mtime;
-
 always @(posedge clk) begin
     if(rst)
       mtime[0] <= 1'b0;
