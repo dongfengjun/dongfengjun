@@ -18,11 +18,6 @@
 #include "VysyxSoCFull___024unit.h"
 
 // DPI TYPES for DPI Export callbacks (Internal use)
-using VysyxSoCFull__Vcb_amat_counter_t = void (*) (VysyxSoCFull__Syms* __restrict vlSymsp, IData/*31:0*/ i, IData/*31:0*/ &amat_counter__Vfuncrtn);
-using VysyxSoCFull__Vcb_csr_grab_t = void (*) (VysyxSoCFull__Syms* __restrict vlSymsp, IData/*31:0*/ i, IData/*31:0*/ &csr_grab__Vfuncrtn);
-using VysyxSoCFull__Vcb_dpic_grab_t = void (*) (VysyxSoCFull__Syms* __restrict vlSymsp, IData/*31:0*/ i, IData/*31:0*/ &dpic_grab__Vfuncrtn);
-using VysyxSoCFull__Vcb_gpr_reg_grab_t = void (*) (VysyxSoCFull__Syms* __restrict vlSymsp, IData/*31:0*/ addr, IData/*31:0*/ &gpr_reg_grab__Vfuncrtn);
-using VysyxSoCFull__Vcb_performance_counter_t = void (*) (VysyxSoCFull__Syms* __restrict vlSymsp, IData/*31:0*/ i, IData/*31:0*/ &performance_counter__Vfuncrtn);
 
 // SYMS CLASS (contains all model state)
 class VysyxSoCFull__Syms final : public VerilatedSyms {
@@ -45,9 +40,6 @@ class VysyxSoCFull__Syms final : public VerilatedSyms {
     VerilatedScope __Vscope_ysyxSoCFull__asic__axi4xbar_1;
     VerilatedScope __Vscope_ysyxSoCFull__asic__axi4yank;
     VerilatedScope __Vscope_ysyxSoCFull__asic__axi4yank__unnamedblk1;
-    VerilatedScope __Vscope_ysyxSoCFull__asic__cpu__cpu;
-    VerilatedScope __Vscope_ysyxSoCFull__asic__cpu__cpu__ICACHE;
-    VerilatedScope __Vscope_ysyxSoCFull__asic__cpu__cpu__RFU;
     VerilatedScope __Vscope_ysyxSoCFull__asic__lmrom;
     VerilatedScope __Vscope_ysyxSoCFull__flash;
     VerilatedScope __Vscope_ysyxSoCFull__flash__flash_cmd_i;

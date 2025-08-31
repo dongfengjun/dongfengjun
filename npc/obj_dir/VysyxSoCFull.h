@@ -92,13 +92,6 @@ class VysyxSoCFull VL_NOT_FINAL : public VerilatedModel {
     /// Retrieve name of this model instance (as passed to constructor).
     const char* name() const;
 
-    /// DPI Export functions
-    static int amat_counter(int i);
-    static int csr_grab(int i);
-    static int dpic_grab(int i);
-    static int gpr_reg_grab(int addr);
-    static int performance_counter(int i);
-
     // Abstract methods from VerilatedModel
     const char* hierName() const override final;
     const char* modelName() const override final;
