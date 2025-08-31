@@ -28,8 +28,8 @@ module ysyx_24110017_IDU(
 	output reg	[ 3:0] rs1_o,
   output reg	[ 3:0] rs2_o,
 	output reg	[ 3:0] rd_o,
-	output reg	       gpr_wen_o,
-	output reg         fencei_o
+	output wire	       gpr_wen_o,
+	output wire        fencei_o
 );
 
 /***分布式控制***/
@@ -61,8 +61,6 @@ always@(posedge clk) begin
 		rs1_o				<= 4'b0;
 		rs2_o				<= 4'b0;
 		rd_o				<= 4'b0;
-		gpr_wen_o		<= 1'b0;
-		fencei_o		<= 1'b0;
 	end
 	else begin
 		case(state)
@@ -80,8 +78,6 @@ always@(posedge clk) begin
 					rs1_o				<= rs1;
 					rs2_o				<= rs2;
 					rd_o        <= rd;
-					gpr_wen_o   <= gpr_wen;
-					fencei_o		<= fencei;
 				end
 			end
 		endcase
@@ -99,7 +95,7 @@ wire [6:0]funct7; //R
  
 assign op = inst_i[6:2];
 assign rd = (op == 5'b01101 || op == 5'b00101 || op == 5'b11011 || op == 5'b11001 || op == 5'b00000 || op == 5'b00100 || op == 5'b11100 || op == 5'b01100) ? inst_i[10:7] : 4'b0;
-wire gpr_wen = (op == 5'b01101 || op == 5'b00101 || op == 5'b11011 || op == 5'b11001 || op == 5'b00100 || op == 5'b11100 || op == 5'b01100 || op == 5'b00000);
+assign gpr_wen_o = (op_o == 5'b01101 || op_o == 5'b00101 || op_o == 5'b11011 || op_o == 5'b11001 || op_o == 5'b00100 || op_o == 5'b11100 || op_o == 5'b01100 || op_O == 5'b00000);
 assign funct3 = inst_i[14:12];
 assign rs1 = (op == 5'b11001 || op == 5'b00000 || op == 5'b00100 || op == 5'b11100	//I
  || op == 5'b11000	//B
@@ -126,7 +122,7 @@ assign imm = (op == 5'b01101 || op == 5'b00101) ? immU
  : (op == 5'b01100) ? {20'b0,funct7,5'b0}
  : 32'b0;
 
-wire fencei = (op == 5'b00011);
+assign fencei_o = (op_o == 5'b00011);
 
 //静态分支预测
 assign prepc_en_o[1:0] = (op == 5'b11000 && inst_i[31]) ? 2'b01 : (op == 5'b11011) ? 2'b10 : 2'b00;
