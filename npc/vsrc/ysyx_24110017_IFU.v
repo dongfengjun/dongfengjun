@@ -78,14 +78,16 @@ end
 ***/
 
 always @(posedge clk) begin
-  case({rst || flush,state,if_valid_o && id_ready_i})
-    3'b1??: begin
+  casez({rst || flush,state})
+    2'b1?: begin
       pc_o   <= 32'h0;
       inst_o <= 32'h0;
     end
-    3'b011: begin
-			pc_o   <= if_axi_araddr_o;
-			inst_o <= if_axi_rdata_i;
+    2'b01: begin
+			if(if_valid_o && id_ready_i) begin
+				pc_o   <= if_axi_araddr_o;
+				inst_o <= if_axi_rdata_i;
+			end
 		end
     default: begin
     end
