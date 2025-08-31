@@ -14,7 +14,7 @@ assign pc_valid_o = !flush;
 
 localparam RESET_PC = 32'h30000000;
 
-always @(*) begin
+always @(posedge clk) begin
   casez({rst, flush, if_ready_i})
     3'b1??:  pc_o <= RESET_PC;
     3'b01?:  pc_o <= dnpc_i;
