@@ -78,7 +78,7 @@ always @(posedge clk) begin
   else begin
     case (state)
       IDLE: state			 <= (ex_valid_i && ls_ready_o)   ? WAIT : state;
-      WAIT: state			 <= (ls_done || !ls_valid_i) ? DONE : state;
+      WAIT: state			 <= (ls_done || !ls_valid_i  )   ? DONE : state;
 			DONE: state			 <= DIFFTEST;
 			DIFFTEST : state <= IDLE;
     endcase
@@ -99,8 +99,13 @@ end
 `endif
 
 wire ls_valid_i = (op_i == 5'b00000 || op_i == 5'b01000);
-wire ls_wen_i = (op_i == 5'b01000) && ex_valid_i && ls_ready_o;
-wire ls_ren_i = (op_i == 5'b00000) && ex_valid_i && ls_ready_o;
+wire ls_wen_i = (op_i == 5'b01000);
+wire ls_ren_i = (op_i == 5'b00000);
+reg ls_wen,ls_ren;
+always @(posedge clk) begin
+  ls_wen <= ls_wen_i;
+	ls_ren <= ls_ren_i;
+end
 wire ls_done = (ls_axi_rvalid && ls_axi_rready) || (ls_axi_bvalid && ls_axi_bready);
 wire [31:0] xrd = (ls_valid_i) ? ls_rdata : ex_i;
 wire [ 3:0] ls_wmask_i = 
@@ -211,11 +216,11 @@ always @(posedge clk or posedge rst) begin
 		else begin
       case (axi_state)
         AXI_IDLE: begin
-				  if(ls_ren_i) begin
+				  if(ls_ren_i && !ls_ren) begin
             axi_state		   <= AXI_READ;
 					  ls_axi_arvalid <= 1'b1;
 					end
-					if(ls_wen_i) begin
+					if(ls_wen_i && !ls_wen) begin
 		        axi_state      <= AXI_WRITE;
 						ls_axi_awvalid <= 1'b1;
 						ls_axi_wvalid  <= 1'b1;
