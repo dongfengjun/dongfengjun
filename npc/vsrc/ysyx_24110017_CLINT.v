@@ -56,11 +56,9 @@ end
 wire [64:0]mtime = {counter_out[7], counter_out[6], counter_out[5], counter_out[4],counter_out[3], counter_out[2], counter_out[1], counter_out[0]};
 wire [15:0] counter_out [3:0];
 wire [3:0] carry_chain;
-counter_8bit #(
-    .INIT_VALUE(8'h00)
-) counter_level0 (
+counter_8bit counter_level0 (
     .clk(clk),
-    .rst_n(rst_n),
+    .rst_n(rst),
     .enable(1'b1),
     .count(counter_out[0]),
     .carry_out(carry_chain[0])
@@ -68,11 +66,9 @@ counter_8bit #(
 genvar i;
 generate
     for (i = 1; i < 7; i = i + 1) begin : counter_levels
-        counter_8bit #(
-            .INIT_VALUE(8'h00)
-        ) counter (
+        counter_8bit counter (
             .clk(clk),
-            .rst_n(rst_n),
+            .rst_n(rst),
             .enable(carry_chain[i-1]),  // 前一级的进位作为使能
             .count(counter_out[i]),
             .carry_out(carry_chain[i])
@@ -81,7 +77,7 @@ generate
 endgenerate
 counter_8bit counter_level7 (
     .clk(clk),
-    .rst_n(rst_n),
+    .rst_n(rst),
     .enable(carry_chain[6]),
     .count(counter_out[7]),
     .carry_out(carry_chain[7])
@@ -90,17 +86,17 @@ endmodule
 
 module counter_8bit (
     input wire clk,
-    input wire rst_n,
+    input wire rst,
     input wire enable,
     output reg [7:0] count,
     output wire carry_out
 );
 
-always @(posedge clk or negedge rst_n) begin
-    if (!rst_n) begin
-        count <= INIT_VALUE;      // 异步复位到初始值
+always @(posedge clk) begin
+    if (rst) begin
+        count <= 0;
     end else if (enable) begin
-        count <= count + 1'b1;    // 使能时计数
+        count <= count + 1'b1;
     end
 end
 
