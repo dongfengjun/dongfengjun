@@ -45,7 +45,9 @@ generate
       if(rst)
         mtime[i] <= 1'b0;
       else if(mtime[i-1])
-        mtime[i] <= ~mtime[i];
+        mtime[i] <= 1'b1;
+			else
+				mtime[i] <= 1'b0;
 		end
   end
 endgenerate
