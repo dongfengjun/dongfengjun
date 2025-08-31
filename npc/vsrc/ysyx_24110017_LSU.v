@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_LSU(
 	input  wire clk,
 	input  wire rst,
