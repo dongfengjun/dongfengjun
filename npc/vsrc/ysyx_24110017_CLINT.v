@@ -21,6 +21,7 @@ localparam DEVICE_CLINT_LOW_ADDR = 32'h02000000;
 localparam DEVICE_CLINT_HIGH_ADDR = 32'h02000004;
 reg [63:0] mtime;
 
+/***
 always @(posedge clk) begin
 	if(rst) begin
 		mtime <= 64'b0;
@@ -29,9 +30,31 @@ always @(posedge clk) begin
 		mtime <= mtime + 1;
 	end
 end
+***/
+
+reg [63:0] mtime;
+
+always @(posedge clk) begin
+    if(rst)
+      mtime[0] <= 1'b0;
+    else
+      mtime[0] <= ~mtime[0];
+end
+
+genvar i;
+generate
+  for (i = 1; i < 64; i = i + 1) begin : counter_chain
+    always @(posedge rst or negedge mtime[i-1]) begin
+      if(rst)
+        mtime[i] <= 1'b0;
+      else
+        mtime[i] <= ~mtime[i];
+		end
+  end
+endgenerate
 
 wire[31:0] c_rdata = {32{(c_axi_araddr == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | {32{(c_axi_araddr == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
-assign c_axi_rdata = (c_axi_rvalid) ? c_rdata : 32'h0;
+assign c_axi_rdata = (c_axi_rvalid && c_axi_rready) ? c_rdata : 32'h0;
 
 always @(posedge clk) begin
   if(rst) begin
