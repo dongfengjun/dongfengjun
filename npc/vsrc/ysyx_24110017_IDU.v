@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_IDU(
 	input	 wire clk,
 	input  wire rst,
@@ -22,7 +22,7 @@ module ysyx_24110017_IDU(
   input  wire [31:0] inst_i,
 	
 	output reg  [31:0] pc_o,
-	output wire	[31:0] imm_o,
+	output reg	[31:0] imm_o,
 	output reg  [ 4:0] op_o,
 	output reg  [ 2:0] funct3_o,
 	output reg	[ 3:0] rs1_o,
@@ -49,15 +49,13 @@ end
 assign id_valid_o = (state == WAIT) && (!isRAW_i);
 assign id_ready_o = (state == IDLE) && (!isRAW_i);
 
-reg [24:0] i;
-assign imm_o = imm;
 always@(posedge clk) begin
 	if(rst || flush_i) begin
 `ifndef YOSYS_STA
 		inst_o			<= 32'h0;
 `endif
 		pc_o				<= 32'h0;
-		i       		<= 25'b0;
+		imm_o				<= 32'h0;
 		op_o				<= 5'b0;
 		funct3_o		<= 3'b0;
 		rs1_o				<= 4'b0;
@@ -76,7 +74,7 @@ always@(posedge clk) begin
 					inst_o			<= inst_i;
 `endif
 					pc_o        <= pc_i;
-					i           <= inst_i[31:7];
+					imm_o       <= imm;
 					op_o				<= op;
 					funct3_o		<= funct3;
 					rs1_o				<= rs1;
@@ -113,19 +111,19 @@ assign rs2 = (op == 5'b11000  //B
  || op == 5'b01100) ? inst_i[23:20] //R
  : (op == 5'b11100 && imm == 32'd0 && funct3 == 3'b000) ? 4'd15 //ecall
  : 4'b0;
-assign immI = {{20{i[24]}},i[24:13]};	//SEXTIimmediate
-assign immU = {i[24:5],{12{1'b0}}};	//UEXTUimm
-assign immS = {{20{i[24]}},i[24:18], i[4:0]};	//SEXTSimm
-assign immB = {{19{i[24]}},i[24], i[7],i[23:18],i[4:1],1'b0};	//SEXTBimm
-assign immJ = {{11{i[24]}},i[24], i[12:5],i[13],i[23:14],1'b0};	//SEXTJimm
-assign funct7 = i[24:18];
+assign immI = {{20{inst_i[31]}},inst_i[31:20]};	//SEXTIimmediate
+assign immU = {inst_i[31:12],{12{1'b0}}};	//UEXTUimm
+assign immS = {{20{inst_i[31]}}, inst_i[31:25], inst_i[11:7]};	//SEXTSimm
+assign immB = {{19{inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};	//SEXTBimm
+assign immJ = {{11{inst_i[31]}}, inst_i[31], inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};	//SEXTJimm
+assign funct7 = inst_i[31:25];
 
-assign imm = (op_o == 5'b01101 || op_o == 5'b00101) ? immU
- : (op_o == 5'b11011) ? immJ
- : (op_o == 5'b11000) ? immB
- : (op_o == 5'b01000) ? immS
- : (op_o == 5'b11001 || op_o == 5'b00000 || op_o == 5'b00100 || op_o == 5'b11100) ? immI 
- : (op_o == 5'b01100) ? {20'b0,funct7,5'b0}
+assign imm = (op == 5'b01101 || op == 5'b00101) ? immU
+ : (op == 5'b11011) ? immJ
+ : (op == 5'b11000) ? immB
+ : (op == 5'b01000) ? immS
+ : (op == 5'b11001 || op == 5'b00000 || op == 5'b00100 || op == 5'b11100) ? immI 
+ : (op == 5'b01100) ? {20'b0,funct7,5'b0}
  : 32'b0;
 
 wire fencei = (op == 5'b00011);
