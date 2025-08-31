@@ -23,7 +23,6 @@ module ysyx_24110017_LSU(
   input  wire [31:0] csrsw_i,
   input  wire [ 3:0] csrs_wen_i,
   input  wire [31:0] ex_i,
-	input						   ls_wen_i,ls_ren_i,
   input  wire [31:0] ls_waddr_i,ls_wdata_i,ls_raddr_i,
 	
 	output reg  [31:0] xrd_o,
@@ -100,6 +99,8 @@ end
 `endif
 
 wire ls_valid_i = (op_i == 5'b00000 || op_i == 5'b01000);
+wire ls_wen_i = (op_i == 5'b01000) && ex_valid_i && ls_ready_o;
+wire ls_ren_i = (op_i == 5'b00000) && ex_valid_i && ls_ready_o;
 wire ls_done = (ls_axi_rvalid && ls_axi_rready) || (ls_axi_bvalid && ls_axi_bready);
 wire [31:0] xrd = (ls_valid_i) ? ls_rdata : ex_i;
 wire [ 3:0] ls_wmask_i = 
@@ -210,11 +211,11 @@ always @(posedge clk or posedge rst) begin
 		else begin
       case (axi_state)
         AXI_IDLE: begin
-				  if(ls_valid_i && ls_ren_i) begin
+				  if(ls_ren_i) begin
             axi_state		   <= AXI_READ;
 					  ls_axi_arvalid <= 1'b1;
 					end
-					if(ls_valid_i && ls_wen_i) begin
+					if(ls_wen_i) begin
 		        axi_state      <= AXI_WRITE;
 						ls_axi_awvalid <= 1'b1;
 						ls_axi_wvalid  <= 1'b1;

@@ -49,43 +49,33 @@ end
 assign id_valid_o = (state == WAIT) && (!isRAW_i);
 assign id_ready_o = (state == IDLE) && (!isRAW_i);
 
+wire updata = id_valid_o && ex_ready_i;
 always@(posedge clk) begin
-/***	
-	if(flush_i) begin
+  if(updata) begin
 `ifndef YOSYS_STA
-		inst_o			<= 32'h0;
+    inst_o <= inst_i;
 `endif
-		pc_o				<= 32'h0;
-		imm_o				<= 32'h0;
-		op_o				<= 5'b0;
-		funct3_o		<= 3'b0;
-		rs1_o				<= 4'b0;
-		rs2_o				<= 4'b0;
-		rd_o				<= 4'b0;
+		pc_o <= pc_i;
 	end
-***/
-//	else begin
-//		case(state)
-//			IDLE: begin
-//			end
-//			WAIT: begin
-				if(id_valid_o && ex_ready_i && !flush_i) begin
-`ifndef YOSYS_STA
-					inst_o			<= inst_i;
-`endif
-					pc_o        <= pc_i;
-					imm_o       <= imm;
-					op_o				<= op;
-					funct3_o		<= funct3;
-					rs1_o				<= rs1;
-					rs2_o				<= rs2;
-					rd_o        <= rd;
-				end
-//			end
-//		endcase
-//	end
 end
-
+always@(posedge clk) begin
+  if(updata) imm_o <= imm;
+end
+always@(posedge clk) begin
+  if(updata) op_o  <= op;
+end
+always@(posedge clk) begin
+  if(updata) funct3_o <= funct3;
+end
+always@(posedge clk) begin
+  if(updata) rs1_o <= rs1;
+end
+always@(posedge clk) begin
+  if(updata) rs2_o <= rs2;
+end
+always@(posedge clk) begin
+  if(updata) rd_o  <= rd;
+end
 /***pattern***/
 wire [4:0]op;
 wire [3:0]rd; //R I U J

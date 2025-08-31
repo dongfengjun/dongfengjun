@@ -60,11 +60,12 @@ always @(posedge clk) begin
   endcase
 end
 
+wire updata = if_valid_o && id_ready_i;
 always @(posedge clk) begin
-	if(if_valid_o && id_ready_i) begin
-		pc_o   <= if_axi_araddr_o;
-		inst_o <= if_axi_rdata_i;
-	end
+	if(updata) pc_o <= if_axi_araddr_o;
+end
+always @(posedge clk) begin
+  if(updata) inst_o <= if_axi_rdata_i;
 end
 
 /***AXI4_LITE***/
