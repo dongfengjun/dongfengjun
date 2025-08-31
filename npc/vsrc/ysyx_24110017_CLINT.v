@@ -20,7 +20,22 @@ module ysyx_24110017_CLINT(
 localparam DEVICE_CLINT_LOW_ADDR = 32'h02000000;
 localparam DEVICE_CLINT_HIGH_ADDR = 32'h02000004;
 //reg [63:0] mtime;
-wire [63:0] mtime = {47'b0,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a};
+wire [63:0] mtime = {mtime63, mtime62, mtime61, mtime60,
+                     mtime59, mtime58, mtime57, mtime56,
+                     mtime55, mtime54, mtime53, mtime52,
+                     mtime51, mtime50, mtime49, mtime48,
+                     mtime47, mtime46, mtime45, mtime44,
+                     mtime43, mtime42, mtime41, mtime40,
+                     mtime39, mtime38, mtime37, mtime36,
+                     mtime35, mtime34, mtime33, mtime32,
+                     mtime31, mtime30, mtime29, mtime28,
+                     mtime27, mtime26, mtime25, mtime24,
+                     mtime23, mtime22, mtime21, mtime20,
+                     mtime19, mtime18, mtime17, mtime16,
+                     mtime15, mtime14, mtime13, mtime12,
+                     mtime11, mtime10, mtime9,  mtime8,
+                     mtime7,  mtime6,  mtime5,  mtime4,
+                     mtime3,  mtime2,  mtime1,  mtime0};
 
 /***
 always @(posedge clk) begin
@@ -32,108 +47,461 @@ always @(posedge clk) begin
 	end
 end
 ***/
-reg a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q;
+reg mtime0, mtime1, mtime2, mtime3, mtime4, mtime5, mtime6, mtime7,
+    mtime8, mtime9, mtime10, mtime11, mtime12, mtime13, mtime14, mtime15,
+    mtime16, mtime17, mtime18, mtime19, mtime20, mtime21, mtime22, mtime23,
+    mtime24, mtime25, mtime26, mtime27, mtime28, mtime29, mtime30, mtime31,
+    mtime32, mtime33, mtime34, mtime35, mtime36, mtime37, mtime38, mtime39,
+    mtime40, mtime41, mtime42, mtime43, mtime44, mtime45, mtime46, mtime47,
+    mtime48, mtime49, mtime50, mtime51, mtime52, mtime53, mtime54, mtime55,
+    mtime56, mtime57, mtime58, mtime59, mtime60, mtime61, mtime62, mtime63;
+
 always @(posedge clk) begin
-    if(rst)
-      a <= 1'b0;
-    else
-      a <= ~a;
-end
-always @(posedge rst or negedge a) begin
   if(rst)
-    b <= 1'b0;
+    mtime0 <= 1'b0;
   else
-    b <= ~b;
+    mtime0 <= ~mtime0;
 end
-always @(posedge rst or negedge b) begin
+
+always @(posedge rst or negedge mtime0) begin
   if(rst)
-    c <= 1'b0;
+    mtime1 <= 1'b0;
   else
-    c <= ~c;
+    mtime1 <= ~mtime1;
 end
-always @(posedge rst or negedge c) begin
-	if(rst)
-		d <= 1'b0;
-	else
-		d <= ~d;
-	end
-always @(posedge rst or negedge d) begin
-	if(rst)
-		e <= 1'b0;
-	else
-		e <= ~e;
-	end
-always @(posedge rst or negedge e) begin
-	if(rst)
-		f <= 1'b0;
-	else
-		f <= ~f;
-end
-always @(posedge rst or negedge f) begin
-	if(rst)
-		g <= 1'b0;
-	else
-		g <= ~g;
-	end
-always @(posedge rst or negedge g) begin
-	if(rst)
-		h <= 1'b0;
-	else
-		h <= ~h;
-	end
-always @(posedge rst or negedge h) begin
+
+always @(posedge rst or negedge mtime1) begin
   if(rst)
-    i <= 1'b0;
+    mtime2 <= 1'b0;
   else
-    i <= ~i;
+    mtime2 <= ~mtime2;
 end
-always @(posedge rst or negedge i) begin
+
+always @(posedge rst or negedge mtime2) begin
   if(rst)
-    j <= 1'b0;
+    mtime3 <= 1'b0;
   else
-    j <= ~j;
+    mtime3 <= ~mtime3;
 end
-always @(posedge rst or negedge j) begin
+
+always @(posedge rst or negedge mtime3) begin
   if(rst)
-    k <= 1'b0;
+    mtime4 <= 1'b0;
   else
-    k <= ~k;
+    mtime4 <= ~mtime4;
 end
-always @(posedge rst or negedge k) begin
+
+always @(posedge rst or negedge mtime4) begin
   if(rst)
-    l <= 1'b0;
+    mtime5 <= 1'b0;
   else
-    l <= ~l;
+    mtime5 <= ~mtime5;
 end
-always @(posedge rst or negedge l) begin
+
+always @(posedge rst or negedge mtime5) begin
   if(rst)
-    m <= 1'b0;
+    mtime6 <= 1'b0;
   else
-    m <= ~m;
+    mtime6 <= ~mtime6;
 end
-always @(posedge rst or negedge m) begin
+
+always @(posedge rst or negedge mtime6) begin
   if(rst)
-    n <= 1'b0;
+    mtime7 <= 1'b0;
   else
-    n <= ~n;
+    mtime7 <= ~mtime7;
 end
-always @(posedge rst or negedge n) begin
+
+always @(posedge rst or negedge mtime7) begin
   if(rst)
-    o <= 1'b0;
+    mtime8 <= 1'b0;
   else
-    o <= ~o;
+    mtime8 <= ~mtime8;
 end
-always @(posedge rst or negedge o) begin
+
+always @(posedge rst or negedge mtime8) begin
   if(rst)
-    p <= 1'b0;
+    mtime9 <= 1'b0;
   else
-    p <= ~p;
+    mtime9 <= ~mtime9;
 end
-always @(posedge rst or negedge p) begin
+
+always @(posedge rst or negedge mtime9) begin
   if(rst)
-    q <= 1'b0;
+    mtime10 <= 1'b0;
   else
-    q <= ~q;
+    mtime10 <= ~mtime10;
+end
+
+always @(posedge rst or negedge mtime10) begin
+  if(rst)
+    mtime11 <= 1'b0;
+  else
+    mtime11 <= ~mtime11;
+end
+
+always @(posedge rst or negedge mtime11) begin
+  if(rst)
+    mtime12 <= 1'b0;
+  else
+    mtime12 <= ~mtime12;
+end
+
+always @(posedge rst or negedge mtime12) begin
+  if(rst)
+    mtime13 <= 1'b0;
+  else
+    mtime13 <= ~mtime13;
+end
+
+always @(posedge rst or negedge mtime13) begin
+  if(rst)
+    mtime14 <= 1'b0;
+  else
+    mtime14 <= ~mtime14;
+end
+
+always @(posedge rst or negedge mtime14) begin
+  if(rst)
+    mtime15 <= 1'b0;
+  else
+    mtime15 <= ~mtime15;
+end
+
+always @(posedge rst or negedge mtime15) begin
+  if(rst)
+    mtime16 <= 1'b0;
+  else
+    mtime16 <= ~mtime16;
+end
+
+always @(posedge rst or negedge mtime16) begin
+  if(rst)
+    mtime17 <= 1'b0;
+  else
+    mtime17 <= ~mtime17;
+end
+
+always @(posedge rst or negedge mtime17) begin
+  if(rst)
+    mtime18 <= 1'b0;
+  else
+    mtime18 <= ~mtime18;
+end
+
+always @(posedge rst or negedge mtime18) begin
+  if(rst)
+    mtime19 <= 1'b0;
+  else
+    mtime19 <= ~mtime19;
+end
+
+always @(posedge rst or negedge mtime19) begin
+  if(rst)
+    mtime20 <= 1'b0;
+  else
+    mtime20 <= ~mtime20;
+end
+
+always @(posedge rst or negedge mtime20) begin
+  if(rst)
+    mtime21 <= 1'b0;
+  else
+    mtime21 <= ~mtime21;
+end
+
+always @(posedge rst or negedge mtime21) begin
+  if(rst)
+    mtime22 <= 1'b0;
+  else
+    mtime22 <= ~mtime22;
+end
+
+always @(posedge rst or negedge mtime22) begin
+  if(rst)
+    mtime23 <= 1'b0;
+  else
+    mtime23 <= ~mtime23;
+end
+
+always @(posedge rst or negedge mtime23) begin
+  if(rst)
+    mtime24 <= 1'b0;
+  else
+    mtime24 <= ~mtime24;
+end
+
+always @(posedge rst or negedge mtime24) begin
+  if(rst)
+    mtime25 <= 1'b0;
+  else
+    mtime25 <= ~mtime25;
+end
+
+always @(posedge rst or negedge mtime25) begin
+  if(rst)
+    mtime26 <= 1'b0;
+  else
+    mtime26 <= ~mtime26;
+end
+
+always @(posedge rst or negedge mtime26) begin
+  if(rst)
+    mtime27 <= 1'b0;
+  else
+    mtime27 <= ~mtime27;
+end
+
+always @(posedge rst or negedge mtime27) begin
+  if(rst)
+    mtime28 <= 1'b0;
+  else
+    mtime28 <= ~mtime28;
+end
+
+always @(posedge rst or negedge mtime28) begin
+  if(rst)
+    mtime29 <= 1'b0;
+  else
+    mtime29 <= ~mtime29;
+end
+
+always @(posedge rst or negedge mtime29) begin
+  if(rst)
+    mtime30 <= 1'b0;
+  else
+    mtime30 <= ~mtime30;
+end
+
+always @(posedge rst or negedge mtime30) begin
+  if(rst)
+    mtime31 <= 1'b0;
+  else
+    mtime31 <= ~mtime31;
+end
+
+always @(posedge rst or negedge mtime31) begin
+  if(rst)
+    mtime32 <= 1'b0;
+  else
+    mtime32 <= ~mtime32;
+end
+
+always @(posedge rst or negedge mtime32) begin
+  if(rst)
+    mtime33 <= 1'b0;
+  else
+    mtime33 <= ~mtime33;
+end
+
+always @(posedge rst or negedge mtime33) begin
+  if(rst)
+    mtime34 <= 1'b0;
+  else
+    mtime34 <= ~mtime34;
+end
+
+always @(posedge rst or negedge mtime34) begin
+  if(rst)
+    mtime35 <= 1'b0;
+  else
+    mtime35 <= ~mtime35;
+end
+
+always @(posedge rst or negedge mtime35) begin
+  if(rst)
+    mtime36 <= 1'b0;
+  else
+    mtime36 <= ~mtime36;
+end
+
+always @(posedge rst or negedge mtime36) begin
+  if(rst)
+    mtime37 <= 1'b0;
+  else
+    mtime37 <= ~mtime37;
+end
+
+always @(posedge rst or negedge mtime37) begin
+  if(rst)
+    mtime38 <= 1'b0;
+  else
+    mtime38 <= ~mtime38;
+end
+
+always @(posedge rst or negedge mtime38) begin
+  if(rst)
+    mtime39 <= 1'b0;
+  else
+    mtime39 <= ~mtime39;
+end
+
+always @(posedge rst or negedge mtime39) begin
+  if(rst)
+    mtime40 <= 1'b0;
+  else
+    mtime40 <= ~mtime40;
+end
+
+always @(posedge rst or negedge mtime40) begin
+  if(rst)
+    mtime41 <= 1'b0;
+  else
+    mtime41 <= ~mtime41;
+end
+
+always @(posedge rst or negedge mtime41) begin
+  if(rst)
+    mtime42 <= 1'b0;
+  else
+    mtime42 <= ~mtime42;
+end
+
+always @(posedge rst or negedge mtime42) begin
+  if(rst)
+    mtime43 <= 1'b0;
+  else
+    mtime43 <= ~mtime43;
+end
+
+always @(posedge rst or negedge mtime43) begin
+  if(rst)
+    mtime44 <= 1'b0;
+  else
+    mtime44 <= ~mtime44;
+end
+
+always @(posedge rst or negedge mtime44) begin
+  if(rst)
+    mtime45 <= 1'b0;
+  else
+    mtime45 <= ~mtime45;
+end
+
+always @(posedge rst or negedge mtime45) begin
+  if(rst)
+    mtime46 <= 1'b0;
+  else
+    mtime46 <= ~mtime46;
+end
+
+always @(posedge rst or negedge mtime46) begin
+  if(rst)
+    mtime47 <= 1'b0;
+  else
+    mtime47 <= ~mtime47;
+end
+
+always @(posedge rst or negedge mtime47) begin
+  if(rst)
+    mtime48 <= 1'b0;
+  else
+    mtime48 <= ~mtime48;
+end
+
+always @(posedge rst or negedge mtime48) begin
+  if(rst)
+    mtime49 <= 1'b0;
+  else
+    mtime49 <= ~mtime49;
+end
+
+always @(posedge rst or negedge mtime49) begin
+  if(rst)
+    mtime50 <= 1'b0;
+  else
+    mtime50 <= ~mtime50;
+end
+
+always @(posedge rst or negedge mtime50) begin
+  if(rst)
+    mtime51 <= 1'b0;
+  else
+    mtime51 <= ~mtime51;
+end
+
+always @(posedge rst or negedge mtime51) begin
+  if(rst)
+    mtime52 <= 1'b0;
+  else
+    mtime52 <= ~mtime52;
+end
+
+always @(posedge rst or negedge mtime52) begin
+  if(rst)
+    mtime53 <= 1'b0;
+  else
+    mtime53 <= ~mtime53;
+end
+
+always @(posedge rst or negedge mtime53) begin
+  if(rst)
+    mtime54 <= 1'b0;
+  else
+    mtime54 <= ~mtime54;
+end
+
+always @(posedge rst or negedge mtime54) begin
+  if(rst)
+    mtime55 <= 1'b0;
+  else
+    mtime55 <= ~mtime55;
+end
+
+always @(posedge rst or negedge mtime55) begin
+  if(rst)
+    mtime56 <= 1'b0;
+  else
+    mtime56 <= ~mtime56;
+end
+
+always @(posedge rst or negedge mtime56) begin
+  if(rst)
+    mtime57 <= 1'b0;
+  else
+    mtime57 <= ~mtime57;
+end
+
+always @(posedge rst or negedge mtime57) begin
+  if(rst)
+    mtime58 <= 1'b0;
+  else
+    mtime58 <= ~mtime58;
+end
+
+always @(posedge rst or negedge mtime58) begin
+  if(rst)
+    mtime59 <= 1'b0;
+  else
+    mtime59 <= ~mtime59;
+end
+
+always @(posedge rst or negedge mtime59) begin
+  if(rst)
+    mtime60 <= 1'b0;
+  else
+    mtime60 <= ~mtime60;
+end
+
+always @(posedge rst or negedge mtime60) begin
+  if(rst)
+    mtime61 <= 1'b0;
+  else
+    mtime61 <= ~mtime61;
+end
+
+always @(posedge rst or negedge mtime61) begin
+  if(rst)
+    mtime62 <= 1'b0;
+  else
+    mtime62 <= ~mtime62;
+end
+
+always @(posedge rst or negedge mtime62) begin
+  if(rst)
+    mtime63 <= 1'b0;
+  else
+    mtime63 <= ~mtime63;
 end
 
 wire[31:0] c_rdata = {32{(c_axi_araddr == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | {32{(c_axi_araddr == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
