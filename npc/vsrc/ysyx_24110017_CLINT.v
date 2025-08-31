@@ -19,7 +19,8 @@ module ysyx_24110017_CLINT(
 
 localparam DEVICE_CLINT_LOW_ADDR = 32'h02000000;
 localparam DEVICE_CLINT_HIGH_ADDR = 32'h02000004;
-reg [63:0] mtime;
+//reg [63:0] mtime;
+wire [63:0] mtime = {47'b0,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a};
 
 /***
 always @(posedge clk) begin
@@ -31,24 +32,109 @@ always @(posedge clk) begin
 	end
 end
 ***/
+reg a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q;
 always @(posedge clk) begin
     if(rst)
-      mtime[0] <= 1'b0;
+      a <= 1'b0;
     else
-      mtime[0] <= ~mtime[0];
+      a <= ~a;
 end
-
-genvar i;
-generate
-  for (i = 1; i < 64; i = i + 1) begin : counter_chain
-    always @(*) begin
-      if(rst)
-        mtime[i] <= 1'b0;
-      else if(!mtime[i-1])
-        mtime[i] <= ~mtime[i];
-		end
-  end
-endgenerate
+always @(posedge rst or negedge a) begin
+  if(rst)
+    b <= 1'b0;
+  else
+    b <= ~b;
+end
+always @(posedge rst or negedge b) begin
+  if(rst)
+    c <= 1'b0;
+  else
+    c <= ~c;
+end
+always @(posedge rst or negedge c) begin
+	if(rst)
+		d <= 1'b0;
+	else
+		d <= ~d;
+	end
+always @(posedge rst or negedge d) begin
+	if(rst)
+		e <= 1'b0;
+	else
+		e <= ~e;
+	end
+always @(posedge rst or negedge e) begin
+	if(rst)
+		f <= 1'b0;
+	else
+		f <= ~f;
+end
+always @(posedge rst or negedge f) begin
+	if(rst)
+		g <= 1'b0;
+	else
+		g <= ~g;
+	end
+always @(posedge rst or negedge g) begin
+	if(rst)
+		h <= 1'b0;
+	else
+		h <= ~h;
+	end
+always @(posedge rst or negedge h) begin
+  if(rst)
+    i <= 1'b0;
+  else
+    i <= ~i;
+end
+always @(posedge rst or negedge i) begin
+  if(rst)
+    j <= 1'b0;
+  else
+    j <= ~j;
+end
+always @(posedge rst or negedge j) begin
+  if(rst)
+    k <= 1'b0;
+  else
+    k <= ~k;
+end
+always @(posedge rst or negedge k) begin
+  if(rst)
+    l <= 1'b0;
+  else
+    l <= ~l;
+end
+always @(posedge rst or negedge l) begin
+  if(rst)
+    m <= 1'b0;
+  else
+    m <= ~m;
+end
+always @(posedge rst or negedge m) begin
+  if(rst)
+    n <= 1'b0;
+  else
+    n <= ~n;
+end
+always @(posedge rst or negedge n) begin
+  if(rst)
+    o <= 1'b0;
+  else
+    o <= ~o;
+end
+always @(posedge rst or negedge o) begin
+  if(rst)
+    p <= 1'b0;
+  else
+    p <= ~p;
+end
+always @(posedge rst or negedge p) begin
+  if(rst)
+    q <= 1'b0;
+  else
+    q <= ~q;
+end
 
 wire[31:0] c_rdata = {32{(c_axi_araddr == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | {32{(c_axi_araddr == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
 assign c_axi_rdata = (c_axi_rvalid && c_axi_rready) ? c_rdata : 32'h0;
