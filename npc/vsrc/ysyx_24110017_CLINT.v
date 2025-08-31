@@ -2,7 +2,7 @@ module ysyx_24110017_CLINT(
     input  wire clk,
     input  wire rst,
 
-    output reg	      c_axi_arready,
+    output wire	      c_axi_arready,
     input  wire       c_axi_arvalid,
     input  wire [ 3:0]c_axi_arid,
     input  wire [31:0]c_axi_araddr,
@@ -10,7 +10,7 @@ module ysyx_24110017_CLINT(
     input  wire [ 2:0]c_axi_arsize,
     input  wire [ 1:0]c_axi_arburst,
     input  wire       c_axi_rready,
-    output reg        c_axi_rvalid,
+    output wire       c_axi_rvalid,
     output wire [ 3:0]c_axi_rid,
     output wire [31:0]c_axi_rdata,
     output wire [ 1:0]c_axi_rresp,
@@ -31,8 +31,11 @@ always @(posedge clk) begin
 end
 
 wire[31:0] c_rdata = {32{(c_axi_araddr == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | {32{(c_axi_araddr == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
-assign c_axi_rdata = (c_axi_rvalid) ? c_rdata : 32'h0;
+assign c_axi_rdata   = (c_axi_rvalid && c_axi_rready) ? c_rdata : 32'h0;
+assign c_axi_arready = 1'b1;
+assign c_axi_rvalid  = 1'b1;
 
+/***
 always @(posedge clk) begin
   if(rst) begin
     c_axi_arready <= 1'b0;
@@ -48,5 +51,6 @@ always @(posedge clk) begin
 		end
 	end
 end
+***/
 
 endmodule
