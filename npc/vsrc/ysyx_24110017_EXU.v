@@ -73,7 +73,7 @@ always @(posedge clk) begin
   if(updata) rd_o       <= rd_i;
 end
 always @(posedge clk) begin
-	if(flush)  gpr_wen_o  <= 1'b0;
+	if(flush_i)  gpr_wen_o  <= 1'b0;
   else if(updata) gpr_wen_o  <= gpr_wen_i;
 end
 always @(posedge clk) begin
