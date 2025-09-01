@@ -218,7 +218,7 @@ assign ls_wen_o = ls_wen && !ls_wen_enable;
 assign ls_ren_o = ls_ren && !ls_ren_enable;
 wire [31:0]ls_addr  = r1_i + offset;
 assign ls_waddr_o = (op_i == 5'b01000) ? ls_addr : 32'h0;
-assign ls_wdata_o = (op_i == 5'b01000) ? ((ls_waddr[1:0] == 0) ? r2_i : (ls_waddr[1:0] == 1) ? {r2_i[23:0],8'b0} : (ls_waddr[1:0] == 2) ? {r2_i[15:0],16'b0} : (ls_waddr[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0) : 32'h0;
+assign ls_wdata_o = (op_i == 5'b01000) ? ((ls_waddr_o[1:0] == 0) ? r2_i : (ls_waddr_o[1:0] == 1) ? {r2_i[23:0],8'b0} : (ls_waddr_o[1:0] == 2) ? {r2_i[15:0],16'b0} : (ls_waddr_o[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0) : 32'h0;
 assign ls_raddr_o = (op_i == 5'b00000) ? ls_addr : 32'h0;
 
 /***BU***/
