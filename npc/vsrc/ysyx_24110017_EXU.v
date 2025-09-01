@@ -73,8 +73,6 @@ always @(posedge clk) begin
 		csrs_wen_o		<= 4'b0;
 		ex_o					<= 32'h0;
 
-		ls_wen_o			<= 1'b0;
-		ls_ren_o			<= 1'b0;
 		ls_waddr_o		<= 32'h0;
 		ls_wdata_o		<= 32'h0;
 		ls_raddr_o		<= 32'h0;
