@@ -293,9 +293,9 @@ function int performance_counter(int i);
 															 : (i == 12) ? {31'b0,isCHazard}
 															 : (i == 13) ? {31'b0,if_valid}
 															 : (i == 14) ? {25'b0,inst_ex[6:0]}
-															 : (i == 15) ? {31'b0,(ex_valid && inst_ls[6:0] == 7'b1100011) && isCHazard}
-															 : (i == 16) ? {31'b0,(ex_valid && inst_ls[6:0] == 7'b1101111) && isCHazard}
-															 : (i == 17) ? {31'b0,(ex_valid && inst_ls[6:0] == 7'b1100111) && isCHazard}
+															 : (i == 15) ? {31'b0,(ex_valid && inst_ex[6:0] == 7'b1100011) && isCHazard}
+															 : (i == 16) ? {31'b0,(ex_valid && inst_ex[6:0] == 7'b1101111) && isCHazard}
+															 : (i == 17) ? {31'b0,(ex_valid && inst_ex[6:0] == 7'b1100111) && isCHazard}
 															 : 32'b0;
   end
 endfunction
