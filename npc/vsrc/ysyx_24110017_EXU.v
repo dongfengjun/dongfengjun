@@ -9,7 +9,7 @@ module ysyx_24110017_EXU(
 	input  wire [31:0] inst_i,//difftest
 	output reg  [31:0] pc_o,
 	output reg  [31:0] inst_o,
-	output reg  [31:0] npc,
+	output reg  [31:0] npc_o,
 `endif
 
 	input  wire  id_valid_i,
