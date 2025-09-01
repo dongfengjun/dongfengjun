@@ -210,11 +210,11 @@ always @(posedge clk or posedge rst) begin
 		else begin
       case (axi_state)
         AXI_IDLE: begin
-				  if(ls_ren_i && !ls_ren) begin
+				  if(ls_ren_i) begin
             axi_state		   <= AXI_READ;
 					  ls_axi_arvalid <= 1'b1;
 					end
-					if(ls_wen_i && !ls_wen) begin
+					if(ls_wen_i) begin
 		        axi_state      <= AXI_WRITE;
 						ls_axi_awvalid <= 1'b1;
 						ls_axi_wvalid  <= 1'b1;
