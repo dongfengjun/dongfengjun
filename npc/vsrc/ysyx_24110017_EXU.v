@@ -88,7 +88,6 @@ always @(posedge clk) begin
     mcause_o      <= 32'h0;
     csrsw_o       <= 32'h0;
     csrs_wen_o    <= 4'b0;
-		dnpc_o        <= 32'h0;
 	end
 	else begin
 		case(state)
