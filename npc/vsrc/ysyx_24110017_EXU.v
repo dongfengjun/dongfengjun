@@ -211,8 +211,8 @@ always@(posedge clk) begin
 	ls_wen_enable <= ls_wen;
 	ls_ren_enable <= ls_ren;
 end
-assign ls_wen_o <= ls_wen && !ls_wen_enable;
-assign ls_ren_o <= ls_ren && !ls_ren_enable;
+assign ls_wen_o = ls_wen && !ls_wen_enable;
+assign ls_ren_o = ls_ren && !ls_ren_enable;
 wire [31:0]ls_addr  = r1_i + offset;
 wire [31:0]ls_waddr = (op_i == 5'b01000) ? ls_addr : 32'h0;
 wire [31:0]ls_wdata = (op_i == 5'b01000) ? ((ls_waddr[1:0] == 0) ? r2_i : (ls_waddr[1:0] == 1) ? {r2_i[23:0],8'b0} : (ls_waddr[1:0] == 2) ? {r2_i[15:0],16'b0} : (ls_waddr[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0) : 32'h0;
