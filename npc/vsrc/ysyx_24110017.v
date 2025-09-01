@@ -170,7 +170,7 @@ ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 		pc_if,inst_if,
 		pc_id,imm_id,op_id,funct3_id,rs1_id,rs2_id,
 		rd_id,gpr_wen_id,ls_valid_id,
-		fencei_id,
+		fencei_id
 );
 ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 `ifndef YOSYS_STA
