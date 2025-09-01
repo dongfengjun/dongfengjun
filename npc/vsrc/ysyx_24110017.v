@@ -246,7 +246,7 @@ wire isCHazard = (ex_valid) && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_e
 reg difftest_delay;
 reg difftest;
 always@(posedge clock) begin
-	if(ex_valid) difftest_delay <= 1'b1;
+	if(ex_valid && !isCHazard) difftest_delay <= 1'b1;
 	else difftest_delay <= 1'b0;
 	if(difftest_delay) difftest <= 1'b1;
 	else difftest <= 1'b0;
