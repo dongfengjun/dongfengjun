@@ -9,6 +9,7 @@ module ysyx_24110017_EXU(
 	input  wire [31:0] inst_i,//difftest
 	output reg  [31:0] pc_o,
 	output reg  [31:0] inst_o,
+	output reg  [31:0] npc,
 `endif
 
 	input  wire  id_valid_i,
@@ -64,6 +65,7 @@ always @(posedge clk) begin
 `ifndef YOSYS_STA
 		pc_o					<= 32'h0;
 		inst_o				<= 32'h0;
+		npc_o         <= 32'h0;
 `endif
 		xrd_o         <= 32'h0;
 		rd_o					<= 4'b0;
@@ -78,6 +80,7 @@ always @(posedge clk) begin
 `ifndef YOSYS_STA
 		pc_o          <= 32'h0;
     inst_o        <= 32'h0;
+		npc_o         <= 32'h0;
 `endif
     xrd_o         <= 32'h0;
 		rd_o          <= 4'b0;
@@ -105,6 +108,7 @@ always @(posedge clk) begin
 `ifndef YOSYS_STA
 					pc_o					<= pc_i;
 					inst_o				<= inst_i;
+					npc_o         <= dnpc;
 `endif
 					xrd_o         <= xrd;
 					rd_o          <= rd_i;

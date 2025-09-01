@@ -102,7 +102,7 @@ wire gpr_wen_id;
 wire fencei_id;
 /***EXU***/
 `ifndef YOSYS_STA
-wire [31:0] pc_ex,inst_ex;//difftest
+wire [31:0] pc_ex,inst_ex,npc_ex;//difftest
 `endif
 wire        ex_ready,ex_valid;
 wire [31:0] xrd_ex;
@@ -174,7 +174,7 @@ ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 );
 ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 `ifndef YOSYS_STA
-		inst_id,pc_ex,inst_ex,
+		inst_id,pc_ex,inst_ex,npc_ex,
 `endif
 		id_valid,ex_ready,ex_valid,
 		pc_id,imm_id,op_id,funct3_id,
@@ -269,7 +269,7 @@ endfunction
 export "DPI-C" function dpic_grab;                                    
 function int dpic_grab(int i);
   begin
-		assign dpic_grab = (i == 0) ? pc_ex : (i == 1) ? dnpc_ex : (i == 2) ? inst_ex : (i == 3) ? {31'b0,difftest} : 32'b0;
+		assign dpic_grab = (i == 0) ? pc_ex : (i == 1) ? npc_ex : (i == 2) ? inst_ex : (i == 3) ? {31'b0,difftest} : 32'b0;
   end
 endfunction
 /***E*N*D***/
