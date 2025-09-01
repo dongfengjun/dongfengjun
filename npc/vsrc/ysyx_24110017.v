@@ -238,7 +238,12 @@ ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b
 wire isRAW = 1'b0;//((rs1_id != 0) && (((!ls_ready) && (rs1_id == rd_ex)) || (rs1_id == rd_ls))) || 
 						 //((rs2_id != 0) && (((!ls_ready) && (rs2_id == rd_ex)) || (rs2_id == rd_ls)));
 
-wire isCHazard = (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
+reg CHazarden;
+always @(posedge clk) begin
+	if(id_valid && ex_ready) CHazarden <= 1'b1;
+	else CHazarden <= 1'b0;
+end
+wire isCHazard = CHazarden && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
 
 `ifndef YOSYS_STA
 /***DIFFTEST***/
