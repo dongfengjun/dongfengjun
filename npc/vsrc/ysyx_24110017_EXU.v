@@ -203,7 +203,7 @@ assign alu_res = (alu_sel == ADD) ? (a + b)
 	: 32'b0;
 
 /***LSU***/
-wire ls_valid = (op == 5'b01000) || (op == 5'b00000);
+wire ls_valid = (op_i == 5'b01000) || (op_i == 5'b00000);
 wire ls_ren = (op_i == 5'b00000);
 wire ls_wen = (op_i == 5'b01000);
 reg ls_wen_enable,ls_ren_enable;

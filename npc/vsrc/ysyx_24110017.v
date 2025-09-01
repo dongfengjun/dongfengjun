@@ -245,7 +245,7 @@ wire isCHazard = (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
 /***DIFFTEST***/
 reg difftest_delay;
 reg difftest;
-always@(posedge clk) begin
+always@(posedge clock) begin
 	if(ex_valid) difftest_delay <= 1'b1;
 	else difftest_delay <= 1'b0;
 	if(difftest_delay) difftest <= 1'b1;
@@ -254,7 +254,7 @@ end
 /***DPIC*etrace***/
 import "DPI-C" function void npc_trap();
 always@(*) begin
-  if(ls_valid && inst_if == 32'b00000000000100000000000001110011) begin
+  if(ex_valid && inst_if == 32'b00000000000100000000000001110011) begin
     npc_trap();
   end
 end
@@ -269,7 +269,7 @@ endfunction
 export "DPI-C" function dpic_grab;                                    
 function int dpic_grab(int i);
   begin
-		assign dpic_grab = (i == 0) ? pc_ls : (i == 1) ? dnpc_ls : (i == 2) ? inst_ls : (i == 3) ? {31'b0,difftest} : 32'b0;
+		assign dpic_grab = (i == 0) ? pc_ex : (i == 1) ? dnpc_ex : (i == 2) ? inst_ex : (i == 3) ? {31'b0,difftest} : 32'b0;
   end
 endfunction
 /***E*N*D***/
