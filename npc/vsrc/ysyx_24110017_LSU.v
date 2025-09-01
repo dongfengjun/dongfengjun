@@ -51,7 +51,7 @@ wire [ 3:0] ls_wmask_i =
  : ((ls_waddr_i[1:0] == 2) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b1100 
  : ((ls_waddr_i[1:0] == 3) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b1000 
  : 4'b0;
-assign [31:0]ls_rdata_o = 
+assign ls_rdata_o = 
    ((ls_raddr_i[1:0] == 0) && op_i == 5'b00000 && funct3_i == 3'b010) ? ls_axi_rdata
  : ((ls_raddr_i[1:0] == 0) && op_i == 5'b00000 && funct3_i == 3'b000) ? {{24{ls_axi_rdata[7]}},ls_axi_rdata[7:0]}
  : ((ls_raddr_i[1:0] == 1) && op_i == 5'b00000 && funct3_i == 3'b000) ? {{24{ls_axi_rdata[15]}},ls_axi_rdata[15:8]}
