@@ -239,7 +239,7 @@ wire isRAW = 1'b0;//((rs1_id != 0) && (((!ls_ready) && (rs1_id == rd_ex)) || (rs
 						 //((rs2_id != 0) && (((!ls_ready) && (rs2_id == rd_ex)) || (rs2_id == rd_ls)));
 
 reg CHazarden;
-always @(posedge clk) begin
+always @(posedge clock) begin
 	if(id_valid && ex_ready) CHazarden <= 1'b1;
 	else CHazarden <= 1'b0;
 end
