@@ -186,7 +186,7 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 		dnpc_ex
 );
 ysyx_24110017_LSU LSU(clock,reset,
-		op_id,funct3_id,ls_valid_id && ((dnpc_ex == pc_id) || (dnpc_ex == 32'h0)),
+		op_id,funct3_id,ls_valid_id),
 		ls_waddr,ls_wdata,ls_raddr,
 		ls_rdata,ls_done,
 		ls_axi_awready,ls_axi_awvalid,ls_axi_awid,ls_axi_awaddr,
@@ -238,7 +238,7 @@ ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b
 wire isRAW = 1'b0;//((rs1_id != 0) && (((!ls_ready) && (rs1_id == rd_ex)) || (rs1_id == rd_ls))) || 
 						 //((rs2_id != 0) && (((!ls_ready) && (rs2_id == rd_ex)) || (rs2_id == rd_ls)));
 
-wire isCHazard = (ex_valid) && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
+wire isCHazard = (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
 
 `ifndef YOSYS_STA
 /***DIFFTEST***/
