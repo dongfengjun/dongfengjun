@@ -58,50 +58,76 @@ end
 wire [31:0]al_res;
 wire updata = ex_valid_o && ls_ready_i;
 always @(posedge clk) begin
-	if(updata) begin
+	if(rst) begin
 `ifndef YOSYS_STA
-		pc_o   <= pc_i;
-		inst_o <= inst_i;
+		pc_o					<= 32'h0;
+		inst_o				<= 32'h0;
 `endif
-		op_o   <= op_i;
+		op_o					<= 5'b0;
+		funct3_o			<= 3'b0;
+		rd_o					<= 4'b0;
+		gpr_wen_o			<= 1'b0;
+		mepc_o				<= 32'h0;
+		mcause_o			<= 32'h0;
+		csrsw_o				<= 32'h0;
+		csrs_wen_o		<= 4'b0;
+		ex_o					<= 32'h0;
+
+		ls_wen_o			<= 1'b0;
+		ls_ren_o			<= 1'b0;
+		ls_waddr_o		<= 32'h0;
+		ls_wdata_o		<= 32'h0;
+		ls_raddr_o		<= 32'h0;
+		dnpc_o				<= 32'h0;
 	end
-end
-always @(posedge clk) begin
-	if(updata) funct3_o   <= funct3_i;
-end
-always @(posedge clk) begin
-  if(updata) rd_o       <= rd_i;
-end
-always @(posedge clk) begin
-	if(flush_i)  gpr_wen_o  <= 1'b0;
-  else if(updata) gpr_wen_o  <= gpr_wen_i;
-end
-always @(posedge clk) begin
-  if(updata) mepc_o     <= mepc_w;
-end
-always @(posedge clk) begin
-  if(updata) mcause_o   <= mcause_w;
-end
-always @(posedge clk) begin
-  if(updata) csrsw_o    <= csrs_w;
-end
-always @(posedge clk) begin
-  if(updata) csrs_wen_o <= csrs_wen;
-end
-always @(posedge clk) begin
-  if(updata) ex_o       <= ex;
-end
-always @(posedge clk) begin
-  if(updata) ls_waddr_o <= ls_waddr;
-end
-always @(posedge clk) begin
-  if(updata) ls_wdata_o <= ls_wdata;
-end
-always @(posedge clk) begin
-  if(updata) ls_raddr_o <= ls_raddr;
-end
-always @(posedge clk) begin
-  if(updata) dnpc_o	    <= dnpc;
+	else if(flush_i) begin
+`ifndef YOSYS_STA
+		pc_o          <= 32'h0;
+    inst_o        <= 32'h0;
+`endif
+    op_o          <= 5'b0;
+    funct3_o      <= 3'b0;
+    rd_o          <= 4'b0;
+    gpr_wen_o     <= 1'b0;
+    mepc_o        <= 32'h0;
+    mcause_o      <= 32'h0;
+    csrsw_o       <= 32'h0;
+    csrs_wen_o    <= 4'b0;
+    ex_o          <= 32'h0;
+
+    ls_waddr_o    <= 32'h0;
+    ls_wdata_o    <= 32'h0;
+    ls_raddr_o    <= 32'h0;
+    dnpc_o        <= 32'h0;
+  end
+	else begin
+		case(state)
+			IDLE: begin
+			end
+			WAIT: begin
+				if(ex_valid_o && ls_ready_i) begin
+`ifndef YOSYS_STA
+					pc_o					<= pc_i;
+					inst_o				<= inst_i;
+					op_o          <= op_i;
+`endif
+					funct3_o      <= funct3_i;
+					rd_o          <= rd_i;
+					gpr_wen_o     <= gpr_wen_i;
+					mepc_o        <= mepc_w;
+					mcause_o      <= mcause_w;
+					csrsw_o       <= csrs_w;
+					csrs_wen_o    <= csrs_wen;
+					ex_o          <= ex;
+
+					ls_waddr_o    <= ls_waddr;
+					ls_wdata_o    <= ls_wdata;
+					ls_raddr_o    <= ls_raddr;
+					dnpc_o				<= dnpc;
+				end
+			end
+		endcase
+	end
 end
 
 wire [31:0]ex;
