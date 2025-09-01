@@ -186,7 +186,7 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 		dnpc_ex
 );
 ysyx_24110017_LSU LSU(clock,reset,
-		op_id,funct3_id,ls_valid_id,
+		op_id,funct3_id,ls_valid_id && (!isCHazard),
 		ls_waddr,ls_wdata,ls_raddr,
 		ls_rdata,ls_done,
 		ls_axi_awready,ls_axi_awvalid,ls_axi_awid,ls_axi_awaddr,
