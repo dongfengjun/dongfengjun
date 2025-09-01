@@ -2,37 +2,12 @@
 module ysyx_24110017_LSU(
 	input  wire clk,
 	input  wire rst,
-`ifndef YOSYS_STA
-	input  wire [31:0] pc_i,
-	input  wire [31:0] inst_i,
-	input  wire [31:0] dnpc_i,
-	output reg  [31:0] pc_o,
-	output reg  [31:0] inst_o,
-	output reg  [31:0] dnpc_o,
-	output wire        ls_valid_o,
-  output wire        difftest_o,
-`endif
-	input  wire				 ex_valid_i,	
-  output wire				 ls_ready_o,
 	input  wire [ 4:0] op_i,
 	input  wire [ 2:0] funct3_i,
-	input  wire [ 3:0] rd_i,
-  input  wire				 gpr_wen_i,
-	input  wire [31:0] mepc_i,
-  input  wire [31:0] mcause_i,
-  input  wire [31:0] csrsw_i,
-  input  wire [ 3:0] csrs_wen_i,
-  input  wire [31:0] ex_i,
-  input						   ls_wen_i,ls_ren_i,
+  input	 wire	       ls_wen_i,ls_ren_i,
 	input  wire [31:0] ls_waddr_i,ls_wdata_i,ls_raddr_i,
-	
-	output reg  [31:0] xrd_o,
-	output reg  [ 3:0] rd_o,
-  output reg				 gpr_wen_o,
-  output reg  [31:0] mepc_o,
-  output reg  [31:0] mcause_o,
-  output reg  [31:0] csrsw_o,
-  output reg  [ 3:0] csrs_wen_o,
+	output wire [31:0] ls_rdata_o,
+	output wire        ls_done_o,
  
 	input  wire				 ls_axi_awready,
 	output reg				 ls_axi_awvalid,
@@ -66,42 +41,7 @@ module ysyx_24110017_LSU(
 	input  wire				 ls_axi_rlast
 );
 
-/***分布式控制***/
-assign ls_ready_o = (state == IDLE);
-
-`ifndef YOSYS_STA
-assign ls_valid_o = (state == DONE);
-assign difftest_o = (state == DIFFTEST);
-parameter IDLE = 2'b00,WAIT = 2'b01,DONE = 2'b10,DIFFTEST = 2'b11;
-reg[1:0] state; 
-always @(posedge clk) begin
-  if(rst) state <= IDLE;
-  else begin
-    case (state)
-      IDLE: state			 <= (ex_valid_i && ls_ready_o)   ? WAIT : state;
-      WAIT: state			 <= (ls_done || !ls_valid_i  )   ? DONE : state;
-			DONE: state			 <= DIFFTEST;
-			DIFFTEST : state <= IDLE;
-    endcase
-  end
-end
-`else
-parameter IDLE = 1'b0,WAIT = 1'b1;
-reg state; 
-always @(posedge clk) begin
-  if(rst) state <= IDLE;
-  else begin
-    case (state)
-      IDLE: state      <= (ex_valid_i && ls_ready_o) ? WAIT : state;
-      WAIT: state      <= (ls_done || !ls_valid_i)   ? IDLE : state;
-    endcase
-  end
-end
-`endif
-
-wire ls_valid_i = (op_i == 5'b00000 || op_i == 5'b01000);
-wire ls_done = (ls_axi_rvalid && ls_axi_rready) || (ls_axi_bvalid && ls_axi_bready);
-wire [31:0] xrd = (ls_valid_i) ? ls_rdata : ex_i;
+assign ls_done_o = (ls_axi_rvalid && ls_axi_rready) || (ls_axi_bvalid && ls_axi_bready);
 wire [ 3:0] ls_wmask_i = 
 	 ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0001
  : ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b0011
@@ -128,61 +68,6 @@ wire [31:0]ls_rdata =
  : 32'b0;
 wire [ 2:0]ls_awsize_i = (op_i == 5'b01000 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  5'b01000 && funct3_i == 3'b001) ? 3'b1 : (op_i == 5'b01000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
 wire [ 2:0]ls_arsize_i = (op_i == 5'b00000 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 5'b00000 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 5'b00000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
-
-always@(posedge clk) begin
-	if(rst) begin
-`ifndef YOSYS_STA
-		pc_o					<= 32'h0;
-		inst_o				<= 32'h0;
-		dnpc_o				<= 32'h0;
-`endif
-		rd_o					<= 4'b0;
-		gpr_wen_o			<= 1'b0;
-		mepc_o				<= 32'h0;
-		mcause_o			<= 32'h0;
-		csrsw_o				<= 32'h0;
-		csrs_wen_o		<= 4'b0;
-		xrd_o					<= 32'h0;
-	end
-	else begin
-		case(state)
-			IDLE: begin
-				rd_o         <= 4'b0;
-		    gpr_wen_o    <= 1'b0;
-		    mepc_o       <= 32'h0;
-		    mcause_o     <= 32'h0;
-		    csrsw_o      <= 32'h0;
-		    csrs_wen_o   <= 4'b0;
-		    xrd_o        <= 32'h0; 
-			end
-			WAIT: begin
-				if(ls_done || !ls_valid_i) begin
-`ifndef YOSYS_STA
-					pc_o       <= pc_i;
-			    inst_o     <= inst_i;
-			    dnpc_o     <= dnpc_i;
-`endif
-					rd_o       <= rd_i;
-					gpr_wen_o  <= gpr_wen_i;
-					mepc_o     <= mepc_i;
-					mcause_o   <= mcause_i;
-					csrsw_o    <= csrsw_i;
-					csrs_wen_o <= csrs_wen_i;
-					xrd_o      <= xrd;
-				end
-			end
-			default: begin
-				rd_o         <= 4'b0;
-        gpr_wen_o    <= 1'b0;
-        mepc_o       <= 32'h0;
-        mcause_o     <= 32'h0;
-        csrsw_o      <= 32'h0;
-        csrs_wen_o   <= 4'b0;
-        xrd_o        <= 32'h0;
-			end
-		endcase
-	end
-end
 
 import "DPI-C" function void diff_skip_ref();
 

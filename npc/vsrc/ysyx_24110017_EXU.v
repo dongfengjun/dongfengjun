@@ -14,7 +14,6 @@ module ysyx_24110017_EXU(
 	input  wire  id_valid_i,
 	output wire  ex_ready_o,
 	output wire  ex_valid_o,
-	input  wire  ls_ready_i,
 	
   input  wire [31:0] pc_i,
   input  wire [31:0] imm_i,
@@ -26,59 +25,53 @@ module ysyx_24110017_EXU(
 	input  wire				 gpr_wen_i,
 	input  wire [31:0] mepc_i,mstatus_i,mcause_i,mtvec_i,
 
-	output reg  [ 4:0] op_o,
-	output reg  [ 2:0] funct3_o,
+	output reg  [31:0] xrd_o, 
 	output reg  [ 3:0] rd_o,
 	output reg				 gpr_wen_o,
+	
 	output reg  [31:0] mepc_o,
   output reg  [31:0] mcause_o,
   output reg  [31:0] csrsw_o,
   output reg  [ 3:0] csrs_wen_o,
-	output reg  [31:0] ex_o,
-	output reg	ls_wen_o,ls_ren_o,
-	output reg  [31:0] ls_waddr_o,ls_wdata_o,ls_raddr_o,
+
+	output wire	ls_wen_o,ls_ren_o,
+	output wire [31:0] ls_waddr_o,ls_wdata_o,ls_raddr_o,
+	input  wire [31:0] ls_rdata_i,
+	input  wire ls_done_i,
+
 	output reg  [31:0] dnpc_o
 );
 
 /***分布式控制***/
 assign ex_ready_o = (state == IDLE);
-assign ex_valid_o = (state == WAIT);
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
+wire updata = (state == WAIT) && (!ls_valid || ls_done_i);
+assign ex_valid_o = updata; 
 always @(posedge clk) begin
 	if(rst || flush_i) state <= IDLE;
   else begin
 		case (state)
 			IDLE: state <= (id_valid_i) ? WAIT : state;
-			WAIT: state <= (ls_ready_i) ? IDLE : state;
+			WAIT: state <= (updata) ? IDLE : state;
 		endcase
 	end
 end
 
-wire [31:0]al_res;
-wire updata = ex_valid_o && ls_ready_i;
 always @(posedge clk) begin
 	if(rst) begin
 `ifndef YOSYS_STA
 		pc_o					<= 32'h0;
 		inst_o				<= 32'h0;
 `endif
-		op_o					<= 5'b0;
-		funct3_o			<= 3'b0;
+		xrd_o         <= 32'h0;
 		rd_o					<= 4'b0;
 		gpr_wen_o			<= 1'b0;
 		mepc_o				<= 32'h0;
 		mcause_o			<= 32'h0;
 		csrsw_o				<= 32'h0;
 		csrs_wen_o		<= 4'b0;
-		ex_o					<= 32'h0;
-
-		ls_wen_o			<= 1'b0;
-		ls_ren_o			<= 1'b0;
-		ls_waddr_o		<= 32'h0;
-		ls_wdata_o		<= 32'h0;
-		ls_raddr_o		<= 32'h0;
 		dnpc_o				<= 32'h0;
 	end
 	else if(flush_i) begin
@@ -86,57 +79,48 @@ always @(posedge clk) begin
 		pc_o          <= 32'h0;
     inst_o        <= 32'h0;
 `endif
-    op_o          <= 5'b0;
-    funct3_o      <= 3'b0;
-    rd_o          <= 4'b0;
+    xrd_o         <= 32'h0;
+		rd_o          <= 4'b0;
     gpr_wen_o     <= 1'b0;
     mepc_o        <= 32'h0;
     mcause_o      <= 32'h0;
     csrsw_o       <= 32'h0;
     csrs_wen_o    <= 4'b0;
-    ex_o          <= 32'h0;
-
-		ls_wen_o			<= 1'b0;
-		ls_ren_o			<= 1'b0;
-    ls_waddr_o    <= 32'h0;
-    ls_wdata_o    <= 32'h0;
-    ls_raddr_o    <= 32'h0;
-    dnpc_o        <= 32'h0;
-  end
+		dnpc_o        <= 32'h0;
+	end
 	else begin
 		case(state)
 			IDLE: begin
+				xrd_o         <= 32'h0;
+        rd_o          <= 4'b0;
+        gpr_wen_o     <= 1'b0;
+        mepc_o        <= 32'h0;
+        mcause_o      <= 32'h0;
+        csrsw_o       <= 32'h0;
+        csrs_wen_o    <= 4'b0;
+				dnpc_o        <= 32'h0;
 			end
 			WAIT: begin
-				if(ex_valid_o && ls_ready_i) begin
+				if(updata) begin
 `ifndef YOSYS_STA
 					pc_o					<= pc_i;
 					inst_o				<= inst_i;
-					op_o          <= op_i;
 `endif
-					funct3_o      <= funct3_i;
+					xrd_o         <= xrd;
 					rd_o          <= rd_i;
 					gpr_wen_o     <= gpr_wen_i;
 					mepc_o        <= mepc_w;
 					mcause_o      <= mcause_w;
 					csrsw_o       <= csrs_w;
 					csrs_wen_o    <= csrs_wen;
-					ex_o          <= ex;
-
-					ls_wen_o      <= ls_wen;
-					ls_ren_o			<= ls_ren;
-					ls_waddr_o    <= ls_waddr;
-					ls_wdata_o    <= ls_wdata;
-					ls_raddr_o    <= ls_raddr;
-					dnpc_o				<= dnpc;
+					dnpc_o        <= dnpc;
 				end
 			end
 		endcase
 	end
 end
 
-wire [31:0]ex;
-assign ex = 
+wire [31:0]xrd = 
 /***I*addi~srai***/
 				(op_i == 5'b00100) ? (alu_res) :
 /***R_add~R_remu***/
@@ -146,6 +130,8 @@ assign ex =
 				(op_i == 5'b11001) ? pc_i + 4			: //I_jalr
 				(op_i == 5'b01101) ? imm_i				: //U_lui
 				(op_i == 5'b00101) ? pc_i + imm_i :	//U_auipc
+/***LSU***/
+				(op_i == 5'b00000) ? ls_rdata_i   : //LOAD
 /***CSRU***/
 				((op_i == 5'b11100) && ((funct3_i == 3'b001) || (funct3_i == 3'b010) || (funct3_i == 3'b000))) ? csr : //I_csrrw_csrrs_csrrc
 				32'h0;
@@ -217,8 +203,16 @@ assign alu_res = (alu_sel == ADD) ? (a + b)
 	: 32'b0;
 
 /***LSU***/
+wire ls_valid = (op == 5'b01000) || (op == 5'b00000);
 wire ls_ren = (op_i == 5'b00000);
 wire ls_wen = (op_i == 5'b01000);
+reg ls_wen_enable,ls_ren_enable;
+always@(posedge clk) begin
+	ls_wen_enable <= ls_wen;
+	ls_ren_enable <= ls_ren;
+end
+assign ls_wen_o <= ls_wen && !ls_wen_enable;
+assign ls_ren_o <= ls_ren && !ls_ren_enable;
 wire [31:0]ls_addr  = r1_i + offset;
 wire [31:0]ls_waddr = (op_i == 5'b01000) ? ls_addr : 32'h0;
 wire [31:0]ls_wdata = (op_i == 5'b01000) ? ((ls_waddr[1:0] == 0) ? r2_i : (ls_waddr[1:0] == 1) ? {r2_i[23:0],8'b0} : (ls_waddr[1:0] == 2) ? {r2_i[15:0],16'b0} : (ls_waddr[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0) : 32'h0;

@@ -102,31 +102,20 @@ wire gpr_wen_id;
 wire fencei_id;
 /***EXU***/
 `ifndef YOSYS_STA
-wire [31:0]pc_ex,inst_ex;//difftest
+wire [31:0] pc_ex,inst_ex;//difftest
 `endif
-wire ex_ready,ex_valid;
-wire [ 4:0] op_ex;
-wire [ 2:0] funct3_ex;
+wire        ex_ready,ex_valid;
+wire [31:0] xrd_ex;
 wire [ 3:0] rd_ex;
-wire gpr_wen_ex;
+wire        gpr_wen_ex;
 wire [31:0] mepc_ex,mcause_ex,csrsw_ex;
-wire [3:0] csrs_wen_ex;
-wire [31:0] ex_ex;
-wire ls_wen_ex,ls_ren_ex;
-wire [31:0] ls_waddr_ex,ls_wdata_ex,ls_raddr_ex;
+wire [3:0]  csrs_wen_ex;
+wire        ls_wen,ls_ren;
+wire [31:0] ls_waddr,ls_wdata,ls_raddr;
 wire [31:0] dnpc_ex;
 /***LSU***/
-`ifndef YOSYS_STA
-wire [31:0]pc_ls,inst_ls,dnpc_ls;//difftest
-wire ls_valid,difftest;
-`endif
-wire ls_ready;
-wire [31:0] xrd_ls;
-wire [ 3:0] rd_ls;
-wire gpr_wen_ls;
-wire [31:0] mepc_ls,mcause_ls,csrsw_ls;
-wire [ 3:0] csrs_wen_ls;
-
+wire [31:0] ls_rdata;
+wire        ls_done;
 wire [31:0] ls_axi_awaddr,ls_axi_wdata,ls_axi_araddr,ls_axi_rdata;
 wire [ 3:0] ls_axi_wstrb;
 wire [ 7:0] ls_axi_awlen,ls_axi_arlen;
@@ -134,7 +123,9 @@ wire [ 3:0] ls_axi_awid,ls_axi_bid,ls_axi_arid,ls_axi_rid;
 wire [ 2:0] ls_axi_awsize,ls_axi_arsize;
 wire [ 1:0] ls_axi_awburst,ls_axi_arburst;
 wire [ 1:0] ls_axi_bresp,ls_axi_rresp;
-wire ls_axi_awvalid,ls_axi_awready,ls_axi_wvalid,ls_axi_wready,ls_axi_bvalid,ls_axi_bready,ls_axi_arvalid,ls_axi_arready,ls_axi_rvalid,ls_axi_rready,ls_axi_wlast,ls_axi_rlast;
+wire        ls_axi_awvalid,ls_axi_awready,ls_axi_wvalid,ls_axi_wready,
+            ls_axi_bvalid,ls_axi_bready,ls_axi_arvalid,ls_axi_arready,
+						ls_axi_rvalid,ls_axi_rready,ls_axi_wlast,ls_axi_rlast;
 /***Arbiter-Xbar***/
 /***My-Clint***/
 wire [31:0] c_axi_awaddr,c_axi_wdata,c_axi_araddr,c_axi_rdata;
@@ -185,26 +176,20 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 `ifndef YOSYS_STA
 		inst_id,pc_ex,inst_ex,
 `endif
-		id_valid,ex_ready,ex_valid,ls_ready,
+		id_valid,ex_ready,ex_valid,
 		pc_id,imm_id,op_id,funct3_id,
 		r1,r2,rd_id,gpr_wen_id,
 		mepc,mstatus,mcause,mtvec,
-		op_ex,funct3_ex,rd_ex,gpr_wen_ex,
+		xrd_ex,rd_ex,gpr_wen_ex,
 		mepc_ex,mcause_ex,csrsw_ex,csrs_wen_ex,
-		ex_ex,ls_wen_ex,ls_ren_ex,
-		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,dnpc_ex
+		ls_wen,ls_ren,ls_waddr,ls_wdata,ls_raddr,ls_rdata,ls_done,
+		dnpc_ex
 );
 ysyx_24110017_LSU LSU(clock,reset,
-`ifndef YOSYS_STA
-		pc_ex,inst_ex,dnpc_ex,pc_ls,inst_ls,dnpc_ls,ls_valid,difftest,
-`endif
-		(ex_valid && !isCHazard),ls_ready,
-		op_ex,funct3_ex,rd_ex,gpr_wen_ex,
-		mepc_ex,mcause_ex,csrsw_ex,csrs_wen_ex,
-		ex_ex,ls_wen_ex,ls_ren_ex,
-		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,
-		xrd_ls,rd_ls,gpr_wen_ls,
-		mepc_ls,mcause_ls,csrsw_ls,csrs_wen_ls,
+		op_id,funct3_id,
+		ls_wen,ls_ren,
+		ls_waddr,ls_wdata,ls_raddr,
+		ls_rdata,ls_done,
 		ls_axi_awready,ls_axi_awvalid,ls_axi_awid,ls_axi_awaddr,
 		ls_axi_awlen,ls_axi_awsize,ls_axi_awburst,
 		ls_axi_wready,ls_axi_wvalid,ls_axi_wdata,ls_axi_wstrb,ls_axi_wlast,
@@ -243,20 +228,29 @@ ysyx_24110017_CLINT CLINT(clock,reset,
 		c_axi_rready,c_axi_rvalid,c_axi_rid,c_axi_rdata,c_axi_rresp,c_axi_rlast
 );
 
-ysyx_24110017_RegisterFile #(4,32) RFU (clock,xrd_ls,rd_ls[3:0],gpr_wen_ls,rs1_id,r1,rs2_id,r2);
-ysyx_24110017_Reg #(32, 32'b0) mepc_reg (clock,reset,mepc_ls,mepc,csrs_wen_ls[0]);
-ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,csrsw_ls,mstatus,csrs_wen_ls[1]);
-ysyx_24110017_Reg #(32, 32'b0) mcause_reg (clock,reset,mcause_ls,mcause,csrs_wen_ls[2]);
-ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,csrsw_ls,mtvec,csrs_wen_ls[3]);
+ysyx_24110017_RegisterFile #(4,32) RFU (clock,xrd_ex,rd_ex,gpr_wen_ex,rs1_id,r1,rs2_id,r2);
+ysyx_24110017_Reg #(32, 32'b0) mepc_reg (clock,reset,mepc_ex,mepc,csrs_wen_ex[0]);
+ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,csrsw_ex,mstatus,csrs_wen_ex[1]);
+ysyx_24110017_Reg #(32, 32'b0) mcause_reg (clock,reset,mcause_ex,mcause,csrs_wen_ex[2]);
+ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,csrsw_ex,mtvec,csrs_wen_ex[3]);
 ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid,1'b0);
 ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
 
-wire isRAW = ((rs1_id != 0) && (((!ls_ready) && (rs1_id == rd_ex)) || (rs1_id == rd_ls))) || 
-						 ((rs2_id != 0) && (((!ls_ready) && (rs2_id == rd_ex)) || (rs2_id == rd_ls)));
+wire isRAW = 1'b0;//((rs1_id != 0) && (((!ls_ready) && (rs1_id == rd_ex)) || (rs1_id == rd_ls))) || 
+						 //((rs2_id != 0) && (((!ls_ready) && (rs2_id == rd_ex)) || (rs2_id == rd_ls)));
 
-wire isCHazard = (ex_valid && ls_ready) && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
+wire isCHazard = (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
 
 `ifndef YOSYS_STA
+/***DIFFTEST***/
+reg difftest_delay;
+reg difftest;
+always@(posedge clk) begin
+	if(ex_valid) difftest_delay <= 1'b1;
+	else difftest_delay <= 1'b0;
+	if(difftest_delay) difftest <= 1'b1;
+	else difftest <= 1'b0;
+end
 /***DPIC*etrace***/
 import "DPI-C" function void npc_trap();
 always@(*) begin
@@ -286,10 +280,10 @@ function int performance_counter(int i);
   begin
     assign performance_counter = (i == 0) ? {31'b0,if_valid && id_ready}
 															 : (i == 1) ? {31'b0,id_valid && ex_ready}
-															 : (i == 2) ? {31'b0,ex_valid && ls_ready}//wb_ready
+															 : (i == 2) ? {31'b0,ex_valid}
 															 : (i == 3) ? {31'b0,ls_axi_rvalid && ls_axi_rready}
 															 : (i == 4) ? {25'b0,inst_if[6:0]}
-															 : (i == 5) ? {31'b0,ls_valid}
+															 : (i == 5) ? {31'b0,ex_valid}
 															 : (i == 6) ? {31'b0,if_axi_arvalid && if_axi_arready}
 															 : (i == 7) ? {31'b0,if_axi_rvalid && if_axi_rready}
 															 : (i == 8) ? {31'b0,if_ready}
@@ -298,10 +292,10 @@ function int performance_counter(int i);
 															 : (i == 11) ? {31'b0,ls_axi_bvalid && ls_axi_bready}
 															 : (i == 12) ? {31'b0,isCHazard}
 															 : (i == 13) ? {31'b0,if_valid}
-															 : (i == 14) ? {25'b0,inst_ls[6:0]}
-															 : (i == 15) ? {31'b0,(ex_valid && ls_ready && inst_ls[6:0] == 7'b1100011) && isCHazard}
-															 : (i == 16) ? {31'b0,(ex_valid && ls_ready && inst_ls[6:0] == 7'b1101111) && isCHazard}
-															 : (i == 17) ? {31'b0,(ex_valid && ls_ready && inst_ls[6:0] == 7'b1100111) && isCHazard}
+															 : (i == 14) ? {25'b0,inst_ex[6:0]}
+															 : (i == 15) ? {31'b0,(ex_valid && inst_ls[6:0] == 7'b1100011) && isCHazard}
+															 : (i == 16) ? {31'b0,(ex_valid && inst_ls[6:0] == 7'b1101111) && isCHazard}
+															 : (i == 17) ? {31'b0,(ex_valid && inst_ls[6:0] == 7'b1100111) && isCHazard}
 															 : 32'b0;
   end
 endfunction
