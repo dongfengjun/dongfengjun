@@ -4,7 +4,7 @@ module ysyx_24110017_LSU(
 	input  wire rst,
 	input  wire [ 4:0] op_i,
 	input  wire [ 2:0] funct3_i,
-  input	 wire	       ls_wen_i,ls_ren_i,
+	input  wire        ls_valid_i,
 	input  wire [31:0] ls_waddr_i,ls_wdata_i,ls_raddr_i,
 	output wire [31:0] ls_rdata_o,
 	output wire        ls_done_o,
@@ -41,7 +41,10 @@ module ysyx_24110017_LSU(
 	input  wire				 ls_axi_rlast
 );
 
-assign ls_done_o = (ls_axi_rvalid && ls_axi_rready) || (ls_axi_bvalid && ls_axi_bready);
+assign ls_done_o = (ls_axi_rvalid && ls_axi_rready) || (ls_axi_bvalid && ls_axi_bready); 
+wire ls_wen_i = (op == 5'b01000) && ls_valid_i;
+wire ls_ren_i = (op == 5'b01000) && ls_valid_i;
+
 wire [ 3:0] ls_wmask_i = 
 	 ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0001
  : ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b0011

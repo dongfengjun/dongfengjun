@@ -29,6 +29,7 @@ module ysyx_24110017_IDU(
   output reg	[ 3:0] rs2_o,
 	output reg	[ 3:0] rd_o,
 	output wire	       gpr_wen_o,
+	output reg         ls_valid_o,
 	output wire        fencei_o
 );
 
@@ -76,6 +77,13 @@ end
 always@(posedge clk) begin
   if(updata) rd_o  <= rd;
 end
+always@(posedge clk) begin
+  case(state)
+	  IDLE : ls_valid_o <= 1'b0;
+		WAIT : if(updata) ls_valid_o <= (op == 5'b01000 || op == 5'b00000);
+	endcase
+end
+
 /***pattern***/
 wire [4:0]op;
 wire [3:0]rd; //R I U J

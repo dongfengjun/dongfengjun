@@ -99,6 +99,7 @@ wire [ 2:0] funct3_id;
 wire [ 3:0] rs1_id,rs2_id;
 wire [ 3:0] rd_id;
 wire gpr_wen_id;
+wire ls_valid_id;
 wire fencei_id;
 /***EXU***/
 `ifndef YOSYS_STA
@@ -169,8 +170,8 @@ ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 		if_valid,id_ready,id_valid,ex_ready,
 		pc_if,inst_if,
 		pc_id,imm_id,op_id,funct3_id,rs1_id,rs2_id,
-		rd_id,gpr_wen_id,
-		fencei_id
+		rd_id,gpr_wen_id,ls_valid_id,
+		fencei_id,
 );
 ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 `ifndef YOSYS_STA
@@ -182,12 +183,11 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 		mepc,mstatus,mcause,mtvec,
 		xrd_ex,rd_ex,gpr_wen_ex,
 		mepc_ex,mcause_ex,csrsw_ex,csrs_wen_ex,
-		ls_wen,ls_ren,ls_waddr,ls_wdata,ls_raddr,ls_rdata,ls_done,
+		ls_waddr,ls_wdata,ls_raddr,ls_rdata,ls_done,
 		dnpc_ex
 );
 ysyx_24110017_LSU LSU(clock,reset,
-		op_id,funct3_id,
-		ls_wen,ls_ren,
+		op_id,funct3_id,ls_valid_id,
 		ls_waddr,ls_wdata,ls_raddr,
 		ls_rdata,ls_done,
 		ls_axi_awready,ls_axi_awvalid,ls_axi_awid,ls_axi_awaddr,
