@@ -35,6 +35,7 @@ module ysyx_24110017_EXU(
   output reg  [31:0] csrsw_o,
   output reg  [ 3:0] csrs_wen_o,
 	output reg  [31:0] ex_o,
+	output reg	ls_wen_o,ls_ren_o,
 	output reg  [31:0] ls_waddr_o,ls_wdata_o,ls_raddr_o,
 	output reg  [31:0] dnpc_o
 );
@@ -73,6 +74,8 @@ always @(posedge clk) begin
 		csrs_wen_o		<= 4'b0;
 		ex_o					<= 32'h0;
 
+		ls_wen_o			<= 1'b0;
+		ls_ren_o			<= 1'b0;
 		ls_waddr_o		<= 32'h0;
 		ls_wdata_o		<= 32'h0;
 		ls_raddr_o		<= 32'h0;
@@ -93,6 +96,8 @@ always @(posedge clk) begin
     csrs_wen_o    <= 4'b0;
     ex_o          <= 32'h0;
 
+		ls_wen_o			<= 1'b0;
+		ls_ren_o			<= 1'b0;
     ls_waddr_o    <= 32'h0;
     ls_wdata_o    <= 32'h0;
     ls_raddr_o    <= 32'h0;
@@ -118,6 +123,8 @@ always @(posedge clk) begin
 					csrs_wen_o    <= csrs_wen;
 					ex_o          <= ex;
 
+					ls_wen_o      <= ls_wen;
+					ls_ren_o			<= ls_ren;
 					ls_waddr_o    <= ls_waddr;
 					ls_wdata_o    <= ls_wdata;
 					ls_raddr_o    <= ls_raddr;
@@ -210,6 +217,8 @@ assign alu_res = (alu_sel == ADD) ? (a + b)
 	: 32'b0;
 
 /***LSU***/
+wire ls_ren = (op_i == 5'b00000);
+wire ls_wen = (op_i == 5'b01000);
 wire [31:0]ls_addr  = r1_i + offset;
 wire [31:0]ls_waddr = (op_i == 5'b01000) ? ls_addr : 32'h0;
 wire [31:0]ls_wdata = (op_i == 5'b01000) ? ((ls_waddr[1:0] == 0) ? r2_i : (ls_waddr[1:0] == 1) ? {r2_i[23:0],8'b0} : (ls_waddr[1:0] == 2) ? {r2_i[15:0],16'b0} : (ls_waddr[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0) : 32'h0;

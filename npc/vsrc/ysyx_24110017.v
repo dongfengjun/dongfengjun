@@ -112,6 +112,7 @@ wire gpr_wen_ex;
 wire [31:0] mepc_ex,mcause_ex,csrsw_ex;
 wire [3:0] csrs_wen_ex;
 wire [31:0] ex_ex;
+wire ls_wen_ex,ls_ren_ex;
 wire [31:0] ls_waddr_ex,ls_wdata_ex,ls_raddr_ex;
 wire [31:0] dnpc_ex;
 /***LSU***/
@@ -190,7 +191,7 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 		mepc,mstatus,mcause,mtvec,
 		op_ex,funct3_ex,rd_ex,gpr_wen_ex,
 		mepc_ex,mcause_ex,csrsw_ex,csrs_wen_ex,
-		ex_ex,
+		ex_ex,ls_wen_ex,ls_ren_ex,
 		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,dnpc_ex
 );
 ysyx_24110017_LSU LSU(clock,reset,
@@ -200,7 +201,7 @@ ysyx_24110017_LSU LSU(clock,reset,
 		(ex_valid && !isCHazard),ls_ready,
 		op_ex,funct3_ex,rd_ex,gpr_wen_ex,
 		mepc_ex,mcause_ex,csrsw_ex,csrs_wen_ex,
-		ex_ex,
+		ex_ex,ls_wen_ex,ls_ren_ex,
 		ls_waddr_ex,ls_wdata_ex,ls_raddr_ex,
 		xrd_ls,rd_ls,gpr_wen_ls,
 		mepc_ls,mcause_ls,csrsw_ls,csrs_wen_ls,
