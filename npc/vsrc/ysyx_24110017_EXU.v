@@ -70,7 +70,7 @@ always @(posedge clk) begin
 		rd_o					<= 4'b0;
 		gpr_wen_o			<= 1'b0;
 		mepc_o				<= 32'h0;
-		mcause_o			<= 32'h0;
+	  mcause_o			<= 32'h0;
 		csrsw_o				<= 32'h0;
 		csrs_wen_o		<= 4'b0;
 		dnpc_o				<= 32'h0;
