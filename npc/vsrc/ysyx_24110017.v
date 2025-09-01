@@ -111,7 +111,6 @@ wire [ 3:0] rd_ex;
 wire        gpr_wen_ex;
 wire [31:0] mepc_ex,mcause_ex,csrsw_ex;
 wire [3:0]  csrs_wen_ex;
-wire        ls_wen,ls_ren;
 wire [31:0] ls_waddr,ls_wdata,ls_raddr;
 wire [31:0] dnpc_ex;
 /***LSU***/

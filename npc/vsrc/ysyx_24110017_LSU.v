@@ -42,8 +42,8 @@ module ysyx_24110017_LSU(
 );
 
 assign ls_done_o = (ls_axi_rvalid && ls_axi_rready) || (ls_axi_bvalid && ls_axi_bready); 
-wire ls_wen_i = (op == 5'b01000) && ls_valid_i;
-wire ls_ren_i = (op == 5'b01000) && ls_valid_i;
+wire ls_wen_i = (op_i == 5'b01000) && ls_valid_i;
+wire ls_ren_i = (op_i == 5'b01000) && ls_valid_i;
 
 wire [ 3:0] ls_wmask_i = 
 	 ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0001
