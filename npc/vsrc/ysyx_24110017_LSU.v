@@ -6,7 +6,7 @@ module ysyx_24110017_LSU(
 	input  wire [ 2:0] funct3_i,
 	input  wire        ls_valid_i,
 	input  wire [31:0] ls_addr_i,ls_wdata_i,
-	output wire [31:0] ls_rdata_o,
+	output reg  [31:0] ls_rdata_o,
 	output wire        ls_done_o,
  
 	input  wire				 ls_axi_awready,
@@ -41,7 +41,7 @@ module ysyx_24110017_LSU(
 	input  wire				 ls_axi_rlast
 );
 
-assign ls_done_o = (ls_axi_rvalid && ls_axi_rready) || (ls_axi_bvalid && ls_axi_bready); 
+assign ls_done_o = (ls_read_done) || (ls_axi_bvalid && ls_axi_bready); 
 wire ls_wen_i = (op_i == 5'b01000) && ls_valid_i;
 wire ls_ren_i = (op_i == 5'b00000) && ls_valid_i;
 
@@ -54,7 +54,7 @@ wire [ 3:0] ls_wmask_i =
  : ((ls_addr_i[1:0] == 2) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b1100 
  : ((ls_addr_i[1:0] == 3) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b1000 
  : 4'b0;
-assign ls_rdata_o = 
+wire[31:0] ls_rdata = 
    ((ls_addr_i[1:0] == 0) && op_i == 5'b00000 && funct3_i == 3'b010) ? ls_axi_rdata
  : ((ls_addr_i[1:0] == 0) && op_i == 5'b00000 && funct3_i == 3'b000) ? {{24{ls_axi_rdata[7]}},ls_axi_rdata[7:0]}
  : ((ls_addr_i[1:0] == 1) && op_i == 5'b00000 && funct3_i == 3'b000) ? {{24{ls_axi_rdata[15]}},ls_axi_rdata[15:8]}
@@ -71,6 +71,15 @@ assign ls_rdata_o =
  : 32'b0;
 wire [ 2:0]ls_awsize_i = (op_i == 5'b01000 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  5'b01000 && funct3_i == 3'b001) ? 3'b1 : (op_i == 5'b01000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
 wire [ 2:0]ls_arsize_i = (op_i == 5'b00000 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 5'b00000 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 5'b00000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
+
+reg ls_read_done;
+always @(posedge clk)
+	if(ls_axi_rvalid && ls_axi_rready) begin
+		ls_read_done <= 1'b1;
+		ls_rdata_o <= ls_rdata;
+	end
+	else ls_read_done <= 1'b0;
+end
 
 import "DPI-C" function void diff_skip_ref();
 
