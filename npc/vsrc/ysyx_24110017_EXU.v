@@ -212,7 +212,7 @@ assign a = a_use_r1 ? (ab_use_signed ? $signed(r1_i) : r1_i) : 32'b0;
 assign b = b_use_imm ? (ab_use_signed ? $signed(imm_i) : b_use_shamt ? {27'b0, shamt_i} : imm_i) :
            b_use_r2 ? (ab_use_signed ? $signed(r2_i) : r2_i) : 32'b0;
 
-localparam [3:0] ADD = 3'd1,SUB = 3'd2,SLL = 3'd3,SRL = 3'd4,SRA = 3'd5,SLT = 5'd6,AND = 3'd7,OR = 3'd8,XOR = 3'd9;
+localparam [3:0] ADD = 4'd0,SUB = 4'd1,SLL = 4'd2,SRL = 4'd3,SRA = 4'd4,SLT = 4'd5,AND = 4'd6,OR = 4'd7,XOR = 4'd8;
 assign alu_sel =
     ((op_i == 5'b00100 && funct3_i == 3'b000) || (op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 1'b0)) ? ADD 
   :  (op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 1'b1) ? SUB 
