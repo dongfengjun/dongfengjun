@@ -179,10 +179,10 @@ wire[31:0] csrs_w =
       ({32{(op_i == 5'b11100) && (funct3_i == 3'b011)}} & (csr & ~r1_i)) | //I_csrrc
 			({32{ecall_en}} & pc_i); //ecall_mepc
 wire [3:0] csrs_wen = {
-    (op_i == 5'b11100 &&  imm_i[6] && imm_i[2:0] == 3'b101),
-    (op_i == 5'b11100 && !imm_i[6] && imm_i[2:0] == 3'b010) || ecall_en,
-    (op_i == 5'b11100 &&  imm_i[6] && imm_i[2:0] == 3'b000),
-    (op_i == 5'b11100 && !imm_i[6] && imm_i[2:0] == 3'b001) || ecall_en
+    (op_i == 5'b11100 && !imm_i[6] && imm_i[2:0] == 3'b101), //1100000101
+    (op_i == 5'b11100 &&  imm_i[6] && imm_i[2:0] == 3'b010) || ecall_en, //1101000010
+    (op_i == 5'b11100 && !imm_i[6] && imm_i[2:0] == 3'b000), //1100000000
+    (op_i == 5'b11100 &&  imm_i[6] && imm_i[2:0] == 3'b001) || ecall_en //1101000001
 };
 
 /***ALU***/
