@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_EXU(
 	input  wire clk,
 	input  wire rst,
@@ -30,7 +30,6 @@ module ysyx_24110017_EXU(
 	output reg  [ 3:0] rd_o,
 	output reg				 gpr_wen_o,
 	
-  output reg  [31:0] mcause_o,
 	output reg  [31:0] csrsw_o,
   output reg  [ 3:0] csrs_wen_o,
 
@@ -46,13 +45,16 @@ assign ex_ready_o = !state;
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
-wire updata = (!ls_valid || ls_done_i);
+wire updata = (!ls_valid || ls_done_i) && (!isAbnormal) || (!abnormal_cnt);
 assign ex_valid_o = updata && state; 
 always @(posedge clk) begin
   if(rst || flush_i)						state <= IDLE;
   else if(id_valid_i && !state) state <= WAIT;
   else if(updata && state)			state <= IDLE;
 end
+
+/***Abnormal***/
+wire isAbnormal = ecall_en;// || b || c;
 
 always@(posedge clk) begin
 	casez({flush_i,state})
@@ -90,26 +92,22 @@ always@(posedge clk) begin
 	endcase
 end
 
-always@(posedge clk) begin
+always @(posedge clk) begin
   if(flush_i) gpr_wen_o	<= 1'b0;
   else begin
     case(state)
       IDLE : gpr_wen_o	<= 1'b0;
-      WAIT : begin
-        if(updata) gpr_wen_o <= gpr_wen_i;
-      end
+      WAIT : 
+				if(updata) gpr_wen_o <= gpr_wen_i;
     endcase
   end
 end
 
-always@(posedge clk) begin
-  casez({flush_i,state})
-		2'b1? : mcause_o <= 32'h0;
-    2'b01 : begin
-			if(updata) mcause_o <= mcause_w;
-    end
-		default : begin
-		end
+reg abnormal_cnt;
+always @(posedge clk) begin
+	case (state) 
+		IDLE : abnormal_cnt <= isAbnormal;
+		WAIT : abnormal_cnt <= 1'b0;
 	endcase
 end
 
@@ -117,7 +115,11 @@ always@(posedge clk) begin
   casez({flush_i,state})
 		2'b1? : csrsw_o	<= 32'h0;
 		2'b01 : begin
-			if(updata) csrsw_o <= csrs_w;
+			if(isAbnormal) begin
+				if(abnormal_cnt) csrsw_o <= pc_i;
+				else csrsw_o <= r2_i;
+			end
+			else if(updata) csrsw_o <= csrs_w;
 		end
 		default : begin
 		end
@@ -133,7 +135,11 @@ always@(posedge clk) begin
 				csrs_wen_o <= 4'b0;
 			end
 			WAIT : begin
-        if(updata) csrs_wen_o <= csrs_wen;
+				if(isAbnormal) begin
+					if(abnormal_cnt) csrs_wen_o <= 4'b0001;
+					else csrs_wen_o <= 4'b0100;
+				end
+        else if(updata) csrs_wen_o <= csrs_wen;
       end
     endcase
 	end
@@ -166,23 +172,21 @@ wire [31:0]xrd =
 				32'h0;
 
 wire[31:0] csr = 
-		(op_i == 5'b11100 && imm_i == 32'd833) ? mepc_i
-	: (op_i == 5'b11100 && imm_i == 32'd768) ? mstatus_i
-	: (op_i == 5'b11100 && imm_i == 32'd834) ? mcause_i
-	: (op_i == 5'b11100 && imm_i == 32'd773) ? mtvec_i 
+		(op_i == 5'b11100 && imm_i[9:0] == 10'b1101000001) ? mepc_i
+	: (op_i == 5'b11100 && imm_i[9:0] == 10'b1100000000) ? mstatus_i
+	: (op_i == 5'b11100 && imm_i[9:0] == 10'b1101000010) ? mcause_i
+	: (op_i == 5'b11100 && imm_i[9:0] == 10'b1100000101) ? mtvec_i 
 	: 32'b0;
 	
-wire[31:0] mcause_w = (ecall_en) ? r2_i : csrs_w; //ecall a5
 wire[31:0] csrs_w = 
 			({32{(op_i == 5'b11100) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
 			({32{(op_i == 5'b11100) && (funct3_i == 3'b010)}} & (csr |  r1_i)) | //I_csrrs
-      ({32{(op_i == 5'b11100) && (funct3_i == 3'b011)}} & (csr & ~r1_i)) | //I_csrrc
-			({32{ecall_en}} & pc_i); //ecall_mepc
+      ({32{(op_i == 5'b11100) && (funct3_i == 3'b011)}} & (csr & ~r1_i));//I_csrrc
 wire [3:0] csrs_wen = {
     (op_i == 5'b11100 && imm_i == 32'd773),
-    (op_i == 5'b11100 && imm_i == 32'd834) || ecall_en,
+    (op_i == 5'b11100 && imm_i == 32'd834),
     (op_i == 5'b11100 && imm_i == 32'd768),
-    (op_i == 5'b11100 && imm_i == 32'd833) || ecall_en
+    (op_i == 5'b11100 && imm_i == 32'd833)
 };
 
 /***ALU***/
