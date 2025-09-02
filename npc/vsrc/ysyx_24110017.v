@@ -181,7 +181,7 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 		r1,r2,rd_id,gpr_wen_id,
 		mepc,mstatus,mcause,mtvec,
 		xrd_ex,rd_ex,gpr_wen_ex,
-		mepc_ex,mcause_ex,csrsw_ex,csrs_wen_ex,
+		mcause_ex,csrsw_ex,csrs_wen_ex,
 		ls_addr,ls_wdata,ls_rdata,ls_done,
 		dnpc_ex
 );
