@@ -12,13 +12,13 @@ module ysyx_24110017_LSU(
 	input  wire				 ls_axi_awready,
 	output reg				 ls_axi_awvalid,
 	output wire [ 3:0] ls_axi_awid,
-	output wire [31:0] ls_axi_awaddr,
+	output reg  [31:0] ls_axi_awaddr,
 	output wire [ 7:0] ls_axi_awlen,
 	output wire [ 2:0] ls_axi_awsize,
 	output wire [ 1:0] ls_axi_awburst,
 	input  wire				 ls_axi_wready,
 	output reg				 ls_axi_wvalid,
-	output wire [31:0] ls_axi_wdata,
+	output reg  [31:0] ls_axi_wdata,
 	output wire [ 3:0] ls_axi_wstrb,
 	output wire				 ls_axi_wlast,
 	output reg				 ls_axi_bready,
@@ -29,7 +29,7 @@ module ysyx_24110017_LSU(
 	input  wire				 ls_axi_arready,
 	output reg				 ls_axi_arvalid,
 	output wire [ 3:0] ls_axi_arid,
-	output wire  [31:0] ls_axi_araddr,
+	output reg  [31:0] ls_axi_araddr,
 	output wire [ 7:0] ls_axi_arlen,
 	output wire [ 2:0] ls_axi_arsize,
 	output wire [ 1:0] ls_axi_arburst,
@@ -77,12 +77,12 @@ import "DPI-C" function void diff_skip_ref();
 parameter AXI_IDLE=2'b00,AXI_READ=2'b01,AXI_WRITE=2'b10;
 reg [1:0]axi_state;
 
-assign ls_axi_awaddr = (ls_axi_awvalid || ls_axi_bready) ? ls_addr_i  : 32'h0;
+//assign ls_axi_awaddr = (ls_axi_awvalid || ls_axi_bready) ? ls_addr_i  : 32'h0;
 assign ls_axi_awsize = (ls_axi_awvalid) ? ls_awsize_i : 3'b0;
-assign ls_axi_wdata  = (ls_axi_wvalid)  ? ls_wdata_i  : 32'h0;
+//assign ls_axi_wdata  = (ls_axi_wvalid)  ? ls_wdata_i  : 32'h0;
 assign ls_axi_wstrb  = (ls_axi_wvalid)  ? ls_wmask_i  : 4'b0;
 assign ls_axi_wlast  = (ls_axi_wvalid)  ? 1'b1 : 1'b0;
-assign ls_axi_araddr = (ls_axi_arvalid || ls_axi_rready) ? ls_addr_i : 32'h0;
+//assign ls_axi_araddr = (ls_axi_arvalid || ls_axi_rready) ? ls_addr_i : 32'h0;
 assign ls_axi_arsize = (ls_axi_arvalid) ? ls_arsize_i : 3'b0;
 
 always @(posedge clk or posedge rst) begin
@@ -95,11 +95,14 @@ always @(posedge clk or posedge rst) begin
 				  if(ls_ren_i) begin
             axi_state		   <= AXI_READ;
 					  ls_axi_arvalid <= 1'b1;
+						ls_axi_araddr  <= ls_addr_i;
 					end
 					if(ls_wen_i) begin
 		        axi_state      <= AXI_WRITE;
 						ls_axi_awvalid <= 1'b1;
 						ls_axi_wvalid  <= 1'b1;
+						ls_axi_awaddr  <= ls_addr_i;
+						ls_axi_wadata  <= ls_wdata_i;
 	        end
 				end
 				AXI_READ: begin
@@ -108,6 +111,7 @@ always @(posedge clk or posedge rst) begin
 						ls_axi_rready  <= 1'b1;
 					end
 	        if(ls_axi_rvalid && ls_axi_rready) begin
+						ls_axi_araddr  <= 32'h0;
 						ls_axi_rready  <= 1'b0;
             axi_state			 <= AXI_IDLE;
 `ifndef YOSYS_STA						
@@ -123,10 +127,12 @@ always @(posedge clk or posedge rst) begin
 					end
 					if(ls_axi_wvalid && ls_axi_wready && ((ls_axi_awvalid && ls_axi_awready) || !ls_axi_awvalid)) begin
 						ls_axi_wvalid  <= 1'b0;
+						ls_axi_wdata   <= 32'h0;
 						ls_axi_bready  <= 1'b1;
 					end
 					if(ls_axi_bvalid && ls_axi_bready) begin
 						ls_axi_bready <= 1'b0;
+						ls_axi_awaddr <= 32'h0;
 						axi_state     <= AXI_IDLE;
 					end
 				end
