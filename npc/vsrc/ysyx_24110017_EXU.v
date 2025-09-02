@@ -1,4 +1,4 @@
-`define YOSYS_STA
+//`define YOSYS_STA
 module ysyx_24110017_EXU(
 	input  wire clk,
 	input  wire rst,
@@ -58,56 +58,6 @@ always @(posedge clk) begin
 		endcase
 	end
 end
-
-/***
-always @(posedge clk) begin
-	if(flush_i) begin
-`ifndef YOSYS_STA
-		pc_o          <= 32'h0;
-    inst_o        <= 32'h0;
-		npc_o         <= 32'h0;
-`endif
-    xrd_o         <= 32'h0;
-		rd_o          <= 4'b0;
-    gpr_wen_o     <= 1'b0;
-    mepc_o        <= 32'h0;
-    mcause_o      <= 32'h0;
-    csrsw_o       <= 32'h0;
-    csrs_wen_o    <= 4'b0;
-		dnpc_o        <= 32'h0;
-	end
-	else begin
-		case(state)
-			IDLE: begin
-				xrd_o         <= 32'h0;
-        rd_o          <= 4'b0;
-        gpr_wen_o     <= 1'b0;
-        mepc_o        <= 32'h0;
-        mcause_o      <= 32'h0;
-        csrsw_o       <= 32'h0;
-        csrs_wen_o    <= 4'b0;
-			end
-			WAIT: begin
-				if(updata) begin
-`ifndef YOSYS_STA
-					pc_o					<= pc_i;
-					inst_o				<= inst_i;
-					npc_o         <= dnpc;
-`endif
-					xrd_o         <= xrd;
-					rd_o          <= rd_i;
-					gpr_wen_o     <= gpr_wen_i;
-					mepc_o        <= mepc_w;
-					mcause_o      <= mcause_w;
-					csrsw_o       <= csrs_w;
-					csrs_wen_o    <= csrs_wen;
-					dnpc_o        <= dnpc;
-				end
-			end
-		endcase
-	end
-end
-***/
 
 always@(posedge clk) begin
 	casez({flush_i,state})
