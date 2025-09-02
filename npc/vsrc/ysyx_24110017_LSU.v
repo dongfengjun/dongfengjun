@@ -5,7 +5,7 @@ module ysyx_24110017_LSU(
 	input  wire [ 4:0] op_i,
 	input  wire [ 2:0] funct3_i,
 	input  wire        ls_valid_i,
-	input  wire [31:0] ls_waddr_i,ls_wdata_i,ls_raddr_i,
+	input  wire [31:0] ls_addr_i,ls_wdata_i,
 	output wire [31:0] ls_rdata_o,
 	output wire        ls_done_o,
  
@@ -46,28 +46,28 @@ wire ls_wen_i = (op_i == 5'b01000) && ls_valid_i;
 wire ls_ren_i = (op_i == 5'b00000) && ls_valid_i;
 
 wire [ 3:0] ls_wmask_i = 
-	 ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0001
- : ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b0011
- : ((ls_waddr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b010) ? 4'b1111
- : ((ls_waddr_i[1:0] == 1) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0010
- : ((ls_waddr_i[1:0] == 2) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0100 
- : ((ls_waddr_i[1:0] == 2) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b1100 
- : ((ls_waddr_i[1:0] == 3) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b1000 
+	 ((ls_addr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0001
+ : ((ls_addr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b0011
+ : ((ls_addr_i[1:0] == 0) && op_i == 5'b01000 && funct3_i == 3'b010) ? 4'b1111
+ : ((ls_addr_i[1:0] == 1) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0010
+ : ((ls_addr_i[1:0] == 2) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b0100 
+ : ((ls_addr_i[1:0] == 2) && op_i == 5'b01000 && funct3_i == 3'b001) ? 4'b1100 
+ : ((ls_addr_i[1:0] == 3) && op_i == 5'b01000 && funct3_i == 3'b000) ? 4'b1000 
  : 4'b0;
 assign ls_rdata_o = 
-   ((ls_raddr_i[1:0] == 0) && op_i == 5'b00000 && funct3_i == 3'b010) ? ls_axi_rdata
- : ((ls_raddr_i[1:0] == 0) && op_i == 5'b00000 && funct3_i == 3'b000) ? {{24{ls_axi_rdata[7]}},ls_axi_rdata[7:0]}
- : ((ls_raddr_i[1:0] == 1) && op_i == 5'b00000 && funct3_i == 3'b000) ? {{24{ls_axi_rdata[15]}},ls_axi_rdata[15:8]}
- : ((ls_raddr_i[1:0] == 2) && op_i == 5'b00000 && funct3_i == 3'b000) ? {{24{ls_axi_rdata[23]}},ls_axi_rdata[23:16]}
- : ((ls_raddr_i[1:0] == 3) && op_i == 5'b00000 && funct3_i == 3'b000) ? {{24{ls_axi_rdata[31]}},ls_axi_rdata[31:24]}
- : ((ls_raddr_i[1:0] == 0) && op_i == 5'b00000 && funct3_i == 3'b001) ? {{16{ls_axi_rdata[15]}},ls_axi_rdata[15:0]}
- : ((ls_raddr_i[1:0] == 2) && op_i == 5'b00000 && funct3_i == 3'b001) ? {{16{ls_axi_rdata[31]}},ls_axi_rdata[31:16]}
- : ((ls_raddr_i[1:0] == 0) && op_i == 5'b00000 && funct3_i == 3'b100) ? {24'b0,ls_axi_rdata[7:0]}
- : ((ls_raddr_i[1:0] == 1) && op_i == 5'b00000 && funct3_i == 3'b100) ? {24'b0,ls_axi_rdata[15:8]}
- : ((ls_raddr_i[1:0] == 2) && op_i == 5'b00000 && funct3_i == 3'b100) ? {24'b0,ls_axi_rdata[23:16]}
- : ((ls_raddr_i[1:0] == 3) && op_i == 5'b00000 && funct3_i == 3'b100) ? {24'b0,ls_axi_rdata[31:24]}
- : ((ls_raddr_i[1:0] == 0) && op_i == 5'b00000 && funct3_i == 3'b101) ? {16'b0,ls_axi_rdata[15:0]}
- : ((ls_raddr_i[1:0] == 2) && op_i == 5'b00000 && funct3_i == 3'b101) ? {16'b0,ls_axi_rdata[31:16]}
+   ((ls_addr_i[1:0] == 0) && op_i == 5'b00000 && funct3_i == 3'b010) ? ls_axi_rdata
+ : ((ls_addr_i[1:0] == 0) && op_i == 5'b00000 && funct3_i == 3'b000) ? {{24{ls_axi_rdata[7]}},ls_axi_rdata[7:0]}
+ : ((ls_addr_i[1:0] == 1) && op_i == 5'b00000 && funct3_i == 3'b000) ? {{24{ls_axi_rdata[15]}},ls_axi_rdata[15:8]}
+ : ((ls_addr_i[1:0] == 2) && op_i == 5'b00000 && funct3_i == 3'b000) ? {{24{ls_axi_rdata[23]}},ls_axi_rdata[23:16]}
+ : ((ls_addr_i[1:0] == 3) && op_i == 5'b00000 && funct3_i == 3'b000) ? {{24{ls_axi_rdata[31]}},ls_axi_rdata[31:24]}
+ : ((ls_addr_i[1:0] == 0) && op_i == 5'b00000 && funct3_i == 3'b001) ? {{16{ls_axi_rdata[15]}},ls_axi_rdata[15:0]}
+ : ((ls_addr_i[1:0] == 2) && op_i == 5'b00000 && funct3_i == 3'b001) ? {{16{ls_axi_rdata[31]}},ls_axi_rdata[31:16]}
+ : ((ls_addr_i[1:0] == 0) && op_i == 5'b00000 && funct3_i == 3'b100) ? {24'b0,ls_axi_rdata[7:0]}
+ : ((ls_addr_i[1:0] == 1) && op_i == 5'b00000 && funct3_i == 3'b100) ? {24'b0,ls_axi_rdata[15:8]}
+ : ((ls_addr_i[1:0] == 2) && op_i == 5'b00000 && funct3_i == 3'b100) ? {24'b0,ls_axi_rdata[23:16]}
+ : ((ls_addr_i[1:0] == 3) && op_i == 5'b00000 && funct3_i == 3'b100) ? {24'b0,ls_axi_rdata[31:24]}
+ : ((ls_addr_i[1:0] == 0) && op_i == 5'b00000 && funct3_i == 3'b101) ? {16'b0,ls_axi_rdata[15:0]}
+ : ((ls_addr_i[1:0] == 2) && op_i == 5'b00000 && funct3_i == 3'b101) ? {16'b0,ls_axi_rdata[31:16]}
  : 32'b0;
 wire [ 2:0]ls_awsize_i = (op_i == 5'b01000 && funct3_i == 3'b000) ? 3'b000 : (op_i ==  5'b01000 && funct3_i == 3'b001) ? 3'b1 : (op_i == 5'b01000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
 wire [ 2:0]ls_arsize_i = (op_i == 5'b00000 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 5'b00000 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 5'b00000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
@@ -77,12 +77,12 @@ import "DPI-C" function void diff_skip_ref();
 parameter AXI_IDLE=2'b00,AXI_READ=2'b01,AXI_WRITE=2'b10,AXI_DONE=2'b11;
 reg [1:0]axi_state;
 
-assign ls_axi_awaddr = (ls_axi_awvalid || ls_axi_bready) ? ls_waddr_i  : 32'h0;
+assign ls_axi_awaddr = (ls_axi_awvalid || ls_axi_bready) ? ls_addr_i : 32'h0;
 assign ls_axi_awsize = (ls_axi_awvalid) ? ls_awsize_i : 3'b0;
 assign ls_axi_wdata  = (ls_axi_wvalid)  ? ls_wdata_i  : 32'h0;
 assign ls_axi_wstrb  = (ls_axi_wvalid)  ? ls_wmask_i  : 4'b0;
 assign ls_axi_wlast  = (ls_axi_wvalid)  ? 1'b1 : 1'b0;
-assign ls_axi_araddr = (ls_axi_arvalid || ls_axi_rready) ? ls_raddr_i  : 32'h0;
+assign ls_axi_araddr = (ls_axi_arvalid || ls_axi_rready) ? ls_addr_i : 32'h0;
 assign ls_axi_arsize = (ls_axi_arvalid) ? ls_arsize_i : 3'b0;
 
 always @(posedge clk or posedge rst) begin
