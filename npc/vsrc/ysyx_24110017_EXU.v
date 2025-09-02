@@ -177,7 +177,7 @@ wire[31:0] csrs_w =
 			({32{(op_i == 5'b11100) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
 			({32{(op_i == 5'b11100) && (funct3_i == 3'b010)}} & (csr |  r1_i)) | //I_csrrs
       ({32{(op_i == 5'b11100) && (funct3_i == 3'b011)}} & (csr & ~r1_i)) | //I_csrrc
-			({32{ecall_en}} & (pc_i); //ecall_mepc
+			({32{ecall_en}} & pc_i); //ecall_mepc
 wire [3:0] csrs_wen = {
     (op_i == 5'b11100 && imm_i == 32'd773),
     (op_i == 5'b11100 && imm_i == 32'd834) || ecall_en,
