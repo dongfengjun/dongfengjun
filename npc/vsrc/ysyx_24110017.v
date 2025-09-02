@@ -181,7 +181,7 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 		r1,r2,rd_id,gpr_wen_id,
 		mepc,mstatus,mcause,mtvec,
 		xrd_ex,rd_ex,gpr_wen_ex,
-		csrsw_ex,csrs_wen_ex,
+		mcause_ex,csrsw_ex,csrs_wen_ex,
 		ls_addr,ls_wdata,ls_rdata,ls_done,
 		dnpc_ex
 );
@@ -229,7 +229,7 @@ ysyx_24110017_CLINT CLINT(clock,reset,
 ysyx_24110017_RegisterFile #(4,32) RFU (clock,xrd_ex,rd_ex,gpr_wen_ex,rs1_id,r1,rs2_id,r2);
 ysyx_24110017_Reg #(32, 32'b0) mepc_reg (clock,reset,csrsw_ex,mepc,csrs_wen_ex[0]);
 ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,csrsw_ex,mstatus,csrs_wen_ex[1]);
-ysyx_24110017_Reg #(32, 32'b0) mcause_reg (clock,reset,csrsw_ex,mcause,csrs_wen_ex[2]);
+ysyx_24110017_Reg #(32, 32'b0) mcause_reg (clock,reset,mcause_ex,mcause,csrs_wen_ex[2]);
 ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,csrsw_ex,mtvec,csrs_wen_ex[3]);
 ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid,1'b0);
 ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
