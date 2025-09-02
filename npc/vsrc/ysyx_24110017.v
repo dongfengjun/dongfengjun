@@ -109,7 +109,7 @@ wire        ex_ready,ex_valid;
 wire [31:0] xrd_ex;
 wire [ 3:0] rd_ex;
 wire        gpr_wen_ex;
-wire [31:0] mepc_ex,mcause_ex,csrsw_ex;
+wire [31:0] mcause_ex,csrsw_ex;
 wire [3:0]  csrs_wen_ex;
 wire [31:0] ls_addr,ls_wdata;
 wire [31:0] dnpc_ex;
@@ -227,7 +227,7 @@ ysyx_24110017_CLINT CLINT(clock,reset,
 );
 
 ysyx_24110017_RegisterFile #(4,32) RFU (clock,xrd_ex,rd_ex,gpr_wen_ex,rs1_id,r1,rs2_id,r2);
-ysyx_24110017_Reg #(32, 32'b0) mepc_reg (clock,reset,mepc_ex,mepc,csrs_wen_ex[0]);
+ysyx_24110017_Reg #(32, 32'b0) mepc_reg (clock,reset,csrsw_ex,mepc,csrs_wen_ex[0]);
 ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,csrsw_ex,mstatus,csrs_wen_ex[1]);
 ysyx_24110017_Reg #(32, 32'b0) mcause_reg (clock,reset,mcause_ex,mcause,csrs_wen_ex[2]);
 ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,csrsw_ex,mtvec,csrs_wen_ex[3]);
