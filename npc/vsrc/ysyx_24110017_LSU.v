@@ -74,7 +74,7 @@ wire [ 2:0]ls_arsize_i = (op_i == 5'b00000 && (funct3_i == 3'b000 || funct3_i ==
 
 import "DPI-C" function void diff_skip_ref();
 
-parameter AXI_IDLE=2'b00,AXI_READ=2'b01,AXI_WRITE=2'b10,AXI_DONE=2'b11;
+parameter AXI_IDLE=2'b00,AXI_READ=2'b01,AXI_WRITE=2'b10;
 reg [1:0]axi_state;
 
 assign ls_axi_awaddr = (ls_axi_awvalid || ls_axi_bready) ? ls_addr_i  : 32'h0;
@@ -86,14 +86,8 @@ assign ls_axi_araddr = (ls_axi_arvalid || ls_axi_rready) ? ls_addr_i : 32'h0;
 assign ls_axi_arsize = (ls_axi_arvalid) ? ls_arsize_i : 3'b0;
 
 always @(posedge clk or posedge rst) begin
-		if (rst) begin
+		if(rst) begin
 			axi_state			 <= AXI_IDLE;
-      ls_axi_awvalid <= 1'b0;
-      ls_axi_wvalid  <= 1'b0;
-      ls_axi_bready  <= 1'b0;
-
-			ls_axi_arvalid <= 1'b0;
-      ls_axi_rready	 <= 1'b0;
     end 
 		else begin
       case (axi_state)
@@ -115,7 +109,7 @@ always @(posedge clk or posedge rst) begin
 					end
 	        if(ls_axi_rvalid && ls_axi_rready) begin
 						ls_axi_rready  <= 1'b0;
-            axi_state			 <= AXI_DONE;
+            axi_state			 <= AXI_IDLE;
 `ifndef YOSYS_STA						
 						if((ls_axi_araddr - 32'h10000000 < 32'h1000) || (ls_axi_araddr == 32'h02000000) || (ls_axi_araddr == 32'h02000004)) begin //DEVICE DIFFTEST
 							diff_skip_ref();
@@ -133,17 +127,11 @@ always @(posedge clk or posedge rst) begin
 					end
 					if(ls_axi_bvalid && ls_axi_bready) begin
 						ls_axi_bready <= 1'b0;
-						axi_state     <= AXI_DONE;
+						axi_state     <= AXI_IDLE;
 					end
 				end
-        AXI_DONE: begin
-					ls_axi_arvalid <= 1'b0;
-					ls_axi_rready	 <= 1'b0;
-					ls_axi_awvalid <= 1'b0;
-					ls_axi_wvalid  <= 1'b0;
-					ls_axi_bready  <= 1'b0;
-          axi_state      <= AXI_IDLE;
-        end
+				default : begin
+				end
       endcase
 		end
 	end
