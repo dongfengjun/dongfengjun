@@ -10,8 +10,8 @@ module ysyx_24110017_IDU(
 	output reg  [31:0] inst_o,//difftest
 `endif
 
-	output wire [ 4:0] rs1,
-	output wire [ 4:0] rs2,
+	output wire [ 3:0] rs1,
+	output wire [ 3:0] rs2,
 	input  wire [31:0] r1,
 	input  wire [31:0] r2,
 	output wire [20:0] prepc_o,
