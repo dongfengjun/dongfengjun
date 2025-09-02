@@ -102,7 +102,7 @@ always @(posedge clk or posedge rst) begin
 						ls_axi_awvalid <= 1'b1;
 						ls_axi_wvalid  <= 1'b1;
 						ls_axi_awaddr  <= ls_addr_i;
-						ls_axi_wadata  <= ls_wdata_i;
+						ls_axi_wdata   <= ls_wdata_i;
 	        end
 				end
 				AXI_READ: begin
