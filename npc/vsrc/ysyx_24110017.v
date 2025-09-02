@@ -91,13 +91,13 @@ wire icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,i
 wire [31:0]inst_id;//difftest
 `endif
 wire id_valid,id_ready;
-wire [ 4:0] rs1,rs2;
+wire [ 3:0] rs1,rs2;
 wire [20:0] prepc;
 wire [ 1:0] prepc_en;
 wire [31:0] pc_id,imm_id;
 wire [ 4:0] op_id;
 wire [ 2:0] funct3_id;
-wire [13:0] r1_id,r2_id;
+wire [31:0] r1_id,r2_id;
 wire [ 3:0] rd_id;
 wire gpr_wen_id;
 wire ls_valid_id;
