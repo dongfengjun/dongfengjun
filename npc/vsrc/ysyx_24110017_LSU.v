@@ -77,7 +77,7 @@ import "DPI-C" function void diff_skip_ref();
 parameter AXI_IDLE=2'b00,AXI_READ=2'b01,AXI_WRITE=2'b10,AXI_DONE=2'b11;
 reg [1:0]axi_state;
 
-assign ls_axi_awaddr = (ls_axi_awvalid || ls_axi_bready) ? ls_addr_i : 32'h0;
+assign ls_axi_awaddr = (ls_axi_awvalid || ls_axi_bready) ? ls_addr_i  : 32'h0;
 assign ls_axi_awsize = (ls_axi_awvalid) ? ls_awsize_i : 3'b0;
 assign ls_axi_wdata  = (ls_axi_wvalid)  ? ls_wdata_i  : 32'h0;
 assign ls_axi_wstrb  = (ls_axi_wvalid)  ? ls_wmask_i  : 4'b0;

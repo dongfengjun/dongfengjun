@@ -49,17 +49,6 @@ reg state;
 
 wire updata = (!ls_valid || ls_done_i);
 assign ex_valid_o = updata && state; 
-/***
-always @(posedge clk) begin
-	if(rst || flush_i) state <= IDLE;
-  else begin
-		case (state)
-			IDLE: state <= (id_valid_i) ? WAIT : state;
-			WAIT: state <= (updata) ? IDLE : state;
-		endcase
-	end
-end
-***/
 always @(posedge clk) begin
   if(rst || flush_i) state <= IDLE;
   else if(id_valid_i && !state) state <= WAIT;
@@ -185,7 +174,7 @@ wire [31:0]xrd =
 /***LSU***/
 				(op_i == 5'b00000) ? ls_rdata_i   : //LOAD
 /***CSRU***/
-				((op_i == 5'b11100) && ((funct3_i == 3'b001) || (funct3_i == 3'b010) || (funct3_i == 3'b000))) ? csr : //I_csrrw_csrrs_csrrc
+				((op_i == 5'b11100) && ((funct3_i == 3'b001) || (funct3_i == 3'b010) || (funct3_i == 3'b011))) ? csr : //I_csrrw_csrrs_csrrc
 				32'h0;
 
 wire[31:0] csr = (op_i == 5'b11100 && imm_i == 32'd833) ? mepc_i
@@ -223,16 +212,7 @@ assign a = a_use_r1 ? (ab_use_signed ? $signed(r1_i) : r1_i) : 32'b0;
 assign b = b_use_imm ? (ab_use_signed ? $signed(imm_i) : b_use_shamt ? {27'b0, shamt_i} : imm_i) :
            b_use_r2 ? (ab_use_signed ? $signed(r2_i) : r2_i) : 32'b0;
 
-localparam ADD  = 4'b0001;
-localparam SUB  = 4'b0010;
-localparam SLL  = 4'b0011;
-localparam SRL  = 4'b0100;
-localparam SRA  = 4'b0101;
-localparam SLT  = 4'b0110;
-localparam AND  = 4'b0111;
-localparam OR   = 4'b1000;
-localparam XOR  = 4'b1001;
-localparam NULL = 4'b1010;
+localparam [3:0] ADD = 3'd1,SUB = 3'd2,SLL = 3'd3,SRL = 3'd4,SRA = 3'd5,SLT = 5'd6,AND = 3'd7,OR = 3'd8,XOR = 3'd9;
 assign alu_sel =
     ((op_i == 5'b00100 && funct3_i == 3'b000) || (op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 1'b0)) ? ADD 
   :  (op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 1'b1) ? SUB 
@@ -242,7 +222,7 @@ assign alu_sel =
 	: ((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 1'b0) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 1'b0)) ? SRL 
 	: ((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 1'b1) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 1'b1)) ? SRA 
 	: ((op_i == 5'b00100 && funct3_i == 3'b110) || (op_i == 5'b01100 && funct3_i == 3'b110 && funct7_i == 1'b0)) ? OR 
-	: ((op_i == 5'b00100 && funct3_i == 3'b111) || (op_i == 5'b01100 && funct3_i == 3'b111 && funct7_i == 1'b0)) ? AND : NULL;
+	: ((op_i == 5'b00100 && funct3_i == 3'b111) || (op_i == 5'b01100 && funct3_i == 3'b111 && funct7_i == 1'b0)) ? AND : ADD;
 assign alu_res = (alu_sel == ADD) ? (a + b)
 	: (alu_sel == SUB) ? (a - b)
 	: (alu_sel == SLL) ? (a << b[4:0]) 
