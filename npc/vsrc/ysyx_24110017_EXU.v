@@ -43,12 +43,13 @@ module ysyx_24110017_EXU(
 );
 
 /***分布式控制***/
-assign ex_ready_o = (state == IDLE);
+assign ex_ready_o = !state;
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
 wire updata = (!ls_valid || ls_done_i);
-assign ex_valid_o = updata && (state == WAIT); 
+assign ex_valid_o = updata && state; 
+/***
 always @(posedge clk) begin
 	if(rst || flush_i) state <= IDLE;
   else begin
@@ -57,6 +58,12 @@ always @(posedge clk) begin
 			WAIT: state <= (updata) ? IDLE : state;
 		endcase
 	end
+end
+***/
+always @(posedge clk) begin
+  if(rst || flush_i) state <= IDLE;
+  else if(id_valid_i && !state) state <= WAIT;
+  else if(updata && state) state <= IDLE;
 end
 
 always@(posedge clk) begin
@@ -88,7 +95,7 @@ always@(posedge clk) begin
   casez({flush_i,state})
 		2'b1? : rd_o <= 4'b0;
     2'b01 : begin
-        if(updata) rd_o <= rd_i;
+      if(updata) rd_o <= rd_i;
     end
 		default : begin
 		end
@@ -263,8 +270,8 @@ assign blten = (op_i == 5'b11000 && funct3_i == 3'b100 && ($signed(r1_i) < $sign
 assign bgeen = (op_i == 5'b11000 && funct3_i == 3'b101 && ($signed(r1_i) >= $signed(r2_i)));
 assign bltuen = (op_i == 5'b11000 && funct3_i == 3'b110 && (r1_i < r2_i));
 assign bgeuen = (op_i == 5'b11000 && funct3_i == 3'b111 && (r1_i >= r2_i));
-assign ecall_en = (op_i == 5'b11100 && offset == 32'd0 && funct3_i == 3'b000);
-assign mret_en = (op_i == 5'b11100 && offset == 32'b1100000010 && funct3_i == 3'b000);
+assign ecall_en = (op_i == 5'b11100 && offset[0] == 1'b0 && funct3_i == 3'b0);
+assign mret_en = (op_i == 5'b11100 && offset[9:0] == 10'b1100000010 && funct3_i == 3'b0);
 
 wire [31:0]dnpc = (jalen) ? (pc_i + offset)	//jal
 	: (jalren) ? ((r1_i + offset) & ~1) //jalr
