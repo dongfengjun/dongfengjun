@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_EXU(
 	input  wire clk,
 	input  wire rst,
@@ -47,8 +47,8 @@ assign ex_ready_o = (state == IDLE);
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
-wire updata = (state == WAIT) && (!ls_valid || ls_done_i);
-assign ex_valid_o = updata; 
+wire updata = (!ls_valid || ls_done_i);
+assign ex_valid_o = updata && (state == WAIT); 
 always @(posedge clk) begin
 	if(rst || flush_i) state <= IDLE;
   else begin
@@ -59,23 +59,9 @@ always @(posedge clk) begin
 	end
 end
 
+/***
 always @(posedge clk) begin
-	if(rst) begin
-`ifndef YOSYS_STA
-		pc_o					<= 32'h0;
-		inst_o				<= 32'h0;
-		npc_o         <= 32'h0;
-`endif
-		xrd_o         <= 32'h0;
-		rd_o					<= 4'b0;
-		gpr_wen_o			<= 1'b0;
-		mepc_o				<= 32'h0;
-	  mcause_o			<= 32'h0;
-		csrsw_o				<= 32'h0;
-		csrs_wen_o		<= 4'b0;
-		dnpc_o				<= 32'h0;
-	end
-	else if(flush_i) begin
+	if(flush_i) begin
 `ifndef YOSYS_STA
 		pc_o          <= 32'h0;
     inst_o        <= 32'h0;
@@ -88,6 +74,7 @@ always @(posedge clk) begin
     mcause_o      <= 32'h0;
     csrsw_o       <= 32'h0;
     csrs_wen_o    <= 4'b0;
+		dnpc_o        <= 32'h0;
 	end
 	else begin
 		case(state)
@@ -119,6 +106,113 @@ always @(posedge clk) begin
 			end
 		endcase
 	end
+end
+***/
+
+always@(posedge clk) begin
+	casez({flush_i,state})
+		2'b1? : begin
+`ifndef YOSYS_STA
+			pc_o          <= 32'h0;
+			inst_o        <= 32'h0;
+			npc_o         <= 32'h0;
+`endif
+			xrd_o         <= 32'h0;
+		end
+		2'b01 : begin
+			if(updata) begin
+`ifndef YOSYS_STA
+				pc_o					<= pc_i;
+				inst_o				<= inst_i;
+				npc_o         <= dnpc;
+`endif
+				xrd_o         <= xrd;
+			end
+		end
+		default : begin
+		end
+	endcase
+end
+
+always@(posedge clk) begin
+  casez({flush_i,state})
+		2'b1? : rd_o <= 4'b0;
+    2'b01 : begin
+        if(updata) rd_o <= rd_i;
+    end
+		default : begin
+		end
+	endcase
+end
+
+always@(posedge clk) begin
+  if(flush_i) gpr_wen_o	<= 1'b0;
+  else begin
+    case(state)
+      IDLE : gpr_wen_o	<= 1'b0;
+      WAIT : begin
+        if(updata) gpr_wen_o <= gpr_wen_i;
+      end
+    endcase
+  end
+end
+
+always@(posedge clk) begin
+  casez({flush_i,state})
+		2'b1? : mepc_o <= 32'h0;
+		2'b01 : begin
+			if(updata) mepc_o <= mepc_w;
+		end
+		default : begin
+		end
+	endcase
+end
+
+always@(posedge clk) begin
+  casez({flush_i,state})
+		2'b1? : mcause_o <= 32'h0;
+    2'b01 : begin
+			if(updata) mcause_o <= mcause_w;
+    end
+		default : begin
+		end
+	endcase
+end
+
+always@(posedge clk) begin
+  casez({flush_i,state})
+		2'b1? : csrsw_o	<= 32'h0;
+		2'b01 : begin
+			if(updata) csrsw_o <= csrs_w;
+		end
+		default : begin
+		end
+  endcase
+end
+
+always@(posedge clk) begin
+  if(flush_i)
+		csrs_wen_o <= 4'b0;
+  else begin
+    case(state)
+      IDLE : begin
+				csrs_wen_o <= 4'b0;
+			end
+			WAIT : begin
+        if(updata) csrs_wen_o <= csrs_wen;
+      end
+    endcase
+	end
+end
+
+always@(posedge clk) begin
+	casez({flush_i,state})
+		2'b1? : dnpc_o <= 32'h0;
+		2'b01 : begin
+			if(updata) dnpc_o <= dnpc;
+		end
+		default : dnpc_o <= dnpc_o;
+	endcase
 end
 
 wire [31:0]xrd = 
