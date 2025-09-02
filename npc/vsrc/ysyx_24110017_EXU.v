@@ -166,10 +166,10 @@ wire [31:0]xrd =
 				32'h0;
 
 wire[31:0] csr = 
-		(op_i == 5'b11100 &&  imm[6] && imm_i[2:0] == 3'b001) ? mepc_i
-	: (op_i == 5'b11100 && !imm[6] && imm_i[2:0] == 3'b000) ? mstatus_i
-	: (op_i == 5'b11100 &&  imm[6] && imm_i[2:0] == 3'b010) ? mcause_i
-	: (op_i == 5'b11100 && !imm[6] && imm_i[2:0] == 3'b101) ? mtvec_i 
+		(op_i == 5'b11100 &&  imm_i[6] && imm_i[2:0] == 3'b001) ? mepc_i
+	: (op_i == 5'b11100 && !imm_i[6] && imm_i[2:0] == 3'b000) ? mstatus_i
+	: (op_i == 5'b11100 &&  imm_i[6] && imm_i[2:0] == 3'b010) ? mcause_i
+	: (op_i == 5'b11100 && !imm_i[6] && imm_i[2:0] == 3'b101) ? mtvec_i 
 	: 32'b0;
 	
 wire[31:0] mcause_w = (ecall_en) ? r2_i : csrs_w; //ecall a5
