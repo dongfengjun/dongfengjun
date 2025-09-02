@@ -10,10 +10,6 @@ module ysyx_24110017_IDU(
 	output reg  [31:0] inst_o,//difftest
 `endif
 
-	output wire [ 3:0] rs1,
-	output wire [ 3:0] rs2,
-	input  wire [31:0] r1,
-	input  wire [31:0] r2,
 	output wire [20:0] prepc_o,
 	output wire [ 1:0] prepc_en_o,
 
@@ -29,8 +25,8 @@ module ysyx_24110017_IDU(
 	output reg	[31:0] imm_o,
 	output reg  [ 4:0] op_o,
 	output reg  [ 2:0] funct3_o,
-	output reg	[31:0] r1_o,
-  output reg	[31:0] r2_o,
+	output reg	[ 3:0] rs1_o,
+  output reg	[ 3:0] rs2_o,
 	output reg	[ 3:0] rd_o,
 	output wire	       gpr_wen_o,
 	output reg         ls_valid_o,
@@ -73,10 +69,10 @@ always@(posedge clk) begin
   if(updata) funct3_o <= funct3;
 end
 always@(posedge clk) begin
-  if(updata) r1_o <= r1;
+  if(updata) rs1_o <= rs1;
 end
 always@(posedge clk) begin
-  if(updata) r2_o <= r2;
+  if(updata) rs2_o <= rs2;
 end
 always@(posedge clk) begin
   if(updata) rd_o  <= rd;
@@ -92,8 +88,8 @@ end
 wire [4:0]op;
 wire [3:0]rd; //R I U J
 wire [2:0]funct3;
-//wire [3:0]rs1;  //R I S B
-//wire [3:0]rs2;  //R S B
+wire [3:0]rs1;  //R I S B
+wire [3:0]rs2;  //R S B
 wire [31:0]immI,immU,immS,immB,immJ,imm;
 wire [6:0]funct7; //R
  

@@ -91,13 +91,12 @@ wire icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,i
 wire [31:0]inst_id;//difftest
 `endif
 wire id_valid,id_ready;
-wire [ 3:0] rs1,rs2;
 wire [20:0] prepc;
 wire [ 1:0] prepc_en;
 wire [31:0] pc_id,imm_id;
 wire [ 4:0] op_id;
 wire [ 2:0] funct3_id;
-wire [31:0] r1_id,r2_id;
+wire [ 3:0] rs1_id,rs2_id;
 wire [ 3:0] rd_id;
 wire gpr_wen_id;
 wire ls_valid_id;
@@ -166,10 +165,10 @@ ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 `ifndef YOSYS_STA
 		inst_id,
 `endif
-		rs1,rs2,r1,r2,prepc,prepc_en,
+		prepc,prepc_en,
 		if_valid,id_ready,id_valid,ex_ready,
 		pc_if,inst_if,
-		pc_id,imm_id,op_id,funct3_id,r1_id,r2_id,
+		pc_id,imm_id,op_id,funct3_id,rs1_id,rs2_id,
 		rd_id,gpr_wen_id,ls_valid_id,
 		fencei_id
 );
@@ -179,7 +178,7 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 `endif
 		id_valid,ex_ready,ex_valid,
 		pc_id,imm_id,op_id,funct3_id,
-		r1_id,r2_id,rd_id,gpr_wen_id,
+		r1,r2,rd_id,gpr_wen_id,
 		mepc,mstatus,mcause,mtvec,
 		xrd_ex,rd_ex,gpr_wen_ex,
 		mcause_ex,csrsw_ex,csrs_wen_ex,
@@ -227,7 +226,7 @@ ysyx_24110017_CLINT CLINT(clock,reset,
 		c_axi_rready,c_axi_rvalid,c_axi_rid,c_axi_rdata,c_axi_rresp,c_axi_rlast
 );
 
-ysyx_24110017_RegisterFile #(4,32) RFU (clock,xrd_ex,rd_ex,gpr_wen_ex,rs1,r1,rs2,r2);
+ysyx_24110017_RegisterFile #(4,32) RFU (clock,xrd_ex,rd_ex,gpr_wen_ex,rs1_id,r1,rs2_id,r2);
 ysyx_24110017_Reg #(32, 32'b0) mepc_reg (clock,reset,csrsw_ex,mepc,csrs_wen_ex[0]);
 ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,csrsw_ex,mstatus,csrs_wen_ex[1]);
 ysyx_24110017_Reg #(32, 32'b0) mcause_reg (clock,reset,mcause_ex,mcause,csrs_wen_ex[2]);
