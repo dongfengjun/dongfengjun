@@ -115,6 +115,9 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0) (
 							if(m_axi_araddr - 32'ha0000000 < 32'h20000000) begin
 								s_axi_arlen <= CACHE_WIDTH - {6'b0,offset} - 1;
 							end
+							else begin
+								s_axi_arlen <= 8'h0;
+							end
 							burst_counter <= offset;
 						end
 						else begin
@@ -148,6 +151,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0) (
 					if(s_axi_rlast) begin
 						s_axi_arvalid <= 1'b0;
 						s_axi_rready  <= 1'b0;
+						s_axi_arlen   <= 8'b0;
 						burst_counter <= 2'b0;
 					end
 				end
