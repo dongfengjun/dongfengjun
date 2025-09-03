@@ -84,14 +84,14 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 0) (
 		if(rst) state <= IDLE;
 		else begin
 			case(state)
-				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && (access == 0) ? TRANS : state;
+				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && (hit == 0) ? TRANS : state;
 				TRANS:   state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
         default: state <= state;
 			endcase
 		end
 	end
 
-	assign s_axi_araddr = (s_axi_arvalid) ? (m_axi_araddr + (burst - offset)) << 2 : 32'h0;
+	assign s_axi_araddr = (s_axi_arvalid) ? m_axi_araddr + ((burst_counter - offset) << 2) : 32'h0;
 	assign s_axi_arburst = 2'b01;
 	assign s_axi_arlen = (m_axi_araddr - 32'ha0000000 < 32'h20000000) ? CACHE_WIDTH - {6'b0,offset} - 1 : 8'b0;
 	assign s_axi_arsize = 3'b10;
