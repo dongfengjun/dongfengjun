@@ -1,7 +1,7 @@
 //`define YOSYS_STA
 module ysyx_24110017_CACHE #(n = 2, m = 4, w = 0) (
-	input clk,
-	input rst,
+	input  wire clk,
+	input  wire rst,
 	input  wire fencei_i,
 
 	output reg  m_axi_arready,
@@ -95,7 +95,6 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 0) (
 	assign s_axi_arburst = 2'b01;
 	assign s_axi_arlen = (m_axi_araddr - 32'ha0000000 < 32'h20000000) ? CACHE_WIDTH - {6'b0,offset} - 1 : 8'b0;
 	assign s_axi_arsize = 3'b10;
-	wire [31:0]
 	reg  [ 1:0] burst_counter;
 
 	always @(posedge clk) begin
