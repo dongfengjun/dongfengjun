@@ -1884,7 +1884,7 @@ void VysyxSoCFull___024root__trace_chg_sub_0(VysyxSoCFull___024root* vlSelf, Ver
         bufp->chgBit(oldp+1016,(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi42apb__DOT__is_write));
         bufp->chgIData(oldp+1017,(vlSelf->ysyxSoCFull__DOT__asic__DOT___axi42apb_auto_out_pwdata),32);
         bufp->chgCData(oldp+1018,(((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi42apb__DOT__is_write)
-                                    ? (IData)(vlSelf->__VdfgTmp_h504ef6e4__0)
+                                    ? (IData)(vlSelf->__VdfgTmp_h28ba5c95__0)
                                     : 0U)),4);
         bufp->chgBit(oldp+1019,(vlSelf->ysyxSoCFull__DOT__asic__DOT__axi42apb__DOT__accept_write));
         bufp->chgBit(oldp+1020,(vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4xbar_1_auto_anon_out_0_awvalid));

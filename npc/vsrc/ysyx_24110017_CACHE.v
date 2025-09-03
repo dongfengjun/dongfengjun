@@ -91,7 +91,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 0) (
 		end
 	end
 
-	assign s_axi_araddr = (s_axi_arvalid) ? {m_axi_araddr[31:m], (burst_counter << 2)} : 32'h0;
+	assign s_axi_araddr = (s_axi_arvalid) ? {m_axi_araddr[31:m], ({(m-2){1'b0}},burst_counter} << 2)} : 32'h0;
 	assign s_axi_arburst = 2'b01;
 	assign s_axi_arlen = (m_axi_araddr - 32'ha0000000 < 32'h20000000) ? CACHE_WIDTH - {6'b0,offset} - 1 : 8'b0;
 	assign s_axi_arsize = 3'b10;
