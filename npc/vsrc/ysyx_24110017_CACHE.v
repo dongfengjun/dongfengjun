@@ -143,7 +143,6 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 0) (
 						tag_reg  [burst_counter][index * CACHE_WAY] <= s_axi_araddr[31 : m+n-w];
 						valid_reg[burst_counter][index * CACHE_WAY] <= 1'b1;
 						burst_counter <= burst_counter + 1;
-						s_axi_araddr  <= s_axi_araddr + 4;
 					end
 					if(s_axi_rlast) begin
 						s_axi_arvalid <= 1'b0;
