@@ -44,6 +44,8 @@ module ysyx_24110017_BTB #(n = 2, w = 0) (
 			end
 	endgenerate
 
+`define IS_NONZERO(w) (w != 0)
+`ifdef IS_NONZERO(w)
 	wire [(1<<w)-1:0]already;
   generate
     genvar k;
@@ -51,7 +53,8 @@ module ysyx_24110017_BTB #(n = 2, w = 0) (
         assign already[k] = (prepc_tag == tag_reg[prepc_index * (1<<w) + k]);
       end
   endgenerate
-	
+`endif
+
 	assign snpc_o = (jhit) ? {pc_i[31:21],jsnpc_reg} : (hit != 0) ? {pc_i[31:8],snpc_reg[index * (1<<w) + log2(hit)]} : pc_i + 4;
 	
 	reg [1:0]enable;
@@ -65,7 +68,7 @@ module ysyx_24110017_BTB #(n = 2, w = 0) (
 			jsnpc_reg <= prepc_i;
       jtag_reg  <= prepc_tag_i[31:2];
 		end
-		else if(prepc_en_i[0] && !enable[0] && (already == 0)) begin
+		else if(prepc_en_i[0] && !enable[0]) begin // && (already == 0)) begin
 			integer a;
 			for (a = 1; a < (1<<w); a = a + 1) begin
         snpc_reg[prepc_index * (1<<w) + a] <= snpc_reg[prepc_index * (1<<w) + a - 1];
