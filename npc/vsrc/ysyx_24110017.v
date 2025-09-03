@@ -227,7 +227,7 @@ ysyx_24110017_CLINT CLINT(clock,reset,
 		c_axi_rready,c_axi_rvalid,c_axi_rid,c_axi_rdata,c_axi_rresp,c_axi_rlast
 );
 
-ysyx_24110017_RegisterFile #(4,32) RFU (clock,xrd_ex,rd_ex,gpr_wen_ex,rs1_id,r1,rs2_id,r2);
+ysyx_24110017_RegisterFile #(4,32) RFU (clock,xrd_ex,rd_ex,gpr_wen_ex,rs1,r1,rs2,r2);
 ysyx_24110017_Reg #(32, 32'b0) mepc_reg (clock,reset,csrsw_ex,mepc,csrs_wen_ex[0]);
 ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,csrsw_ex,mstatus,csrs_wen_ex[1]);
 ysyx_24110017_Reg #(32, 32'b0) mcause_reg (clock,reset,mcause_ex,mcause,csrs_wen_ex[2]);

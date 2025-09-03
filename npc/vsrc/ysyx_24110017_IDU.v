@@ -12,10 +12,10 @@ module ysyx_24110017_IDU(
 
 	output wire [20:0] prepc_o,
 	output wire [ 1:0] prepc_en_o,
-	output wire [ 3:0] rs1_o,
-	output wire [ 3:0] rs2_o,
-	input  wire [31:0] r1_i,
-	input  wire [31:0] r2_i,
+	output wire [ 3:0] rs1,
+	output wire [ 3:0] rs2,
+	input  wire [31:0] r1,
+	input  wire [31:0] r2,
 
 	input  wire if_valid_i,
 	output wire id_ready_o,
