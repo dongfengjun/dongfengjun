@@ -1,5 +1,5 @@
-//`define YOSYS_STA
-module ysyx_24110017_CACHE #(n = 2, m = 4, w = 0) (
+`define YOSYS_STA
+module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0) (
 	input  wire clk,
 	input  wire rst,
 	input  wire fencei_i,
@@ -22,9 +22,9 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 0) (
 	output reg  s_axi_arvalid,
 	output wire [ 3:0]s_axi_arid,
 	output reg  [31:0]s_axi_araddr,
-	output reg  [ 7:0]s_axi_arlen,
-	output reg  [ 2:0]s_axi_arsize,
-	output reg  [ 1:0]s_axi_arburst,
+	output wire [ 7:0]s_axi_arlen,
+	output wire [ 2:0]s_axi_arsize,
+	output wire [ 1:0]s_axi_arburst,
 	output reg  s_axi_rready,
 	input wire  s_axi_rvalid,
 	input wire  [ 3:0]s_axi_rid,
@@ -93,9 +93,8 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 0) (
 	end
 
 	assign s_axi_arburst = 2'b01;
-	assign s_axi_arlen = (s_axi_arvalid) ? ((axi_araddr - 32'ha0000000 < 32'h20000000) ? CACHE_WIDTH - {6'b0,offset} - 1 : 8'b0) : 8'b0;
+	assign s_axi_arlen = (s_axi_arvalid) ? ((s_axi_araddr - 32'ha0000000 < 32'h20000000) ? CACHE_WIDTH - {6'b0,offset} - 1 : 8'b0) : 8'b0;
 	assign s_axi_arsize = 3'b10;
-	reg [31:0] axi_araddr;
 	reg [m-3 : 0] burst_counter;
 
 	always @(posedge clk) begin
