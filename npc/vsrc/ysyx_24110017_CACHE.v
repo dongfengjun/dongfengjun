@@ -1,5 +1,5 @@
 //`define YOSYS_STA
-module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
+module ysyx_24110017_CACHE #(n = 2, m = 4, w = 0) (
 	input clk,
 	input rst,
 	input  wire fencei_i,
@@ -40,6 +40,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
 	reg  [31:0]								 cache_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
   reg  [31-m-n+w : 0]				 tag_reg	 [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
   reg  [CACHE_DEPTH - 1 : 0] valid_reg [CACHE_WIDTH - 1 : 0];
+	
 	wire [31-m-n+w : 0]				 tag			 = m_axi_araddr[31 : m+n-w];
   wire [n-w-1 : 0]					 index		 = m_axi_araddr[m+n-w-1 : m];
   wire [m-3 : 0]						 offset	   = m_axi_araddr[m-1 : 2];
@@ -47,8 +48,8 @@ module ysyx_24110017_CACHE #(n = 4, m = 4, w = 3) (
   wire [n-w-1 : 0]					 s_index   = s_axi_araddr[m+n-w-1 : m];
   wire [m-3 : 0]						 s_offset  = s_axi_araddr[m-1 : 2];
  
-	wire [CACHE_WAY - 1 : 0]access;
-	wire [CACHE_WAY - 1 : 0]hit;
+	wire [CACHE_WAY - 1 : 0] access;
+	wire [CACHE_WAY - 1 : 0] hit;
 
 	generate 
     genvar i; 

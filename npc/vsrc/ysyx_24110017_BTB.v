@@ -36,7 +36,7 @@ module ysyx_24110017_BTB #(n = 2, w = 0) (
       end
     end
   endfunction
-  
+
 	wire [(1<<w)-1:0]hit;
 	generate 
     genvar i; 

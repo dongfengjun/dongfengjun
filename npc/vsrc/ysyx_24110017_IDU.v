@@ -133,8 +133,9 @@ always @(posedge clk) begin
 	if(if_valid_i && id_ready_o) prevalid <= 1'b1;
 	else prevalid <= 1'b0;
 end
-assign prepc_en_o[1:0] = prevalid ? ((op == 5'b11000 && inst_i[31]) ? 2'b01 : (op == 5'b11011) ? 2'b10 : 2'b00) : 2'b00;
-assign prepc_o = ((op == 5'b11000 && inst_i[31]) || (op == 5'b11011)) ? prepc[20:0] : 21'b0;
+wire [1:0] prepc_en = (op == 5'b11000 && inst_i[31]) ? 2'b01 : (op == 5'b11011) ? 2'b10 : 2'b00;
 wire [31:0] prepc = pc_i + imm;
+assign prepc_en_o = prevalid ? prepc_en : 2'b00;
+assign prepc_o = ((op == 5'b11000 && inst_i[31]) || (op == 5'b11011)) ? prepc[20:0] : 21'b0;
 
 endmodule
