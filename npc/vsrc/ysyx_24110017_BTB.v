@@ -45,7 +45,7 @@ module ysyx_24110017_BTB #(n = 2, w = 0) (
 	endgenerate
 
 `define IS_NONZERO(w) (w != 0)
-`ifdef IS_NONZERO(w)
+`ifdef IS_NONZERO
 	wire [(1<<w)-1:0]already;
   generate
     genvar k;
