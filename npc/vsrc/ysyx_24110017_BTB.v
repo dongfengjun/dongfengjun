@@ -1,8 +1,10 @@
 module ysyx_24110017_BTB #(n = 2, w = 0) (
-	input clk,
-	input rst,
+	input  wire        clk,
+	input  wire        rst,
+
 	input  wire [31:0] pc_i,
 	output wire [31:0] snpc_o,
+
 	input  wire [20:0] prepc_i,
 	input  wire [31:0] prepc_tag_i,
 	input  wire [ 1:0] prepc_en_i
@@ -13,7 +15,7 @@ module ysyx_24110017_BTB #(n = 2, w = 0) (
 	wire [29:0] jtag = pc_i[31:2];
 	wire jhit = (jtag == jtag_reg);
 
-	reg  [ 9:0]     snpc_reg [(1<<n)-1:0];
+	reg  [ 7:0]     snpc_reg [(1<<n)-1:0];
   reg  [29-n+w:0] tag_reg  [(1<<n)-1:0];
 	wire [29-n+w:0] tag   = pc_i[31:2+n-w];
 	wire [n-1-w :0] index = pc_i[1+n-w:2];
@@ -50,7 +52,7 @@ module ysyx_24110017_BTB #(n = 2, w = 0) (
       end
   endgenerate
 	
-	assign snpc_o = (jhit) ? pc_i + {{11{jsnpc_reg[20]}},jsnpc_reg} : (hit != 0) ? pc_i + {{22{1'b1}},snpc_reg[index * (1<<w)]} : pc_i + 4;
+	assign snpc_o = (jhit) ? {pc_i[31:21],jsnpc_reg} : (hit != 0) ? {pc_i[31:8],snpc_reg[index * (1<<w) + log2(hit)]} : pc_i + 4;
 	
 	reg [1:0]enable;
 	always @(posedge clk) begin
@@ -59,9 +61,7 @@ module ysyx_24110017_BTB #(n = 2, w = 0) (
 	end
 
 	always @(posedge clk) begin
-		if(rst) begin
-		end
-		else if(prepc_en_i[1] && !enable[1]) begin
+		if(prepc_en_i[1] && !enable[1]) begin
 			jsnpc_reg <= prepc_i;
       jtag_reg  <= prepc_tag_i[31:2];
 		end
@@ -71,7 +71,7 @@ module ysyx_24110017_BTB #(n = 2, w = 0) (
         snpc_reg[prepc_index * (1<<w) + a] <= snpc_reg[prepc_index * (1<<w) + a - 1];
         tag_reg[prepc_index * (1<<w) + a]  <= tag_reg[prepc_index * (1<<w) + a - 1];
       end
-			snpc_reg[prepc_index * (1<<w)] <= prepc_i[9:0];
+			snpc_reg[prepc_index * (1<<w)] <= prepc_i[7:0];
 			tag_reg[prepc_index * (1<<w)]  <= prepc_tag;
 		end
 	end

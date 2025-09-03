@@ -12,6 +12,10 @@ module ysyx_24110017_IDU(
 
 	output wire [20:0] prepc_o,
 	output wire [ 1:0] prepc_en_o,
+	output wire [ 3:0] rs1,
+	output wire [ 3:0] rs2,
+	input  wire [31:0] r1,
+	input  wire [31:0] r2,
 
 	input  wire if_valid_i,
 	output wire id_ready_o,
@@ -25,14 +29,13 @@ module ysyx_24110017_IDU(
 	output reg	[31:0] imm_o,
 	output reg  [ 4:0] op_o,
 	output reg  [ 2:0] funct3_o,
-	output reg	[ 3:0] rs1_o,
-  output reg	[ 3:0] rs2_o,
+	output reg	[31:0] r1_o,
+  output reg	[31:0] r2_o,
 	output reg	[ 3:0] rd_o,
 	output wire	       gpr_wen_o,
 	output reg         ls_valid_o,
 	output wire        fencei_o
 );
-
 /***分布式控制***/
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
@@ -69,10 +72,10 @@ always@(posedge clk) begin
   if(updata) funct3_o <= funct3;
 end
 always@(posedge clk) begin
-  if(updata) rs1_o <= rs1;
+  if(updata) r1_o <= r1;
 end
 always@(posedge clk) begin
-  if(updata) rs2_o <= rs2;
+  if(updata) r2_o <= r2;
 end
 always@(posedge clk) begin
   if(updata) rd_o  <= rd;
@@ -88,8 +91,8 @@ end
 wire [4:0]op;
 wire [3:0]rd; //R I U J
 wire [2:0]funct3;
-wire [3:0]rs1;  //R I S B
-wire [3:0]rs2;  //R S B
+//wire [3:0]rs1;  //R I S B
+//wire [3:0]rs2;  //R S B
 wire [31:0]immI,immU,immS,immB,immJ,imm;
 wire [6:0]funct7; //R
  
@@ -126,6 +129,6 @@ assign fencei_o = (op_o == 5'b00011);
 
 //静态分支预测
 assign prepc_en_o[1:0] = (op == 5'b11000 && inst_i[31]) ? 2'b01 : (op == 5'b11011) ? 2'b10 : 2'b00;
-assign prepc_o = ((op == 5'b11000 && inst_i[31]) || (op == 5'b11011)) ? imm[20:0] : 21'b0;
+assign prepc_o = ((op == 5'b11000 && inst_i[31]) || (op == 5'b11011)) ? (pc + imm)[20:0] : 21'b0;
 
 endmodule
