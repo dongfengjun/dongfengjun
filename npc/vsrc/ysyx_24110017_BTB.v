@@ -1,3 +1,4 @@
+//`define Associative //w != 0
 module ysyx_24110017_BTB #(n = 2, w = 0) (
 	input  wire        clk,
 	input  wire        rst,
@@ -44,8 +45,7 @@ module ysyx_24110017_BTB #(n = 2, w = 0) (
 			end
 	endgenerate
 
-`define IS_NONZERO(w) (w != 0)
-`ifdef IS_NONZERO
+`ifdef Associative
 	wire [(1<<w)-1:0]already;
   generate
     genvar k;
@@ -55,26 +55,42 @@ module ysyx_24110017_BTB #(n = 2, w = 0) (
   endgenerate
 `endif
 
-	assign snpc_o = (jhit) ? {pc_i[31:21],jsnpc_reg} : (hit != 0) ? {pc_i[31:8],snpc_reg[index * (1<<w) + log2(hit)]} : pc_i + 4;
-	
-	reg [1:0]enable;
+	assign snpc_o = (jhit) ? {pc_i[31:21],jsnpc_reg} : (|hit) ? {pc_i[31:8],snpc_reg[index * (1<<w) + log2(hit)]} : pc_i + 4;
+
 	always @(posedge clk) begin
-		if(rst) enable <= 2'b0;
-		else enable <= prepc_en_i;
+		if(prepc_en_i[1]) begin
+			jsnpc_reg <= prepc_i;
+		end
+	end
+	always @(posedge clk) begin
+		if(prepc_en_i[1]) begin
+			jtag_reg  <= prepc_tag_i[31:2];
+		end
 	end
 
 	always @(posedge clk) begin
-		if(prepc_en_i[1] && !enable[1]) begin
-			jsnpc_reg <= prepc_i;
-      jtag_reg  <= prepc_tag_i[31:2];
-		end
-		else if(prepc_en_i[0] && !enable[0]) begin // && (already == 0)) begin
+`ifdef Associative
+		if(prepc_en_i[0] && (!already)) begin
+`else
+		if(prepc_en_i[0]) begin
+`endif
 			integer a;
 			for (a = 1; a < (1<<w); a = a + 1) begin
-        snpc_reg[prepc_index * (1<<w) + a] <= snpc_reg[prepc_index * (1<<w) + a - 1];
-        tag_reg[prepc_index * (1<<w) + a]  <= tag_reg[prepc_index * (1<<w) + a - 1];
-      end
+				snpc_reg[prepc_index * (1<<w) + a] <= snpc_reg[prepc_index * (1<<w) + a - 1];
+			end
 			snpc_reg[prepc_index * (1<<w)] <= prepc_i[7:0];
+		end
+	end
+	always @(posedge clk) begin
+`ifdef Associative
+		if(prepc_en_i[0] && (!already)) begin
+`else
+		if(prepc_en_i[0]) begin
+`endif
+			integer a;
+			for (a = 1; a < (1<<w); a = a + 1) begin
+				tag_reg[prepc_index * (1<<w) + a]  <= tag_reg[prepc_index * (1<<w) + a - 1];                            
+			end
 			tag_reg[prepc_index * (1<<w)]  <= prepc_tag;
 		end
 	end
