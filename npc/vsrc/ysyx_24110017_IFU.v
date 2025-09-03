@@ -32,13 +32,12 @@ module ysyx_24110017_IFU(
 assign if_ready_o = (state == IDLE);
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
-wire ifaddr_valid = (pc_i[31:28] == 4'h3) || (pc_i[31:24] == 8'h0f) || (pc_i[31] == 1'b1 && pc_i[30:29] != 2'b11);
 
 always @(posedge clk) begin
 	if(rst || flush) state <= IDLE;
 	else begin
 		case(state)
-			IDLE: state <= (pc_valid_i && ifaddr_valid) ? WAIT : state;
+			IDLE: state <= (pc_valid_i) ? WAIT : state;
 			WAIT:	state <= (if_valid_o && id_ready_i)   ? IDLE : state;
 		endcase
 	end
