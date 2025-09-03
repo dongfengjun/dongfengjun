@@ -41,9 +41,10 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 0) (
   reg  [31-m-n+w : 0]				 tag_reg	 [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
   reg  [CACHE_DEPTH - 1 : 0] valid_reg [CACHE_WIDTH - 1 : 0];
 	
-	wire [31-m-n+w : 0]				 tag			 = m_axi_araddr[31 : m+n-w];
-  wire [n-w-1 : 0]					 index		 = m_axi_araddr[m+n-w-1 : m];
-  wire [m-3 : 0]						 offset	   = m_axi_araddr[m-1 : 2];
+	wire [31:0] axi_araddr = (!state) ? m_axi_araddr : s_axi_araddr;
+	wire [31-m-n+w : 0]				 tag			 = axi_araddr[31 : m+n-w];
+  wire [n-w-1 : 0]					 index		 = axi_araddr[m+n-w-1 : m];
+  wire [m-3 : 0]						 offset	   = axi_araddr[m-1 : 2];
  
 	wire [CACHE_WAY - 1 : 0] hit;
 
@@ -91,11 +92,11 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 0) (
 		end
 	end
 
-	assign s_axi_araddr = {m_axi_araddr[31:m], ({{(m-2){1'b0}},burst_counter} << 2)};
 	assign s_axi_arburst = 2'b01;
-	assign s_axi_arlen = (m_axi_araddr - 32'ha0000000 < 32'h20000000) ? CACHE_WIDTH - {6'b0,offset} - 1 : 8'b0;
+	assign s_axi_arlen = (axi_araddr - 32'ha0000000 < 32'h20000000) ? CACHE_WIDTH - {6'b0,offset} - 1 : 8'b0;
 	assign s_axi_arsize = 3'b10;
-	reg  [m-3 : 0] burst_counter;
+	reg [31:0] axi_araddr;
+	reg [m-3 : 0] burst_counter;
 
 	always @(posedge clk) begin
 		if(fencei_i) begin
@@ -108,6 +109,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 0) (
 			case(state)
 				IDLE: begin
 					m_axi_arready <= 1'b1;
+					s_axi_araddr  <= m_axi_araddr;
 					if(m_axi_arvalid && m_axi_arready) begin
 						if(hit == 0) begin
 							m_axi_arready <= 1'b0;
@@ -141,6 +143,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 0) (
 						tag_reg  [burst_counter][index * CACHE_WAY] <= s_axi_araddr[31 : m+n-w];
 						valid_reg[burst_counter][index * CACHE_WAY] <= 1'b1;
 						burst_counter <= burst_counter + 1;
+						s_axi_araddr  <= s_axi_araddr + 4;
 					end
 					if(s_axi_rlast) begin
 						s_axi_arvalid <= 1'b0;

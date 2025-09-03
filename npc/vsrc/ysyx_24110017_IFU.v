@@ -16,7 +16,7 @@ module ysyx_24110017_IFU(
 	input  wire				 if_axi_arready_i,
 	output reg				 if_axi_arvalid_o,
 	output wire [ 3:0] if_axi_arid_o,
-	output reg  [31:0] if_axi_araddr_o,
+	output wire [31:0] if_axi_araddr_o,
 	output wire [ 7:0] if_axi_arlen_o,
 	output wire	[ 2:0] if_axi_arsize_o,
 	output wire	[ 1:0] if_axi_arburst_o,
@@ -72,6 +72,7 @@ assign if_axi_arid_o    = 4'b0;
 assign if_axi_arlen_o   = 8'b0;
 assign if_axi_arsize_o  = 3'b0;
 assign if_axi_arburst_o = 2'b0;
+assign if_axi_araddr_o  = (if_axi_arvalid_o) ? pc_i : 32'h0;
 
 always @(posedge clk) begin
   if(rst || flush) begin
@@ -81,7 +82,6 @@ always @(posedge clk) begin
     case (state)
       IDLE: begin
 				if_axi_arvalid_o <= 1'b1;
-				if_axi_araddr_o  <= pc_i;
       end
       WAIT: begin
 				if(if_axi_arvalid_o && if_axi_arready_i) begin
