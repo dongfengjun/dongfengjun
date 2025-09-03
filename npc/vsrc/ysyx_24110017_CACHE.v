@@ -109,7 +109,7 @@ module ysyx_24110017_CACHE #(n = 2, m = 4, w = 0) (
 				IDLE: begin
 					m_axi_arready <= 1'b1;
 					if(m_axi_arvalid && m_axi_arready) begin
-						if(access == 0) begin
+						if(hit == 0) begin
 							m_axi_arready <= 1'b0;
 							s_axi_arvalid <= 1'b1;
 							burst_counter <= offset;
