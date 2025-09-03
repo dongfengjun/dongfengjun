@@ -93,10 +93,11 @@ wire [31:0]inst_id;//difftest
 wire id_valid,id_ready;
 wire [20:0] prepc;
 wire [ 1:0] prepc_en;
+wire [ 3:0] rs1,rs2;
 wire [31:0] pc_id,imm_id;
 wire [ 4:0] op_id;
 wire [ 2:0] funct3_id;
-wire [ 3:0] rs1_id,rs2_id;
+wire [31:0] r1_id,r2_id;
 wire [ 3:0] rd_id;
 wire gpr_wen_id;
 wire ls_valid_id;
@@ -165,10 +166,10 @@ ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 `ifndef YOSYS_STA
 		inst_id,
 `endif
-		prepc,prepc_en,
+		prepc,prepc_en,rs1,rs2,r1,r2,
 		if_valid,id_ready,id_valid,ex_ready,
 		pc_if,inst_if,
-		pc_id,imm_id,op_id,funct3_id,rs1_id,rs2_id,
+		pc_id,imm_id,op_id,funct3_id,r1_id,r2_id,
 		rd_id,gpr_wen_id,ls_valid_id,
 		fencei_id
 );
