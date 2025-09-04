@@ -67,19 +67,18 @@ localparam RESET_PC = 32'h30000000;
 reg [31:0]pc;
 always @(posedge clk) begin
   casez({rst, flush, updata})
-    3'b1??:  pc_o <= RESET_PC;
-    3'b01?:  pc_o <= dnpc_i;
-    3'b001:  pc_o <= snpc_i;
-		default: pc_o <= pc_o;
+    3'b1??:  pc <= RESET_PC;
+    3'b01?:  pc <= dnpc_i;
+    3'b001:  pc <= snpc_i;
+		default: pc <= pc_o;
 	endcase
 end
 
 wire updata = if_valid_o && id_ready_i;
-/***
+
 always @(posedge clk) begin
-	if(updata) pc_o <= if_axi_araddr_o;
+	if(updata) pc_o <= pc;
 end
-***/
 always @(posedge clk) begin
   if(updata) inst_o <= if_axi_rdata_i;
 end
@@ -89,7 +88,7 @@ assign if_axi_arid_o    = 4'b0;
 assign if_axi_arlen_o   = 8'b0;
 assign if_axi_arsize_o  = 3'b0;
 assign if_axi_arburst_o = 2'b0;
-assign if_axi_araddr_o  = pc_o;
+assign if_axi_araddr_o  = pc;
 
 always @(posedge clk) begin
   if(rst || flush) begin
