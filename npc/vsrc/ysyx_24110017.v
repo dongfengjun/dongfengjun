@@ -146,7 +146,7 @@ wire [31:0]mvendorid,marchid; //ID
 //		pc,dnpc_ex,snpc,
 //		pc_valid,if_ready
 //);
-ysyx_24110017_BTB #(1,0) BTB(clock,reset,pc,snpc,prepc,pc_if,prepc_en);
+ysyx_24110017_BTB #(1,0) BTB(clock,reset,pc_if,snpc,prepc,pc_if,prepc_en);
 ysyx_24110017_IFU IFU(clock,reset,isCHazard,
 		//pc_valid,if_ready,if_valid,id_ready,
 		//pc,pc_if,inst_if,
@@ -291,7 +291,7 @@ function int performance_counter(int i);
 															 : (i == 5) ? {31'b0,ex_valid}
 															 : (i == 6) ? {31'b0,if_axi_arvalid && if_axi_arready}
 															 : (i == 7) ? {31'b0,if_axi_rvalid && if_axi_rready}
-															 : (i == 8) ? {31'b0,if_ready}
+															 : (i == 8) ? 32'b0//{31'b0,if_ready}
 															 : (i == 9) ? {31'b0,ls_axi_awvalid && ls_axi_awready}
 															 : (i == 10) ? {31'b0,ls_axi_arvalid && ls_axi_arready}
 															 : (i == 11) ? {31'b0,ls_axi_bvalid && ls_axi_bready}
