@@ -64,13 +64,13 @@ module ysyx_24110017(
 );
 
 /***PCU***/
-wire [31:0] pc;
-wire pc_valid;
+//wire [31:0] pc;
+//wire pc_valid;
 /***BTB***/
 wire [31:0]snpc;
 /***IFU***/
 wire [31:0] inst_if,pc_if;
-wire if_valid,if_ready;
+wire if_valid;//,if_ready;
 wire [31:0] if_axi_araddr,if_axi_rdata;
 wire [ 7:0] if_axi_arlen;
 wire [ 3:0] if_axi_arid,if_axi_rid;
@@ -142,14 +142,15 @@ wire [31:0]r1,r2;
 wire [31:0]mepc,mstatus,mcause,mtvec;
 wire [31:0]mvendorid,marchid; //ID
 
-ysyx_24110017_PCU PCU(clock,reset,isCHazard,
-		pc,dnpc_ex,snpc,
-		pc_valid,if_ready
-);
+//ysyx_24110017_PCU PCU(clock,reset,isCHazard,
+//		pc,dnpc_ex,snpc,
+//		pc_valid,if_ready
+//);
 ysyx_24110017_BTB #(1,0) BTB(clock,reset,pc,snpc,prepc,pc_if,prepc_en);
 ysyx_24110017_IFU IFU(clock,reset,isCHazard,
-		pc_valid,if_ready,if_valid,id_ready,
-		pc,pc_if,inst_if,
+		//pc_valid,if_ready,if_valid,id_ready,
+		//pc,pc_if,inst_if,
+		if_valid,dnpc_ex,snpc,
 		if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
 		if_axi_arlen,if_axi_arsize,if_axi_arburst,
 		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast

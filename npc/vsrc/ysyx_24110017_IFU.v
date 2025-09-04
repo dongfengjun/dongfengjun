@@ -3,20 +3,22 @@ module ysyx_24110017_IFU(
 	input  wire rst,
 
 	input  wire flush,
-	input  wire pc_valid_i,
-	output wire if_ready_o,
+//	input  wire pc_valid_i,
+//	output wire if_ready_o,
 	output reg  if_valid_o,
-	input  wire id_ready_i,
+//	input  wire id_ready_i,
 
-  input  wire [31:0] pc_i,
-	
+  //input  wire [31:0] pc_i,
+	input  wire [31:0] dnpc_i,
+	input  wire [31:0] snpc_i,
+
   output reg  [31:0] pc_o,
   output reg  [31:0] inst_o,
 /***AXI4*R***/
 	input  wire				 if_axi_arready_i,
 	output reg				 if_axi_arvalid_o,
 	output wire [ 3:0] if_axi_arid_o,
-	output reg  [31:0] if_axi_araddr_o,
+	output wire [31:0] if_axi_araddr_o,
 	output wire [ 7:0] if_axi_arlen_o,
 	output wire	[ 2:0] if_axi_arsize_o,
 	output wire	[ 1:0] if_axi_arburst_o,
@@ -29,7 +31,7 @@ module ysyx_24110017_IFU(
 );
 
 /***分布式控制***/
-assign if_ready_o = (state == IDLE);
+//assign if_ready_o = (state == IDLE);
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
@@ -37,7 +39,8 @@ always @(posedge clk) begin
 	if(rst || flush) state <= IDLE;
 	else begin
 		case(state)
-			IDLE: state <= (pc_valid_i) ? WAIT : state;
+			//IDLE: state <= (pc_valid_i) ? WAIT : state;
+			IDLE: state <= WAIT;
 			WAIT:	state <= (if_valid_o && id_ready_i)   ? IDLE : state;
 		endcase
 	end
@@ -59,19 +62,34 @@ always @(posedge clk) begin
   endcase
 end
 
+localparam RESET_PC = 32'h30000000;
+
+reg [31:0]pc;
+always @(posedge clk) begin
+  casez({rst, flush, updata})
+    3'b1??:  pc_o <= RESET_PC;
+    3'b01?:  pc_o <= dnpc_i;
+    3'b001:  pc_o <= snpc_i;
+		default: pc_o <= pc_o;
+	endcase
+end
+
 wire updata = if_valid_o && id_ready_i;
+/***
 always @(posedge clk) begin
 	if(updata) pc_o <= if_axi_araddr_o;
 end
 always @(posedge clk) begin
   if(updata) inst_o <= if_axi_rdata_i;
 end
+***/
 
 /***AXI4_LITE***/
 assign if_axi_arid_o    = 4'b0;
 assign if_axi_arlen_o   = 8'b0;
 assign if_axi_arsize_o  = 3'b0;
 assign if_axi_arburst_o = 2'b0;
+assign if_axi_araddr_o  = pc_o;
 
 always @(posedge clk) begin
   if(rst || flush) begin
@@ -81,7 +99,7 @@ always @(posedge clk) begin
     case (state)
       IDLE: begin
 				if_axi_arvalid_o <= 1'b1;
-				if_axi_araddr_o  <= pc_i;
+//			if_axi_araddr_o  <= pc_i;
       end
       WAIT: begin
 				if(if_axi_arvalid_o && if_axi_arready_i) begin
