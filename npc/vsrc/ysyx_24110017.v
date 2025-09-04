@@ -150,7 +150,7 @@ ysyx_24110017_BTB #(1,0) BTB(clock,reset,pc,snpc,prepc,pc_if,prepc_en);
 ysyx_24110017_IFU IFU(clock,reset,isCHazard,
 		//pc_valid,if_ready,if_valid,id_ready,
 		//pc,pc_if,inst_if,
-		if_valid,dnpc_ex,snpc,
+		if_valid,id_ready,dnpc_ex,snpc,
 		if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
 		if_axi_arlen,if_axi_arsize,if_axi_arburst,
 		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast

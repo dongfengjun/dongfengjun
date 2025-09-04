@@ -6,7 +6,7 @@ module ysyx_24110017_IFU(
 //	input  wire pc_valid_i,
 //	output wire if_ready_o,
 	output reg  if_valid_o,
-//	input  wire id_ready_i,
+	input  wire id_ready_i,
 
   //input  wire [31:0] pc_i,
 	input  wire [31:0] dnpc_i,
