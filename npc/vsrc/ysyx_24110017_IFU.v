@@ -79,10 +79,10 @@ wire updata = if_valid_o && id_ready_i;
 always @(posedge clk) begin
 	if(updata) pc_o <= if_axi_araddr_o;
 end
+***/
 always @(posedge clk) begin
   if(updata) inst_o <= if_axi_rdata_i;
 end
-***/
 
 /***AXI4_LITE***/
 assign if_axi_arid_o    = 4'b0;
