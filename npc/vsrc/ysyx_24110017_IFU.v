@@ -70,7 +70,7 @@ always @(posedge clk) begin
     3'b1??:  pc <= RESET_PC;
     3'b01?:  pc <= dnpc_i;
     3'b001:  pc <= snpc_i;
-		default: pc <= pc_o;
+		default: pc <= pc;
 	endcase
 end
 
