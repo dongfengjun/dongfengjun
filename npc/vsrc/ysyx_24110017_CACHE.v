@@ -1,5 +1,5 @@
 //`define YOSYS_STA
-module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0) (
+module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 16) ( //tag width = 16中型程序
 	input  wire clk,
 	input  wire rst,
 	input  wire fencei_i,
@@ -33,18 +33,24 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0) (
 	input wire  s_axi_rlast
 );
 
+	reg [31-TAG_WIDTH:0]tag_check;
+	always@(posedge clk) begin
+		tag_check <= m_axi_araddr[31:TAG_WIDTH];
+	end
+	wire unvalid = tag_check != m_axi_araddr[31:TAG_WIDTH];
+
 	localparam CACHE_WIDTH = (1 << (m-2));
 	localparam CACHE_DEPTH = (1 << n);
 	localparam CACHE_WAY	 = (1 << w);
 
-	reg  [31:0]								 cache_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
-  reg  [31-m-n+w : 0]				 tag_reg	 [CACHE_DEPTH - 1 : 0];
-  reg  [CACHE_DEPTH - 1 : 0] valid_reg [CACHE_WIDTH - 1 : 0];
+	reg  [31:0]								   cache_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
+  reg  [TAG_WIDTH-1-m-n+w : 0] tag_reg	 [CACHE_DEPTH - 1 : 0];
+  reg  [CACHE_DEPTH - 1 : 0]   valid_reg [CACHE_WIDTH - 1 : 0];
 	
 	wire [31:0] axi_araddr = (!state) ? m_axi_araddr : s_axi_araddr;
-	wire [31-m-n+w : 0]				 tag			 = axi_araddr[31 : m+n-w];
-  wire [n-w-1 : 0]					 index		 = axi_araddr[m+n-w-1 : m];
-  wire [m-3 : 0]						 offset	   = axi_araddr[m-1 : 2];
+	wire [TAG_WIDTH-1-m-n+w:0] tag			 = axi_araddr[TAG_WIDTH-1:m+n-w];
+  wire [n-w-1:0]					   index		 = axi_araddr[m+n-w-1:m];
+  wire [m-3:0]						   offset	   = axi_araddr[m-1:2];
  
 	wire [CACHE_WAY - 1 : 0] hit;
 
@@ -85,7 +91,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0) (
 		if(rst) state <= IDLE;
 		else begin
 			case(state)
-				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && (hit == 0) ? TRANS : state;
+				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && ((hit == 0) || unvalid) ? TRANS : state;
 				TRANS:   state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
         default: state <= state;
 			endcase
@@ -97,7 +103,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0) (
 	reg [m-3 : 0] burst_counter;
 
 	always @(posedge clk) begin
-		if(fencei_i) begin
+		if(fencei_i || unvalid) begin
 			integer f;
 			for (f = 0; f < CACHE_WIDTH; f = f + 1) begin : fencei
 				valid_reg[f] <= 0;
@@ -137,7 +143,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0) (
           end
 				end
 				if(s_axi_rready && s_axi_rvalid) begin
-					tag_reg [index * CACHE_WAY] <= s_axi_araddr[31 : m+n-w];
+					tag_reg [index * CACHE_WAY] <= s_axi_araddr[TAG_WIDTH-1:m+n-w];
 				end
 			end
 			default : begin
