@@ -35,7 +35,9 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 16) ( //tag width 
 
 	reg [31-TAG_WIDTH:0]tag_check;
 	always@(posedge clk) begin
-		tag_check <= m_axi_araddr[31:TAG_WIDTH];
+		if(m_axi_arvalid && m_axi_arready)
+			tag_check <= m_axi_araddr[31:TAG_WIDTH];
+		end
 	end
 	wire unvalid = tag_check != m_axi_araddr[31:TAG_WIDTH];
 
