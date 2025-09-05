@@ -99,7 +99,7 @@ module ysyx_24110017_BTB
       for (a = 1; a < (1<<J_W); a = a + 1) begin
         jsnpc_reg[jindex_pre * (1<<J_W) + a] <= jsnpc_reg[jindex_pre * (1<<J_W) + a - 1];
       end
-      jsnpc_reg[jindex_pre * (1<<J_W)] <= prepc_i[JTARG-1:0];
+      jsnpc_reg[jtag_pre * (1<<J_W)] <= prepc_i[JTARG-1:0];
     end
   end
   always @(posedge clk) begin
@@ -112,7 +112,7 @@ module ysyx_24110017_BTB
       for (a = 1; a < (1<<J_W); a = a + 1) begin
 	      jtag_reg[jindex_pre * (1<<J_W) + a]  <= jtag_reg[jindex_pre * (1<<J_W) + a - 1];
       end
-		jtag_reg[jprepc_pre * (1<<J_W)]  <= prepc_tag_i[JTAG:2+J_N-J_W];
+		jtag_reg[jindex_pre * (1<<J_W)]  <= prepc_tag_i[JTAG:2+J_N-J_W];
 		end
 	end
 
@@ -127,7 +127,7 @@ module ysyx_24110017_BTB
 			for (a = 1; a < (1<<B_W); a = a + 1) begin
 				bsnpc_reg[bindex_pre * (1<<B_W) + a] <= bsnpc_reg[bindex_pre * (1<<B_W) + a - 1];
 			end
-			bsnpc_reg[bprepc_pre * (1<<B_W)] <= prepc_i[BTAR-1:0];
+			bsnpc_reg[bindex_pre * (1<<B_W)] <= prepc_i[BTAR-1:0];
 		end
 	end
 	always @(posedge clk) begin
