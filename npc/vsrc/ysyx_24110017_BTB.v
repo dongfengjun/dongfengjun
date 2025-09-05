@@ -28,12 +28,24 @@ module ysyx_24110017_BTB
 	wire [BTAG-3-B_N+B_W:0] btag_pre   = prepc_tag_i[BTAG:2+B_N-B_W];
 	wire [J_N-J_W-1 :0]     bindex_pre = prepc_tag_i[B_N-B_W+1:2];
 
-	function integer log2;
-    input [(1<<w) - 1 : 0] value;
+	function integer blog2;
+    input [(1<<B_W) - 1 : 0] value;
     integer loop_var;
     begin
-      for (loop_var = 0; loop_var < (1<<w); loop_var = loop_var + 1) begin
+      for (loop_var = 0; loop_var < (1<<B_W); loop_var = loop_var + 1) begin
         if(value != 0) begin
+          value = value >> 1;
+          log2 = loop_var;
+        end
+      end
+    end
+  endfunction
+	function integer jlog2;
+    input [(1<<J_W) - 1 : 0] value;
+    integer loop_var;
+    begin
+      for (loop_var = 0; loop_var < (1<<J_W); loop_var = loop_var + 1) begin
+	      if(value != 0) begin
           value = value >> 1;
           log2 = loop_var;
         end
@@ -45,7 +57,7 @@ module ysyx_24110017_BTB
 	generate 
     genvar i; 
       for(i = 0; i < (1<<B_W); i = i + 1) begin : comparator_b
-        assign bhit[i] = (btag == tag_reg[bindex * (1<<B_W) + i]);
+        assign bhit[i] = (btag == btag_reg[bindex * (1<<B_W) + i]);
 			end
 	endgenerate
 
@@ -75,7 +87,7 @@ module ysyx_24110017_BTB
   endgenerate
 `endif
 
-	assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W) + log2(jhit)]} : (|bhit) ? {pc_i[31:BTARG],bsnpc_reg[bindex * (1<<B_W) + log2(bhit)]} : pc_i + 4;
+	assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W) + jlog2(jhit)]} : (|bhit) ? {pc_i[31:BTARG],bsnpc_reg[bindex * (1<<B_W) + blog2(bhit)]} : pc_i + 4;
 
   always @(posedge clk) begin
 `ifdef Associative
