@@ -149,6 +149,9 @@ always@(posedge clk) begin
 	endcase
 end
 
+//wire [31:0]add_res = (ls_valid || jalren) ? (r1_i + imm_i) : (pc_i + imm_i);
+wire [31:0]add_res = ((ls_valid || jalren) ? r1_i : pc_i) + imm_i;
+
 wire [31:0]xrd = 
 /***I*addi~srai***/
 				(op_i == 5'b00100) ? (alu_res) :
@@ -255,7 +258,5 @@ wire [31:0]dnpc = (jalen) ? add_res	//jal
 	: (ecall_en) ? mtvec_i  //ecall
 	: (mret_en) ? mepc_i  //mret
 	: pc_i + 4;
-
-wire [31:0]add_res = (ls_valid || jalren) ? (r1_i + imm_i) : (pc_i + imm_i);
 
 endmodule
