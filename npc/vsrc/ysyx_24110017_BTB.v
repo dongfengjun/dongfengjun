@@ -35,7 +35,7 @@ module ysyx_24110017_BTB
       for (loop_var = 0; loop_var < (1<<B_W); loop_var = loop_var + 1) begin
         if(value != 0) begin
           value = value >> 1;
-          log2 = loop_var;
+          blog2 = loop_var;
         end
       end
     end
@@ -47,7 +47,7 @@ module ysyx_24110017_BTB
       for (loop_var = 0; loop_var < (1<<J_W); loop_var = loop_var + 1) begin
 	      if(value != 0) begin
           value = value >> 1;
-          log2 = loop_var;
+          jlog2 = loop_var;
         end
       end
     end
@@ -96,7 +96,7 @@ module ysyx_24110017_BTB
     if(prepc_en_i[1]) begin
 `endif
       integer a;                                                                                                                                              
-      for (a = 1; a < (1<<w); a = a + 1) begin
+      for (a = 1; a < (1<<J_W); a = a + 1) begin
         jsnpc_reg[jindex_pre * (1<<J_W) + a] <= jsnpc_reg[jindex_pre * (1<<J_W) + a - 1];
       end
       jsnpc_reg[jindex_pre * (1<<J_W)] <= prepc_i[JTARG-1:0];
