@@ -173,7 +173,7 @@ wire [3:0]alu_sel =
 	: ((op_i == 5'b00100 && funct3_i == 3'b110) || (op_i == 5'b01100 && funct3_i == 3'b110 && funct7_i == 1'b0)) ? OR 
 	: ((op_i == 5'b00100 && funct3_i == 3'b111) || (op_i == 5'b01100 && funct3_i == 3'b111 && funct7_i == 1'b0)) ? AND : NULL;
 wire [31:0]alu_res = (alu_sel == ADD) ? add_res
-	: (alu_sel == SUB) ? add_res
+	: (alu_sel == SUB) ? sub_res
 	: (alu_sel == SLL) ? sll_res
 	: (alu_sel == SRL) ? srl_res
 	: (alu_sel == SRA) ? sra_res
@@ -184,8 +184,9 @@ wire [31:0]alu_res = (alu_sel == ADD) ? add_res
 	: 32'b0;
 
 /***运算复用***/
-wire [31:0]add_res = (ls_valid || jalren) ? r1_i + imm_i : (jal_branch) ? pc_i + imm_i : (alu_sel == ADD) ? a + b : (alu_sel == SUB) ? a + (~b) + 1 : 32'h0;
+wire [31:0]add_res = (ls_valid || jalren) ? r1_i + imm_i : (jal_branch) ? pc_i + imm_i : (alu_sel == ADD) ? a + b : 32'h0;
 wire [31:0]add_pc_4 = pc_i + 4;
+wire [31:0]sub_res = (a - b);
 wire [31:0]sll_res = (a << b[4:0]);
 wire [31:0]srl_res = (a >> b[4:0]);
 wire [31:0]sra_res = ({32{a[31]}} << (32 - b[4:0])) | (a >> b[4:0]);
