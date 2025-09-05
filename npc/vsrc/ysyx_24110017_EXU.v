@@ -224,7 +224,7 @@ wire[31:0] csr =
 	: 32'b0;
 	
 wire[31:0] mcause_w = (ecall_en) ? r2_i : csrs_w; //ecall a5
-wire[31:0] csrs_w = ((op_i == 5'b11100) && (funct3_i == 3'b001)) ? r1_i) //I_csrrw
+wire[31:0] csrs_w = ((op_i == 5'b11100) && (funct3_i == 3'b001)) ? r1_i //I_csrrw
 	: ((op_i == 5'b11100) && (funct3_i == 3'b010)) ? or_res //I_csrrs
   : ((op_i == 5'b11100) && (funct3_i == 3'b011)) ? and_res //I_csrrc
 	: (ecall_en)? pc_i : 32'h0; //ecall_mepc
