@@ -231,6 +231,7 @@ assign ls_wdata_o = (op_i == 5'b01000) ? ((ls_addr_o[1:0] == 0) ? r2_i
 			: (ls_addr_o[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0) : 32'h0;
 
 /***BU***/
+wire [31:0] offset = imm_i;
 wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
 assign jalen		= (op_i == 5'b11011);
 assign jalren		= (op_i == 5'b11001);
