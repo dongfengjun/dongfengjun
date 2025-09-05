@@ -215,25 +215,25 @@ wire [31:0]xrd =
 				(jal)   ? pc_i + 4   :
 				(jalr)  ? pc_i + 4   :
 				(load)  ? ls_rdata_i :
-				(addi)  ? rs1_i + imm_i :
-				(slti)  ? $signed(rs1_i) < $signed(imm_i) :
-				(sltiu) ? rs1_i < imm_i :
-				(xori)  ? rs1_i ^ imm_i :
-				(ori)   ? rs1_i | imm_i :
-				(andi)  ? rs1_i & imm_i :
-				(slli)  ? rs1_i << shamt_i :
-				(srli)  ? rs1_i >> shamt_i :
+				(addi)  ? r1_i + imm_i :
+				(slti)  ? $signed(r1_i) < $signed(imm_i) :
+				(sltiu) ? r1_i < imm_i :
+				(xori)  ? r1_i ^ imm_i :
+				(ori)   ? r1_i | imm_i :
+				(andi)  ? r1_i & imm_i :
+				(slli)  ? r1_i << shamt_i :
+				(srli)  ? r1_i >> shamt_i :
 				(srai)  ? ({32{rs1_i[31]}} << (32 - shamt_i[4:0])) | (rs1_i >> shamt_i[4:0]) :
-				(add)   ? rs1_i + rs2_i :
-				(sub)   ? rs1_i - rs2_i :
-				(sll)   ? rs1_i << rs2_i[4:0] :
-				(slt)   ? $signed(rs1_i) < $signed(rs2_i) :
-				(sltu)  ? rs1_i < rs2_i :
-				(xor_)  ? rs1_i ^ rs2_i :
-				(srl)   ? rs1_i >> rs2_i[4:0] :
-				(sra)   ? ({32{rs1_i[31]}} << (32 - rs2_i[4:0])) | (rs1_i >> rs2_i[4:0]) :
-				(or_)   ? rs1_i | rs2_i :
-				(and_)  ? rs1_i & rs2_i :
+				(add)   ? r1_i + r2_i :
+				(sub)   ? r1_i - r2_i :
+				(sll)   ? r1_i << r2_i[4:0] :
+				(slt)   ? $signed(r1_i) < $signed(r2_i) :
+				(sltu)  ? r1_i < r2_i :
+				(xor_)  ? r1_i ^ r2_i :
+				(srl)   ? r1_i >> r2_i[4:0] :
+				(sra)   ? ({32{r1_i[31]}} << (32 - r2_i[4:0])) | (r1_i >> r2_i[4:0]) :
+				(or_)   ? r1_i | r2_i :
+				(and_)  ? r1_i & r2_i :
 				(csrrw) ? csr :
 				(csrrs) ? csr :
 				(csrrc) ? csr :
