@@ -38,7 +38,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 16) ( //tag width 
 		if(m_axi_arvalid && m_axi_arready)
 			tag_check <= m_axi_araddr[31:TAG_WIDTH];
 	end
-	wire unvalid = tag_check != m_axi_araddr[31:TAG_WIDTH];
+	wire unvalid = m_axi_arvalid && m_axi_arready && (tag_check != m_axi_araddr[31:TAG_WIDTH]);
 
 	localparam CACHE_WIDTH = (1 << (m-2));
 	localparam CACHE_DEPTH = (1 << n);
