@@ -15,12 +15,12 @@ module ysyx_24110017_BTB
 	
 	reg  [JTARG-1:0]        jsnpc_reg [(1<<J_N)-1:0];
   reg  [JTAG-3-J_N+J_W:0] jtag_reg  [(1<<J_N)-1:0];
-  wire [JTAG-3-J_N+J_W:0] jtag   = pc_i[JTAG:2+J_N-J_W];
+  wire [JTAG-3-J_N+J_W:0] jtag   = pc_i[JTAG-1:2+J_N-J_W];
   wire [J_N-J_W-1:0]			jindex = pc_i[J_N-J_W+1:2];
 
 	reg  [BTARG-1:0]        bsnpc_reg [(1<<B_N)-1:0];
   reg  [BTAG-3-B_N+B_W:0] btag_reg  [(1<<B_N)-1:0];
-	wire [BTAG-3-B_N+B_W:0] btag   = pc_i[BTAG:2+B_N-B_W];
+	wire [BTAG-3-B_N+B_W:0] btag   = pc_i[BTAG-1:2+B_N-B_W];
 	wire [B_N-B_W-1 :0]			bindex = pc_i[B_N-B_W+1:2];
 
 	wire [JTAG-3-J_N+J_W:0] jtag_pre   = prepc_tag_i[JTAG:2+J_N-J_W];
