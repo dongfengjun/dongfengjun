@@ -185,7 +185,7 @@ assign alu_res = (alu_sel == ADD) ? add_res
 	: (alu_sel == OR)  ? (a | b) 
 	: (alu_sel == XOR) ? (a ^ b) 
 	: 32'b0;
-wire [31:0]add_res = ((ls_valid || jalren) ? r1_i : (op == 5'b00100 || op == 5'b01100) ? a : pc_i) + ((op == 5'b00100 || op == 5'b01100) ? b : imm_i);
+wire [31:0]add_res = ((ls_valid || jalren) ? r1_i : (op_i == 5'b00100 || op_i == 5'b01100) ? a : pc_i) + ((op_i == 5'b00100 || op_i == 5'b01100) ? b : imm_i);
 wire [31:0]add_pc_4 = pc_i + 4;
 
 
