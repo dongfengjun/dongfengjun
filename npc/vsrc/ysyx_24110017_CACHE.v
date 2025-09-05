@@ -76,7 +76,7 @@ module ysyx_24110017_CACHE
 	endfunction
 
 	assign m_axi_rvalid = axi_rvalid && !axi_rvalid_enable;
-	assign m_axi_rdata  = (|hit) ? cache_reg[offset][index * CACHE_WAY + log2(hit)] : 32'h0;
+	assign m_axi_rdata  = ((|hit) && (!unvalid)) ? cache_reg[offset][index * CACHE_WAY + log2(hit)] : 32'h0;
 	wire	 axi_rvalid   = (s_axi_arlen != 0) ? s_axi_rlast : (|hit) && !(m_axi_arvalid && m_axi_arready);
 	reg axi_rvalid_enable;
 	always @(posedge clk) begin
@@ -92,7 +92,7 @@ module ysyx_24110017_CACHE
 		if(rst) state <= IDLE;
 		else begin
 			case(state)
-				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && (hit == 0) ? TRANS : state;
+				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && ((hit == 0) || unvalid) ? TRANS : state;
 				TRANS:   state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
         default: state <= state;
 			endcase
