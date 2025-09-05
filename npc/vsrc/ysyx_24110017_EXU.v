@@ -222,7 +222,7 @@ wire [31:0]xrd =
 				(andi)  ? rs1_i & imm_i :
 				(slli)  ? rs1_i << shamt_i :
 				(srli)  ? rs1_i >> shamt_i :
-				(srai)  ? ({32{rs1_i[31]}} << (32 - shamt_i[4:0])) | (rs1_i >> shamt_i[4:0])
+				(srai)  ? ({32{rs1_i[31]}} << (32 - shamt_i[4:0])) | (rs1_i >> shamt_i[4:0]) :
 				(add)   ? rs1_i + rs2_i :
 				(sub)   ? rs1_i - rs2_i :
 				(sll)   ? rs1_i << rs2_i[4:0] :
@@ -230,7 +230,7 @@ wire [31:0]xrd =
 				(sltu)  ? rs1_i < rs2_i :
 				(xor_)  ? rs1_i ^ rs2_i :
 				(srl)   ? rs1_i >> rs2_i[4:0] :
-				(sra)   ? ({32{rs1_i[31]}} << (32 - rs2_i[4:0])) | (rs1_i >> rs2_i[4:0])
+				(sra)   ? ({32{rs1_i[31]}} << (32 - rs2_i[4:0])) | (rs1_i >> rs2_i[4:0]) :
 				(or_)   ? rs1_i | rs2_i :
 				(and_)  ? rs1_i & rs2_i :
 				(csrrw) ? csr :
