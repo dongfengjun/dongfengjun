@@ -112,7 +112,7 @@ module ysyx_24110017_BTB
       for (a = 1; a < (1<<J_W); a = a + 1) begin
 	      jtag_reg[jindex_pre * (1<<J_W) + a]  <= jtag_reg[jindex_pre * (1<<J_W) + a - 1];
       end
-		jtag_reg[jindex_pre * (1<<J_W)]  <= prepc_tag_i[JTAG:2+J_N-J_W];
+		jtag_reg[jindex_pre * (1<<J_W)]  <= prepc_tag_i[JTAG-1:2+J_N-J_W];
 		end
 	end
 
@@ -140,7 +140,7 @@ module ysyx_24110017_BTB
 			for (a = 1; a < (1<<B_W); a = a + 1) begin
 				btag_reg[bindex_pre * (1<<B_W) + a]  <= btag_reg[bindex_pre * (1<<B_W) + a - 1];                            
 			end
-			btag_reg[bindex_pre * (1<<B_W)]  <= prepc_tag_i[BTAG:2+B_N-B_W];
+			btag_reg[bindex_pre * (1<<B_W)]  <= prepc_tag_i[BTAG-1:2+B_N-B_W];
 		end
 	end
 
