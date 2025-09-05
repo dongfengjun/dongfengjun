@@ -1,4 +1,4 @@
-`define YOSYS_STA
+//`define YOSYS_STA
 module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 16) ( //tag width = 16中型程序
 	input  wire clk,
 	input  wire rst,
