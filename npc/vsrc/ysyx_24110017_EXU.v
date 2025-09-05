@@ -172,7 +172,7 @@ wire [3:0]alu_sel =
 	: ((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 1'b1) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 1'b1)) ? SRA 
 	: ((op_i == 5'b00100 && funct3_i == 3'b110) || (op_i == 5'b01100 && funct3_i == 3'b110 && funct7_i == 1'b0)) ? OR 
 	: ((op_i == 5'b00100 && funct3_i == 3'b111) || (op_i == 5'b01100 && funct3_i == 3'b111 && funct7_i == 1'b0)) ? AND : NULL;
-wire alu_res = (alu_sel == ADD) ? add_res
+wire [31:0]alu_res = (alu_sel == ADD) ? add_res
 	: (alu_sel == SUB) ? add_res
 	: (alu_sel == SLL) ? sll_res
 	: (alu_sel == SRL) ? srl_res
