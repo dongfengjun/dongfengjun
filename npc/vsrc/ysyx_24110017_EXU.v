@@ -223,7 +223,7 @@ wire [31:0]xrd =
 				(andi)  ? r1_i & imm_i :
 				(slli)  ? r1_i << shamt_i :
 				(srli)  ? r1_i >> shamt_i :
-				(srai)  ? ({32{rs1_i[31]}} << (32 - shamt_i[4:0])) | (r1_i >> shamt_i[4:0]) :
+				(srai)  ? ({32{r1_i[31]}} << (32 - shamt_i[4:0])) | (r1_i >> shamt_i[4:0]) :
 				(add)   ? r1_i + r2_i :
 				(sub)   ? r1_i - r2_i :
 				(sll)   ? r1_i << r2_i[4:0] :
@@ -254,9 +254,9 @@ wire[31:0] csrs_w =
 			(ecall) ? pc_i : 32'h0; //ecall_mepc
 wire [3:0] csrs_wen = {
     (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001), //1100000101
-    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110) || ecall_en, //1101000010
+    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110) || ecall, //1101000010
     (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1000), //1100000000
-    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101) || ecall_en //1101000001
+    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101) || ecall //1101000001
 };
 
 /***ALU***
