@@ -76,7 +76,7 @@ module ysyx_24110017_CACHE
 	endfunction
 
 	assign m_axi_rvalid = axi_rvalid && !axi_rvalid_enable;
-	assign m_axi_rdata  = ((|hit) && (!unvalid)) ? cache_reg[offset][index * CACHE_WAY + log2(hit)] : 32'h0;
+	assign m_axi_rdata  = (|hit) ? cache_reg[offset][index * CACHE_WAY + log2(hit)] : 32'h0;
 	wire	 axi_rvalid   = (s_axi_arlen != 0) ? s_axi_rlast : (|hit) && !(m_axi_arvalid && m_axi_arready);
 	reg axi_rvalid_enable;
 	always @(posedge clk) begin
@@ -104,7 +104,7 @@ module ysyx_24110017_CACHE
 	reg [m-3 : 0] burst_counter;
 
 	always @(posedge clk) begin
-		if(fencei_i) begin
+		if(fencei_i || unvalid) begin
 			integer f;
 			for (f = 0; f < CACHE_WIDTH; f = f + 1) begin : fencei
 				valid_reg[f] <= 0;
