@@ -1,4 +1,4 @@
-//`define YOSYS_STA
+`define YOSYS_STA
 module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0) (
 	input  wire clk,
 	input  wire rst,
@@ -147,28 +147,6 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0) (
 
 	always @(posedge clk) begin
 		case(state)
-			TRANS: begin
-				if(s_axi_arvalid && s_axi_arready) begin
-					integer a;
-          integer b;
-					for (b = 0; b < CACHE_WIDTH; b = b + 1) begin : fifo
-						cache_reg[b][index * CACHE_WAY] <= 0;
-						for (a = 1; a < CACHE_WAY; a = a + 1) begin
-              cache_reg[b][index * CACHE_WAY + a] <= cache_reg[b][index * CACHE_WAY + a - 1];
-            end
-          end
-				end
-				if(s_axi_rready && s_axi_rvalid) begin
-					cache_reg[burst_counter][index * CACHE_WAY] <= s_axi_rdata;
-				end
-			end
-			default : begin
-			end
-		endcase
-	end
-
-	always @(posedge clk) begin
-		case(state)
 			IDLE: begin
 				m_axi_arready <= 1'b1;
 				s_axi_araddr  <= m_axi_araddr;
@@ -191,10 +169,19 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0) (
 			end
 			TRANS: begin
 				if(s_axi_arvalid && s_axi_arready) begin
+					integer a;
+          integer b;
+					for (b = 0; b < CACHE_WIDTH; b = b + 1) begin : fifo
+						cache_reg[b][index * CACHE_WAY] <= 0;
+						for (a = 1; a < CACHE_WAY; a = a + 1) begin
+              cache_reg[b][index * CACHE_WAY + a] <= cache_reg[b][index * CACHE_WAY + a - 1];
+            end
+          end
 					s_axi_arvalid <= 1'b0;
 					s_axi_rready  <= 1'b1;
 				end
 				if(s_axi_rready && s_axi_rvalid) begin
+					cache_reg[burst_counter][index * CACHE_WAY] <= s_axi_rdata;
 					burst_counter <= burst_counter + 1;
 				end
 				if(s_axi_rlast) begin
