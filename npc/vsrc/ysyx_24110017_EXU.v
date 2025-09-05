@@ -187,7 +187,7 @@ assign alu_res = (alu_sel == ADD) ? add_res
 	: 32'b0;
 
 /***运算复用***/
-wire [31:0]add_res = (ls_valid || jalren) ? r1_i + imm : (alu_sel == ADD) ? a + b : pc_i + imm_i;
+wire [31:0]add_res = (ls_valid || jalren) ? r1_i + imm_i : (alu_sel == ADD) ? a + b : pc_i + imm_i;
 wire [31:0]add_pc_4 = pc_i + 4;
 wire [31:0]sub_res = (a - b);
 wire [31:0]sll_res = (a << b[4:0]);
