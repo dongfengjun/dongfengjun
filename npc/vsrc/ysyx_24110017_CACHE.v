@@ -104,7 +104,7 @@ module ysyx_24110017_CACHE
 	reg [m-3 : 0] burst_counter;
 
 	always @(posedge clk) begin
-		if(fencei_i || unvalid) begin
+		if(fencei_i) begin
 			integer f;
 			for (f = 0; f < CACHE_WIDTH; f = f + 1) begin : fencei
 				valid_reg[f] <= 0;
