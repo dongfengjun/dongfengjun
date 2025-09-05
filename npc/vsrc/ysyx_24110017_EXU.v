@@ -151,6 +151,8 @@ end
 
 wire [31:0]add_res = ((ls_valid || jalren) ? r1_i : pc_i) + imm_i;
 wire [31:0]add_pc_4 = pc_i + 4;
+wire [31:0]and_res = ((op_i == 5'b11100) && (funct3_i == 3'b011)) ? ~r1_i & csr : a & b;
+wire [31:0]or_res  = ((op_i == 5'b11100) && (funct3_i == 3'b010)) ?  r1_i | csr : a | b;
 
 wire [31:0]xrd = 
 /***I*addi~srai***/
@@ -178,8 +180,8 @@ wire[31:0] csr =
 wire[31:0] mcause_w = (ecall_en) ? r2_i : csrs_w; //ecall a5
 wire[31:0] csrs_w = 
 			({32{(op_i == 5'b11100) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
-			({32{(op_i == 5'b11100) && (funct3_i == 3'b010)}} & (csr |  r1_i)) | //I_csrrs
-      ({32{(op_i == 5'b11100) && (funct3_i == 3'b011)}} & (csr & ~r1_i)) | //I_csrrc
+			({32{(op_i == 5'b11100) && (funct3_i == 3'b010)}} & (or_res)) | //I_csrrs
+      ({32{(op_i == 5'b11100) && (funct3_i == 3'b011)}} & (and_res)) | //I_csrrc
 			({32{ecall_en}} & pc_i); //ecall_mepc
 wire [3:0] csrs_wen = {
     (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001 && imm_i[2:0] == 3'b101), //1100000101
@@ -220,8 +222,8 @@ assign alu_res = (alu_sel == ADD) ? (a + b)
 	: (alu_sel == SRL) ? (a >> b[4:0]) 
 	: (alu_sel == SRA) ? ({32{a[31]}} << (32 - b[4:0])) | (a >> b[4:0]) 
 	: (alu_sel == SLT) ? {31'b0, a < b} 
-	: (alu_sel == AND) ? (a & b) 
-	: (alu_sel == OR)  ? (a | b) 
+	: (alu_sel == AND) ? and_res
+	: (alu_sel == OR)  ? or_res
 	: (alu_sel == XOR) ? (a ^ b) 
 	: 32'b0;
 
