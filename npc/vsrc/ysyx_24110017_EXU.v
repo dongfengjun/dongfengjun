@@ -186,6 +186,7 @@ assign alu_res = (alu_sel == ADD) ? add_res
 	: (alu_sel == XOR) ? xor_res
 	: 32'b0;
 
+/***运算复用***/
 wire [31:0]add_res = ((ls_valid || jalren) ? r1_i : (alu_sel == ADD) ? a : pc_i) + ((alu_sel == ADD) ? b : imm_i);
 wire [31:0]add_pc_4 = pc_i + 4;
 wire [31:0]sub_res = (a - b);
@@ -193,9 +194,10 @@ wire [31:0]sll_res = (a << b[4:0]);
 wire [31:0]srl_res = (a >> b[4:0]);
 wire [31:0]sra_res = ({32{a[31]}} << (32 - b[4:0])) | (a >> b[4:0]);
 wire slt_res = (((bltuen || bgeuen) ? r1_i : (blten || bgeen) ? $signed(r1_i) : a) < ((bltuen || bgeuen) ? r2_i : (blten || bgeen) ? $signed(r2_i) : b));
-wire [31:0]and_res = (a & b);
-wire [31:0]or_res  = (a | b);
+wire [31:0]and_res = ((((op_i == 5'b11100) && (funct3_i == 3'b011)) ? ~r1_i : a) & (((op_i == 5'b11100) && (funct3_i == 3'b011)) ? csr : b));
+wire [31:0]or_res  = ((((op_i == 5'b11100) && (funct3_i == 3'b010)) ? r1_i : a) | (((op_i == 5'b11100) && (funct3_i == 3'b010)) ? csr : b));
 wire [31:0]xor_res = (a ^ b);
+wire eq_res = (r1_i == r2_i);
 
 
 wire [31:0]xrd = 
@@ -222,11 +224,10 @@ wire[31:0] csr =
 	: 32'b0;
 	
 wire[31:0] mcause_w = (ecall_en) ? r2_i : csrs_w; //ecall a5
-wire[31:0] csrs_w = 
-			({32{(op_i == 5'b11100) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
-			({32{(op_i == 5'b11100) && (funct3_i == 3'b010)}} & (csr |  r1_i)) | //I_csrrs
-      ({32{(op_i == 5'b11100) && (funct3_i == 3'b011)}} & (csr & ~r1_i)) | //I_csrrc
-			({32{ecall_en}} & pc_i); //ecall_mepc
+wire[31:0] csrs_w = ((op_i == 5'b11100) && (funct3_i == 3'b001)) ? r1_i) //I_csrrw
+	: ((op_i == 5'b11100) && (funct3_i == 3'b010)) ? or_res //I_csrrs
+  : ((op_i == 5'b11100) && (funct3_i == 3'b011)) ? and_res //I_csrrc
+	: (ecall_en)? pc_i : 32'h0; //ecall_mepc
 wire [3:0] csrs_wen = {
     (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001 && imm_i[2:0] == 3'b101), //1100000101
     (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110 && imm_i[2:0] == 3'b010) || ecall_en, //1101000010
@@ -234,48 +235,11 @@ wire [3:0] csrs_wen = {
     (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101 && imm_i[2:0] == 3'b001) || ecall_en //1101000001
 };
 
-/***ALU***
-wire funct7_i = imm_i[10];
-wire [4:0]shamt_i  = imm_i[4:0];
-wire [3:0]alu_sel;
-wire [31:0]alu_res;
-wire [31:0]a,b;
-wire a_use_r1 = (op_i == 5'b00100) || (op_i == 5'b01100);
-wire b_use_imm = (op_i == 5'b00100);
-wire b_use_shamt = (funct3_i == 3'b001 || funct3_i == 3'b101);
-wire b_use_r2 = (op_i == 5'b01100);
-wire ab_use_signed = (funct3_i == 3'b010);
-assign a = a_use_r1 ? (ab_use_signed ? $signed(r1_i) : r1_i) : 32'b0;
-assign b = b_use_imm ? (ab_use_signed ? $signed(imm_i) : b_use_shamt ? {27'b0, shamt_i} : imm_i) :
-           b_use_r2 ? (ab_use_signed ? $signed(r2_i) : r2_i) : 32'b0;
-
-localparam [3:0] ADD = 4'd0,SUB = 4'd1,SLL = 4'd2,SRL = 4'd3,SRA = 4'd4,SLT = 4'd5,AND = 4'd6,OR = 4'd7,XOR = 4'd8;
-assign alu_sel =
-    ((op_i == 5'b00100 && funct3_i == 3'b000) || (op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 1'b0)) ? ADD 
-  :  (op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 1'b1) ? SUB 
-	: ((op_i == 5'b00100 && funct3_i == 3'b001) || (op_i == 5'b01100 && (funct3_i == 3'b001 && funct7_i == 1'b0))) ? SLL 
-	: ((op_i == 5'b00100 &&(funct3_i == 3'b010 || funct3_i == 3'b011)) || (op_i == 5'b01100 && ((funct3_i == 3'b010 && funct7_i == 1'b0) || (funct3_i == 3'b011 && funct7_i == 1'b0)))) ? SLT 
-	: ((op_i == 5'b00100 && funct3_i == 3'b100) || (op_i == 5'b01100 && (funct3_i == 3'b100 && funct7_i == 1'b0))) ? XOR 
-	: ((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 1'b0) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 1'b0)) ? SRL 
-	: ((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 1'b1) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 1'b1)) ? SRA 
-	: ((op_i == 5'b00100 && funct3_i == 3'b110) || (op_i == 5'b01100 && funct3_i == 3'b110 && funct7_i == 1'b0)) ? OR 
-	: ((op_i == 5'b00100 && funct3_i == 3'b111) || (op_i == 5'b01100 && funct3_i == 3'b111 && funct7_i == 1'b0)) ? AND : ADD;
-assign alu_res = (alu_sel == ADD) ? (a + b)
-	: (alu_sel == SUB) ? (a - b)
-	: (alu_sel == SLL) ? (a << b[4:0]) 
-	: (alu_sel == SRL) ? (a >> b[4:0]) 
-	: (alu_sel == SRA) ? ({32{a[31]}} << (32 - b[4:0])) | (a >> b[4:0]) 
-	: (alu_sel == SLT) ? {31'b0, a < b} 
-	: (alu_sel == AND) ? (a & b) 
-	: (alu_sel == OR)  ? (a | b) 
-	: (alu_sel == XOR) ? (a ^ b) 
-	: 32'b0;
-***/
-
 /***LSU***/
 wire ls_valid = (op_i == 5'b01000) || (op_i == 5'b00000);
 assign ls_addr_o = (ls_valid) ? add_res : 32'h0;
-assign ls_wdata_o = (op_i == 5'b01000) ? ((ls_addr_o[1:0] == 0) ? r2_i 
+assign ls_wdata_o = (op_i == 5'b01000) ? (
+				(ls_addr_o[1:0] == 0) ?  r2_i 
 			: (ls_addr_o[1:0] == 1) ? {r2_i[23:0],8'b0} 
 			: (ls_addr_o[1:0] == 2) ? {r2_i[15:0],16'b0} 
 			: (ls_addr_o[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0) : 32'h0;
@@ -285,8 +249,8 @@ wire [31:0] offset = imm_i;
 wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
 assign jalen		= (op_i == 5'b11011);
 assign jalren		= (op_i == 5'b11001);
-assign beqen		= (op_i == 5'b11000 && funct3_i == 3'b000 && (r1_i == r2_i));
-assign bneen		= (op_i == 5'b11000 && funct3_i == 3'b001 && (r1_i != r2_i));
+assign beqen		= (op_i == 5'b11000 && funct3_i == 3'b000);
+assign bneen		= (op_i == 5'b11000 && funct3_i == 3'b001);
 assign blten		= (op_i == 5'b11000 && funct3_i == 3'b100);
 assign bgeen		= (op_i == 5'b11000 && funct3_i == 3'b101);
 assign bltuen		= (op_i == 5'b11000 && funct3_i == 3'b110);
@@ -296,8 +260,8 @@ assign mret_en	= (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} 
 
 wire [31:0]dnpc = (jalen) ? add_res	//jal
 	: (jalren) ? (add_res & ~1) //jalr
-	: (beqen) ? add_res	//beq
-	: (bneen) ? add_res	//bne
+	: (beqen  &&  eq_res)  ? add_res	//beq
+	: (bneen  && !eq_res)  ? add_res	//bne
 	: (blten  &&  slt_res) ? add_res	//blt
 	: (bgeen  && !slt_res) ? add_res	//bge
 	: (bltuen &&  slt_res) ? add_res	//bltu
