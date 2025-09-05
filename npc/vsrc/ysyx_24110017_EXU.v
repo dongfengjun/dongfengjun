@@ -198,15 +198,15 @@ wire sra     = (op_i == 5'b01100) && (funct3_i == 3'b101) && (funct7_i == 1'b1);
 wire or_     = (op_i == 5'b01100) && (funct3_i == 3'b110) && (funct7_i == 1'b0);
 wire and_    = (op_i == 5'b01100) && (funct3_i == 3'b111) && (funct7_i == 1'b0);
 //System
-assign ecall = (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b0000 && funct3_i == 3'b0);
-assign mret  = (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b1010 && funct3_i == 3'b0);
+wire ecall = (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b0000 && funct3_i == 3'b0);
+wire mret  = (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b1010 && funct3_i == 3'b0);
 //CSR
 wire csrrw   = (op_i == 5'b11100) && (funct3_i == 3'b001);
 wire csrrs   = (op_i == 5'b11100) && (funct3_i == 3'b010);
 wire csrrc   = (op_i == 5'b11100) && (funct3_i == 3'b011);
 
 //复用
-wire [31:0]add_res = ((ls_valid || jalren) ? r1_i : pc_i) + imm_i;
+wire [31:0]add_res = ((ls_valid || jalr) ? r1_i : pc_i) + imm_i;
 wire [31:0]add_pc_4 = pc_i + 4;
 
 wire [31:0]xrd = 
