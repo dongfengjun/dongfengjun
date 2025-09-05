@@ -191,8 +191,8 @@ wire [4:0]shamt_i  = imm_i[4:0];
 wire [3:0]alu_sel;
 wire [31:0]alu_res;
 wire [31:0]a,b;
-wire a_use_r1 = (op_i == 5'b00100) || (op_i == 5'b01100) || (ls_valid);
-wire b_use_imm = (op_i == 5'b00100) || (ls_valid);
+wire a_use_r1 = (op_i == 5'b00100) || (op_i == 5'b01100);
+wire b_use_imm = (op_i == 5'b00100);
 wire b_use_shamt = (funct3_i == 3'b001 || funct3_i == 3'b101);
 wire b_use_r2 = (op_i == 5'b01100);
 wire ab_use_signed = (funct3_i == 3'b010);
@@ -202,7 +202,7 @@ assign b = b_use_imm ? (ab_use_signed ? $signed(imm_i) : b_use_shamt ? {27'b0, s
 
 localparam [3:0] ADD = 4'd0,SUB = 4'd1,SLL = 4'd2,SRL = 4'd3,SRA = 4'd4,SLT = 4'd5,AND = 4'd6,OR = 4'd7,XOR = 4'd8;
 assign alu_sel =
-    ((op_i == 5'b00100 && funct3_i == 3'b000) || (op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 1'b0) || (ls_valid)) ? ADD 
+    ((op_i == 5'b00100 && funct3_i == 3'b000) || (op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 1'b0)) ? ADD 
   :  (op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 1'b1) ? SUB 
 	: ((op_i == 5'b00100 && funct3_i == 3'b001) || (op_i == 5'b01100 && (funct3_i == 3'b001 && funct7_i == 1'b0))) ? SLL 
 	: ((op_i == 5'b00100 &&(funct3_i == 3'b010 || funct3_i == 3'b011)) || (op_i == 5'b01100 && ((funct3_i == 3'b010 && funct7_i == 1'b0) || (funct3_i == 3'b011 && funct7_i == 1'b0)))) ? SLT 
@@ -224,7 +224,8 @@ assign alu_res = (alu_sel == ADD) ? (a + b)
 
 /***LSU***/
 wire ls_valid = (op_i == 5'b01000) || (op_i == 5'b00000);
-assign ls_addr_o = (ls_valid) ? alu_res : 32'h0;
+//assign ls_addr_o = (ls_valid) ? (r1_i + offset) : 32'h0;
+assign ls_addr_o = (ls_valid) ? add_res : 32'h0;
 assign ls_wdata_o = (op_i == 5'b01000) ? ((ls_addr_o[1:0] == 0) ? r2_i 
 			: (ls_addr_o[1:0] == 1) ? {r2_i[23:0],8'b0} 
 			: (ls_addr_o[1:0] == 2) ? {r2_i[15:0],16'b0} 
@@ -244,6 +245,7 @@ assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && (r1_i >= r2_i));
 assign ecall_en = (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b0000 && funct3_i == 3'b0);
 assign mret_en	= (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b1010 && funct3_i == 3'b0);
 
+/***
 wire [31:0]dnpc = (jalen) ? (pc_i + offset)	//jal
 	: (jalren)   ? ((r1_i + offset) & ~1) //jalr
 	: (beqen)    ? (pc_i + offset)	//beq
@@ -254,6 +256,21 @@ wire [31:0]dnpc = (jalen) ? (pc_i + offset)	//jal
 	:	(bgeuen)   ? (pc_i + offset)	//bgeu
 	: (ecall_en) ? mtvec_i  //ecall
 	: (mret_en)  ? mepc_i  //mret
+	: pc_i + 4;
+***/
+
+wire add_res = (ls_valid || jalren) ? (r1_i + offset) : pc_i + offset;
+
+wire [31:0]dnpc = (jalen) ? add_res	//jal
+	: (jalren) ? (add_res & ~1) //jalr
+	: (beqen) ? add_res	//beq
+	: (bneen) ? add_res	//bne
+	: (blten) ? add_res	//blt
+	: (bgeen) ? add_res	//bge
+	: (bltuen) ? add_res	//bltu
+	:	(bgeuen) ? add_res	//bgeu
+	: (ecall_en) ? mtvec_i  //ecall
+	: (mret_en) ? mepc_i  //mret
 	: pc_i + 4;
 
 endmodule
