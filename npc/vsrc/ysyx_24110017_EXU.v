@@ -223,7 +223,7 @@ wire [31:0]xrd =
 				(andi)  ? r1_i & imm_i :
 				(slli)  ? r1_i << shamt_i :
 				(srli)  ? r1_i >> shamt_i :
-				(srai)  ? ({32{rs1_i[31]}} << (32 - shamt_i[4:0])) | (rs1_i >> shamt_i[4:0]) :
+				(srai)  ? ({32{rs1_i[31]}} << (32 - shamt_i[4:0])) | (r1_i >> shamt_i[4:0]) :
 				(add)   ? r1_i + r2_i :
 				(sub)   ? r1_i - r2_i :
 				(sll)   ? r1_i << r2_i[4:0] :
@@ -246,7 +246,7 @@ wire[31:0] csr =
 	: (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001) ? mtvec_i 
 	: 32'b0;
 	
-wire[31:0] mcause_w = (ecall_en) ? r2_i : csrs_w; //ecall a5
+wire[31:0] mcause_w = (ecall) ? r2_i : csrs_w; //ecall a5
 wire[31:0] csrs_w = 
 			(csrrw) ? r1_i :
 			(csrrs) ? csr |  r1_i :
