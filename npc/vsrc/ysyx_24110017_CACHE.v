@@ -136,7 +136,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0) (
 							valid_reg[b][index * CACHE_WAY] <= 0;
 							for (a = 1; a < CACHE_WAY; a = a + 1) begin
                 cache_reg[b][index * CACHE_WAY + a] <= cache_reg[b][index * CACHE_WAY + a - 1];
-                tag_reg[index * CACHE_WAY + a] <= cache_reg[index * CACHE_WAY + a - 1];
+                tag_reg[index * CACHE_WAY + a] <= tag_reg[index * CACHE_WAY + a - 1];
 								//tag_reg  [b][index * CACHE_WAY + a] <= tag_reg  [b][index * CACHE_WAY + a - 1];
                 valid_reg[b][index * CACHE_WAY + a] <= valid_reg[b][index * CACHE_WAY + a - 1];
               end
