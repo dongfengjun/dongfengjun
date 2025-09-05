@@ -36,7 +36,7 @@ module ysyx_24110017_CACHE
 
 	reg [31:TAG_WIDTH]tag_check;
 	wire unvalid = m_axi_araddr[31:TAG_WIDTH] != tag_check;
-	always(posedge clk) begin
+	always @(posedge clk) begin
 		tag_check <= m_axi_araddr[31:TAG_WIDTH];
 	end
 
