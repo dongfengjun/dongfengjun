@@ -61,7 +61,7 @@ module ysyx_24110017_BTB
 			end
 	endgenerate
 
-	wire [(1<<J_N)-1:0]jhit;
+	wire [(1<<J_W)-1:0]jhit;
   generate
     genvar j;
       for(j = 0; j < (1<<J_N); j = j + 1) begin : comparator_j
