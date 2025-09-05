@@ -205,7 +205,7 @@ assign a = a_use_r1 ? (ab_use_signed ? $signed(r1_i) : r1_i) : 32'b0;
 assign b = b_use_imm ? (ab_use_signed ? $signed(imm_i) : b_use_shamt ? {27'b0, shamt_i} : imm_i) :
            b_use_r2 ? (ab_use_signed ? $signed(r2_i) : r2_i) : 32'b0;
 
-localparam [3:0] ADD = 4'd0,SUB = 4'd1,SLL = 4'd2,SRL = 4'd3,SRA = 4'd4,SLT = 4'd5,AND = 4'd6,OR = 4'd7,XOR = 4'd8;
+localparam [3:0] ADD = 4'd0,SUB = 4'd1,SLL = 4'd2,SRL = 4'd3,SRA = 4'd4,SLT = 4'd5,AND = 4'd6,OR = 4'd7,XOR = 4'd8,NULL = 4'd9;
 assign alu_sel =
     ((op_i == 5'b00100 && funct3_i == 3'b000) || (op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 1'b0)) ? ADD 
   :  (op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 1'b1) ? SUB 
@@ -215,7 +215,7 @@ assign alu_sel =
 	: ((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 1'b0) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 1'b0)) ? SRL 
 	: ((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 1'b1) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 1'b1)) ? SRA 
 	: ((op_i == 5'b00100 && funct3_i == 3'b110) || (op_i == 5'b01100 && funct3_i == 3'b110 && funct7_i == 1'b0)) ? OR 
-	: ((op_i == 5'b00100 && funct3_i == 3'b111) || (op_i == 5'b01100 && funct3_i == 3'b111 && funct7_i == 1'b0)) ? AND : ADD;
+	: ((op_i == 5'b00100 && funct3_i == 3'b111) || (op_i == 5'b01100 && funct3_i == 3'b111 && funct7_i == 1'b0)) ? AND : NULL;
 assign alu_res = (alu_sel == ADD) ? add_res
 	: (alu_sel == SUB) ? (a - b)
 	: (alu_sel == SLL) ? (a << b[4:0]) 
