@@ -150,7 +150,8 @@ always@(posedge clk) begin
 end
 
 wire funct7_i = imm_i[10];
-wire [4:0]shamt_i  = imm_i[4:0];
+wire [ 4:0] shamt_i = imm_i[4:0];
+wire [31:0] offset  = imm_i;
 //U
 wire lui     = (op_i == 5'b01101);
 wire auipc   = (op_i == 5'b00101);
@@ -306,14 +307,6 @@ assign ls_wdata_o = (op_i == 5'b01000) ?
 			: (ls_addr_o[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0) : 32'h0;
 
 /***BU***/
-wire [31:0] offset = imm_i;
-assign beqen		= (op_i == 5'b11000 && funct3_i == 3'b000 && (r1_i == r2_i));
-assign bneen		= (op_i == 5'b11000 && funct3_i == 3'b001 && (r1_i != r2_i));
-assign blten		= (op_i == 5'b11000 && funct3_i == 3'b100 && ($signed(r1_i) < $signed(r2_i)));
-assign bgeen		= (op_i == 5'b11000 && funct3_i == 3'b101 && ($signed(r1_i) >= $signed(r2_i)));
-assign bltuen		= (op_i == 5'b11000 && funct3_i == 3'b110 && (r1_i < r2_i));
-assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && (r1_i >= r2_i));
-
 wire [31:0]dnpc = 
     (jal) ?   add_res	//jal
 	: (jalr) ? (add_res & ~1) //jalr
