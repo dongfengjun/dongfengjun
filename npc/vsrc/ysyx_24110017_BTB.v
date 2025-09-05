@@ -26,7 +26,7 @@ module ysyx_24110017_BTB
 	wire [JTAG-3-J_N+J_W:0] jtag_pre   = prepc_tag_i[JTAG-1:2+J_N-J_W];
 	wire [J_N-J_W-1:0]      jindex_pre = prepc_tag_i[J_N-J_W+1:2];
 	wire [BTAG-3-B_N+B_W:0] btag_pre   = prepc_tag_i[BTAG-1:2+B_N-B_W];
-	wire [J_N-J_W-1 :0]     bindex_pre = prepc_tag_i[B_N-B_W+1:2];
+	wire [B_N-B_W-1 :0]     bindex_pre = prepc_tag_i[B_N-B_W+1:2];
 
 	function integer blog2;
     input [(1<<B_W) - 1 : 0] value;

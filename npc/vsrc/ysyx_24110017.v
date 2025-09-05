@@ -139,7 +139,7 @@ wire [31:0]r1,r2;
 wire [31:0]mepc,mstatus,mcause,mtvec;
 wire [31:0]mvendorid,marchid; //ID
 
-ysyx_24110017_BTB #(2,0,16,8,1,0,16,16) BTB(clock,reset,if_axi_araddr,snpc,prepc,pc_if,prepc_en);
+ysyx_24110017_BTB #(1,0,16,8,1,0,16,16) BTB(clock,reset,if_axi_araddr,snpc,prepc,pc_if,prepc_en);
 ysyx_24110017_IFU IFU(clock,reset,isCHazard,
 		if_valid,id_ready,dnpc_ex,snpc,pc_if,inst_if,
 		if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
