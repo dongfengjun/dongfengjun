@@ -259,7 +259,7 @@ wire [31:0]dnpc = (jalen) ? (pc_i + offset)	//jal
 	: pc_i + 4;
 ***/
 
-wire add_res = (ls_valid || jalren) ? (r1_i + offset) : pc_i + offset;
+wire [31:0]add_res = (ls_valid || jalren) ? (r1_i + offset) : pc_i + offset;
 
 wire [31:0]dnpc = (jalen) ? add_res	//jal
 	: (jalren) ? (add_res & ~1) //jalr
