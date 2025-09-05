@@ -122,7 +122,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 16) ( //tag width 
               end
             end
 					end
-					if(s_axi_rready && s_axi_rvalid) begin
+					if(!m_axi_arvalid && s_axi_rready && s_axi_rvalid) begin
 						valid_reg[burst_counter][index * CACHE_WAY] <= 1'b1;
 					end
 				end
