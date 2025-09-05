@@ -3,12 +3,9 @@ module ysyx_24110017_IFU(
 	input  wire rst,
 
 	input  wire flush,
-//	input  wire pc_valid_i,
-//	output wire if_ready_o,
 	output reg  if_valid_o,
 	input  wire id_ready_i,
 
-  //input  wire [31:0] pc_i,
 	input  wire [31:0] dnpc_i,
 	input  wire [31:0] snpc_i,
 
@@ -31,7 +28,6 @@ module ysyx_24110017_IFU(
 );
 
 /***分布式控制***/
-//assign if_ready_o = (state == IDLE);
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
@@ -39,7 +35,6 @@ always @(posedge clk) begin
 	if(rst || flush) state <= IDLE;
 	else begin
 		case(state)
-			//IDLE: state <= (pc_valid_i) ? WAIT : state;
 			IDLE: state <= WAIT;
 			WAIT:	state <= (if_valid_o && id_ready_i)   ? IDLE : state;
 		endcase
@@ -98,7 +93,6 @@ always @(posedge clk) begin
     case (state)
       IDLE: begin
 				if_axi_arvalid_o <= 1'b1;
-//			if_axi_araddr_o  <= pc_i;
       end
       WAIT: begin
 				if(if_axi_arvalid_o && if_axi_arready_i) begin
