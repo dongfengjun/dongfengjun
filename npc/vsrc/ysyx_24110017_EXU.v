@@ -287,10 +287,10 @@ assign jalen		= (op_i == 5'b11011);
 assign jalren		= (op_i == 5'b11001);
 assign beqen		= (op_i == 5'b11000 && funct3_i == 3'b000 && (r1_i == r2_i));
 assign bneen		= (op_i == 5'b11000 && funct3_i == 3'b001 && (r1_i != r2_i));
-assign blten		= (op_i == 5'b11000 && funct3_i == 3'b100 && ( slt_res));
-assign bgeen		= (op_i == 5'b11000 && funct3_i == 3'b101 && (!slt_res));
-assign bltuen		= (op_i == 5'b11000 && funct3_i == 3'b110 && ( slt_res));
-assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && (!slt_res));
+assign blten		= (op_i == 5'b11000 && funct3_i == 3'b100);
+assign bgeen		= (op_i == 5'b11000 && funct3_i == 3'b101);
+assign bltuen		= (op_i == 5'b11000 && funct3_i == 3'b110);
+assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111);
 assign ecall_en = (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b0000 && funct3_i == 3'b0);
 assign mret_en	= (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b1010 && funct3_i == 3'b0);
 
@@ -298,10 +298,10 @@ wire [31:0]dnpc = (jalen) ? add_res	//jal
 	: (jalren) ? (add_res & ~1) //jalr
 	: (beqen) ? add_res	//beq
 	: (bneen) ? add_res	//bne
-	: (blten) ? add_res	//blt
-	: (bgeen) ? add_res	//bge
-	: (bltuen) ? add_res	//bltu
-	:	(bgeuen) ? add_res	//bgeu
+	: (blten  &&  slt_res) ? add_res	//blt
+	: (bgeen  && !slt_res) ? add_res	//bge
+	: (bltuen &&  slt_res) ? add_res	//bltu
+	:	(bgeuen && !slt_res) ? add_res	//bgeu
 	: (ecall_en) ? mtvec_i  //ecall
 	: (mret_en) ? mepc_i  //mret
 	: add_pc_4;
