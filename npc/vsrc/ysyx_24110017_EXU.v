@@ -151,6 +151,8 @@ end
 
 wire [31:0]add_res = ((ls_valid || jalren) ? r1_i : pc_i) + imm_i;
 wire [31:0]add_pc_4 = pc_i + 4;
+wire [31:0]r1_sigend = $signed(r1_i);
+wire [31:0]r2_signed = $signed(r2_i);
 
 wire [31:0]xrd = 
 /***I*addi~srai***/
@@ -165,7 +167,7 @@ wire [31:0]xrd =
 /***LSU***/
 				(op_i == 5'b00000) ? ls_rdata_i   : //LOAD
 /***CSRU***/
-				((op_i == 5'b11100) && (|funct3_i)) ? csr : //I_csrrw_csrrs_csrrc
+				((op_i == 5'b11100) && ((funct3_i == 3'b001) || (funct3_i == 3'b010) || (funct3_i == 3'b011))) ? csr : //I_csrrw_csrrs_csrrc
 				32'h0;
 
 wire[31:0] csr = 
@@ -199,9 +201,9 @@ wire b_use_imm = (op_i == 5'b00100);
 wire b_use_shamt = (funct3_i == 3'b001 || funct3_i == 3'b101);
 wire b_use_r2 = (op_i == 5'b01100);
 wire ab_use_signed = (funct3_i == 3'b010);
-assign a = a_use_r1 ? (ab_use_signed ? $signed(r1_i) : r1_i) : 32'b0;
+assign a = a_use_r1 ? (ab_use_signed ? r1_signed : r1_i) : 32'b0;
 assign b = b_use_imm ? (ab_use_signed ? $signed(imm_i) : b_use_shamt ? {27'b0, shamt_i} : imm_i) :
-           b_use_r2 ? (ab_use_signed ? $signed(r2_i) : r2_i) : 32'b0;
+           b_use_r2 ? (ab_use_signed ? r2_signed : r2_i) : 32'b0;
 
 localparam [3:0] ADD = 4'd0,SUB = 4'd1,SLL = 4'd2,SRL = 4'd3,SRA = 4'd4,SLT = 4'd5,AND = 4'd6,OR = 4'd7,XOR = 4'd8;
 assign alu_sel =
@@ -240,10 +242,10 @@ assign jalen		= (op_i == 5'b11011);
 assign jalren		= (op_i == 5'b11001);
 assign beqen		= (op_i == 5'b11000 && funct3_i == 3'b000 && (r1_i == r2_i));
 assign bneen		= (op_i == 5'b11000 && funct3_i == 3'b001 && (r1_i != r2_i));
-assign blten		= (op_i == 5'b11000 && funct3_i == 3'b100 && ($signed(r1_i) < $signed(r2_i)));
-assign bgeen		= (op_i == 5'b11000 && funct3_i == 3'b101 && ($signed(r1_i) >= $signed(r2_i)));
+assign blten		= (op_i == 5'b11000 && funct3_i == 3'b100 && (r1_sigend < r2_sigend));
+assign bgeen		= (op_i == 5'b11000 && funct3_i == 3'b101 && !(r1_signed < r2_signed));
 assign bltuen		= (op_i == 5'b11000 && funct3_i == 3'b110 && (r1_i < r2_i));
-assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && (r1_i >= r2_i));
+assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && !(r1_i < r2_i));
 assign ecall_en = (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b0000 && funct3_i == 3'b0);
 assign mret_en	= (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b1010 && funct3_i == 3'b0);
 
