@@ -69,7 +69,7 @@ always@(posedge clk) begin
 `ifndef YOSYS_STA
 				pc_o	 <= pc_i;
 				inst_o <= inst_i;
-				npc_o  <= npc;
+				npc_o  <= dnpc;
 `endif
 				xrd_o  <= xrd;
 			end
@@ -257,20 +257,6 @@ wire [31:0]dnpc = (jalen) ? add_res	//jal
 	:	(bgeuen) ? add_res	//bgeu
 	: (ecall_en) ? mtvec_i  //ecall
 	: (mret_en) ? mepc_i  //mret
-	: 32'h0;
-
-`ifndef YOSYS_STA
-wire [31:0]npc = (jalen) ? add_res //jal
-	: (jalren) ? (add_res & ~1) //jalr
-  : (beqen) ? add_res //beq
-  : (bneen) ? add_res //bne
-  : (blten) ? add_res //blt
-  : (bgeen) ? add_res //bge
-  : (bltuen) ? add_res  //bltu
-  : (bgeuen) ? add_res  //bgeu
-  : (ecall_en) ? mtvec_i  //ecall
-  : (mret_en) ? mepc_i  //mret
-  : pc_i + 4;
-`endif
+	: add_pc_4;
 
 endmodule
