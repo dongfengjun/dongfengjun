@@ -149,7 +149,7 @@ always@(posedge clk) begin
 	endcase
 end
 
-wire [31:0]add_res = ((op_i == 5'b00000 || op_i == 5'b01000 || op_i == 5'b11001) ? r1_i : pc_i) + imm_i;
+wire [31:0]add_res = ((op_i == 5'b00000 || op_i == 5'b01000 || op_i == 5'b11001 || (op_i == 5'b00100) || (op_i == 5'b01100)) ? r1_i : pc_i) + ((op_i == 5'b00100) ? r2_i : imm_i);
 wire [31:0]add_pc_4 = pc_i + 4;
 
 wire [31:0]xrd = 
@@ -214,7 +214,7 @@ assign alu_sel =
 	: ((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 1'b1) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 1'b1)) ? SRA 
 	: ((op_i == 5'b00100 && funct3_i == 3'b110) || (op_i == 5'b01100 && funct3_i == 3'b110 && funct7_i == 1'b0)) ? OR 
 	: ((op_i == 5'b00100 && funct3_i == 3'b111) || (op_i == 5'b01100 && funct3_i == 3'b111 && funct7_i == 1'b0)) ? AND : ADD;
-assign alu_res = (alu_sel == ADD) ? (a + b)
+assign alu_res = (alu_sel == ADD) ? add_res
 	: (alu_sel == SUB) ? (a - b)
 	: (alu_sel == SLL) ? (a << b[4:0]) 
 	: (alu_sel == SRL) ? (a >> b[4:0]) 
