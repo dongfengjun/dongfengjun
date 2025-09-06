@@ -252,7 +252,7 @@ wire [31:0]dnpc = (jalen) ? add_res	//jal
 	: (mret_en) ? mepc_i  //mret
 	: add_pc_4;
 ***/
-assign ecall_en = (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b0000 && funct3_i == 3'b0);
+wire ecall_en = (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b0000 && funct3_i == 3'b0);
 localparam [3:0] jal = 4'd1, jalr = 4'd2, beq = 4'd3, bne = 4'd4, blt = 4'd5, bge = 4'd6, bltu = 4'd7, bgeu = 4'd8, ecall = 4'd9, mret = 4'd10;
 wire [3:0] sel = 
    (op_i == 5'b11011) ? jal
