@@ -38,7 +38,8 @@ module ysyx_24110017_EXU(
 	input  wire [31:0] ls_rdata_i,
 	input  wire ls_done_i,
 
-	output reg  [31:0] dnpc_o
+	//output reg  [31:0] dnpc_o
+	output wire dnpc
 );
 
 /***分布式控制***/
@@ -248,16 +249,16 @@ assign ecall_en = (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]}
 assign mret_en	= (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b1010 && funct3_i == 3'b0);
 
 wire [31:0]dnpc = 
-		(jalen) ? add_res	//jal
-	: (jalren) ? (add_res & ~1) //jalr
-	: (beqen) ? add_res	//beq
-	: (bneen) ? add_res	//bne
-	: (blten) ? add_res	//blt
-	: (bgeen) ? add_res	//bge
-	: (bltuen) ? add_res	//bltu
-	:	(bgeuen) ? add_res	//bgeu
-	: (ecall_en) ? mtvec_i  //ecall
-	: (mret_en) ? mepc_i  //mret
-	: add_pc_4;
+		(jalen)	   ?	add_res	//jal
+	: (jalren)   ? (add_res & ~1) //jalr
+	: (beqen)    ?  add_res	//beq
+	: (bneen)    ?	add_res	//bne
+	: (blten)    ?	add_res	//blt
+	: (bgeen)    ?	add_res	//bge
+	: (bltuen)   ?  add_res	//bltu
+	:	(bgeuen)   ?  add_res	//bgeu
+	: (ecall_en) ?  mtvec_i  //ecall
+	: (mret_en)  ?	mepc_i  //mret
+	:               add_pc_4;
 
 endmodule
