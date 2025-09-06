@@ -160,16 +160,15 @@ wire [31:0]xor_res = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i ^ ((op_i == 5
 
 wire [31:0]xrd = 
 /***I*addi~srai***/
-				(op_i == 5'b00100) ? (alu_res) :
+				(op_i == 5'b00100) ? alu_res :
 /***R_add~R_remu***/
-				(op_i == 5'b01100) ? (alu_res) :
+				(op_i == 5'b01100) ? alu_res :
 /*********/
-				(op_i == 5'b11011) ? add_pc_4	: //I_jal
-				(op_i == 5'b11001) ? add_pc_4	: //I_jalr
+				(op_i[5:3] == 3'b110) ? add_pc_4	: //I_jal I_jalr
 				(op_i == 5'b01101) ? imm_i		: //U_lui
-				(op_i == 5'b00101) ? add_res  :	//U_auipc
+				(op_i == 5'b00101) ? alu_res  :	//U_auipc
 /***LSU***/
-				(op_i == 5'b00000) ? ls_rdata_i   : //LOAD
+				(op_i == 5'b00000) ? ls_rdata_i : //load
 /***CSRU***/
 				(op_i == 5'b11100) ? csr : //I_csrrw_csrrs_csrrc
 				32'h0;
