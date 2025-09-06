@@ -201,14 +201,14 @@ wire funct7_i = imm_i[10];
 localparam [3:0] ADD = 4'd0,SUB = 4'd1,SLL = 4'd2,SRL = 4'd3,SRA = 4'd4,SLT = 4'd5,AND = 4'd6,OR = 4'd7,XOR = 4'd8;
 wire [3:0]alu_sel =
     ((op_i == 5'b00100 && funct3_i == 3'b000) || (op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 1'b0)) ? ADD
-  :  (op_i == 5'b01100 && funct3_i == 3'b000 && funct7_i == 1'b1) ? SUB
-	: ((op_i == 5'b00100 && funct3_i == 3'b001) || (op_i == 5'b01100 && (funct3_i == 3'b001 && funct7_i == 1'b0))) ? SLL
-	: ((op_i == 5'b00100 &&(funct3_i == 3'b010 || funct3_i == 3'b011)) || (op_i == 5'b01100 && ((funct3_i == 3'b010 && funct7_i == 1'b0) || (funct3_i == 3'b011 && funct7_i == 1'b0)))) ? SLT
-	: ((op_i == 5'b00100 && funct3_i == 3'b100) || (op_i == 5'b01100 && (funct3_i == 3'b100 && funct7_i == 1'b0))) ? XOR
-	: ((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 1'b0) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 1'b0)) ? SRL
-	: ((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 1'b1) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 1'b1)) ? SRA
-	: ((op_i == 5'b00100 && funct3_i == 3'b110) || (op_i == 5'b01100 && funct3_i == 3'b110 && funct7_i == 1'b0)) ? OR
-	: ((op_i == 5'b00100 && funct3_i == 3'b111) || (op_i == 5'b01100 && funct3_i == 3'b111 && funct7_i == 1'b0)) ? AND : ADD;
+  : (funct3_i == 3'b000 && funct7_i == 1'b1) ? SUB
+	: (funct3_i == 3'b001) ? SLL
+	: (funct3_i == 3'b010 || funct3_i == 3'b011) ? SLT
+	: (funct3_i == 3'b100) ? XOR
+	: (funct3_i == 3'b101 && funct7_i == 1'b0) ? SRL
+	: (funct3_i == 3'b101 && funct7_i == 1'b1) ? SRA
+	: (funct3_i == 3'b110) ? OR
+	: (funct3_i == 3'b111) ? AND : ADD;
 wire [31:0]alu_res = (alu_sel == ADD) ? add_res
 	: (alu_sel == SUB) ? sub_res
 	: (alu_sel == SLL) ? sll_res
