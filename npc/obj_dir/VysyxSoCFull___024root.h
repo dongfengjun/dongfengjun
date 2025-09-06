@@ -9036,7 +9036,6 @@ class VysyxSoCFull___024root final : public VerilatedModule {
             IData/*31:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__EXU__DOT__csrs_w;
             IData/*31:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__EXU__DOT__alu_res;
             IData/*31:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__EXU__DOT__dnpc;
-            IData/*31:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__EXU__DOT____VdfgTmp_h3724aa64__0;
             IData/*31:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__EXU__DOT____VdfgTmp_h0bc2acfe__0;
             IData/*31:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__LSU__DOT__ls_rdata;
             IData/*31:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__Xbar__DOT__X_AXI_ARADDR;
@@ -9064,9 +9063,9 @@ class VysyxSoCFull___024root final : public VerilatedModule {
             IData/*31:0*/ ysyxSoCFull__DOT__asic__DOT__lsdram_axi__DOT__msdram__DOT__u_sdram_axi__DOT__u_core__DOT__sample_data0_q;
             IData/*31:0*/ ysyxSoCFull__DOT__asic__DOT__lsdram_axi__DOT__msdram__DOT__u_sdram_axi__DOT__u_core__DOT__sample_data_q;
             IData/*31:0*/ ysyxSoCFull__DOT__asic__DOT__lsdram_axi__DOT__msdram__DOT__u_sdram_axi__DOT__u_core__DOT__idx;
+            VlWide<3>/*79:0*/ ysyxSoCFull__DOT__asic__DOT__lsdram_axi__DOT__msdram__DOT__u_sdram_axi__DOT__u_core__DOT__dbg_state;
         };
         struct {
-            VlWide<3>/*79:0*/ ysyxSoCFull__DOT__asic__DOT__lsdram_axi__DOT__msdram__DOT__u_sdram_axi__DOT__u_core__DOT__dbg_state;
             IData/*31:0*/ ysyxSoCFull__DOT__asic__DOT__apbdelay_delayer__DOT__prdata_reg;
             IData/*31:0*/ ysyxSoCFull__DOT__asic__DOT__axi42apb__DOT__araddr_reg_r;
             IData/*31:0*/ ysyxSoCFull__DOT__asic__DOT__axi42apb__DOT__awaddr_reg_r;
@@ -9130,9 +9129,9 @@ class VysyxSoCFull___024root final : public VerilatedModule {
             VlUnpacked<CData/*5:0*/, 4> ysyxSoCFull__DOT__asic__DOT__lsdram_axi__DOT__msdram__DOT__u_sdram_axi__DOT__u_axi__DOT__u_requests__DOT__ram;
             VlUnpacked<IData/*31:0*/, 4> ysyxSoCFull__DOT__asic__DOT__lsdram_axi__DOT__msdram__DOT__u_sdram_axi__DOT__u_axi__DOT__u_response__DOT__ram;
             VlUnpacked<SData/*12:0*/, 8> ysyxSoCFull__DOT__asic__DOT__lsdram_axi__DOT__msdram__DOT__u_sdram_axi__DOT__u_core__DOT__active_row_q;
+            VlUnpacked<CData/*7:0*/, 4> ysyxSoCFull__DOT__psram__DOT__wdata;
         };
         struct {
-            VlUnpacked<CData/*7:0*/, 4> ysyxSoCFull__DOT__psram__DOT__wdata;
             VlUnpacked<SData/*15:0*/, 512> ysyxSoCFull__DOT__sdram__DOT__sense_amp;
             VlUnpacked<VlUnpacked<VlUnpacked<SData/*15:0*/, 512>, 8192>, 4> ysyxSoCFull__DOT__sdram__DOT__bank_mem;
             VlUnpacked<SData/*15:0*/, 512> ysyxSoCFull__DOT__sdram1__DOT__sense_amp;
