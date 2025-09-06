@@ -140,6 +140,7 @@ always@(posedge clk) begin
 	end
 end
 
+/***
 always@(posedge clk) begin
 	casez({flush_i,state})
 		2'b1? : dnpc_o <= 32'h0;
@@ -149,6 +150,7 @@ always@(posedge clk) begin
 		default : dnpc_o <= dnpc_o;
 	endcase
 end
+***/
 
 wire [31:0]add_res = ((ls_valid || jalren) ? r1_i : pc_i) + imm_i;
 wire [31:0]add_pc_4 = pc_i + 4;
@@ -248,7 +250,7 @@ assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && (r1_i >= r2_i));
 assign ecall_en = (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b0000 && funct3_i == 3'b0);
 assign mret_en	= (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b1010 && funct3_i == 3'b0);
 
-wire [31:0]dnpc = 
+assign dnpc = 
 		(jalen)	   ?	add_res	//jal
 	: (jalren)   ? (add_res & ~1) //jalr
 	: (beqen)    ?  add_res	//beq
