@@ -199,7 +199,7 @@ wire sel_mvendorid = (X_AXI_ARADDR == MVENDORID_ADDR);
 wire sel_marchid	 = (X_AXI_ARADDR == MARCHID_ADDR);
 wire sel_id = sel_mvendorid || sel_marchid;
 
-wire [31:0]I_AXI_RDATA = (sel_mvendorid) ? mvendorid : (sel_marchid) ? marchid : 32'h0;
+wire [31:0]I_AXI_RDATA = (sel_id) ? ((sel_mvendorid) ? mvendorid : marchid) : 32'h0;
 wire I_AXI_ARREADY = 1'b1;
 wire I_AXI_RVALID = 1'b1;
 
