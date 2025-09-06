@@ -235,9 +235,8 @@ assign ls_wdata_o = (op_i == 5'b01000) ? ((ls_addr_o[1:0] == 0) ? r2_i
 
 /***BU***/
 wire [31:0] offset = imm_i;
-wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
-assign jalen		= (op_i == 5'b11011);
-assign jalren		= (op_i == 5'b11001);
+/**
+wire beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
 assign beqen		= (op_i == 5'b11000 && funct3_i == 3'b000 && (r1_i == r2_i));
 assign bneen		= (op_i == 5'b11000 && funct3_i == 3'b001 && (r1_i != r2_i));
 assign blten		= (op_i == 5'b11000 && funct3_i == 3'b100 && ($signed(r1_i) < $signed(r2_i)));
@@ -246,17 +245,18 @@ assign bltuen		= (op_i == 5'b11000 && funct3_i == 3'b110 && (r1_i < r2_i));
 assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && (r1_i >= r2_i));
 assign ecall_en = (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b0000 && funct3_i == 3'b0);
 assign mret_en	= (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b1010 && funct3_i == 3'b0);
-
-wire [31:0]dnpc = (jalen) ? add_res	//jal
-	: (jalren) ? (add_res & ~1) //jalr
-	: (beqen) ? add_res	//beq
-	: (bneen) ? add_res	//bne
-	: (blten) ? add_res	//blt
-	: (bgeen) ? add_res	//bge
-	: (bltuen) ? add_res	//bltu
-	:	(bgeuen) ? add_res	//bgeu
-	: (ecall_en) ? mtvec_i  //ecall
-	: (mret_en) ? mepc_i  //mret
+**/
+wire [31:0]dnpc = 
+		(op_i == 5'b11011) ? add_res	//jal
+	: (op_i == 5'b11001) ? (add_res & ~1) //jalr
+	: ((op_i == 5'b11000 && funct3_i == 3'b000 && (r1_i == r2_i))) ? add_res	//beq
+	: ((op_i == 5'b11000 && funct3_i == 3'b001 && (r1_i != r2_i))) ? add_res	//bne
+	: ((op_i == 5'b11000 && funct3_i == 3'b100 && ($signed(r1_i) < $signed(r2_i)))) ? add_res	//blt
+	: ((op_i == 5'b11000 && funct3_i == 3'b101 && ($signed(r1_i) >= $signed(r2_i)))) ? add_res	//bge
+	: ((op_i == 5'b11000 && funct3_i == 3'b110 && (r1_i < r2_i))) ? add_res	//bltu
+	:	((op_i == 5'b11000 && funct3_i == 3'b111 && (r1_i >= r2_i))) ? add_res	//bgeu
+	: ((op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b0000 && funct3_i == 3'b0)) ? mtvec_i  //ecall
+	: ((op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b1010 && funct3_i == 3'b0)) ? mepc_i  //mret
 	: add_pc_4;
 
 endmodule
