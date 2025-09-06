@@ -186,7 +186,7 @@ wire[31:0] csr =
 wire[31:0] mcause_w = (ecall_en) ? r2_i : csrs_w; //ecall a5
 wire[31:0] csrs_w = 
 			({32{(op_i == 5'b11100) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
-			({32{(op_i == 5'b11100) && (funct3_i == 3'b010)}} & or_res | //I_csrrs
+			({32{(op_i == 5'b11100) && (funct3_i == 3'b010)}} & or_res) | //I_csrrs
       ({32{(op_i == 5'b11100) && (funct3_i == 3'b011)}} & (csr & ~r1_i)) | //I_csrrc
 			({32{ecall_en}} & pc_i); //ecall_mepc
 wire [3:0] csrs_wen = {
