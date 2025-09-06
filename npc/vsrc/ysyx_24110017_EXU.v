@@ -151,7 +151,7 @@ end
 
 wire [31:0]add_res = ((ls_valid || jalren) ? r1_i : pc_i) + imm_i;
 wire [31:0]add_pc_4 = pc_i + 4;
-wire [31:0]r1_sigend = $signed(r1_i);
+wire [31:0]r1_signed = $signed(r1_i);
 wire [31:0]r2_signed = $signed(r2_i);
 
 wire [31:0]xrd = 
