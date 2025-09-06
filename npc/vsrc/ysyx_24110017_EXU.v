@@ -153,21 +153,26 @@ wire [31:0]add_res = ((ls_valid || jalren) ? r1_i : pc_i) + imm_i;
 wire [31:0]add_pc_4 = pc_i + 4;
 
 wire [31:0]xrd = 
+/***I*addi~srai***/
 				(op_i == 5'b00100) ? (alu_res) :
+/***R_add~R_remu***/
 				(op_i == 5'b01100) ? (alu_res) :
+/*********/
 				(op_i == 5'b11011) ? add_pc_4	: //I_jal
 				(op_i == 5'b11001) ? add_pc_4	: //I_jalr
 				(op_i == 5'b01101) ? imm_i		: //U_lui
 				(op_i == 5'b00101) ? add_res  :	//U_auipc
+/***LSU***/
 				(op_i == 5'b00000) ? ls_rdata_i   : //LOAD
+/***CSRU***/
 				((op_i == 5'b11100) && ((funct3_i == 3'b001) || (funct3_i == 3'b010) || (funct3_i == 3'b011))) ? csr : //I_csrrw_csrrs_csrrc
 				32'h0;
 
 wire[31:0] csr = 
-		(op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101) ? mepc_i
-	: (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1000) ? mstatus_i
-	: (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110) ? mcause_i
-	: (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001) ? mtvec_i 
+		(op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101 && imm_i[2:0] == 3'b001) ? mepc_i
+	: (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1000 && imm_i[2:0] == 3'b000) ? mstatus_i
+	: (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110 && imm_i[2:0] == 3'b010) ? mcause_i
+	: (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001 && imm_i[2:0] == 3'b101) ? mtvec_i 
 	: 32'b0;
 	
 wire[31:0] mcause_w = (ecall_en) ? r2_i : csrs_w; //ecall a5
@@ -177,10 +182,10 @@ wire[31:0] csrs_w =
       ({32{(op_i == 5'b11100) && (funct3_i == 3'b011)}} & (csr & ~r1_i)) | //I_csrrc
 			({32{ecall_en}} & pc_i); //ecall_mepc
 wire [3:0] csrs_wen = {
-    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001), //1100000101
-    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110) || ecall_en, //1101000010
-    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1000), //1100000000
-    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101) || ecall_en //1101000001
+    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001 && imm_i[2:0] == 3'b101), //1100000101
+    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110 && imm_i[2:0] == 3'b010) || ecall_en, //1101000010
+    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1000 && imm_i[2:0] == 3'b000), //1100000000
+    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101 && imm_i[2:0] == 3'b001) || ecall_en //1101000001
 };
 
 /***ALU***/
@@ -239,8 +244,8 @@ assign blten		= (op_i == 5'b11000 && funct3_i == 3'b100 && ($signed(r1_i) < $sig
 assign bgeen		= (op_i == 5'b11000 && funct3_i == 3'b101 && ($signed(r1_i) >= $signed(r2_i)));
 assign bltuen		= (op_i == 5'b11000 && funct3_i == 3'b110 && (r1_i < r2_i));
 assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && (r1_i >= r2_i));
-assign ecall_en = (op_i == 5'b11100 && offset[1:0] == 0 && funct3_i == 3'b0);
-assign mret_en	= (op_i == 5'b11100 && offset[1] && funct3_i == 3'b0);
+assign ecall_en = (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b0000 && funct3_i == 3'b0);
+assign mret_en	= (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b1010 && funct3_i == 3'b0);
 
 wire [31:0]dnpc = (jalen) ? add_res	//jal
 	: (jalren) ? (add_res & ~1) //jalr
@@ -252,6 +257,6 @@ wire [31:0]dnpc = (jalen) ? add_res	//jal
 	:	(bgeuen) ? add_res	//bgeu
 	: (ecall_en) ? mtvec_i  //ecall
 	: (mret_en) ? mepc_i  //mret
-	: 32'h0;
+	: add_pc_4;
 
 endmodule
