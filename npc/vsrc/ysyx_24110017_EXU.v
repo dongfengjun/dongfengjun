@@ -54,10 +54,16 @@ always @(posedge clk) begin
   else if(updata && state)			state <= IDLE;
 end
 
+reg counter_en;
+always @(posedge clk) begin
+	if(id_valid_i && ex_ready_o) counter_en <= 1'b1;
+	else counter_en <= 1'b0;
+end
+
 reg [1:0]counter;
 always @(posedge clk) begin
 	if(flush_i) counter <= 2'd0;
-	else begin
+	else if(counter_en)begin
 		case(counter)
 			2'd0 : counter <= (ecall_en) ? 2'd2: (|csrs_wen) ? 2'd1 : counter;
 			2'd1 : counter <= 2'd0;
