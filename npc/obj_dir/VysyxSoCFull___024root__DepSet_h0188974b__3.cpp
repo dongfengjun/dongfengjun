@@ -7,47 +7,6 @@
 
 #include "VysyxSoCFull___024root.h"
 
-VL_INLINE_OPT void VysyxSoCFull___024root___nba_comb__TOP__5(VysyxSoCFull___024root* vlSelf) {
-    if (false && vlSelf) {}  // Prevent unused
-    VysyxSoCFull__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root___nba_comb__TOP__5\n"); );
-    // Body
-    vlSelf->ysyxSoCFull__DOT__dio__en2 = ((IData)(vlSelf->ysyxSoCFull__DOT___asic_psram_ce_n)
-                                           ? 0U : (
-                                                   (3U 
-                                                    == (IData)(vlSelf->ysyxSoCFull__DOT__psram__DOT__state))
-                                                    ? 0U
-                                                    : 
-                                                   ((4U 
-                                                     == (IData)(vlSelf->ysyxSoCFull__DOT__psram__DOT__state))
-                                                     ? 0xfU
-                                                     : 0U)));
-    vlSelf->ysyxSoCFull__DOT___dio_wire = ((((((3U 
-                                                & ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lpsram__DOT__mpsram__DOT__qspi_dio__out__strong__out0) 
-                                                   & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lpsram__DOT__mpsram__DOT__douten))) 
-                                               | (0xcU 
-                                                  & ((IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lpsram__DOT__mpsram__DOT__qspi_dio__out__strong__out1) 
-                                                     & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lpsram__DOT__mpsram__DOT__douten)))) 
-                                              & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lpsram__DOT__qspi_dio__en0)) 
-                                             & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lpsram__DOT__qspi_dio__en0)) 
-                                            & (IData)(vlSelf->ysyxSoCFull__DOT__asic__DOT__lpsram__DOT__qspi_dio__en0)) 
-                                           | ((((IData)(vlSelf->ysyxSoCFull__DOT___asic_psram_ce_n)
-                                                 ? 0U
-                                                 : 
-                                                ((3U 
-                                                  == (IData)(vlSelf->ysyxSoCFull__DOT__psram__DOT__state))
-                                                  ? 0U
-                                                  : 
-                                                 ((4U 
-                                                   == (IData)(vlSelf->ysyxSoCFull__DOT__psram__DOT__state))
-                                                   ? 
-                                                  (vlSelf->ysyxSoCFull__DOT__psram__DOT__data 
-                                                   >> 0x1cU)
-                                                   : 0U))) 
-                                               & (IData)(vlSelf->ysyxSoCFull__DOT__dio__en2)) 
-                                              & (IData)(vlSelf->ysyxSoCFull__DOT__dio__en2)));
-}
-
 void VysyxSoCFull___024root___nba_sequent__TOP__0(VysyxSoCFull___024root* vlSelf);
 void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___024root* vlSelf);
 void VysyxSoCFull___024root___nba_sequent__TOP__2(VysyxSoCFull___024root* vlSelf);
@@ -76,6 +35,7 @@ void VysyxSoCFull___024root___nba_sequent__TOP__21(VysyxSoCFull___024root* vlSel
 void VysyxSoCFull___024root___nba_comb__TOP__3(VysyxSoCFull___024root* vlSelf);
 void VysyxSoCFull___024root___nba_sequent__TOP__22(VysyxSoCFull___024root* vlSelf);
 void VysyxSoCFull___024root___nba_comb__TOP__4(VysyxSoCFull___024root* vlSelf);
+void VysyxSoCFull___024root___nba_comb__TOP__5(VysyxSoCFull___024root* vlSelf);
 
 void VysyxSoCFull___024root___eval_nba(VysyxSoCFull___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
