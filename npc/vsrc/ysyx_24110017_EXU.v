@@ -157,7 +157,7 @@ wire [31:0]srl_res = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i >> ((op_i == 
 wire [31:0]sra_res = (op_i == 5'b00100) ? ({32{r1_i[31]}} << (32 - imm_i[4:0])) | (r1_i >> imm_i[4:0]) : ({32{r1_i[31]}} << (32 - r2_i[4:0])) | (r1_i >> r2_i[4:0]);
 wire slt_res = (op_i == 5'b00100) ? ((funct3_i == 3'b010) ? $signed(r1_i) < $signed(imm_i) : r1_i < imm_i) : ((funct3_i == 3'b010) ? $signed(r1_i) < $signed(r2_i) : r1_i < r2_i);
 wire [31:0]and_res = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i & ((op_i == 5'b00100) ? imm_i : r2_i) : 32'b0;
-wire [31:0]or_res  = r1_i | ((op_i == 5'b00100) ? imm_i : (op_i == 5'b01100) ? r2_i : csr);
+wire [31:0]or_res  = (op_i == 5'b00100 || op_i == 5'b01100 || op_i == 5'b11100) ? r1_i | ((op_i == 5'b00100) ? imm_i : (op_i == 5'b01100) ? r2_i : csr) : 32'b0;
 wire [31:0]xor_res = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i ^ ((op_i == 5'b00100) ? imm_i : r2_i) : 32'b0;
 
 wire [31:0]xrd = 
