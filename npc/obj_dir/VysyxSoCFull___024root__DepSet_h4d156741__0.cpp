@@ -8,12 +8,29 @@
 #include "VysyxSoCFull__Syms.h"
 #include "VysyxSoCFull___024root.h"
 
+void VysyxSoCFull___024root____Vdpiexp_ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__amat_counter_TOP(VysyxSoCFull__Syms* __restrict vlSymsp, IData/*31:0*/ i, IData/*31:0*/ &amat_counter__Vfuncrtn) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root____Vdpiexp_ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__amat_counter_TOP\n"); );
+    // Init
+    // Body
+    amat_counter__Vfuncrtn = ((0U == i) ? (IData)(vlSymsp->TOP.ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__ICACHE__DOT__hit)
+                               : 0U);
+}
+
 extern "C" void diff_skip_ref();
 
 VL_INLINE_OPT void VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__LSU__DOT__diff_skip_ref_TOP() {
     VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root____Vdpiimwrap_ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__LSU__DOT__diff_skip_ref_TOP\n"); );
     // Body
     diff_skip_ref();
+}
+
+void VysyxSoCFull___024root____Vdpiexp_ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__RFU__DOT__gpr_reg_grab_TOP(VysyxSoCFull__Syms* __restrict vlSymsp, IData/*31:0*/ addr, IData/*31:0*/ &gpr_reg_grab__Vfuncrtn) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root____Vdpiexp_ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__RFU__DOT__gpr_reg_grab_TOP\n"); );
+    // Init
+    // Body
+    gpr_reg_grab__Vfuncrtn = (VL_GTS_III(32, 0x10U, addr)
+                               ? vlSymsp->TOP.ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__RFU__DOT__rf
+                              [(0xfU & addr)] : 0U);
 }
 
 extern "C" void mrom_read(int raddr, int* rdata);

@@ -15,6 +15,12 @@ extern "C" {
 #endif
 
 
+    // DPI EXPORTS
+    // DPI export at vsrc/ysyx_24110017_CACHE.v:207:15
+    extern int amat_counter(int i);
+    // DPI export at vsrc/ysyx_24110017_RegisterFile.v:62:14
+    extern int gpr_reg_grab(int addr);
+
     // DPI IMPORTS
     // DPI import at vsrc/ysyx_24110017_LSU.v:85:30
     extern void diff_skip_ref();

@@ -14,3 +14,19 @@
 #include "VysyxSoCFull__Dpi.h"
 #include "VysyxSoCFull.h"
 
+#ifndef VL_DPIDECL_amat_counter_
+#define VL_DPIDECL_amat_counter_
+int amat_counter(int i) {
+    // DPI export at vsrc/ysyx_24110017_CACHE.v:207:15
+    return VysyxSoCFull::amat_counter(i);
+}
+#endif
+
+#ifndef VL_DPIDECL_gpr_reg_grab_
+#define VL_DPIDECL_gpr_reg_grab_
+int gpr_reg_grab(int addr) {
+    // DPI export at vsrc/ysyx_24110017_RegisterFile.v:62:14
+    return VysyxSoCFull::gpr_reg_grab(addr);
+}
+#endif
+
