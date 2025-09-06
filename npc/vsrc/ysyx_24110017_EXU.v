@@ -168,7 +168,7 @@ wire [31:0]xrd =
 				(op_i == 5'b01101) ? imm_i		: //U_lui
 				(op_i == 5'b00101) ? alu_res  :	//U_auipc
 /***LSU***/
-				(op_i == 5'b00000) ? ls_rdata_i   : //LOAD
+				(op_i == 5'b00000) ? ls_rdata_i : //load
 /***CSRU***/
 				(op_i == 5'b11100) ? csr : //I_csrrw_csrrs_csrrc
 				32'h0;
@@ -227,7 +227,6 @@ assign ls_wdata_o =
 			: (ls_addr_o[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0;
 
 /***BU***/
-wire [31:0] offset = imm_i;
 wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
 assign jalen		= (op_i == 5'b11011);
 assign jalren		= (op_i == 5'b11001);
@@ -237,8 +236,8 @@ assign blten		= (op_i == 5'b11000 && funct3_i == 3'b100 &&  slt_res);
 assign bgeen		= (op_i == 5'b11000 && funct3_i == 3'b101 && !slt_res);
 assign bltuen		= (op_i == 5'b11000 && funct3_i == 3'b110 &&  slt_res);
 assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && !slt_res);
-assign ecall_en = (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b0000 && funct3_i == 3'b0);
-assign mret_en	= (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b1010 && funct3_i == 3'b0);
+assign ecall_en = (op_i == 5'b11100 && offset[1:0] == 2'b00 && funct3_i == 3'b0);
+assign mret_en	= (op_i == 5'b11100 && offset[1:0] == 2'b10 && funct3_i == 3'b0);
 
 wire [31:0]dnpc = (jalen) ? add_res	//jal
 	: (jalren) ? (add_res & ~1) //jalr
