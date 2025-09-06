@@ -30,8 +30,8 @@ module ysyx_24110017_EXU(
 	output reg  [ 3:0] rd_o,
 	output reg				 gpr_wen_o,
 	
-  output reg  [31:0] mcause_o,
-	output reg  [31:0] csrsw_o,
+//  output reg  [31:0] mcause_o,
+//	output reg  [31:0] csrsw_o,
   output reg  [ 3:0] csrs_wen_o,
 
 	output wire [31:0] ls_addr_o,ls_wdata_o,
@@ -46,7 +46,7 @@ assign ex_ready_o = !state;
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
-wire updata = (!ls_valid || ls_done_i);
+wire updata = (!ls_valid || ls_done_i) && (counter == 0);
 assign ex_valid_o = updata && state; 
 always @(posedge clk) begin
   if(rst || flush_i)						state <= IDLE;
@@ -54,29 +54,57 @@ always @(posedge clk) begin
   else if(updata && state)			state <= IDLE;
 end
 
+reg [1:0]counter;
+always @(posedge clk) begin
+	if(flush_i) counter <= 2'd0;
+	else begin
+		case(counter)
+			2'd0 : counter <= (ecallen) ? 2'd2: (|csrs_wen) ? 2'd1 : counter;
+			2'd1 : counter <= 2'd0;
+			2'd2 : counter <= 2'd1;
+			default : counter <= counter;
+		endcase
+	end
+end
+
+`ifndef YOSYS_STA
 always@(posedge clk) begin
 	casez({flush_i,state})
 		2'b1? : begin
-`ifndef YOSYS_STA
 			pc_o   <= 32'h0;
 			inst_o <= 32'h0;
 			npc_o  <= 32'h0;
-`endif
-			xrd_o  <= 32'h0;
 		end
 		2'b01 : begin
 			if(updata) begin
-`ifndef YOSYS_STA
 				pc_o	 <= pc_i;
 				inst_o <= inst_i;
 				npc_o  <= dnpc;
-`endif
-				xrd_o  <= xrd;
 			end
 		end
 		default : begin
 		end
 	endcase
+end
+`endif
+
+always@(posedge clk) begin
+  casez({flush_i,state})
+    2'b1? : begin
+      xrd_o  <= 32'h0;
+    end
+    2'b01 : begin
+			if(counter == 2'd2)
+				xrd_o <= mcause_w;
+			else if(counter == 2'd1)
+				xrd_o <= csrs_w;
+      else if(updata) begin
+        xrd_o  <= xrd;
+      end
+    end
+    default : begin
+    end
+  endcase
 end
 
 always@(posedge clk) begin
@@ -102,6 +130,7 @@ always@(posedge clk) begin
   end
 end
 
+/***
 always@(posedge clk) begin
   casez({flush_i,state})
 		2'b1? : mcause_o <= 32'h0;
@@ -123,20 +152,22 @@ always@(posedge clk) begin
 		end
   endcase
 end
+***/
 
 always@(posedge clk) begin
-  if(flush_i)
-		csrs_wen_o <= 4'b0;
-  else begin
-    case(state)
-      IDLE : begin
-				csrs_wen_o <= 4'b0;
-			end
-			WAIT : begin
-        if(updata) csrs_wen_o <= csrs_wen;
+  casez({flush_i,state})
+		2'b1? : csrs_wen_o <= 4'b0;
+    2'b01 : begin
+				if(counter == 2'd2)
+					csrs_wen_o <= 4'b0100;
+				else if(counter == 2'd1)
+					csrs_wen_o <= csrs_wen; 
+        else if(updata) 
+					csrs_wen_o <= 4'b0 ;
       end
-    endcase
-	end
+		default : begin
+		end
+  endcase
 end
 
 always@(posedge clk) begin
@@ -188,7 +219,7 @@ wire[31:0] csrs_w =
 			({32{ecall_en}} & pc_i); //ecall_mepc
 wire [3:0] csrs_wen = {
     (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001 && imm_i[2:0] == 3'b101), //1100000101
-    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110 && imm_i[2:0] == 3'b010) || ecall_en, //1101000010
+    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110 && imm_i[2:0] == 3'b010), //1101000010
     (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1000 && imm_i[2:0] == 3'b000), //1100000000
     (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101 && imm_i[2:0] == 3'b001) || ecall_en //1101000001
 };

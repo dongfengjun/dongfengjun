@@ -107,7 +107,7 @@ wire        ex_ready,ex_valid;
 wire [31:0] xrd_ex;
 wire [ 3:0] rd_ex;
 wire        gpr_wen_ex;
-wire [31:0] mcause_ex,csrsw_ex;
+//wire [31:0] mcause_ex,csrsw_ex;
 wire [3:0]  csrs_wen_ex;
 wire [31:0] ls_addr,ls_wdata;
 wire [31:0] dnpc_ex;
@@ -174,7 +174,8 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 		r1_id,r2_id,rd_id,gpr_wen_id,
 		mepc,mstatus,mcause,mtvec,
 		xrd_ex,rd_ex,gpr_wen_ex,
-		mcause_ex,csrsw_ex,csrs_wen_ex,
+		//mcause_ex,csrsw_ex,
+		csrs_wen_ex,
 		ls_addr,ls_wdata,ls_rdata,ls_done,
 		dnpc_ex
 );
@@ -220,22 +221,17 @@ ysyx_24110017_CLINT CLINT(clock,reset,
 );
 
 ysyx_24110017_RegisterFile #(4,32) RFU (clock,xrd_ex,rd_ex,gpr_wen_ex,rs1,r1,rs2,r2);
-ysyx_24110017_Reg #(32, 32'b0) mepc_reg (clock,reset,csrsw_ex,mepc,csrs_wen_ex[0]);
-ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,csrsw_ex,mstatus,csrs_wen_ex[1]);
-ysyx_24110017_Reg #(32, 32'b0) mcause_reg (clock,reset,mcause_ex,mcause,csrs_wen_ex[2]);
-ysyx_24110017_Reg #(32, 32'b0) mtvec_reg (clock,reset,csrsw_ex,mtvec,csrs_wen_ex[3]);
+ysyx_24110017_Reg #(32, 32'b0)    mepc_reg    (clock,reset,xrd_ex,mepc,   csrs_wen_ex[0]);
+ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,xrd_ex,mstatus,csrs_wen_ex[1]);
+ysyx_24110017_Reg #(32, 32'b0)    mcause_reg  (clock,reset,xrd_ex,mcause, csrs_wen_ex[2]);
+ysyx_24110017_Reg #(32, 32'b0)    mtvec_reg   (clock,reset,xrd_ex,mtvec,  csrs_wen_ex[3]);
 ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid,1'b0);
 ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
 
 wire isRAW = 1'b0;//((rs1_id != 0) && (((!ls_ready) && (rs1_id == rd_ex)) || (rs1_id == rd_ls))) || 
 						 //((rs2_id != 0) && (((!ls_ready) && (rs2_id == rd_ex)) || (rs2_id == rd_ls)));
 
-reg CHazarden;
-always @(posedge clock) begin
-	if(id_valid && ex_ready) CHazarden <= 1'b1;
-	else CHazarden <= 1'b0;
-end
-wire isCHazard = CHazarden && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
+wire isCHazard = ex_valid && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
 
 `ifndef YOSYS_STA
 /***DIFFTEST***/
