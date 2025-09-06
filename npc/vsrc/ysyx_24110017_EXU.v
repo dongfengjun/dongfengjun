@@ -38,8 +38,7 @@ module ysyx_24110017_EXU(
 	input  wire [31:0] ls_rdata_i,
 	input  wire ls_done_i,
 
-	//output reg  [31:0] dnpc_o
-	output wire [31:0] dnpc
+	output reg  [31:0] dnpc_o
 );
 
 /***分布式控制***/
@@ -140,7 +139,6 @@ always@(posedge clk) begin
 	end
 end
 
-/***
 always@(posedge clk) begin
 	casez({flush_i,state})
 		2'b1? : dnpc_o <= 32'h0;
@@ -150,7 +148,6 @@ always@(posedge clk) begin
 		default : dnpc_o <= dnpc_o;
 	endcase
 end
-***/
 
 wire [31:0]add_res = ((ls_valid || jalren) ? r1_i : pc_i) + imm_i;
 wire [31:0]add_pc_4 = pc_i + 4;
@@ -168,7 +165,7 @@ wire [31:0]xrd =
 /***LSU***/
 				(op_i == 5'b00000) ? ls_rdata_i   : //LOAD
 /***CSRU***/
-				((op_i == 5'b11100) && ((funct3_i == 3'b001) || (funct3_i == 3'b010) || (funct3_i == 3'b011))) ? csr : //I_csrrw_csrrs_csrrc
+				((op_i == 5'b11100) && (|funct3_i)) ? csr : //I_csrrw_csrrs_csrrc
 				32'h0;
 
 wire[31:0] csr = 
@@ -250,17 +247,16 @@ assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && (r1_i >= r2_i));
 assign ecall_en = (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b0000 && funct3_i == 3'b0);
 assign mret_en	= (op_i == 5'b11100 && {offset[9],offset[6],offset[1],offset[0]} == 4'b1010 && funct3_i == 3'b0);
 
-assign dnpc = 
-		(jalen)	   ?	add_res	//jal
-	: (jalren)   ? (add_res & ~1) //jalr
-	: (beqen)    ?  add_res	//beq
-	: (bneen)    ?	add_res	//bne
-	: (blten)    ?	add_res	//blt
-	: (bgeen)    ?	add_res	//bge
-	: (bltuen)   ?  add_res	//bltu
-	:	(bgeuen)   ?  add_res	//bgeu
-	: (ecall_en) ?  mtvec_i  //ecall
-	: (mret_en)  ?	mepc_i  //mret
-	:               add_pc_4;
+wire [31:0]dnpc = (jalen) ? add_res	//jal
+	: (jalren) ? (add_res & ~1) //jalr
+	: (beqen) ? add_res	//beq
+	: (bneen) ? add_res	//bne
+	: (blten) ? add_res	//blt
+	: (bgeen) ? add_res	//bge
+	: (bltuen) ? add_res	//bltu
+	:	(bgeuen) ? add_res	//bgeu
+	: (ecall_en) ? mtvec_i  //ecall
+	: (mret_en) ? mepc_i  //mret
+	: add_pc_4;
 
 endmodule

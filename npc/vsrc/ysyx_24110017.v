@@ -235,8 +235,7 @@ always @(posedge clock) begin
 	if(id_valid && ex_ready) CHazarden <= 1'b1;
 	else CHazarden <= 1'b0;
 end
-//wire isCHazard = CHazarden && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
-wire isCHazard = ex_valid && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
+wire isCHazard = CHazarden && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
 
 `ifndef YOSYS_STA
 /***DIFFTEST***/
