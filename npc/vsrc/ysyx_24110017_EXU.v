@@ -164,7 +164,7 @@ wire [31:0]xrd =
 /***R_add~R_remu***/
 				(op_i == 5'b01100) ? alu_res :
 /*********/
-				(op_i[5:3] == 3'b110) ? add_pc_4	: //I_jal I_jalr
+				(op_i[4:2] == 3'b110) ? add_pc_4	: //I_jal I_jalr
 				(op_i == 5'b01101) ? imm_i		: //U_lui
 				(op_i == 5'b00101) ? alu_res  :	//U_auipc
 /***LSU***/
