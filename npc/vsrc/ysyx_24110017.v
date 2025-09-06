@@ -259,7 +259,7 @@ end
 export "DPI-C" function csr_grab;                                    
 function int csr_grab(int i);
   begin
-    assign csr_grab = (i == 0) ? mepc : (i == 1) ? mstatus : (i == 2) ? mcause : (i == 3) ? mtvec : (i == 4) ? mvendorid : (i == 5) ? marchid : 32'b0;
+    assign csr_grab = (i == 0) ? mepc : (i == 1) ? mstatus : (i == 2) ? mcause : (i == 3) ? mtvec : 32'b0;
   end
 endfunction
 /***DPI-C*DIFFTEST***/
