@@ -88,9 +88,7 @@ module ysyx_24110017_Xbar(
 	input  wire [ 3:0]C_AXI_RID,
 	input  wire [31:0]C_AXI_RDATA,
 	input  wire [ 1:0]C_AXI_RRESP,
-	input  wire				C_AXI_RLAST,
-	input  wire [31:0] mvendorid,
-	input  wire [31:0] marchid
+	input  wire				C_AXI_RLAST
 );
 
 wire [31:0]X_AXI_AWADDR,X_AXI_WDATA,X_AXI_ARADDR,X_AXI_RDATA;
@@ -204,5 +202,14 @@ wire sel_id = sel_mvendorid || sel_marchid;
 wire [31:0]I_AXI_RDATA = (sel_mvendorid) ? mvendorid : (sel_marchid) ? marchid : 32'h0;
 wire I_AXI_ARREADY = 1'b1;
 wire I_AXI_RVALID = 1'b1;
+
+reg [31:0]mvendorid;
+reg [31:0]marchid;
+always @(posedge clk) begin
+	if(rst) mvendorid <= 32'h79737978;
+end
+always @(posedge clk) begin
+	if(rst) marchid <= 32'h016fe3c1;
+end
 
 endmodule

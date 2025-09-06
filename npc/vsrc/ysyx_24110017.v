@@ -137,7 +137,7 @@ wire c_axi_awvalid,c_axi_awready,c_axi_wvalid,c_axi_wready,c_axi_bvalid,c_axi_br
 /***RFU***/
 wire [31:0]r1,r2;
 wire [31:0]mepc,mstatus,mcause,mtvec;
-wire [31:0]mvendorid,marchid; //ID
+//wire [31:0]mvendorid,marchid; //ID
 
 ysyx_24110017_BTB #(1,0,16,8,1,0,16,16) BTB(clock,reset,if_axi_araddr,snpc,prepc,pc_if,prepc_en);
 ysyx_24110017_IFU IFU(clock,reset,isCHazard,
@@ -210,8 +210,8 @@ ysyx_24110017_Xbar Xbar(clock,reset,
 		io_master_rready,io_master_rvalid,io_master_rid,io_master_rdata,io_master_rresp,io_master_rlast,
 		c_axi_arready,c_axi_arvalid,c_axi_arid,c_axi_araddr,
 		c_axi_arlen,c_axi_arsize,c_axi_arburst,
-		c_axi_rready,c_axi_rvalid,c_axi_rid,c_axi_rdata,c_axi_rresp,c_axi_rlast,
-		mvendorid,marchid
+		c_axi_rready,c_axi_rvalid,c_axi_rid,c_axi_rdata,c_axi_rresp,c_axi_rlast
+		//mvendorid,marchid
 );
 /***My-Clint***/
 ysyx_24110017_CLINT CLINT(clock,reset,
@@ -225,8 +225,8 @@ ysyx_24110017_Reg #(32, 32'b0)    mepc_reg    (clock,reset,xrd_ex,mepc   ,csrs_w
 ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,xrd_ex,mstatus,csrs_wen_ex[1]);
 ysyx_24110017_Reg #(32, 32'b0)    mcause_reg  (clock,reset,xrd_ex,mcause ,csrs_wen_ex[2]);
 ysyx_24110017_Reg #(32, 32'b0)    mtvec_reg   (clock,reset,xrd_ex,mtvec  ,csrs_wen_ex[3]);
-ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid,1'b0);
-ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
+//ysyx_24110017_Reg #(32, 32'h79737978) mvendorid_reg (clock,reset,32'b0,mvendorid,1'b0);
+//ysyx_24110017_Reg #(32, 32'h016fe3c1) marchid_reg (clock,reset,32'b0,marchid,1'b0);
 
 wire isRAW = 1'b0;//((rs1_id != 0) && (((!ls_ready) && (rs1_id == rd_ex)) || (rs1_id == rd_ls))) || 
 						 //((rs2_id != 0) && (((!ls_ready) && (rs2_id == rd_ex)) || (rs2_id == rd_ls)));
