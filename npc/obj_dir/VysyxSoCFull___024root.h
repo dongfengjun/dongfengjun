@@ -1067,7 +1067,7 @@ class VysyxSoCFull___024root final : public VerilatedModule {
             CData/*0:0*/ ysyxSoCFull__DOT__sdram3__DOT____VdfgTmp_h50b78ab2__0;
             CData/*0:0*/ ysyxSoCFull__DOT__sdram3__DOT____VdfgTmp_hada35e22__0;
             CData/*0:0*/ ysyxSoCFull__DOT__sdram3__DOT____VdfgTmp_hd0133cc5__0;
-            CData/*3:0*/ __VdfgTmp_hfa7f17b3__0;
+            CData/*3:0*/ __VdfgTmp_he66395ab__0;
             CData/*0:0*/ __VdfgTmp_h8b8a6165__0;
             CData/*2:0*/ __VdfgTmp_ha17ae98a__0;
             CData/*0:0*/ __Vfunc_ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__BTB__DOT__jlog2__0__value;
