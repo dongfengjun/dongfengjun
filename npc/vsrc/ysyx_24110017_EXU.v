@@ -242,7 +242,7 @@ assign jalen		= (op_i == 5'b11011);
 assign jalren		= (op_i == 5'b11001);
 assign beqen		= (op_i == 5'b11000 && funct3_i == 3'b000 && (r1_i == r2_i));
 assign bneen		= (op_i == 5'b11000 && funct3_i == 3'b001 && (r1_i != r2_i));
-assign blten		= (op_i == 5'b11000 && funct3_i == 3'b100 && (r1_sigend < r2_sigend));
+assign blten		= (op_i == 5'b11000 && funct3_i == 3'b100 && (r1_signed < r2_signed));
 assign bgeen		= (op_i == 5'b11000 && funct3_i == 3'b101 && !(r1_signed < r2_signed));
 assign bltuen		= (op_i == 5'b11000 && funct3_i == 3'b110 && (r1_i < r2_i));
 assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && !(r1_i < r2_i));
