@@ -158,14 +158,14 @@ wire [31:0]xrd =
 /***R_add~R_remu***/
 				(op_i == 5'b01100) ? (alu_res) :
 /*********/
-				(op_i == 5'b11011) ? add_pc_4	: //I_jal
-				(op_i == 5'b11001) ? add_pc_4	: //I_jalr
-				(op_i == 5'b01101) ? imm_i		: //U_lui
-				(op_i == 5'b00101) ? add_res  :	//U_auipc
+				(op_i == 5'b11011) ? add_pc_4	: 
+				(op_i == 5'b11001) ? add_pc_4	: 
+				(op_i == 5'b01101) ? imm_i		: 
+				(op_i == 5'b00101) ? add_res  :	
 /***LSU***/
-				(op_i == 5'b00000) ? ls_rdata_i   : //LOAD
+				(op_i == 5'b00000) ? ls_rdata_i :
 /***CSRU***/
-				((op_i == 5'b11100) && ((funct3_i == 3'b001) || (funct3_i == 3'b010) || (funct3_i == 3'b011))) ? csr : //I_csrrw_csrrs_csrrc
+				(op_i == 5'b11100) ? csr :
 				32'h0;
 
 wire[31:0] csr = 
