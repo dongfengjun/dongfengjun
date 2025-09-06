@@ -257,6 +257,6 @@ wire [31:0]dnpc = (jalen) ? add_res	//jal
 	:	(bgeuen) ? add_res	//bgeu
 	: (ecall_en) ? mtvec_i  //ecall
 	: (mret_en) ? mepc_i  //mret
-	: add_pc_4;
+	: 32'h0;
 
 endmodule
