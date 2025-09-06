@@ -177,17 +177,17 @@ wire [31:0]xrd =
 				32'h0;
 
 wire[31:0] csr = 
-		(op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101 && imm_i[2:0] == 3'b001) ? mepc_i
-	: (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1000 && imm_i[2:0] == 3'b000) ? mstatus_i
-	: (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110 && imm_i[2:0] == 3'b010) ? mcause_i
-	: (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001 && imm_i[2:0] == 3'b101) ? mtvec_i 
+		({imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101 && imm_i[2:0] == 3'b001) ? mepc_i
+	: ({imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1000 && imm_i[2:0] == 3'b000) ? mstatus_i
+	: ({imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110 && imm_i[2:0] == 3'b010) ? mcause_i
+	: ({imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001 && imm_i[2:0] == 3'b101) ? mtvec_i 
 	: 32'b0;
 	
 wire[31:0] mcause_w = (ecall_en) ? r2_i : csrs_w; //ecall a5
 wire[31:0] csrs_w = 
-			({32{(op_i == 5'b11100) && (funct3_i == 3'b001)}} & r1_i) | //I_csrrw
-			({32{(op_i == 5'b11100) && (funct3_i == 3'b010)}} & (csr |  r1_i)) | //I_csrrs
-      ({32{(op_i == 5'b11100) && (funct3_i == 3'b011)}} & (csr & ~r1_i)) | //I_csrrc
+			({32{funct3_i == 3'b001}} & r1_i) | //I_csrrw
+			({32{funct3_i == 3'b010}} & (csr |  r1_i)) | //I_csrrs
+      ({32{funct3_i == 3'b011}} & (csr & ~r1_i)) | //I_csrrc
 			({32{ecall_en}} & pc_i); //ecall_mepc
 wire [3:0] csrs_wen = {
     (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001 && imm_i[2:0] == 3'b101), //1100000101
