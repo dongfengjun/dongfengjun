@@ -151,12 +151,11 @@ end
 
 wire [31:0]add_res = ((op_i == 5'b00000 || op_i == 5'b01000 || op_i == 5'b11001 || op_i == 5'b00100 || op_i == 5'b01100) ? r1_i : pc_i) + ((op_i == 5'b01100) ? r2_i : imm_i);
 wire [31:0]add_pc_4 = pc_i + 4;
-wire [31:0]sub_res = (op_i == 5'b01100) ? r1_i - r2_i : 32'b0;
+//wire [31:0]sub_res = (op_i == 5'b01100) ? r1_i - r2_i : 32'b0;
 wire [31:0]sll_res = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i << ((op_i == 5'b00100) ? imm_i[4:0] : r2_i[4:0]) : 32'b0;
 wire [31:0]srl_res = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i >> ((op_i == 5'b00100) ? imm_i[4:0] : r2_i[4:0]) : 32'b0;
-//wire [31:0]sra_res = (op_i == 5'b00100) ? ({32{r1_i[31]}} << (32 - imm_i[4:0])) | (r1_i >> imm_i[4:0]) : (op_i == 5'b01100) ? ({32{r1_i[31]}} << (32 - r2_i[4:0])) | (r1_i >> r2_i[4:0]) : 32'b0;
-//wire slt_res = (op_i == 5'b00100) ? ((funct3_i == 3'b010) ? $signed(r1_i) < $signed(imm_i) : r1_i < imm_i) : (op_i == 5'b01100 || op_i == 5'b11100) ? ((funct3_i == 3'b010 || funct3_i == 3'b100 || funct3_i == 3'b101) ? $signed(r1_i) < $signed(r2_i) : r1_i < r2_i) : 1'b0;
-wire [31:0]sra_res = (op_i == 5'b00100 || op_i == 5'b01100) ? (({32{r1_i[31]}} << (32 - ((op_i == 5'b00100) ? imm_i[4:0] : r2_i[4:0]))) | (r1_i >> ((op_i == 5'b00100) ? imm_i[4:0] : r2_i[4:0]))) : 32'h0;
+wire [31:0]sra_res = (op_i == 5'b00100) ? ({32{r1_i[31]}} << (32 - imm_i[4:0])) | (r1_i >> imm_i[4:0]) : (op_i == 5'b01100) ? ({32{r1_i[31]}} << (32 - r2_i[4:0])) | (r1_i >> r2_i[4:0]) : 32'b0;
+//wire slt_res = (op_i == 5'b00100) ? ((funct3_i == 3'b010) ? $signed(r1_i) < $signed(imm_i) : r1_i < imm_i) : (op_i == 5'b01100 || op_i == 5'b1100) ? ((funct3_i == 3'b010 || funct3_i == 3'b100 || funct3_i == 3'b101) ? $signed(r1_i) < $signed(r2_i) : r1_i < r2_i) : 1'b0;
 wire slt_res = (op_i == 5'b00100 || op_i == 5'b01100 || op_i == 5'b11000) ? ((funct3_i == 3'b010 || funct3_i == 3'b100 || funct3_i == 3'b101) ? $signed(r1_i) < $signed((op_i == 5'b00100) ? imm_i : r2_i) : r1_i < ((op_i == 5'b00100) ? imm_i : r2_i)) : 1'b0;
 wire [31:0]and_res = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i & ((op_i == 5'b00100) ? imm_i : r2_i) : 32'b0;
 wire [31:0]or_res  = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i | ((op_i == 5'b00100) ? imm_i : r2_i) : 32'b0;
@@ -212,7 +211,7 @@ wire [3:0]alu_sel =
 	: ((op_i == 5'b00100 && funct3_i == 3'b110) || (op_i == 5'b01100 && funct3_i == 3'b110 && funct7_i == 1'b0)) ? OR
 	: ((op_i == 5'b00100 && funct3_i == 3'b111) || (op_i == 5'b01100 && funct3_i == 3'b111 && funct7_i == 1'b0)) ? AND : ADD;
 wire [31:0]alu_res = (alu_sel == ADD) ? add_res
-	: (alu_sel == SUB) ? sub_res
+	: (alu_sel == SUB) ? r1_i - r2_i
 	: (alu_sel == SLL) ? sll_res
 	: (alu_sel == SRL) ? srl_res
 	: (alu_sel == SRA) ? sra_res
