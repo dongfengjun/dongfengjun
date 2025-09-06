@@ -59,7 +59,7 @@ always @(posedge clk) begin
 	if(flush_i) counter <= 2'd0;
 	else begin
 		case(counter)
-			2'd0 : counter <= (ecallen) ? 2'd2: (|csrs_wen) ? 2'd1 : counter;
+			2'd0 : counter <= (ecall_en) ? 2'd2: (|csrs_wen) ? 2'd1 : counter;
 			2'd1 : counter <= 2'd0;
 			2'd2 : counter <= 2'd1;
 			default : counter <= counter;
