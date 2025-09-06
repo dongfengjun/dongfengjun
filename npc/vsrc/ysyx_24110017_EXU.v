@@ -159,18 +159,18 @@ wire [31:0]or_res  = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i | ((op_i == 5
 wire [31:0]xor_res = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i ^ ((op_i == 5'b00100) ? imm_i : r2_i) : 32'b0;
 
 wire [31:0]xrd = 
-/***I*addi~srai***/
-				(op_i == 5'b00100) ? alu_res :
+/***I*addi~srai + U*auipc***/
+				(op_i[4:2] == 3'b001) ? alu_res :
 /***R_add~R_remu***/
-				(op_i == 5'b01100) ? alu_res :
+				(op_i[4:2] == 3'b011) ? alu_res :
 /*********/
 				(op_i[4:2] == 3'b110) ? add_pc_4	: //I_jal I_jalr
-				(op_i == 5'b01101) ? imm_i		: //U_lui
-				(op_i == 5'b00101) ? alu_res  :	//U_auipc
+				(op_i[4:2] == 3'b011) ? imm_i		: //U_lui
+//				(op_i == 5'b00101) ? alu_res  :	//U_auipc
 /***LSU***/
-				(op_i == 5'b00000) ? ls_rdata_i : //load
+				(op_i[4:2] == 3'b000) ? ls_rdata_i : //load
 /***CSRU***/
-				(op_i == 5'b11100) ? csr : //I_csrrw_csrrs_csrrc
+				(op_i[4:2] == 3'b111) ? csr : //I_csrrw_csrrs_csrrc
 				32'h0;
 
 wire[31:0] csr = 
