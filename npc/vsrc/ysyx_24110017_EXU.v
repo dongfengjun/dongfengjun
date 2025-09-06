@@ -153,8 +153,6 @@ wire [31:0]add_res = ((op_i == 5'b00000 || op_i == 5'b01000 || op_i == 5'b11001 
 wire [31:0]add_pc_4 = pc_i + 4;
 wire [31:0]sll_res = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i << ((op_i == 5'b00100) ? imm_i[4:0] : r2_i[4:0]) : 32'b0;
 wire [31:0]srl_res = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i >> ((op_i == 5'b00100) ? imm_i[4:0] : r2_i[4:0]) : 32'b0;
-wire [31:0]sra_res = (op_i == 5'b00100) ? ({32{r1_i[31]}} << (32 - imm_i[4:0])) | (r1_i >> imm_i[4:0]) : (op_i == 5'b01100) ? ({32{r1_i[31]}} << (32 - r2_i[4:0])) | (r1_i >> r2_i[4:0]) : 32'b0;
-//wire slt_res = (op_i == 5'b00100) ? ((funct3_i == 3'b010) ? $signed(r1_i) < $signed(imm_i) : r1_i < imm_i) : (op_i == 5'b01100 || op_i == 5'b1100) ? ((funct3_i == 3'b010 || funct3_i == 3'b100 || funct3_i == 3'b101) ? $signed(r1_i) < $signed(r2_i) : r1_i < r2_i) : 1'b0;
 wire slt_res = (op_i == 5'b00100 || op_i == 5'b01100 || op_i == 5'b11000) ? ((funct3_i == 3'b010 || funct3_i == 3'b100 || funct3_i == 3'b101) ? $signed(r1_i) < $signed((op_i == 5'b00100) ? imm_i : r2_i) : r1_i < ((op_i == 5'b00100) ? imm_i : r2_i)) : 1'b0;
 wire [31:0]and_res = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i & ((op_i == 5'b00100) ? imm_i : r2_i) : 32'b0;
 wire [31:0]or_res  = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i | ((op_i == 5'b00100) ? imm_i : r2_i) : 32'b0;
@@ -213,7 +211,7 @@ wire [31:0]alu_res = (alu_sel == ADD) ? add_res
 	: (alu_sel == SUB) ? r1_i - r2_i
 	: (alu_sel == SLL) ? sll_res
 	: (alu_sel == SRL) ? srl_res
-	: (alu_sel == SRA) ? sra_res
+	: (alu_sel == SRA) ? ((op_i == 5'b00100) ? ({32{r1_i[31]}} << (32 - imm_i[4:0])) | (r1_i >> imm_i[4:0]) : ({32{r1_i[31]}} << (32 - r2_i[4:0])) | (r1_i >> r2_i[4:0]))
 	: (alu_sel == SLT) ? {31'b0, slt_res} 
 	: (alu_sel == AND) ? and_res
 	: (alu_sel == OR)  ? or_res 
@@ -223,10 +221,11 @@ wire [31:0]alu_res = (alu_sel == ADD) ? add_res
 /***LSU***/
 wire ls_valid = (op_i == 5'b01000) || (op_i == 5'b00000);
 assign ls_addr_o = (ls_valid) ? add_res : 32'h0;
-assign ls_wdata_o = (op_i == 5'b01000) ? ((ls_addr_o[1:0] == 0) ? r2_i 
+assign ls_wdata_o = 
+				(ls_addr_o[1:0] == 0) ? r2_i 
 			: (ls_addr_o[1:0] == 1) ? {r2_i[23:0],8'b0} 
 			: (ls_addr_o[1:0] == 2) ? {r2_i[15:0],16'b0} 
-			: (ls_addr_o[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0) : 32'h0;
+			: (ls_addr_o[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0;
 
 /***BU***/
 wire [31:0] offset = imm_i;
