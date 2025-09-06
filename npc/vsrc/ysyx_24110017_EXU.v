@@ -227,31 +227,30 @@ assign ls_wdata_o =
 			: (ls_addr_o[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0;
 
 /***BU***/
-/****
-wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
-assign jalen		= (op_i == 5'b11011);
-assign jalren		= (op_i == 5'b11001);
-assign beqen		= (op_i == 5'b11000 && funct3_i == 3'b000 && (r1_i == r2_i));
-assign bneen		= (op_i == 5'b11000 && funct3_i == 3'b001 && (r1_i != r2_i));
-assign blten		= (op_i == 5'b11000 && funct3_i == 3'b100 &&  slt_res);
-assign bgeen		= (op_i == 5'b11000 && funct3_i == 3'b101 && !slt_res);
-assign bltuen		= (op_i == 5'b11000 && funct3_i == 3'b110 &&  slt_res);
-assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && !slt_res);
-assign ecall_en = (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b0000 && funct3_i == 3'b0);
-assign mret_en	= (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1010 && funct3_i == 3'b0);
+wire jalen		= (op_i == 5'b11011);
+wire jalren		= (op_i == 5'b11001);
+wire [1:0]beqen		= {(op_i == 5'b11000 && funct3_i == 3'b000 && (r1_i == r2_i)),(op_i == 5'b11000 && funct3_i == 3'b001 && (r1_i != r2_i))};
+//assign bneen		= (op_i == 5'b11000 && funct3_i == 3'b001 && (r1_i != r2_i));
+wire [1:0]blten		= {(op_i == 5'b11000 && funct3_i == 3'b100 &&  slt_res),(op_i == 5'b11000 && funct3_i == 3'b101 && !slt_res)};
+//assign bgeen		= (op_i == 5'b11000 && funct3_i == 3'b101 && !slt_res);
+wire [1:0]bltuen	= {(op_i == 5'b11000 && funct3_i == 3'b110 &&  slt_res),(op_i == 5'b11000 && funct3_i == 3'b111 && !slt_res)};
+//assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && !slt_res);
+wire ecall_en = (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b0000 && funct3_i == 3'b0);
+wire mret_en	= (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1010 && funct3_i == 3'b0);
 
 wire [31:0]dnpc = (jalen) ? add_res	//jal
 	: (jalren) ? (add_res & ~1) //jalr
-	: (beqen) ? add_res	//beq
-	: (bneen) ? add_res	//bne
-	: (blten) ? add_res	//blt
-	: (bgeen) ? add_res	//bge
-	: (bltuen) ? add_res	//bltu
-	:	(bgeuen) ? add_res	//bgeu
+	: (|beqen) ? add_res	//beq
+//	: (bneen) ? add_res	//bne
+	: (|blten) ? add_res	//blt
+//	: (bgeen) ? add_res	//bge
+	: (|bltuen) ? add_res	//bltu
+//	:	(bgeuen) ? add_res	//bgeu
 	: (ecall_en) ? mtvec_i  //ecall
 	: (mret_en) ? mepc_i  //mret
 	: add_pc_4;
-***/
+
+/***
 wire ecall_en = (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b0000 && funct3_i == 3'b0);
 localparam [3:0] jal = 4'd1, jalr = 4'd2, beq = 4'd3, bne = 4'd4, blt = 4'd5, bge = 4'd6, bltu = 4'd7, bgeu = 4'd8, ecall = 4'd9, mret = 4'd10;
 wire [3:0] sel = 
@@ -277,5 +276,6 @@ wire [31:0]dnpc = (sel == jal) ? add_res //jal
  : (sel == ecall) ? mtvec_i  //ecall
  : (sel == mret) ? mepc_i  //mret
  : add_pc_4;
+***/
 
 endmodule
