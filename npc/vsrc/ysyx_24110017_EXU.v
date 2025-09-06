@@ -236,8 +236,8 @@ assign blten		= (op_i == 5'b11000 && funct3_i == 3'b100 &&  slt_res);
 assign bgeen		= (op_i == 5'b11000 && funct3_i == 3'b101 && !slt_res);
 assign bltuen		= (op_i == 5'b11000 && funct3_i == 3'b110 &&  slt_res);
 assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && !slt_res);
-assign ecall_en = (op_i == 5'b11100 && offset[1:0] == 2'b00 && funct3_i == 3'b0);
-assign mret_en	= (op_i == 5'b11100 && offset[1:0] == 2'b10 && funct3_i == 3'b0);
+assign ecall_en = (op_i == 5'b11100 && imm_i[1:0] == 2'b00 && funct3_i == 3'b0);
+assign mret_en	= (op_i == 5'b11100 && imm_i[1:0] == 2'b10 && funct3_i == 3'b0);
 
 wire [31:0]dnpc = (jalen) ? add_res	//jal
 	: (jalren) ? (add_res & ~1) //jalr
