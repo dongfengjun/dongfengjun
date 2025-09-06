@@ -39,7 +39,7 @@ module ysyx_24110017_EXU(
 	input  wire ls_done_i,
 
 	//output reg  [31:0] dnpc_o
-	output wire dnpc
+	output wire [31:0] dnpc
 );
 
 /***分布式控制***/
