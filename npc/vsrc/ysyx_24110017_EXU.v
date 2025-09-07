@@ -29,9 +29,6 @@ module ysyx_24110017_EXU(
 	output reg  [31:0] xrd_o, 
 	output reg  [ 3:0] rd_o,
 	output reg				 gpr_wen_o,
-	
-//  output reg  [31:0] mcause_o,
-//	output reg  [31:0] csrsw_o,
   output reg  [ 3:0] csrs_wen_o,
 
 	output wire [31:0] ls_addr_o,ls_wdata_o,
@@ -124,30 +121,6 @@ always@(posedge clk) begin
     endcase
   end
 end
-
-/***
-always@(posedge clk) begin
-  casez({flush_i,state})
-		2'b1? : mcause_o <= 32'h0;
-    2'b01 : begin
-			if(updata) mcause_o <= mcause_w;
-    end
-		default : begin
-		end
-	endcase
-end
-
-always@(posedge clk) begin
-  casez({flush_i,state})
-		2'b1? : csrsw_o	<= 32'h0;
-		2'b01 : begin
-			if(updata) csrsw_o <= csrs_w;
-		end
-		default : begin
-		end
-  endcase
-end
-***/
 
 always@(posedge clk) begin
   casez({flush_i,state})
