@@ -143,7 +143,7 @@ static void statistic() {
 	Log("******************Performance Evaluation*************************");
 	Log("IPC = %.6f", (double)g_nr_guest_inst/(double)g_nr_guest_cycle);
 	Log("CPI = %.6f", (double)g_nr_guest_cycle/(double)g_nr_guest_inst);
-	Log("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld WB FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt,wb_fin_cnt);
+	Log("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld\tWB FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt,wb_fin_cnt);
 	Log("Integer   Jump      Branch    Load      Store     Immediate System");
 	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Count)",Integer_Computational_cnt,Jump_cnt,Branch_cnt,Load_cnt,Store_cnt,Immediate_cnt,System_cnt);
 	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Cycles)",Integer_Computational_wait,Jump_wait,Branch_wait,Load_wait,Store_wait,Immediate_wait,System_wait);
