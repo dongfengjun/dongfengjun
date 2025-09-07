@@ -222,7 +222,7 @@ ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,xrd_ex,mstatus,csrs_w
 ysyx_24110017_Reg #(32, 32'b0)    mcause_reg  (clock,reset,xrd_ex,mcause ,csrs_wen_ex[2]);
 ysyx_24110017_Reg #(32, 32'b0)    mtvec_reg   (clock,reset,xrd_ex,mtvec  ,csrs_wen_ex[3]);
 
-wire isRAW = ((rs1 == rd_id) || (rs2 == rd_id)) && (rd_id != rd_ex) && (rd_id != 0) && (!ex_valid);
+wire isRAW = ((rs1 == rd_ex) || (rs2 == rd_ex)) && (rd_ex != 0);
 
 reg CHazarden;
 always @(posedge clock) begin

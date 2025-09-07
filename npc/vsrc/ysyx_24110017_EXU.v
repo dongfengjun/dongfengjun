@@ -103,11 +103,17 @@ always@(posedge clk) begin
 //  casez({flush_i,state})
 //		2'b1? : rd_o <= 4'b0;
 //    2'b01 : begin
-      if(updata) rd_o <= rd_i;
+//      if(updata) rd_o <= rd_i;
 //    end
 //		default : begin
 //		end
 //	endcase
+	case(state)
+	  IDLE : rd_o <= 4'b0;
+		WAIT : begin
+			if(updata) rd_o <= rd_i;
+		end
+	endcase
 end
 
 always@(posedge clk) begin
