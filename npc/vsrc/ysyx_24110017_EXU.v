@@ -100,14 +100,14 @@ always@(posedge clk) begin
 end
 
 always@(posedge clk) begin
-  casez({flush_i,state})
-		2'b1? : rd_o <= 4'b0;
-    2'b01 : begin
+//  casez({flush_i,state})
+//		2'b1? : rd_o <= 4'b0;
+//    2'b01 : begin
       if(updata) rd_o <= rd_i;
-    end
-		default : begin
-		end
-	endcase
+//    end
+//		default : begin
+//		end
+//	endcase
 end
 
 always@(posedge clk) begin
