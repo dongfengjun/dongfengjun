@@ -245,7 +245,7 @@ end
 /***DPIC*etrace***/
 import "DPI-C" function void npc_trap();
 always@(*) begin
-  if(inst_if == 32'b00000000000100000000000001110011) begin
+  if(difftest && inst_if == 32'b00000000000100000000000001110011) begin
     npc_trap();
   end
 end
@@ -274,10 +274,8 @@ function int performance_counter(int i);
 															 : (i == 2) ? {31'b0,ex_valid}
 															 : (i == 3) ? {31'b0,ls_axi_rvalid && ls_axi_rready}
 															 : (i == 4) ? {25'b0,inst_if[6:0]}
-															 : (i == 5) ? {31'b0,ex_valid}
 															 : (i == 6) ? {31'b0,if_axi_arvalid && if_axi_arready}
 															 : (i == 7) ? {31'b0,if_axi_rvalid && if_axi_rready}
-															 : (i == 8) ? 32'b0//{31'b0,if_ready}
 															 : (i == 9) ? {31'b0,ls_axi_awvalid && ls_axi_awready}
 															 : (i == 10) ? {31'b0,ls_axi_arvalid && ls_axi_arready}
 															 : (i == 11) ? {31'b0,ls_axi_bvalid && ls_axi_bready}
