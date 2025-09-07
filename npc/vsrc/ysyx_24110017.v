@@ -94,7 +94,7 @@ wire [ 3:0] rs1,rs2;
 wire [31:0] pc_id,imm_id;
 wire [ 4:0] op_id;
 wire [ 2:0] funct3_id;
-//wire [31:0] r1_id,r2_id;
+wire [31:0] r1_id,r2_id;
 wire [ 3:0] rd_id;
 wire gpr_wen_id;
 wire ls_valid_id;
@@ -156,7 +156,7 @@ ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 `ifndef YOSYS_STA
 		inst_id,
 `endif
-		prepc,prepc_en,//rs1,rs2,r1,r2,
+		prepc,prepc_en,rs1,rs2,r1,r2,
 		if_valid,id_ready,id_valid,ex_ready,
 		pc_if,inst_if,
 		pc_id,imm_id,op_id,funct3_id,rs1,rs2,
@@ -169,7 +169,7 @@ ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 `endif
 		id_valid,ex_ready,ex_valid,
 		pc_id,imm_id,op_id,funct3_id,
-		r1,r2,rd_id,gpr_wen_id,
+		r1_id,r2_id,rd_id,gpr_wen_id,
 		mepc,mstatus,mcause,mtvec,
 		xrd_ex,rd_ex,gpr_wen_ex,
 		csrs_wen_ex,
