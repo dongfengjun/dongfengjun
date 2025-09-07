@@ -245,7 +245,7 @@ end
 /***DPIC*etrace***/
 import "DPI-C" function void npc_trap();
 always@(*) begin
-  if(ex_valid && inst_if == 32'b00000000000100000000000001110011) begin
+  if(inst_if == 32'b00000000000100000000000001110011) begin
     npc_trap();
   end
 end

@@ -206,7 +206,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 	export "DPI-C" function amat_counter;
 	function int amat_counter(int i);
 	  begin
-			assign amat_counter = (i == 0) ? {31'b0,(hit != 0)} : 32'b0;
+			assign amat_counter = (i == 0) ? {31'b0,(hit != 0) && (!unvalid)} : 32'b0;
 		end
 	endfunction
 `endif
