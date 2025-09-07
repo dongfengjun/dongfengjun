@@ -46,7 +46,7 @@ assign ex_ready_o = !state;
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
-wire updata = (!ls_valid || ls_done_i) && (counter == 0);
+wire updata = (!ls_valid || ls_done_i) && (abnormal == 0);
 assign ex_valid_o = updata && state; 
 always @(posedge clk) begin
   if(rst || flush_i)						state <= IDLE;
@@ -54,23 +54,12 @@ always @(posedge clk) begin
   else if(updata && state)			state <= IDLE;
 end
 
-reg counter_en;
-always @(posedge clk) begin
-	if(id_valid_i && ex_ready_o) counter_en <= 1'b1;
-	else counter_en <= 1'b0;
-end
-
+wire [1:0]total = (ecall_en) ? 2'd2 : (|csrs_wen) ? 2'd1 : 2'd0,
+wire [1:0]abnormal = total - counter;
 reg [1:0]counter;
 always @(posedge clk) begin
-	if(flush_i) counter <= 2'd0;
-	else if(counter_en)begin
-		case(counter)
-			2'd0 : counter <= (ecall_en) ? 2'd2: (|csrs_wen) ? 2'd1 : counter;
-			2'd1 : counter <= 2'd0;
-			2'd2 : counter <= 2'd1;
-			default : counter <= counter;
-		endcase
-	end
+	if(id_valid_i && ex_ready_o) counter <= 2'd0;
+	else if(counter != total) counter <= counter + 1;
 end
 
 `ifndef YOSYS_STA
@@ -100,9 +89,9 @@ always@(posedge clk) begin
       xrd_o  <= 32'h0;
     end
     2'b01 : begin
-			if(counter == 2'd2)
+			if(abnormal == 2'd2)
 				xrd_o <= mcause_w;
-			else if(counter == 2'd1)
+			else if(abnormal == 2'd1)
 				xrd_o <= csrs_w;
       else if(updata) begin
         xrd_o  <= xrd;
@@ -164,9 +153,9 @@ always@(posedge clk) begin
   casez({flush_i,state})
 		2'b1? : csrs_wen_o <= 4'b0;
     2'b01 : begin
-				if(counter == 2'd2)
+				if(abnormal == 2'd2)
 					csrs_wen_o <= 4'b0100;
-				else if(counter == 2'd1)
+				else if(abnormal == 2'd1)
 					csrs_wen_o <= csrs_wen; 
         else if(updata) 
 					csrs_wen_o <= 4'b0 ;
