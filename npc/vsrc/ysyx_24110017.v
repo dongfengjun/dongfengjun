@@ -159,7 +159,7 @@ ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 		prepc,prepc_en,rs1,rs2,r1,r2,
 		if_valid,id_ready,id_valid,ex_ready,
 		pc_if,inst_if,
-		pc_id,imm_id,op_id,funct3_id,rs1,rs2,
+		pc_id,imm_id,op_id,funct3_id,r1_id,r2_id,
 		rd_id,gpr_wen_id,ls_valid_id,
 		fencei_id
 );
