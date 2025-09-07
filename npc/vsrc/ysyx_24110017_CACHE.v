@@ -158,7 +158,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 				m_axi_arready <= 1'b1;
 				s_axi_araddr  <= m_axi_araddr;
 				if(m_axi_arvalid && m_axi_arready) begin
-					if(hit == 0) begin
+					if(hit == 0 || unvalid) begin
 						m_axi_arready <= 1'b0;
 						s_axi_arvalid <= 1'b1;
 						if(m_axi_araddr - 32'ha0000000 < 32'h20000000) begin
