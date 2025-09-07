@@ -54,7 +54,7 @@ always @(posedge clk) begin
   else if(updata && state)			state <= IDLE;
 end
 
-wire [1:0]total = (ecall_en) ? 2'd2 : (|csrs_wen) ? 2'd1 : 2'd0,
+wire [1:0]total = (ecall_en) ? 2'd2 : (|csrs_wen) ? 2'd1 : 2'd0;
 wire [1:0]abnormal = total - counter;
 reg [1:0]counter;
 always @(posedge clk) begin
