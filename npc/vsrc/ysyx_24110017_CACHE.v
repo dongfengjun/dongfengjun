@@ -1,4 +1,4 @@
-`define YOSYS_STA
+//`define YOSYS_STA
 module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width = 16中型程序,而且对于n=1的cache块，考虑burst命中的地址范围最多为5位，tag六位以上改变大概率miss，tag保存到8位,大部分branch指令范围在8位以内,但是16位综合器综合后的面积时序最优
 	input  wire clk,
 	input  wire rst,
