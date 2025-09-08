@@ -212,7 +212,7 @@ wire [31:0]alu_res = (alu_sel == ADD) ? add_res
 	: (alu_sel == SLL) ? sll_res
 	: (alu_sel == SRL) ? srl_res
 //	: (alu_sel == SRA) ? ((op_i == 5'b00100) ? ({32{r1_i[31]}} << (32 - imm_i[4:0])) | (r1_i >> imm_i[4:0]) : ({32{r1_i[31]}} << (32 - r2_i[4:0])) | (r1_i >> r2_i[4:0]))
-	: (alu_sel == SRA) ? ((op_i == 5'b00100) ? {{shamti{r1_i[31]}},r1_i[31:shamti]} : {{shamtr{r1_i[31]}},r1_i[31:shamtr]};
+	: (alu_sel == SRA) ? ((op_i == 5'b00100) ? {shamti{r1_i[31]},r1_i[31:shamti]} : {shamtr{r1_i[31]},r1_i[31:shamtr]};
 	: (alu_sel == SLT) ? {31'b0, slt_res} 
 	: (alu_sel == AND) ? and_res
 	: (alu_sel == OR)  ? or_res 
