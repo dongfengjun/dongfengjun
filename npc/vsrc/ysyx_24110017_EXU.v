@@ -161,13 +161,14 @@ wire [31:0]xrd =
 /***R_add~R_remu***/
 				(op_i == 5'b01100) ? alu_res :
 /*********/
-				(op_i[4:2] == 3'b110) ? add_pc_4	: //I_jal I_jalr
+				(op_i == 5'b11011) ? add_pc_4 : //jal
+				(op_i == 5'b11001) ? add_pc_4 : //jalr
 				(op_i == 5'b01101) ? imm_i		: //U_lui
 				(op_i == 5'b00101) ? alu_res  :	//U_auipc
 /***LSU***/
 				(op_i == 5'b00000) ? ls_rdata_i : //load
 /***CSRU***/
-				(op_i == 5'b11100) ? csr : //I_csrrw_csrrs_csrrc
+				(op_i == 5'b11100) ? csr : //csrr
 				32'h0;
 
 wire[31:0] csr = 
