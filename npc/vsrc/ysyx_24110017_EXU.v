@@ -171,49 +171,28 @@ wire [31:0]xrd =
 				(op_i == 5'b11100) ? csr : //csrr
 				32'h0;
 
-/***
-wire[31:0] csr = 
-		({imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101 && imm_i[2:0] == 3'b001) ? mepc_i
-	: ({imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1000 && imm_i[2:0] == 3'b000) ? mstatus_i
-	: ({imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110 && imm_i[2:0] == 3'b010) ? mcause_i
-	: ({imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001 && imm_i[2:0] == 3'b101) ? mtvec_i 
-	: 32'b0;
-***/
+wire ismepc    = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101; //1101000001
+wire ismstatus = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1000; //1100000000
+wire ismcause  = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110; //1101000010
+wire ismtvec   = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001; //1100000101
+wire isecall   = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b0000;
+wire ismret    = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1010;
+//wire isebreak= {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b0001;
+
+wire[31:0] csr = (ismepc) ? mepc_i : (ismstatus) ? mstatus_i : (ismcause) ? mcause_i : (ismtvec) ? mtvec_i : 32'b0;
 
 wire[31:0] mcause_w = (ecall_en) ? r2_i : csrs_w; //ecall a5
 wire[31:0] csrs_w = 
-			({32{funct3_i == 3'b001}} & r1_i) | //I_csrrw
-			({32{funct3_i == 3'b010}} & (r1_i | csr)) | //I_csrrs
-      ({32{funct3_i == 3'b011}} & (~r1_i & csr)) |//I_csrrc
+			({32{funct3_i == 3'b001}} & (r1_i))        | //csrrw
+			({32{funct3_i == 3'b010}} & (r1_i | csr))  | //csrrs
+      ({32{funct3_i == 3'b011}} & (~r1_i & csr)) | //csrrc
 			({32{ecall_en}} & pc_i); //ecall_mepc
-
-/***
 wire [3:0] csrs_wen = {
-    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001 && imm_i[2:0] == 3'b101), //1100000101
-    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110 && imm_i[2:0] == 3'b010), //1101000010
-    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1000 && imm_i[2:0] == 3'b000), //1100000000
-    (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101 && imm_i[2:0] == 3'b001) || ecall_en //1101000001
+    (op_i == 5'b11100 && ismtvec),
+    (op_i == 5'b11100 && ismcause),
+    (op_i == 5'b11100 && ismstatus),
+    (op_i == 5'b11100 && ismepc) || ecall_en
 };
-***/
-wire [3:0] csrs_wen = {
-    (op_i == 5'b11100 && ismtvec), //1100000101
-    (op_i == 5'b11100 && ismcause), //1101000010
-    (op_i == 5'b11100 && ismstatus), //1100000000
-    (op_i == 5'b11100 && (ismepc || isecall)) //1101000001
-};
-wire[31:0] csr = 
-    (ismepc) ? mepc_i
-  : (ismstatus) ? mstatus_i
-  : (ismcause) ? mcause_i
-  : (ismtvec) ? mtvec_i 
-  : 32'b0;
-wire ismepc = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101;
-wire ismstatus = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1000;
-wire ismcause = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110;
-wire ismtvec = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001;
-wire isecall = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b0000;
-wire ismret = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1010;
-//wire isebreak= {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b0001;
 
 /***ALU***/
 wire funct7_i = imm_i[10];
@@ -232,7 +211,7 @@ wire [31:0]alu_res = (alu_sel == ADD) ? add_res
 	: (alu_sel == SUB) ? r1_i - r2_i
 	: (alu_sel == SLL) ? sll_res
 	: (alu_sel == SRL) ? srl_res
-	: (alu_sel == SRA) ? ((op_i == 5'b00100) ? ({32{r1_i[31]}} << (32 - imm_i[4:0])) | (r1_i >> imm_i[4:0]) : ({32{r1_i[31]}} << (32 - r2_i[4:0])) | (r1_i >> r2_i[4:0]))
+	: (alu_sel == SRA) ? ((op_i == 5'b00100 || op_i == 5'b01100) ? ((op_i == 5'b00100) ? ({32{r1_i[31]}} << (32 - imm_i[4:0])) | (r1_i >> imm_i[4:0]) : ({32{r1_i[31]}} << (32 - r2_i[4:0])) | (r1_i >> r2_i[4:0])) : 32'h0)
 	: (alu_sel == SLT) ? {31'b0, slt_res} 
 	: (alu_sel == AND) ? and_res
 	: (alu_sel == OR)  ? or_res 
@@ -243,10 +222,10 @@ wire [31:0]alu_res = (alu_sel == ADD) ? add_res
 wire ls_valid = (op_i == 5'b01000) || (op_i == 5'b00000);
 assign ls_addr_o = (ls_valid) ? add_res : 32'h0;
 assign ls_wdata_o = 
-				(ls_addr_o[1:0] == 0) ? r2_i 
-			: (ls_addr_o[1:0] == 1) ? {r2_i[23:0],8'b0} 
-			: (ls_addr_o[1:0] == 2) ? {r2_i[15:0],16'b0} 
-			: (ls_addr_o[1:0] == 3) ? {r2_i[7:0],24'b0} : 32'h0;
+				(ls_addr_o[1:0] == 2'b00) ? r2_i 
+			: (ls_addr_o[1:0] == 2'b01) ? {r2_i[23:0],8'b0} 
+			: (ls_addr_o[1:0] == 2'b10) ? {r2_i[15:0],16'b0} 
+			: (ls_addr_o[1:0] == 2'b11) ? {r2_i[7:0],24'b0} : 32'h0;
 
 /***BU***/
 wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
@@ -258,21 +237,20 @@ assign blten		= (op_i == 5'b11000 && funct3_i == 3'b100 &&  slt_res);
 assign bgeen		= (op_i == 5'b11000 && funct3_i == 3'b101 && !slt_res);
 assign bltuen		= (op_i == 5'b11000 && funct3_i == 3'b110 &&  slt_res);
 assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && !slt_res);
-//assign ecall_en = (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b0000);
-//assign mret_en  = (op_i == 5'b11100 && {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1010);
 assign ecall_en = (op_i == 5'b11100 && isecall);
 assign mret_en  = (op_i == 5'b11100 && ismret);
 
-wire [31:0]dnpc = (jalen) ? add_res	//jal
+wire [31:0]dnpc = 
+    (jalen)  ? add_res	//jal
 	: (jalren) ? (add_res & ~1) //jalr
-	: (beqen) ? add_res	//beq
-	: (bneen) ? add_res	//bne
-	: (blten) ? add_res	//blt
-	: (bgeen) ? add_res	//bge
+	: (beqen)  ? add_res	//beq
+	: (bneen)  ? add_res	//bne
+	: (blten)  ? add_res	//blt
+	: (bgeen)  ? add_res	//bge
 	: (bltuen) ? add_res	//bltu
 	:	(bgeuen) ? add_res	//bgeu
 	: (ecall_en) ? mtvec_i  //ecall
-	: (mret_en) ? mepc_i  //mret
+	: (mret_en)  ? mepc_i  //mret
 	: add_pc_4;
 
 endmodule
