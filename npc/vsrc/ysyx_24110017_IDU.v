@@ -127,7 +127,7 @@ assign imm = (op == 5'b01101 || op == 5'b00101) ? immU
  : (op == 5'b01100) ? {20'b0,funct7,5'b0}
  : 32'b0;
 
-assign fencei_o = (op_o == 5'b00011);
+assign fencei_o = (op == 5'b00011 && id_valid_o);
 
 //静态分支预测
 reg prevalid;
