@@ -143,7 +143,7 @@ static void statistic() {
 	Log("******************Performance Evaluation*************************");
 	Log("IPC = %.6f", (double)g_nr_guest_inst/(double)g_nr_guest_cycle);
 	Log("CPI = %.6f", (double)g_nr_guest_cycle/(double)g_nr_guest_inst);
-	Log("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld WB FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt,wb_fin_cnt);
+	Log("IF FIN:%ld\tID FIN:%ld\tEX FIN:%ld\tLS FIN:%ld\tWB FIN:%ld",if_fin_cnt,id_fin_cnt,ex_fin_cnt,ls_fin_cnt,wb_fin_cnt);
 	Log("Integer   Jump      Branch    Load      Store     Immediate System");
 	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Count)",Integer_Computational_cnt,Jump_cnt,Branch_cnt,Load_cnt,Store_cnt,Immediate_cnt,System_cnt);
 	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Cycles)",Integer_Computational_wait,Jump_wait,Branch_wait,Load_wait,Store_wait,Immediate_wait,System_wait);
@@ -400,7 +400,7 @@ void performance_evaluation() {
 	if(performance_counters(1)) id_fin_cnt ++;
 	if(performance_counters(2)) ex_fin_cnt ++;
 	if(performance_counters(3)) ls_fin_cnt ++;
-	if(performance_counters(5)) wb_fin_cnt ++;
+	if(dpic_display(3)) wb_fin_cnt ++;
 	if(performance_counters(6)) {
 		if_mem_flag = true;
 		if_cnt ++;
@@ -421,11 +421,11 @@ void performance_evaluation() {
 	if(if_mem_flag) if_mem_wait ++;
 	if(icache_access_flag) icache_access_time ++;
 	if(icache_miss_flag) icache_miss_penalty ++;
-	if(performance_counters(8)) if_flag = true;
+	if(performance_counters(6)) if_flag = true;
 	if(performance_counters(13)) if_flag = false;
 	if(if_flag) if_wait ++;
 	if(performance_counters(1)) ex_total_flag = true;
-	if(performance_counters(5)) ex_total_flag = false;
+	if(dpic_display(3)) ex_total_flag = false;
 	if(ex_total_flag) ex_total_wait ++;
 	
 	if(performance_counters(1) && performance_counters(4) == 0b0110011) { Integer_Computational_flag = true;}
@@ -436,7 +436,7 @@ void performance_evaluation() {
 	if(performance_counters(1) && performance_counters(4) == 0b0010011) { Immediate_flag = true;}
 	if(performance_counters(1) && performance_counters(4) == 0b1110011) { System_flag = true;}
 
-	if(performance_counters(5)) {
+	if(dpic_display(3)) {
 		Integer_Computational_flag = false;
 		Jump_flag = false;
 		Branch_flag = false;
@@ -454,19 +454,18 @@ void performance_evaluation() {
   if(Immediate_flag) Immediate_tmp ++;
   if(System_flag) System_tmp ++;
 
-	if(performance_counters(5) && performance_counters(14) == 0b0110011) { Integer_Computational_wait += Integer_Computational_tmp; Integer_Computational_cnt ++; }
-	if(performance_counters(5) && (performance_counters(14) == 0b1101111 || performance_counters(14) == 0b1100111)) { 
+	if(dpic_display(3) && performance_counters(14) == 0b0110011) { Integer_Computational_wait += Integer_Computational_tmp; Integer_Computational_cnt ++; }
+	if(dpic_display(3) && (performance_counters(14) == 0b1101111 || performance_counters(14) == 0b1100111)) { 
 		Jump_wait += Jump_tmp ; Jump_cnt ++; 
 		if(performance_counters(14) == 0b1101111) Jal_cnt ++;
 		if(performance_counters(14) == 0b1100111) Jalr_cnt ++;
 	}
-  if(performance_counters(5) && performance_counters(14) == 0b1100011) { Branch_wait += Branch_tmp; Branch_cnt ++;}
-  if(performance_counters(5) && performance_counters(14) == 0b0000011) { Load_wait += Load_tmp; Load_cnt ++; }
-  if(performance_counters(5) && performance_counters(14) == 0b0100011) { Store_wait += Store_tmp; Store_cnt ++; }
-  if(performance_counters(5) && performance_counters(14) == 0b0010011) { Immediate_wait += Immediate_tmp; Immediate_cnt ++; }
-  if(performance_counters(5) && performance_counters(14) == 0b1110011) { System_wait += System_tmp; System_cnt ++; }
-
-	if(performance_counters(5)) {
+  if(dpic_display(3) && performance_counters(14) == 0b1100011) { Branch_wait += Branch_tmp; Branch_cnt ++;}
+  if(dpic_display(3) && performance_counters(14) == 0b0000011) { Load_wait += Load_tmp; Load_cnt ++; }
+  if(dpic_display(3) && performance_counters(14) == 0b0100011) { Store_wait += Store_tmp; Store_cnt ++; }
+  if(dpic_display(3) && performance_counters(14) == 0b0010011) { Immediate_wait += Immediate_tmp; Immediate_cnt ++; }
+  if(dpic_display(3) && performance_counters(14) == 0b1110011) { System_wait += System_tmp; System_cnt ++; }
+	if(dpic_display(3)) {
 		Integer_Computational_tmp = 0;
 		Jump_tmp = 0;
 		Branch_tmp = 0;

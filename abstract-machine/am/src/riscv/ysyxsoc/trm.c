@@ -83,9 +83,9 @@ void bootloader_ssbl(void) {
 void bootloader_fsbl(void) {
 	if(&ssbl_vma_start != &ssbl_lma_start) {
     if((size_t)ssbl_size != 0) {
-			char *o = (char *)ssbl_vma_start;
-			char *i = (char *)ssbl_lma_start;
-		  for(int j = 0;j < (size_t)ssbl_size; j ++) {
+			uint32_t *o = (uint32_t *)ssbl_vma_start;
+			uint32_t *i = (uint32_t *)ssbl_lma_start;
+		  for(int j = 0;j < (size_t)ssbl_size / 4; j ++) {
 			  *o ++ = *i ++;
 			}
 		}

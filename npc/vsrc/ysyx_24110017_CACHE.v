@@ -1,236 +1,204 @@
 //`define YOSYS_STA
-module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
-	input clk,
-	input rst,
-	input wire fencei_i,
-	output wire m_axi_awready,
-	input wire m_axi_awvalid,
-	input wire [3:0]m_axi_awid,
-	input wire [31:0]m_axi_awaddr,
-	input wire [7:0]m_axi_awlen,
-	input wire [2:0]m_axi_awsize,
-	input wire [1:0]m_axi_awburst, 
-	output wire m_axi_wready,
-	input wire m_axi_wvalid,
-	input wire [31:0]m_axi_wdata,
-	input wire [3:0]m_axi_wstrb,
-	input wire m_axi_wlast,
-	input wire m_axi_bready,
-	output wire m_axi_bvalid,
-	output wire [3:0]m_axi_bid,
-	output wire [1:0]m_axi_bresp,
+module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width = 16中型程序,而且对于n=1的cache块，考虑burst命中的地址范围最多为5位，tag六位以上改变大概率miss，tag保存到8位,大部分branch指令范围在8位以内,但是16位综合器综合后的面积时序最优
+	input  wire clk,
+	input  wire rst,
+	input  wire fencei_i,
 
-	output reg m_axi_arready,
-	input wire m_axi_arvalid,
-	input wire [3:0]m_axi_arid,
-	input wire [31:0]m_axi_araddr,
-	input wire [7:0]m_axi_arlen,
-	input wire [2:0]m_axi_arsize,
-	input wire [1:0]m_axi_arburst,
-	input wire m_axi_rready,
-	output reg m_axi_rvalid,
-	output wire [3:0]m_axi_rid,
-	output reg [31:0]m_axi_rdata,
-	output wire [1:0]m_axi_rresp,
+	output reg  m_axi_arready,
+	input  wire m_axi_arvalid,
+	input  wire [ 3:0]m_axi_arid,
+	input  wire [31:0]m_axi_araddr,
+	input  wire [ 7:0]m_axi_arlen,
+	input  wire [ 2:0]m_axi_arsize,
+	input  wire [ 1:0]m_axi_arburst,
+	input  wire m_axi_rready,
+	output wire m_axi_rvalid,
+	output wire [ 3:0]m_axi_rid,
+	output wire [31:0]m_axi_rdata,
+	output wire [ 1:0]m_axi_rresp,
 	output wire m_axi_rlast,
 
-	input wire s_axi_awready,
-	output wire s_axi_awvalid,
-	output wire [3:0]s_axi_awid,
-	output wire [31:0]s_axi_awaddr,
-	output wire [7:0]s_axi_awlen,
-	output wire [2:0]s_axi_awsize,
-	output wire [1:0]s_axi_awburst,
-	input wire s_axi_wready,
-	output wire s_axi_wvalid,
-	output wire [31:0]s_axi_wdata,
-	output wire [3:0]s_axi_wstrb,
-	output wire s_axi_wlast,
-	output wire s_axi_bready,
-	input wire s_axi_bvalid,
-	input wire [3:0]s_axi_bid,
-	input wire [1:0]s_axi_bresp,
-
-	input wire s_axi_arready,
-	output reg s_axi_arvalid,
-	output wire [3:0]s_axi_arid,
-	output reg [31:0]s_axi_araddr,
-	output reg [7:0]s_axi_arlen,
-	output reg [2:0]s_axi_arsize,
-	output reg [1:0]s_axi_arburst,
-	output reg s_axi_rready,
-	input wire s_axi_rvalid,
-	input wire [3:0]s_axi_rid,
-	input wire [31:0]s_axi_rdata,
-	input wire [1:0]s_axi_rresp,
-	input wire s_axi_rlast
+	input  wire s_axi_arready,
+	output reg  s_axi_arvalid,
+	output wire [ 3:0]s_axi_arid,
+	output reg  [31:0]s_axi_araddr,
+	output reg  [ 7:0]s_axi_arlen,
+	output wire [ 2:0]s_axi_arsize,
+	output wire [ 1:0]s_axi_arburst,
+	output reg  s_axi_rready,
+	input wire  s_axi_rvalid,
+	input wire  [ 3:0]s_axi_rid,
+	input wire  [31:0]s_axi_rdata,
+	input wire  [ 1:0]s_axi_rresp,
+	input wire  s_axi_rlast
 );
 
-//	wire[127:0]cache_test0,cache_test1,cache_test2,cache_test3;
-//	assign cache_test0 = {cache_reg[0][0],cache_reg[1][0],cache_reg[2][0],cache_reg[3][0]};
-//	assign cache_test1 = {cache_reg[0][1],cache_reg[1][1],cache_reg[2][1],cache_reg[3][1]};
-//	assign cache_test2 = {cache_reg[0][2],cache_reg[1][2],cache_reg[2][2],cache_reg[3][2]};
-//	assign cache_test3 = {cache_reg[0][3],cache_reg[1][3],cache_reg[2][3],cache_reg[3][3]};
+	reg [31-TAG_WIDTH:0]tag_check;
+	always@(posedge clk) begin
+		if(m_axi_arvalid && m_axi_arready)
+			tag_check <= m_axi_araddr[31:TAG_WIDTH];
+	end
+	wire unvalid = m_axi_arvalid && m_axi_arready && (tag_check != m_axi_araddr[31:TAG_WIDTH]);
 
-	reg [31:0] cache_reg [(1<<(m-2))-1 : 0][(1<<n)-1 : 0];
-  reg [31-m-n+w : 0] tag_reg [(1<<(m-2))-1 : 0][(1<<n)-1 : 0];
-  reg [(1<<n)-1 : 0] valid_reg[(1<<(m-2))-1 : 0];
-	wire [31-m-n+w : 0]tag = m_axi_araddr[31 : m+n-w];
-  wire [n-1-w : 0]index = m_axi_araddr[m+n-w-1 : m];
-  wire [m-3 : 0]offset = m_axi_araddr[m-1 : 2];
-	wire [31-m-n+w : 0]s_tag = s_axi_araddr[31 : m+n-w];
-  wire [n-1-w : 0]s_index = s_axi_araddr[m+n-w-1 : m];
-  wire [m-3 : 0]s_offset = s_axi_araddr[m-1 : 2];
+	localparam CACHE_WIDTH = (1 << (m-2));
+	localparam CACHE_DEPTH = (1 << n);
+	localparam CACHE_WAY	 = (1 << w);
 
-  wire [(1<<w) - 1 : 0]access;
-	wire [(1<<w) - 1 : 0]access_raw;
+	reg  [31:0]								   cache_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
+  reg  [TAG_WIDTH-1-m-n+w : 0] tag_reg	 [CACHE_DEPTH - 1 : 0];
+  reg  [CACHE_DEPTH - 1 : 0]   valid_reg [CACHE_WIDTH - 1 : 0];
+	
+	wire [31:0] axi_araddr = (!state) ? m_axi_araddr : s_axi_araddr;
+	wire [TAG_WIDTH-1-m-n+w:0] tag			 = axi_araddr[TAG_WIDTH-1:m+n-w];
+  wire [n-w-1:0]					   index		 = axi_araddr[m+n-w-1:m];
+  wire [m-3:0]						   offset	   = axi_araddr[m-1:2];
+ 
+	wire [CACHE_WAY - 1 : 0] hit;
+
 	generate 
     genvar i; 
-      for(i = 0; i < (1<<w); i = i + 1) begin : comparator
-        assign access_raw[i] = (tag == tag_reg[offset][index * (1<<w) + i]) && (valid_reg[offset][index * (1<<w) + i]);
+      for(i = 0; i < CACHE_WAY; i = i + 1) begin : comparator
+        assign hit[i] = ((tag == tag_reg[index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i])) ? 1 : 0;
 			end
 	endgenerate
-	assign access = access_raw & ~(access_raw - 1);
 
-	localparam IDLE = 2'b00;
-  localparam TRANS = 2'b01;
-  localparam RETURN = 2'b10;
-  reg [1:0]state;
+	function integer log2;
+    input [CACHE_WAY - 1 : 0] value;
+    integer loop_var;
+		begin
+			for (loop_var = 0; loop_var < CACHE_WAY; loop_var = loop_var + 1) begin
+				if(value != 0) begin
+					value = value >> 1;
+					log2 = loop_var;
+				end
+			end
+		end
+	endfunction
 
-  always @(posedge clk or posedge rst) begin
-    if(rst) state <= IDLE;
-    else begin
-      case(state)
-        IDLE   : begin
-          if(m_axi_arvalid && m_axi_arready) begin
-						if(access != 0) begin
-							state <= RETURN;
-						end
-						else begin
-							state <= TRANS;
-						end
+	assign m_axi_rvalid = axi_rvalid && !axi_rvalid_enable;
+	assign m_axi_rdata  = (|hit) ? cache_reg[offset][index * CACHE_WAY + log2(hit)] : 32'h0;
+	wire	 axi_rvalid   = (s_axi_arlen != 0) ? s_axi_rlast : (|hit) && !(m_axi_arvalid && m_axi_arready);
+	reg axi_rvalid_enable;
+	always @(posedge clk) begin
+		if(axi_rvalid) axi_rvalid_enable <= 1'b1;
+		else axi_rvalid_enable <= 1'b0;
+	end 
+
+	localparam IDLE  = 1'b0;
+  localparam TRANS = 1'b1;
+  reg state;
+
+	always @(posedge clk or posedge rst) begin
+		if(rst) state <= IDLE;
+		else begin
+			case(state)
+				IDLE:    state <= (m_axi_arvalid && m_axi_arready) && ((hit == 0) || unvalid) ? TRANS : state;
+				TRANS:   state <= (m_axi_rready && m_axi_rvalid) ? IDLE : state;
+        default: state <= state;
+			endcase
+		end
+	end
+
+	assign s_axi_arburst = 2'b01;
+	assign s_axi_arsize = 3'b10;
+	reg [m-3 : 0] burst_counter;
+
+	always @(posedge clk) begin
+		if(fencei_i || unvalid) begin
+			integer f;
+			for (f = 0; f < CACHE_WIDTH; f = f + 1) begin : fencei
+				valid_reg[f] <= 0;
+			end
+		end
+		else begin
+			case(state)
+				TRANS: begin
+					if(s_axi_arvalid && s_axi_arready) begin
+						integer a;
+            integer b;
+						for (b = 0; b < CACHE_WIDTH; b = b + 1) begin : fifo
+							valid_reg[b][index * CACHE_WAY] <= 0;
+							for (a = 1; a < CACHE_WAY; a = a + 1) begin
+                valid_reg[b][index * CACHE_WAY + a] <= valid_reg[b][index * CACHE_WAY + a - 1];
+              end
+            end
+					end
+					if(s_axi_rready && s_axi_rvalid) begin
+						valid_reg[burst_counter][index * CACHE_WAY] <= 1'b1;
 					end
 				end
-				TRANS  : begin
-					if(m_axi_rready && m_axi_rvalid) begin
-						state <= IDLE;
-					end
-				end
-				RETURN : begin
-					if(m_axi_rready && m_axi_rvalid) begin
-						state <= IDLE;
-					end
-				end
-				default: begin
-					state <= state;
+				default : begin
 				end
 			endcase
 		end
 	end
 
-	reg [m-3 : 0]burst_counter;
-	reg [31:0] burst_araddr;
-	always @(posedge clk or posedge rst) begin
-		if(rst) begin
-      integer j;
-			integer k;
-			for (j = 0; j < (1<<(m-2)); j = j + 1) begin : init_reg
-				for (k = 0; k < (1 << n); k = k + 1) begin
-					cache_reg[j][k]	<= 0;
-					tag_reg[j][k]		<= 0;
+	always @(posedge clk) begin
+		case(state)
+			TRANS: begin
+				if(s_axi_arvalid && s_axi_arready) begin
+					integer a;
+					tag_reg[index * CACHE_WAY] <= 0;
+					for (a = 1; a < CACHE_WAY; a = a + 1) begin
+            tag_reg[index * CACHE_WAY + a] <= tag_reg[index * CACHE_WAY + a - 1];
+          end
 				end
-				valid_reg[j]      <= 0;
-			end
-		end
-		else begin
-			if(fencei_i) begin
-				integer f;
-				for (f = 0; f < (1<<(m-2)); f = f + 1) begin : fencei
-					valid_reg[f] <= 0;
+				if(s_axi_rready && s_axi_rvalid) begin
+					tag_reg [index * CACHE_WAY] <= s_axi_araddr[TAG_WIDTH-1:m+n-w];
 				end
 			end
-			else begin
-				case(state)
-				IDLE	 : begin
-					m_axi_arready <= 1'b1;
-					if(access == 0) begin
-						if(m_axi_arvalid && m_axi_arready) begin
-							m_axi_arready <= 1'b0;
-							s_axi_arvalid <= 1'b1;
-							s_axi_araddr <= m_axi_araddr;
-							burst_araddr <= m_axi_araddr;
-							s_axi_arburst <= 2'b01;
-							if(m_axi_araddr - 32'ha0000000 < 32'h20000000) begin
-								s_axi_arlen <= (1 << (m - 2)) - {6'b0,offset} - 1;
-							end
-							else begin
-								s_axi_arlen <= 8'h0;
-							end
-							s_axi_arsize <= 3'h2;
-						end
-					end
-				end
-				TRANS  : begin
-					if(s_axi_arvalid && s_axi_arready) begin
-						integer a;
-            integer b;
-						for (b = 0; b < (1<<(m-2)); b = b + 1) begin : fifo
-							cache_reg[b][s_index * (1<<w)] <= 0;
-              tag_reg[b][s_index * (1<<w)] <= 0;
-							valid_reg[b][s_index * (1<<w)] <= 0;
-							for (a = 1; a < (1<<w); a = a + 1) begin
-                cache_reg[b][s_index * (1<<w) + a] <= cache_reg[b][s_index * (1<<w) + a - 1];
-                tag_reg[b][s_index * (1<<w) + a] <= tag_reg[b][s_index * (1<<w) + a - 1];
-                valid_reg[b][s_index * (1<<w) + a] <= valid_reg[b][s_index * (1<<w) + a - 1];
-              end
-            end
-						s_axi_arvalid <= 1'b0;
-						s_axi_rready <= 1'b1;                                           
-            burst_counter <= s_offset;
-					end
-					if(s_axi_rready && s_axi_rvalid) begin
-						cache_reg[burst_counter][s_index * (1<<w)] <= s_axi_rdata;
-						tag_reg[burst_counter][s_index * (1<<w)] <= burst_araddr[31 : m+n-w];
-						valid_reg[burst_counter][s_index * (1<<w)] <= 1'b1;
-						burst_araddr <= burst_araddr + 4;
-						burst_counter <= burst_counter + 1;
-					end
-					if(s_axi_rlast) begin
-						s_axi_arvalid <=1'b0;
-						s_axi_araddr <= 32'h0;
-						s_axi_arsize <= 3'b0;
-						s_axi_rready <= 1'b0;
-						m_axi_rvalid <= 1'b1;
-						burst_counter <= 0;
-						if(s_axi_arlen == 8'b0) begin
-							m_axi_rdata <= s_axi_rdata;
+			default : begin
+			end
+		endcase
+	end
+
+	always @(posedge clk) begin
+		case(state)
+			IDLE: begin
+				m_axi_arready <= 1'b1;
+				s_axi_araddr  <= m_axi_araddr;
+				if(m_axi_arvalid && m_axi_arready) begin
+					if(hit == 0 || unvalid) begin
+						m_axi_arready <= 1'b0;
+						s_axi_arvalid <= 1'b1;
+						if(m_axi_araddr - 32'ha0000000 < 32'h20000000) begin
+							s_axi_arlen <= CACHE_WIDTH - {6'b0,offset} - 1;
 						end
 						else begin
-							m_axi_rdata <= cache_reg[s_offset][s_index * (1 << w)];
+							s_axi_arlen <= 8'h0;
 						end
+						burst_counter <= offset;
 					end
-					if(m_axi_rvalid && m_axi_rready) begin
-						m_axi_rvalid <= 1'b0;
-					end
-				end
-				RETURN : begin
-					//if(m_axi_arvalid && m_axi_arready) begin
-						m_axi_rvalid <= 1'b1;
+					else begin
 						m_axi_arready <= 1'b0;
-`ifndef YOSYS_STA
-						m_axi_rdata <= cache_reg[offset][index * (2 ** w) + $clog2(access)];
-`endif
-						m_axi_rresp  <= 2'b11;
-					//end
-					if(m_axi_rvalid && m_axi_rready) begin
-						m_axi_rvalid <= 0;
-					end		
+					end
 				end
-				default: begin
-				end
-				endcase
 			end
-		end
+			TRANS: begin
+				if(s_axi_arvalid && s_axi_arready) begin
+					integer a;
+          integer b;
+					for (b = 0; b < CACHE_WIDTH; b = b + 1) begin : fifo
+						cache_reg[b][index * CACHE_WAY] <= 0;
+						for (a = 1; a < CACHE_WAY; a = a + 1) begin
+              cache_reg[b][index * CACHE_WAY + a] <= cache_reg[b][index * CACHE_WAY + a - 1];
+            end
+          end
+					s_axi_arvalid <= 1'b0;
+					s_axi_rready  <= 1'b1;
+				end
+				if(s_axi_rready && s_axi_rvalid) begin
+					cache_reg[burst_counter][index * CACHE_WAY] <= s_axi_rdata;
+					burst_counter <= burst_counter + 1;
+				end
+				if(s_axi_rlast) begin
+					s_axi_arvalid <= 1'b0;
+					s_axi_rready  <= 1'b0;
+					s_axi_arlen   <= 8'b0;
+					burst_counter <= 2'b0;
+				end
+			end
+		endcase
 	end
 
 /***DPIC-AMAT***/
@@ -238,7 +206,7 @@ module ysyx_24110017_CACHE #(n = 4, m = 2, w = 3) (
 	export "DPI-C" function amat_counter;
 	function int amat_counter(int i);
 	  begin
-			assign amat_counter = (i == 0) ? {31'b0,(access != 0)} : 32'b0;
+			assign amat_counter = (i == 0) ? {31'b0,((hit != 0) && (!unvalid))} : 32'b0;
 		end
 	endfunction
 `endif

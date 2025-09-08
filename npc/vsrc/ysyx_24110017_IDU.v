@@ -2,19 +2,20 @@
 module ysyx_24110017_IDU(
 	input	 wire clk,
 	input  wire rst,
-	input  wire isRAW,
-	input  wire isCHazard,
 
+	input  wire isRAW_i,
+	input  wire flush_i,
+
+`ifndef YOSYS_STA
 	output reg  [31:0] inst_o,//difftest
-	
-	output wire [31:0] prepc_o,
-	output wire prepc_en_o,
+`endif
 
-	output wire [ 4:0] rs1_o,
-	output wire [ 4:0] rs2_o,
-	input  wire [31:0] r1_i,
-	input  wire [31:0] r2_i,
-	input  wire [31:0] mepc_i,mstatus_i,mcause_i,mtvec_i,
+	output wire [20:0] prepc_o,
+	output wire [ 1:0] prepc_en_o,
+	output wire [ 3:0] rs1,
+	output wire [ 3:0] rs2,
+	input  wire [31:0] r1,
+	input  wire [31:0] r2,
 
 	input  wire if_valid_i,
 	output wire id_ready_o,
@@ -26,27 +27,23 @@ module ysyx_24110017_IDU(
 	
 	output reg  [31:0] pc_o,
 	output reg	[31:0] imm_o,
-	output reg  [ 6:0] op_o,
+	output reg  [ 4:0] op_o,
 	output reg  [ 2:0] funct3_o,
-	output reg  [ 4:0] rd_o,
-	output reg  gpr_wen_o,
-	output reg  [ 3:0] alu_sel_o,
-	output reg  [31:0] a_o,
-	output reg  [31:0] b_o,
-	output reg  [31:0] r1_o,
-	output reg  [31:0] r2_o,
-	output reg	[31:0] csr_o,
-	output reg  [31:0] mepc_o,mtvec_o,
-	output reg	mepc_wen_o,mstatus_wen_o,mcause_wen_o,mtvec_wen_o,
-	output reg  fencei_o
+	output reg	[31:0] r1_o,
+  output reg	[31:0] r2_o,
+	//output reg  [ 3:0] rs1_o,
+	//output reg  [ 3:0] rs2_o,
+	output reg	[ 3:0] rd_o,
+	output wire	       gpr_wen_o,
+	output reg         ls_valid_o,
+	output wire        fencei_o
 );
-
 /***分布式控制***/
 parameter IDLE = 1'b0,WAIT = 1'b1;
 reg state;
 
 always @(posedge clk) begin
-	if(rst || isCHazard) state <= IDLE;
+	if(rst || flush_i) state <= IDLE;
   else begin
 		case (state)
 			IDLE: state <= (if_valid_i && id_ready_o) ? WAIT : state;
@@ -55,161 +52,92 @@ always @(posedge clk) begin
 	end
 end
 
-assign id_valid_o = (state == WAIT) && (!isRAW);
-assign id_ready_o = (state == IDLE) && (!isRAW);
+assign id_valid_o = (state == WAIT) && (!isRAW_i);
+assign id_ready_o = (state == IDLE) && (!isRAW_i);
 
-
+wire updata = id_valid_o && ex_ready_i;
 always@(posedge clk) begin
-	if(rst || isCHazard) begin
-		inst_o			<= 32'h0;
-		pc_o				<= 32'h0;
-		imm_o				<= 32'h0;
-		op_o				<= 7'b0;
-		funct3_o		<= 3'b0;
-		rd_o				<= 5'b0;
-		gpr_wen_o		<= 1'b0;
-		alu_sel_o		<= 4'b0;
-		a_o					<= 32'h0;
-		b_o					<= 32'h0;
-		r1_o				<= 32'h0;
-		r2_o				<= 32'h0;
-		csr_o				<= 32'h0;
-		mepc_o			<= 32'h0;
-		mtvec_o			<= 32'h0;
-		mepc_wen_o		<= 1'b0;
-		mstatus_wen_o <= 1'b0;
-		mcause_wen_o	<= 1'b0;
-		mtvec_wen_o		<= 1'b0;
-		fencei_o		<= 1'b0;
+  if(updata) begin
+`ifndef YOSYS_STA
+    inst_o <= inst_i;
+`endif
+		pc_o <= pc_i;
 	end
-	else begin
-		case(state)
-			IDLE: begin
-			end
-			WAIT: begin
-				if(id_valid_o && ex_ready_i) begin
-					inst_o			<= inst_i;
-					pc_o        <= pc_i;
-					imm_o       <= imm;
-					op_o				<= op;
-					funct3_o		<= funct3;
-					rd_o        <= rd;
-					gpr_wen_o   <= gpr_wen;
-					alu_sel_o   <= alu_sel;
-					a_o         <= a;
-					b_o         <= b;
-					r1_o				<= r1_i;
-					r2_o				<= r2_i;
-					csr_o       <= csr;
-					mepc_o      <= mepc_i;
-					mtvec_o     <= mtvec_i;
-					mepc_wen_o    <= mepc_wen;
-					mstatus_wen_o <= mstatus_wen;
-					mcause_wen_o  <= mcause_wen;
-					mtvec_wen_o   <= mtvec_wen;
-					fencei_o		<= fencei;
-				end
-			end
-		endcase
-	end
+end
+always@(posedge clk) begin
+  if(updata) imm_o <= imm;
+end
+always@(posedge clk) begin
+  if(updata) op_o  <= op;
+end
+always@(posedge clk) begin
+  if(updata) funct3_o <= funct3;
+end
+always@(posedge clk) begin
+  if(updata) r1_o <= r1;
+end
+always@(posedge clk) begin
+  if(updata) r2_o <= r2;
+end
+always@(posedge clk) begin
+  if(updata) rd_o  <= rd;
+end
+always@(posedge clk) begin
+  case(state)
+	  IDLE : ls_valid_o <= 1'b0;
+		WAIT : if(updata) ls_valid_o <= (op == 5'b01000 || op == 5'b00000);
+	endcase
 end
 
 /***pattern***/
-wire [6:0]op;
-wire [4:0]rd; //R I U J
+wire [4:0]op;
+wire [3:0]rd; //R I U J
 wire [2:0]funct3;
-//wire [4:0]rs1;  //R I S B
-//wire [4:0]rs2;  //R S B
+//wire [3:0]rs1;  //R I S B
+//wire [3:0]rs2;  //R S B
 wire [31:0]immI,immU,immS,immB,immJ,imm;
 wire [6:0]funct7; //R
-wire [4:0]shamt;  //I shamt
  
-assign op = inst_i[6:0];
-assign rd = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 
- || op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111
- || op == 7'b1110011 || op == 7'b0110011) ? inst_i[11:7] : 5'b0;
+assign op = inst_i[6:2];
+assign rd = (op == 5'b01101 || op == 5'b00101 || op == 5'b11011 || op == 5'b11001 || op == 5'b00000 || op == 5'b00100 || op == 5'b11100 || op == 5'b01100) ? inst_i[10:7] : 4'b0;
+assign gpr_wen_o = (rd_o != 0);
 assign funct3 = inst_i[14:12];
-assign rs1_o = (op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011	//I
- || op == 7'b1100011	//B
- || op == 7'b0100011	//S
- || op == 7'b0110011) ? //R
- inst_i[19:15] : 5'b0;
-assign rs2_o = (op == 7'b1100011  //B
- || op == 7'b0100011  //S
- || op == 7'b0110011) ? inst_i[24:20] //R
- : (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000) ? 5'd15 //ecall
- : 5'b0;
-assign funct7 = (op == 7'b0110011 || op == 7'b0010011) ? inst_i[31:25] : 7'b0;
+assign rs1 = (op == 5'b11001 || op == 5'b00000 || op == 5'b00100 || op == 5'b11100	//I
+ || op == 5'b11000	//B
+ || op == 5'b01000	//S
+ || op == 5'b01100) ? //R
+ inst_i[18:15] : 4'b0;
+assign rs2 = (op == 5'b11000  //B
+ || op == 5'b01000 //S
+ || op == 5'b01100) ? inst_i[23:20] //R
+ : (op == 5'b11100 && imm == 32'd0 && funct3 == 3'b000) ? 4'd15 //ecall
+ : 4'b0;
 assign immI = {{20{inst_i[31]}},inst_i[31:20]};	//SEXTIimmediate
-assign shamt = {inst_i[24:20]};	//I shamt
 assign immU = {inst_i[31:12],{12{1'b0}}};	//UEXTUimm
 assign immS = {{20{inst_i[31]}}, inst_i[31:25], inst_i[11:7]};	//SEXTSimm
 assign immB = {{19{inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};	//SEXTBimm
 assign immJ = {{11{inst_i[31]}}, inst_i[31], inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};	//SEXTJimm
+assign funct7 = inst_i[31:25];
 
-assign imm = (op == 7'b0110111 || op == 7'b0010111) ? immU
- : (op == 7'b1101111) ? immJ
- : (op == 7'b1100011) ? immB
- : (op == 7'b0100011) ? immS
- : (op == 7'b1100111 || op == 7'b0000011 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011) ? immI 
+assign imm = (op == 5'b01101 || op == 5'b00101) ? immU
+ : (op == 5'b11011) ? immJ
+ : (op == 5'b11000) ? immB
+ : (op == 5'b01000) ? immS
+ : (op == 5'b11001 || op == 5'b00000 || op == 5'b00100 || op == 5'b11100) ? immI 
+ : (op == 5'b01100) ? {20'b0,funct7,5'b0}
  : 32'b0;
 
-wire gpr_wen = (op == 7'b0110111 || op == 7'b0010111 || op == 7'b1101111 || op == 7'b1100111 || op == 7'b0010011 || op == 7'b0001111 || op == 7'b1110011 || op == 7'b0110011 || op == 7'b0000011) ? 1'b1 : 1'b0;
-/***ALU***/
-wire [3:0]alu_sel;
-wire [31:0]a,b;
-assign a = ((op == 7'b0010011) && (funct3 == 3'b000 || funct3 == 3'b001 || funct3 == 3'b011 || funct3 == 3'b100 || funct3 == 3'b101 || funct3 == 3'b110 || funct3 == 3'b111) || (op == 7'b0110011) && ((funct3 == 3'b000 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0100000) || (funct3 == 3'b001 && funct7 == 7'b0000000) || (funct3 == 3'b011 && funct7 == 7'b0000000) || (funct3 == 3'b100 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0100000) || (funct3 == 3'b110 && funct7 == 7'b0000000) || (funct3 == 3'b111 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? r1_i 
-	: ((op == 7'b0010011 && funct3 == 3'b010) || ((op == 7'b0110011) && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b001 && funct7 == 7'b0000001) || (funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b110 && funct7 == 7'b0000001)))) ? $signed(r1_i)
-	: 32'b0;
-assign b = ((op == 7'b0010011) && (funct3 == 3'b000 || funct3 == 3'b001 || funct3 == 3'b011 || funct3 == 3'b100 || funct3 == 3'b110 || funct3 == 3'b111)) ? imm
-	: ((op == 7'b0010011) && (funct3 == 3'b010)) ? $signed(imm) 
-	: ((op == 7'b0010011) && (funct3 == 3'b001 || funct3 == 3'b101)) ? {27'b0,shamt} 
-	: ((op == 7'b0110011) && ((funct3 == 3'b000 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0100000) || (funct3 == 3'b011 && funct7 == 7'b0000000) || (funct3 == 3'b100 && funct7 == 7'b0000000) || (funct3 == 3'b110 && funct7 == 7'b0000000) || (funct3 == 3'b111 && funct7 == 7'b0000000) || (funct3 == 3'b000 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? r2_i
-	: ((op == 7'b0110011 && ((funct3 == 3'b001 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0000000) || (funct3 == 3'b101 && funct7 == 7'b0100000)))) ? {27'b0,r2_i[4:0]}
-	: ((op == 7'b0110011) && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b001 && funct7 == 7'b0000001) || (funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b110 && funct7 == 7'b0000001))) ? $signed(r2_i)
-	: 32'b0;
-localparam ADD  = 4'b0000;
-localparam SUB  = 4'b0001;
-localparam SLL  = 4'b0010;
-localparam SRL  = 4'b0011;
-localparam SRA  = 4'b0100;
-localparam SLT  = 4'b0101;
-localparam AND  = 4'b0110;
-localparam OR   = 4'b0111;
-localparam XOR  = 4'b1000;
-localparam MUL  = 4'b1001;
-localparam MULH = 4'b1010;
-localparam DIV  = 4'b1011;
-localparam REM  = 4'b1100;
-assign alu_sel =  ((op == 7'b0010011 && funct3 == 3'b000) || (op == 7'b0110011 && funct3 == 3'b000 && funct7 == 7'b0000000)) ? ADD : 
-							(op == 7'b0110011 && funct3 == 3'b000 && funct7 == 7'b0100000) ? SUB :
-						  ((op == 7'b0010011 && funct3 == 3'b001) || (op == 7'b0110011 && (funct3 == 3'b001 && funct7 == 7'b0000000))) ? SLL :
-							((op == 7'b0010011 &&(funct3 == 3'b010 || funct3 == 3'b011)) || (op == 7'b0110011 && ((funct3 == 3'b010 && funct7 == 7'b0000000) || (funct3 == 3'b011 && funct7 == 7'b0000000)))) ? SLT :
-							((op == 7'b0010011 && funct3 == 3'b100) || (op == 7'b0110011 && (funct3 == 3'b100 && funct7 == 7'b0000000))) ? XOR :
-							((op == 7'b0010011 && funct3 == 3'b101 && funct7 == 7'b0000000) || (op == 7'b0110011 && funct3 == 3'b101 && funct7 == 7'b0000000)) ? SRL :
-							((op == 7'b0010011 && funct3 == 3'b101 && funct7 == 7'b0100000) || (op == 7'b0110011 && funct3 == 3'b101 && funct7 == 7'b0100000)) ? SRA :
-							((op == 7'b0010011 && funct3 == 3'b110) || (op == 7'b0110011 && funct3 == 3'b110 && funct7 == 7'b0000000)) ? OR : 
-							((op == 7'b0010011 && funct3 == 3'b111) || (op == 7'b0110011 && funct3 == 3'b111 && funct7 == 7'b0000000)) ? AND : 
-							(op == 7'b0110011 && funct3 == 3'b000 && funct7 == 7'b0000001) ? MUL :
-							(op == 7'b0110011 && funct3 == 3'b001 && funct7 == 7'b0000001) ? MULH :
-							(op == 7'b0110011 && ((funct3 == 3'b100 && funct7 == 7'b0000001) || (funct3 == 3'b101 && funct7 == 7'b0000001))) ? DIV :
-							(op == 7'b0110011 && ((funct3 == 3'b110 && funct7 == 7'b0000001) || (funct3 == 3'b111 && funct7 == 7'b0000001))) ? REM 
-							: 4'b1111;
-
-wire[31:0] csr = (op == 7'b1110011 && imm == 32'd833) ? mepc_i
-	: (op == 7'b1110011 && imm == 32'd768) ? mstatus_i
-	: (op == 7'b1110011 && imm == 32'd834) ? mcause_i
-	: (op == 7'b1110011 && imm == 32'd773) ? mtvec_i
-	: 32'b0;
-wire mepc_wen = ((op == 7'b1110011 && imm == 32'd833) || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
-wire mstatus_wen = (op == 7'b1110011 && imm == 32'd768) ? 1'b1 : 1'b0;
-wire mcause_wen = (op == 7'b1110011 && imm == 32'd834 || (op == 7'b1110011 && imm == 32'd0 && funct3 == 3'b000)) ? 1'b1 : 1'b0;
-wire mtvec_wen = (op == 7'b1110011 && imm == 32'd773) ? 1'b1 : 1'b0;
-
-wire fencei = (inst_i == 32'b00000000000000000001000000001111);
+assign fencei_o = (op_o == 5'b00011);
 
 //静态分支预测
-assign prepc_en_o = (op == 7'b1100011 && inst_i[31]) || (op == 7'b1101111);
-assign prepc_o = ((op == 7'b1100011 && inst_i[31]) || (op == 7'b1101111)) ? pc_i + imm : 32'h0;
+reg prevalid;
+always @(posedge clk) begin
+	if(if_valid_i && id_ready_o) prevalid <= 1'b1;
+	else prevalid <= 1'b0;
+end
+wire [1:0] prepc_en = (op == 5'b11000 && inst_i[31]) ? 2'b01 : (op == 5'b11011) ? 2'b10 : 2'b00;
+wire [31:0] prepc = pc_i + imm;
+assign prepc_en_o = prevalid ? prepc_en : 2'b00;
+assign prepc_o = ((op == 5'b11000 && inst_i[31]) || (op == 5'b11011)) ? prepc[20:0] : 21'b0;
 
 endmodule
