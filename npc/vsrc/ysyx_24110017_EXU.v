@@ -199,7 +199,7 @@ wire [3:0] csrs_wen = {
     (op_i == 5'b11100 && ismtvec), //1100000101
     (op_i == 5'b11100 && ismcause), //1101000010
     (op_i == 5'b11100 && ismstatus), //1100000000
-    (op_i == 5'b11100 && (ismepc || isecall) //1101000001
+    (op_i == 5'b11100 && (ismepc || isecall)) //1101000001
 };
 wire[31:0] csr = 
     (ismepc) ? mepc_i
