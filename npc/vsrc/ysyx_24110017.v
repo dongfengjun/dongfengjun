@@ -1,4 +1,176 @@
 //`define ysyx_24110017_YOSYS_STA
+module ysyx_24110017_testbench;
+	reg clock;
+	reg reset;
+
+	ysyx_24110017 cpu(
+		.clock             (clock),
+    .reset             (reset),
+    .io_interrupt      (1'h0),
+    .io_master_awready (master_awready),
+    .io_master_awvalid (master_awvalid),
+    .io_master_awid    (),
+    .io_master_awaddr  (master_awaddr),
+    .io_master_awlen   (),
+    .io_master_awsize  (),
+    .io_master_awburst (),
+    .io_master_wready  (master_wready),
+    .io_master_wvalid  (master_wvalid),
+    .io_master_wdata   (master_wdata),
+    .io_master_wstrb   (master_wstrb),
+    .io_master_wlast   (),
+    .io_master_bready  (master_bready),
+    .io_master_bvalid  (master_bvalid),
+    .io_master_bid     (4'b0),
+    .io_master_bresp   (2'b0),
+    .io_master_arready (master_arready),
+    .io_master_arvalid (master_arvalid),
+    .io_master_arid    (),
+    .io_master_araddr  (master_araddr),
+    .io_master_arlen   (),
+    .io_master_arsize  (),
+    .io_master_arburst (),
+    .io_master_rready  (master_rready),
+    .io_master_rvalid  (master_rvalid),
+    .io_master_rid     (4'b0),
+    .io_master_rdata   (master_rdata),
+    .io_master_rresp   (2'b0),
+    .io_master_rlast   (master_rlast),
+    .io_slave_awready  (/* unused */),
+    .io_slave_awvalid  (1'h0),
+    .io_slave_awid     (4'h0),
+    .io_slave_awaddr   (32'h0),
+    .io_slave_awlen    (8'h0),
+    .io_slave_awsize   (3'h0),
+    .io_slave_awburst  (2'h0),
+    .io_slave_wready   (/* unused */),
+    .io_slave_wvalid   (1'h0),
+    .io_slave_wdata    (32'h0),
+    .io_slave_wstrb    (4'h0),
+    .io_slave_wlast    (1'h0),
+    .io_slave_bready   (1'h0),
+    .io_slave_bvalid   (/* unused */),
+    .io_slave_bid      (/* unused */),
+    .io_slave_bresp    (/* unused */),
+    .io_slave_arready  (/* unused */),
+    .io_slave_arvalid  (1'h0),
+    .io_slave_arid     (4'h0),
+    .io_slave_araddr   (32'h0),
+    .io_slave_arlen    (8'h0),
+    .io_slave_arsize   (3'h0),
+    .io_slave_arburst  (2'h0),
+    .io_slave_rready   (1'h0),
+    .io_slave_rvalid   (/* unused */),
+    .io_slave_rid      (/* unused */),
+    .io_slave_rdata    (/* unused */),
+    .io_slave_rresp    (/* unused */),
+    .io_slave_rlast    (/* unused */)
+  );
+
+	ysyx_24110017_memory iverilog_memory #(32,32,100000) (
+		.clock(clock),
+		.reset(reset),
+		.wen(wen),
+		.waddr(waddr),
+		.wdata(wdata),
+		.raddr(raddr),
+		.rdata(rdata)
+	);
+	
+	always #5 clock = ~clock;
+
+	initial begin
+		clock = 0;
+		reset = 1;
+
+		$dumpflie("iwave.vcd");
+		$dump(0,ysyx_24110017_testbench);
+
+		#50 rst = 1;
+		#10000 $finish;
+	end
+
+	wire wen = master_wvalid && master_wready;
+	wire [31:0]waddr = master_awaddr / 4;
+	wire [31:0]wdata = master_wdata;
+	wire [31:0]raddr = master_araddr / 4;
+	wire [31:0]master_wdata = rdata;
+
+	reg master_awready;
+	reg master_wready;
+	reg master_bvalid;
+	reg master_arready;
+  reg master_rvalid;
+  reg master_rlast;
+	always @(posedge clk) begin
+		if(rst) begin
+			master_awready <= 1'b1;
+			master_wready  <= 1'b1;
+			master_bvalid  <= 1'b0;
+			master_arready <= 1'b1;
+			master_rvalid  <= 1'b0;
+			master_rlast   <= 1'b0;
+		end
+		else begin
+			if(master_awvalid && master_awready) begin
+				master_awready <= 1'b0;
+				master_arready <= 1'b0;
+			end
+			if(master_wvalid && master_wready) begin
+				master_wready  <= 1'b0;
+				master_bvalid  <= 1'b1;
+			end
+			if(master_bvalid && master_bready) begin
+				master_bvalid  <= 1'b0;
+				master_awready <= 1'b1;
+				master_wready  <= 1'b1;
+				master_arready <= 1'b1;
+			end
+			if(master_arvalid && master_arready) begin
+				master_arready <= 1'b0;
+				master_rvalid  <= 1'b1;
+				master_rlast   <= 1'b1;
+				master_awready <= 1'b0;
+				master_wready  <= 1'b0;
+			end
+			if(master_rvalid && master_rready) begin
+				master_arready <= 1'b1;
+        master_rvalid  <= 1'b0;
+        master_rlast   <= 1'b0;
+        master_awready <= 1'b1;
+        master_wready  <= 1'b1;
+			end
+		end
+	end
+
+endmodule
+
+module ysyx_24110017_memory #(ADDR_WIDTH = 32, DATA_WIDTH = 32, MEM_SIZE = 100000) (
+	input wire clock,
+	input wire reset,
+	input wire wen,
+	input wire [ADDR_WIDTH-1:0] waddr,
+  input wire [DATA_WIDTH-1:0] wdata,
+	input wire [ADDR_WIDTH-1:0] raddr,
+  output wire [DATA_WIDTH-1:0] rdata
+)
+	
+	reg [DATA_WIDTH-1:0] memory [MEM_SIZE-1:0];
+
+	initial begin
+		$readmemh("iverilog-memory.hex",memory);
+	end
+
+	always @(posedge clock) begin
+		if(wen) begin
+			memory[waddr] <= wdata;
+		end
+	end
+
+	assign rdata = memory[raddr];
+
+endmodule
+
 module ysyx_24110017(
 	input	 wire clock,
 	input	 wire reset,
