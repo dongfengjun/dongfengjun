@@ -34,7 +34,8 @@ VERILATOR_FLAGS += --top-module $(TOP)
 VERILATOR_FLAGS += --timescale "1ns/1ns" --no-timing
 VERILATOR_FLAGS += --autoflush
 VERILATOR_FLAGS += --lint-only
-VERILATOR_FLAGS += --Wall --Werror
+VERILATOR_FLAGS += -Wall
+VERILATOR_FLAGS += -Werror
 
 LOG ?= $(BUILD)/npc-log.txt
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
