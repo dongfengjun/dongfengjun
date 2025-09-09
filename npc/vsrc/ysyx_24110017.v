@@ -160,7 +160,6 @@ module ysyx_24110017_memory #(ADDR_WIDTH = 32, DATA_WIDTH = 32, MEM_SIZE = 10000
 	always @(posedge clk) begin
 		if(rst)
 			$readmemh("iverilog-memory.hex",memory);
-		end
 	end
 
 	always @(posedge clock) begin
