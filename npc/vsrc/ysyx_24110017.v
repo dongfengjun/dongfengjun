@@ -67,7 +67,7 @@ module ysyx_24110017_testbench;
     .io_slave_rlast    (/* unused */)
   );
 
-	ysyx_24110017_memory iverilog_memory #(32,32,100000) (
+	ysyx_24110017_memory #(32,32,100000) iverilog_memory (
 		.clock(clock),
 		.reset(reset),
 		.wen(wen),
@@ -153,12 +153,14 @@ module ysyx_24110017_memory #(ADDR_WIDTH = 32, DATA_WIDTH = 32, MEM_SIZE = 10000
   input wire [DATA_WIDTH-1:0] wdata,
 	input wire [ADDR_WIDTH-1:0] raddr,
   output wire [DATA_WIDTH-1:0] rdata
-)
+);
 	
 	reg [DATA_WIDTH-1:0] memory [MEM_SIZE-1:0];
 
-	initial begin
-		$readmemh("iverilog-memory.hex",memory);
+	always @(posedge clk) begin
+		if(rst)
+			$readmemh("iverilog-memory.hex",memory);
+		end
 	end
 
 	always @(posedge clock) begin
