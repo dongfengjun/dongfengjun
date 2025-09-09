@@ -125,14 +125,13 @@ wire        ls_axi_awvalid,ls_axi_awready,ls_axi_wvalid,ls_axi_wready,
 						ls_axi_rvalid,ls_axi_rready,ls_axi_wlast,ls_axi_rlast;
 /***Arbiter-Xbar***/
 /***My-Clint***/
-wire [31:0] c_axi_awaddr,c_axi_wdata,c_axi_araddr,c_axi_rdata;
-wire [ 3:0] c_axi_wstrb;
-wire [ 7:0] c_axi_awlen,c_axi_arlen;
-wire [ 3:0] c_axi_awid,c_axi_bid,c_axi_arid,c_axi_rid;
-wire [ 2:0] c_axi_awsize,c_axi_arsize;
-wire [ 1:0] c_axi_awburst,c_axi_arburst;
-wire [ 1:0] c_axi_bresp,c_axi_rresp;
-wire c_axi_awvalid,c_axi_awready,c_axi_wvalid,c_axi_wready,c_axi_bvalid,c_axi_bready,c_axi_arvalid,c_axi_arready,c_axi_rvalid,c_axi_rready,c_axi_wlast,c_axi_rlast;
+wire [31:0] c_axi_araddr,c_axi_rdata;
+wire [ 7:0] c_axi_arlen;
+wire [ 3:0] c_axi_arid,c_axi_rid;
+wire [ 2:0] c_axi_arsize;
+wire [ 1:0] c_axi_arburst;
+wire [ 1:0] c_axi_rresp;
+wire c_axi_arvalid,c_axi_arready,c_axi_rvalid,c_axi_rready,c_axi_rlast;
 /***RFU***/
 wire [31:0]r1,r2;
 wire [31:0]mepc,mstatus,mcause,mtvec;
@@ -505,7 +504,7 @@ module ysyx_24110017_BTB
       for (a = 1; a < (1<<J_W); a = a + 1) begin
         jsnpc_reg[jindex_pre * (1<<J_W) + a] <= jsnpc_reg[jindex_pre * (1<<J_W) + a - 1];
       end
-      jsnpc_reg[jtag_pre * (1<<J_W)] <= prepc_i[JTARG-1:0];
+      jsnpc_reg[jindex_pre * (1<<J_W)] <= prepc_i[JTARG-1:0];
     end
   end
   always @(posedge clk) begin
