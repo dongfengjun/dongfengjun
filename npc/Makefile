@@ -1,13 +1,14 @@
 BUILD = ./build
 OBJ_DIR = $(BUILD)/obj_dir
-TOP = ysyxSoCFull
-VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
+#TOP = ysyxSoCFull
+TOP = ysyx_24110017
+#VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
 VSRCS += $(shell find ./vsrc -name "*.v")
-VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
+#VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
 CSRCS += $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 INC_COM_PATH = ./csrc/include
-INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
-INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
+#INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
+#INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
 
 #nvboard
 NXDC_FILES = ./constr/top.nxdc
