@@ -24,7 +24,7 @@ LDFLAGS += -fsanitize=address#ASan
 LDLIBS := -lasan $(LDLIBS)
 
 VERILATOR = verilator
-VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build
+VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build --lint-only -Wall -Werror
 VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH)	-I$(INC_COM_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
 VERILATOR_FLAGS += -CFLAGS $(CXXFLAGS)
 VERILATOR_FLAGS += -CFLAGS -g
@@ -33,7 +33,6 @@ VERILATOR_FLAGS += -LDFLAGS -lreadline
 VERILATOR_FLAGS += --top-module $(TOP)
 VERILATOR_FLAGS += --timescale "1ns/1ns" --no-timing
 VERILATOR_FLAGS += --autoflush
-VERILATOR_FLAGS += --lint-only -Wall -Werror
 
 LOG ?= $(BUILD)/npc-log.txt
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
