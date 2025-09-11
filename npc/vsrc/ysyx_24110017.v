@@ -1274,8 +1274,9 @@ always@(posedge clk) begin
 end
 
 always@(posedge clk) begin
-	casez(state)
-		WAIT: begin
+	casez({rst || flush_i,state})
+		2'b1? : dnpc_o <= 32'h0;
+		2'b01 : begin
 			if(updata) dnpc_o <= dnpc;
 		end
 		default : dnpc_o <= dnpc_o;
