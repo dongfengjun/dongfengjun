@@ -74,7 +74,6 @@ IVERILOG_FLAGS = -g2012 -Wall
 VSRC = ./vsrc/ysyx_24110017.v
 
 COMPILED = $(BUILD)/ysyx_24110017_iverilog.vpp
-WAVE_FILE = $(BUILD)/wave.vcd
 MEMORY_HEX = $(BUILD)/memory_iverilog.hex
 
 IIMG ?= /home/xi/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
@@ -85,7 +84,7 @@ $(BUILD):
 
 sim-iverilog: $(MEMORY_HEX) compile run_sim_iverilog
 
-$(MEMORY_HEX): $(IMG) | $(BUILD_DIR)
+$(MEMORY_HEX): $(IIMG) | $(BUILD)
 	$(OBJCOPY) -O verilog --adjust-vma=$(VMA_ADJUST) $(IIMG) $(MEMORY_HEX)
 
 compile: $(VSRC) | $(BUILD_DIR)
@@ -97,5 +96,5 @@ run_sim_iverilog: $(COMPILED)
 clean:
 	rm -rf ./build
 
-.PHONY: clean run sim wave
+.PHONY: clean run sim wave $(MEMORY_HEX) wave.vcd compile
 include ../Makefile

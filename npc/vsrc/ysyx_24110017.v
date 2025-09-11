@@ -4,7 +4,7 @@
 	`define ysyx_24110017_YOSYS_STA
 `endif
 
-`ifndef ysyx_24110017_YOSYS_STA
+`ifdef ysyx_24110017_YOSYS_STA
 `timescale 1ns/1ps
 module ysyx_24110017_testbench;
 	reg clock;
@@ -543,7 +543,11 @@ always @(posedge clk) begin
   endcase
 end
 
+`ifdef __ICARUS__
+localparam RESET_PC = 32'h80000000;
+`else
 localparam RESET_PC = 32'h30000000;
+`endif
 
 reg [31:0]pc;
 always @(posedge clk) begin
@@ -1897,6 +1901,23 @@ module ysyx_24110017_RegisterFile #(ADDR_WIDTH = 4, DATA_WIDTH = 32) (
  };
  assign r1 = raddr1[3] ? rdata1_high : rdata1_low;
  assign r2 = raddr2[3] ? rdata2_high : rdata2_low;
+
+	wire[31:0]rf0 = rf[0];
+	wire[31:0]rf1 = rf[1];
+	wire[31:0]rf2 = rf[2];
+  wire[31:0]rf3 = rf[3];
+	wire[31:0]rf4 = rf[4];
+  wire[31:0]rf5 = rf[5];
+  wire[31:0]rf6 = rf[6];
+  wire[31:0]rf7 = rf[7];
+	wire[31:0]rf8 = rf[8];
+  wire[31:0]rf9 = rf[9];
+  wire[31:0]rf10 = rf[10];
+  wire[31:0]rf11 = rf[11];
+  wire[31:0]rf12 = rf[12];
+  wire[31:0]rf13 = rf[13];
+  wire[31:0]rf14 = rf[14];
+  wire[31:0]rf15 = rf[15];
 
 /***DPI-C***/
 `ifndef ysyx_24110017_YOSYS_STA
