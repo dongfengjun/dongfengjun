@@ -569,7 +569,7 @@ always @(posedge clk) begin
 		if_axi_arvalid_o <= 1'b0;
 		if_axi_rready_o  <= 1'b0;
   end
-	else if(flush_i) begin
+	else if(flush) begin
 		if_axi_arvalid_o <= 1'b0;
 	end
 	else begin
