@@ -1,6 +1,10 @@
+//`define ysyx_24110017_YOSYS_STA
+
 `ifdef __ICARUS__
 	`define ysyx_24110017_YOSYS_STA
 `endif
+
+`ifndef ysyx_24110017_YOSYS_STA
 `timescale 1ns/1ps
 module ysyx_24110017_testbench;
 	reg clock;
@@ -62,23 +66,23 @@ module ysyx_24110017_testbench;
     .io_master_rdata   (master_rdata),
     .io_master_rresp   (2'b0),
     .io_master_rlast   (master_rlast),
-    .io_slave_awready  (/* unused */),
+    .io_slave_awready  (),
     .io_slave_awvalid  (1'h0),
     .io_slave_awid     (4'h0),
     .io_slave_awaddr   (32'h0),
     .io_slave_awlen    (8'h0),
     .io_slave_awsize   (3'h0),
     .io_slave_awburst  (2'h0),
-    .io_slave_wready   (/* unused */),
+    .io_slave_wready   (),
     .io_slave_wvalid   (1'h0),
     .io_slave_wdata    (32'h0),
     .io_slave_wstrb    (4'h0),
     .io_slave_wlast    (1'h0),
     .io_slave_bready   (1'h0),
-    .io_slave_bvalid   (/* unused */),
-    .io_slave_bid      (/* unused */),
-    .io_slave_bresp    (/* unused */),
-    .io_slave_arready  (/* unused */),
+    .io_slave_bvalid   (),
+    .io_slave_bid      (),
+    .io_slave_bresp    (),
+    .io_slave_arready  (),
     .io_slave_arvalid  (1'h0),
     .io_slave_arid     (4'h0),
     .io_slave_araddr   (32'h0),
@@ -86,11 +90,11 @@ module ysyx_24110017_testbench;
     .io_slave_arsize   (3'h0),
     .io_slave_arburst  (2'h0),
     .io_slave_rready   (1'h0),
-    .io_slave_rvalid   (/* unused */),
-    .io_slave_rid      (/* unused */),
-    .io_slave_rdata    (/* unused */),
-    .io_slave_rresp    (/* unused */),
-    .io_slave_rlast    (/* unused */)
+    .io_slave_rvalid   (),
+    .io_slave_rid      (),
+    .io_slave_rdata    (),
+    .io_slave_rresp    (),
+    .io_slave_rlast    ()
   );
 
 	ysyx_24110017_memory #(32,32,10000) iverilog_memory (
@@ -186,6 +190,7 @@ module ysyx_24110017_memory #(ADDR_WIDTH = 32, DATA_WIDTH = 32, MEM_SIZE = 16) (
 	assign rdata = {memory[raddr+3],memory[raddr+2],memory[raddr+1],memory[raddr]};
 
 endmodule
+`endif
 
 module ysyx_24110017(
 	input	 wire clock,
