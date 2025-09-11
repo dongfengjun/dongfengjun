@@ -92,7 +92,7 @@ compile: $(VSRC) | $(BUILD_DIR)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $(COMPILED) $(VSRC)
 
 run_sim_iverilog: $(COMPILED)
-	$(VVP) $(COMPILED) && mv wave_iverilog.vcd $(BUILD)
+	$(VVP) $(COMPILED)
 
 clean:
 	rm -rf ./build

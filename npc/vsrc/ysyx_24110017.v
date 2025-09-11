@@ -1,4 +1,4 @@
-//`define ysyx_24110017_YOSYS_STA
+`define ysyx_24110017_YOSYS_STA
 `timescale 1ns/1ps
 module ysyx_24110017_testbench;
 	reg clock;
@@ -108,7 +108,7 @@ module ysyx_24110017_testbench;
 		clock = 0;
 		reset = 0;
 
-		$dumpfile("wave_iverilog.vcd");
+		$dumpfile("build/wave.vcd");
 		$dumpvars(0,ysyx_24110017_testbench);
 
 		#15 reset = 1;
@@ -162,7 +162,7 @@ module ysyx_24110017_memory #(ADDR_WIDTH = 32, DATA_WIDTH = 32, MEM_SIZE = 16) (
 	reg [7:0] memory [0:MEM_SIZE-1];
 	
 	initial begin
-		$readmemh("./build1/memory_iverilog.hex",memory);
+		$readmemh("./build/memory_iverilog.hex",memory);
 	end
 
 	always @(posedge clock) begin
@@ -940,47 +940,52 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 
 	assign m_axi_arready = !state;
 	always @(posedge clk) begin
-		case(state)
-			IDLE: begin
-				s_axi_araddr  <= m_axi_araddr;
-				if(m_axi_arvalid && m_axi_arready) begin
-					if(hit == 0 || unvalid) begin
-						s_axi_arvalid <= 1'b1;
-						if(m_axi_araddr - 32'ha0000000 < 32'h20000000) begin
-							s_axi_arlen <= CACHE_WIDTH - {6'b0,offset} - 1;
+		if(rst) begin
+			s_axi_arvalid <= 1'b0;
+		end
+		else begin
+			case(state)
+				IDLE: begin
+					s_axi_araddr  <= m_axi_araddr;
+					if(m_axi_arvalid && m_axi_arready) begin
+						if(hit == 0 || unvalid) begin
+							s_axi_arvalid <= 1'b1;
+							if(m_axi_araddr - 32'ha0000000 < 32'h20000000) begin
+								s_axi_arlen <= CACHE_WIDTH - {6'b0,offset} - 1;
+							end
+							else begin
+								s_axi_arlen <= 8'h0;
+							end
+							burst_counter <= offset;
 						end
-						else begin
-							s_axi_arlen <= 8'h0;
-						end
-						burst_counter <= offset;
 					end
 				end
-			end
-			TRANS: begin
-				if(s_axi_arvalid && s_axi_arready) begin
-					integer a;
-          integer b;
-					for (b = 0; b < CACHE_WIDTH; b = b + 1) begin : fifo
-						cache_reg[b][index * CACHE_WAY] <= 0;
-						for (a = 1; a < CACHE_WAY; a = a + 1) begin
-              cache_reg[b][index * CACHE_WAY + a] <= cache_reg[b][index * CACHE_WAY + a - 1];
-            end
-          end
-					s_axi_arvalid <= 1'b0;
-					s_axi_rready  <= 1'b1;
+				TRANS: begin
+					if(s_axi_arvalid && s_axi_arready) begin
+						integer a;
+						integer b;
+						for (b = 0; b < CACHE_WIDTH; b = b + 1) begin : fifo
+							cache_reg[b][index * CACHE_WAY] <= 0;
+							for (a = 1; a < CACHE_WAY; a = a + 1) begin
+								cache_reg[b][index * CACHE_WAY + a] <= cache_reg[b][index * CACHE_WAY + a - 1];
+							end
+						end
+						s_axi_arvalid <= 1'b0;
+						s_axi_rready  <= 1'b1;
+					end
+					if(s_axi_rready && s_axi_rvalid) begin
+						cache_reg[burst_counter][index * CACHE_WAY] <= s_axi_rdata;
+						burst_counter <= burst_counter + 1;
+					end
+					if(s_axi_rlast) begin
+						s_axi_arvalid <= 1'b0;
+						s_axi_rready  <= 1'b0;
+						s_axi_arlen   <= 8'b0;
+						burst_counter <= 2'b0;
+					end
 				end
-				if(s_axi_rready && s_axi_rvalid) begin
-					cache_reg[burst_counter][index * CACHE_WAY] <= s_axi_rdata;
-					burst_counter <= burst_counter + 1;
-				end
-				if(s_axi_rlast) begin
-					s_axi_arvalid <= 1'b0;
-					s_axi_rready  <= 1'b0;
-					s_axi_arlen   <= 8'b0;
-					burst_counter <= 2'b0;
-				end
-			end
-		endcase
+			endcase
+		end
 	end
 
 /***DPIC-AMAT***/
