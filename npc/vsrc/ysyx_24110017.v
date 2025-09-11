@@ -97,7 +97,7 @@ module ysyx_24110017_testbench;
     .io_slave_rlast    ()
   );
 
-	ysyx_24110017_memory #(32,32,10000) iverilog_memory (
+	ysyx_24110017_memory #(32,32,1000000) iverilog_memory (
 		.clock(clock),
 		.reset(reset),
 		.wen(wen),
@@ -119,7 +119,7 @@ module ysyx_24110017_testbench;
 
 		#15 reset = 1;
 		#50 reset = 0;
-		#10000 $finish;
+		#100000000 $finish;
 	end
 
 	always @(posedge clock) begin
@@ -166,7 +166,7 @@ module ysyx_24110017_memory #(ADDR_WIDTH = 32, DATA_WIDTH = 32, MEM_SIZE = 16) (
 );
 	
 	reg [7:0] memory [0:MEM_SIZE-1];
-	
+
 	initial begin
 		$readmemh("./build/memory_iverilog.hex",memory);
 	end
@@ -417,12 +417,26 @@ ysyx_24110017_CLINT CLINT(clock,reset,
 		c_axi_rready,c_axi_rvalid,c_axi_rid,c_axi_rdata,c_axi_rresp,c_axi_rlast
 );
 
-ysyx_24110017_RegisterFile #(4,32) RFU (clock,xrd_ex,rd_ex,gpr_wen_ex,rs1,r1,rs2,r2);
+ysyx_24110017_RegisterFile #(4,32) RFU (clock,xrd_ex,rd_ex,gpr_wen_ex,rs1,r1,rs2,r2
+`ifdef __ICARUS__
+,a0
+`endif
+);
 ysyx_24110017_Reg #(32, 32'b0)    mepc_reg    (clock,reset,xrd_ex,mepc   ,csrs_wen_ex[0]);
 ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,xrd_ex,mstatus,csrs_wen_ex[1]);
 ysyx_24110017_Reg #(32, 32'b0)    mcause_reg  (clock,reset,xrd_ex,mcause ,csrs_wen_ex[2]);
 ysyx_24110017_Reg #(32, 32'b0)    mtvec_reg   (clock,reset,xrd_ex,mtvec  ,csrs_wen_ex[3]);
 
+`ifdef __ICARUS__
+wire [31:0]a0;
+always@(*) begin
+		if(inst_if == 32'b00000000000100000000000001110011) begin
+			if(a0 == 0) $write("%sHIT GOOD TRAP at pc = 0x%h%s\n","\033[1;32m",pc_if,"\033[0m");
+			else $write("%sHIT BAD TRAP at pc = 0x%h%s\n","\033[1;31m",pc_if,"\033[0m");
+			$finish;
+		end
+	end
+`endif
 `ifndef ysyx_24110017_YOSYS_STA
 /***DIFFTEST***/
 reg difftest_delay;
@@ -1853,6 +1867,9 @@ module ysyx_24110017_RegisterFile #(ADDR_WIDTH = 4, DATA_WIDTH = 32) (
 	output [DATA_WIDTH-1:0]r1,
 	input [ADDR_WIDTH-1:0]raddr2,
 	output [DATA_WIDTH-1:0]r2
+`ifdef __ICARUS__
+	,output wire [31:0]a0
+`endif
 );
 	reg [DATA_WIDTH-1:0] rf [2**ADDR_WIDTH-1:0];
 
@@ -1919,6 +1936,9 @@ module ysyx_24110017_RegisterFile #(ADDR_WIDTH = 4, DATA_WIDTH = 32) (
   wire[31:0]rf14 = rf[14];
   wire[31:0]rf15 = rf[15];
 
+`ifdef __ICARUS__
+	assign a0 = rf[10];
+`endif
 /***DPI-C***/
 `ifndef ysyx_24110017_YOSYS_STA
 export "DPI-C" function gpr_reg_grab;

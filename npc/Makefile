@@ -76,8 +76,7 @@ VSRC = ./vsrc/ysyx_24110017.v
 COMPILED = $(BUILD)/ysyx_24110017_iverilog.vpp
 MEMORY_HEX = $(BUILD)/memory_iverilog.hex
 
-IIMG ?= /home/xi/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
-VMA_ADJUST ?= -0x80000000
+VMA_ADJUST ?= 0x0
 
 $(BUILD):
 	mkdir $(BUILD)
@@ -85,7 +84,7 @@ $(BUILD):
 sim-iverilog: $(MEMORY_HEX) compile run_sim_iverilog
 
 $(MEMORY_HEX): $(IIMG) | $(BUILD)
-	$(OBJCOPY) -O verilog --adjust-vma=$(VMA_ADJUST) $(IIMG) $(MEMORY_HEX)
+	$(OBJCOPY) -I binary -O verilog --adjust-vma=$(VMA_ADJUST) $(IMG) $(MEMORY_HEX)
 
 compile: $(VSRC) | $(BUILD_DIR)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $(COMPILED) $(VSRC)
