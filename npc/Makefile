@@ -63,6 +63,36 @@ wave:
 
 perf:
 	make -C ../am-kernels/benchmarks/microbench ARCH=riscv32e-ysyxsoc mainargs=test run
+	
+IVERILOG = iverilog
+VVP = vvp
+GTKWAVE = gtkwave
+OBJCOPY = objcopy
+
+IVERILOG_FLAGS = -g2012 -Wall
+
+VSRC = ./vsrc/ysyx_24110017.v
+
+COMPILED = $(BUILD)/ysyx_24110017_iverilog.vpp
+WAVE_FILE = $(BUILD)/wave_iverilog.vcd
+MEMORY_HEX = $(BUILD)/memory_iverilog.hex
+
+IIMG ?= /home/xi/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
+VMA_ADJUST ?= -0x80000000
+
+$(BUILD):
+	mkdir $(BUILD)
+
+sim-iverilog: $(MEMORY_HEX) compile run_sim_iverilog
+
+$(MEMORY_HEX): $(IMG) | $(BUILD_DIR)
+	$(OBJCOPY) -O verilog --adjust-vma=$(VMA_ADJUST) $(IIMG) $(MEMORY_HEX)
+
+compile: $(VSRC) | $(BUILD_DIR)
+	$(IVERILOG) $(IVERILOG_FLAGS) -o $(COMPILED) $(VSRC)
+
+run_sim_iverilog: $(COMPILED)
+	$(VVP) $(COMPILED) && mv wave_iverilog.vcd $(BUILD)
 
 clean:
 	rm -rf ./build
