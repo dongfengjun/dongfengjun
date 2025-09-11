@@ -566,8 +566,8 @@ assign if_axi_araddr_o  = pc;
 
 always @(posedge clk) begin
   if(rst || flush) begin
-		if_axi_arvalid_o <= 1'b1;
-		if_axi_rready_o  <= 1'b1;
+		if_axi_arvalid_o <= 1'b0;
+		if_axi_rready_o  <= 1'b0;
   end 
 	else begin
     case (state)
