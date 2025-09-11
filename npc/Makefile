@@ -74,7 +74,7 @@ IVERILOG_FLAGS = -g2012 -Wall
 VSRC = ./vsrc/ysyx_24110017.v
 
 COMPILED = $(BUILD)/ysyx_24110017_iverilog.vpp
-WAVE_FILE = $(BUILD)/wave_iverilog.vcd
+WAVE_FILE = $(BUILD)/wave.vcd
 MEMORY_HEX = $(BUILD)/memory_iverilog.hex
 
 IIMG ?= /home/xi/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
