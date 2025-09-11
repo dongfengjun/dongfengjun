@@ -565,10 +565,13 @@ assign if_axi_arburst_o = 2'b0;
 assign if_axi_araddr_o  = pc;
 
 always @(posedge clk) begin
-  if(rst || flush) begin
+  if(rst) begin
 		if_axi_arvalid_o <= 1'b0;
 		if_axi_rready_o  <= 1'b0;
-  end 
+  end
+	else if(flush_i) begin
+		if_axi_arvalid_o <= 1'b0;
+	end
 	else begin
     case (state)
       IDLE: begin
