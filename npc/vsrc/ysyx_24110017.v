@@ -1,4 +1,6 @@
-`define ysyx_24110017_YOSYS_STA
+`ifdef __ICARUS__
+	`define ysyx_24110017_YOSYS_STA
+`endif
 `timescale 1ns/1ps
 module ysyx_24110017_testbench;
 	reg clock;
