@@ -571,6 +571,7 @@ always @(posedge clk) begin
   end
 	else if(flush) begin
 		if_axi_arvalid_o <= 1'b0;
+		if_axi_rready_o <= 1'b1;
 	end
 	else begin
     case (state)
