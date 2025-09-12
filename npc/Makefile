@@ -2,12 +2,27 @@ BUILD = ./build
 OBJ_DIR = $(BUILD)/obj_dir
 TOP = ysyxSoCFull
 VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
-VSRCS += $(shell find ./vsrc -name "*.v")
+VSRCS += ./vsrc/ysyx_24110017.v
 VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
 CSRCS += $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 INC_COM_PATH = ./csrc/include
 INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
 INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
+
+#verilator
+VERILATOR = verilator
+VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build
+VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH) -I$(INC_COM_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
+VERILATOR_FLAGS += -CFLAGS $(CXXFLAGS)
+VERILATOR_FLAGS += -CFLAGS -g
+VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
+VERILATOR_FLAGS += -LDFLAGS -lreadline
+VERILATOR_FLAGS += --top-module $(TOP)
+VERILATOR_FLAGS += --timescale "1ns/1ns" --no-timing
+VERILATOR_FLAGS += --autoflush
+#静态检查
+#VERILATOR_FLAGS += --lint-only -Wall
+#VERILATOR_FLAGS += -Wno-DECLFILENAME
 
 #nvboard
 NXDC_FILES = ./constr/top.nxdc
@@ -18,27 +33,33 @@ $(SRC_AUTO_BIND): $(NXDC_FILES)
 CSRCS += $(SRC_AUTO_BIND)
 include $(NVBOARD_HOME)/scripts/nvboard.mk
 
+#gtkwave
+GTKWAVE = gtkwave
+
+#iverilog
+IVERILOG = iverilog
+VVP = vvp
+OBJCOPY = objcopy
+IVERILOG_FLAGS = -g2012 -Wall
+IVSRC = ./vsrc/ysyx_24110017_itestbench.v
+IVSRC += ./vsrc/ysyx_24110017.v
+NETLIST_VSRC = ./ysyx_24110017_testbench.v
+NETLIST ?= ./ysyx_24110017.netlist.syn.v
+NETLIST_VSRC += $(NETLIST)
+CELLS ?= cells.v
+NETLIST_VSRC += $(CELLS)
+COMPILED = $(BUILD)/ysyx_24110017_iverilog.vpp
+MEMORY_HEX = $(BUILD)/memory_iverilog.hex
+VMA_ADJUST ?= 0x0
+#LLVM
 LDFLAGS += $(shell llvm-config --ldflags) -fPIE
-LIBS += $(shell llvm-config --libs)
 LDFLAGS += -fsanitize=address#ASan
+LIBS += $(shell llvm-config --libs)
 LDLIBS := -lasan $(LDLIBS)
 
-VERILATOR = verilator
-VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build
-VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH)	-I$(INC_COM_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
-VERILATOR_FLAGS += -CFLAGS $(CXXFLAGS)
-VERILATOR_FLAGS += -CFLAGS -g
-VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
-VERILATOR_FLAGS += -LDFLAGS -lreadline
-VERILATOR_FLAGS += --top-module $(TOP)
-VERILATOR_FLAGS += --timescale "1ns/1ns" --no-timing
-VERILATOR_FLAGS += --autoflush
-#VERILATOR_FLAGS += --lint-only -Wall
-#VERILATOR_FLAGS += -Wno-DECLFILENAME
-
+#传入参数
 LOG ?= $(BUILD)/npc-log.txt
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
-#IMG ?= ./../char-test/char-test.bin
 ELF ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
 REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
 ARGS += --log=$(LOG)
@@ -47,53 +68,28 @@ ARGS += --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
 ARGS += -b
 
-run: sim
-	$(OBJ_DIR)/VysyxSoCFull $(ARGS)
+$(BUILD):
+	mkdir -p $(BUILD)
 
-sim: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
+run: compile
+	$(OBJ_DIR)/$(TOP) $(ARGS)
+
+compile: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE) | $(BUILD)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
-	@rm -rf ./build/obj_dir
-	mkdir -p build
-	@$(VERILATOR)  $(VERILATOR_FLAGS) --Mdir ./obj_dir --exe $^
-	mv obj_dir $(BUILD)
-
-wave:
-	gtkwave $(BUILD)/wave.vcd
+	@$(VERILATOR)  $(VERILATOR_FLAGS) --Mdir $(OBJ_DIR) --exe $^
 
 perf:
 	make -C ../am-kernels/benchmarks/microbench ARCH=riscv32e-ysyxsoc mainargs=test run
 	
-IVERILOG = iverilog
-VVP = vvp
-GTKWAVE = gtkwave
-OBJCOPY = objcopy
+sim-iverilog: $(MEMORY_HEX) icompile run_sim_iverilog
 
-IVERILOG_FLAGS = -g2012 -Wall
-
-VSRC = ./vsrc/ysyx_24110017_itestbench.v
-VSRC += ./vsrc/ysyx_24110017.v
-NETLIST_VSRC = ./ysyx_24110017_testbench.v
-NETLIST ?= ./ysyx_24110017.netlist.syn.v
-NETLIST_VSRC += $(NETLIST)
-CELLS ?= cells
-NETLIST_VSRC += $(CELLS)
-
-COMPILED = $(BUILD)/ysyx_24110017_iverilog.vpp
-MEMORY_HEX = $(BUILD)/memory_iverilog.hex
-
-VMA_ADJUST ?= 0x0
-
-$(BUILD):
-	mkdir $(BUILD)
-
-sim-iverilog: $(MEMORY_HEX) compile run_sim_iverilog
 sim-iverilog-netlist: $(MEMORY_HEX) compile-netlist run_sim_iverilog
 
-$(MEMORY_HEX): $(IIMG) | $(BUILD)
+$(MEMORY_HEX): $(IMG) | $(BUILD)
 	$(OBJCOPY) -I binary -O verilog --adjust-vma=$(VMA_ADJUST) $(IMG) $(MEMORY_HEX)
 
-compile: $(VSRC) | $(BUILD)
+icompile: $(VSRC) | $(BUILD)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $(COMPILED) $(VSRC)
 
 compile-netlist: $(NETLIST_VSRC) | $(BUILD)
@@ -102,8 +98,12 @@ compile-netlist: $(NETLIST_VSRC) | $(BUILD)
 run_sim_iverilog: $(COMPILED)
 	$(VVP) $(COMPILED)
 
-clean:
-	rm -rf ./build
+wave:
+	$(GTKWAVE) $(BUILD)/wave.vcd
 
-.PHONY: clean run sim wave $(MEMORY_HEX) wave.vcd compile
+clean:
+	rm -rf $(BUILD)
+
+.PHONY: clean run wave $(MEMORY_HEX) wave.vcd compile icompile compile-netlist run_sim_iverilog sim-iverilog sim-iverilog-netlist
+
 include ../Makefile
