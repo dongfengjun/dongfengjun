@@ -71,7 +71,7 @@ ARGS += --diff=$(REF_SO)
 ARGS += -b
 
 run: $(BUILD_DIR) compile
-	$(BUILD_DIR)/$(TOP) $(ARGS)
+	$(BUILD_DIR)/V$(TOP) $(ARGS)
 
 compile: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
