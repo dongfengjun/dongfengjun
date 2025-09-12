@@ -71,10 +71,10 @@ ARGS += -b
 $(BUILD):
 	mkdir $(BUILD)
 
-run: compile
+run: $(BUILD) compile
 	$(OBJ_DIR)/$(TOP) $(ARGS)
 
-compile: $(BUILD) $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
+compile: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
 	@$(VERILATOR)  $(VERILATOR_FLAGS) --Mdir $(OBJ_DIR) --exe $^
