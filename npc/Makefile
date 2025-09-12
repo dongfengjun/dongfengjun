@@ -28,7 +28,7 @@ VERILATOR_FLAGS += --autoflush
 NXDC_FILES = ./constr/top.nxdc
 INC_NVBOARD_PATH = ./../nvboard/usr/include
 SRC_AUTO_BIND = $(BUILD_DIR)/auto_bind.cpp
-$(SRC_AUTO_BIND): $(NXDC_FILES) | $(BUILD)
+$(SRC_AUTO_BIND): $(NXDC_FILES) | $(BUILD_DIR)
 	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
 CSRCS += $(SRC_AUTO_BIND)
 include $(NVBOARD_HOME)/scripts/nvboard.mk
@@ -68,13 +68,13 @@ ARGS += --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
 ARGS += -b
 
-$(BUILD):
+$(BUILD_DIR):
 	mkdir $(BUILD_DIR)
 
-run: compile
+run: $(BUILD_DIR) compile
 	$(OBJ_DIR)/$(TOP) $(ARGS)
 
-compile: $(BUILD_DIR) $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
+compile: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
 	@$(VERILATOR)  $(VERILATOR_FLAGS) --Mdir $(OBJ_DIR) --exe $^
