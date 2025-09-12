@@ -24,6 +24,9 @@ VERILATOR_FLAGS += --autoflush
 #VERILATOR_FLAGS += --lint-only -Wall
 #VERILATOR_FLAGS += -Wno-DECLFILENAME
 
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
 #nvboard
 NXDC_FILES = ./constr/top.nxdc
 INC_NVBOARD_PATH = ./../nvboard/usr/include
@@ -67,9 +70,6 @@ ARGS += --img=$(IMG)
 ARGS += --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
 ARGS += -b
-
-$(BUILD_DIR):
-	mkdir $(BUILD_DIR)
 
 run: $(BUILD_DIR) compile
 	$(OBJ_DIR)/$(TOP) $(ARGS)
