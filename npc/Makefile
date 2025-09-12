@@ -28,7 +28,7 @@ VERILATOR_FLAGS += --autoflush
 NXDC_FILES = ./constr/top.nxdc
 INC_NVBOARD_PATH = ./../nvboard/usr/include
 SRC_AUTO_BIND = $(BUILD)/auto_bind.cpp
-$(SRC_AUTO_BIND): $(NXDC_FILES)
+$(SRC_AUTO_BIND): $(NXDC_FILES) | $(BUILD)
 	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
 CSRCS += $(SRC_AUTO_BIND)
 include $(NVBOARD_HOME)/scripts/nvboard.mk
@@ -71,7 +71,7 @@ ARGS += -b
 $(BUILD):
 	mkdir $(BUILD)
 
-run: $(BUILD) compile
+run: compile
 	$(OBJ_DIR)/$(TOP) $(ARGS)
 
 compile: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
