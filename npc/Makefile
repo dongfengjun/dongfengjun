@@ -89,7 +89,7 @@ $(MEMORY_HEX): $(IMG) | $(BUILD_DIR)
 	$(OBJCOPY) -I binary -O verilog --adjust-vma=$(VMA_ADJUST) $(IMG) $(MEMORY_HEX)
 
 icompile: $(VSRC) | $(BUILD_DIR)
-	$(IVERILOG) $(IVERILOG_FLAGS) -o $(COMPILED) $(VSRC)
+	$(IVERILOG) $(IVERILOG_FLAGS) -o $(COMPILED) $(IVSRC)
 
 compile-netlist: $(NETLIST_VSRC) | $(BUILD_DIR)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $(COMPILED) $(NETLIST_VSRC)
