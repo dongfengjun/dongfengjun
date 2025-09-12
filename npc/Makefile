@@ -71,7 +71,13 @@ OBJCOPY = objcopy
 
 IVERILOG_FLAGS = -g2012 -Wall
 
-VSRC = ./vsrc/ysyx_24110017.v
+VSRC = ./vsrc/ysyx_24110017_itestbench.v
+VSRC += ./vsrc/ysyx_24110017.v
+NETLIST_VSRC = ./ysyx_24110017_testbench.v
+NETLIST ?= ./ysyx_24110017.netlist.syn.v
+NETLIST_VSRC += $(NETLIST)
+CELLS ?= cells
+NETLIST_VSRC += $(CELLS)
 
 COMPILED = $(BUILD)/ysyx_24110017_iverilog.vpp
 MEMORY_HEX = $(BUILD)/memory_iverilog.hex
@@ -82,12 +88,16 @@ $(BUILD):
 	mkdir $(BUILD)
 
 sim-iverilog: $(MEMORY_HEX) compile run_sim_iverilog
+sim-iverilog-netlist: $(MEMORY_HEX) compile-netlist run_sim_iverilog
 
 $(MEMORY_HEX): $(IIMG) | $(BUILD)
 	$(OBJCOPY) -I binary -O verilog --adjust-vma=$(VMA_ADJUST) $(IMG) $(MEMORY_HEX)
 
-compile: $(VSRC) | $(BUILD_DIR)
+compile: $(VSRC) | $(BUILD)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $(COMPILED) $(VSRC)
+
+compile-netlist: $(NETLIST_VSRC) | $(BUILD)
+	$(IVERILOG) $(IVERILOG_FLAGS) -o $(COMPILED) $(NETLIST_VSRC)
 
 run_sim_iverilog: $(COMPILED)
 	$(VVP) $(COMPILED)
