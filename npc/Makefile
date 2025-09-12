@@ -1,31 +1,17 @@
-BUILD = ./build
-OBJ_DIR = $(BUILD)/obj_dir
+BUILD_DIR = ./build
 TOP = ysyxSoCFull
 VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
-VSRCS += $(shell find ./vsrc -name "*.v")
+VSRCS += ./vsrc/ysyx_24110017.v
 VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
 CSRCS += $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 INC_COM_PATH = ./csrc/include
 INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
 INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
 
-#nvboard
-NXDC_FILES = ./constr/top.nxdc
-INC_NVBOARD_PATH = ./../nvboard/usr/include
-SRC_AUTO_BIND = $(BUILD)/auto_bind.cpp
-$(SRC_AUTO_BIND): $(NXDC_FILES)
-	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
-CSRCS += $(SRC_AUTO_BIND)
-include $(NVBOARD_HOME)/scripts/nvboard.mk
-
-LDFLAGS += $(shell llvm-config --ldflags) -fPIE
-LIBS += $(shell llvm-config --libs)
-LDFLAGS += -fsanitize=address#ASan
-LDLIBS := -lasan $(LDLIBS)
-
+#verilator
 VERILATOR = verilator
 VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build
-VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH)	-I$(INC_COM_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
+VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH) -I$(INC_COM_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
 VERILATOR_FLAGS += -CFLAGS $(CXXFLAGS)
 VERILATOR_FLAGS += -CFLAGS -g
 VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS) $(LIBS)"
@@ -33,10 +19,49 @@ VERILATOR_FLAGS += -LDFLAGS -lreadline
 VERILATOR_FLAGS += --top-module $(TOP)
 VERILATOR_FLAGS += --timescale "1ns/1ns" --no-timing
 VERILATOR_FLAGS += --autoflush
+#静态检查
+#VERILATOR_FLAGS += --lint-only -Wall
+#VERILATOR_FLAGS += -Wno-DECLFILENAME
 
-LOG ?= $(BUILD)/npc-log.txt
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+#nvboard
+NXDC_FILES = ./constr/top.nxdc
+INC_NVBOARD_PATH = ./../nvboard/usr/include
+SRC_AUTO_BIND = $(BUILD_DIR)/auto_bind.cpp
+$(SRC_AUTO_BIND): $(NXDC_FILES) | $(BUILD_DIR)
+	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
+CSRCS += $(SRC_AUTO_BIND)
+include $(NVBOARD_HOME)/scripts/nvboard.mk
+
+#gtkwave
+GTKWAVE = gtkwave
+
+#iverilog
+IVERILOG = iverilog
+VVP = vvp
+OBJCOPY = objcopy
+IVERILOG_FLAGS = -g2012 -Wall
+IVSRC = ./vsrc/ysyx_24110017_itestbench.v
+IVSRC += ./vsrc/ysyx_24110017.v
+NETLIST_VSRC = ./ysyx_24110017_testbench.v
+NETLIST ?= ./ysyx_24110017.netlist.syn.v
+NETLIST_VSRC += $(NETLIST)
+CELLS ?= cells.v
+NETLIST_VSRC += $(CELLS)
+COMPILED = $(BUILD_DIR)/ysyx_24110017_iverilog.vpp
+MEMORY_HEX = $(BUILD_DIR)/memory_iverilog.hex
+VMA_ADJUST ?= 0x0
+#LLVM
+LDFLAGS += $(shell llvm-config --ldflags) -fPIE
+LDFLAGS += -fsanitize=address#ASan
+LIBS += $(shell llvm-config --libs)
+LDLIBS := -lasan $(LDLIBS)
+
+#传入参数
+LOG ?= $(BUILD_DIR)/npc-log.txt
 IMG ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
-#IMG ?= ./../char-test/char-test.bin
 ELF ?= ../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
 REF_SO ?= ../nemu/build/riscv32-nemu-interpreter-so
 ARGS += --log=$(LOG)
@@ -45,25 +70,39 @@ ARGS += --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
 ARGS += -b
 
-run: sim
-	$(OBJ_DIR)/VysyxSoCFull $(ARGS)
+run: $(BUILD_DIR) compile
+	$(BUILD_DIR)/V$(TOP) $(ARGS)
 
-sim: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
+compile: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
-	@rm -rf ./build/obj_dir
-	mkdir -p build
-	@$(VERILATOR)  $(VERILATOR_FLAGS) --Mdir ./obj_dir --exe $^
-	mv obj_dir $(BUILD)
-
-wave:
-	gtkwave $(BUILD)/wave.vcd
+	@$(VERILATOR)  $(VERILATOR_FLAGS) --Mdir $(BUILD_DIR) --exe $^
 
 perf:
 	make -C ../am-kernels/benchmarks/microbench ARCH=riscv32e-ysyxsoc mainargs=test run
+	
+sim-iverilog: $(MEMORY_HEX) icompile run_sim_iverilog
+
+sim-iverilog-netlist: $(MEMORY_HEX) compile-netlist run_sim_iverilog
+
+$(MEMORY_HEX): $(IMG) | $(BUILD_DIR)
+	$(OBJCOPY) -I binary -O verilog --adjust-vma=$(VMA_ADJUST) $(IMG) $(MEMORY_HEX)
+
+icompile: $(VSRC) | $(BUILD_DIR)
+	$(IVERILOG) $(IVERILOG_FLAGS) -o $(COMPILED) $(IVSRC)
+
+compile-netlist: $(NETLIST_VSRC) | $(BUILD_DIR)
+	$(IVERILOG) $(IVERILOG_FLAGS) -o $(COMPILED) $(NETLIST_VSRC)
+
+run_sim_iverilog: $(COMPILED)
+	$(VVP) $(COMPILED)
+
+wave:
+	$(GTKWAVE) $(BUILD_DIR)/wave.vcd
 
 clean:
-	rm -rf ./build
+	rm -rf $(BUILD_DIR)
 
-.PHONY: clean run sim wave
+.PHONY: clean run wave $(MEMORY_HEX) wave.vcd compile icompile compile-netlist run_sim_iverilog sim-iverilog sim-iverilog-netlist
+
 include ../Makefile
