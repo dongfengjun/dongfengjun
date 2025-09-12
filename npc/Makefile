@@ -1,5 +1,4 @@
 BUILD_DIR = ./build
-OBJ_DIR = $(BUILD_DIR)/obj_dir
 TOP = ysyxSoCFull
 VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
 VSRCS += ./vsrc/ysyx_24110017.v
@@ -72,7 +71,7 @@ ARGS += --diff=$(REF_SO)
 ARGS += -b
 
 run: $(BUILD_DIR) compile
-	$(OBJ_DIR)/$(TOP) $(ARGS)
+	$(BUILD_DIR)/$(TOP) $(ARGS)
 
 compile: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
