@@ -77,7 +77,7 @@ run: $(BUILD_DIR) compile
 compile: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
-	@$(VERILATOR)  $(VERILATOR_FLAGS) --Mdir $(OBJ_DIR) --exe $^
+	@$(VERILATOR)  $(VERILATOR_FLAGS) --Mdir $(BUILD_DIR) --exe $^
 
 perf:
 	make -C ../am-kernels/benchmarks/microbench ARCH=riscv32e-ysyxsoc mainargs=test run
