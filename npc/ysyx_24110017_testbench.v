@@ -94,7 +94,7 @@ module ysyx_24110017_testbench;
     .io_slave_rlast    ()
   );
 
-	ysyx_24110017_memory #(32,32,32'h1000000) iverilog_memory (
+	ysyx_24110017_memory #(32,32,32'h8000000) iverilog_memory (
 		.clock(clock),
 		.reset(reset),
 		.wen(wen),
@@ -123,7 +123,7 @@ module ysyx_24110017_testbench;
 
 		#15 reset = 1;
 		#50 reset = 0;
-		#100000000 $finish; //RTT need
+		#50000000 $finish; //RTT need
 	end
 
 	reg [31:0]pc_delay1;
