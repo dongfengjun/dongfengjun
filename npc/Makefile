@@ -1,3 +1,4 @@
+export ASAN_OPTIONS=detect_leaks=0
 BUILD_DIR = ./build
 TOP = ysyxSoCFull
 VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
@@ -71,7 +72,7 @@ ARGS += --diff=$(REF_SO)
 ARGS += -b
 
 run: $(BUILD_DIR) compile
-	ASAN_OPTIONS=detect_leaks=0 ASAN_OPTIONS=new_delete_type_mismatch=0 $(BUILD_DIR)/V$(TOP) $(ARGS)
+	ASAN_OPTIONS=new_delete_type_mismatch=0 $(BUILD_DIR)/V$(TOP) $(ARGS)
 
 compile: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
