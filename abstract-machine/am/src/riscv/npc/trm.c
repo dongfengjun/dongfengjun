@@ -10,10 +10,7 @@ extern char _pmem_start;
 #define PMEM_END  ((uintptr_t)&_pmem_start + PMEM_SIZE)
 
 Area heap = RANGE(&_heap_start, PMEM_END);
-#ifndef MAINARGS
-#define MAINARGS ""
-#endif
-static const char mainargs[] = MAINARGS;
+static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
 
 void putch(char ch) {
 	outb(0xa00003F8, ch);

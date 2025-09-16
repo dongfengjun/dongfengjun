@@ -17,15 +17,22 @@ module ysyx_24110017_testbench;
 	wire master_arvalid;
 	wire [31:0]master_araddr;
 	wire master_rready;
-	wire [31:0]master_rdata = rdata;
-	wire wen = master_wvalid && master_wready;
+	wire [31:0]master_rdata = (master_araddr >= 32'h80000000 && master_araddr < 32'h81000000) ? rdata : (master_araddr >= 32'h81000000 && master_araddr < 32'h82000000) ? rdata1 : (master_araddr >= 32'h82000000 && master_araddr < 32'h83000000) ? rdata2 : (master_araddr >= 32'h83000000 && master_araddr < 32'h84000000) ? rdata3 : (master_araddr >= 32'h84000000 && master_araddr < 32'h85000000) ? rdata4 : (master_araddr >= 32'h85000000 && master_araddr < 32'h86000000) ? rdata5 : (master_araddr >= 32'h86000000 && master_araddr < 32'h87000000) ? rdata6 : (master_araddr >= 32'h87000000 && master_araddr < 32'h88000000) ? rdata7 : 32'h0;
+	wire wen  = master_wvalid && master_wready && (master_awaddr >= 32'h80000000 && master_awaddr < 32'h81000000);
+	wire wen1 = master_wvalid && master_wready && (master_awaddr >= 32'h81000000 && master_awaddr < 32'h82000000);
+	wire wen2 = master_wvalid && master_wready && (master_awaddr >= 32'h82000000 && master_awaddr < 32'h83000000);
+	wire wen3 = master_wvalid && master_wready && (master_awaddr >= 32'h83000000 && master_awaddr < 32'h84000000);
+	wire wen4 = master_wvalid && master_wready && (master_awaddr >= 32'h84000000 && master_awaddr < 32'h85000000);
+	wire wen5 = master_wvalid && master_wready && (master_awaddr >= 32'h85000000 && master_awaddr < 32'h86000000);
+	wire wen6 = master_wvalid && master_wready && (master_awaddr >= 32'h86000000 && master_awaddr < 32'h87000000);
+	wire wen7 = master_wvalid && master_wready && (master_awaddr >= 32'h87000000 && master_awaddr < 32'h88000000);
   wire [31:0]waddr_offset = master_awaddr[31:0] - 32'h80000000;
 	wire [31:0]waddr = {waddr_offset[31:2],2'b0};
   wire [ 3:0]wmask = master_wstrb;
 	wire [31:0]wdata = master_wdata;
   wire [31:0]raddr_offset = master_araddr[31:0] - 32'h80000000;
 	wire [31:0]raddr = {raddr_offset[31:2],2'b0};
-  wire [31:0]rdata;
+  wire [31:0]rdata,rdata1,rdata2,rdata3,rdata4,rdata5,rdata6,rdata7;
 	localparam DEVICE_UART_ADDR = 32'ha00003F8;
 	wire uwen = master_wvalid && master_wready && master_awaddr == DEVICE_UART_ADDR;
 	wire [7:0] uwdata = master_wdata[7:0];
@@ -94,7 +101,7 @@ module ysyx_24110017_testbench;
     .io_slave_rlast    ()
   );
 
-	ysyx_24110017_memory #(32,32,32'h8000000) iverilog_memory (
+	ysyx_24110017_memory #(32,32,32'h1000000) iverilog_memory (
 		.clock(clock),
 		.reset(reset),
 		.wen(wen),
@@ -104,6 +111,13 @@ module ysyx_24110017_testbench;
 		.raddr(raddr),
 		.rdata(rdata)
 	);
+	ysyx_24110017_memory #(32,32,32'h1000000) mem1 (clock,reset,wen1,waddr-32'h1000000,wmask,wdata,raddr-32'h1000000,rdata1);
+	ysyx_24110017_memory #(32,32,32'h1000000) mem2 (clock,reset,wen2,waddr-32'h2000000,wmask,wdata,raddr-32'h2000000,rdata2);
+	ysyx_24110017_memory #(32,32,32'h1000000) mem3 (clock,reset,wen3,waddr-32'h3000000,wmask,wdata,raddr-32'h3000000,rdata3);
+	ysyx_24110017_memory #(32,32,32'h1000000) mem4 (clock,reset,wen4,waddr-32'h4000000,wmask,wdata,raddr-32'h4000000,rdata4);
+	ysyx_24110017_memory #(32,32,32'h1000000) mem5 (clock,reset,wen5,waddr-32'h5000000,wmask,wdata,raddr-32'h5000000,rdata5);
+	ysyx_24110017_memory #(32,32,32'h1000000) mem6 (clock,reset,wen6,waddr-32'h6000000,wmask,wdata,raddr-32'h6000000,rdata6);
+	ysyx_24110017_memory #(32,32,32'h1000000) mem7 (clock,reset,wen7,waddr-32'h7000000,wmask,wdata,raddr-32'h7000000,rdata7);
 
 	ysyx_24110017_UART uart(
 		.clock(clock),
@@ -215,10 +229,38 @@ module ysyx_24110017_memory #(ADDR_WIDTH = 32, DATA_WIDTH = 32, MEM_SIZE = 16) (
 	
 	assign rdata = {memory[raddr+3],memory[raddr+2],memory[raddr+1],memory[raddr]};
 
-	wire [31:0]test0 = {memory[3],memory[2],memory[1],memory[0]};
-	wire [31:0]test1 = {memory[7],memory[6],memory[5],memory[4]};
-	wire [31:0]test2 = {memory[11],memory[10],memory[9],memory[8]};
-	wire [31:0]test3 = {memory[15],memory[14],memory[13],memory[12]};
+endmodule
+
+module ysyx_24110017_data_mem #(ADDR_WIDTH = 32, DATA_WIDTH = 32, MEM_SIZE = 16) (
+	input wire clock,
+	input wire reset,
+	input wire wen,
+	input wire [ADDR_WIDTH-1:0] waddr,
+	input wire [3:0] wmask,
+  input wire [DATA_WIDTH-1:0] wdata,
+	input wire [ADDR_WIDTH-1:0] raddr,
+  output wire [DATA_WIDTH-1:0] rdata
+);
+	
+	reg [7:0] memory [0:MEM_SIZE-1];
+
+	always @(posedge clock) begin
+		if(wen) begin
+			case(wmask)
+				4'b0001: memory[waddr] <= wdata[ 7: 0]; 
+				4'b0010: memory[waddr+1] <= wdata[15: 8];
+				4'b0100: memory[waddr+2] <= wdata[23:16];
+				4'b1000: memory[waddr+3] <= wdata[31:24];
+				4'b0011: {memory[waddr+1],memory[waddr]} <= wdata[15:0];
+				4'b1100: {memory[waddr+3],memory[waddr+2]} <= wdata[31:16];
+				4'b1111: {memory[waddr+3],memory[waddr+2],memory[waddr+1],memory[waddr]} <= wdata;
+			default: begin
+			end
+			endcase
+		end
+	end
+	
+	assign rdata = {memory[raddr+3],memory[raddr+2],memory[raddr+1],memory[raddr]};
 endmodule
 
 module ysyx_24110017_UART(

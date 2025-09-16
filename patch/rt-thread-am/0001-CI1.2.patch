@@ -1,0 +1,147 @@
+From 5bca263374ea60e852559786a4ed64bb641e7a56 Mon Sep 17 00:00:00 2001
+From: 11111-dongfengjun <dongfengjun2024@163.com>
+Date: Mon, 15 Sep 2025 22:18:38 +0800
+Subject: [PATCH] CI1.2
+
+---
+ bsp/abstract-machine/extra.ld        |  0
+ bsp/abstract-machine/src/context.c   | 52 +++++++++++++++++++++++++---
+ bsp/abstract-machine/src/hello.c     |  0
+ bsp/abstract-machine/src/init.c      |  0
+ bsp/abstract-machine/src/interrupt.c |  0
+ bsp/abstract-machine/src/libc.c      |  0
+ bsp/abstract-machine/src/uart.c      |  5 +--
+ 7 files changed, 51 insertions(+), 6 deletions(-)
+ mode change 100644 => 100755 bsp/abstract-machine/extra.ld
+ mode change 100644 => 100755 bsp/abstract-machine/src/context.c
+ mode change 100644 => 100755 bsp/abstract-machine/src/hello.c
+ mode change 100644 => 100755 bsp/abstract-machine/src/init.c
+ mode change 100644 => 100755 bsp/abstract-machine/src/interrupt.c
+ mode change 100644 => 100755 bsp/abstract-machine/src/libc.c
+ mode change 100644 => 100755 bsp/abstract-machine/src/uart.c
+
+diff --git a/bsp/abstract-machine/extra.ld b/bsp/abstract-machine/extra.ld
+old mode 100644
+new mode 100755
+diff --git a/bsp/abstract-machine/src/context.c b/bsp/abstract-machine/src/context.c
+old mode 100644
+new mode 100755
+index ee38829ae..3b3d8ef8e
+--- a/bsp/abstract-machine/src/context.c
++++ b/bsp/abstract-machine/src/context.c
+@@ -2,8 +2,21 @@
+ #include <klib.h>
+ #include <rtthread.h>
+ 
++#define STACK_SIZE (1 * 32 * 32)
++
+ static Context* ev_handler(Event e, Context *c) {
+   switch (e.event) {
++		case EVENT_YIELD: {
++			rt_thread_t cp = rt_thread_self();
++			rt_ubase_t to = cp->user_data;
++			c = *(Context **)to;
++			c->mepc += 4;
++			break;
++		}
++		case EVENT_ERROR:
++			break;
++		case EVENT_IRQ_TIMER:
++			break;
+     default: printf("Unhandled event ID = %d\n", e.event); assert(0);
+   }
+   return c;
+@@ -14,18 +27,49 @@ void __am_cte_init() {
+ }
+ 
+ void rt_hw_context_switch_to(rt_ubase_t to) {
+-  assert(0);
++	rt_thread_t pcb = rt_thread_self();
++	rt_ubase_t user_data_replicator = pcb->user_data;
++	pcb->user_data = to;
++	yield();
++	pcb->user_data = user_data_replicator;
+ }
+ 
+ void rt_hw_context_switch(rt_ubase_t from, rt_ubase_t to) {
+-  assert(0);
++	rt_thread_t pcb = rt_thread_self();
++	rt_ubase_t user_data_replicator = pcb->user_data;
++	pcb->user_data = to;
++	*(Context **)from = pcb->sp;
++	yield();
++	pcb->user_data = user_data_replicator;
+ }
+ 
+ void rt_hw_context_switch_interrupt(void *context, rt_ubase_t from, rt_ubase_t to, struct rt_thread *to_thread) {
+   assert(0);
+ }
+ 
++void wrap(void *arg) {
++	rt_ubase_t *stack_bottom = (rt_ubase_t *)arg;
++	rt_ubase_t tentry = *stack_bottom;
++	stack_bottom --;
++	rt_ubase_t texit = *stack_bottom;
++	stack_bottom --;
++	rt_ubase_t parameter = *stack_bottom;
++	((void(*)())tentry) (parameter);
++	((void(*)())texit) ();
++}
++
+ rt_uint8_t *rt_hw_stack_init(void *tentry, void *parameter, rt_uint8_t *stack_addr, void *texit) {
+-  assert(0);
+-  return NULL;
++  stack_addr = (rt_uint8_t *)((uintptr_t)stack_addr & ~(sizeof(uintptr_t)));
++	Area stack;
++	stack.end = stack_addr;
++	stack.start = stack_addr - STACK_SIZE;
++	Context *cp = kcontext(stack, wrap, (void*)(stack.end - sizeof(Context)));
++	rt_ubase_t *stack_bottom = (rt_ubase_t *)(stack.end - sizeof(Context));
++	*stack_bottom = (rt_ubase_t)tentry;
++	stack_bottom --;
++	*stack_bottom = (rt_ubase_t)texit;
++	stack_bottom --;
++	*stack_bottom = (rt_ubase_t)parameter;
++
++	return (rt_uint8_t *)cp;
+ }
+diff --git a/bsp/abstract-machine/src/hello.c b/bsp/abstract-machine/src/hello.c
+old mode 100644
+new mode 100755
+diff --git a/bsp/abstract-machine/src/init.c b/bsp/abstract-machine/src/init.c
+old mode 100644
+new mode 100755
+diff --git a/bsp/abstract-machine/src/interrupt.c b/bsp/abstract-machine/src/interrupt.c
+old mode 100644
+new mode 100755
+diff --git a/bsp/abstract-machine/src/libc.c b/bsp/abstract-machine/src/libc.c
+old mode 100644
+new mode 100755
+diff --git a/bsp/abstract-machine/src/uart.c b/bsp/abstract-machine/src/uart.c
+old mode 100644
+new mode 100755
+index e4eb86689..134b5b562
+--- a/bsp/abstract-machine/src/uart.c
++++ b/bsp/abstract-machine/src/uart.c
+@@ -11,6 +11,7 @@
+ #include <rtthread.h>
+ #include <am.h>
+ #include <klib.h>
++#include <klib-macros.h>
+ 
+ #define UART_DEFAULT_BAUDRATE 115200
+ 
+@@ -37,8 +38,8 @@ static int _uart_putc(struct rt_serial_device *serial, char c) {
+ }
+ 
+ static int _uart_getc(struct rt_serial_device *serial) {
+-  static const char *p = "help\ndate\nversion\nfree\nps\npwd\nls\nmemtrace\nmemcheck\nutest_list\n";
+-  return (*p != '\0' ? *(p ++) : -1);
++  static const char *p = "help\ndate\nversion\nfree\nps\npwd\nls\nmemtrace\nmemcheck\nutest_list\n";//添加命令启动AM程序
++  return (*p != '\0' ? *(p ++) : io_read(AM_UART_CONFIG).present ? io_read(AM_UART_RX).data : -1);
+ }
+ 
+ const struct rt_uart_ops _uart_ops = {
+-- 
+2.43.0
+
