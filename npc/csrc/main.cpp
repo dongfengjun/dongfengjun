@@ -9,6 +9,7 @@
 #include "VysyxSoCFull__Dpi.h"
 #include "./include/common.h"
 #include "nvboard.h"
+#include <sanitizer/lsan_interface.h>
 
 extern char *mtrace_p;
 /***ysyxSoC***/
@@ -531,6 +532,7 @@ void cpu_exec(int n) {
 
 void nvboard_bind_all_pins(VysyxSoCFull* top);
 int main(int argc, char *argv[]) {
+	__lsan_disable();
 /***inst***/
 	Verilated::commandArgs(argc,argv);
 	contextp = new VerilatedContext;  //verilator指针
