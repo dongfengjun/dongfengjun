@@ -1,4 +1,3 @@
-export ASAN_OPTIONS=detect_leaks=0
 BUILD_DIR = ./build
 TOP = ysyxSoCFull
 VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
