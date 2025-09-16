@@ -1,7 +1,7 @@
 From 0c5f00c3e72ea4f593ab14ddc8f2113b44b4b252 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Thu, 26 Aug 2021 14:57:34 +0800
-Subject: [PATCH 03/69] add chiplink bridge and generate verilog with chisel
+Subject: [PATCH 03/70] add chiplink bridge and generate verilog with chisel
  7.0.0-M1
 
 ---

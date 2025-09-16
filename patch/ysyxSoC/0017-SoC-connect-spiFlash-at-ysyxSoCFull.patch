@@ -1,7 +1,7 @@
 From 3baeba8bae8fffefb0ac9b8e9b3331defdadd29b Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 29 Aug 2021 12:09:58 +0800
-Subject: [PATCH 17/69] SoC: connect spiFlash at ysyxSoCFull
+Subject: [PATCH 17/70] SoC: connect spiFlash at ysyxSoCFull
 
 ---
  src/SoC.scala        | 4 ++--

@@ -1,7 +1,7 @@
 From 8e8f380bb97f9f1d7e75cf9e6481934e00f1889d Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Thu, 30 Sep 2021 10:08:09 +0800
-Subject: [PATCH 30/69] amba,AXI4ToAPB: rewrite with standard state machine
+Subject: [PATCH 30/70] amba,AXI4ToAPB: rewrite with standard state machine
 
 ---
  src/amba/AXI4ToAPB.scala | 92 +++++++++++++++++-----------------------

@@ -1,7 +1,7 @@
 From 4b0f9b6ecf8c50424d55ca95f93f8ff40bd78891 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 29 Aug 2021 11:26:12 +0800
-Subject: [PATCH 15/69] SoC: refactor addressSet for chiplinkNode
+Subject: [PATCH 15/70] SoC: refactor addressSet for chiplinkNode
 
 ---
  src/SoC.scala                   | 7 +++----

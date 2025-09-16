@@ -1,7 +1,7 @@
 From fb5a4c141d80dca706d96cf196f10cacd6968e3e Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Tue, 19 Dec 2023 12:50:31 +0800
-Subject: [PATCH 39/69] device: add psram with APB interface
+Subject: [PATCH 39/70] device: add psram with APB interface
 
 ---
  perip/psram/psram.v         |  9 +++++++

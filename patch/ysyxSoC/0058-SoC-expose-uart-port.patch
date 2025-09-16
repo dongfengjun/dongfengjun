@@ -1,7 +1,7 @@
 From dc9634b3ddb9c3869f15289f92f2fe37a0a14682 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Wed, 10 Jan 2024 18:18:10 +0800
-Subject: [PATCH 58/69] SoC: expose uart port
+Subject: [PATCH 58/70] SoC: expose uart port
 
 ---
  src/SoC.scala | 3 ++-

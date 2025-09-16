@@ -1,7 +1,7 @@
 From cae42cf937edc482af76611a54cc1d8488f080b5 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 14 Apr 2024 23:48:40 +0800
-Subject: [PATCH 62/69] SoC: use config to determine the bus interface of SDRAM
+Subject: [PATCH 62/70] SoC: use config to determine the bus interface of SDRAM
 
 ---
  src/SoC.scala | 20 +++++++++++++++-----

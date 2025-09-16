@@ -1,7 +1,7 @@
 From af3e49d72bcb8f7c6c7b87bb0d40090f8204ed41 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 31 Dec 2023 22:18:33 +0800
-Subject: [PATCH 55/69] device: add wrapper for PS2 keyboard
+Subject: [PATCH 55/70] device: add wrapper for PS2 keyboard
 
 ---
  perip/ps2/ps2_top_apb.v   | 19 +++++++++++++++

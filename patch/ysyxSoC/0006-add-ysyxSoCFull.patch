@@ -1,7 +1,7 @@
 From 34ac5628e0fb22b97a81fbd83653b7d925263c60 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Thu, 26 Aug 2021 16:46:31 +0800
-Subject: [PATCH 06/69] add ysyxSoCFull
+Subject: [PATCH 06/70] add ysyxSoCFull
 
 ---
  src/SoC.scala | 41 +++++++++++++++++++++++++++++++++++++++++

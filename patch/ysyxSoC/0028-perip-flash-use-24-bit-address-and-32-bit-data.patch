@@ -1,7 +1,7 @@
 From 88dd3792df0040089ced8d81a582a529fd9c3ace Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Mon, 18 Dec 2023 18:35:11 +0800
-Subject: [PATCH 28/69] perip,flash: use 24-bit address and 32-bit data
+Subject: [PATCH 28/70] perip,flash: use 24-bit address and 32-bit data
 
 ---
  perip/flash/flash.v | 59 ++++++++++++++++++++++++---------------------

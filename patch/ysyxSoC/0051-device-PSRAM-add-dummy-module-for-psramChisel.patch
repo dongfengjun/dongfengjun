@@ -1,7 +1,7 @@
 From b02c471bc1df03cbcb0f0775252984d2e26c9bf6 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 31 Dec 2023 20:57:13 +0800
-Subject: [PATCH 51/69] device,PSRAM: add dummy module for psramChisel
+Subject: [PATCH 51/70] device,PSRAM: add dummy module for psramChisel
 
 ---
  src/device/PSRAM.scala  |  5 +++++

@@ -1,7 +1,7 @@
 From 14fb8c1eb55f0ee63b233dfd8946f61eb3ee1d97 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 31 Dec 2023 20:42:22 +0800
-Subject: [PATCH 49/69] perip,spi,spi_top_apb: connect spi_irq_out
+Subject: [PATCH 49/70] perip,spi,spi_top_apb: connect spi_irq_out
 
 ---
  perip/spi/rtl/spi_top_apb.v | 3 ++-

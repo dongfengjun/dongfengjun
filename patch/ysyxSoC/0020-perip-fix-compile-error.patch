@@ -1,7 +1,7 @@
 From ec3665c64236eb9783ee660a5115383a5dcdfd99 Mon Sep 17 00:00:00 2001
 From: Chen Lu <181250012@smail.nju.edu.cn>
 Date: Sun, 29 Aug 2021 22:54:10 +0800
-Subject: [PATCH 20/69] perip: fix compile error
+Subject: [PATCH 20/70] perip: fix compile error
 
 ---
  perip/spi/rtl/spi_clgen.v              | 1 -

@@ -1,7 +1,7 @@
 From f76106ce02fdda8c93da82e0a20956660e07976e Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 29 Aug 2021 12:08:07 +0800
-Subject: [PATCH 16/69] SoC: let UART use the same address as QEMU
+Subject: [PATCH 16/70] SoC: let UART use the same address as QEMU
 
 * now this SoC can run unmodified rt-thread from OSCPU
 ---

@@ -1,7 +1,7 @@
 From d8e98d62f862ee6e316f8ca22045507ee3450dc2 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Tue, 19 Dec 2023 10:11:41 +0800
-Subject: [PATCH 37/69] perip: import psram from efabless
+Subject: [PATCH 37/70] perip: import psram from efabless
 
 ---
  perip/psram/efabless/EF_PSRAM_CTRL.v    | 236 ++++++++++++++++++++++++

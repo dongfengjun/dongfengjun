@@ -1,7 +1,7 @@
 From 47618049c6a794af9cc0d82a901be67d5fe64a6c Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sat, 28 Aug 2021 16:37:48 +0800
-Subject: [PATCH 11/69] ysyxSoCASIC: expose APB for uart
+Subject: [PATCH 11/70] ysyxSoCASIC: expose APB for uart
 
 ---
  src/SoC.scala | 55 +++++++++++++++++++++++++--------------------------

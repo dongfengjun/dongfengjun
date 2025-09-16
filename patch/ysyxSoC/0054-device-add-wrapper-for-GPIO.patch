@@ -1,7 +1,7 @@
 From 3b759b7b6d189ce3c9f03e36dfa9a9e07cc4fed2 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 31 Dec 2023 21:34:22 +0800
-Subject: [PATCH 54/69] device: add wrapper for GPIO
+Subject: [PATCH 54/70] device: add wrapper for GPIO
 
 ---
  perip/gpio/gpio_top_apb.v | 27 ++++++++++++++++++++

@@ -1,7 +1,7 @@
 From 553bc88584f443ddf3796d43d8b4f456bd0418cb Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 29 Aug 2021 20:52:24 +0800
-Subject: [PATCH 19/69] SoC: add dummy external interrupt
+Subject: [PATCH 19/70] SoC: add dummy external interrupt
 
 ---
  src/SoC.scala | 7 +++++++

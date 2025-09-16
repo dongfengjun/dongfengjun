@@ -1,7 +1,7 @@
 From e54457cd6b50dd854d8367782739c76569edff34 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Tue, 19 Dec 2023 09:34:53 +0800
-Subject: [PATCH 22/69] perip,uart16550: display the char when pushing it to
+Subject: [PATCH 22/70] perip,uart16550: display the char when pushing it to
  tfifo
 
 ---

@@ -1,7 +1,7 @@
 From 3866d652b24e7850db7f48fd2c6702e50076edfd Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 31 Dec 2023 23:44:07 +0800
-Subject: [PATCH 57/69] spec: add cpu-interface.md
+Subject: [PATCH 57/70] spec: add cpu-interface.md
 
 ---
  spec/cpu-interface.md | 40 ++++++++++++++++++++++++++++++++++++++++

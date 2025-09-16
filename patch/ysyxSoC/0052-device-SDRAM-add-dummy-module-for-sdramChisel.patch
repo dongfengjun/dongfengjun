@@ -1,7 +1,7 @@
 From 4e5f9a8241356c498fdb5e03e0ebb7b56ada0cae Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 31 Dec 2023 20:59:03 +0800
-Subject: [PATCH 52/69] device,SDRAM: add dummy module for sdramChisel
+Subject: [PATCH 52/70] device,SDRAM: add dummy module for sdramChisel
 
 ---
  src/device/SDRAM.scala | 4 ++++

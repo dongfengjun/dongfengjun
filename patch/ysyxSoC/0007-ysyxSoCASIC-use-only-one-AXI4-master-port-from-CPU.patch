@@ -1,7 +1,7 @@
 From d6824d6dc7ca6fbc0dba1d62e6ec4abbd1f2a187 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Fri, 27 Aug 2021 21:30:32 +0800
-Subject: [PATCH 07/69] ysyxSoCASIC: use only one AXI4 master port from CPU
+Subject: [PATCH 07/70] ysyxSoCASIC: use only one AXI4 master port from CPU
 
 ---
  src/SoC.scala | 46 +++++++++++++++-------------------------------

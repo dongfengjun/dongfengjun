@@ -1,7 +1,7 @@
 From ecb380830b42026239ccfb694d77c4efc65d4944 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Thu, 26 Aug 2021 16:03:17 +0800
-Subject: [PATCH 05/69] add SoC for ASIC
+Subject: [PATCH 05/70] add SoC for ASIC
 
 ---
  src/SoC.scala | 91 +++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -1,7 +1,7 @@
 From f5ace42a773e31db14e3c603506c37c698cee19c Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Mon, 18 Dec 2023 18:15:22 +0800
-Subject: [PATCH 23/69] perip,spi: change port name to match doc
+Subject: [PATCH 23/70] perip,spi: change port name to match doc
 
 ---
  perip/flash/flash.v         | 24 +++++++++++-------------

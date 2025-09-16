@@ -1,7 +1,7 @@
 From 4437727c73c1e4bd2a3b1370dd642f48a6cccdc3 Mon Sep 17 00:00:00 2001
 From: Qiming Chu <cchuqiming@gmail.com>
 Date: Tue, 24 Dec 2024 10:38:20 +0800
-Subject: [PATCH 68/69] chore: bump mill to 0.12.4 and chisel to 7.0.0-M2
+Subject: [PATCH 68/70] chore: bump mill to 0.12.4 and chisel to 7.0.0-M2
 
 ---
  .mill-version |  1 +

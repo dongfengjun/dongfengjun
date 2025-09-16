@@ -1,7 +1,7 @@
 From 0c9b084b97a7f5eddaac88de70b5d7727b8c53eb Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Fri, 1 Dec 2023 12:40:51 +0800
-Subject: [PATCH 31/69] device: add 4KB MROM
+Subject: [PATCH 31/70] device: add 4KB MROM
 
 ---
  src/SoC.scala         |  3 +-

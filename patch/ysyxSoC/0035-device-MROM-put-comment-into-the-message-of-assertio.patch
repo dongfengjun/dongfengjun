@@ -1,7 +1,7 @@
 From 51500b51a631d04e4eade7140fe7b124a2c14a60 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Mon, 11 Dec 2023 12:56:09 +0800
-Subject: [PATCH 35/69] device,MROM: put comment into the message of assertion
+Subject: [PATCH 35/70] device,MROM: put comment into the message of assertion
 
 ---
  src/device/MROM.scala | 2 +-

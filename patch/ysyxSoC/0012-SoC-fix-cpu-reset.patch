@@ -1,7 +1,7 @@
 From 9fa1ded8c7d9ea88813c66d2b205c4d94fd21938 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sat, 28 Aug 2021 20:18:40 +0800
-Subject: [PATCH 12/69] SoC: fix cpu reset
+Subject: [PATCH 12/70] SoC: fix cpu reset
 
 * it may be random value at the very beginning
 ---

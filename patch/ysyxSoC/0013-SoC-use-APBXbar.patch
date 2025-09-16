@@ -1,7 +1,7 @@
 From 92f7900de0b7b4685fc552b18f54b120ef79728d Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sat, 28 Aug 2021 23:44:50 +0800
-Subject: [PATCH 13/69] SoC: use APBXbar
+Subject: [PATCH 13/70] SoC: use APBXbar
 
 ---
  src/SoC.scala | 4 +++-

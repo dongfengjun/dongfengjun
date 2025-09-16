@@ -1,7 +1,7 @@
 From 86c5c0dfcfdb2543ebc7809c82af1ec897e821fa Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Mon, 4 Dec 2023 10:06:20 +0800
-Subject: [PATCH 33/69] SoC: add Config to disable chiplink
+Subject: [PATCH 33/70] SoC: add Config to disable chiplink
 
 ---
  src/SoC.scala | 61 +++++++++++++++++++++++++++++----------------------

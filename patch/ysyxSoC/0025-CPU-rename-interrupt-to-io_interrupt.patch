@@ -1,7 +1,7 @@
 From 94162e7865c6de860b3cb78b9cfce060a4d7f4d5 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Wed, 1 Sep 2021 12:58:43 +0800
-Subject: [PATCH 25/69] CPU: rename interrupt to io_interrupt
+Subject: [PATCH 25/70] CPU: rename interrupt to io_interrupt
 
 ---
  src/CPU.scala | 4 ++--

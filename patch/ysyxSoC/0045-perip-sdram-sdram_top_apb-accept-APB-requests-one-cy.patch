@@ -1,7 +1,7 @@
 From 776b3aaeef5c52308f8b65d08bce1760dafba90d Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sat, 30 Dec 2023 11:38:06 +0800
-Subject: [PATCH 45/69] perip,sdram,sdram_top_apb: accept APB requests one
+Subject: [PATCH 45/70] perip,sdram,sdram_top_apb: accept APB requests one
  cycle earlier
 
 ---

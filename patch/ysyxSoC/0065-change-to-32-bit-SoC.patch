@@ -1,7 +1,7 @@
 From 219d948cf0b9000f29a7ae2a2ceabc162263c337 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Fri, 7 Jun 2024 23:10:43 +0800
-Subject: [PATCH 65/69] change to 32 bit SoC
+Subject: [PATCH 65/70] change to 32 bit SoC
 
 ---
  perip/amba/axi4_data_width_converter_64to32.v | 66 -------------------

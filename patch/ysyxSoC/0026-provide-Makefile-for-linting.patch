@@ -1,7 +1,7 @@
 From de5f2b16fba692b412acbf9536cdcf5d3e0f3c3c Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sat, 4 Sep 2021 15:43:48 +0800
-Subject: [PATCH 26/69] provide Makefile for linting
+Subject: [PATCH 26/70] provide Makefile for linting
 
 ---
  lint/Makefile              | 16 ++++++++++++++++

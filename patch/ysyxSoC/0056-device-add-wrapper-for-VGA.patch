@@ -1,7 +1,7 @@
 From 753622332375d4cc6737a5623a4814421ba7df7d Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 31 Dec 2023 22:49:56 +0800
-Subject: [PATCH 56/69] device: add wrapper for VGA
+Subject: [PATCH 56/70] device: add wrapper for VGA
 
 ---
  perip/vga/vga_top_apb.v | 23 +++++++++++++++++

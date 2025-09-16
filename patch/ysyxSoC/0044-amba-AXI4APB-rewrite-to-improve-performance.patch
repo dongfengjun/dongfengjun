@@ -1,7 +1,7 @@
 From 10811303a1f3133d623e8edf1c7010c36335fdc0 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sat, 30 Dec 2023 11:35:55 +0800
-Subject: [PATCH 44/69] amba,AXI4APB: rewrite to improve performance
+Subject: [PATCH 44/70] amba,AXI4APB: rewrite to improve performance
 
 ---
  src/amba/AXI4ToAPB.scala | 53 ++++++++++++++++++----------------------

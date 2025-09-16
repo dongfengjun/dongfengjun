@@ -1,7 +1,7 @@
 From e0d28ef51eeaf3d1820207c14321d42d95b4d55a Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Mon, 18 Dec 2023 18:06:51 +0800
-Subject: [PATCH 21/69] perip: add wrapper for APB
+Subject: [PATCH 21/70] perip: add wrapper for APB
 
 ---
  perip/flash/flash.v                |  2 +-

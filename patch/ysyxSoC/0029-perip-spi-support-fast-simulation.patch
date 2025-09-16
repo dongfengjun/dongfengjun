@@ -1,7 +1,7 @@
 From 3d653737e88672d02a94d0136a60488de4fd386c Mon Sep 17 00:00:00 2001
 From: Haojin Tang <tanghaojin@outlook.com>
 Date: Sat, 25 Sep 2021 22:39:05 +0800
-Subject: [PATCH 29/69] perip,spi: support fast simulation
+Subject: [PATCH 29/70] perip,spi: support fast simulation
 
 ---
  perip/spi/rtl/spi_top_apb.v | 26 ++++++++++++++++++++++++++

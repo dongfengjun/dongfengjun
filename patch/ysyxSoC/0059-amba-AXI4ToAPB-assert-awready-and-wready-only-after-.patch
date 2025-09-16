@@ -1,7 +1,7 @@
 From 19b8c0ab6c707ef01ae18736dc5a93aab6a77da2 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Wed, 10 Jan 2024 19:46:02 +0800
-Subject: [PATCH 59/69] amba,AXI4ToAPB: assert awready and wready only after
+Subject: [PATCH 59/70] amba,AXI4ToAPB: assert awready and wready only after
  awvalid & wvalid
 
 ---

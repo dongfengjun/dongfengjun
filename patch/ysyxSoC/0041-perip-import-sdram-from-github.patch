@@ -1,7 +1,7 @@
 From 9e912363ced293b4189c944420a440d8e2ccae69 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Thu, 21 Dec 2023 14:14:47 +0800
-Subject: [PATCH 41/69] perip: import sdram from github
+Subject: [PATCH 41/70] perip: import sdram from github
 
 ---
  perip/sdram/core_sdram_axi4/LICENSE          | 674 +++++++++++++++++

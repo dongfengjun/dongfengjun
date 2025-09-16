@@ -1,7 +1,7 @@
 From 1215e4e9c30c7ebbfa5aa79980c7e46858048834 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sat, 28 Aug 2021 08:14:19 +0800
-Subject: [PATCH 09/69] ysyxSoCASIC: generate delayed reset for CPU
+Subject: [PATCH 09/70] ysyxSoCASIC: generate delayed reset for CPU
 
 * Some async modules in chiplink will spend certain cycles to finish
   reset. If CPU sends requests too early, chiplink will return a slave

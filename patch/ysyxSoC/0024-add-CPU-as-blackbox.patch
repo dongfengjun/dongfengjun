@@ -1,7 +1,7 @@
 From dc1c5eeb8a56adee009d8979113dcc135ced0589 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Wed, 1 Sep 2021 10:21:05 +0800
-Subject: [PATCH 24/69] add CPU as blackbox
+Subject: [PATCH 24/70] add CPU as blackbox
 
 ---
  src/CPU.scala                   | 45 ++++++++++++++++++++++++++++

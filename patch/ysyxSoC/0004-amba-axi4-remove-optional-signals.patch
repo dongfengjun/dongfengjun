@@ -1,7 +1,7 @@
 From 38df46debc6f9601d0c93329a04ac3fe326d8c8f Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Thu, 26 Aug 2021 15:28:54 +0800
-Subject: [PATCH 04/69] amba,axi4: remove optional signals
+Subject: [PATCH 04/70] amba,axi4: remove optional signals
 
 ---
  patch/rocket-chip.patch | 19 +++++++++++++++++++

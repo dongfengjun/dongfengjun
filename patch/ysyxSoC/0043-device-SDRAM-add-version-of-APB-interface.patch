@@ -1,7 +1,7 @@
 From 4e3d137e9a5dbeca9d848575c66bf4847c6e67d4 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Mon, 25 Dec 2023 01:50:06 +0800
-Subject: [PATCH 43/69] device,SDRAM: add version of APB interface
+Subject: [PATCH 43/70] device,SDRAM: add version of APB interface
 
 ---
  perip/sdram/sdram_top_apb.v | 78 +++++++++++++++++++++++++++++++++++++

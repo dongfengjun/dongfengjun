@@ -1,7 +1,7 @@
 From 20e27fc231011a2c750a8ce0dea437372303c107 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Wed, 10 Apr 2024 07:41:19 +0800
-Subject: [PATCH 64/69] amba: add wrapper for AXI4Delayer
+Subject: [PATCH 64/70] amba: add wrapper for AXI4Delayer
 
 ---
  perip/amba/axi4_delayer.v  | 96 ++++++++++++++++++++++++++++++++++++++

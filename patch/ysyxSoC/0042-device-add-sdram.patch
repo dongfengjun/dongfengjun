@@ -1,7 +1,7 @@
 From ac8c7414af58ea0a004dd29b0bb4c0ba05aca165 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Thu, 21 Dec 2023 16:07:24 +0800
-Subject: [PATCH 42/69] device: add sdram
+Subject: [PATCH 42/70] device: add sdram
 
 ---
  perip/sdram/sdram.v         | 16 ++++++

@@ -1,7 +1,7 @@
 From 22a97962e701a3f969609e6d30ab23e3991e5a59 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Tue, 19 Dec 2023 19:32:41 +0800
-Subject: [PATCH 40/69] perip,psram: fix final counter of writing
+Subject: [PATCH 40/70] perip,psram: fix final counter of writing
 
 ---
  perip/psram/efabless/EF_PSRAM_CTRL.v | 10 +++++-----

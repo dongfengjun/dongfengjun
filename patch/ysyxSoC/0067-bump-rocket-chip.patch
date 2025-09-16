@@ -1,7 +1,7 @@
 From 9fd2744317b5ed2ef04161b4899efe69f35cd1fc Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 8 Sep 2024 11:44:56 +0800
-Subject: [PATCH 67/69] bump rocket-chip
+Subject: [PATCH 67/70] bump rocket-chip
 
 ---
  build.sc                |  42 ++++--

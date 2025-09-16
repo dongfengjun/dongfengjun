@@ -1,7 +1,7 @@
 From da22d4cf75926e39504b8a89b3f237dc7a38ec3f Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Tue, 19 Dec 2023 11:24:22 +0800
-Subject: [PATCH 38/69] perip,psram: fix warning reported by verilator
+Subject: [PATCH 38/70] perip,psram: fix warning reported by verilator
 
 ---
  perip/psram/efabless/EF_PSRAM_CTRL.v    | 16 ++++++++--------

@@ -1,7 +1,7 @@
 From 6ce4b15556e25560ac952b6f3de236f9657ef435 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 31 Dec 2023 21:17:25 +0800
-Subject: [PATCH 53/69] perip: change to standard clock and reset in Chisel
+Subject: [PATCH 53/70] perip: change to standard clock and reset in Chisel
 
 ---
  perip/psram/psram_top_apb.v        |  8 ++++----

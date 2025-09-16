@@ -1,7 +1,7 @@
 From cbd7d50906c59ddb79291a31ae213689aa9ff4d4 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sat, 28 Aug 2021 14:58:12 +0800
-Subject: [PATCH 10/69] amba: add simplied AXI4ToAPB bridge
+Subject: [PATCH 10/70] amba: add simplied AXI4ToAPB bridge
 
 ---
  src/SoC.scala            |  12 +++-

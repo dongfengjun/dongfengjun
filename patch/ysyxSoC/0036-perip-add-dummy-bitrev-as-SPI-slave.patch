@@ -1,7 +1,7 @@
 From fc4542c7637b5c80e13ed09b644e9266813280f6 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Mon, 18 Dec 2023 22:13:53 +0800
-Subject: [PATCH 36/69] perip: add dummy bitrev as SPI slave
+Subject: [PATCH 36/70] perip: add dummy bitrev as SPI slave
 
 ---
  perip/bitrev/bitrev.v       | 8 ++++++++

@@ -1,7 +1,7 @@
 From 4de691644cdf81c3f8f2aff38606c91b59b61474 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 14 Apr 2024 12:02:35 +0800
-Subject: [PATCH 61/69] amba: add wrapper for APBDelayer
+Subject: [PATCH 61/70] amba: add wrapper for APBDelayer
 
 ---
  perip/amba/apb_delayer.v  | 38 +++++++++++++++++++++++++++++++

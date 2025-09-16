@@ -1,7 +1,7 @@
 From abc4dd516d5e1aef97e58ca421e5ef4d6db1c27d Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sat, 30 Dec 2023 11:42:03 +0800
-Subject: [PATCH 47/69] perip,psram,psram_top_apb: fix pready asserting for two
+Subject: [PATCH 47/70] perip,psram,psram_top_apb: fix pready asserting for two
  cycles
 
 ---

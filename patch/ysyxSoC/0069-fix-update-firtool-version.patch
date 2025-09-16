@@ -1,7 +1,7 @@
 From 8764f20a1e7d0066ff561663b1cd3bb2a30509ee Mon Sep 17 00:00:00 2001
 From: Qiming Chu <cchuqiming@gmail.com>
 Date: Fri, 14 Feb 2025 15:23:40 +0800
-Subject: [PATCH 69/69] fix: update firtool version
+Subject: [PATCH 69/70] fix: update firtool version
 
 This is a temporary workaround until Chisel publishes a new version that
 includes the updated firtool.

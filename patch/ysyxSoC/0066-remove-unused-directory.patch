@@ -1,7 +1,7 @@
 From 6461b9bad6515e71151336266d08c594470dcceb Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Fri, 26 Jul 2024 10:40:35 +0800
-Subject: [PATCH 66/69] remove unused directory
+Subject: [PATCH 66/70] remove unused directory
 
 ---
  lint/Makefile              | 16 ----------------

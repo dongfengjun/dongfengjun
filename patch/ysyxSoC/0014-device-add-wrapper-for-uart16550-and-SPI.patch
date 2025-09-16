@@ -1,7 +1,7 @@
 From da7ec3ce1cb79eeb7b1c3fbd41e431e1d8975392 Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 29 Aug 2021 09:29:10 +0800
-Subject: [PATCH 14/69] device: add wrapper for uart16550 and SPI
+Subject: [PATCH 14/70] device: add wrapper for uart16550 and SPI
 
 ---
  src/SoC.scala              | 27 ++++++---------------

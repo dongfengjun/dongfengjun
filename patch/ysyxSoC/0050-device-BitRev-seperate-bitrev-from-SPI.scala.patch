@@ -1,7 +1,7 @@
 From d65246a8226f16275c02efd82293d4c4130c576d Mon Sep 17 00:00:00 2001
 From: Zihao Yu <yuzihao@ict.ac.cn>
 Date: Sun, 31 Dec 2023 20:54:21 +0800
-Subject: [PATCH 50/69] device,BitRev: seperate bitrev from SPI.scala
+Subject: [PATCH 50/70] device,BitRev: seperate bitrev from SPI.scala
 
 ---
  src/device/BitRev.scala | 13 +++++++++++++
