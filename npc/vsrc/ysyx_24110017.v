@@ -520,7 +520,8 @@ module ysyx_24110017_BTB
   endgenerate
 `endif
 
-	assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W) + jlog2(jhit)]} : (|bhit) ? {pc_i[31:BTARG],bsnpc_reg[bindex * (1<<B_W) + blog2(bhit)]} : pc_i + 4;
+//	assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W) + jlog2(jhit)]} : (|bhit) ? {pc_i[31:BTARG],bsnpc_reg[bindex * (1<<B_W) + blog2(bhit)]} : pc_i + 4; //直接相联hit为1位
+assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit) ? {pc_i[31:BTARG],bsnpc_reg[bindex * (1<<B_W)]} : pc_i + 4;
 
   always @(posedge clk) begin
 		if(rst) begin
