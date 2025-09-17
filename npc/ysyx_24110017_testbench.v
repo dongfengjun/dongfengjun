@@ -17,7 +17,16 @@ module ysyx_24110017_testbench;
 	wire master_arvalid;
 	wire [31:0]master_araddr;
 	wire master_rready;
-	wire [31:0]master_rdata = (master_araddr >= 32'h80000000 && master_araddr < 32'h81000000) ? rdata : (master_araddr >= 32'h81000000 && master_araddr < 32'h82000000) ? rdata1 : (master_araddr >= 32'h82000000 && master_araddr < 32'h83000000) ? rdata2 : (master_araddr >= 32'h83000000 && master_araddr < 32'h84000000) ? rdata3 : (master_araddr >= 32'h84000000 && master_araddr < 32'h85000000) ? rdata4 : (master_araddr >= 32'h85000000 && master_araddr < 32'h86000000) ? rdata5 : (master_araddr >= 32'h86000000 && master_araddr < 32'h87000000) ? rdata6 : (master_araddr >= 32'h87000000 && master_araddr < 32'h88000000) ? rdata7 : 32'h0;
+	wire [31:0]rdata,rdata1,rdata2,rdata3,rdata4,rdata5,rdata6,rdata7;
+	wire [31:0]master_rdata = ((master_araddr >= 32'h80000000) && (master_araddr < 32'h81000000)) ? rdata 
+	                        : ((master_araddr >= 32'h81000000) && (master_araddr < 32'h82000000)) ? rdata1 
+													: ((master_araddr >= 32'h82000000) && (master_araddr < 32'h83000000)) ? rdata2 
+													: ((master_araddr >= 32'h83000000) && (master_araddr < 32'h84000000)) ? rdata3 
+													: ((master_araddr >= 32'h84000000) && (master_araddr < 32'h85000000)) ? rdata4 
+													: ((master_araddr >= 32'h85000000) && (master_araddr < 32'h86000000)) ? rdata5 
+													: ((master_araddr >= 32'h86000000) && (master_araddr < 32'h87000000)) ? rdata6 
+													: ((master_araddr >= 32'h87000000) && (master_araddr < 32'h88000000)) ? rdata7 
+													: 32'h0;
 	wire wen  = master_wvalid && master_wready && (master_awaddr >= 32'h80000000 && master_awaddr < 32'h81000000);
 	wire wen1 = master_wvalid && master_wready && (master_awaddr >= 32'h81000000 && master_awaddr < 32'h82000000);
 	wire wen2 = master_wvalid && master_wready && (master_awaddr >= 32'h82000000 && master_awaddr < 32'h83000000);
@@ -32,7 +41,6 @@ module ysyx_24110017_testbench;
 	wire [31:0]wdata = master_wdata;
   wire [31:0]raddr_offset = master_araddr[31:0] - 32'h80000000;
 	wire [31:0]raddr = {raddr_offset[31:2],2'b0};
-  wire [31:0]rdata,rdata1,rdata2,rdata3,rdata4,rdata5,rdata6,rdata7;
 	localparam DEVICE_UART_ADDR = 32'ha00003F8;
 	wire uwen = master_wvalid && master_wready && master_awaddr == DEVICE_UART_ADDR;
 	wire [7:0] uwdata = master_wdata[7:0];
