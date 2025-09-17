@@ -1,6 +1,4 @@
-//`define ysyx_24110017_YOSYS_STA
 `ifdef __ICARUS__
-	`define ysyx_24110017_YOSYS_STA
 	`timescale 1ns/1ps
 `endif
 
@@ -90,7 +88,9 @@ wire [ 1:0] icache_axi_rresp;
 wire icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,icache_axi_rlast;
 /***IDU***/
 `ifndef ysyx_24110017_YOSYS_STA
+`ifndef __ICARUS__
 wire [31:0]inst_id;//difftest
+`endif
 `endif
 wire id_valid,id_ready;
 wire [20:0] prepc;
@@ -106,7 +106,9 @@ wire ls_valid_id;
 wire fencei_id;
 /***EXU***/
 `ifndef ysyx_24110017_YOSYS_STA
+`ifndef __ICARUS__
 wire [31:0] pc_ex,inst_ex,npc_ex;//difftest
+`endif
 `endif
 wire        ex_ready,ex_valid;
 wire [31:0] xrd_ex;
@@ -140,6 +142,9 @@ wire c_axi_arvalid,c_axi_arready,c_axi_rvalid,c_axi_rready,c_axi_rlast;
 /***RFU***/
 wire [31:0]r1,r2;
 wire [31:0]mepc,mstatus,mcause,mtvec;
+`ifdef __ICARUS__
+wire [31:0] a0;
+`endif
 
 wire isRAW = ((rs1 == rd_ex) || (rs2 == rd_ex)) && (rd_ex != 0);
  
@@ -167,7 +172,9 @@ ysyx_24110017_CACHE #(1,4,0,16) ICACHE(clock,reset,fencei_id, //w < n
 );
 ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 `ifndef ysyx_24110017_YOSYS_STA
+`ifndef __ICARUS__
 		inst_id,
+`endif
 `endif
 		prepc,prepc_en,rs1,rs2,r1,r2,
 		if_valid,id_ready,id_valid,ex_ready,
@@ -178,7 +185,9 @@ ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 );
 ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 `ifndef ysyx_24110017_YOSYS_STA
+`ifndef __ICARUS__
 		inst_id,pc_ex,inst_ex,npc_ex,
+`endif
 `endif
 		id_valid,ex_ready,ex_valid,
 		pc_id,imm_id,op_id,funct3_id,
@@ -239,8 +248,8 @@ ysyx_24110017_Reg #(32, 32'h1800) mstatus_reg (clock,reset,xrd_ex,mstatus,csrs_w
 ysyx_24110017_Reg #(32, 32'b0)    mcause_reg  (clock,reset,xrd_ex,mcause ,csrs_wen_ex[2]);
 ysyx_24110017_Reg #(32, 32'b0)    mtvec_reg   (clock,reset,xrd_ex,mtvec  ,csrs_wen_ex[3]);
 
+`ifndef ysyx_24110017_YOSYS_STA
 `ifdef __ICARUS__
-wire [31:0]a0;
 always@(*) begin
 		if(inst_if == 32'b00000000000100000000000001110011) begin
 			if(a0 == 0) $write("%sHIT GOOD TRAP at pc = 0x%h%s\n","\033[1;32m",pc_if,"\033[0m");
@@ -249,7 +258,10 @@ always@(*) begin
 		end
 	end
 `endif
+`endif
+
 `ifndef ysyx_24110017_YOSYS_STA
+`ifndef __ICARUS__
 /***DIFFTEST***/
 reg difftest_delay;
 reg difftest;
@@ -306,6 +318,7 @@ function int performance_counter(int i);
   end
 endfunction
 /***E*N*D***/
+`endif
 `endif
 endmodule
 
@@ -369,7 +382,7 @@ always @(posedge clk) begin
   endcase
 end
 
-`ifdef ysyx_24110017_YOSYS_STA
+`ifdef __ICARUS__
 localparam RESET_PC = 32'h80000000;
 `else
 localparam RESET_PC = 32'h30000000;
@@ -828,12 +841,14 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 
 /***DPIC-AMAT***/
 `ifndef ysyx_24110017_YOSYS_STA
+`ifndef __ICARUS__
 	export "DPI-C" function amat_counter;
 	function int amat_counter(int i);
 	  begin
 			assign amat_counter = (i == 0) ? {31'b0,((hit != 0) && (!unvalid))} : 32'b0;
 		end
 	endfunction
+`endif
 `endif
 
 endmodule
@@ -847,7 +862,9 @@ module ysyx_24110017_IDU(
 	input  wire flush_i,
 
 `ifndef ysyx_24110017_YOSYS_STA
+`ifndef __ICARUS__
 	output reg  [31:0] inst_o,//difftest
+`endif
 `endif
 
 	output wire [20:0] prepc_o,
@@ -899,7 +916,9 @@ wire updata = id_valid_o && ex_ready_i;
 always@(posedge clk) begin
   if(updata) begin
 `ifndef ysyx_24110017_YOSYS_STA
+`ifndef __ICARUS__
     inst_o <= inst_i;
+`endif
 `endif
 		pc_o <= pc_i;
 	end
@@ -990,10 +1009,12 @@ module ysyx_24110017_EXU(
 	input  wire flush_i,
 
 `ifndef ysyx_24110017_YOSYS_STA
+`ifndef __ICARUS__
 	input  wire [31:0] inst_i,//difftest
 	output reg  [31:0] pc_o,
 	output reg  [31:0] inst_o,
 	output reg  [31:0] npc_o,
+`endif
 `endif
 
 	input  wire  id_valid_i,
@@ -1044,6 +1065,7 @@ always @(posedge clk) begin
 end
 
 `ifndef ysyx_24110017_YOSYS_STA
+`ifndef __ICARUS__
 always@(posedge clk) begin
 	casez({flush_i,state})
 		2'b1? : begin
@@ -1062,6 +1084,7 @@ always@(posedge clk) begin
 		end
 	endcase
 end
+`endif
 `endif
 
 always@(posedge clk) begin
@@ -1324,18 +1347,17 @@ always @(posedge clk) begin
 end
 
 `ifndef ysyx_24110017_YOSYS_STA
+`ifndef __ICARUS__
 import "DPI-C" function void diff_skip_ref();
+`endif
 `endif
 
 parameter AXI_IDLE=2'b00,AXI_READ=2'b01,AXI_WRITE=2'b10;
 reg [1:0]axi_state;
 
-//assign ls_axi_awaddr = (ls_axi_awvalid || ls_axi_bready) ? ls_addr_i  : 32'h0;
 assign ls_axi_awsize = (ls_axi_awvalid) ? ls_awsize_i : 3'b0;
-//assign ls_axi_wdata  = (ls_axi_wvalid)  ? ls_wdata_i  : 32'h0;
 assign ls_axi_wstrb  = (ls_axi_wvalid)  ? ls_wmask_i  : 4'b0;
 assign ls_axi_wlast  = (ls_axi_wvalid)  ? 1'b1 : 1'b0;
-//assign ls_axi_araddr = (ls_axi_arvalid || ls_axi_rready) ? ls_addr_i : 32'h0;
 assign ls_axi_arsize = (ls_axi_arvalid) ? ls_arsize_i : 3'b0;
 
 always @(posedge clk or posedge rst) begin
@@ -1369,10 +1391,12 @@ always @(posedge clk or posedge rst) begin
 						ls_axi_araddr  <= 32'h0;
 						ls_axi_rready  <= 1'b0;
             axi_state			 <= AXI_IDLE;
-`ifndef ysyx_24110017_YOSYS_STA						
+`ifndef ysyx_24110017_YOSYS_STA
+`ifndef __ICARUS__
 						if((ls_axi_araddr - 32'h10000000 < 32'h1000) || (ls_axi_araddr == 32'h02000000) || (ls_axi_araddr == 32'h02000004)) begin //DEVICE DIFFTEST
 							diff_skip_ref();
 						end
+`endif
 `endif
           end
         end
@@ -1754,12 +1778,14 @@ module ysyx_24110017_RegisterFile #(ADDR_WIDTH = 4, DATA_WIDTH = 32) (
 `endif
 /***DPI-C***/
 `ifndef ysyx_24110017_YOSYS_STA
+`ifndef __ICARUS__
 export "DPI-C" function gpr_reg_grab;
 function int gpr_reg_grab(int addr);
 	begin
 		assign gpr_reg_grab = (addr < 2 ** ADDR_WIDTH) ? rf[addr] : 32'h0;
 	end
 endfunction
+`endif
 `endif
 /***E*N*D***/
 

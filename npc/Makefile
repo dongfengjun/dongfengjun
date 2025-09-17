@@ -104,7 +104,7 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 verilog: $(BUILD_DIR)
-	cp vsrc/ysyx_24110017.v build/ysyx_24110017.v
+	iverilog -E -Dysyx_24110017_YOSYS_STA vsrc/ysyx_24110017.v -o $(BUILD_DIR)/ysyx_24110017.v
 
 .PHONY: clean run wave $(MEMORY_HEX) wave.vcd compile icompile compile-netlist run_sim_iverilog sim-iverilog sim-iverilog-netlist verilog
 
