@@ -1055,7 +1055,7 @@ wire [31:0] xrd;
 wire [ 3:0] csrs_wen;
 wire [31:0] alu_res;
 wire [31:0] csr,mcause_w,csrs_w;
-wire [31:0] dpnc;
+wire [31:0] dnpc;
 
 wire updata = (!ls_valid || ls_done_i) && (abnormal == 0);
 assign ex_valid_o = updata && state;
