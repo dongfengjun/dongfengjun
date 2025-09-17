@@ -142,6 +142,9 @@ wire c_axi_arvalid,c_axi_arready,c_axi_rvalid,c_axi_rready,c_axi_rlast;
 /***RFU***/
 wire [31:0]r1,r2;
 wire [31:0]mepc,mstatus,mcause,mtvec;
+`ifdef __ICARUS__
+wire [31:0] a0;
+`endif
 
 wire isRAW = ((rs1 == rd_ex) || (rs2 == rd_ex)) && (rd_ex != 0);
  
@@ -247,7 +250,6 @@ ysyx_24110017_Reg #(32, 32'b0)    mtvec_reg   (clock,reset,xrd_ex,mtvec  ,csrs_w
 
 `ifndef ysyx_24110017_YOSYS_STA
 `ifdef __ICARUS__
-wire [31:0]a0;
 always@(*) begin
 		if(inst_if == 32'b00000000000100000000000001110011) begin
 			if(a0 == 0) $write("%sHIT GOOD TRAP at pc = 0x%h%s\n","\033[1;32m",pc_if,"\033[0m");
@@ -380,11 +382,13 @@ always @(posedge clk) begin
   endcase
 end
 
-`ifdef ysyx_24110017_YOSYS_STA
+`ifdef __ICARUS__
 localparam RESET_PC = 32'h80000000;
 `else
 localparam RESET_PC = 32'h30000000;
 `endif
+
+wire updata = if_valid_o && id_ready_i;
 
 reg [31:0]pc;
 always @(posedge clk) begin
@@ -395,8 +399,6 @@ always @(posedge clk) begin
 		default: pc <= pc;
 	endcase
 end
-
-wire updata = if_valid_o && id_ready_i;
 
 always @(posedge clk) begin
 	if(updata) pc_o <= pc;
@@ -659,6 +661,8 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 	input wire  s_axi_rlast
 );
 
+	reg state;
+	
 	reg [31-TAG_WIDTH:0]tag_check;
 	always@(posedge clk) begin
 		if(m_axi_arvalid && m_axi_arready)
@@ -701,7 +705,6 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 		end
 	endfunction
 
-	assign m_axi_rvalid = axi_rvalid && !axi_rvalid_enable;
 	//assign m_axi_rdata  = (|hit) ? cache_reg[offset][index * CACHE_WAY + log2(hit)] : 32'h0;
 	assign m_axi_rdata  = (|hit) ? cache_reg[offset][index] : 32'h0;
 	wire	 axi_rvalid   = (s_axi_arlen != 0) ? s_axi_rlast : (|hit) && !(m_axi_arvalid && m_axi_arready);
@@ -709,11 +712,11 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 	always @(posedge clk) begin
 		if(axi_rvalid) axi_rvalid_enable <= 1'b1;
 		else axi_rvalid_enable <= 1'b0;
-	end 
+	end
+	assign m_axi_rvalid = axi_rvalid && !axi_rvalid_enable;
 
 	localparam IDLE  = 1'b0;
   localparam TRANS = 1'b1;
-  reg state;
 
 	always @(posedge clk) begin
 		if(rst) state <= IDLE;
@@ -911,6 +914,15 @@ assign id_valid_o = (state == WAIT) && (!isRAW_i);
 assign id_ready_o = (state == IDLE) && (!isRAW_i);
 
 wire updata = id_valid_o && ex_ready_i;
+/***pattern***/
+wire [4:0]op;
+wire [3:0]rd; //R I U J
+wire [2:0]funct3;
+//wire [3:0]rs1;  //R I S B
+//wire [3:0]rs2;  //R S B
+wire [31:0]immI,immU,immS,immB,immJ,imm;
+wire [6:0]funct7; //R
+
 always@(posedge clk) begin
   if(updata) begin
 `ifndef ysyx_24110017_YOSYS_STA
@@ -945,15 +957,6 @@ always@(posedge clk) begin
 		WAIT : if(updata) ls_valid_o <= (op == 5'b01000 || op == 5'b00000);
 	endcase
 end
-
-/***pattern***/
-wire [4:0]op;
-wire [3:0]rd; //R I U J
-wire [2:0]funct3;
-//wire [3:0]rs1;  //R I S B
-//wire [3:0]rs2;  //R S B
-wire [31:0]immI,immU,immS,immB,immJ,imm;
-wire [6:0]funct7; //R
  
 assign op = inst_i[6:2];
 assign rd = (op == 5'b01101 || op == 5'b00101 || op == 5'b11011 || op == 5'b11001 || op == 5'b00000 || op == 5'b00100 || op == 5'b11100 || op == 5'b01100) ? inst_i[10:7] : 4'b0;
@@ -1042,9 +1045,17 @@ module ysyx_24110017_EXU(
 );
 
 /***分布式控制***/
+reg state;
 assign ex_ready_o = !state;
 parameter IDLE = 1'b0,WAIT = 1'b1;
-reg state;
+
+wire ls_valid;
+wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
+wire [31:0] xrd;
+wire [ 3:0] csrs_wen;
+wire [31:0] alu_res;
+wire [31:0] csr,mcause_w,csrs_w;
+wire [31:0] dpnc;
 
 wire updata = (!ls_valid || ls_done_i) && (abnormal == 0);
 assign ex_valid_o = updata && state;
@@ -1055,12 +1066,12 @@ always @(posedge clk) begin
 end
 
 wire [1:0]total = (ecall_en) ? 2'd2 : (|csrs_wen) ? 2'd1 : 2'd0;
-wire [1:0]abnormal = total - counter;
 reg [1:0]counter;
 always @(posedge clk) begin
 	if(id_valid_i && ex_ready_o) counter <= 2'd0;
 	else if(counter != total) counter <= counter + 1;
 end
+wire [1:0]abnormal = total - counter;
 
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
@@ -1160,7 +1171,7 @@ wire [31:0]and_res = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i & ((op_i == 5
 wire [31:0]or_res  = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i | ((op_i == 5'b00100) ? imm_i : r2_i) : 32'b0;
 wire [31:0]xor_res = (op_i == 5'b00100 || op_i == 5'b01100) ? r1_i ^ ((op_i == 5'b00100) ? imm_i : r2_i) : 32'b0;
 
-wire [31:0]xrd = 
+assign xrd = 
 /***I*addi~srai***/
 				(op_i == 5'b00100) ? alu_res :
 /***R_add~R_remu***/
@@ -1184,15 +1195,15 @@ wire isecall   = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b0000;
 wire ismret    = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1010;
 //wire isebreak= {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b0001;
 
-wire[31:0] csr = (ismepc) ? mepc_i : (ismstatus) ? mstatus_i : (ismcause) ? mcause_i : (ismtvec) ? mtvec_i : 32'b0;
+assign csr = (ismepc) ? mepc_i : (ismstatus) ? mstatus_i : (ismcause) ? mcause_i : (ismtvec) ? mtvec_i : 32'b0;
 
-wire[31:0] mcause_w = (ecall_en) ? r2_i : csrs_w; //ecall a5
-wire[31:0] csrs_w = 
+assign mcause_w = (ecall_en) ? r2_i : csrs_w; //ecall a5
+assign csrs_w = 
 			({32{funct3_i == 3'b001}} & (r1_i))        | //csrrw
 			({32{funct3_i == 3'b010}} & (r1_i | csr))  | //csrrs
       ({32{funct3_i == 3'b011}} & (~r1_i & csr)) | //csrrc
 			({32{ecall_en}} & pc_i); //ecall_mepc
-wire [3:0] csrs_wen = {
+assign csrs_wen = {
     (op_i == 5'b11100 && ismtvec),
     (op_i == 5'b11100 && ismcause),
     (op_i == 5'b11100 && ismstatus),
@@ -1212,7 +1223,7 @@ wire [3:0]alu_sel =
 	: ((op_i == 5'b00100 && funct3_i == 3'b101 && funct7_i == 1'b1) || (op_i == 5'b01100 && funct3_i == 3'b101 && funct7_i == 1'b1)) ? SRA
 	: ((op_i == 5'b00100 && funct3_i == 3'b110) || (op_i == 5'b01100 && funct3_i == 3'b110 && funct7_i == 1'b0)) ? OR
 	: ((op_i == 5'b00100 && funct3_i == 3'b111) || (op_i == 5'b01100 && funct3_i == 3'b111 && funct7_i == 1'b0)) ? AND : ADD;
-wire [31:0]alu_res = (alu_sel == ADD) ? add_res
+assign alu_res = (alu_sel == ADD) ? add_res
 	: (alu_sel == SUB) ? r1_i - r2_i
 	: (alu_sel == SLL) ? sll_res
 	: (alu_sel == SRL) ? srl_res
@@ -1224,7 +1235,7 @@ wire [31:0]alu_res = (alu_sel == ADD) ? add_res
 	: 32'b0;
 
 /***LSU***/
-wire ls_valid = (op_i == 5'b01000) || (op_i == 5'b00000);
+assign ls_valid = (op_i == 5'b01000) || (op_i == 5'b00000);
 assign ls_addr_o = (ls_valid) ? add_res : 32'h0;
 assign ls_wdata_o = 
 				(ls_addr_o[1:0] == 2'b00) ? r2_i
@@ -1233,7 +1244,6 @@ assign ls_wdata_o =
 			: (ls_addr_o[1:0] == 2'b11) ? {r2_i[7:0],24'b0} : 32'h0;
 
 /***BU***/
-wire jalen,jalren,beqen,bneen,blten,bgeen,bltuen,bgeuen,ecall_en,mret_en;
 assign jalen		= (op_i == 5'b11011);
 assign jalren		= (op_i == 5'b11001);
 assign beqen		= (op_i == 5'b11000 && funct3_i == 3'b000 && (r1_i == r2_i));
@@ -1245,7 +1255,7 @@ assign bgeuen		= (op_i == 5'b11000 && funct3_i == 3'b111 && !slt_res);
 assign ecall_en = (op_i == 5'b11100 && isecall);
 assign mret_en  = (op_i == 5'b11100 && ismret);
 
-wire [31:0]dnpc =
+assign dnpc =
     (jalen)  ? add_res	//jal
 	: (jalren) ? (add_res & ~1) //jalr
 	: (beqen)  ? add_res	//beq
@@ -1303,6 +1313,7 @@ module ysyx_24110017_LSU(
 	input  wire				 ls_axi_rlast
 );
 
+reg ls_read_done;
 assign ls_done_o = (ls_read_done) || (ls_axi_bvalid && ls_axi_bready); 
 wire ls_wen_i = (op_i == 5'b01000) && ls_valid_i;
 wire ls_ren_i = (op_i == 5'b00000) && ls_valid_i;
@@ -1335,7 +1346,6 @@ wire [ 2:0]ls_awsize_i = (op_i == 5'b01000 && funct3_i == 3'b000) ? 3'b000 : (op
 wire [ 2:0]ls_arsize_i = (op_i == 5'b00000 && (funct3_i == 3'b000 || funct3_i == 3'b100)) ? 3'b0 : (op_i == 5'b00000 && (funct3_i == 3'b001 || funct3_i == 3'b101)) ? 3'b1 : (op_i == 5'b00000 && funct3_i == 3'b010) ? 3'b10 : 3'b10;
 
 /***时序最差路径***/
-reg ls_read_done;
 always @(posedge clk) begin
 	if(ls_axi_rvalid && ls_axi_rready) begin
 		ls_read_done <= 1'b1;
@@ -1525,8 +1535,6 @@ wire			 X_AXI_AWVALID,X_AXI_AWREADY,X_AXI_WVALID,X_AXI_WREADY,X_AXI_BVALID,X_AXI
 wire			 X_AXI_ARVALID,X_AXI_ARREADY,X_AXI_RVALID,X_AXI_RREADY,X_AXI_RLAST;
 
 parameter SEL_IFU = 1'b0,SEL_LSU = 1'b1;
-wire sel_m = ((state != GRANT_IFU) && (LSU_AXI_ARVALID || LSU_AXI_AWVALID || state == GRANT_LSU)) ? SEL_LSU : SEL_IFU;
-
 parameter IDLE = 2'b00,GRANT_LSU = 2'b01,GRANT_IFU = 2'b10;
 reg [1:0] state;
 always @(posedge clk) begin
@@ -1540,6 +1548,9 @@ always @(posedge clk) begin
 		endcase
 	end
 end
+
+wire sel_m = ((state != GRANT_IFU) && (LSU_AXI_ARVALID || LSU_AXI_AWVALID || state == GRANT_LSU)) ? SEL_LSU : SEL_IFU;
+wire sel_id;
 
 assign X_AXI_AWID      = (sel_m == SEL_LSU) ? LSU_AXI_AWID    : 4'b0;
 assign X_AXI_AWLEN     = (sel_m == SEL_LSU) ? LSU_AXI_AWLEN   : 8'b0;
@@ -1620,7 +1631,7 @@ localparam MVENDORID_ADDR = 32'h01000000;
 localparam MARCHID_ADDR		= 32'h01000004;
 wire sel_mvendorid = (X_AXI_ARADDR == MVENDORID_ADDR);
 wire sel_marchid	 = (X_AXI_ARADDR == MARCHID_ADDR);
-wire sel_id = sel_mvendorid || sel_marchid;
+assign sel_id = sel_mvendorid || sel_marchid;
 
 wire [31:0]I_AXI_RDATA = (sel_mvendorid) ? mvendorid : marchid;
 wire I_AXI_ARREADY = 1'b1;
@@ -1660,6 +1671,7 @@ module ysyx_24110017_CLINT(
 localparam DEVICE_CLINT_LOW_ADDR = 32'h02000000;
 localparam DEVICE_CLINT_HIGH_ADDR = 32'h02000004;
 
+reg [63:0] mtime;
 wire[31:0] c_rdata = {32{(c_axi_araddr == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | {32{(c_axi_araddr == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
 
 always @(posedge clk) begin
@@ -1680,7 +1692,6 @@ always @(posedge clk) begin
 end
 
 /***基本二进制***/
-reg [63:0] mtime;
 always @(posedge clk) begin
 	if(rst) begin
 		mtime <= 64'b0;
