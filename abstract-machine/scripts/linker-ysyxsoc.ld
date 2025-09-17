@@ -2,7 +2,7 @@ ENTRY(_start)
 PHDRS { entry PT_LOAD; ssbl PT_LOAD; text PT_LOAD; rodata PT_LOAD; data PT_LOAD; }
 
 MEMORY {
-	flash (rx): ORIGIN = 0x30000000, LENGTH = 1M
+	flash (rx): ORIGIN = 0x30000000, LENGTH = 16M
   sdram (wrx): ORIGIN = 0xa0000000, LENGTH = 32M
 	sram (wrx): ORIGIN = 0x0f000000, LENGTH = 2K
 }
