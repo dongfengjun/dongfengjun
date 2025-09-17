@@ -84,7 +84,7 @@ perf:
 	
 sim-iverilog: $(MEMORY_HEX) $(ICOMPILED) run_sim_iverilog
 
-sim-iverilog-netlist: $(MEMORY_HEX) compile-netlist run_sim_iverilog
+sim-iverilog-netlist: $(MEMORY_HEX) $(ICOMPILED-NETLIST) run_sim_iverilog_netlist
 
 $(MEMORY_HEX): $(IMG) | $(BUILD_DIR)
 	$(OBJCOPY) -I binary -O verilog --adjust-vma=$(VMA_ADJUST) $(IMG) $(MEMORY_HEX)
