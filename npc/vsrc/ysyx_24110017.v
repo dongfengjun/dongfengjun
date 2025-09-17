@@ -1057,6 +1057,7 @@ wire [31:0] alu_res;
 wire [31:0] csr,mcause_w,csrs_w;
 wire [31:0] dnpc;
 
+wire [1:0]abnormal;
 wire updata = (!ls_valid || ls_done_i) && (abnormal == 0);
 assign ex_valid_o = updata && state;
 always @(posedge clk) begin
@@ -1071,7 +1072,7 @@ always @(posedge clk) begin
 	if(id_valid_i && ex_ready_o) counter <= 2'd0;
 	else if(counter != total) counter <= counter + 1;
 end
-wire [1:0]abnormal = total - counter;
+assign abnormal = total - counter;
 
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
@@ -1533,9 +1534,12 @@ wire [ 1:0]X_AXI_AWBURST,X_AXI_ARBURST;
 wire [ 1:0]X_AXI_BRESP,X_AXI_RRESP;
 wire			 X_AXI_AWVALID,X_AXI_AWREADY,X_AXI_WVALID,X_AXI_WREADY,X_AXI_BVALID,X_AXI_BREADY,X_AXI_WLAST;
 wire			 X_AXI_ARVALID,X_AXI_ARREADY,X_AXI_RVALID,X_AXI_RREADY,X_AXI_RLAST;
+wire [31:0]I_AXI_RDATA;
+wire       I_AXI_ARREADY,I_AXI_RVALID;
 
 parameter SEL_IFU = 1'b0,SEL_LSU = 1'b1;
 parameter IDLE = 2'b00,GRANT_LSU = 2'b01,GRANT_IFU = 2'b10;
+wire sel_id;
 reg [1:0] state;
 always @(posedge clk) begin
 	if(rst) state <= IDLE;
@@ -1550,7 +1554,6 @@ always @(posedge clk) begin
 end
 
 wire sel_m = ((state != GRANT_IFU) && (LSU_AXI_ARVALID || LSU_AXI_AWVALID || state == GRANT_LSU)) ? SEL_LSU : SEL_IFU;
-wire sel_id;
 
 assign X_AXI_AWID      = (sel_m == SEL_LSU) ? LSU_AXI_AWID    : 4'b0;
 assign X_AXI_AWLEN     = (sel_m == SEL_LSU) ? LSU_AXI_AWLEN   : 8'b0;
@@ -1633,12 +1636,11 @@ wire sel_mvendorid = (X_AXI_ARADDR == MVENDORID_ADDR);
 wire sel_marchid	 = (X_AXI_ARADDR == MARCHID_ADDR);
 assign sel_id = sel_mvendorid || sel_marchid;
 
-wire [31:0]I_AXI_RDATA = (sel_mvendorid) ? mvendorid : marchid;
-wire I_AXI_ARREADY = 1'b1;
-wire I_AXI_RVALID = 1'b1;
+reg [31:0]mvendorid,marchid;
+assign I_AXI_RDATA = (sel_mvendorid) ? mvendorid : marchid;
+assign I_AXI_ARREADY = 1'b1;
+assign I_AXI_RVALID = 1'b1;
 
-reg [31:0]mvendorid;
-reg [31:0]marchid;
 always @(posedge clk) begin
 	if(rst) mvendorid <= 32'h79737978;
 end
