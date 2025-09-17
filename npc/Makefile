@@ -50,7 +50,8 @@ NETLIST ?= ./ysyx_24110017.netlist.syn.v
 NETLIST_VSRC += $(NETLIST)
 CELLS ?= cells.v
 NETLIST_VSRC += $(CELLS)
-COMPILED = $(BUILD_DIR)/ysyx_24110017_iverilog.vpp
+ICOMPILED = $(BUILD_DIR)/ysyx_24110017_iverilog.vpp
+ICOMPILED-NETLIST = $(BUILD_DIR)/ysyx_24110017_iverilog_netlist.vpp
 MEMORY_HEX = $(BUILD_DIR)/memory_iverilog.hex
 VMA_ADJUST ?= 0x0
 #LLVM
@@ -81,21 +82,24 @@ compile: $(CSRCS) $(VSRCS) $(NVBOARD_ARCHIVE)
 perf:
 	make -C ../am-kernels/benchmarks/microbench ARCH=riscv32e-ysyxsoc mainargs=test run
 	
-sim-iverilog: $(MEMORY_HEX) icompile run_sim_iverilog
+sim-iverilog: $(MEMORY_HEX) $(ICOMPILED) run_sim_iverilog
 
 sim-iverilog-netlist: $(MEMORY_HEX) compile-netlist run_sim_iverilog
 
 $(MEMORY_HEX): $(IMG) | $(BUILD_DIR)
 	$(OBJCOPY) -I binary -O verilog --adjust-vma=$(VMA_ADJUST) $(IMG) $(MEMORY_HEX)
 
-icompile: $(VSRC) | $(BUILD_DIR)
-	$(IVERILOG) $(IVERILOG_FLAGS) -o $(COMPILED) $(IVSRC)
+$(ICOMPILED): $(IVSRC) | $(BUILD_DIR)
+	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $^
 
-compile-netlist: $(NETLIST_VSRC) | $(BUILD_DIR)
-	$(IVERILOG) $(IVERILOG_FLAGS) -o $(COMPILED) $(NETLIST_VSRC)
+$(ICOMPILED-NETLIST): $(NETLIST_VSRC) | $(BUILD_DIR)
+	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $^
 
-run_sim_iverilog: $(COMPILED)
-	$(VVP) $(COMPILED)
+run_sim_iverilog: $(ICOMPILED)
+	$(VVP) $(ICOMPILED)
+
+run_sim_iverilog_netlist: $(ICOMPILED-NETLIST)
+	$(VVP) $(ICOMPILED-NETLIST)
 
 wave:
 	$(GTKWAVE) $(BUILD_DIR)/wave.vcd
