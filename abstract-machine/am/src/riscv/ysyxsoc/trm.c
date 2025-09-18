@@ -96,8 +96,8 @@ void bootloader_fsbl(void) {
 void uart_init(void) {
 	outb(UART_BASE + 1, 0x00);
 	outb(UART_BASE + 3, 0x80);
-	outb(UART_BASE    , 0x00);
-	outb(UART_BASE + 1, 0x10);
+	outb(UART_BASE    , 0x09);
+	outb(UART_BASE + 1, 0x00);
 	outb(UART_BASE + 3, 0x03);
 	while (inb(UART_BASE + 5) & 0x01) {
     (void)inb(UART_BASE);
@@ -105,20 +105,6 @@ void uart_init(void) {
 	outb(UART_BASE + 2, 0xc7);
 	outb(UART_BASE + 1, 0x01);
 }
-
-/***
-void uart_init(void) {
-  outb(UART_BASE + 1, 0x00);
-  outb(UART_BASE + 2, 0x00);
-  outb(UART_BASE + 3, 0x80);
-  outb(UART_BASE + 0, 0x0c);
-  outb(UART_BASE + 1, 0x00);
-  outb(UART_BASE + 3, 0x03);
-  while (inb(UART_BASE + 5) & 0x01) {
-		(void)inb(UART_BASE);
-	}
-}
-***/
 
 #define IDCSR_BASE 0x01000000
 void idcsrs_init(void) {
