@@ -21,7 +21,7 @@ static const char mainargs[] = MAINARGS;
 #define UART_BASE 0X10000000
 void putch(char ch) {
 	while((inb(UART_BASE + 0X5) & 0x20) == 0){};
-	outl(UART_BASE, ch);
+	outb(UART_BASE, ch);
 }
 
 void halt(int code) {
