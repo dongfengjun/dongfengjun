@@ -69,7 +69,7 @@ ARGS += --log=$(LOG)
 ARGS += --img=$(IMG)
 ARGS += --elf=$(ELF)
 ARGS += --diff=$(REF_SO)
-#ARGS += -b
+ARGS += -b
 
 run: $(BUILD_DIR) compile
 	ASAN_OPTIONS=new_delete_type_mismatch=0 $(BUILD_DIR)/V$(TOP) $(ARGS)
