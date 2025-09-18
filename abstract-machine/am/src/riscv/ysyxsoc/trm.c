@@ -112,7 +112,7 @@ void uart_init(void) {
   outb(UART_BASE + 1, 0x00);
   outb(UART_BASE + 2, 0x00);
   outb(UART_BASE + 3, 0x80);
-  outb(UART_BASE + 0, 0x01);
+  outb(UART_BASE + 0, 0x04);
   outb(UART_BASE + 1, 0x00);
   outb(UART_BASE + 3, 0x03);
   while (inb(UART_BASE + 5) & 0x01) {
