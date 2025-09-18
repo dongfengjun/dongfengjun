@@ -94,11 +94,14 @@ void bootloader_fsbl(void) {
 }
 
 void uart_init(void) {
-	outb(UART_BASE + 0X3, 0x80);
-	outb(UART_BASE + 0X1, 0x0);
-	outb(UART_BASE, 0x1);
-	outb(UART_BASE + 0X3, 0x3);
-	outb(UART_BASE + 0X1, 0x11);
+	outb(UART_BASE + 1, 0x00);
+	outb(UART_BASE + 2, 0x07);
+	outb(UART_BASE + 3, 0x80);
+	outb(UART_BASE    , 0x01);
+	outb(UART_BASE + 1, 0x00);
+	outb(UART_BASE + 3, 0x03);
+	outb(UART_BASE + 4, 0x08);
+	outb(UART_BASE + 1, 0x01);
 }
 
 #define IDCSR_BASE 0x01000000
