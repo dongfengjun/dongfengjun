@@ -78,8 +78,6 @@ SECTIONS {
   } > sdram AT > flash : data
 
 	.data : ALIGN(4) {
-		*(.data.instr_A_src)
-    *(.data.test_A_data)
 		*(.data*)
 		*(.sdata*)
 		. = ALIGN(4);
