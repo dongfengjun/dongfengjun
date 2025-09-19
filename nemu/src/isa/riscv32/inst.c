@@ -37,13 +37,6 @@ static vaddr_t *csrs(word_t csr) {
 #define MRET() { \
 	s->dnpc = CSRs(0x341); \
 }
-/***
-	cpu.csr.mstatus &= ~(1<<3); \
-	cpu.csr.mstatus |= ((cpu.csr.mstatus&(1<<7))>>4); \
-	cpu.csr.mstatus |= (1<<7); \
-	cpu.csr.mstatus &= ~((1<<11)+(1<<12)); \
-}
-***/
 
 #ifdef CONFIG_ETRACE
 	extern char *etrace_p;
@@ -175,6 +168,7 @@ static int decode_exec(Decode *s) {
 	INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, R(rd) = CSRs(imm); CSRs(imm) |= src1);
 	INSTPAT("??????? ????? ????? 011 ????? 11100 11", csrrc  , I, R(rd) = CSRs(imm); CSRs(imm) &= ~src1);
 	INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , R, MRET(););
+	INSTPAT("0000000 00000 00000 001 00000 00011 11", fencei , I);
 	INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 
