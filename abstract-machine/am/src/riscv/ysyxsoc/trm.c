@@ -47,6 +47,7 @@ extern char bss_size[];
 void bootloader_ssbl(void) {
 	if(&data_vma_start != &data_lma_start) {
 		if((size_t)data_size == 0x1020) {
+			outb(UART_BASE, 'a');
 		}
 		else if((size_t)data_size != 0) {
 			uint32_t *o1 = (uint32_t *)data_vma_start;
