@@ -78,10 +78,10 @@ SECTIONS {
   } > sdram AT > flash : data
 
 	.data : ALIGN(4) {
+		*(.data.instr_A_src)
+    *(.data.test_A_data)
 		*(.data*)
 		*(.sdata*)
-		*(.instr_A_src)
-		*(.test_A_data)
 		. = ALIGN(4);
   } > sdram AT > flash : data
 	data_size = SIZEOF(.data) + SIZEOF(.data.extra);
