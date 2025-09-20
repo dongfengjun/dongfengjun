@@ -112,6 +112,5 @@ SECTIONS {
   _end = .;
 	. = bss_vma_start + bss_size;
   _heap_start = ALIGN(0x10);
-	. = _heap_start + 0x1000000;
-	_heap_end = .;
+	_heap_end = ORIGIN(sdram) + LENGTH(sdram);
 }
