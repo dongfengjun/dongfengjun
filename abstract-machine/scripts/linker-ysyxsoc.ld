@@ -47,11 +47,14 @@ SECTIONS {
 	rodata_size = SIZEOF(.rodata);
 	rodata_lma_start = LOADADDR(.rodata);
 
-/***
-	. = ALIGN(4);
-	.data.extra : ALIGN(4) {
-    data_vma_start = .;
-		__fsymtab_start = .;
+	.data : ALIGN(4) {
+		data_vma_start = .;
+		*(.data*)
+		*(.sdata*)
+		. = ALIGN(4);
+
+		/* section information for finsh shell */
+    __fsymtab_start = .;
     KEEP(*(FSymTab))
     __fsymtab_end = .;
     . = ALIGN(8);
@@ -60,6 +63,7 @@ SECTIONS {
     __vsymtab_end = .;
     . = ALIGN(8);
 
+    /* section information for initial. */
     . = ALIGN(8);
     __rt_init_start = .;
     KEEP(*(SORT(.rti_fn*)))
@@ -77,26 +81,17 @@ SECTIONS {
     __am_apps_data_end = .;
     . = ALIGN(8);
   } > sdram AT > flash : data
-***/
-
-	.data : ALIGN(4) {
-		data_vma_start = .;
-		*(.data*)
-		*(.sdata*)
-		. = ALIGN(4);
-  } > sdram AT > flash : data
-/*
-	data_size = SIZEOF(.data) + SIZEOF(.data.extra);
-	data_lma_start = LOADADDR(.data.extra);
-*/
+	
 	data_size = SIZEOF(.data);
   data_lma_start = LOADADDR(.data);
 
-/***
-. = ALIGN(4);
-	.bss.extra : {
-    . = ALIGN(8);
+	.bss : ALIGN(4) {
 		bss_vma_start = .;
+		*(.bss*)
+    *(.sbss*)
+    *(.scommon)
+
+		. = ALIGN(8);
     __am_apps_bss_start = .;
     *(__am_apps.bss*)
     *(__am_apps.sbss*)
@@ -104,24 +99,14 @@ SECTIONS {
     __am_apps_bss_end = .;
     . = ALIGN(8);
   } > sdram AT > flash
-***/
-
-	.bss : ALIGN(4) {
-		bss_vma_start = .;
-		*(.bss*)
-    *(.sbss*)
-    *(.scommon)
-		. = ALIGN(4);
-  } > sdram AT > flash
-/***
-	bss_size = SIZEOF(.bss) + SIZEOF(.bss.extra);
-  bss_lma_start = LOADADDR(.bss.extra);
-***/
+	
 	bss_size = SIZEOF(.bss);
   bss_lma_start = LOADADDR(.bss);
 
 	end = .;
   _end = .;
+
+/***
 	_heap_start = 0xa0f00000;
 	. = _heap_start + 0x100000;
 	_heap_end = .;
@@ -130,4 +115,12 @@ SECTIONS {
   _stack_top = ALIGN(0X10);
   . = _stack_top + 0x1000;
   _stack_pointer = .;
+***/
+	. = ORIGIN(sram);
+  _stack_top = ALIGN(0x10);
+  . = _stack_top + 0x2000;
+  _stack_pointer = .;
+
+  . = bss_vma_start + bss_size;
+  _heap_start = ALIGN(0x10);
 }
