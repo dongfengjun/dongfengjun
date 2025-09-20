@@ -9,16 +9,8 @@ Context* __am_irq_handle(Context *c) {
   if(user_handler) {
     Event ev = {0};
     switch (c->mcause) {
-			case 0xb:
-				if(c->GPR1 == -1) {
-					ev.event = EVENT_YIELD;
-				}
-				else {
-					printf("mcause is not b,=%x\n",c->mcause);
-					ev.event = EVENT_SYSCALL;
-				}
-				break;
-				default: ev.event = EVENT_ERROR; printf("mcause=%d\n",c->mcause);break;
+			case -1: ev.event = EVENT_YIELD;
+			default: ev.event = EVENT_ERROR; printf("mcause=%d\n",c->mcause);break;
 		}
 
 		c = user_handler(ev, c);
