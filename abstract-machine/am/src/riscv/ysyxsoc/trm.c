@@ -51,7 +51,6 @@ void bootloader_ssbl(void) {
       uint32_t *i1 = (uint32_t *)data_lma_start;
       for(int j = 0;j < (size_t)data_size / 4; j ++) {
         *o1 ++ = *i1 ++;
-				outb(UART_BASE, 'a');
 			}
 		}
 	}
