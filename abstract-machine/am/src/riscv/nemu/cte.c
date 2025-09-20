@@ -5,18 +5,26 @@
 static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
-  if (user_handler) {
+  c->mepc += 4;
+  if(user_handler) {
     Event ev = {0};
     switch (c->mcause) {
-			case -1: ev.event = EVENT_YIELD; c->mepc += 4; break;
-      default: ev.event = EVENT_ERROR; break;
-    }
-		
-    c = user_handler(ev, c);
-    assert(c != NULL);
-  }
+			case 0xb:
+				if(c->GPR1 == -1) {
+					ev.event = EVENT_YIELD;
+				}
+				else {
+					printf("mcause is not b,=%x\n",c->mcause);
+					ev.event = EVENT_SYSCALL;
+				}
+				break;
+				default: ev.event = EVENT_ERROR; printf("mcause=%d\n",c->mcause);break;
+		}
 
-  return c;
+		c = user_handler(ev, c);
+		assert(c != NULL);
+	}
+	return c;
 }
 
 extern void __am_asm_trap(void);
@@ -32,11 +40,17 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 }
 
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
-  Context *cp = (Context *)(kstack.end - sizeof(Context));
-	cp->gpr[10] = (uintptr_t)arg; //$a0
-	cp->mstatus = 0x1800;
-	cp->mepc = (uintptr_t)entry;
-	return cp;
+	Context *stack_top = kstack.end - sizeof(Context);
+  stack_top->mepc = (uintptr_t)entry;
+  stack_top->mstatus = 0x1800;
+  //stack_top->gpr[10]=(uintptr_t) arg;
+	// a0 is gpr[10]
+  for(int i=0; i<4; i++) {
+	// stack_top->gpr[10+i] = ((uintptr_t)arg)[i];
+		stack_top->gpr[10+i] = (uintptr_t)arg+i;
+	}
+  // printf("mepc addr:%p\n", &(stack_top->mepc));
+  return stack_top;
 }
 
 void yield() {
