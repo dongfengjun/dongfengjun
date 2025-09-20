@@ -103,24 +103,15 @@ SECTIONS {
 	bss_size = SIZEOF(.bss);
   bss_lma_start = LOADADDR(.bss);
 
-	end = .;
-  _end = .;
-
-/***
-	_heap_start = 0xa0f00000;
-	. = _heap_start + 0x100000;
-	_heap_end = .;
-
-	. = ORIGIN(sram) + 0x1000;
-  _stack_top = ALIGN(0X10);
-  . = _stack_top + 0x1000;
-  _stack_pointer = .;
-***/
 	. = ORIGIN(sram);
   _stack_top = ALIGN(0x10);
   . = _stack_top + 0x2000;
   _stack_pointer = .;
 
-  . = bss_vma_start + bss_size;
+  end = .;
+  _end = .;
+	. = bss_vma_start + bss_size;
   _heap_start = ALIGN(0x10);
+	. = _heap_start + 0x1000000;
+	_heap_end = .;
 }
