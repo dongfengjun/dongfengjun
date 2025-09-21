@@ -11,6 +11,10 @@ INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
 #verilator
 VERILATOR = verilator
 VERILATOR_FLAGS += -MMD -x-assign fast --trace --cc --build
+#fast
+VERILATOR_FLAGS += -O3 --x-initial fast
+VERILATOR_FLAGS += -CFLAGS "-O3" / -LDFLAGS "-O3"
+
 VERILATOR_FLAGS += -CFLAGS -I$(INC_PATH) -I$(INC_COM_PATH) -I$(INC_UART_PATH) -I$(INC_SPI_PATH)
 VERILATOR_FLAGS += -CFLAGS $(CXXFLAGS)
 VERILATOR_FLAGS += -CFLAGS -g
