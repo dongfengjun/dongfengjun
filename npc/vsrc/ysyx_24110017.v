@@ -162,7 +162,7 @@ ysyx_24110017_IFU IFU(clock,reset,isCHazard,
 		if_axi_arlen,if_axi_arsize,if_axi_arburst,
 		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast
 );
-ysyx_24110017_CACHE #(1,4,0,16) ICACHE(clock,reset,fencei_id, //w < n
+ysyx_24110017_CACHE #(4,4,0,16) ICACHE(clock,reset,fencei_id, //w < n
 		if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
 		if_axi_arlen,if_axi_arsize,if_axi_arburst,
 		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast,
@@ -1198,7 +1198,7 @@ wire ismret    = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1010;
 
 assign csr = (ismepc) ? mepc_i : (ismstatus) ? mstatus_i : (ismcause) ? mcause_i : (ismtvec) ? mtvec_i : 32'b0;
 
-assign mcause_w = (ecall_en) ? r2_i : csrs_w; //ecall a5
+assign mcause_w = (ecall_en) ? 32'hb : csrs_w; //ecall a5
 assign csrs_w = 
 			({32{funct3_i == 3'b001}} & (r1_i))        | //csrrw
 			({32{funct3_i == 3'b010}} & (r1_i | csr))  | //csrrs
