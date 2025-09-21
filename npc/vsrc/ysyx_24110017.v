@@ -66,8 +66,21 @@ module ysyx_24110017(
 	output wire io_slave_rlast
 );
 
+/***UNDRIVEN***/
+assign io_slave_awready = 1'b0;
+assign io_slave_wready  = 1'b0;
+assign io_slave_bvalid  = 1'b0;
+assign io_slave_bid     = 4'b0;
+assign io_slave_bresp   = 2'b0;
+assign io_slave_arready = 1'b0;
+assign io_slave_rvalid  = 1'b0;
+assign io_slave_rid     = 4'b0;
+assign io_slave_rdata   = 32'b0;
+assign io_slave_rresp   = 2'b0;
+assign io_slave_rlast   = 1'b0;
+
 /***BTB***/
-wire [31:0]snpc;
+wire [31:0] snpc;
 /***IFU***/
 wire [31:0] inst_if,pc_if;
 wire if_valid;
@@ -89,7 +102,7 @@ wire icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,i
 /***IDU***/
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
-wire [31:0]inst_id;//difftest
+wire [31:0] inst_id;//difftest
 `endif
 `endif
 wire id_valid,id_ready;
@@ -143,11 +156,10 @@ wire c_axi_arvalid,c_axi_arready,c_axi_rvalid,c_axi_rready,c_axi_rlast;
 wire [31:0]r1,r2;
 wire [31:0]mepc,mstatus,mcause,mtvec;
 `ifdef __ICARUS__
-wire [31:0] a0;
+wire [31:0] a0;//iverilog仿真检测a0
 `endif
 
 wire isRAW = ((rs1 == rd_ex) || (rs2 == rd_ex)) && (rd_ex != 0);
- 
 reg CHazarden;
 always @(posedge clock) begin
 	if(id_valid && ex_ready) CHazarden <= 1'b1;
@@ -157,90 +169,90 @@ wire isCHazard = CHazarden && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex
 
 ysyx_24110017_BTB #(1,0,16,8,1,0,16,16) BTB(clock,reset,if_axi_araddr,snpc,prepc,pc_if,prepc_en);
 ysyx_24110017_IFU IFU(clock,reset,isCHazard,
-		if_valid,id_ready,dnpc_ex,snpc,pc_if,inst_if,
-		if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
-		if_axi_arlen,if_axi_arsize,if_axi_arburst,
-		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast
+	if_valid,id_ready,dnpc_ex,snpc,pc_if,inst_if,
+	if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
+	if_axi_arlen,if_axi_arsize,if_axi_arburst,
+	if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast
 );
-ysyx_24110017_CACHE #(4,4,0,16) ICACHE(clock,reset,fencei_id, //w < n
-		if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
-		if_axi_arlen,if_axi_arsize,if_axi_arburst,
-		if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast,
-    icache_axi_arready,icache_axi_arvalid,icache_axi_arid,icache_axi_araddr,
-    icache_axi_arlen,icache_axi_arsize,icache_axi_arburst,
-    icache_axi_rready,icache_axi_rvalid,icache_axi_rid,icache_axi_rdata,icache_axi_rresp,icache_axi_rlast
+ysyx_24110017_CACHE #(1,4,0,16) ICACHE(clock,reset,fencei_id, //w < n
+	if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
+	if_axi_arlen,if_axi_arsize,if_axi_arburst,
+	if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast,
+	icache_axi_arready,icache_axi_arvalid,icache_axi_arid,icache_axi_araddr,
+  icache_axi_arlen,icache_axi_arsize,icache_axi_arburst,
+  icache_axi_rready,icache_axi_rvalid,icache_axi_rid,icache_axi_rdata,icache_axi_rresp,icache_axi_rlast
 );
 ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
-		inst_id,
+	inst_id,
 `endif
 `endif
-		prepc,prepc_en,rs1,rs2,r1,r2,
-		if_valid,id_ready,id_valid,ex_ready,
-		pc_if,inst_if,
-		pc_id,imm_id,op_id,funct3_id,r1_id,r2_id,
-		rd_id,gpr_wen_id,ls_valid_id,
-		fencei_id
+	prepc,prepc_en,rs1,rs2,r1,r2,
+	if_valid,id_ready,id_valid,ex_ready,
+	pc_if,inst_if,
+	pc_id,imm_id,op_id,funct3_id,r1_id,r2_id,
+	rd_id,gpr_wen_id,ls_valid_id,
+	fencei_id
 );
 ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
-		inst_id,pc_ex,inst_ex,npc_ex,
+	inst_id,pc_ex,inst_ex,npc_ex,
 `endif
 `endif
-		id_valid,ex_ready,ex_valid,
-		pc_id,imm_id,op_id,funct3_id,
-		r1_id,r2_id,rd_id,gpr_wen_id,
-		mepc,mstatus,mcause,mtvec,
-		xrd_ex,rd_ex,gpr_wen_ex,
-		csrs_wen_ex,
-		ls_addr,ls_wdata,ls_rdata,ls_done,
-		dnpc_ex
+	id_valid,ex_ready,ex_valid,
+	pc_id,imm_id,op_id,funct3_id,
+	r1_id,r2_id,rd_id,gpr_wen_id,
+	mepc,mstatus,mcause,mtvec,
+	xrd_ex,rd_ex,gpr_wen_ex,
+	csrs_wen_ex,
+	ls_addr,ls_wdata,ls_rdata,ls_done,
+	dnpc_ex
 );
 ysyx_24110017_LSU LSU(clock,reset,
-		op_id,funct3_id,ls_valid_id && (!isCHazard),
-		ls_addr,ls_wdata,ls_rdata,ls_done,
-		ls_axi_awready,ls_axi_awvalid,ls_axi_awid,ls_axi_awaddr,
-		ls_axi_awlen,ls_axi_awsize,ls_axi_awburst,
-		ls_axi_wready,ls_axi_wvalid,ls_axi_wdata,ls_axi_wstrb,ls_axi_wlast,
-		ls_axi_bready,ls_axi_bvalid,ls_axi_bid,ls_axi_bresp,
-		ls_axi_arready,ls_axi_arvalid,ls_axi_arid,ls_axi_araddr,
-		ls_axi_arlen,ls_axi_arsize,ls_axi_arburst,
-		ls_axi_rready,ls_axi_rvalid,ls_axi_rid,ls_axi_rdata,ls_axi_rresp,ls_axi_rlast
+	op_id,funct3_id,ls_valid_id && (!isCHazard),
+	ls_addr,ls_wdata,ls_rdata,ls_done,
+	ls_axi_awready,ls_axi_awvalid,ls_axi_awid,ls_axi_awaddr,
+	ls_axi_awlen,ls_axi_awsize,ls_axi_awburst,
+	ls_axi_wready,ls_axi_wvalid,ls_axi_wdata,ls_axi_wstrb,ls_axi_wlast,
+	ls_axi_bready,ls_axi_bvalid,ls_axi_bid,ls_axi_bresp,
+	ls_axi_arready,ls_axi_arvalid,ls_axi_arid,ls_axi_araddr,
+	ls_axi_arlen,ls_axi_arsize,ls_axi_arburst,
+	ls_axi_rready,ls_axi_rvalid,ls_axi_rid,ls_axi_rdata,ls_axi_rresp,ls_axi_rlast
 );
 ysyx_24110017_Xbar Xbar(clock,reset,
-    icache_axi_arready,icache_axi_arvalid,icache_axi_arid,icache_axi_araddr,
-    icache_axi_arlen,icache_axi_arsize,icache_axi_arburst,
-    icache_axi_rready,icache_axi_rvalid,icache_axi_rid,icache_axi_rdata,icache_axi_rresp,icache_axi_rlast,
-		ls_axi_awready,ls_axi_awvalid,ls_axi_awid,ls_axi_awaddr,
-		ls_axi_awlen,ls_axi_awsize,ls_axi_awburst,
-		ls_axi_wready,ls_axi_wvalid,ls_axi_wdata,ls_axi_wstrb,ls_axi_wlast,
-		ls_axi_bready,ls_axi_bvalid,ls_axi_bid,ls_axi_bresp,
-		ls_axi_arready,ls_axi_arvalid,ls_axi_arid,ls_axi_araddr,
-		ls_axi_arlen,ls_axi_arsize,ls_axi_arburst,
-		ls_axi_rready,ls_axi_rvalid,ls_axi_rid,ls_axi_rdata,ls_axi_rresp,ls_axi_rlast,
-		io_master_awready,io_master_awvalid,io_master_awid,io_master_awaddr,
-		io_master_awlen,io_master_awsize,io_master_awburst,
-		io_master_wready,io_master_wvalid,io_master_wdata,io_master_wstrb,io_master_wlast,
-		io_master_bready,io_master_bvalid,io_master_bid,io_master_bresp,
-		io_master_arready,io_master_arvalid,io_master_arid,io_master_araddr,
-		io_master_arlen,io_master_arsize,io_master_arburst,
-		io_master_rready,io_master_rvalid,io_master_rid,io_master_rdata,io_master_rresp,io_master_rlast,
-		c_axi_arready,c_axi_arvalid,c_axi_arid,c_axi_araddr,
-		c_axi_arlen,c_axi_arsize,c_axi_arburst,
-		c_axi_rready,c_axi_rvalid,c_axi_rid,c_axi_rdata,c_axi_rresp,c_axi_rlast
+  icache_axi_arready,icache_axi_arvalid,icache_axi_arid,icache_axi_araddr,
+  icache_axi_arlen,icache_axi_arsize,icache_axi_arburst,
+  icache_axi_rready,icache_axi_rvalid,icache_axi_rid,icache_axi_rdata,icache_axi_rresp,icache_axi_rlast,
+	ls_axi_awready,ls_axi_awvalid,ls_axi_awid,ls_axi_awaddr,
+	ls_axi_awlen,ls_axi_awsize,ls_axi_awburst,
+	ls_axi_wready,ls_axi_wvalid,ls_axi_wdata,ls_axi_wstrb,ls_axi_wlast,
+	ls_axi_bready,ls_axi_bvalid,ls_axi_bid,ls_axi_bresp,
+	ls_axi_arready,ls_axi_arvalid,ls_axi_arid,ls_axi_araddr,
+	ls_axi_arlen,ls_axi_arsize,ls_axi_arburst,
+	ls_axi_rready,ls_axi_rvalid,ls_axi_rid,ls_axi_rdata,ls_axi_rresp,ls_axi_rlast,
+	io_master_awready,io_master_awvalid,io_master_awid,io_master_awaddr,
+	io_master_awlen,io_master_awsize,io_master_awburst,
+	io_master_wready,io_master_wvalid,io_master_wdata,io_master_wstrb,io_master_wlast,
+	io_master_bready,io_master_bvalid,io_master_bid,io_master_bresp,
+	io_master_arready,io_master_arvalid,io_master_arid,io_master_araddr,
+	io_master_arlen,io_master_arsize,io_master_arburst,
+	io_master_rready,io_master_rvalid,io_master_rid,io_master_rdata,io_master_rresp,io_master_rlast,
+	c_axi_arready,c_axi_arvalid,c_axi_arid,c_axi_araddr,
+	c_axi_arlen,c_axi_arsize,c_axi_arburst,
+	c_axi_rready,c_axi_rvalid,c_axi_rid,c_axi_rdata,c_axi_rresp,c_axi_rlast
 );
 /***My-Clint***/
 ysyx_24110017_CLINT CLINT(clock,reset,
-		c_axi_arready,c_axi_arvalid,c_axi_arid,c_axi_araddr,
-		c_axi_arlen,c_axi_arsize,c_axi_arburst,
-		c_axi_rready,c_axi_rvalid,c_axi_rid,c_axi_rdata,c_axi_rresp,c_axi_rlast
+	c_axi_arready,c_axi_arvalid,c_axi_arid,c_axi_araddr,
+	c_axi_arlen,c_axi_arsize,c_axi_arburst,
+	c_axi_rready,c_axi_rvalid,c_axi_rid,c_axi_rdata,c_axi_rresp,c_axi_rlast
 );
 
 ysyx_24110017_RegisterFile #(4,32) RFU (clock,xrd_ex,rd_ex,gpr_wen_ex,rs1,r1,rs2,r2
 `ifdef __ICARUS__
-,a0
+	,a0
 `endif
 );
 ysyx_24110017_Reg #(32, 32'b0)    mepc_reg    (clock,reset,xrd_ex,mepc   ,csrs_wen_ex[0]);
@@ -250,6 +262,7 @@ ysyx_24110017_Reg #(32, 32'b0)    mtvec_reg   (clock,reset,xrd_ex,mtvec  ,csrs_w
 
 `ifndef ysyx_24110017_YOSYS_STA
 `ifdef __ICARUS__
+/***iverilog***/
 always@(*) begin
 		if(inst_if == 32'b00000000000100000000000001110011) begin
 			if(a0 == 0) $write("%sHIT GOOD TRAP at pc = 0x%h%s\n","\033[1;32m",pc_if,"\033[0m");
@@ -293,7 +306,6 @@ function int dpic_grab(int i);
   end
 endfunction
 /***E*N*D***/
-
 /***DPI-C*PERFORMANCE_COUNTER***/
 export "DPI-C" function performance_counter;
 function int performance_counter(int i);
@@ -501,34 +513,34 @@ module ysyx_24110017_BTB
 
 	wire [(1<<B_W)-1:0]bhit;
 	generate 
-    genvar i; 
-      for(i = 0; i < (1<<B_W); i = i + 1) begin : comparator_b
-        assign bhit[i] = (btag == btag_reg[bindex * (1<<B_W) + i]);
+    genvar i1; 
+      for(i1 = 0; i1 < (1<<B_W); i1 = i1 + 1) begin : comparator_b
+        assign bhit[i1] = (btag == btag_reg[bindex * (1<<B_W) + i1]);
 			end
 	endgenerate
 
 	wire [(1<<J_W)-1:0]jhit;
   generate
-    genvar j;
-      for(j = 0; j < (1<<J_W); j = j + 1) begin : comparator_j
-        assign jhit[j] = (jtag == jtag_reg[jindex * (1<<J_W) + j]);
+    genvar i2;
+      for(i2 = 0; i2 < (1<<J_W); i2 = i2 + 1) begin : comparator_j
+        assign jhit[i2] = (jtag == jtag_reg[jindex * (1<<J_W) + i2]);
       end
   endgenerate
 
 `ifdef ysyx_24110017_Associative
 	wire [(1<<B_W)-1:0]balready;
   generate
-    genvar k;
-      for(k = 0; k < (1<<B_W); k = k + 1) begin : comparator_b
-        assign balready[k] = (btag_pre == btag_reg[bindex_pre * (1<<B_W) + k]);
+    genvar i3;
+      for(i3 = 0; i3 < (1<<B_W); i3 = i3 + 1) begin : comparator_b
+        assign balready[i3] = (btag_pre == btag_reg[bindex_pre * (1<<B_W) + i3]);
       end
   endgenerate
 
 	wire [(1<<J_W)-1:0]jalready;
   generate
-    genvar l;
-      for(l = 0; l < (1<<J_W); l = l + 1) begin : comparator_j
-        assign jalready[l] = (jtag_pre == jtag_reg[jindex_pre * (1<<J_W) + l]);
+    genvar i4;
+      for(i4 = 0; i4 < (1<<J_W); i4 = i4 + 1) begin : comparator_j
+        assign jalready[i4] = (jtag_pre == jtag_reg[jindex_pre * (1<<J_W) + i4]);
       end
   endgenerate
 `endif
@@ -538,9 +550,9 @@ assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit
 
   always @(posedge clk) begin
 		if(rst) begin
-			integer i;
-      for (i = 0; i < (1<<B_N); i = i + 1) begin
-				jsnpc_reg[i]  <= 0;
+			integer i5;
+      for (i5 = 0; i5 < (1<<B_N); i5 = i5 + 1) begin
+				jsnpc_reg[i5]  <= 0;
       end
     end
 		else begin
@@ -560,9 +572,9 @@ assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit
 
   always @(posedge clk) begin
 		if(rst) begin
-			integer i;
-      for (i = 0; i < (1<<J_N); i = i + 1) begin
-        jtag_reg[i]  <= 0;
+			integer i6;
+      for (i6 = 0; i6 < (1<<J_N); i6 = i6 + 1) begin
+        jtag_reg[i6]  <= 0;
       end
 		end
 		else begin
@@ -571,9 +583,9 @@ assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit
 `else
 			if(prepc_en_i[1]) begin
 `endif
-				integer a;
-				for (a = 1; a < (1<<J_W); a = a + 1) begin
-					jtag_reg[jindex_pre * (1<<J_W) + a]  <= jtag_reg[jindex_pre * (1<<J_W) + a - 1];
+				integer b;
+				for (b = 1; b < (1<<J_W); b = b + 1) begin
+					jtag_reg[jindex_pre * (1<<J_W) + b]  <= jtag_reg[jindex_pre * (1<<J_W) + b - 1];
 				end
 			jtag_reg[jindex_pre * (1<<J_W)]  <= prepc_tag_i[JTAG-1:2+J_N-J_W];
 			end
@@ -582,9 +594,9 @@ assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit
 
 	always @(posedge clk) begin
 		if(rst) begin
-	    integer i;
-	    for (i = 0; i < (1<<B_N); i = i + 1) begin
-	      bsnpc_reg[i]  <= 0;
+	    integer i7;
+	    for (i7 = 0; i7 < (1<<B_N); i7 = i7 + 1) begin
+	      bsnpc_reg[i7]  <= 0;
 	    end
 	  end
 		else begin
@@ -593,9 +605,9 @@ assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit
 `else
 			if(prepc_en_i[0]) begin
 `endif
-				integer a;
-				for (a = 1; a < (1<<B_W); a = a + 1) begin
-					bsnpc_reg[bindex_pre * (1<<B_W) + a] <= bsnpc_reg[bindex_pre * (1<<B_W) + a - 1];
+				integer c;
+				for (c = 1; c < (1<<B_W); c = c + 1) begin
+					bsnpc_reg[bindex_pre * (1<<B_W) + c] <= bsnpc_reg[bindex_pre * (1<<B_W) + c - 1];
 				end
 				bsnpc_reg[bindex_pre * (1<<B_W)] <= prepc_i[BTARG-1:0];
 			end
@@ -604,9 +616,9 @@ assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit
 
 	always @(posedge clk) begin
 		if(rst) begin
-			integer i;
-      for (i = 0; i < (1<<B_N); i = i + 1) begin
-				btag_reg[i]  <= 0;
+			integer i8;
+      for (i8 = 0; i8 < (1<<B_N); i8 = i8 + 1) begin
+				btag_reg[i8]  <= 0;
       end
 		end
 		else begin
@@ -615,9 +627,9 @@ assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit
 `else
 			if(prepc_en_i[0]) begin
 `endif
-				integer a;
-				for (a = 1; a < (1<<B_W); a = a + 1) begin
-					btag_reg[bindex_pre * (1<<B_W) + a]  <= btag_reg[bindex_pre * (1<<B_W) + a - 1];                            
+				integer d;
+				for (d = 1; d < (1<<B_W); d = d + 1) begin
+					btag_reg[bindex_pre * (1<<B_W) + d]  <= btag_reg[bindex_pre * (1<<B_W) + d - 1];                            
 				end
 				btag_reg[bindex_pre * (1<<B_W)]  <= prepc_tag_i[BTAG-1:2+B_N-B_W];
 			end
@@ -654,12 +666,17 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 	output wire [ 2:0]s_axi_arsize,
 	output wire [ 1:0]s_axi_arburst,
 	output reg  s_axi_rready,
-	input wire  s_axi_rvalid,
-	input wire  [ 3:0]s_axi_rid,
-	input wire  [31:0]s_axi_rdata,
-	input wire  [ 1:0]s_axi_rresp,
-	input wire  s_axi_rlast
+	input  wire s_axi_rvalid,
+	input  wire [ 3:0]s_axi_rid,
+	input  wire [31:0]s_axi_rdata,
+	input  wire [ 1:0]s_axi_rresp,
+	input  wire s_axi_rlast
 );
+
+	assign m_axi_rid   = 4'b0;
+	assign m_axi_rresp = 2'b0;
+	assign m_axi_rlast = 1'b0;
+	assign s_axi_arid  = 4'b0;
 
 	reg state;
 	
@@ -686,9 +703,9 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 	wire [CACHE_WAY - 1 : 0] hit;
 
 	generate 
-    genvar i; 
-      for(i = 0; i < CACHE_WAY; i = i + 1) begin : comparator
-        assign hit[i] = ((tag == tag_reg[index * CACHE_WAY + i]) && (valid_reg[offset][index * CACHE_WAY + i])) ? 1 : 0;
+    genvar i9; 
+      for(i9 = 0; i9 < CACHE_WAY; i9 = i9 + 1) begin : comparator
+        assign hit[i9] = ((tag == tag_reg[index * CACHE_WAY + i9]) && (valid_reg[offset][index * CACHE_WAY + i9])) ? 1 : 0;
 			end
 	endgenerate
 
@@ -765,9 +782,9 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 
 	always @(posedge clk) begin
 		if(rst) begin
-			integer i;
-      for (i = 0; i < CACHE_DEPTH; i = i + 1) begin
-        tag_reg[i] <= 0;
+			integer i10;
+      for (i10 = 0; i10 < CACHE_DEPTH; i10 = i10 + 1) begin
+        tag_reg[i10] <= 0;
       end
 		end
 		else begin
@@ -1314,6 +1331,13 @@ module ysyx_24110017_LSU(
 	input  wire				 ls_axi_rlast
 );
 
+assign ls_axi_awid    = 4'b0;
+assign ls_axi_awlen   = 8'b0;
+assign ls_axi_awburst = 2'b01;
+assign ls_axi_arid    = 4'b0;
+assign ls_axi_arlen   = 8'b0;
+assign ls_axi_arburst = 2'b01;
+
 reg ls_read_done;
 assign ls_done_o = (ls_read_done) || (ls_axi_bvalid && ls_axi_bready); 
 wire ls_wen_i = (op_i == 5'b01000) && ls_valid_i;
@@ -1369,32 +1393,32 @@ assign ls_axi_wstrb  = (ls_axi_wvalid)  ? ls_wmask_i  : 4'b0;
 assign ls_axi_wlast  = (ls_axi_wvalid)  ? 1'b1 : 1'b0;
 assign ls_axi_arsize = (ls_axi_arvalid) ? ls_arsize_i : 3'b0;
 
-always @(posedge clk or posedge rst) begin
-		if(rst) begin
-			axi_state			 <= AXI_IDLE;
-			ls_axi_arvalid <= 1'b0;
-			ls_axi_awvalid <= 1'b0;
-    end 
-		else begin
-      case (axi_state)
-        AXI_IDLE: begin
-				  if(ls_ren_i) begin
-            axi_state		   <= AXI_READ;
-					  ls_axi_arvalid <= 1'b1;
-						ls_axi_araddr  <= ls_addr_i;
-					end
-					if(ls_wen_i) begin
-		        axi_state      <= AXI_WRITE;
-						ls_axi_awvalid <= 1'b1;
-						ls_axi_wvalid  <= 1'b1;
-						ls_axi_awaddr  <= ls_addr_i;
-						ls_axi_wdata   <= ls_wdata_i;
-	        end
+always @(posedge clk) begin
+	if(rst) begin
+		axi_state			 <= AXI_IDLE;
+		ls_axi_arvalid <= 1'b0;
+		ls_axi_awvalid <= 1'b0;
+  end 
+	else begin
+		case (axi_state)
+			AXI_IDLE: begin
+				if(ls_ren_i) begin
+					axi_state		   <= AXI_READ;
+					ls_axi_arvalid <= 1'b1;
+					ls_axi_araddr  <= ls_addr_i;
 				end
-				AXI_READ: begin
-          if(ls_axi_arvalid && ls_axi_arready) begin
-						ls_axi_arvalid <= 1'b0;
-						ls_axi_rready  <= 1'b1;
+				if(ls_wen_i) begin
+					axi_state      <= AXI_WRITE;
+					ls_axi_awvalid <= 1'b1;
+					ls_axi_wvalid  <= 1'b1;
+					ls_axi_awaddr  <= ls_addr_i;
+					ls_axi_wdata   <= ls_wdata_i;
+				end
+			end
+			AXI_READ: begin
+        if(ls_axi_arvalid && ls_axi_arready) begin
+					ls_axi_arvalid <= 1'b0;
+					ls_axi_rready  <= 1'b1;
 					end
 	        if(ls_axi_rvalid && ls_axi_rready) begin
 						ls_axi_araddr  <= 32'h0;
@@ -1402,33 +1426,34 @@ always @(posedge clk or posedge rst) begin
             axi_state			 <= AXI_IDLE;
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
-						if((ls_axi_araddr - 32'h10000000 < 32'h1000) || (ls_axi_araddr == 32'h02000000) || (ls_axi_araddr == 32'h02000004)) begin //DEVICE DIFFTEST
-							diff_skip_ref();
-						end
+					if((ls_axi_araddr - 32'h10000000 < 32'h1000) || (ls_axi_araddr == 32'h02000000) || (ls_axi_araddr == 32'h02000004)) begin //DEVICE DIFFTEST
+						diff_skip_ref();
+					end
 `endif
 `endif
-          end
         end
-				AXI_WRITE: begin
-					if(ls_axi_awvalid && ls_axi_awready) begin
-						ls_axi_awvalid <= 1'b0;
-					end
-					if(ls_axi_wvalid && ls_axi_wready && ((ls_axi_awvalid && ls_axi_awready) || !ls_axi_awvalid)) begin
-						ls_axi_wvalid  <= 1'b0;
-						ls_axi_wdata   <= 32'h0;
-						ls_axi_bready  <= 1'b1;
-					end
-					if(ls_axi_bvalid && ls_axi_bready) begin
-						ls_axi_bready <= 1'b0;
-						ls_axi_awaddr <= 32'h0;
-						axi_state     <= AXI_IDLE;
-					end
+      end
+			AXI_WRITE: begin
+				if(ls_axi_awvalid && ls_axi_awready) begin
+					ls_axi_awvalid <= 1'b0;
 				end
-				default : begin
+				if(ls_axi_wvalid && ls_axi_wready && ((ls_axi_awvalid && ls_axi_awready) || !ls_axi_awvalid)) begin
+					ls_axi_wvalid  <= 1'b0;
+					ls_axi_wdata   <= 32'h0;
+					ls_axi_bready  <= 1'b1;
 				end
-      endcase
-		end
+				if(ls_axi_bvalid && ls_axi_bready) begin
+					ls_axi_bready <= 1'b0;
+					ls_axi_awaddr <= 32'h0;
+					axi_state     <= AXI_IDLE;
+				end
+			end
+			default : begin
+			end
+		endcase
 	end
+end
+
 endmodule
 
 
@@ -1652,23 +1677,27 @@ endmodule
 
 
 module ysyx_24110017_CLINT(
-    input  wire clk,
-    input  wire rst,
+  input  wire clk,
+  input  wire rst,
 
-    output reg	      c_axi_arready,
-    input  wire       c_axi_arvalid,
-    input  wire [ 3:0]c_axi_arid,
-    input  wire [31:0]c_axi_araddr,
-    input  wire [ 7:0]c_axi_arlen,
-    input  wire [ 2:0]c_axi_arsize,
-    input  wire [ 1:0]c_axi_arburst,
-    input  wire       c_axi_rready,
-    output reg        c_axi_rvalid,
-    output wire [ 3:0]c_axi_rid,
-    output reg [31:0]c_axi_rdata,
-    output wire [ 1:0]c_axi_rresp,
-    output wire       c_axi_rlast
+  output reg	      c_axi_arready,
+  input  wire       c_axi_arvalid,
+  input  wire [ 3:0]c_axi_arid,
+  input  wire [31:0]c_axi_araddr,
+  input  wire [ 7:0]c_axi_arlen,
+  input  wire [ 2:0]c_axi_arsize,
+  input  wire [ 1:0]c_axi_arburst,
+  input  wire       c_axi_rready,
+  output reg        c_axi_rvalid,
+  output wire [ 3:0]c_axi_rid,
+  output reg  [31:0]c_axi_rdata,
+  output wire [ 1:0]c_axi_rresp,
+  output wire       c_axi_rlast
 );
+
+assign c_axi_rid      = 4'b0;
+assign c_axi_rresp    = 2'b0;
+assign c_axi_rlast    = 1'b0;
 
 localparam DEVICE_CLINT_LOW_ADDR = 32'h02000000;
 localparam DEVICE_CLINT_HIGH_ADDR = 32'h02000004;
@@ -1693,7 +1722,6 @@ always @(posedge clk) begin
 	end
 end
 
-/***基本二进制***/
 always @(posedge clk) begin
 	if(rst) begin
 		mtime <= 64'b0;
@@ -1719,13 +1747,14 @@ module ysyx_24110017_RegisterFile #(ADDR_WIDTH = 4, DATA_WIDTH = 32) (
 	,output wire [31:0]a0
 `endif
 );
-	reg [DATA_WIDTH-1:0] rf [2**ADDR_WIDTH-1:0];
 
-	always @(posedge clk) begin
-    if (wen && (waddr != 0)) rf[waddr] <= wdata;
-	end
+reg [DATA_WIDTH-1:0] rf [2**ADDR_WIDTH-1:0];
 
-	wire [31:0] rdata1_low = {
+always @(posedge clk) begin
+  if (wen && (waddr != 0)) rf[waddr] <= wdata;
+end
+
+wire [31:0] rdata1_low = {
 		({32{raddr1[3:0] == 'd1}} & rf[1]) |
 		({32{raddr1[3:0] == 'd2}} & rf[2]) |
 		({32{raddr1[3:0] == 'd3}} & rf[3]) |
@@ -1733,37 +1762,37 @@ module ysyx_24110017_RegisterFile #(ADDR_WIDTH = 4, DATA_WIDTH = 32) (
 		({32{raddr1[3:0] == 'd5}} & rf[5]) |
 		({32{raddr1[3:0] == 'd6}} & rf[6]) |
 		({32{raddr1[3:0] == 'd7}} & rf[7]) 
-	};
-	wire [31:0] rdata1_high = {
-		({32{raddr1[3:0] == 'd8 }} & rf[8]) |
-		({32{raddr1[3:0] == 'd9 }} & rf[9]) |
+};
+wire [31:0] rdata1_high = {
+		({32{raddr1[3:0] == 'd8 }} & rf[ 8]) |
+		({32{raddr1[3:0] == 'd9 }} & rf[ 9]) |
 		({32{raddr1[3:0] == 'd10}} & rf[10]) |
 		({32{raddr1[3:0] == 'd11}} & rf[11]) |
 		({32{raddr1[3:0] == 'd12}} & rf[12]) |
 		({32{raddr1[3:0] == 'd13}} & rf[13]) |
 		({32{raddr1[3:0] == 'd14}} & rf[14]) |
 		({32{raddr1[3:0] == 'd15}} & rf[15])
-	};
+};
 
-	wire [31:0] rdata2_low = {
-		({32{raddr2[3:0] == 'd1}} & rf[1]) |
-		({32{raddr2[3:0] == 'd2}} & rf[2]) |
-		({32{raddr2[3:0] == 'd3}} & rf[3]) |
-		({32{raddr2[3:0] == 'd4}} & rf[4]) |
-		({32{raddr2[3:0] == 'd5}} & rf[5]) |
-		({32{raddr2[3:0] == 'd6}} & rf[6]) |
-		({32{raddr2[3:0] == 'd7}} & rf[7])
-	};
-	wire [31:0] rdata2_high = {
-		({32{raddr2[3:0] == 'd8 }} & rf[8]) |
-		({32{raddr2[3:0] == 'd9 }} & rf[9]) |
-		({32{raddr2[3:0] == 'd10}} & rf[10]) |
-		({32{raddr2[3:0] == 'd11}} & rf[11]) |
-		({32{raddr2[3:0] == 'd12}} & rf[12]) |
-		({32{raddr2[3:0] == 'd13}} & rf[13]) |
-		({32{raddr2[3:0] == 'd14}} & rf[14]) |
-		({32{raddr2[3:0] == 'd15}} & rf[15])
- };
+wire [31:0] rdata2_low = {
+	({32{raddr2[3:0] == 'd1}} & rf[1]) |
+	({32{raddr2[3:0] == 'd2}} & rf[2]) |
+	({32{raddr2[3:0] == 'd3}} & rf[3]) |
+	({32{raddr2[3:0] == 'd4}} & rf[4]) |
+	({32{raddr2[3:0] == 'd5}} & rf[5]) |
+	({32{raddr2[3:0] == 'd6}} & rf[6]) |
+	({32{raddr2[3:0] == 'd7}} & rf[7])
+};
+wire [31:0] rdata2_high = {
+	({32{raddr2[3:0] == 'd8 }} & rf[ 8]) |
+	({32{raddr2[3:0] == 'd9 }} & rf[ 9]) |
+	({32{raddr2[3:0] == 'd10}} & rf[10]) |
+	({32{raddr2[3:0] == 'd11}} & rf[11]) |
+	({32{raddr2[3:0] == 'd12}} & rf[12]) |
+	({32{raddr2[3:0] == 'd13}} & rf[13]) |
+	({32{raddr2[3:0] == 'd14}} & rf[14]) |
+	({32{raddr2[3:0] == 'd15}} & rf[15])
+};
  assign r1 = raddr1[3] ? rdata1_high : rdata1_low;
  assign r2 = raddr2[3] ? rdata2_high : rdata2_low;
 
@@ -1799,9 +1828,7 @@ endfunction
 `endif
 `endif
 /***E*N*D***/
-
 endmodule
-
 
 module ysyx_24110017_Reg #(WIDTH = 1, RESET_VAL = 0) (
   input clk,

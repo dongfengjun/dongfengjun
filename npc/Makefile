@@ -21,7 +21,7 @@ VERILATOR_FLAGS += --timescale "1ns/1ns" --no-timing
 VERILATOR_FLAGS += --autoflush
 #静态检查
 #VERILATOR_FLAGS += --lint-only -Wall
-#VERILATOR_FLAGS += -Wno-DECLFILENAME
+#VERILATOR_FLAGS += -Wno-DECLFILENAME -Wno-UNUSED
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
