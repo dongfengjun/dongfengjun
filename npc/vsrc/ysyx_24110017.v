@@ -1198,7 +1198,7 @@ wire ismret    = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1010;
 
 assign csr = (ismepc) ? mepc_i : (ismstatus) ? mstatus_i : (ismcause) ? mcause_i : (ismtvec) ? mtvec_i : 32'b0;
 
-assign mcause_w = (ecall_en) ? r2_i : csrs_w; //ecall a5
+assign mcause_w = (ecall_en) ? 32'hb : csrs_w; //ecall a5
 assign csrs_w = 
 			({32{funct3_i == 3'b001}} & (r1_i))        | //csrrw
 			({32{funct3_i == 3'b010}} & (r1_i | csr))  | //csrrs
