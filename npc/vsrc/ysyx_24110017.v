@@ -66,6 +66,19 @@ module ysyx_24110017(
 	output wire io_slave_rlast
 );
 
+/***UNDRIVEN***/
+assign io_slave_awready = 1'b0;
+assign io_slave_wready  = 1'b0;
+assign io_slave_bvalid  = 1'b0;
+assign io_slave_bid     = 4'b0;
+assign io_slave_bresp   = 2'b0;
+assign io_slave_arready = 1'b0;
+assign io_slave_rvalid  = 1'b0;
+assign io_slave_rid     = 4'b0;
+assign io_slave_rdata   = 32'b0;
+assign io_slave_rresp   = 2'b0;
+assign io_slave_rlast   = 1'b0;
+
 /***BTB***/
 wire [31:0] snpc;
 /***IFU***/
@@ -659,6 +672,11 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 	input  wire [ 1:0]s_axi_rresp,
 	input  wire s_axi_rlast
 );
+
+	assign m_axi_rid   = 4'b0;
+	assign m_axi_rresp = 2'b0;
+	assign m_axi_rlast = 1'b0;
+	assign s_axi_arid  = 4'b0;
 
 	reg state;
 	
@@ -1313,6 +1331,13 @@ module ysyx_24110017_LSU(
 	input  wire				 ls_axi_rlast
 );
 
+assign ls_axi_awid    = 4'b0;
+assign ls_axi_awlen   = 8'b0;
+assign ls_axi_awburst = 2'b01;
+assign ls_axi_arid    = 4'b0;
+assign ls_axi_arlen   = 8'b0;
+assign ls_axi_arburst = 2'b01;
+
 reg ls_read_done;
 assign ls_done_o = (ls_read_done) || (ls_axi_bvalid && ls_axi_bready); 
 wire ls_wen_i = (op_i == 5'b01000) && ls_valid_i;
@@ -1669,6 +1694,10 @@ module ysyx_24110017_CLINT(
   output wire [ 1:0]c_axi_rresp,
   output wire       c_axi_rlast
 );
+
+assign c_axi_rid      = 4'b0;
+assign c_axi_rresp    = 2'b0;
+assign c_axi_rlast    = 1'b0;
 
 localparam DEVICE_CLINT_LOW_ADDR = 32'h02000000;
 localparam DEVICE_CLINT_HIGH_ADDR = 32'h02000004;
