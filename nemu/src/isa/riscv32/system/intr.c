@@ -20,7 +20,12 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
    * Then return the address of the interrupt/exception vector.
    */
 	cpu.csr.mepc = epc;
-	cpu.csr.mcause = NO;
+	if(NO == -1) {
+		cpu.csr.mcause = 11;
+	}
+	else {
+		panic("unknow mcause:%x",NO);
+	}
   return cpu.csr.mtvec;
 }
 
