@@ -1,7 +1,7 @@
 From 58697aff2b80607302ebb1cb063ee5a4b2236a0e Mon Sep 17 00:00:00 2001
 From: 11111-dongfengjun <dongfengjun2024@163.com>
 Date: Tue, 16 Sep 2025 17:56:53 +0800
-Subject: [PATCH 70/70] CI 1.6
+Subject: [PATCH 70/73] CI 1.6
 
 ---
  patch/firtool/firtool-1.105.0/bin/firtool    | Bin 0 -> 28396024 bytes

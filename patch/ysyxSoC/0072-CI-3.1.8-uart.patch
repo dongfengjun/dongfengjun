@@ -1,7 +1,7 @@
 From bd5d7422ba4f67bd0870be35e74e49c3efd9109b Mon Sep 17 00:00:00 2001
 From: 11111-dongfengjun <dongfengjun2024@163.com>
 Date: Thu, 18 Sep 2025 22:13:08 +0800
-Subject: [PATCH 72/72] CI 3.1.8 uart
+Subject: [PATCH 72/73] CI 3.1.8 uart
 
 ---
  perip/uart16550/rtl/uart_tfifo.v | 4 ++--
