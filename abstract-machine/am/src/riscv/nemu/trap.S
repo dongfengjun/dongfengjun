@@ -56,7 +56,19 @@ __am_asm_trap:
   STORE t1, OFFSET_STATUS(sp)
   STORE t2, OFFSET_EPC(sp)
 
-# set mstatus.MPRV to pass difftest
+    /***# 输出成功进入函数的信息
+    addi sp, sp, -16   # 分配栈空间
+    STORE a0, 0(sp)       # 保存 a0
+    STORE a1, 8(sp)       # 保存 a1
+    STORE ra, 16(sp)      # 保存 ra
+    la a0, msg         # 加载字符串地址
+    jal printf         # 调用 printf
+    LOAD a0, 0(sp)       # 恢复 a0
+    LOAD a1, 8(sp)       # 恢复 a1
+    LOAD ra, 16(sp)      # 恢复 ra
+    addi sp, sp, 16    # 释放栈空间***/
+	
+	# set mstatus.MPRV to pass difftest
   li a0, (1 << 17)
   or t1, t1, a0
   csrw mstatus, t1
