@@ -1,6 +1,7 @@
 `ifdef __ICARUS__
 	`timescale 1ns/1ps
 `endif
+`define ysyx_24110017_SIMFAST
 
 module ysyx_24110017(
 	input	 wire clock,
@@ -102,7 +103,9 @@ wire icache_axi_arvalid,icache_axi_arready,icache_axi_rvalid,icache_axi_rready,i
 /***IDU***/
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
+`ifndef ysyx_24110017_SIMFAST
 wire [31:0] inst_id;//difftest
+`endif
 `endif
 `endif
 wire id_valid,id_ready;
@@ -120,7 +123,9 @@ wire fencei_id;
 /***EXU***/
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
+`ifndef ysyx_24110017_SIMFAST
 wire [31:0] pc_ex,inst_ex,npc_ex;//difftest
+`endif
 `endif
 `endif
 wire        ex_ready,ex_valid;
@@ -185,7 +190,9 @@ ysyx_24110017_CACHE #(1,4,0,16) ICACHE(clock,reset,fencei_id, //w < n
 ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
+`ifndef ysyx_24110017_SIMFAST
 	inst_id,
+`endif
 `endif
 `endif
 	prepc,prepc_en,rs1,rs2,r1,r2,
@@ -198,7 +205,9 @@ ysyx_24110017_IDU IDU(clock,reset,isRAW,isCHazard,
 ysyx_24110017_EXU EXU(clock,reset,isCHazard,
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
+`ifndef ysyx_24110017_SIMFAST
 	inst_id,pc_ex,inst_ex,npc_ex,
+`endif
 `endif
 `endif
 	id_valid,ex_ready,ex_valid,
@@ -275,6 +284,8 @@ always@(*) begin
 
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
+
+`ifndef ysyx_24110017_SIMFAST
 /***DIFFTEST***/
 reg difftest_delay;
 reg difftest;
@@ -284,6 +295,7 @@ always@(posedge clock) begin
 	if(difftest_delay) difftest <= 1'b1;
 	else difftest <= 1'b0;
 end
+`endif
 /***DPIC*etrace***/
 import "DPI-C" function void npc_trap();
 always@(*) begin
@@ -291,6 +303,7 @@ always@(*) begin
     npc_trap();
   end
 end
+`ifndef ysyx_24110017_SIMFAST
 /***DPI-C*CSR***/
 export "DPI-C" function csr_grab;                                    
 function int csr_grab(int i);
@@ -298,6 +311,7 @@ function int csr_grab(int i);
     assign csr_grab = (i == 0) ? mepc : (i == 1) ? mstatus : (i == 2) ? mcause : (i == 3) ? mtvec : 32'b0;
   end
 endfunction
+`endif
 /***DPI-C*DIFFTEST***/
 export "DPI-C" function dpic_grab;                                    
 function int dpic_grab(int i);
@@ -305,7 +319,7 @@ function int dpic_grab(int i);
 		assign dpic_grab = (i == 0) ? pc_ex : (i == 1) ? npc_ex : (i == 2) ? inst_ex : (i == 3) ? {31'b0,difftest} : 32'b0;
   end
 endfunction
-/***E*N*D***/
+`ifndef ysyx_24110017_SIMFAST
 /***DPI-C*PERFORMANCE_COUNTER***/
 export "DPI-C" function performance_counter;
 function int performance_counter(int i);
@@ -329,7 +343,7 @@ function int performance_counter(int i);
 															 : 32'b0;
   end
 endfunction
-/***E*N*D***/
+`endif
 `endif
 `endif
 endmodule
@@ -860,12 +874,14 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 /***DPIC-AMAT***/
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
+`ifndef ysyx_24110017_SIMFAST
 	export "DPI-C" function amat_counter;
 	function int amat_counter(int i);
 	  begin
 			assign amat_counter = (i == 0) ? {31'b0,((hit != 0) && (!unvalid))} : 32'b0;
 		end
 	endfunction
+`endif
 `endif
 `endif
 
@@ -881,7 +897,9 @@ module ysyx_24110017_IDU(
 
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
+`ifndef ysyx_24110017_SIMFAST
 	output reg  [31:0] inst_o,//difftest
+`endif
 `endif
 `endif
 
@@ -944,7 +962,9 @@ always@(posedge clk) begin
   if(updata) begin
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
+`ifndef ysyx_24110017_SIMFAST
     inst_o <= inst_i;
+`endif
 `endif
 `endif
 		pc_o <= pc_i;
@@ -1028,10 +1048,12 @@ module ysyx_24110017_EXU(
 
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
+`ifndef ysyx_24110017_SIMFAST
 	input  wire [31:0] inst_i,//difftest
 	output reg  [31:0] pc_o,
 	output reg  [31:0] inst_o,
 	output reg  [31:0] npc_o,
+`endif
 `endif
 `endif
 
@@ -1093,6 +1115,7 @@ assign abnormal = total - counter;
 
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
+`ifndef ysyx_24110017_SIMFAST
 always@(posedge clk) begin
 	casez({flush_i,state})
 		2'b1? : begin
@@ -1111,6 +1134,7 @@ always@(posedge clk) begin
 		end
 	endcase
 end
+`endif
 `endif
 `endif
 
@@ -1381,7 +1405,9 @@ end
 
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
+`ifndef ysyx_24110017_SIMFAST
 import "DPI-C" function void diff_skip_ref();
+`endif
 `endif
 `endif
 
@@ -1426,9 +1452,11 @@ always @(posedge clk) begin
             axi_state			 <= AXI_IDLE;
 `ifndef ysyx_24110017_YOSYS_STA
 `ifndef __ICARUS__
+`ifndef ysyx_24110017_SIMFAST
 					if((ls_axi_araddr - 32'h10000000 < 32'h1000) || (ls_axi_araddr == 32'h02000000) || (ls_axi_araddr == 32'h02000004)) begin //DEVICE DIFFTEST
 						diff_skip_ref();
 					end
+`endif
 `endif
 `endif
         end
