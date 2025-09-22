@@ -311,7 +311,6 @@ function int csr_grab(int i);
     assign csr_grab = (i == 0) ? mepc : (i == 1) ? mstatus : (i == 2) ? mcause : (i == 3) ? mtvec : 32'b0;
   end
 endfunction
-`endif
 /***DPI-C*DIFFTEST***/
 export "DPI-C" function dpic_grab;                                    
 function int dpic_grab(int i);
@@ -319,7 +318,6 @@ function int dpic_grab(int i);
 		assign dpic_grab = (i == 0) ? pc_ex : (i == 1) ? npc_ex : (i == 2) ? inst_ex : (i == 3) ? {31'b0,difftest} : 32'b0;
   end
 endfunction
-`ifndef ysyx_24110017_SIMFAST
 /***DPI-C*PERFORMANCE_COUNTER***/
 export "DPI-C" function performance_counter;
 function int performance_counter(int i);
