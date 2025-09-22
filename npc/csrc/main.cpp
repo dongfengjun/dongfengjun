@@ -174,11 +174,13 @@ static void statistic() {
 }
 #endif
 
+#ifndef ysyx_24110017_SIMFAST
 void assert_fail_msg() {
   isa_regs_display();
 	IFDEF(CONFIG_ITRACE, iringbuf_display());
   statistic();
 }
+#endif
 
 #ifdef CONFIG_ITRACE
 static void itrace_push(){
