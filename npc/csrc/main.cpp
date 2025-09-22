@@ -489,7 +489,9 @@ void performance_evaluation() {
 }
 
 void cpu_exec(int n) {
+#ifndef CONFIG_SIM_FAST
 	g_print_step = (n > 0 && n < MAX_INST_TO_PRINT);
+#endif
 #ifdef CONFIG_ITRACE
     itracelog = fopen("build/npc-itrace-log.txt", "w");  //Itrace
 		btracelog = fopen("build/npc-btrace-log.txt", "w");	 //Btrace
@@ -501,9 +503,11 @@ void cpu_exec(int n) {
 	while(RUNNING && n != 0) {
 		single_cycle();
 		nvboard_update();
+#ifndef CONFIG_SIM_FAST
 		cpu.pc = dpic_display(1);
 		isa_gpr_push();
 		performance_evaluation();
+#endif
 #ifdef CONFIG_ITRACE
 		itrace_push();
 #endif
@@ -513,8 +517,10 @@ void cpu_exec(int n) {
 		trace_and_difftest();
 		n--;
   }
+#ifndef CONFIG_SIM_FAST
 	uint64_t timer_end = get_time();
 	g_timer += timer_end - timer_start;
+#endif
 #ifdef CONFIG_ITRACE
     fprintf(itracelog, "%s", itracebuf);
 		fclose(itracelog);
@@ -533,7 +539,7 @@ void cpu_exec(int n) {
 void nvboard_bind_all_pins(VysyxSoCFull* top);
 int main(int argc, char *argv[]) {
 	__lsan_disable();
-/***inst***/
+/***init***/
 	Verilated::commandArgs(argc,argv);
 	contextp = new VerilatedContext;  //verilator指针
   top = new VysyxSoCFull{contextp};  //实例化top块
@@ -545,7 +551,7 @@ int main(int argc, char *argv[]) {
 	nvboard_bind_all_pins(top); //引脚绑定
 	nvboard_init(); //初始化NVBoard
 /***code***/
-	init_monitor(argc, argv);//load inst
+	init_monitor(argc, argv);
 	reset(50);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
@@ -555,7 +561,9 @@ int main(int argc, char *argv[]) {
 #endif
 	dump_wave();
 /***close**/
+#ifndef CONFIG_SIM_FAST
 	statistic();
+#endif
 	tfp->close();
 	nvboard_quit();
 	delete contextp;
