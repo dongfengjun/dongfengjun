@@ -36,7 +36,7 @@ extern "C" void psram_write(int32_t addr, int32_t data, char len) {
   mtrace_p += sprintf(mtrace_p, "psram addr:%08x write:%08x\n", addr, data);
 #endif
 }
-#ifndef ysyx_24110017_SIMFAST
+#ifndef CONFIG_SIM_FAST
 extern "C" void diff_skip_ref() {
 	difftest_skip_ref();
 }
@@ -174,7 +174,7 @@ static void statistic() {
 }
 #endif
 
-#ifndef ysyx_24110017_SIMFAST
+#ifndef CONFIG_SIM_FAST
 void assert_fail_msg() {
   isa_regs_display();
 	IFDEF(CONFIG_ITRACE, iringbuf_display());
