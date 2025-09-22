@@ -176,13 +176,13 @@ static void statistic() {
 }
 #endif
 
-#ifndef CONFIG_SIM_FAST
 void assert_fail_msg() {
-  isa_regs_display();
+#ifndef CONFIG_SIM_FAST
+	isa_regs_display();
 	IFDEF(CONFIG_ITRACE, iringbuf_display());
   statistic();
-}
 #endif
+}
 
 #ifdef CONFIG_ITRACE
 static void itrace_push(){
