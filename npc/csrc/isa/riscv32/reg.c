@@ -11,10 +11,9 @@ const char *regs[] = {
 };
 extern CPU_state cpu;
 
-#ifndef CONFIG_SIM_FAST
 void isa_regs_display() {
-  for(int i = 0; i < 32; i ++) {
-    printf("%s:0x%08x\t", regs[i], gpr_regs_display(i));
+	for(int i = 0; i < 32; i ++) {
+    printf("%s:0x%08x\t", regs[i], cpu.gpr[i]);
   }
   printf("\n");
 	printf("%s:0x%08x\n", "pc", cpu.pc);
@@ -27,7 +26,7 @@ void isa_regs_display() {
 word_t isa_reg_str2val(const char *s, bool *success) {
   for(int i = 0 ; i < 32 ; i ++){
    	if(strcmp(regs[i], s) == 0){
-			return gpr_regs_display(i);
+			return cpu.gpr[i];
 			break;
 		}
 	}
@@ -51,6 +50,7 @@ word_t isa_reg_str2val(const char *s, bool *success) {
 	return 0;
 }
 
+#ifndef CONFIG_SIM_FAST
 void isa_gpr_push() {
 	for(int i = 0; i < 32; i ++) {
 		cpu.gpr[i] = gpr_regs_display(i);
