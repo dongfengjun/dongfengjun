@@ -11,7 +11,9 @@
 #include "nvboard.h"
 #include <sanitizer/lsan_interface.h>
 
+#ifdef CONFIG_MTRACE
 extern char *mtrace_p;
+#endif
 /***ysyxSoC***/
 extern "C" void flash_read(int32_t addr, int32_t *data) {
 	*data = pmem_read(addr + CONFIG_MBASE);
@@ -34,9 +36,11 @@ extern "C" void psram_write(int32_t addr, int32_t data, char len) {
   mtrace_p += sprintf(mtrace_p, "psram addr:%08x write:%08x\n", addr, data);
 #endif
 }
+#ifndef CONFIG_SIM_FAST
 extern "C" void diff_skip_ref() {
 	difftest_skip_ref();
 }
+#endif
 
 VerilatedContext* contextp = NULL;	//verilator指针
 VysyxSoCFull* top = NULL;	//实例化指针
@@ -47,6 +51,7 @@ word_t gpr_regs_display(int raddr) {
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.RFU"));
   return gpr_reg_grab(raddr);
 }
+#ifndef CONFIG_SIM_FAST
 word_t csrs_display(int i) {
   extern int csr_grab(int i);
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
@@ -67,16 +72,22 @@ word_t amat_counters(int i) {
 	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.ICACHE"));
 	return amat_counter(i);
 }
+#endif
 /******/
 bool RUNNING;
 void npc_trap() {
   int a0 = gpr_regs_display(10);//抓取a0
   char str[15];
+#ifndef CONFIG_SIM_FAST
   Log("npc: %s at pc = " FMT_WORD, (a0 == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED)), dpic_display(0));
+#else
+	Log("npc: %s",(a0 == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED)));
+#endif
 	RUNNING = false;
 }
 
 /***main***/
+#ifndef CONFIG_SIM_FAST
 #define MAX_INST_TO_PRINT 10//puts inst
 extern CPU_state cpu;
 uint64_t g_nr_guest_inst = 0;
@@ -121,6 +132,8 @@ uint64_t Jalr_cnt = 0;
 
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
+#endif
+
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
 IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
 #ifdef CONFIG_ITRACE
@@ -133,6 +146,7 @@ IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
 #endif
 uint8_t fopcode;
 
+#ifndef CONFIG_SIM_FAST
 static void statistic() {
   IFNDEF(CONFIG_TARGET_AM, setlocale(LC_NUMERIC, ""));
 #define NUMBERIC_FMT MUXDEF(CONFIG_TARGET_AM, "%", "%'") PRIu64
@@ -160,11 +174,14 @@ static void statistic() {
 	Log("Jal total:%ld prediction error:%ld accuracy rate:%.6f",Jal_cnt,Jal_pre_err_cnt,1-((double)Jal_pre_err_cnt/(double)Jal_cnt));
 	Log("Jalr total:%ld prediction error:%ld accuracy rate:%.6f",Jalr_cnt,Jalr_pre_err_cnt,1-((double)Jalr_pre_err_cnt/(double)Jalr_cnt));
 }
+#endif
 
 void assert_fail_msg() {
-  isa_regs_display();
+#ifndef CONFIG_SIM_FAST
+	isa_regs_display();
 	IFDEF(CONFIG_ITRACE, iringbuf_display());
   statistic();
+#endif
 }
 
 #ifdef CONFIG_ITRACE
@@ -333,6 +350,7 @@ void isa_parser_elf(char *filename){
 	FILE *mtracelog;
 #endif
 
+#ifndef CONFIG_SIM_FAST
 static void trace_and_difftest() {
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", logbuf); }
@@ -341,6 +359,7 @@ static void trace_and_difftest() {
 		IFDEF(CONFIG_DIFFTEST, if(dpic_display(3)){difftest_step(dpic_display(0), dpic_display(1));});
 		IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
+#endif
 
 /***single_cycle***/
 void dump_wave() {
@@ -373,6 +392,7 @@ static void reset(int n) {
 	top->reset=0;
 }
 
+#ifndef CONFIG_SIM_FAST
 int Integer_Computational_tmp = 0;
 int Jump_tmp = 0;
 int Branch_tmp = 0;
@@ -487,9 +507,12 @@ void performance_evaluation() {
 	if(performance_counters(16)) Jal_pre_err_cnt ++;
 	if(performance_counters(17)) Jalr_pre_err_cnt ++;
 }
+#endif
 
 void cpu_exec(int n) {
+#ifndef CONFIG_SIM_FAST
 	g_print_step = (n > 0 && n < MAX_INST_TO_PRINT);
+#endif
 #ifdef CONFIG_ITRACE
     itracelog = fopen("build/npc-itrace-log.txt", "w");  //Itrace
 		btracelog = fopen("build/npc-btrace-log.txt", "w");	 //Btrace
@@ -501,20 +524,26 @@ void cpu_exec(int n) {
 	while(RUNNING && n != 0) {
 		single_cycle();
 		nvboard_update();
+#ifndef CONFIG_SIM_FAST
 		cpu.pc = dpic_display(1);
 		isa_gpr_push();
 		performance_evaluation();
+#endif
 #ifdef CONFIG_ITRACE
 		itrace_push();
 #endif
 #ifdef CONFIG_FTRACE
 		ftrace_push();
 #endif
+#ifndef CONFIG_SIM_FAST
 		trace_and_difftest();
+#endif
 		n--;
   }
+#ifndef CONFIG_SIM_FAST
 	uint64_t timer_end = get_time();
 	g_timer += timer_end - timer_start;
+#endif
 #ifdef CONFIG_ITRACE
     fprintf(itracelog, "%s", itracebuf);
 		fclose(itracelog);
@@ -533,7 +562,7 @@ void cpu_exec(int n) {
 void nvboard_bind_all_pins(VysyxSoCFull* top);
 int main(int argc, char *argv[]) {
 	__lsan_disable();
-/***inst***/
+/***init***/
 	Verilated::commandArgs(argc,argv);
 	contextp = new VerilatedContext;  //verilator指针
   top = new VysyxSoCFull{contextp};  //实例化top块
@@ -545,7 +574,7 @@ int main(int argc, char *argv[]) {
 	nvboard_bind_all_pins(top); //引脚绑定
 	nvboard_init(); //初始化NVBoard
 /***code***/
-	init_monitor(argc, argv);//load inst
+	init_monitor(argc, argv);
 	reset(50);
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
@@ -555,7 +584,9 @@ int main(int argc, char *argv[]) {
 #endif
 	dump_wave();
 /***close**/
+#ifndef CONFIG_SIM_FAST
 	statistic();
+#endif
 	tfp->close();
 	nvboard_quit();
 	delete contextp;
