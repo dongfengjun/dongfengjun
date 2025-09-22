@@ -57,13 +57,11 @@ word_t csrs_display(int i) {
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
   return csr_grab(i);
 }
-#endif
 word_t dpic_display(int i) {
   extern int dpic_grab(int i);
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
   return dpic_grab(i);
 }
-#ifndef CONFIG_SIM_FAST
 word_t performance_counters(int i) {
   extern int performance_counter(int i);
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));

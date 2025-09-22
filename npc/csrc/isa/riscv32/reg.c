@@ -11,6 +11,7 @@ const char *regs[] = {
 };
 extern CPU_state cpu;
 
+#ifndef CONFIG_SIM_FAST
 void isa_regs_display() {
   for(int i = 0; i < 32; i ++) {
     printf("%s:0x%08x\t", regs[i], gpr_regs_display(i));
@@ -59,3 +60,4 @@ void isa_gpr_push() {
 	cpu.csr.mcause = csrs_display(2);
 	cpu.csr.mtvec = csrs_display(3);
 }
+#endif
