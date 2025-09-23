@@ -407,7 +407,11 @@ always @(posedge clk) begin
 end
 
 `ifdef __ICARUS__
-localparam RESET_PC = 32'h80000000;
+	`ifndef ysyx_24110017_YOSYS_STA
+        localparam RESET_PC = 32'h80000000;
+  `else
+        localparam RESET_PC = 32'h30000000;
+  `endif
 `else
 localparam RESET_PC = 32'h30000000;
 `endif
