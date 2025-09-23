@@ -1,7 +1,7 @@
 `ifdef __ICARUS__
 	`timescale 1ns/1ps
 `endif
-//`define ysyx_24110017_SIMFAST
+`define ysyx_24110017_SIMFAST
 
 module ysyx_24110017(
 	input	 wire clock,
