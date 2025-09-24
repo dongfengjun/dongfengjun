@@ -350,7 +350,7 @@ void isa_parser_elf(char *filename){
 	FILE *mtracelog;
 #endif
 
-#ifndef CONFIG_SIM_FAST
+//#ifndef CONFIG_SIM_FAST
 static void trace_and_difftest() {
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", logbuf); }
@@ -359,7 +359,7 @@ static void trace_and_difftest() {
 		IFDEF(CONFIG_DIFFTEST, if(dpic_display(3)){difftest_step(dpic_display(0), dpic_display(1));});
 		IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
-#endif
+//#endif
 
 /***single_cycle***/
 void dump_wave() {
@@ -535,9 +535,9 @@ void cpu_exec(int n) {
 #ifdef CONFIG_FTRACE
 		ftrace_push();
 #endif
-#ifndef CONFIG_SIM_FAST
+//#ifndef CONFIG_SIM_FAST
 		trace_and_difftest();
-#endif
+//#endif
 		n--;
   }
 #ifndef CONFIG_SIM_FAST
