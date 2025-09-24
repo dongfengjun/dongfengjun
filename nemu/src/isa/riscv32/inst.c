@@ -166,7 +166,7 @@ static int decode_exec(Decode *s) {
 #ifdef CONFIG_TARGET_SHARE
 	INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , I, s->dnpc = isa_raise_intr(R(15), s->pc); ETRACE()); //RISCV32E R(15) is $a5
 #else
-	INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , I, s->dnpc = isa_raise_intr(R(15), s->pc); ETRACE()); //R(17) is $a7
+	INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , I, s->dnpc = isa_raise_intr(R(17), s->pc); ETRACE()); //R(17) is $a7
 #endif
 	INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, R(rd) = CSRs(imm); CSRs(imm) = src1);
 	INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, R(rd) = CSRs(imm); CSRs(imm) |= src1);
