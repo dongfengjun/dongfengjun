@@ -524,11 +524,11 @@ void cpu_exec(int n) {
 	while(RUNNING && n != 0) {
 		single_cycle();
 		nvboard_update();
-#ifndef CONFIG_SIM_FAST
+//#ifndef CONFIG_SIM_FAST
 		cpu.pc = dpic_display(1);
 		isa_gpr_push();
-		performance_evaluation();
-#endif
+//		performance_evaluation();
+//#endif
 #ifdef CONFIG_ITRACE
 		itrace_push();
 #endif
