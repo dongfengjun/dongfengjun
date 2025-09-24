@@ -36,11 +36,11 @@ extern "C" void psram_write(int32_t addr, int32_t data, char len) {
   mtrace_p += sprintf(mtrace_p, "psram addr:%08x write:%08x\n", addr, data);
 #endif
 }
-//#ifndef CONFIG_SIM_FAST
+#ifndef CONFIG_SIM_FAST
 extern "C" void diff_skip_ref() {
 	difftest_skip_ref();
 }
-//#endif
+#endif
 
 VerilatedContext* contextp = NULL;	//verilator指针
 VysyxSoCFull* top = NULL;	//实例化指针
@@ -51,7 +51,7 @@ word_t gpr_regs_display(int raddr) {
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.RFU"));
   return gpr_reg_grab(raddr);
 }
-//#ifndef CONFIG_SIM_FAST
+#ifndef CONFIG_SIM_FAST
 word_t csrs_display(int i) {
   extern int csr_grab(int i);
   svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu"));
@@ -72,7 +72,7 @@ word_t amat_counters(int i) {
 	svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.ICACHE"));
 	return amat_counter(i);
 }
-//#endif
+#endif
 /******/
 bool RUNNING;
 void npc_trap() {
@@ -87,7 +87,7 @@ void npc_trap() {
 }
 
 /***main***/
-//#ifndef CONFIG_SIM_FAST
+#ifndef CONFIG_SIM_FAST
 #define MAX_INST_TO_PRINT 10//puts inst
 extern CPU_state cpu;
 uint64_t g_nr_guest_inst = 0;
@@ -132,7 +132,7 @@ uint64_t Jalr_cnt = 0;
 
 static uint64_t g_timer = 0;
 static bool g_print_step = false;
-//#endif
+#endif
 
 IFDEF(CONFIG_ITRACE, char logbuf[128]);
 IFDEF(CONFIG_ITRACE, char iringbuf[128]);//Itrace
@@ -350,7 +350,7 @@ void isa_parser_elf(char *filename){
 	FILE *mtracelog;
 #endif
 
-//#ifndef CONFIG_SIM_FAST
+#ifndef CONFIG_SIM_FAST
 static void trace_and_difftest() {
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", logbuf); }
@@ -359,7 +359,7 @@ static void trace_and_difftest() {
 		IFDEF(CONFIG_DIFFTEST, if(dpic_display(3)){difftest_step(dpic_display(0), dpic_display(1));});
 		IFDEF(CONFIG_WATCHPOINT, checkWatchPoint());	//运行一次扫描所有监视点
 }
-//#endif
+#endif
 
 /***single_cycle***/
 void dump_wave() {
@@ -524,20 +524,20 @@ void cpu_exec(int n) {
 	while(RUNNING && n != 0) {
 		single_cycle();
 		nvboard_update();
-//#ifndef CONFIG_SIM_FAST
+#ifndef CONFIG_SIM_FAST
 		cpu.pc = dpic_display(1);
 		isa_gpr_push();
-//		performance_evaluation();
-//#endif
+		//performance_evaluation();
+#endif
 #ifdef CONFIG_ITRACE
 		itrace_push();
 #endif
 #ifdef CONFIG_FTRACE
 		ftrace_push();
 #endif
-//#ifndef CONFIG_SIM_FAST
+#ifndef CONFIG_SIM_FAST
 		trace_and_difftest();
-//#endif
+#endif
 		n--;
   }
 #ifndef CONFIG_SIM_FAST
