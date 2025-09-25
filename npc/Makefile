@@ -1,6 +1,7 @@
 BUILD_DIR = ./build
 TOP = ysyxSoCFull
-VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
+VSRCS = ./../ysyxSoC1/build/ysyxSoCFull.v
+#VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
 VSRCS += ./vsrc/ysyx_24110017.v
 VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
 CSRCS += $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
