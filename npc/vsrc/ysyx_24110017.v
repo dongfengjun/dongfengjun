@@ -624,7 +624,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, TAG_WIDTH = 16) (
 
 	reg  [31:0]								   cache_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
   reg  [TAG_WIDTH-1-m-n : 0]   tag_reg	 [CACHE_DEPTH - 1 : 0];
-  reg  [CACHE_DEPTH - 1 : 0]   valid_reg [CACHE_WIDTH - 1 : 0];
+  reg  [CACHE_WIDTH - 1 : 0]   valid_reg [CACHE_DEPTH - 1 : 0];
 	
 	wire [31:0] axi_araddr = (!state) ? m_axi_araddr : s_axi_araddr;
 	wire [TAG_WIDTH-1-m-n : 0] tag			 = axi_araddr[TAG_WIDTH-1 : m+n];
@@ -632,8 +632,8 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, TAG_WIDTH = 16) (
   wire [m-3 : 0]						 offset	   = axi_araddr[m-1:2];
  
 	/*****TEST*****/
-	wire [3:0] valid_n0 = {valid_reg[0][0],valid_reg[1][0],valid_reg[2][0],valid_reg[3][0]};
-	wire [3:0] valid_n1 = {valid_reg[0][1],valid_reg[1][1],valid_reg[2][1],valid_reg[3][1]};
+	wire [3:0] valid_n0 = {valid_reg[0]};
+	wire [3:0] valid_n1 = {valid_reg[1]};
 	wire [10:0] tag_n0 = tag_reg[0];
 	wire [10:0] tag_n1 = tag_reg[1];
 	wire [31:0] cache_m0_n0 = cache_reg[0][0];
@@ -648,7 +648,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, TAG_WIDTH = 16) (
 
 
 	wire hit;
-	assign hit = ((tag == tag_reg[index]) && (valid_reg[offset][index])) ? 1'b1 : 1'b0;
+	assign hit = ((tag == tag_reg[index]) && (valid_reg[index][offset])) ? 1'b1 : 1'b0;
 
 	assign m_axi_rdata  = (|hit) ? cache_reg[offset][index] : 32'h0;
 	wire	 axi_rvalid   = (s_axi_arlen != 0) ? s_axi_rlast : hit && !(m_axi_arvalid && m_axi_arready);
@@ -680,7 +680,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, TAG_WIDTH = 16) (
 	always @(posedge clk) begin
 		if(rst || fencei_i || unvalid) begin
 			integer f;
-			for (f = 0; f < CACHE_WIDTH; f = f + 1) begin : fencei
+			for (f = 0; f < CACHE_DEPTH; f = f + 1) begin : fencei
 				valid_reg[f] <= 0;
 			end
 		end
@@ -688,13 +688,10 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, TAG_WIDTH = 16) (
 			case(state)
 				TRANS: begin
 					if(s_axi_arvalid && s_axi_arready) begin
-            integer offset_i;
-						for (offset_i = 0; offset_i < CACHE_WIDTH; offset_i = offset_i + 1) begin
-							valid_reg[offset_i][index] <= 0;
-            end
+						valid_reg[index] <= 0;
 					end
 					if(s_axi_rready && s_axi_rvalid) begin
-						valid_reg[burst_counter][index] <= 1'b1;
+						valid_reg[index][burst_counter] <= 1'b1;
 					end
 				end
 				default : begin
