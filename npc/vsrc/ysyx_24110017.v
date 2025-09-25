@@ -687,11 +687,13 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, TAG_WIDTH = 16) (
 		else begin
 			case(state)
 				TRANS: begin
-					if(s_axi_arvalid && s_axi_arready) begin
-            integer offset_i;
-						for (offset_i = 0; offset_i < CACHE_WIDTH; offset_i = offset_i + 1) begin
-							valid_reg[offset_i][index] <= 0;
-            end
+					if(s_axi_arlen != 0) begin
+						if(s_axi_arvalid && s_axi_arready) begin
+							integer offset_i;
+							for (offset_i = 0; offset_i < CACHE_WIDTH; offset_i = offset_i + 1) begin
+								valid_reg[offset_i][index] <= 0;
+							end
+						end
 					end
 					if(s_axi_rready && s_axi_rvalid) begin
 						valid_reg[burst_counter][index] <= 1'b1;

@@ -1,12 +1,12 @@
 BUILD_DIR = ./build
 TOP = ysyxSoCFull
-VSRCS = ./../ysyxSoC1/build/ysyxSoCFull.v
+VSRCS = ./../ysyxSoC/build/ysyxSoCFull.v
 VSRCS += ./vsrc/ysyx_24110017.v
-VSRCS += $(shell find ./../ysyxSoC1/perip -name "*.v")
+VSRCS += $(shell find ./../ysyxSoC/perip -name "*.v")
 CSRCS += $(shell find ./csrc -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 INC_COM_PATH = ./csrc/include
-INC_UART_PATH = ./../ysyxSoC1/perip/uart16550/rtl
-INC_SPI_PATH = ./../ysyxSoC1/perip/spi/rtl
+INC_UART_PATH = ./../ysyxSoC/perip/uart16550/rtl
+INC_SPI_PATH = ./../ysyxSoC/perip/spi/rtl
 
 #verilator
 VERILATOR = verilator
