@@ -163,7 +163,7 @@ static void statistic() {
 	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Count)",Integer_Computational_cnt,Jump_cnt,Branch_cnt,Load_cnt,Store_cnt,Immediate_cnt,System_cnt);
 	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Cycles)",Integer_Computational_wait,Jump_wait,Branch_wait,Load_wait,Store_wait,Immediate_wait,System_wait);
 	Log("%-10.6f%-10.6f%-10.6f%-10.6f%-10.6f%-10.6f%-10.6f (Proportion)",(double)Integer_Computational_wait/(double)ex_total_wait,(double)Jump_wait/(double)ex_total_wait,(double)Branch_wait/(double)ex_total_wait,(double)Load_wait/(double)ex_total_wait,(double)Store_wait/(double)ex_total_wait,(double)Immediate_wait/(double)ex_total_wait,(double)System_wait/(double)ex_total_wait);
-	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Jump_wait/Jump_cnt, Branch_wait/Branch_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, System_wait/System_cnt);
+	Log("%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld%-10ld (Average Cycles)",Integer_Computational_wait/Integer_Computational_cnt, Jump_wait/Jump_cnt, Branch_wait/Branch_cnt, Load_wait/Load_cnt, Store_wait/Store_cnt, Immediate_wait/Immediate_cnt, 0);
 	Log("IF->MEM:%ld IF TOTAL:%ld",if_mem_wait,if_wait);
 	Log("The proportion of IF MEM access:%.6f", (double)if_mem_wait/(double)if_wait);
 	Log("LS LOAD:%ld (Average Delay)", ls_load_wait/ls_load_cnt);

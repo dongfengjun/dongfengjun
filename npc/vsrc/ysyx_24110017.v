@@ -172,14 +172,14 @@ always @(posedge clock) begin
 end
 wire isCHazard = CHazarden && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
 
-ysyx_24110017_BTB #(1,0,16,8,1,0,16,16) BTB(clock,reset,if_axi_araddr,snpc,prepc,pc_if,prepc_en);
+ysyx_24110017_BTB #(1,16,8,1,16,16) BTB(clock,reset,if_axi_araddr,snpc,prepc,pc_if,prepc_en);
 ysyx_24110017_IFU IFU(clock,reset,isCHazard,
 	if_valid,id_ready,dnpc_ex,snpc,pc_if,inst_if,
 	if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
 	if_axi_arlen,if_axi_arsize,if_axi_arburst,
 	if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast
 );
-ysyx_24110017_CACHE #(1,4,0,16) ICACHE(clock,reset,fencei_id, //w < n
+ysyx_24110017_CACHE #(1,4,16) ICACHE(clock,reset,fencei_id, //w < n
 	if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
 	if_axi_arlen,if_axi_arsize,if_axi_arburst,
 	if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast,
@@ -474,7 +474,7 @@ endmodule
 
 //`define ysyx_24110017_Associative //w != 0
 module ysyx_24110017_BTB 
-#(B_N = 2, B_W = 0, BTAG = 16, BTARG = 8, J_N = 1, J_W = 0, JTAG = 16, JTARG = 16) 
+#(B_N = 2, BTAG = 16, BTARG = 8, J_N = 1, JTAG = 16, JTARG = 16) 
 (
 	input  wire        clk,
 	input  wire        rst,
@@ -487,82 +487,28 @@ module ysyx_24110017_BTB
 	input  wire [ 1:0] prepc_en_i
 );
 	
-	reg  [JTARG-1:0]        jsnpc_reg [(1<<J_N)-1:0];
-  reg  [JTAG-3-J_N+J_W:0] jtag_reg  [(1<<J_N)-1:0];
-  wire [JTAG-3-J_N+J_W:0] jtag   = pc_i[JTAG-1:2+J_N-J_W];
-  wire [J_N-J_W-1:0]			jindex = pc_i[J_N-J_W+1:2];
+	reg  [JTARG - 1 : 0]      jsnpc_reg [(1<<J_N) - 1 : 0];
+  reg  [JTAG - 3 - J_N : 0] jtag_reg  [(1<<J_N) - 1 : 0];
+  wire [JTAG - 3 - J_N : 0] jtag   = pc_i[JTAG - 1 : 2 + J_N];
+  wire [J_N-1 : 0]			    jindex = pc_i[J_N + 1 : 2];
 
-	reg  [BTARG-1:0]        bsnpc_reg [(1<<B_N)-1:0];
-  reg  [BTAG-3-B_N+B_W:0] btag_reg  [(1<<B_N)-1:0];
-	wire [BTAG-3-B_N+B_W:0] btag   = pc_i[BTAG-1:2+B_N-B_W];
-	wire [B_N-B_W-1 :0]			bindex = pc_i[B_N-B_W+1:2];
+	reg  [BTARG - 1 : 0]      bsnpc_reg [(1<<B_N) - 1 : 0];
+  reg  [BTAG - 3 - B_N : 0] btag_reg  [(1<<B_N) - 1 : 0];
+	wire [BTAG - 3 - B_N : 0] btag   = pc_i[BTAG - 1 : 2 + B_N];
+	wire [B_N - 1 : 0]			  bindex = pc_i[B_N + 1 : 2];
 
-	wire [JTAG-3-J_N+J_W:0] jtag_pre   = prepc_tag_i[JTAG-1:2+J_N-J_W];
-	wire [J_N-J_W-1:0]      jindex_pre = prepc_tag_i[J_N-J_W+1:2];
-	wire [BTAG-3-B_N+B_W:0] btag_pre   = prepc_tag_i[BTAG-1:2+B_N-B_W];
-	wire [B_N-B_W-1 :0]     bindex_pre = prepc_tag_i[B_N-B_W+1:2];
+	wire [JTAG - 3 - J_N : 0] jtag_pre   = prepc_tag_i[JTAG - 1 : 2 + J_N];
+	wire [J_N - 1 : 0]        jindex_pre = prepc_tag_i[J_N + 1 : 2];
+	wire [BTAG - 3 - B_N : 0] btag_pre   = prepc_tag_i[BTAG - 1 : 2 + B_N];
+	wire [B_N - 1 : 0]        bindex_pre = prepc_tag_i[B_N + 1 : 2];
 
-	function integer blog2;
-    input [(1<<B_W) - 1 : 0] value;
-    integer loop_var;
-    begin
-      for (loop_var = 0; loop_var < (1<<B_W); loop_var = loop_var + 1) begin
-        if(value != 0) begin
-          value = value >> 1;
-          blog2 = loop_var;
-        end
-      end
-    end
-  endfunction
-	function integer jlog2;
-    input [(1<<J_W) - 1 : 0] value;
-    integer loop_var;
-    begin
-      for (loop_var = 0; loop_var < (1<<J_W); loop_var = loop_var + 1) begin
-	      if(value != 0) begin
-          value = value >> 1;
-          jlog2 = loop_var;
-        end
-      end
-    end
-  endfunction
+	wire bhit;
+  assign bhit = (btag == btag_reg[bindex]);
 
-	wire [(1<<B_W)-1:0]bhit;
-	generate 
-    genvar i1; 
-      for(i1 = 0; i1 < (1<<B_W); i1 = i1 + 1) begin : comparator_b
-        assign bhit[i1] = (btag == btag_reg[bindex * (1<<B_W) + i1]);
-			end
-	endgenerate
+	wire jhit;
+  assign jhit = (jtag == jtag_reg[jindex]);
 
-	wire [(1<<J_W)-1:0]jhit;
-  generate
-    genvar i2;
-      for(i2 = 0; i2 < (1<<J_W); i2 = i2 + 1) begin : comparator_j
-        assign jhit[i2] = (jtag == jtag_reg[jindex * (1<<J_W) + i2]);
-      end
-  endgenerate
-
-`ifdef ysyx_24110017_Associative
-	wire [(1<<B_W)-1:0]balready;
-  generate
-    genvar i3;
-      for(i3 = 0; i3 < (1<<B_W); i3 = i3 + 1) begin : comparator_b
-        assign balready[i3] = (btag_pre == btag_reg[bindex_pre * (1<<B_W) + i3]);
-      end
-  endgenerate
-
-	wire [(1<<J_W)-1:0]jalready;
-  generate
-    genvar i4;
-      for(i4 = 0; i4 < (1<<J_W); i4 = i4 + 1) begin : comparator_j
-        assign jalready[i4] = (jtag_pre == jtag_reg[jindex_pre * (1<<J_W) + i4]);
-      end
-  endgenerate
-`endif
-
-//	assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W) + jlog2(jhit)]} : (|bhit) ? {pc_i[31:BTARG],bsnpc_reg[bindex * (1<<B_W) + blog2(bhit)]} : pc_i + 4; //直接相联hit为1位
-assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit) ? {pc_i[31:BTARG],bsnpc_reg[bindex * (1<<B_W)]} : pc_i + 4;
+	assign snpc_o = (jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex]} : (bhit) ? {pc_i[31:BTARG],bsnpc_reg[bindex]} : pc_i + 4;
 
   always @(posedge clk) begin
 		if(rst) begin
@@ -572,16 +518,8 @@ assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit
       end
     end
 		else begin
-`ifdef ysyx_24110017_Associative
-			if(prepc_en_i[1] && (!jalready)) begin
-`else
 			if(prepc_en_i[1]) begin
-`endif
-				integer a;
-				for (a = 1; a < (1<<J_W); a = a + 1) begin
-					jsnpc_reg[jindex_pre * (1<<J_W) + a] <= jsnpc_reg[jindex_pre * (1<<J_W) + a - 1];
-				end
-				jsnpc_reg[jindex_pre * (1<<J_W)] <= prepc_i[JTARG-1:0];
+				jsnpc_reg[jindex_pre] <= prepc_i[JTARG-1:0];
 			end
 		end
   end
@@ -594,16 +532,9 @@ assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit
       end
 		end
 		else begin
-`ifdef ysyx_24110017_Associative
-			if(prepc_en_i[1] && (!jalready)) begin
-`else
 			if(prepc_en_i[1]) begin
-`endif
 				integer b;
-				for (b = 1; b < (1<<J_W); b = b + 1) begin
-					jtag_reg[jindex_pre * (1<<J_W) + b]  <= jtag_reg[jindex_pre * (1<<J_W) + b - 1];
-				end
-			jtag_reg[jindex_pre * (1<<J_W)]  <= prepc_tag_i[JTAG-1:2+J_N-J_W];
+			jtag_reg[jindex_pre]  <= prepc_tag_i[JTAG-1:2+J_N];
 			end
 		end
 	end
@@ -616,16 +547,8 @@ assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit
 	    end
 	  end
 		else begin
-`ifdef ysyx_24110017_Associative
-			if(prepc_en_i[0] && (!balready)) begin
-`else
 			if(prepc_en_i[0]) begin
-`endif
-				integer c;
-				for (c = 1; c < (1<<B_W); c = c + 1) begin
-					bsnpc_reg[bindex_pre * (1<<B_W) + c] <= bsnpc_reg[bindex_pre * (1<<B_W) + c - 1];
-				end
-				bsnpc_reg[bindex_pre * (1<<B_W)] <= prepc_i[BTARG-1:0];
+				bsnpc_reg[bindex_pre] <= prepc_i[BTARG-1:0];
 			end
 		end
 	end
@@ -638,16 +561,8 @@ assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit
       end
 		end
 		else begin
-`ifdef ysyx_24110017_Associative
-			if(prepc_en_i[0] && (!balready)) begin
-`else
 			if(prepc_en_i[0]) begin
-`endif
-				integer d;
-				for (d = 1; d < (1<<B_W); d = d + 1) begin
-					btag_reg[bindex_pre * (1<<B_W) + d]  <= btag_reg[bindex_pre * (1<<B_W) + d - 1];                            
-				end
-				btag_reg[bindex_pre * (1<<B_W)]  <= prepc_tag_i[BTAG-1:2+B_N-B_W];
+				btag_reg[bindex_pre]  <= prepc_tag_i[BTAG-1:2+B_N];
 			end
 		end
 	end
@@ -655,7 +570,8 @@ assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit
 endmodule
 
 
-module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width = 16中型程序,而且对于n=1的cache块，考虑burst命中的地址范围最多为5位，tag六位以上改变大概率miss，tag保存到8位,大部分branch指令范围在8位以内,但是16位综合器综合后的面积时序最优
+module ysyx_24110017_CACHE #(n = 1, m = 4, TAG_WIDTH = 16) (
+//tag width = 16中型程序,而且对于n=1的cache块，考虑burst命中的地址范围最多为5位，tag六位以上改变大概率miss，tag保存到8位,大部分branch指令范围在8位以内,但是16位综合器综合后的面积时序最优
 	input  wire clk,
 	input  wire rst,
 	input  wire fencei_i,
@@ -688,7 +604,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 	input  wire [ 1:0]s_axi_rresp,
 	input  wire s_axi_rlast
 );
-
+	
 	assign m_axi_rid   = 4'b0;
 	assign m_axi_rresp = 2'b0;
 	assign m_axi_rlast = 1'b0;
@@ -696,7 +612,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 
 	reg state;
 	
-	reg [31-TAG_WIDTH:0]tag_check;
+	reg [31-TAG_WIDTH:0] tag_check;
 	always@(posedge clk) begin
 		if(m_axi_arvalid && m_axi_arready)
 			tag_check <= m_axi_araddr[31:TAG_WIDTH];
@@ -705,42 +621,37 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 
 	localparam CACHE_WIDTH = (1 << (m-2));
 	localparam CACHE_DEPTH = (1 << n);
-	localparam CACHE_WAY	 = (1 << w);
 
 	reg  [31:0]								   cache_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
-  reg  [TAG_WIDTH-1-m-n+w : 0] tag_reg	 [CACHE_DEPTH - 1 : 0];
+  reg  [TAG_WIDTH-1-m-n : 0]   tag_reg	 [CACHE_DEPTH - 1 : 0];
   reg  [CACHE_DEPTH - 1 : 0]   valid_reg [CACHE_WIDTH - 1 : 0];
 	
 	wire [31:0] axi_araddr = (!state) ? m_axi_araddr : s_axi_araddr;
-	wire [TAG_WIDTH-1-m-n+w:0] tag			 = axi_araddr[TAG_WIDTH-1:m+n-w];
-  wire [n-w-1:0]					   index		 = axi_araddr[m+n-w-1:m];
-  wire [m-3:0]						   offset	   = axi_araddr[m-1:2];
+	wire [TAG_WIDTH-1-m-n : 0] tag			 = axi_araddr[TAG_WIDTH-1 : m+n];
+  wire [n-1 : 0]					   index		 = axi_araddr[m+n-1 : m];
+  wire [m-3 : 0]						 offset	   = axi_araddr[m-1:2];
  
-	wire [CACHE_WAY - 1 : 0] hit;
+	/*****TEST*****/
+	wire [3:0] valid_n0 = {valid_reg[0][0],valid_reg[1][0],valid_reg[2][0],valid_reg[3][0]};
+	wire [3:0] valid_n1 = {valid_reg[0][1],valid_reg[1][1],valid_reg[2][1],valid_reg[3][1]};
+	wire [10:0] tag_n0 = tag_reg[0];
+	wire [10:0] tag_n1 = tag_reg[1];
+	wire [31:0] cache_m0_n0 = cache_reg[0][0];
+	wire [31:0] cache_m1_n0 = cache_reg[1][0];
+	wire [31:0] cache_m2_n0 = cache_reg[2][0];
+	wire [31:0] cache_m3_n0 = cache_reg[3][0];
+	wire [31:0] cache_m0_n1 = cache_reg[0][1];
+  wire [31:0] cache_m1_n1 = cache_reg[1][1];
+	wire [31:0] cache_m2_n1 = cache_reg[2][1];
+  wire [31:0] cache_m3_n1 = cache_reg[3][1];
+	/*********/
 
-	generate 
-    genvar i9; 
-      for(i9 = 0; i9 < CACHE_WAY; i9 = i9 + 1) begin : comparator
-        assign hit[i9] = ((tag == tag_reg[index * CACHE_WAY + i9]) && (valid_reg[offset][index * CACHE_WAY + i9])) ? 1 : 0;
-			end
-	endgenerate
 
-	function integer log2;
-    input [CACHE_WAY - 1 : 0] value;
-    integer loop_var;
-		begin
-			for (loop_var = 0; loop_var < CACHE_WAY; loop_var = loop_var + 1) begin
-				if(value != 0) begin
-					value = value >> 1;
-					log2 = loop_var;
-				end
-			end
-		end
-	endfunction
+	wire hit;
+	assign hit = ((tag == tag_reg[index]) && (valid_reg[offset][index])) ? 1'b1 : 1'b0;
 
-	//assign m_axi_rdata  = (|hit) ? cache_reg[offset][index * CACHE_WAY + log2(hit)] : 32'h0;
 	assign m_axi_rdata  = (|hit) ? cache_reg[offset][index] : 32'h0;
-	wire	 axi_rvalid   = (s_axi_arlen != 0) ? s_axi_rlast : (|hit) && !(m_axi_arvalid && m_axi_arready);
+	wire	 axi_rvalid   = (s_axi_arlen != 0) ? s_axi_rlast : hit && !(m_axi_arvalid && m_axi_arready);
 	reg axi_rvalid_enable;
 	always @(posedge clk) begin
 		if(axi_rvalid) axi_rvalid_enable <= 1'b1;
@@ -777,17 +688,13 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 			case(state)
 				TRANS: begin
 					if(s_axi_arvalid && s_axi_arready) begin
-						integer a;
-            integer b;
-						for (b = 0; b < CACHE_WIDTH; b = b + 1) begin : fifo
-							valid_reg[b][index * CACHE_WAY] <= 0;
-							for (a = 1; a < CACHE_WAY; a = a + 1) begin
-                valid_reg[b][index * CACHE_WAY + a] <= valid_reg[b][index * CACHE_WAY + a - 1];
-              end
+            integer offset_i;
+						for (offset_i = 0; offset_i < CACHE_WIDTH; offset_i = offset_i + 1) begin
+							valid_reg[offset_i][index] <= 0;
             end
 					end
 					if(s_axi_rready && s_axi_rvalid) begin
-						valid_reg[burst_counter][index * CACHE_WAY] <= 1'b1;
+						valid_reg[burst_counter][index] <= 1'b1;
 					end
 				end
 				default : begin
@@ -806,15 +713,11 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 		else begin
 			case(state)
 				TRANS: begin
-					if(s_axi_arvalid && s_axi_arready) begin
-						integer a;
-						tag_reg[index * CACHE_WAY] <= 0;
-						for (a = 1; a < CACHE_WAY; a = a + 1) begin
-							tag_reg[index * CACHE_WAY + a] <= tag_reg[index * CACHE_WAY + a - 1];
-						end
-					end
+					//if(s_axi_arvalid && s_axi_arready) begin
+						//tag_reg[index] <= 0;
+					//end
 					if(s_axi_rready && s_axi_rvalid) begin
-						tag_reg [index * CACHE_WAY] <= s_axi_araddr[TAG_WIDTH-1:m+n-w];
+						tag_reg[index] <= s_axi_araddr[TAG_WIDTH-1:m+n];
 					end
 				end
 				default : begin
@@ -833,7 +736,6 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 			case(state)
 				IDLE: begin
 					s_axi_araddr  <= m_axi_araddr;
-//				s_axi_rready  <= 1'b0;
 					if(m_axi_arvalid && m_axi_arready) begin
 						if(hit == 0 || unvalid) begin
 							s_axi_arvalid <= 1'b1;
@@ -849,24 +751,14 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 				end
 				TRANS: begin
 					if(s_axi_arvalid && s_axi_arready) begin
-						integer a;
-						integer b;
-						for (b = 0; b < CACHE_WIDTH; b = b + 1) begin : fifo
-							cache_reg[b][index * CACHE_WAY] <= 0;
-							for (a = 1; a < CACHE_WAY; a = a + 1) begin
-								cache_reg[b][index * CACHE_WAY + a] <= cache_reg[b][index * CACHE_WAY + a - 1];
-							end
-						end
 						s_axi_arvalid <= 1'b0;
-//					s_axi_rready  <= 1'b1;
 					end
 					if(s_axi_rready && s_axi_rvalid) begin
-						cache_reg[burst_counter][index * CACHE_WAY] <= s_axi_rdata;
+						cache_reg[burst_counter][index] <= s_axi_rdata;
 						burst_counter <= burst_counter + 1;
 					end
 					if(s_axi_rlast) begin
 						s_axi_arlen   <= 8'b0;
-						burst_counter <= 2'b0;
 					end
 				end
 			endcase
@@ -1336,7 +1228,7 @@ module ysyx_24110017_LSU(
 	output reg				 ls_axi_wvalid,
 	output reg  [31:0] ls_axi_wdata,
 	output wire [ 3:0] ls_axi_wstrb,
-	output wire				 ls_axi_wlast,
+	output reg         ls_axi_wlast,
 	output reg				 ls_axi_bready,
 	input  wire				 ls_axi_bvalid,
 	input  wire [ 3:0] ls_axi_bid,
@@ -1418,7 +1310,6 @@ reg [1:0]axi_state;
 
 assign ls_axi_awsize = (ls_axi_awvalid) ? ls_awsize_i : 3'b0;
 assign ls_axi_wstrb  = (ls_axi_wvalid)  ? ls_wmask_i  : 4'b0;
-assign ls_axi_wlast  = (ls_axi_wvalid)  ? 1'b1 : 1'b0;
 assign ls_axi_arsize = (ls_axi_arvalid) ? ls_arsize_i : 3'b0;
 
 always @(posedge clk) begin
@@ -1441,6 +1332,7 @@ always @(posedge clk) begin
 					ls_axi_wvalid  <= 1'b1;
 					ls_axi_awaddr  <= ls_addr_i;
 					ls_axi_wdata   <= ls_wdata_i;
+					ls_axi_wlast   <= 1'b1;
 				end
 			end
 			AXI_READ: begin
@@ -1467,7 +1359,7 @@ always @(posedge clk) begin
 				if(ls_axi_awvalid && ls_axi_awready) begin
 					ls_axi_awvalid <= 1'b0;
 				end
-				if(ls_axi_wvalid && ls_axi_wready && ((ls_axi_awvalid && ls_axi_awready) || !ls_axi_awvalid)) begin
+				if(ls_axi_wvalid && ls_axi_wready && ls_axi_awvalid && ls_axi_awready) begin
 					ls_axi_wvalid  <= 1'b0;
 					ls_axi_wdata   <= 32'h0;
 					ls_axi_bready  <= 1'b1;
@@ -1475,6 +1367,7 @@ always @(posedge clk) begin
 				if(ls_axi_bvalid && ls_axi_bready) begin
 					ls_axi_bready <= 1'b0;
 					ls_axi_awaddr <= 32'h0;
+					ls_axi_wlast  <= 1'b0;
 					axi_state     <= AXI_IDLE;
 				end
 			end
