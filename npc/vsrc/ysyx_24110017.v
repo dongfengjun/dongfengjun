@@ -655,7 +655,8 @@ assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex * (1<<J_W)]} : (|bhit
 endmodule
 
 
-module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width = 16中型程序,而且对于n=1的cache块，考虑burst命中的地址范围最多为5位，tag六位以上改变大概率miss，tag保存到8位,大部分branch指令范围在8位以内,但是16位综合器综合后的面积时序最优
+module ysyx_24110017_CACHE #(n = 1, m = 4, TAG_WIDTH = 16) (
+//tag width = 16中型程序,而且对于n=1的cache块，考虑burst命中的地址范围最多为5位，tag六位以上改变大概率miss，tag保存到8位,大部分branch指令范围在8位以内,但是16位综合器综合后的面积时序最优
 	input  wire clk,
 	input  wire rst,
 	input  wire fencei_i,
@@ -696,7 +697,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 
 	reg state;
 	
-	reg [31-TAG_WIDTH:0]tag_check;
+	reg [31-TAG_WIDTH:0] tag_check;
 	always@(posedge clk) begin
 		if(m_axi_arvalid && m_axi_arready)
 			tag_check <= m_axi_araddr[31:TAG_WIDTH];
@@ -705,42 +706,21 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 
 	localparam CACHE_WIDTH = (1 << (m-2));
 	localparam CACHE_DEPTH = (1 << n);
-	localparam CACHE_WAY	 = (1 << w);
 
 	reg  [31:0]								   cache_reg [CACHE_WIDTH - 1 : 0][CACHE_DEPTH - 1 : 0];
-  reg  [TAG_WIDTH-1-m-n+w : 0] tag_reg	 [CACHE_DEPTH - 1 : 0];
+  reg  [TAG_WIDTH-1-m-n : 0]   tag_reg	 [CACHE_DEPTH - 1 : 0];
   reg  [CACHE_DEPTH - 1 : 0]   valid_reg [CACHE_WIDTH - 1 : 0];
 	
 	wire [31:0] axi_araddr = (!state) ? m_axi_araddr : s_axi_araddr;
-	wire [TAG_WIDTH-1-m-n+w:0] tag			 = axi_araddr[TAG_WIDTH-1:m+n-w];
-  wire [n-w-1:0]					   index		 = axi_araddr[m+n-w-1:m];
-  wire [m-3:0]						   offset	   = axi_araddr[m-1:2];
+	wire [TAG_WIDTH-1-m-n : 0] tag			 = axi_araddr[TAG_WIDTH-1 : m+n];
+  wire [n-1 : 0]					   index		 = axi_araddr[m+n-1 : m];
+  wire [m-3 : 0]						 offset	   = axi_araddr[m-1:2];
  
-	wire [CACHE_WAY - 1 : 0] hit;
+	wire hit;
+	assign hit = ((tag == tag_reg[index]) && (valid_reg[offset][index])) ? 1'b1 : 1'b0;
 
-	generate 
-    genvar i9; 
-      for(i9 = 0; i9 < CACHE_WAY; i9 = i9 + 1) begin : comparator
-        assign hit[i9] = ((tag == tag_reg[index * CACHE_WAY + i9]) && (valid_reg[offset][index * CACHE_WAY + i9])) ? 1 : 0;
-			end
-	endgenerate
-
-	function integer log2;
-    input [CACHE_WAY - 1 : 0] value;
-    integer loop_var;
-		begin
-			for (loop_var = 0; loop_var < CACHE_WAY; loop_var = loop_var + 1) begin
-				if(value != 0) begin
-					value = value >> 1;
-					log2 = loop_var;
-				end
-			end
-		end
-	endfunction
-
-	//assign m_axi_rdata  = (|hit) ? cache_reg[offset][index * CACHE_WAY + log2(hit)] : 32'h0;
 	assign m_axi_rdata  = (|hit) ? cache_reg[offset][index] : 32'h0;
-	wire	 axi_rvalid   = (s_axi_arlen != 0) ? s_axi_rlast : (|hit) && !(m_axi_arvalid && m_axi_arready);
+	wire	 axi_rvalid   = (s_axi_arlen != 0) ? s_axi_rlast : hit && !(m_axi_arvalid && m_axi_arready);
 	reg axi_rvalid_enable;
 	always @(posedge clk) begin
 		if(axi_rvalid) axi_rvalid_enable <= 1'b1;
@@ -777,13 +757,9 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 			case(state)
 				TRANS: begin
 					if(s_axi_arvalid && s_axi_arready) begin
-						integer a;
-            integer b;
-						for (b = 0; b < CACHE_WIDTH; b = b + 1) begin : fifo
-							valid_reg[b][index * CACHE_WAY] <= 0;
-							for (a = 1; a < CACHE_WAY; a = a + 1) begin
-                valid_reg[b][index * CACHE_WAY + a] <= valid_reg[b][index * CACHE_WAY + a - 1];
-              end
+            integer offset_i;
+						for (offset_i = 0; offset_i < CACHE_WIDTH; offset_i = offset_i + 1) begin
+							valid_reg[offset_i][index] <= 0;
             end
 					end
 					if(s_axi_rready && s_axi_rvalid) begin
@@ -806,15 +782,11 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 		else begin
 			case(state)
 				TRANS: begin
-					if(s_axi_arvalid && s_axi_arready) begin
-						integer a;
-						tag_reg[index * CACHE_WAY] <= 0;
-						for (a = 1; a < CACHE_WAY; a = a + 1) begin
-							tag_reg[index * CACHE_WAY + a] <= tag_reg[index * CACHE_WAY + a - 1];
-						end
-					end
+					//if(s_axi_arvalid && s_axi_arready) begin
+						//tag_reg[index] <= 0;
+					//end
 					if(s_axi_rready && s_axi_rvalid) begin
-						tag_reg [index * CACHE_WAY] <= s_axi_araddr[TAG_WIDTH-1:m+n-w];
+						tag_reg[index] <= s_axi_araddr[TAG_WIDTH-1:m+n];
 					end
 				end
 				default : begin
@@ -833,7 +805,6 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 			case(state)
 				IDLE: begin
 					s_axi_araddr  <= m_axi_araddr;
-//				s_axi_rready  <= 1'b0;
 					if(m_axi_arvalid && m_axi_arready) begin
 						if(hit == 0 || unvalid) begin
 							s_axi_arvalid <= 1'b1;
@@ -849,24 +820,14 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 				end
 				TRANS: begin
 					if(s_axi_arvalid && s_axi_arready) begin
-						integer a;
-						integer b;
-						for (b = 0; b < CACHE_WIDTH; b = b + 1) begin : fifo
-							cache_reg[b][index * CACHE_WAY] <= 0;
-							for (a = 1; a < CACHE_WAY; a = a + 1) begin
-								cache_reg[b][index * CACHE_WAY + a] <= cache_reg[b][index * CACHE_WAY + a - 1];
-							end
-						end
 						s_axi_arvalid <= 1'b0;
-//					s_axi_rready  <= 1'b1;
 					end
 					if(s_axi_rready && s_axi_rvalid) begin
-						cache_reg[burst_counter][index * CACHE_WAY] <= s_axi_rdata;
+						cache_reg[burst_counter][index] <= s_axi_rdata;
 						burst_counter <= burst_counter + 1;
 					end
 					if(s_axi_rlast) begin
 						s_axi_arlen   <= 8'b0;
-						burst_counter <= 2'b0;
 					end
 				end
 			endcase
@@ -1336,7 +1297,6 @@ module ysyx_24110017_LSU(
 	output reg				 ls_axi_wvalid,
 	output reg  [31:0] ls_axi_wdata,
 	output wire [ 3:0] ls_axi_wstrb,
-//	output wire				 ls_axi_wlast,
 	output reg         ls_axi_wlast,
 	output reg				 ls_axi_bready,
 	input  wire				 ls_axi_bvalid,
@@ -1419,7 +1379,6 @@ reg [1:0]axi_state;
 
 assign ls_axi_awsize = (ls_axi_awvalid) ? ls_awsize_i : 3'b0;
 assign ls_axi_wstrb  = (ls_axi_wvalid)  ? ls_wmask_i  : 4'b0;
-//assign ls_axi_wlast  = (ls_axi_wvalid)  ? 1'b1 : 1'b0;
 assign ls_axi_arsize = (ls_axi_arvalid) ? ls_arsize_i : 3'b0;
 
 always @(posedge clk) begin
@@ -1469,7 +1428,6 @@ always @(posedge clk) begin
 				if(ls_axi_awvalid && ls_axi_awready) begin
 					ls_axi_awvalid <= 1'b0;
 				end
-				//if(ls_axi_wvalid && ls_axi_wready && ((ls_axi_awvalid && ls_axi_awready) || !ls_axi_awvalid)) begin
 				if(ls_axi_wvalid && ls_axi_wready && ls_axi_awvalid && ls_axi_awready) begin
 					ls_axi_wvalid  <= 1'b0;
 					ls_axi_wdata   <= 32'h0;
