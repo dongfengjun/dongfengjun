@@ -1,7 +1,7 @@
 `ifdef __ICARUS__
 	`timescale 1ns/1ps
 `endif
-//`define ysyx_24110017_SIMFAST
+`define ysyx_24110017_SIMFAST
 
 module ysyx_24110017(
 	input	 wire clock,
@@ -824,6 +824,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 	end
 
 	assign m_axi_arready = !state;
+	assign s_axi_rready = state;
 	always @(posedge clk) begin
 		if(rst) begin
 			s_axi_arvalid <= 1'b0;
@@ -832,7 +833,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 			case(state)
 				IDLE: begin
 					s_axi_araddr  <= m_axi_araddr;
-					s_axi_rready  <= 1'b0;
+//				s_axi_rready  <= 1'b0;
 					if(m_axi_arvalid && m_axi_arready) begin
 						if(hit == 0 || unvalid) begin
 							s_axi_arvalid <= 1'b1;
@@ -857,7 +858,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 							end
 						end
 						s_axi_arvalid <= 1'b0;
-						s_axi_rready  <= 1'b1;
+//					s_axi_rready  <= 1'b1;
 					end
 					if(s_axi_rready && s_axi_rvalid) begin
 						cache_reg[burst_counter][index * CACHE_WAY] <= s_axi_rdata;
