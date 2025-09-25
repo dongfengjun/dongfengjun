@@ -503,12 +503,12 @@ module ysyx_24110017_BTB
 	wire [B_N - 1 : 0]        bindex_pre = prepc_tag_i[B_N + 1 : 2];
 
 	wire bhit;
-  assign bhit[i1] = (btag == btag_reg[bindex]);
+  assign bhit = (btag == btag_reg[bindex]);
 
 	wire jhit;
-  assign jhit[i2] = (jtag == jtag_reg[jindex]);
+  assign jhit = (jtag == jtag_reg[jindex]);
 
-	assign snpc_o = (|jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex]} : (|bhit) ? {pc_i[31:BTARG],bsnpc_reg[bindex]} : pc_i + 4;
+	assign snpc_o = (jhit) ? {pc_i[31:JTARG],jsnpc_reg[jindex]} : (bhit) ? {pc_i[31:BTARG],bsnpc_reg[bindex]} : pc_i + 4;
 
   always @(posedge clk) begin
 		if(rst) begin
