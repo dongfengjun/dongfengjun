@@ -687,9 +687,14 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, TAG_WIDTH = 16) (
 		else begin
 			case(state)
 				TRANS: begin
+				/***
 					if(s_axi_arvalid && s_axi_arready) begin
 						valid_reg[index] <= 0;
 					end
+				***/
+					if(s_axi_arvalid && s_axi_arready && ((s_axi_araddr - 32'ha0000000) < 32'h20000000)) begin
+            valid_reg[index] <= 0;
+          end
 					if(s_axi_rready && s_axi_rvalid) begin
 						valid_reg[index][burst_counter] <= 1'b1;
 					end
