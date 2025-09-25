@@ -604,7 +604,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, TAG_WIDTH = 16) (
 	input  wire [ 1:0]s_axi_rresp,
 	input  wire s_axi_rlast
 );
-
+	
 	assign m_axi_rid   = 4'b0;
 	assign m_axi_rresp = 2'b0;
 	assign m_axi_rlast = 1'b0;
@@ -631,6 +631,22 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, TAG_WIDTH = 16) (
   wire [n-1 : 0]					   index		 = axi_araddr[m+n-1 : m];
   wire [m-3 : 0]						 offset	   = axi_araddr[m-1:2];
  
+	/*****TEST*****/
+	wire [3:0] valid_n0 = {valid_reg[0][0],valid_reg[1][0],valid_reg[2][0],valid_reg[3][0]};
+	wire [3:0] valid_n1 = {valid_reg[0][1],valid_reg[1][1],valid_reg[2][1],valid_reg[3][1]};
+	wire [10:0] tag_n0 = tag_reg[0];
+	wire [10:0] tag_n1 = tag_reg[1];
+	wire [31:0] cache_m0_n0 = cache_reg[0][0];
+	wire [31:0] cache_m1_n0 = cache_reg[1][0];
+	wire [31:0] cache_m2_n0 = cache_reg[2][0];
+	wire [31:0] cache_m3_n0 = cache_reg[3][0];
+	wire [31:0] cache_m0_n1 = cache_reg[0][1];
+  wire [31:0] cache_m1_n1 = cache_reg[1][1];
+	wire [31:0] cache_m2_n1 = cache_reg[2][1];
+  wire [31:0] cache_m3_n1 = cache_reg[3][1];
+	/*********/
+
+
 	wire hit;
 	assign hit = ((tag == tag_reg[index]) && (valid_reg[offset][index])) ? 1'b1 : 1'b0;
 
