@@ -1438,7 +1438,7 @@ always @(posedge clk) begin
 				if(ls_wen_i) begin
 					axi_state      <= AXI_WRITE;
 					ls_axi_awvalid <= 1'b1;
-					ls_axi_wvalid  <= 1'b1;
+//					ls_axi_wvalid  <= 1'b1;
 					ls_axi_awaddr  <= ls_addr_i;
 					ls_axi_wdata   <= ls_wdata_i;
 				end
@@ -1466,8 +1466,10 @@ always @(posedge clk) begin
 			AXI_WRITE: begin
 				if(ls_axi_awvalid && ls_axi_awready) begin
 					ls_axi_awvalid <= 1'b0;
+					ls_axi_wvalid  <= 1'b1; //+
 				end
-				if(ls_axi_wvalid && ls_axi_wready && ((ls_axi_awvalid && ls_axi_awready) || !ls_axi_awvalid)) begin
+				//if(ls_axi_wvalid && ls_axi_wready && ((ls_axi_awvalid && ls_axi_awready) || !ls_axi_awvalid)) begin
+				if(ls_axi_wvalid && ls_axi_wready) begin
 					ls_axi_wvalid  <= 1'b0;
 					ls_axi_wdata   <= 32'h0;
 					ls_axi_bready  <= 1'b1;
