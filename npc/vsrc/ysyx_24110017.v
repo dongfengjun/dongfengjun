@@ -681,7 +681,7 @@ module ysyx_24110017_CACHE #(n = 1, m = 4, w = 0, TAG_WIDTH = 8) ( //tag width =
 	output reg  [ 7:0]s_axi_arlen,
 	output wire [ 2:0]s_axi_arsize,
 	output wire [ 1:0]s_axi_arburst,
-	output reg  s_axi_rready,
+	output wire s_axi_rready,
 	input  wire s_axi_rvalid,
 	input  wire [ 3:0]s_axi_rid,
 	input  wire [31:0]s_axi_rdata,
