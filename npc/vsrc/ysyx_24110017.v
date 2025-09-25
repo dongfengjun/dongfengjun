@@ -1336,7 +1336,8 @@ module ysyx_24110017_LSU(
 	output reg				 ls_axi_wvalid,
 	output reg  [31:0] ls_axi_wdata,
 	output wire [ 3:0] ls_axi_wstrb,
-	output wire				 ls_axi_wlast,
+//	output wire				 ls_axi_wlast,
+	output reg         ls_axi_wlast,
 	output reg				 ls_axi_bready,
 	input  wire				 ls_axi_bvalid,
 	input  wire [ 3:0] ls_axi_bid,
@@ -1418,7 +1419,7 @@ reg [1:0]axi_state;
 
 assign ls_axi_awsize = (ls_axi_awvalid) ? ls_awsize_i : 3'b0;
 assign ls_axi_wstrb  = (ls_axi_wvalid)  ? ls_wmask_i  : 4'b0;
-assign ls_axi_wlast  = (ls_axi_wvalid)  ? 1'b1 : 1'b0;
+//assign ls_axi_wlast  = (ls_axi_wvalid)  ? 1'b1 : 1'b0;
 assign ls_axi_arsize = (ls_axi_arvalid) ? ls_arsize_i : 3'b0;
 
 always @(posedge clk) begin
@@ -1441,6 +1442,7 @@ always @(posedge clk) begin
 					ls_axi_wvalid  <= 1'b1;
 					ls_axi_awaddr  <= ls_addr_i;
 					ls_axi_wdata   <= ls_wdata_i;
+					ls_axi_wlast   <= 1'b1;
 				end
 			end
 			AXI_READ: begin
@@ -1476,6 +1478,7 @@ always @(posedge clk) begin
 				if(ls_axi_bvalid && ls_axi_bready) begin
 					ls_axi_bready <= 1'b0;
 					ls_axi_awaddr <= 32'h0;
+					ls_axi_wlast  <= 1'b0;
 					axi_state     <= AXI_IDLE;
 				end
 			end
