@@ -533,8 +533,7 @@ module ysyx_24110017_BTB
 		end
 		else begin
 			if(prepc_en_i[1]) begin
-				integer b;
-			jtag_reg[jindex_pre]  <= prepc_tag_i[JTAG-1:2+J_N];
+				jtag_reg[jindex_pre]  <= prepc_tag_i[JTAG-1:2+J_N];
 			end
 		end
 	end
@@ -1314,6 +1313,8 @@ always @(posedge clk) begin
 		axi_state			 <= AXI_IDLE;
 		ls_axi_arvalid <= 1'b0;
 		ls_axi_awvalid <= 1'b0;
+		ls_axi_araddr  <= 32'h0;
+		ls_axi_awaddr  <= 32'h0;
   end 
 	else begin
 		case (axi_state)
