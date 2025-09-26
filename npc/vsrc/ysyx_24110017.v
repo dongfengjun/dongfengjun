@@ -1492,7 +1492,7 @@ always @(posedge clk) begin
 		case (state)
 			IDLE :			state <= (LSU_AXI_ARVALID || LSU_AXI_AWVALID) ? GRANT_LSU : (IFU_AXI_ARVALID) ? GRANT_IFU : state;
 			GRANT_LSU : state <= (C_AXI_RVALID || sel_id || io_master_rvalid || io_master_bvalid) ? IDLE : state;
-			GRANT_IFU : state <= (io_master_rlast) ? IDLE : state;
+			GRANT_IFU : state <= (((IFU_AXI_ARADDR >= 32'ha0000000) && (IFU_AXI_ARADDR < 32'hc0000000)) ? (io_master_rlast) : (io_master_rvalid && io_master_rready)) ? IDLE : state;
 			default :   state <= state;
 		endcase
 	end
