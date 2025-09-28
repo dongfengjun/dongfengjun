@@ -109,11 +109,10 @@ void uart_init(void) {
 void idcsrs_init(void) {
 	uint32_t idcsr;
   asm volatile ("csrr %0, 0xFF0" : "=r" (idcsr));
-  //putch((idcsr >> 24) & 0xFF);
-	//putch((idcsr >> 16) & 0xFF);
-  //putch((idcsr >> 8) & 0xFF);
-  //putch(idcsr & 0xFF);
-	printf("%s",(char)idcsr);
+  putch((idcsr >> 24) & 0xFF);
+	putch((idcsr >> 16) & 0xFF);
+  putch((idcsr >> 8) & 0xFF);
+  putch(idcsr & 0xFF);
 	asm volatile ("csrr %0, 0xFF1" : "=r" (idcsr));
   printf("%d\n", idcsr);
 }
