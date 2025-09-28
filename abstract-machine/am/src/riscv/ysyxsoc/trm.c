@@ -126,10 +126,7 @@ void idcsrs_init(void) {
   putch((idcsr >> 8) & 0xFF);
   putch(idcsr & 0xFF);
 	asm volatile ("csrr %0, 0xFF1" : "=r" (idcsr));
-	putch((idcsr >> 24) & 0xFF);
-  putch((idcsr >> 16) & 0xFF);
-  putch((idcsr >> 8) & 0xFF);
-  putch(idcsr & 0xFF);
+  printf("%d\n", idcsr);
 }
 
 //am flash_read
