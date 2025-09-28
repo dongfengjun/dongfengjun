@@ -533,8 +533,7 @@ module ysyx_24110017_BTB
 		end
 		else begin
 			if(prepc_en_i[1]) begin
-				integer b;
-			jtag_reg[jindex_pre]  <= prepc_tag_i[JTAG-1:2+J_N];
+				jtag_reg[jindex_pre]  <= prepc_tag_i[JTAG-1:2+J_N];
 			end
 		end
 	end
@@ -1120,15 +1119,19 @@ assign xrd =
 				(op_i == 5'b11100) ? csr : //csrr
 				32'h0;
 
-wire ismepc    = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1101; //1101000001
-wire ismstatus = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1000; //1100000000
-wire ismcause  = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1110; //1101000010
-wire ismtvec   = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1001; //1100000101
-wire isecall   = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b0000;
-wire ismret    = {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b1010;
-//wire isebreak= {imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 4'b0001;
+wire ismepc    = {imm_i[11],imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 5'b01101; //1101000001
+wire ismstatus = {imm_i[11],imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 5'b01000; //1100000000
+wire ismcause  = {imm_i[11],imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 5'b01110; //1101000010
+wire ismtvec   = {imm_i[11],imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 5'b01001; //1100000101
+wire isecall   = {imm_i[11],imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 5'b00000;
+wire ismret    = {imm_i[11],imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 5'b01010;
+//wire isebreak= {imm_i[11],imm_i[9],imm_i[6],imm_i[1],imm_i[0]} == 5'b00001;
+wire ismvendorid = {imm_i[11],imm_i[0]} == 2'b10; //0xFF0
+wire ismarchid   = {imm_i[11],imm_i[0]} == 2'b11; //0xFF1
+localparam MVENDORID = 32'h79737978;
+localparam MARCHID   = 32'h016fe3c1;
 
-assign csr = (ismepc) ? mepc_i : (ismstatus) ? mstatus_i : (ismcause) ? mcause_i : (ismtvec) ? mtvec_i : 32'b0;
+assign csr = (ismepc) ? mepc_i : (ismstatus) ? mstatus_i : (ismcause) ? mcause_i : (ismtvec) ? mtvec_i : (ismvendorid) ? MVENDORID : (ismarchid) ? MARCHID : 32'b0;
 
 assign mcause_w = (ecall_en) ? 32'hb : csrs_w; //ecall a5
 assign csrs_w = 
@@ -1484,14 +1487,13 @@ wire       I_AXI_ARREADY,I_AXI_RVALID;
 
 parameter SEL_IFU = 1'b0,SEL_LSU = 1'b1;
 parameter IDLE = 2'b00,GRANT_LSU = 2'b01,GRANT_IFU = 2'b10;
-wire sel_id;
 reg [1:0] state;
 always @(posedge clk) begin
 	if(rst) state <= IDLE;
 	else begin
 		case (state)
 			IDLE :			state <= (LSU_AXI_ARVALID || LSU_AXI_AWVALID) ? GRANT_LSU : (IFU_AXI_ARVALID) ? GRANT_IFU : state;
-			GRANT_LSU : state <= (C_AXI_RVALID || sel_id || io_master_rvalid || io_master_bvalid) ? IDLE : state;
+			GRANT_LSU : state <= (C_AXI_RVALID || io_master_rvalid || io_master_bvalid) ? IDLE : state;
 			GRANT_IFU : state <= (((IFU_AXI_ARADDR >= 32'ha0000000) && (IFU_AXI_ARADDR < 32'hc0000000)) ? (io_master_rlast) : (io_master_rvalid && io_master_rready)) ? IDLE : state;
 			default :   state <= state;
 		endcase
@@ -1560,7 +1562,7 @@ assign X_AXI_BVALID = io_master_bvalid;
 assign X_AXI_BID = io_master_bid;
 assign X_AXI_BRESP = io_master_bresp;
 
-assign X_AXI_ARREADY = (sel_clint) ? C_AXI_ARREADY : (sel_id) ? I_AXI_ARREADY : io_master_arready;
+assign X_AXI_ARREADY = (sel_clint) ? C_AXI_ARREADY : io_master_arready;
 assign {C_AXI_ARVALID,io_master_arvalid} = (sel_clint) ? {X_AXI_ARVALID,1'b0} : {1'b0,X_AXI_ARVALID};
 assign {C_AXI_ARID,io_master_arid} = (sel_clint) ? {X_AXI_ARID,4'b0} : {4'b0,X_AXI_ARID};
 assign {C_AXI_ARADDR,io_master_araddr} = (sel_clint) ? {X_AXI_ARADDR,32'b0} : {32'b0,X_AXI_ARADDR};
@@ -1568,30 +1570,11 @@ assign {C_AXI_ARLEN,io_master_arlen} = (sel_clint) ? {X_AXI_ARLEN,8'b0} : {8'b0,
 assign {C_AXI_ARSIZE,io_master_arsize} = (sel_clint) ? {X_AXI_ARSIZE,3'b0} : {3'b0,X_AXI_ARSIZE};
 assign {C_AXI_ARBURST,io_master_arburst} = (sel_clint) ? {X_AXI_ARBURST,2'b0} : {2'b0,X_AXI_ARBURST};
 assign {C_AXI_RREADY,io_master_rready} = (sel_clint) ? {X_AXI_RREADY,1'b0} : {1'b0,X_AXI_RREADY};
-assign X_AXI_RVALID = (sel_clint) ? C_AXI_RVALID : (sel_id) ? I_AXI_RVALID : io_master_rvalid;
+assign X_AXI_RVALID = (sel_clint) ? C_AXI_RVALID : io_master_rvalid;
 assign X_AXI_RID = (sel_clint) ? C_AXI_RID : io_master_rid;
-assign X_AXI_RDATA = (sel_clint) ? C_AXI_RDATA : (sel_id) ? I_AXI_RDATA : io_master_rdata;
+assign X_AXI_RDATA = (sel_clint) ? C_AXI_RDATA : io_master_rdata;
 assign X_AXI_RRESP = (sel_clint) ? C_AXI_RRESP : io_master_rresp;
 assign X_AXI_RLAST = (sel_clint) ? C_AXI_RLAST : io_master_rlast;
-
-/***IDCSR***/
-localparam MVENDORID_ADDR = 32'h01000000;
-localparam MARCHID_ADDR		= 32'h01000004;
-wire sel_mvendorid = (LSU_AXI_ARADDR == MVENDORID_ADDR);
-wire sel_marchid	 = (LSU_AXI_ARADDR == MARCHID_ADDR);
-assign sel_id = sel_mvendorid || sel_marchid;
-
-reg [31:0]mvendorid,marchid;
-assign I_AXI_RDATA = (sel_mvendorid) ? mvendorid : marchid;
-assign I_AXI_ARREADY = 1'b1;
-assign I_AXI_RVALID = 1'b1;
-
-always @(posedge clk) begin
-	if(rst) mvendorid <= 32'h79737978;
-end
-always @(posedge clk) begin
-	if(rst) marchid <= 32'h016fe3c1;
-end
 
 endmodule
 
