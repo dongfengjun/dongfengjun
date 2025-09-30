@@ -52,7 +52,7 @@ void init_mem() {
 
 word_t paddr_read(paddr_t addr, int len) {
 //#ifdef CONFIG_TARGET_SHARE
-	if (addr - 0x30000000 < 0x10000000) return flash_read(addr, len);//ysyxsoc-flash
+//	if (addr - 0x30000000 < 0x10000000) return flash_read(addr, len);//ysyxsoc-flash
 	if (addr - 0x0f000000 < 0x2000) return sram_read(addr, len);//ysyxsoc-sram
 	if (addr - 0x80000000 < 0x4000000) return psram_read(addr, len);//ysyxsoc-psram
 	if (addr - 0xa0000000 < 0x20000000) return sdram_read(addr, len);//ysyxsoc-sdram
@@ -65,7 +65,7 @@ word_t paddr_read(paddr_t addr, int len) {
 
 void paddr_write(paddr_t addr, int len, word_t data) {
 //#ifdef CONFIG_TARGET_SHARE
-	if (addr - 0x30000000 < 0x10000000) return init_flash(addr, len, data);
+//	if (addr - 0x30000000 < 0x10000000) return init_flash(addr, len, data);
 	if (addr - 0x0f000000 < 0x2000) return sram_write(addr, len, data);
 	if (addr - 0x80000000 < 0x4000000) return psram_write(addr, len, data);
 	if (addr - 0xa0000000 < 0x20000000) return sdram_write(addr, len, data);
