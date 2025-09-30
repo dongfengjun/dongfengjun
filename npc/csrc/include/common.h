@@ -27,7 +27,7 @@ typedef uint16_t ioaddr_t;
 
 #define CONFIG_SIM_FAST 1
 
-#define CONFIG_DUMP_WAVE 1//是否保存波形（内存不足）
+//#define CONFIG_DUMP_WAVE 1//是否保存波形（内存不足）
 //#define CONFIG_DUMP_WAVE_SIM 1//只保存状态
 
 //#define CONFIG_TRACE 1
