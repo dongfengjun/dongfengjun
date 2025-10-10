@@ -14,6 +14,7 @@
 ***************************************************************************************/
 
 #include <common.h>
+#include <sanitizer/lsan_interface.h>
 
 void init_monitor(int, char *[]);
 void am_init_monitor();
