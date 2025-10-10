@@ -43,6 +43,7 @@ void isa_reg_display() {
 		printf("%s:0x%08x\t", regs[i], cpu.gpr[i]);
 	}
 	printf("\n");
+#ifndef CONFIG_RVE
 	for(i = 16; i < 20; i++) {
 		printf("%s:0x%08x\t", regs[i], cpu.gpr[i]);
 	}
@@ -59,6 +60,7 @@ void isa_reg_display() {
 		printf("%s:0x%08x\t", regs[i], cpu.gpr[i]);
 	}
 	printf("\n");
+#endif
 	printf("%s:0x%08x\n", "pc", cpu.pc);
 	printf("%s:0x%08x\n", "mepc", cpu.csr.mepc);
 	printf("%s:0x%08x\n", "mstatus", cpu.csr.mstatus);
@@ -67,7 +69,11 @@ void isa_reg_display() {
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
-  for(int i = 0 ; i < 32 ; i ++){
+#ifndef CONFIG_RVE
+  for(int i = 0; i < 32; i ++){
+#else
+	for(int i = 0; i < 16; i ++){
+#endif
    	if(strcmp(regs[i], s) == 0){
 			return cpu.gpr[i];
 			break;
