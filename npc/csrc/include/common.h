@@ -20,6 +20,7 @@ typedef MUXDEF(PMEM64, uint64_t, uint32_t) paddr_t;
 typedef uint16_t ioaddr_t;
 
 //Config
+#define __riscv_e
 //#define CONFIG_TARGET_AM 0//AM
 //#define CONFIG_DEVICE 1//DEVICE Software
 #define ITRACE_COND 1
