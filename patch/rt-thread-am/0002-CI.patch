@@ -1,7 +1,7 @@
 From 9504e359434bfac14713f7de15c4b7735427c800 Mon Sep 17 00:00:00 2001
 From: 11111-dongfengjun <dongfengjun2024@163.com>
 Date: Sun, 21 Sep 2025 19:18:55 +0800
-Subject: [PATCH 2/2] CI
+Subject: [PATCH 2/3] CI
 
 ---
  bsp/abstract-machine/src/uart.c | 2 +-
