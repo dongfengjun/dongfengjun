@@ -106,15 +106,15 @@ void uart_init(void) {
 	outb(UART_BASE + 1, 0x01);
 }
 
-#define IDCSR_BASE 0x01000000
 void idcsrs_init(void) {
-	volatile uint32_t *mvendorid = (uint32_t *)(IDCSR_BASE);
-	putch((mvendorid[0] >> 24) & 0xFF);
-	putch((mvendorid[0] >> 16) & 0xFF);
-	putch((mvendorid[0] >> 8) & 0xFF);
-	putch(mvendorid[0] & 0xFF);
-	volatile uint32_t *marchid = (uint32_t *)(IDCSR_BASE + 0x4);
-	printf("%d\n",marchid[0]);
+	uint32_t idcsr;
+  asm volatile ("csrr %0, 0xFF0" : "=r" (idcsr));
+  putch((idcsr >> 24) & 0xFF);
+	putch((idcsr >> 16) & 0xFF);
+  putch((idcsr >> 8) & 0xFF);
+  putch(idcsr & 0xFF);
+	asm volatile ("csrr %0, 0xFF1" : "=r" (idcsr));
+  printf("%d\n", idcsr);
 }
 
 //am flash_read
