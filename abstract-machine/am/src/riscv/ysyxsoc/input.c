@@ -1,28 +1,10 @@
-/***
 #include <am.h>
 #include <stdio.h>
 #include "../riscv.h"
 
 #define KBD_ADDR 0x10011000
 #define KEYUP 0xF0
-void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
-  uint32_t k = inw(KBD_ADDR);
-  if((k >> 8 & 0xFF) == KEYUP) {
-		kbd->keydown = false;
-		kbd->keycode = ((k >> 8) & 0xFF00) | (k & 0xFF);
-	}
-  else {
-		kbd->keydown = true;
-		kbd->keycode = k;
-	}
-	printf("keycode:%d\n", kbd->keycode);
-}
-***/
-#include <am.h>
-#include "../riscv.h"
-
-#define PS2_KBD              0x10011000
-#define PS2_KBD_REG          PS2_KBD + 0x0
+#define KEYEXP 0xE0
 
 static const int keys[256] = {
     [0x0E] = AM_KEY_GRAVE,
@@ -116,13 +98,13 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
 
   static bool is_break = false;
   static bool is_extend = false;
-  int k = inb(PS2_KBD_REG);
+  int k = inb(KBD_ADDR);
 
   kbd->keydown = false;
   kbd->keycode = AM_KEY_NONE;
 
-  if (k == 0xe0) is_extend = true;
-  else if (k == 0xf0) is_break = true;
+  if (k == KEYEXP) is_extend = true;
+  else if (k == KEYUP) is_break = true;
   else if (k != 0x0) {
     kbd->keydown = !is_break;
     kbd->keycode = is_extend ? keys_extend[k] : keys[k];
