@@ -1,5 +1,6 @@
 #include <am.h>
 #include "../riscv.h"
+#include <stdio.h>
 
 #define FB_ADDR   0x21000000
 #define CTL_ADDR  0x211FFFF0
@@ -34,6 +35,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 		}
 	}
 	if(ctl->sync) {
+		printf("sync");
 		outl(SYNC_ADDR, 1);
 	}
 }
