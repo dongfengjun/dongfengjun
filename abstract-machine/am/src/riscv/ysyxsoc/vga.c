@@ -7,11 +7,11 @@
 #define SIZE 0x200000
 
 void __am_gpu_init() {
-	uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-	for(int i = 0; i < 640 * 480; i ++) {
-		fb[i] = 0;
-	}
-	outl(SYNC_ADDR, 1);
+	//uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
+	//for(int i = 0; i < 640 * 480; i ++) {
+		//fb[i] = 0;
+	//}
+	//outl(SYNC_ADDR, 1);
 }
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
