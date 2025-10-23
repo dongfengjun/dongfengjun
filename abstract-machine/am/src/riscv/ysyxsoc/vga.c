@@ -19,7 +19,7 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
     .present = true, .has_accel = false,
     .width = 640, //nvboard
 		.height = 480, //nvboard
-    .vmemsz = 640 * 480 * sizeof(uint32_t)
+    .vmemsz = 0
   };
 }
 
