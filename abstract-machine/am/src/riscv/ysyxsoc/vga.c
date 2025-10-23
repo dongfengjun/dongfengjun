@@ -1,7 +1,7 @@
 #include <am.h>
 #include "../riscv.h"
 
-#define FB_ADDR       0x21000000
+#define FB_ADDR   0x21000000
 #define CTL_ADDR  0x211FFFF0
 #define SYNC_ADDR 0x211FFFF4
 #define SIZE 0x200000
@@ -19,7 +19,7 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
     .present = true, .has_accel = false,
     .width = 640, //nvboard
 		.height = 480, //nvboard
-    .vmemsz = 0
+    .vmemsz = 640 * 480 * sizeof(uint32_t)
   };
 }
 
