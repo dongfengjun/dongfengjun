@@ -172,14 +172,14 @@ always @(posedge clock) begin
 end
 wire isCHazard = CHazarden && (dnpc_ex != pc_id) && (pc_id != 32'h0) && (dnpc_ex != 32'h0);
 
-ysyx_24110017_BTB #(1,16,8,1,16,16) BTB(clock,reset,if_axi_araddr,snpc,prepc,pc_if,prepc_en);
+ysyx_24110017_BTB #(2,16,8,2,16,16) BTB(clock,reset,if_axi_araddr,snpc,prepc,pc_if,prepc_en);
 ysyx_24110017_IFU IFU(clock,reset,isCHazard,
 	if_valid,id_ready,dnpc_ex,snpc,pc_if,inst_if,
 	if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
 	if_axi_arlen,if_axi_arsize,if_axi_arburst,
 	if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast
 );
-ysyx_24110017_CACHE #(1,4,16) ICACHE(clock,reset,fencei_id, //w < n
+ysyx_24110017_CACHE #(4,4,16) ICACHE(clock,reset,fencei_id, //w < n
 	if_axi_arready,if_axi_arvalid,if_axi_arid,if_axi_araddr,
 	if_axi_arlen,if_axi_arsize,if_axi_arburst,
 	if_axi_rready,if_axi_rvalid,if_axi_rid,if_axi_rdata,if_axi_rresp,if_axi_rlast,
