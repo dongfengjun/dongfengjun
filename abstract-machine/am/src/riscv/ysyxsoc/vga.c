@@ -34,10 +34,10 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 			fb[640 * i + j] = pixels[ctl->w * (i-(ctl->y)) + (j-(ctl->x))];	//w*i+j 
 		}
 	}
-	//if(ctl->sync) {
+	if(ctl->sync) {
 		printf("sync33");
 		outl(SYNC_ADDR, 1);
-	//}
+	}
 }
 
 void __am_gpu_status(AM_GPU_STATUS_T *status) {
