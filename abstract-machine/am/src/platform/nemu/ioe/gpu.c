@@ -25,11 +25,6 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
-	bool sync = ctl->sync;
-	if(sync) {
-		putch('a');
-		putch('\n');
-	}
 	if(!ctl->sync && (ctl->w == 0 || ctl->h == 0))
 		return;
 	uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
@@ -39,7 +34,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 			fb[inw(VGACTL_ADDR+2) * i + j] = pixels[ctl->w * (i-(ctl->y)) + (j-(ctl->x))];	//w*i+j 
 		}
 	}
-	if(sync) {
+	if(ctl->sync) {
 		outl(SYNC_ADDR, 1);
 	}
 }
