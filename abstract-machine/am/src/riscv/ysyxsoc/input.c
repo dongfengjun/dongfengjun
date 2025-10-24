@@ -95,7 +95,7 @@ static const int keys_extend[256] = {
 
 
 void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
-
+	printf("aaa\n");
   static bool is_break = false;
   static bool is_extend = false;
   int k = inb(KBD_ADDR);
