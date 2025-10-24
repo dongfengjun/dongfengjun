@@ -5,6 +5,7 @@
 #define SYNC_ADDR (VGACTL_ADDR + 4)
 
 void __am_gpu_init() {
+	printf("aaa\n");
 /***
 	int i;
 	int w = io_read(AM_GPU_CONFIG).width;  //get the correct width
@@ -16,7 +17,8 @@ void __am_gpu_init() {
 }
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
-  *cfg = (AM_GPU_CONFIG_T) {
+  printf("bbb\n");
+	*cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
     .width = inw(VGACTL_ADDR + 2),	//小端系统 
 		.height = inw(VGACTL_ADDR),
@@ -25,6 +27,7 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
+	printf("ccc\n");
 	if(!ctl->sync && (ctl->w == 0 || ctl->h == 0))
 		return;
 	uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
