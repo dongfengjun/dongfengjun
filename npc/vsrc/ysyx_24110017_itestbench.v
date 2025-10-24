@@ -124,7 +124,7 @@ module ysyx_24110017_testbench;
 
 		#15 reset = 1;
 		#50 reset = 0;
-		#50000 $finish; //RTT need
+		#50000000 $finish; //RTT need
 	end
 
 	reg read_delay,write_delay;
