@@ -99,6 +99,7 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
   static bool is_extend = false;
   int k = inb(KBD_ADDR);
 
+	printf("k=%d\n",k);
   kbd->keydown = false;
   kbd->keycode = AM_KEY_NONE;
 
