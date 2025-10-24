@@ -16,7 +16,6 @@ void __am_gpu_init() {
 }
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
-  printf("aaa\n");
 	*cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
     .width = 640, //nvboard
@@ -26,10 +25,6 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
-	printf("bbb\n");
-	int x = ctl->x;
-	int y = ctl->y;
-	printf("x=%d,y=%d\n",x,y);
 	if(!ctl->sync && (ctl->w == 0 || ctl->h == 0))
 		return;
 	uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
@@ -40,6 +35,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 		}
 	}
 	if(ctl->sync) {
+		printf("aaa\n");
 		outl(SYNC_ADDR, 1);
 	}
 }
