@@ -16,7 +16,8 @@ void __am_gpu_init() {
 }
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
-  *cfg = (AM_GPU_CONFIG_T) {
+  printf("aaa\n");
+	*cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
     .width = 640, //nvboard
 		.height = 480, //nvboard
@@ -25,6 +26,7 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
+	printf("bbb\n");
 	int x = ctl->x;
 	int y = ctl->y;
 	printf("x=%d,y=%d\n",x,y);
