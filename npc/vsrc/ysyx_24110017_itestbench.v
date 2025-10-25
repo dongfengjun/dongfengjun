@@ -127,6 +127,51 @@ module ysyx_24110017_testbench;
 		#50000000 $finish; //RTT need
 	end
 
+	reg read_delay,write_delay;
+	reg [10:0]read_counter,write_counter;
+	
+	always @(posedge clock) begin
+		if(reset) begin
+			write_delay <= 1'b0;
+			read_delay <= 1'b0;
+		end
+		else begin
+			if(master_wvalid && master_wready) begin
+				write_delay <= 1'b1;
+			end
+			if(master_arvalid && master_arready) begin
+				read_delay <= 1'b1;
+			end
+			if(read_counter == 3) begin
+				read_delay <= 1'b0;
+			end
+			if(write_counter == 3) begin
+				write_delay <= 1'b0;
+			end
+		end
+	end
+
+	always @(posedge clock) begin
+		if(reset) begin
+			read_counter <= 11'b0;
+			write_counter <= 11'b0;
+		end
+		else begin
+			if(write_delay) begin
+				write_counter <= write_counter + 1;
+			end
+			if(read_delay) begin
+				read_counter <= read_counter + 1;
+			end
+			if(read_counter == 3) begin
+				read_counter <= 11'b0;
+			end
+			if(write_counter == 3) begin
+				write_counter <= 11'b0;
+			end
+		end
+	end
+
 	always @(posedge clock) begin
 		if(reset) begin
 			master_awready <= 1'b0;
@@ -140,13 +185,13 @@ module ysyx_24110017_testbench;
 			master_awready <= 1'b1;
 			master_wready  <= 1'b1;
 			master_arready <= 1'b1;
-			if(master_wvalid && master_wready) begin
+			if(write_counter == 3) begin
 				master_bvalid  <= 1'b1;
 			end
 			if(master_bvalid && master_bready) begin
 				master_bvalid  <= 1'b0;
 			end
-			if(master_arvalid && master_arready) begin
+			if(read_counter == 3) begin
 				master_rvalid  <= 1'b1;
 				master_rlast   <= 1'b1;
 			end

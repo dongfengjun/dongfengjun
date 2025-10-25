@@ -16,7 +16,7 @@ void __am_gpu_init() {
 }
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
-  *cfg = (AM_GPU_CONFIG_T) {
+	*cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
     .width = inw(VGACTL_ADDR + 2),	//小端系统 
 		.height = inw(VGACTL_ADDR),
@@ -34,7 +34,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 			fb[inw(VGACTL_ADDR+2) * i + j] = pixels[ctl->w * (i-(ctl->y)) + (j-(ctl->x))];	//w*i+j 
 		}
 	}
-	if(ctl -> sync) {
+	if(ctl->sync) {
 		outl(SYNC_ADDR, 1);
 	}
 }

@@ -1,14 +1,22 @@
 #include <am.h>
 #include "../riscv.h"
+#include <stdio.h>
 
-#define FB_ADDR 0x21000000
+#define FB_ADDR   0x21000000
+#define CTL_ADDR  0x211FFFF0
+#define SYNC_ADDR 0x211FFFF4
 #define SIZE 0x200000
 
 void __am_gpu_init() {
+	//uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
+	//for(int i = 0; i < 640 * 480; i ++) {
+		//fb[i] = 0;
+	//}
+	//outl(SYNC_ADDR, 1);
 }
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
-  *cfg = (AM_GPU_CONFIG_T) {
+	*cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
     .width = 640, //nvboard
 		.height = 480, //nvboard
@@ -25,6 +33,9 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 		for(int j = ctl->x; j < (ctl->x + ctl->w); j ++) {
 			fb[640 * i + j] = pixels[ctl->w * (i-(ctl->y)) + (j-(ctl->x))];	//w*i+j 
 		}
+	}
+	if(ctl->sync) {
+		outl(SYNC_ADDR, 1);
 	}
 }
 
