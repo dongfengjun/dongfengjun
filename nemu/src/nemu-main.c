@@ -14,7 +14,6 @@
 ***************************************************************************************/
 
 #include <common.h>
-#include <sanitizer/lsan_interface.h>
 
 void init_monitor(int, char *[]);
 void am_init_monitor();
@@ -24,7 +23,6 @@ word_t expr(char *e, bool *success);
 void audio_callback(void* userdata, uint8_t *stream, int len);
 
 int main(int argc, char *argv[]) {
-	__lsan_disable();
   /* Initialize the monitor. */
 #ifdef CONFIG_TARGET_AM
   am_init_monitor();
