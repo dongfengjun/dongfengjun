@@ -1525,8 +1525,8 @@ assign IFU_AXI_RID     = (sel_m == SEL_IFU) ? X_AXI_RID       : 4'b0;
 assign IFU_AXI_RLAST   = (sel_m == SEL_IFU) ? X_AXI_RLAST     : 1'b0;
 
 /***SoC***/
-localparam DEVICE_CLINT_LOW_ADDR  = 32'h2000000;//32'ha0000048;
-localparam DEVICE_CLINT_HIGH_ADDR = 32'h2000004;//32'ha000004c;
+localparam DEVICE_CLINT_LOW_ADDR  = 32'h02000048;//32'ha0000048;
+localparam DEVICE_CLINT_HIGH_ADDR = 32'h0200004c;//32'ha000004c;
 wire sel_clint = (X_AXI_ARADDR == DEVICE_CLINT_LOW_ADDR) || (X_AXI_ARADDR == DEVICE_CLINT_HIGH_ADDR);
 
 assign X_AXI_AWREADY = io_master_awready;
