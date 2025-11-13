@@ -325,6 +325,17 @@ module CLKBUF_X4 (A, Z);
    assign Z = (A);
 endmodule // CLKBUF_X4
 
+module CLKGATE_X1 (CK, E, GCK);
+   input CK;
+   input E;
+   output GCK;
+   reg q;
+   always @(negedge CK) begin
+     q <= E;
+   end
+   assign GCK = CK & q;
+endmodule
+
 module DFF_X1 (CK, D, Q, QN);
    input CK;
    input D;
