@@ -1586,8 +1586,8 @@ assign c_axi_rid      = 4'b0;
 assign c_axi_rresp    = 2'b0;
 assign c_axi_rlast    = 1'b0;
 
-localparam DEVICE_CLINT_LOW_ADDR = 32'h02000000;
-localparam DEVICE_CLINT_HIGH_ADDR = 32'h02000004;
+localparam DEVICE_CLINT_LOW_ADDR = 32'h02000048;
+localparam DEVICE_CLINT_HIGH_ADDR = 32'h0200004c;
 
 reg [63:0] mtime;
 wire[31:0] c_rdata = {32{(c_axi_araddr == DEVICE_CLINT_LOW_ADDR)}} & mtime[31:0] | {32{(c_axi_araddr == DEVICE_CLINT_HIGH_ADDR)}} & mtime[63:32];
